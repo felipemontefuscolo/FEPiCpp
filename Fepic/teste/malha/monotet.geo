@@ -1,0 +1,21 @@
+// Gmsh project created on Sun Jan 16 12:03:52 2011
+Point(1) = {0, 0, 0, 1.0};
+Point(2) = {1, 0, 0, 1.0};
+Point(3) = {0, 1, 0, 1.0};
+Point(4) = {0, 0, 1, 1.0};
+Line(1) = {4, 1};
+Line(2) = {1, 2};
+Line(3) = {2, 3};
+Line(4) = {3, 1};
+Line(5) = {4, 3};
+Line(6) = {4, 2};
+Line Loop(7) = {6, 3, -5};
+Plane Surface(8) = {7};
+Line Loop(9) = {1, -4, -5};
+Plane Surface(10) = {9};
+Line Loop(11) = {1, 2, -6};
+Plane Surface(12) = {11};
+Line Loop(13) = {4, 2, 3};
+Plane Surface(14) = {13};
+Surface Loop(15) = {8, 12, 10, 14};
+Volume(16) = {15};

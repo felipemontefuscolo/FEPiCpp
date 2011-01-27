@@ -1,0 +1,898 @@
+#LyX 1.6.5 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
+\begin_document
+\begin_header
+\textclass book
+\begin_preamble
+\newtheorem{theorem}{Teorema}
+
+
+\numberwithin{theorem}{chapter}
+
+
+\usepackage{dsfont}
+
+\hypersetup{colorlinks, citecolor=red, filecolor=black, linkcolor=blue, urlcolor=cyan, pdftex}
+%\usepackage{colortbl}
+
+\usepackage[bbgreekl]{mathbbol}
+\end_preamble
+\use_default_options true
+\begin_modules
+theorems-ams
+eqs-within-sections
+figs-within-sections
+\end_modules
+\language brazilian
+\inputencoding auto
+\font_roman charter
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\paperfontsize 12
+\spacing onehalf
+\use_hyperref true
+\pdf_bookmarks true
+\pdf_bookmarksnumbered false
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks false
+\pdf_pdfborder true
+\pdf_colorlinks false
+\pdf_backref false
+\pdf_pdfusetitle true
+\papersize default
+\use_geometry true
+\use_amsmath 1
+\use_esint 1
+\cite_engine natbib_authoryear
+\use_bibtopic false
+\paperorientation portrait
+\bottommargin 2cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\author "" 
+\author "" 
+\end_header
+
+\begin_body
+
+\begin_layout Title
+
+\series bold
+O que vou estudando ...
+
+\series default
+ 
+\end_layout
+
+\begin_layout Chapter
+G.D.
+ e elementos isoparamétricos
+\end_layout
+
+\begin_layout Section
+Ferramentas de geometria diferencial
+\end_layout
+
+\begin_layout Subsection
+Notações e definições
+\end_layout
+
+\begin_layout Standard
+Segue algumas notações que eventualmente são adotadas no decorrer deste
+ relatório.
+ Seja 
+\begin_inset Formula $\left\{ x_{i}\right\} $
+\end_inset
+
+, 
+\begin_inset Formula $i=1,...,d$
+\end_inset
+
+ (dimensão) um sistema de coordenadas canônica e 
+\begin_inset Formula $\psi$
+\end_inset
+
+ um campo escalar.
+ Então 
+\begin_inset Formula \[
+\begin{aligned}\left.\boldsymbol{\nabla}\psi\right|_{i}=\dfrac{\partial\psi}{\partial x_{i}}=\partial_{i}\psi=\psi_{,i}\quad i=1,...,d;\end{aligned}
+\]
+
+\end_inset
+
+Seja agora 
+\begin_inset Formula $\left\{ \xi_{i}\right\} $
+\end_inset
+
+, 
+\begin_inset Formula $i=1,...,d$
+\end_inset
+
+ (dimensão) um sistema de coordenadas curvilíneas.
+ Então
+\begin_inset Formula \[
+\begin{aligned}\left.\boldsymbol{\nabla_{\xi}}\psi\right|_{i}=\dfrac{\partial\psi}{\partial\xi_{i}}=\partial_{i}^{\xi}\psi=\psi_{,(i)}\quad i=1,...,d;\end{aligned}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+O gradiente de superfície
+\end_layout
+
+\begin_layout Standard
+Seja uma superfície contínua 
+\begin_inset Formula $S$
+\end_inset
+
+ na qual sobre esta esteja definida um vetor unitário normal 
+\begin_inset Formula $\boldsymbol{n}$
+\end_inset
+
+ que aponta para o exterior da superfície.
+ O gradiente de superfície em um ponto 
+\begin_inset Formula $\boldsymbol{x_{s}}$
+\end_inset
+
+ de 
+\begin_inset Formula $S$
+\end_inset
+
+ de uma função escalar 
+\begin_inset Formula $f:\mathds{R}^{3}\rightarrow\mathds{R}$
+\end_inset
+
+, denotado por 
+\begin_inset Formula $\boldsymbol{\nabla_{s}}f$
+\end_inset
+
+, é definido como um vetor cuja a direção indica a direção na qual 
+\begin_inset Formula $f(\boldsymbol{x})$
+\end_inset
+
+ aumenta mais rapidamente na superfície, enquanto o módulo é o valor absoluto
+ da taxa de variação de 
+\begin_inset Formula $f(\boldsymbol{x})$
+\end_inset
+
+ naquela direção.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{theorem}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+O gradiente de superfície da função 
+\begin_inset Formula $f$
+\end_inset
+
+ é dado por
+\begin_inset Formula \[
+\boldsymbol{\nabla_{s}}f=\mathbb{P}\cdot\boldsymbol{\nabla}f\]
+
+\end_inset
+
+onde 
+\begin_inset Formula $\mathbb{P}$
+\end_inset
+
+ é uma matriz de projeção data por 
+\begin_inset Formula $\mathbb{P}=\mathbb{1}-\boldsymbol{n}\otimes\boldsymbol{n}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset label
+LatexCommand label
+name "thm:grad"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{theorem}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+\begin_inset OptArg
+status open
+
+\begin_layout Plain Layout
+prova (informal)
+\end_layout
+
+\end_inset
+
+ Sem perda de generalidade, para calcular 
+\begin_inset Formula $\boldsymbol{\nabla_{s}}f$
+\end_inset
+
+ em um ponto 
+\begin_inset Formula $\boldsymbol{x_{s}}\in S$
+\end_inset
+
+, pode-se considerar que o sistema de coordenadas esteja posicionado de
+ forma que 
+\begin_inset Formula $\boldsymbol{e_{3}}=\boldsymbol{n}$
+\end_inset
+
+ em 
+\begin_inset Formula $\boldsymbol{x_{s}}$
+\end_inset
+
+.
+ Com isso, o plano tangente à superfície em 
+\begin_inset Formula $\boldsymbol{x_{s}}$
+\end_inset
+
+ será o plano 
+\begin_inset Formula $x_{1}x_{2}$
+\end_inset
+
+, resultando da definição de gradiente que
+\begin_inset Formula \[
+\begin{aligned}\boldsymbol{\nabla_{s}}f=\left(\partial_{1}f,\,\partial_{2}f,\,0\right) & =\left(\partial_{1}f,\,\partial_{2}f,\,\partial_{3}f\right)-\boldsymbol{e_{3}}\left(\boldsymbol{e_{3}}\cdot\boldsymbol{\nabla}f\right)\\
+ & =\boldsymbol{\nabla}f-\left(\boldsymbol{n}\otimes\boldsymbol{n}\right)\cdot\boldsymbol{\nabla}f\\
+ & =\left(\mathbb{1}-\boldsymbol{n}\otimes\boldsymbol{n}\right)\cdot\boldsymbol{\nabla}f\\
+ & =\mathbb{P}\cdot\boldsymbol{\nabla}f\end{aligned}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+O teorema 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "thm:grad"
+
+\end_inset
+
+ pode ser usado para extender o conceito de gradiente de superfície para
+ vetores, tensores, etc..
+ Por exemplo, seja um vetor 
+\begin_inset Formula $\boldsymbol{v}$
+\end_inset
+
+, como
+\begin_inset Formula \[
+\boldsymbol{\nabla_{s}}f\Bigr|_{j}=\partial_{j}^{s}f=\mathbb{P}_{jk}\,\partial_{j}f=\mathbb{P}\cdot\boldsymbol{\nabla}f\Bigr|_{j}\]
+
+\end_inset
+
+então
+\begin_inset Formula \[
+\boldsymbol{\nabla_{s}}\boldsymbol{v}\Bigr|_{ij}=\partial_{j}^{s}v_{i}=\mathbb{P}_{jk}\,\partial_{j}v_{i}=\boldsymbol{\nabla}\boldsymbol{v}\cdot\mathbb{P}\Bigr|_{ij}\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Extensão de funções espaciais
+\end_layout
+
+\begin_layout Standard
+Seja o subconjunto 
+\begin_inset Formula $\mathcal{K}\subseteq\mathds{R}^{3}$
+\end_inset
+
+ (pontos, curvas, superfícies, volumes, etc.) e uma função espacial 
+\begin_inset Formula $g:\mathcal{K}\rightarrow\mathds{R}^{d}$
+\end_inset
+
+, onde 
+\begin_inset Formula $d$
+\end_inset
+
+ é um inteiro positivo que indica se 
+\begin_inset Formula $g$
+\end_inset
+
+ é um função escalar (
+\begin_inset Formula $d=1$
+\end_inset
+
+), vetorial (
+\begin_inset Formula $d=2$
+\end_inset
+
+), tensorial (
+\begin_inset Formula $d=3$
+\end_inset
+
+), etc..
+ A extensão de 
+\begin_inset Formula $g$
+\end_inset
+
+, denotada por 
+\begin_inset Formula $\hat{g}$
+\end_inset
+
+, é definida como:
+\begin_inset Formula \[
+\hat{g}(\boldsymbol{x})\equiv g(\boldsymbol{x_{s}}),\qquad\begin{array}{l}
+\boldsymbol{x}\in\mathds{R}^{3},\\
+\boldsymbol{x_{s}}=\boldsymbol{y}\in S\,\,\mbox{tal que}\,\,\underset{\boldsymbol{y}}{\mathrm{min}}\left\Vert \boldsymbol{x}-\boldsymbol{y}\right\Vert ;\end{array}\]
+
+\end_inset
+
+Ou seja, a extensão de 
+\begin_inset Formula $g$
+\end_inset
+
+ é uma função que extende os valores de 
+\begin_inset Formula $g$
+\end_inset
+
+ em 
+\begin_inset Formula $\mathcal{K}$
+\end_inset
+
+ para 
+\begin_inset Formula $\mathds{R}^{3}$
+\end_inset
+
+.
+ Notar que a extensão de uma função 
+\begin_inset Formula $f:\mathds{R}^{3}\rightarrow\mathds{R}^{d}$
+\end_inset
+
+ é ela mesma.
+ Nos pontos em 
+\begin_inset Formula $S$
+\end_inset
+
+, não é difícil provar a igualdade
+\begin_inset Formula \[
+\boldsymbol{\nabla_{s}}g=\boldsymbol{\nabla}\hat{g}\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+\begin_inset Quotes eld
+\end_inset
+
+Função distância
+\begin_inset Quotes erd
+\end_inset
+
+
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+aspas pois a função em questão não segue a definição de função distância
+ de fato.
+ Qual será o termo correto ???
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Seja uma superfície contínua 
+\begin_inset Formula $S$
+\end_inset
+
+ na qual sobre esta esteja definida o vetor unitário normal 
+\begin_inset Formula $\boldsymbol{n}$
+\end_inset
+
+ que aponta para o exterior da superfície.
+ A 
+\begin_inset Quotes eld
+\end_inset
+
+função distância
+\begin_inset Quotes erd
+\end_inset
+
+ 
+\begin_inset Formula $\phi(\boldsymbol{x};S)$
+\end_inset
+
+ é definida por
+\begin_inset Formula \[
+\phi(\boldsymbol{x};S)=\begin{cases}
++\underset{\boldsymbol{y}\in S}{\mbox{min}}\left\Vert \boldsymbol{x}-\boldsymbol{y}\right\Vert , & \mbox{se }\boldsymbol{x}\mbox{ é exterior à }S;\\
+-\underset{\boldsymbol{y}\in S}{\mbox{min}}\left\Vert \boldsymbol{x}-\boldsymbol{y}\right\Vert , & \mbox{se }\boldsymbol{x}\mbox{ é interior à }S;\end{cases}\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Desse modo, a função 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+
+\begin_inset Formula $\phi(\boldsymbol{x};S)$
+\end_inset
+
+ representa a distância entre 
+\begin_inset Formula $\boldsymbol{x}$
+\end_inset
+
+ e um ponto 
+\begin_inset Formula $\boldsymbol{y}\in S$
+\end_inset
+
+ que está mais próximo de 
+\begin_inset Formula $\boldsymbol{x}$
+\end_inset
+
+, a menos de um sinal.
+ Se 
+\begin_inset Formula $\boldsymbol{x_{s}}$
+\end_inset
+
+ for o ponto da superfície mais próximo de 
+\begin_inset Formula $\boldsymbol{x}$
+\end_inset
+
+ e nela estiver definida uma normal 
+\begin_inset Formula $\boldsymbol{n}$
+\end_inset
+
+, não é difícil verifica que 
+\begin_inset Formula \[
+\boldsymbol{x}-\boldsymbol{x_{s}}=\phi(\boldsymbol{x};S)\boldsymbol{n}(\boldsymbol{x_{s}})\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{theorem}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Seja 
+\begin_inset Formula $\mathcal{X}=\{\boldsymbol{y}\,|\,\exists\,\boldsymbol{n}(\boldsymbol{y_{s}}),$
+\end_inset
+
+ onde 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+
+\begin_inset Formula $\boldsymbol{y_{s}}\in S$
+\end_inset
+
+ é o ponto mais próximo de 
+\begin_inset Formula $\boldsymbol{y}$
+\end_inset
+
+
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\noun default
+\color inherit
+}.
+ O gradiente de 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+
+\begin_inset Formula $\phi(\boldsymbol{x};S)$
+\end_inset
+
+ para todo 
+\begin_inset Formula $\boldsymbol{x}\in\mathcal{X}$
+\end_inset
+
+ é dado por 
+\begin_inset Formula \[
+\boldsymbol{\nabla}\phi(\boldsymbol{x};S)=\hat{\boldsymbol{n}}\]
+
+\end_inset
+
+
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\noun default
+\color inherit
+onde 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+
+\begin_inset Formula $\hat{\boldsymbol{n}}$
+\end_inset
+
+ é a extensão da normal 
+\begin_inset Formula $\boldsymbol{n}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{theorem}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+\begin_inset OptArg
+status open
+
+\begin_layout Plain Layout
+Prova
+\end_layout
+
+\end_inset
+
+ Seja 
+\begin_inset Formula $\boldsymbol{x_{s}}\in S$
+\end_inset
+
+ o ponto mais próximo de 
+\begin_inset Formula $\boldsymbol{x}$
+\end_inset
+
+ e 
+\begin_inset Formula $\boldsymbol{n}$
+\end_inset
+
+ a normal em 
+\begin_inset Formula $\boldsymbol{x_{s}}$
+\end_inset
+
+.
+ Sem perda de generalidade, considera-se que o sistema de coordenadas esteja
+ posicionado de forma que 
+\begin_inset Formula $\boldsymbol{e_{3}}=\boldsymbol{n}$
+\end_inset
+
+ e que 
+\begin_inset Formula $\boldsymbol{x_{s}}=\boldsymbol{0}$
+\end_inset
+
+.
+ Como 
+\begin_inset Formula $\boldsymbol{x}-\boldsymbol{x_{s}}=\phi(\boldsymbol{x};S)\boldsymbol{n}$
+\end_inset
+
+, então 
+\begin_inset Formula $\phi(\boldsymbol{x};S)=x_{3}$
+\end_inset
+
+, segue que
+\begin_inset Formula \[
+\begin{aligned}\boldsymbol{\nabla}\phi(\boldsymbol{x};S)=\boldsymbol{e_{i}}\partial_{i}x_{3} & =\boldsymbol{e_{3}}\\
+ & =\boldsymbol{n}(\boldsymbol{x_{s}})\\
+ & =\hat{\boldsymbol{n}}(\boldsymbol{x})\end{aligned}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Elementos isoparamétricos
+\end_layout
+
+\begin_layout Subsection
+Motivação
+\end_layout
+
+\begin_layout Standard
+Calcular uma integral do tipo
+\begin_inset Formula \[
+\int_{\mathcal{T}}\boldsymbol{\nabla}_{\Gamma}\mathcal{N}\cdot\boldsymbol{\nabla}_{\Gamma}u\,\,\mathrm{d}S\]
+
+\end_inset
+
+onde 
+\begin_inset Formula $\mathcal{T}$
+\end_inset
+
+ é um triângulo (que pode ser linear, quadrático, etc.), 
+\begin_inset Formula $\mathrm{d}S$
+\end_inset
+
+ o diferencial de superfície no espaço tridimensional e 
+\begin_inset Formula $\boldsymbol{\nabla}_{\Gamma}$
+\end_inset
+
+ é o gradiente na superfície.
+\end_layout
+
+\begin_layout Subsection
+Jacobiano da transformação
+\end_layout
+
+\begin_layout Standard
+Sejam 
+\begin_inset Formula $\xi_{j}$
+\end_inset
+
+, 
+\begin_inset Formula $j=1,2$
+\end_inset
+
+, as coordenadas do triângulo de referência e 
+\begin_inset Formula $\boldsymbol{n}$
+\end_inset
+
+ a normal exterior da superfície.
+ O incremento na posição 
+\begin_inset Formula $\mathrm{d}\boldsymbol{x}$
+\end_inset
+
+ associado ao um incremento de 
+\begin_inset Formula $\xi_{j}$
+\end_inset
+
+ é dado por
+\begin_inset Formula \[
+\mathrm{d}\boldsymbol{x}^{(j)}=\dfrac{\partial\boldsymbol{x}}{\partial\xi_{j}}\mathrm{d}\xi_{i}\qquad\mbox{(não há soma em }j\mbox{)}\]
+
+\end_inset
+
+Segue que o diferencial de área 
+\begin_inset Formula $\mathrm{d}S$
+\end_inset
+
+ é dado por
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \[
+\begin{aligned}\mathrm{d}S=\left|\boldsymbol{\breve{n}}\cdot\left(\mathrm{d}\boldsymbol{x}^{(1)}\times\mathrm{d}\boldsymbol{x}^{(2)}\right)\right| & =\left|\boldsymbol{\breve{n}}\cdot\left(\dfrac{\partial\boldsymbol{x}}{\partial\xi_{1}}\times\dfrac{\partial\boldsymbol{x}}{\partial\xi_{2}}\right)\right|\mathrm{d}\xi_{1}\mathrm{d}\xi_{2}\\
+ & =J\,\mathrm{d}\xi_{1}\mathrm{d}\xi_{2}\end{aligned}
+\]
+
+\end_inset
+
+Onde 
+\begin_inset Formula $J$
+\end_inset
+
+ é o jacobiano da transformação.
+ Como os termos 
+\begin_inset Formula $\partial\boldsymbol{x}/\partial\xi_{i}$
+\end_inset
+
+ são perpendiculares à normal, então o jacobiano pode ser reduzido:
+\begin_inset Formula \[
+J=\left|\left(\dfrac{\partial\boldsymbol{x}}{\partial\xi_{1}}\times\dfrac{\partial\boldsymbol{x}}{\partial\xi_{2}}\right)\right|\]
+
+\end_inset
+
+ou escrito como o determinante de uma matriz:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \[
+J=\mathrm{det}\left[\begin{array}{ccc}
+\dfrac{\partial x_{1}}{\partial\xi_{1}} & \dfrac{\partial x_{2}}{\partial\xi_{1}} & \dfrac{\partial x_{3}}{\partial\xi_{1}}\\
+\\\dfrac{\partial x_{1}}{\partial\xi_{2}} & \dfrac{\partial x_{2}}{\partial\xi_{2}} & \dfrac{\partial x_{3}}{\partial\xi_{2}}\\
+\\n_{1} & n_{2} & n_{3}\end{array}\right]\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Cálculo do gradiente
+\end_layout
+
+\begin_layout Standard
+Suponha que a função 
+\begin_inset Formula $u$
+\end_inset
+
+ esteja definida apenas na superfície.
+ Então
+\begin_inset Formula \[
+\boldsymbol{\nabla_{s}}u=\mathbb{P}\cdot\boldsymbol{\nabla}\hat{u}=\boldsymbol{\nabla}\hat{u}\]
+
+\end_inset
+
+Para calcular 
+\begin_inset Formula $\boldsymbol{\nabla}\hat{u}$
+\end_inset
+
+ em função das coordenadas do triângulo, faz-se a seguinte transformação:
+\begin_inset Formula \[
+\hat{u}_{,i}=\hat{u}_{,(j)}\xi_{j,i}\qquad i=1,2,3\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Onde foi somado de 
+\begin_inset Formula $j=1$
+\end_inset
+
+ até 
+\begin_inset Formula $2$
+\end_inset
+
+.
+ Para calcular os termos 
+\begin_inset Formula $\xi_{j,i}$
+\end_inset
+
+, 
+\begin_inset Formula $i=1,2,3;$
+\end_inset
+
+ 
+\begin_inset Formula $j=1,2$
+\end_inset
+
+, pode-se completar a base 
+\begin_inset Formula $\left\{ \xi_{i}\right\} $
+\end_inset
+
+ acrescentando uma coordenada 
+\begin_inset Formula $\xi_{3}$
+\end_inset
+
+ qualquer que satisfaça
+\begin_inset Formula \[
+\boldsymbol{\nabla}_{\Gamma}\xi_{3}=\boldsymbol{0};\qquad\breve{\boldsymbol{n}}\cdot\boldsymbol{\nabla}\xi_{3}\neq\boldsymbol{0};\]
+
+\end_inset
+
+e assim calcular o inverso da matrix 
+\begin_inset Formula $\left[x_{i,(j)}\right]$
+\end_inset
+
+.
+ O 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+
+\begin_inset Formula $\xi_{3}$
+\end_inset
+
+ pode ser a 
+\begin_inset Quotes eld
+\end_inset
+
+função distância
+\begin_inset Quotes erd
+\end_inset
+
+ ou pode ser a coordenada baricêntrica de um 4º de um tetraedro que não
+ esteja na superfície do triângulo.
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "referencias"
+options "plainnat"
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

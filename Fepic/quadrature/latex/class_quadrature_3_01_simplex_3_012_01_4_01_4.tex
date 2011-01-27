@@ -1,0 +1,62 @@
+\hypertarget{class_quadrature_3_01_simplex_3_012_01_4_01_4}{
+\section{Quadrature$<$ Simplex$<$ 2 $>$ $>$ Class Template Reference}
+\label{class_quadrature_3_01_simplex_3_012_01_4_01_4}\index{Quadrature$<$ Simplex$<$ 2 $>$ $>$@{Quadrature$<$ Simplex$<$ 2 $>$ $>$}}
+}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_quadrature_3_01_simplex_3_012_01_4_01_4_a36cabdbc40d489004df7f10630c1edda}{
+void {\bfseries setOrder} (int n)}
+\label{class_quadrature_3_01_simplex_3_012_01_4_01_4_a36cabdbc40d489004df7f10630c1edda}
+
+\item 
+{\footnotesize template$<$class T , class... Args$>$ }\\auto \hyperlink{class_quadrature_3_01_simplex_3_012_01_4_01_4_a153826e764e0b4662abf548637c760bd}{evaluate} (T \&\&t, Args...a)-\/$>$ std
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_quadrature_3_01_simplex_3_012_01_4_01_4_a4bc28de54ec9827109403f6e59259301}{
+int {\bfseries order}}
+\label{class_quadrature_3_01_simplex_3_012_01_4_01_4_a4bc28de54ec9827109403f6e59259301}
+
+\item 
+\hypertarget{class_quadrature_3_01_simplex_3_012_01_4_01_4_a97c6a305b9992a5e89741d5c89b936d9}{
+std::vector$<$ Eigen::Vector2d $>$ {\bfseries L}}
+\label{class_quadrature_3_01_simplex_3_012_01_4_01_4_a97c6a305b9992a5e89741d5c89b936d9}
+
+\item 
+\hypertarget{class_quadrature_3_01_simplex_3_012_01_4_01_4_af6f1a54cbe888843242eff1cd118194d}{
+std::vector$<$ double $>$ {\bfseries weight}}
+\label{class_quadrature_3_01_simplex_3_012_01_4_01_4_af6f1a54cbe888843242eff1cd118194d}
+
+\end{DoxyCompactItemize}
+\subsubsection*{template$<$$>$ class Quadrature$<$ Simplex$<$ 2 $>$ $>$}
+
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_quadrature_3_01_simplex_3_012_01_4_01_4_a153826e764e0b4662abf548637c760bd}{
+\index{Quadrature$<$ Simplex$<$ 2 $>$ $>$@{Quadrature$<$ Simplex$<$ 2 $>$ $>$}!evaluate@{evaluate}}
+\index{evaluate@{evaluate}!Quadrature< Simplex< 2 > >@{Quadrature$<$ Simplex$<$ 2 $>$ $>$}}
+\subsubsection[{evaluate}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T , class... Args$>$ auto Quadrature$<$ Simplex$<$ 2 $>$ $>$::evaluate (
+\begin{DoxyParamCaption}
+\item[{T \&\&}]{ t, }
+\item[{Args...}]{ a}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}
+\label{class_quadrature_3_01_simplex_3_012_01_4_01_4_a153826e764e0b4662abf548637c760bd}
+Avalia uma função nos pontos de quadratura no triangulo UNITARIO
+
+
+\begin{DoxyParams}{Parameters}
+\item[{\em t}]a função \item[{\em a}]os argumentos da função\end{DoxyParams}
+\begin{DoxyNote}{Note}
+a função deve recever os argumentos tal que \par
+ f = f(L, \mbox{[}a\mbox{]}) \par
+ onde L é um vetor 2d e a são os eventuais argumentos que a função pode tomar 
+\end{DoxyNote}
+
+
+The documentation for this class was generated from the following file:\begin{DoxyCompactItemize}
+\item 
+quadrature.hpp\end{DoxyCompactItemize}

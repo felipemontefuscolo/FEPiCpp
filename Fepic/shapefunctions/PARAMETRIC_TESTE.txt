@@ -1,0 +1,50 @@
+#include <iostream>
+#include "Fepic/mesh/mesh.hpp"
+#include "Fepic/misc/misc.hpp"
+#include "Fepic/misc/ivec.hpp"
+#include "Fepic/shapefunctions/parametric_pts.hpp"
+#include "Fepic/shapefunctions/shapefunctions.hpp"
+#include <cmath>
+#include <Eigen/Dense>
+#include <Eigen/Geometry>
+#include <vector>
+#include <cstring>
+#include <iomanip>
+#include <sstream>
+#include <limits>
+
+
+
+int const DIM = 2;
+
+using namespace std;
+using namespace Eigen;
+
+typedef uint uint;
+typedef DefaultTraits<DIM, Simplex<DIM> > MyT;
+
+int main(int argc, char *argv[]) {
+
+	//std::vector<double> list;
+	//std::vector<Eigen::Vector2d> list;
+	std::vector<Eigen::Vector3d> list;
+
+	int n; cin >> n;
+	//list = genLineParametricPts(n);
+	list = genTetParametricPts(n);
+
+	for (uint i = 1; i <= list.size(); i++)
+	{
+		cout << setprecision(15);
+		//cout<<"Point("<<i<<") = {"<<list[i-1][0]<<", "<<list[i-1][1]<<", 1.0};" << endl;
+		//cout<<"Point("<<i<<") = {"<<list[i-1]<<", "<<0<<", 0};" << endl;
+		cout<<"Point("<<i<<") = {"<<list[i-1][0]<<", "<<list[i-1][1]<<", "<<list[i-1][2]<<"};" << endl;
+	}
+
+	
+
+	
+	return 0.;
+}
+
+
