@@ -1,0 +1,6 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classi_polyhedron.html#add6b638aa26486ca8533b8fe27bb9619" title="iPolyhedron::propagateLabel" alt="" coords="241,5,444,35"/>
+<area shape="rect" id="node5" href="$classi_polygon.html#a3e6f8cc8302d25a9860becd940400e16" title="iPolygon::propagateLabel" alt="" coords="252,59,433,88"/>
+<area shape="rect" id="node7" href="$classi_marked_half_face.html#adfeb6a84bef39a3b8f598041014a1f81" title="iMarkedHalfFace::propagateLabel" alt="" coords="225,112,460,141"/>
+<area shape="rect" id="node9" href="$classi_marked_half_edge.html#a558b0f04838e5ccb88c152dda1093c53" title="iMarkedHalfEdge::propagateLabel" alt="" coords="224,165,461,195"/>
+</map>

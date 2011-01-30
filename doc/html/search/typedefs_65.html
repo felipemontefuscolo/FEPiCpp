@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html><head><title></title>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<link rel="stylesheet" type="text/css" href="search.css"/>
+<script type="text/javascript" src="search.js"></script>
+</head>
+<body class="SRPage">
+<div id="SRIndex">
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRResult" id="SR_edget">
+ <div class="SREntry">
+  <a id="Item0" onkeydown="return searchResults.Nav(event,0)" onkeypress="return searchResults.Nav(event,0)" onkeyup="return searchResults.Nav(event,0)" class="SRSymbol" href="javascript:searchResults.Toggle('SR_edget')">EdgeT</a>
+  <div class="SRChildren">
+    <a id="Item0_c0" onkeydown="return searchResults.NavChild(event,0,0)" onkeypress="return searchResults.NavChild(event,0,0)" onkeyup="return searchResults.NavChild(event,0,0)" class="SRScope" href="../classi_point.html#affcbdba191ab2948e0bf0bf638027406" target="_parent">iPoint::EdgeT()</a>
+    <a id="Item0_c1" onkeydown="return searchResults.NavChild(event,0,1)" onkeypress="return searchResults.NavChild(event,0,1)" onkeyup="return searchResults.NavChild(event,0,1)" class="SRScope" href="../classi_triangle.html#ac1f557c96d867b2fffe7dd95a54d3872" target="_parent">iTriangle::EdgeT()</a>
+    <a id="Item0_c2" onkeydown="return searchResults.NavChild(event,0,2)" onkeypress="return searchResults.NavChild(event,0,2)" onkeyup="return searchResults.NavChild(event,0,2)" class="SRScope" href="../classi_tetrahedron.html#a1f6a80e4a78fd9b820ef252abd6da33c" target="_parent">iTetrahedron::EdgeT()</a>
+    <a id="Item0_c3" onkeydown="return searchResults.NavChild(event,0,3)" onkeypress="return searchResults.NavChild(event,0,3)" onkeyup="return searchResults.NavChild(event,0,3)" class="SRScope" href="../classi_mesh.html#a20e30477142d19978f44c30e2c390637" target="_parent">iMesh::EdgeT()</a>
+  </div>
+ </div>
+</div>
+<div class="SRResult" id="SR_elmclass">
+ <div class="SREntry">
+  <a id="Item1" onkeydown="return searchResults.Nav(event,1)" onkeypress="return searchResults.Nav(event,1)" onkeyup="return searchResults.Nav(event,1)" class="SRSymbol" href="javascript:searchResults.Toggle('SR_elmclass')">ElmClass</a>
+  <div class="SRChildren">
+    <a id="Item1_c0" onkeydown="return searchResults.NavChild(event,1,0)" onkeypress="return searchResults.NavChild(event,1,0)" onkeyup="return searchResults.NavChild(event,1,0)" class="SRScope" href="../classi_edge.html#a013b53097dbf9abdcdcbff890f96b492" target="_parent">iEdge::ElmClass()</a>
+    <a id="Item1_c1" onkeydown="return searchResults.NavChild(event,1,1)" onkeypress="return searchResults.NavChild(event,1,1)" onkeyup="return searchResults.NavChild(event,1,1)" class="SRScope" href="../classi_triangle.html#a9202aad6ba516132b43df2effb97e740" target="_parent">iTriangle::ElmClass()</a>
+    <a id="Item1_c2" onkeydown="return searchResults.NavChild(event,1,2)" onkeypress="return searchResults.NavChild(event,1,2)" onkeyup="return searchResults.NavChild(event,1,2)" class="SRScope" href="../classi_tetrahedron.html#a1cc83bca5d4fe58c9cad3ca3ffe97558" target="_parent">iTetrahedron::ElmClass()</a>
+  </div>
+ </div>
+</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+<script type="text/javascript"><!--
+document.getElementById("Loading").style.display="none";
+document.getElementById("NoMatches").style.display="none";
+var searchResults = new SearchResults("searchResults");
+searchResults.Search();
+--></script>
+</div>
+</body>
+</html>
