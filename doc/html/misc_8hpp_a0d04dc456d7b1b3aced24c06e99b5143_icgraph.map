@@ -3,8 +3,8 @@
 <area shape="rect" id="node5" href="$class_shape_function_3_01_simplex_3_012_01_4_01_4.html#aec32386ff8711c5388334ba1f6ba534e" title="ShapeFunction\&lt; Simplex\&lt; 2 \&gt; \&gt;::getNumDof" alt="" coords="131,59,448,88"/>
 <area shape="rect" id="node7" href="$class_shape_function_3_01_simplex_3_013_01_4_01_4.html#adc7073096ed40e82e961a07390c5a25e" title="ShapeFunction\&lt; Simplex\&lt; 3 \&gt; \&gt;::gradL" alt="" coords="151,112,428,141"/>
 <area shape="rect" id="node9" href="$class_shape_function_3_01_simplex_3_012_01_4_01_4.html#a208cf52a358198dfabbb0844860f170a" title="ShapeFunction\&lt; Simplex\&lt; 2 \&gt; \&gt;::gradL" alt="" coords="151,165,428,195"/>
-<area shape="rect" id="node11" href="$classi_marked_entity.html#a5a240052d6cd68fac9777cd69f5eb62e" title="iMarkedEntity::isDead" alt="" coords="211,219,368,248"/>
-<area shape="rect" id="node13" href="$classi_marked_entity.html#a94f4f7447cb082c3b1289f09db8acdc6" title="iMarkedEntity::mustBeKilled" alt="" coords="191,272,388,301"/>
+<area shape="rect" id="node11" href="$classi_labelable.html#accf4e78cc09e860d0ae0123a4dcfcb7f" title="iLabelable::isDead" alt="" coords="220,219,359,248"/>
+<area shape="rect" id="node13" href="$classi_labelable.html#a022b14ee7533b352deb56beeabf616da" title="iLabelable::mustBeKilled" alt="" coords="201,272,377,301"/>
 <area shape="rect" id="node15" href="$class_shape_function_3_01_simplex_3_013_01_4_01_4.html#aa30f08f898a856db959138eaf2274063" title="ShapeFunction\&lt; Simplex\&lt; 3 \&gt; \&gt;::operator()" alt="" coords="136,325,443,355"/>
 <area shape="rect" id="node17" href="$class_shape_function_3_01_simplex_3_012_01_4_01_4.html#a320d96d5dcae6c488c4570ed07a81048" title="ShapeFunction\&lt; Simplex\&lt; 2 \&gt; \&gt;::operator()" alt="" coords="136,379,443,408"/>
 <area shape="rect" id="node19" href="$class_shape_function_3_01_simplex_3_013_01_4_01_4.html#a2e966005bc3920556eb59c9bd9d5e476" title="ShapeFunction\&lt; Simplex\&lt; 3 \&gt; \&gt;::setDegree" alt="" coords="135,432,444,461"/>

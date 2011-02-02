@@ -1,21 +1,4 @@
-#include "prefix_header.hpp"
-//#include <iostream>
-//#include "Fepic/src/mesh/mesh.hpp"
-//#include "Fepic/src/util/misc.hpp"
-//#include "Fepic/src/shapefunctions/parametric_pts.hpp"
-//#include "Fepic/src/shapefunctions/shapefunctions.hpp"
-//#include "Fepic/src/quadrature/quadrature.hpp"
-//#include <cmath>
-//#include <Eigen/Dense>
-//#include <Eigen/Geometry>
-//#include <vector>
-//#include <cstring>
-//#include <iomanip>
-//#include <sstream>
-//#include <limits>
-//#include <cstdlib>
-//#include <sstream>
-//#include <algorithm>
+#include <Fepic/Mesh>
 
 
 int const DIM = 3;
@@ -40,19 +23,19 @@ int main(int argc, char *argv[]) {
     
 	if(DIM == 3)
 	{
-		//malha.readFileMSH("malha/monotet.msh");
-        malha.readFileMSH("malha/tetbig.msh");
+		//malha.readFileMsh("malha/monotet.msh");
+        malha.readFileMsh("malha/tetbig.msh");
 	}
 	else
 	{
-		malha.readFileMSH("malha/simple.msh");
+		malha.readFileMsh("malha/simple.msh");
 	}
 	 
     //malha.printInfo(std::cout);
     
     //malha.setOrder(2);
     
-    //malha.writeVTK();
+    malha.writeVtk();
 
 
     malha.writeFileState();

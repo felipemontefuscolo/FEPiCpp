@@ -19,13 +19,11 @@
 // License and a copy of the GNU General Public License along with
 // FEPiC++. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef MYPETSC_HPP
-#define MYPETSC_HPP
+#ifndef FEPIC_MYPETSC_HPP
+#define FEPIC_MYPETSC_HPP
 
 #include "petscsnes.h"
 #include "petscksp.h"
-#include <iostream>
-#include <iomanip>
 
 
 

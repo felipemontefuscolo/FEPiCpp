@@ -74,7 +74,7 @@ Static Public Member Functions</h2></td></tr>
  class MeshMethods&lt; Mesh, 3 &gt;</h3>
 
 
-<p>Definition at line <a class="el" href="metamesh_8hpp_source.html#l00040">40</a> of file <a class="el" href="metamesh_8hpp_source.html">metamesh.hpp</a>.</p>
+<p>Definition at line <a class="el" href="metamesh_8hpp_source.html#l00060">60</a> of file <a class="el" href="metamesh_8hpp_source.html">metamesh.hpp</a>.</p>
 <hr/><h2>Member Function Documentation</h2>
 <a class="anchor" id="ad4538cac83f816465c8723691dca7b4a"></a><!-- doxytag: member="MeshMethods&lt; Mesh, 3 &gt;::buildAdjacency" ref="ad4538cac83f816465c8723691dca7b4a" args="(iMesh&lt; Traits &gt; &amp;mesh)" -->
 <div class="memitem">
@@ -96,9 +96,9 @@ template&lt;class Traits &gt; </div>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="metamesh_8hpp_source.html#l00044">44</a> of file <a class="el" href="metamesh_8hpp_source.html">metamesh.hpp</a>.</p>
+<p>Definition at line <a class="el" href="metamesh_8hpp_source.html#l00064">64</a> of file <a class="el" href="metamesh_8hpp_source.html">metamesh.hpp</a>.</p>
 
-<p>References <a class="el" href="imesh_i_o_8hpp_source.html#l00105">iMesh&lt; Traits &gt;::buildAdjacency4volume()</a>.</p>
+<p>References <a class="el" href="imesh_i_o_8hpp_source.html#l00118">iMesh&lt; Traits &gt;::buildAdjacency4volume()</a>.</p>
 
 <p><div class="fragment"><pre class="fragment">  {
     mesh.<a class="code" href="classi_mesh.html#aa86dff248af77c3d4a88e7f8dd02b47e">buildAdjacency4volume</a>();
@@ -136,14 +136,14 @@ template&lt;class Traits &gt; </div>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="metamesh_8hpp_source.html#l00056">56</a> of file <a class="el" href="metamesh_8hpp_source.html">metamesh.hpp</a>.</p>
+<p>Definition at line <a class="el" href="metamesh_8hpp_source.html#l00076">76</a> of file <a class="el" href="metamesh_8hpp_source.html">metamesh.hpp</a>.</p>
 
-<p>References <a class="el" href="imesh_8hpp_source.html#l00397">iMesh&lt; Traits &gt;::edges_local_nodes</a>, <a class="el" href="imesh_8hpp_source.html#l00398">iMesh&lt; Traits &gt;::faces_local_nodes</a>, and <a class="el" href="imesh_8hpp_source.html#l00341">iMesh&lt; Traits &gt;::getOrder()</a>.</p>
+<p>References <a class="el" href="imesh_8hpp_source.html#l00414">iMesh&lt; Traits &gt;::edges_local_nodes</a>, <a class="el" href="imesh_8hpp_source.html#l00415">iMesh&lt; Traits &gt;::faces_local_nodes</a>, and <a class="el" href="imesh_8hpp_source.html#l00358">iMesh&lt; Traits &gt;::getOrder()</a>.</p>
 
-<p><div class="fragment"><pre class="fragment">    {
-        mesh.<a class="code" href="classi_mesh.html#adeaa31436a5d674697e6273e7a359559">edges_local_nodes</a> = Traits::CellT::getEdgesLocalNodes(mesh.<a class="code" href="classi_mesh.html#a7b7a01a935aca37faf538eb9dcb1eff9">getOrder</a>());
-        mesh.<a class="code" href="classi_mesh.html#ab168771b22fc7b1568ab59efc882dce7">faces_local_nodes</a> = Traits::CellT::getFacesLocalNodes(mesh.<a class="code" href="classi_mesh.html#a7b7a01a935aca37faf538eb9dcb1eff9">getOrder</a>());
-    }
+<p><div class="fragment"><pre class="fragment">  {
+    mesh.<a class="code" href="classi_mesh.html#adeaa31436a5d674697e6273e7a359559">edges_local_nodes</a> = Traits::CellT::getEdgesLocalNodes(mesh.<a class="code" href="classi_mesh.html#a7b7a01a935aca37faf538eb9dcb1eff9">getOrder</a>());
+    mesh.<a class="code" href="classi_mesh.html#ab168771b22fc7b1568ab59efc882dce7">faces_local_nodes</a> = Traits::CellT::getFacesLocalNodes(mesh.<a class="code" href="classi_mesh.html#a7b7a01a935aca37faf538eb9dcb1eff9">getOrder</a>());
+  }
 </pre></div></p>
 
 <p><div class="dynheader">
@@ -186,13 +186,13 @@ template&lt;class T &gt; </div>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="metamesh_8hpp_source.html#l00050">50</a> of file <a class="el" href="metamesh_8hpp_source.html">metamesh.hpp</a>.</p>
+<p>Definition at line <a class="el" href="metamesh_8hpp_source.html#l00070">70</a> of file <a class="el" href="metamesh_8hpp_source.html">metamesh.hpp</a>.</p>
 
-<p>References <a class="el" href="imesh_8hpp_source.html#l00135">iMesh&lt; Traits &gt;::remodelCellsNodes4volume()</a>.</p>
+<p>References <a class="el" href="imesh_8hpp_source.html#l00157">iMesh&lt; Traits &gt;::remodelCellsNodes4volume()</a>.</p>
 
-<p><div class="fragment"><pre class="fragment">    {
-        mesh.<a class="code" href="classi_mesh.html#ae37e474eb8968265b9eefe425e9d1b6d">remodelCellsNodes4volume</a>(order);
-    }
+<p><div class="fragment"><pre class="fragment">  {
+    mesh.<a class="code" href="classi_mesh.html#ae37e474eb8968265b9eefe425e9d1b6d">remodelCellsNodes4volume</a>(order);
+  }
 </pre></div></p>
 
 <p><div class="dynheader">
@@ -224,7 +224,7 @@ Here is the call graph for this function:</div>
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Fri Jan 28 2011 19:32:29 for FEPiCpp by&nbsp;
+<hr class="footer"/><address class="footer"><small>Generated on Wed Feb 2 2011 20:53:23 for FEPiCpp by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.1 </small></address>
 </body>

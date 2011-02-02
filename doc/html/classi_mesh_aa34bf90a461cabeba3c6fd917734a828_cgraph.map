@@ -1,10 +1,11 @@
 <map id="G" name="G">
 <area shape="rect" id="node3" href="$classi_mesh.html#abb6047181a2267638db01543a217c0b1" title="iMesh::addCell" alt="" coords="259,5,373,35"/>
-<area shape="rect" id="node5" href="$classi_mesh.html#a931cd02ff7cd77a1e0b7ddcba1806818" title="iMesh::getMHalf" alt="" coords="255,59,377,88"/>
-<area shape="rect" id="node7" href="$classi_edge.html#acfdf92b3e46a596cff5994e05c5c4b67" title="iEdge::getMSHTag" alt="" coords="248,112,384,141"/>
-<area shape="rect" id="node9" href="$classi_mesh.html#a75d80a77e481bd2c0f0ecb7c6c214d8c" title="iMesh::getNode" alt="" coords="255,165,377,195"/>
-<area shape="rect" id="node11" href="$classi_mesh.html#a3cc1393958177010a967c03e4a6ddca6" title="iMesh::getNumNodes" alt="" coords="236,219,396,248"/>
-<area shape="rect" id="node13" href="$misc_8hpp.html#a5b49c91325321c7d6350e79f69601e9b" title="search_word" alt="" coords="265,272,367,301"/>
-<area shape="rect" id="node15" href="$classi_mesh.html#a742ec26bec38cad2aaffeb2907878d11" title="iMesh::setOrder" alt="" coords="255,325,377,355"/>
-<area shape="rect" id="node17" href="$classi_mesh.html#a61ce27dbd66689c8c0db694262f79db5" title="iMesh::theseVerticesFormAMHalf" alt="" coords="200,379,432,408"/>
+<area shape="rect" id="node5" href="$classi_mesh.html#a931cd02ff7cd77a1e0b7ddcba1806818" title="iMesh::getMHalf" alt="" coords="511,191,633,220"/>
+<area shape="rect" id="node7" href="$class_edge.html#a19bf37e8deb0873cd266aa6a7b9bf15a" title="Edge::getMSHTag" alt="" coords="249,109,383,139"/>
+<area shape="rect" id="node9" href="$classi_mesh.html#a75d80a77e481bd2c0f0ecb7c6c214d8c" title="iMesh::getNode" alt="" coords="255,163,377,192"/>
+<area shape="rect" id="node11" href="$classi_mesh.html#a3cc1393958177010a967c03e4a6ddca6" title="iMesh::getNumNodes" alt="" coords="236,216,396,245"/>
+<area shape="rect" id="node13" href="$misc_8hpp.html#a5b49c91325321c7d6350e79f69601e9b" title="search_word" alt="" coords="265,269,367,299"/>
+<area shape="rect" id="node15" href="$classi_mesh.html#a742ec26bec38cad2aaffeb2907878d11" title="iMesh::setOrder" alt="" coords="255,323,377,352"/>
+<area shape="rect" id="node17" href="$classi_mesh.html#a61ce27dbd66689c8c0db694262f79db5" title="iMesh::theseVerticesFormAMHalf" alt="" coords="200,376,432,405"/>
+<area shape="rect" id="node20" href="$classi_mesh.html#ad32a1ab93dcee03d47c763ee9e0fdf11" title="iMesh::getNumMHalfTotal" alt="" coords="480,376,664,405"/>
 </map>

@@ -53,22 +53,21 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
-<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
-<a href="#pro-attribs">Protected Attributes</a>  </div>
+<a href="#pub-static-attribs">Static Public Attributes</a>  </div>
   <div class="headertitle">
 <h1>iPoint&lt; Traits &gt; Class Template Reference</h1>  </div>
 </div>
 <div class="contents">
-<!-- doxytag: class="iPoint" --><!-- doxytag: inherits="iMarkedEntity" -->
-<p><code>#include &lt;<a class="el" href="entities_8hpp_source.html">entities.hpp</a>&gt;</code></p>
+<!-- doxytag: class="iPoint" --><!-- doxytag: inherits="iLabelable" -->
+<p><code>#include &lt;<a class="el" href="ipoint_8hpp_source.html">ipoint.hpp</a>&gt;</code></p>
 
-<p>Inherits <a class="el" href="classi_marked_entity.html">iMarkedEntity</a>.</p>
+<p>Inherits <a class="el" href="classi_labelable.html">iLabelable</a>.</p>
 <div class="dynheader">
 Collaboration diagram for iPoint&lt; Traits &gt;:</div>
 <div class="dyncontent">
 <div class="center"><img src="classi_point__coll__graph.png" border="0" usemap="#i_point_3_01_traits_01_4_coll__map" alt="Collaboration graph"/></div>
 <map name="i_point_3_01_traits_01_4_coll__map" id="i_point_3_01_traits_01_4_coll__map">
-<area shape="rect" id="node2" href="classi_marked_entity.html" title="iMarkedEntity" alt="" coords="12,5,119,35"/></map>
+<area shape="rect" id="node2" href="classi_labelable.html" title="iLabelable" alt="" coords="23,5,108,35"/></map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 
 <p><a href="classi_point-members.html">List of all members.</a></p>
@@ -82,7 +81,7 @@ Public Types</h2></td></tr>
 <a class="el" href="classi_point.html#a384ffb215b26e9217628f2990530d6a8">CellT</a> &gt;::<a class="el" href="classi_point.html#a08b4ae5b777bced068688775ff0050f2">FaceT</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi_point.html#a08b4ae5b777bced068688775ff0050f2">FaceT</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">typedef HalfDef&lt; CellT::Dim, <br class="typebreak"/>
 Traits &gt;::<a class="el" href="classi_point.html#a801508184eae0fa1167d40f688ab6a85">HalfT</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi_point.html#a801508184eae0fa1167d40f688ab6a85">HalfT</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classi_edge.html">iEdge</a>&lt; Traits &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi_point.html#affcbdba191ab2948e0bf0bf638027406">EdgeT</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="class_edge.html">Edge</a>&lt; Traits &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi_point.html#a67ef53d3d03730b99e67c4da61ebc86f">EdgeT</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">typedef Traits::MeshT&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi_point.html#a753d3c85f02494520874f47b621f6f1d">MeshT</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">typedef Eigen::Matrix&lt; double, <br class="typebreak"/>
 Traits::spacedim, 1 &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi_point.html#a5979110fb7f4b6530923344817dcc0dd">VecT</a></td></tr>
@@ -113,10 +112,6 @@ Static Public Member Functions</h2></td></tr>
 Static Public Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static const int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi_point.html#aea38edd83bc0d3bb42acf56b4cf3d3fa">Dim</a> = 0</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static const int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi_point.html#acd9c339a458ea547add3223bf85a43bc">N_borders</a> = 1</td></tr>
-<tr><td colspan="2"><h2><a name="pro-attribs"></a>
-Protected Attributes</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classi_point.html#a5979110fb7f4b6530923344817dcc0dd">VecT</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi_point.html#ad6ece4e50d6bf3e5482e5919e1ff7f90">_coord</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classi_point.html#a801508184eae0fa1167d40f688ab6a85">HalfT</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi_point.html#af312bac6d1375426673c1842b339d123">_half</a></td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
 <h3>template&lt;class Traits&gt;<br/>
@@ -124,7 +119,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Os objetos desta classe representam pontos no espaço. </p>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l00884">884</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipoint_8hpp_source.html#l00029">29</a> of file <a class="el" href="ipoint_8hpp_source.html">ipoint.hpp</a>.</p>
 <hr/><h2>Member Typedef Documentation</h2>
 <a class="anchor" id="a384ffb215b26e9217628f2990530d6a8"></a><!-- doxytag: member="iPoint::CellT" ref="a384ffb215b26e9217628f2990530d6a8" args="" -->
 <div class="memitem">
@@ -139,24 +134,24 @@ template&lt;class Traits &gt; </div>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l00888">888</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipoint_8hpp_source.html#l00033">33</a> of file <a class="el" href="ipoint_8hpp_source.html">ipoint.hpp</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="affcbdba191ab2948e0bf0bf638027406"></a><!-- doxytag: member="iPoint::EdgeT" ref="affcbdba191ab2948e0bf0bf638027406" args="" -->
+<a class="anchor" id="a67ef53d3d03730b99e67c4da61ebc86f"></a><!-- doxytag: member="iPoint::EdgeT" ref="a67ef53d3d03730b99e67c4da61ebc86f" args="" -->
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;class Traits &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="classi_edge.html">iEdge</a>&lt;Traits&gt; <a class="el" href="classi_point.html">iPoint</a>&lt; Traits &gt;::<a class="el" href="classi_edge.html">EdgeT</a></td>
+          <td class="memname">typedef <a class="el" href="class_edge.html">Edge</a>&lt;Traits&gt; <a class="el" href="classi_point.html">iPoint</a>&lt; Traits &gt;::<a class="el" href="class_edge.html">EdgeT</a></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l00894">894</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipoint_8hpp_source.html#l00038">38</a> of file <a class="el" href="ipoint_8hpp_source.html">ipoint.hpp</a>.</p>
 
 </div>
 </div>
@@ -173,7 +168,7 @@ template&lt;class Traits &gt; </div>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l00890">890</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipoint_8hpp_source.html#l00035">35</a> of file <a class="el" href="ipoint_8hpp_source.html">ipoint.hpp</a>.</p>
 
 </div>
 </div>
@@ -190,7 +185,7 @@ template&lt;class Traits &gt; </div>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l00892">892</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipoint_8hpp_source.html#l00036">36</a> of file <a class="el" href="ipoint_8hpp_source.html">ipoint.hpp</a>.</p>
 
 </div>
 </div>
@@ -207,7 +202,7 @@ template&lt;class Traits &gt; </div>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l00895">895</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipoint_8hpp_source.html#l00039">39</a> of file <a class="el" href="ipoint_8hpp_source.html">ipoint.hpp</a>.</p>
 
 </div>
 </div>
@@ -224,7 +219,7 @@ template&lt;class Traits &gt; </div>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l00897">897</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipoint_8hpp_source.html#l00041">41</a> of file <a class="el" href="ipoint_8hpp_source.html">ipoint.hpp</a>.</p>
 
 </div>
 </div>
@@ -241,7 +236,7 @@ template&lt;class Traits &gt; </div>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l00889">889</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipoint_8hpp_source.html#l00034">34</a> of file <a class="el" href="ipoint_8hpp_source.html">ipoint.hpp</a>.</p>
 
 </div>
 </div>
@@ -283,17 +278,13 @@ template&lt;class T &gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l00904">904</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipoint_8hpp_source.html#l00048">48</a> of file <a class="el" href="ipoint_8hpp_source.html">ipoint.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l01043">iPoint&lt; Traits &gt;::_coord</a>.</p>
-
-<p><div class="fragment"><pre class="fragment">                                             : <a class="code" href="classi_marked_entity.html#a3c47487f8856ca9629b02c480907ba82">iMarkedEntity</a>(label)
-        {
-                <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; Traits::spacedim; ++i)
-                {
-                        <a class="code" href="classi_point.html#ad6ece4e50d6bf3e5482e5919e1ff7f90">_coord</a>[i] = coord[i];
-                }
-        }
+<p><div class="fragment"><pre class="fragment">                                       : <a class="code" href="classi_labelable.html#a1d8758bd62102cd3a8a1cda3e47c9655">iLabelable</a>(label)
+  {
+    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; Traits::spacedim; ++i)
+      _coord[i] = coord[i];
+  }
 </pre></div></p>
 
 </div>
@@ -316,9 +307,9 @@ template&lt;class Traits &gt; </div>
 <div class="memdoc">
 <p>Construtor. </p>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l00914">914</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipoint_8hpp_source.html#l00056">56</a> of file <a class="el" href="ipoint_8hpp_source.html">ipoint.hpp</a>.</p>
 
-<p><div class="fragment"><pre class="fragment">: <a class="code" href="classi_marked_entity.html#a3c47487f8856ca9629b02c480907ba82">iMarkedEntity</a>() {}
+<p><div class="fragment"><pre class="fragment">: <a class="code" href="classi_labelable.html#a1d8758bd62102cd3a8a1cda3e47c9655">iLabelable</a>() {}
 </pre></div></p>
 
 </div>
@@ -341,7 +332,7 @@ template&lt;class Traits &gt; </div>
 <div class="memdoc">
 <p>Destrutor. </p>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01039">1039</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipoint_8hpp_source.html#l00185">185</a> of file <a class="el" href="ipoint_8hpp_source.html">ipoint.hpp</a>.</p>
 
 <p><div class="fragment"><pre class="fragment">{}
 </pre></div></p>
@@ -376,16 +367,12 @@ template&lt;class Vec &gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l00986">986</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipoint_8hpp_source.html#l00134">134</a> of file <a class="el" href="ipoint_8hpp_source.html">ipoint.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l01043">iPoint&lt; Traits &gt;::_coord</a>.</p>
-
-<p><div class="fragment"><pre class="fragment">        {
-                <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; Traits::spacedim; ++i)
-                {
-                        coord[i] = <a class="code" href="classi_point.html#ad6ece4e50d6bf3e5482e5919e1ff7f90">_coord</a>[i];
-                }
-        }
+<p><div class="fragment"><pre class="fragment">  {
+    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; Traits::spacedim; ++i)
+      coord[i] = _coord[i];
+  }
 </pre></div></p>
 
 </div>
@@ -409,13 +396,11 @@ template&lt;class Traits &gt; </div>
 <div class="memdoc">
 <p>Retorna a i-ésima componente da coordenada </p>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l00996">996</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipoint_8hpp_source.html#l00142">142</a> of file <a class="el" href="ipoint_8hpp_source.html">ipoint.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l01043">iPoint&lt; Traits &gt;::_coord</a>.</p>
-
-<p><div class="fragment"><pre class="fragment">        {
-                <span class="keywordflow">return</span> <a class="code" href="classi_point.html#ad6ece4e50d6bf3e5482e5919e1ff7f90">_coord</a>[i];
-        }
+<p><div class="fragment"><pre class="fragment">  {
+    <span class="keywordflow">return</span> _coord[i];
+  }
 </pre></div></p>
 
 </div>
@@ -438,13 +423,11 @@ template&lt;class Traits &gt; </div>
 <div class="memdoc">
 <p>Retorna a coordenada deste ponto. </p>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01003">1003</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipoint_8hpp_source.html#l00149">149</a> of file <a class="el" href="ipoint_8hpp_source.html">ipoint.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l01043">iPoint&lt; Traits &gt;::_coord</a>.</p>
-
-<p><div class="fragment"><pre class="fragment">        {
-                <span class="keywordflow">return</span> <a class="code" href="classi_point.html#ad6ece4e50d6bf3e5482e5919e1ff7f90">_coord</a>;
-        }
+<p><div class="fragment"><pre class="fragment">  {
+    <span class="keywordflow">return</span> _coord;
+  }
 </pre></div></p>
 
 </div>
@@ -468,13 +451,11 @@ template&lt;class Traits &gt; </div>
 <div class="memdoc">
 <p>Retorna a distância até a coordenada p. </p>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01010">1010</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipoint_8hpp_source.html#l00156">156</a> of file <a class="el" href="ipoint_8hpp_source.html">ipoint.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l01043">iPoint&lt; Traits &gt;::_coord</a>.</p>
-
-<p><div class="fragment"><pre class="fragment">        {
-                <span class="keywordflow">return</span> sqrt( (<a class="code" href="classi_point.html#ad6ece4e50d6bf3e5482e5919e1ff7f90">_coord</a>-p).dot(<a class="code" href="classi_point.html#ad6ece4e50d6bf3e5482e5919e1ff7f90">_coord</a>-p) );
-        }
+<p><div class="fragment"><pre class="fragment">  {
+    <span class="keywordflow">return</span> sqrt( (_coord-p).dot(_coord-p) );
+  }
 </pre></div></p>
 
 </div>
@@ -498,13 +479,11 @@ template&lt;class Traits &gt; </div>
 <div class="memdoc">
 <p>Retorna a distância até o ponto p. </p>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01017">1017</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipoint_8hpp_source.html#l00163">163</a> of file <a class="el" href="ipoint_8hpp_source.html">ipoint.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l01043">iPoint&lt; Traits &gt;::_coord</a>.</p>
-
-<p><div class="fragment"><pre class="fragment">        {
-                <span class="keywordflow">return</span> sqrt( (<a class="code" href="classi_point.html#ad6ece4e50d6bf3e5482e5919e1ff7f90">_coord</a>-p._coord).dot(<a class="code" href="classi_point.html#ad6ece4e50d6bf3e5482e5919e1ff7f90">_coord</a>-p._coord) );
-        }
+<p><div class="fragment"><pre class="fragment">  {
+    <span class="keywordflow">return</span> sqrt( (_coord-p._coord).dot(_coord-p._coord) );
+  }
 </pre></div></p>
 
 </div>
@@ -527,13 +506,11 @@ template&lt;class Traits &gt; </div>
 <div class="memdoc">
 <p>Retorna um ponteiro para sua HalfT. </p>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l00940">940</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipoint_8hpp_source.html#l00082">82</a> of file <a class="el" href="ipoint_8hpp_source.html">ipoint.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l01044">iPoint&lt; Traits &gt;::_half</a>.</p>
-
-<p><div class="fragment"><pre class="fragment">        {
-                <span class="keywordflow">return</span> &amp;<a class="code" href="classi_point.html#af312bac6d1375426673c1842b339d123">_half</a>;
-        }
+<p><div class="fragment"><pre class="fragment">  {
+    <span class="keywordflow">return</span> &amp;_half;
+  }
 </pre></div></p>
 
 </div>
@@ -556,13 +533,11 @@ template&lt;class Traits &gt; </div>
 <div class="memdoc">
 <p>Retorna um ponteiro para sua HalfT. </p>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l00933">933</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipoint_8hpp_source.html#l00075">75</a> of file <a class="el" href="ipoint_8hpp_source.html">ipoint.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l01044">iPoint&lt; Traits &gt;::_half</a>.</p>
-
-<p><div class="fragment"><pre class="fragment">        {
-                <span class="keywordflow">return</span> &amp;<a class="code" href="classi_point.html#af312bac6d1375426673c1842b339d123">_half</a>;
-        }
+<p><div class="fragment"><pre class="fragment">  {
+    <span class="keywordflow">return</span> &amp;_half;
+  }
 </pre></div></p>
 
 </div>
@@ -585,11 +560,11 @@ template&lt;class Traits &gt; </div>
 <div class="memdoc">
 <p>Retorna o tag correspondente ao formato de arquivo .msh </p>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01025">1025</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipoint_8hpp_source.html#l00171">171</a> of file <a class="el" href="ipoint_8hpp_source.html">ipoint.hpp</a>.</p>
 
-<p><div class="fragment"><pre class="fragment">        {
-                <span class="keywordflow">return</span> MSH_PNT;
-        }
+<p><div class="fragment"><pre class="fragment">  {
+    <span class="keywordflow">return</span> MSH_PNT;
+  }
 </pre></div></p>
 
 </div>
@@ -612,11 +587,11 @@ template&lt;class Traits &gt; </div>
 <div class="memdoc">
 <dl class="return"><dt><b>Returns:</b></dt><dd>a dimensão do espaço. </dd></dl>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l00919">919</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipoint_8hpp_source.html#l00061">61</a> of file <a class="el" href="ipoint_8hpp_source.html">ipoint.hpp</a>.</p>
 
-<p><div class="fragment"><pre class="fragment">        {
-                <span class="keywordflow">return</span> Traits::spacedim;
-        }
+<p><div class="fragment"><pre class="fragment">  {
+    <span class="keywordflow">return</span> Traits::spacedim;
+  }
 </pre></div></p>
 
 </div>
@@ -656,29 +631,35 @@ template&lt;class Traits &gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l00949">949</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipoint_8hpp_source.html#l00091">91</a> of file <a class="el" href="ipoint_8hpp_source.html">ipoint.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l01043">iPoint&lt; Traits &gt;::_coord</a>.</p>
-
-<p><div class="fragment"><pre class="fragment">        {
-                <span class="keywordflow">switch</span> (Traits::spacedim) {
-                        <span class="keywordflow">case</span> 1:
-                                o &lt;&lt; std::left &lt;&lt; std::setw(space) &lt;&lt; <a class="code" href="classi_point.html#ad6ece4e50d6bf3e5482e5919e1ff7f90">_coord</a>[0] &lt;&lt; <span class="stringliteral">&quot; 0.0 0.0&quot;</span>;
-                                <span class="keywordflow">break</span>;
-                        <span class="keywordflow">case</span> 2:
-                                o &lt;&lt; std::left &lt;&lt; std::setw(space) &lt;&lt; _coord[0]
-                                                           &lt;&lt; std::setw(space) &lt;&lt; _coord[1] &lt;&lt; <span class="stringliteral">&quot; 0.0&quot;</span>;
-                                <span class="keywordflow">break</span>;
-                        <span class="keywordflow">case</span> 3:
-                                o &lt;&lt; std::left &lt;&lt; std::setw(space) &lt;&lt; _coord[0]
-                                                           &lt;&lt; std::setw(space) &lt;&lt; _coord[1]
-                                                           &lt;&lt; std::setw(space) &lt;&lt; _coord[2];
-                                <span class="keywordflow">break</span>;
-                        <span class="keywordflow">default</span>:
-                                std::cout &lt;&lt; <span class="stringliteral">&quot;Error: invalid dimension\n&quot;</span>;
-                                <span class="keywordflow">break</span>;
-                }
-        }
+<p><div class="fragment"><pre class="fragment">  {
+    <span class="keywordflow">switch</span> (Traits::spacedim) {
+      <span class="keywordflow">case</span> 1:
+      {
+        o &lt;&lt; std::left &lt;&lt; std::setw(space) &lt;&lt; _coord[0] &lt;&lt; <span class="stringliteral">&quot; 0.0 0.0&quot;</span>;
+        <span class="keywordflow">break</span>;
+      }
+      <span class="keywordflow">case</span> 2:
+      {
+        o &lt;&lt; std::left &lt;&lt; std::setw(space) &lt;&lt; _coord[0]
+                       &lt;&lt; std::setw(space) &lt;&lt; _coord[1] &lt;&lt; <span class="stringliteral">&quot; 0.0&quot;</span>;
+        <span class="keywordflow">break</span>;
+      }
+      <span class="keywordflow">case</span> 3:
+      {
+        o &lt;&lt; std::left &lt;&lt; std::setw(space) &lt;&lt; _coord[0]
+                       &lt;&lt; std::setw(space) &lt;&lt; _coord[1]
+                       &lt;&lt; std::setw(space) &lt;&lt; _coord[2];
+        <span class="keywordflow">break</span>;
+      }
+      <span class="keywordflow">default</span>:
+      {
+        std::cout &lt;&lt; <span class="stringliteral">&quot;Error: invalid dimension\n&quot;</span>;
+        <span class="keywordflow">break</span>;
+      }
+    }
+  }
 </pre></div></p>
 
 </div>
@@ -710,16 +691,12 @@ template&lt;class Vec &gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l00974">974</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipoint_8hpp_source.html#l00124">124</a> of file <a class="el" href="ipoint_8hpp_source.html">ipoint.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l01043">iPoint&lt; Traits &gt;::_coord</a>.</p>
-
-<p><div class="fragment"><pre class="fragment">        {
-                <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; Traits::spacedim; ++i)
-                {
-                        <a class="code" href="classi_point.html#ad6ece4e50d6bf3e5482e5919e1ff7f90">_coord</a>[i] = coord[i];
-                }
-        }
+<p><div class="fragment"><pre class="fragment">  {
+    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; Traits::spacedim; ++i)
+      _coord[i] = coord[i];
+  }
 </pre></div></p>
 
 </div>
@@ -743,13 +720,11 @@ template&lt;class Traits &gt; </div>
 <div class="memdoc">
 <p>Faz com que este ponto tenha a HalfT ha. </p>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l00926">926</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipoint_8hpp_source.html#l00068">68</a> of file <a class="el" href="ipoint_8hpp_source.html">ipoint.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l01044">iPoint&lt; Traits &gt;::_half</a>.</p>
-
-<p><div class="fragment"><pre class="fragment">        {
-                <a class="code" href="classi_point.html#af312bac6d1375426673c1842b339d123">_half</a> = ha;
-        }
+<p><div class="fragment"><pre class="fragment">  {
+    _half = ha;
+  }
 </pre></div></p>
 
 </div>
@@ -772,54 +747,16 @@ template&lt;class Traits &gt; </div>
 <div class="memdoc">
 <p>NOT FOR USERS </p>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01032">1032</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipoint_8hpp_source.html#l00178">178</a> of file <a class="el" href="ipoint_8hpp_source.html">ipoint.hpp</a>.</p>
 
-<p><div class="fragment"><pre class="fragment">        {
-                <span class="comment">// nada</span>
-        }
+<p><div class="fragment"><pre class="fragment">  {
+    <span class="comment">// nada</span>
+  }
 </pre></div></p>
 
 </div>
 </div>
 <hr/><h2>Member Data Documentation</h2>
-<a class="anchor" id="ad6ece4e50d6bf3e5482e5919e1ff7f90"></a><!-- doxytag: member="iPoint::_coord" ref="ad6ece4e50d6bf3e5482e5919e1ff7f90" args="" -->
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;class Traits &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classi_point.html#a5979110fb7f4b6530923344817dcc0dd">VecT</a> <a class="el" href="classi_point.html">iPoint</a>&lt; Traits &gt;::<a class="el" href="classi_point.html#ad6ece4e50d6bf3e5482e5919e1ff7f90">_coord</a><code> [protected]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01043">1043</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
-
-<p>Referenced by <a class="el" href="entities_8hpp_source.html#l00986">iPoint&lt; Traits &gt;::getCoord()</a>, <a class="el" href="entities_8hpp_source.html#l01010">iPoint&lt; Traits &gt;::getDistance()</a>, <a class="el" href="entities_8hpp_source.html#l00904">iPoint&lt; Traits &gt;::iPoint()</a>, <a class="el" href="entities_8hpp_source.html#l00949">iPoint&lt; Traits &gt;::printSelfVTK()</a>, and <a class="el" href="entities_8hpp_source.html#l00974">iPoint&lt; Traits &gt;::setCoord()</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="af312bac6d1375426673c1842b339d123"></a><!-- doxytag: member="iPoint::_half" ref="af312bac6d1375426673c1842b339d123" args="" -->
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;class Traits &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classi_point.html#a801508184eae0fa1167d40f688ab6a85">HalfT</a> <a class="el" href="classi_point.html">iPoint</a>&lt; Traits &gt;::<a class="el" href="classi_point.html#af312bac6d1375426673c1842b339d123">_half</a><code> [protected]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01044">1044</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
-
-<p>Referenced by <a class="el" href="entities_8hpp_source.html#l00933">iPoint&lt; Traits &gt;::getHalf()</a>, and <a class="el" href="entities_8hpp_source.html#l00926">iPoint&lt; Traits &gt;::setHalf()</a>.</p>
-
-</div>
-</div>
 <a class="anchor" id="aea38edd83bc0d3bb42acf56b4cf3d3fa"></a><!-- doxytag: member="iPoint::Dim" ref="aea38edd83bc0d3bb42acf56b4cf3d3fa" args="" -->
 <div class="memitem">
 <div class="memproto">
@@ -833,7 +770,7 @@ template&lt;class Traits &gt; </div>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l00886">886</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipoint_8hpp_source.html#l00031">31</a> of file <a class="el" href="ipoint_8hpp_source.html">ipoint.hpp</a>.</p>
 
 </div>
 </div>
@@ -850,12 +787,12 @@ template&lt;class Traits &gt; </div>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01041">1041</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipoint_8hpp_source.html#l00187">187</a> of file <a class="el" href="ipoint_8hpp_source.html">ipoint.hpp</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li><a class="el" href="entities_8hpp_source.html">entities.hpp</a></li>
+<li><a class="el" href="ipoint_8hpp_source.html">ipoint.hpp</a></li>
 </ul>
 </div>
 <!--- window showing the filter options -->
@@ -872,7 +809,7 @@ template&lt;class Traits &gt; </div>
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Fri Jan 28 2011 19:32:29 for FEPiCpp by&nbsp;
+<hr class="footer"/><address class="footer"><small>Generated on Wed Feb 2 2011 20:53:23 for FEPiCpp by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.1 </small></address>
 </body>

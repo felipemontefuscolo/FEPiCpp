@@ -19,13 +19,9 @@
 // License and a copy of the GNU General Public License along with
 // FEPiC++. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef PARAMETRIC_PTS_HPP
-#define PARAMETRIC_PTS_HPP
+#ifndef FEPIC_PARAMETRIC_PTS_HPP
+#define FEPIC_PARAMETRIC_PTS_HPP
 
-#include <iostream>
-#include "Fepic/src/custom_eigen/custom_eigen.hpp"
-#include <vector>
-#include <algorithm>
 
 /* protótipos */
 std::vector<double> genLineParametricPts(int n);

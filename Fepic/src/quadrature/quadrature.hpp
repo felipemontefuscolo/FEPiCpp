@@ -19,14 +19,9 @@
 // License and a copy of the GNU General Public License along with
 // FEPiC++. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef QUADRATURE_HPP
-#define QUADRATURE_HPP
+#ifndef FEPIC_QUADRATURE_HPP
+#define FEPIC_QUADRATURE_HPP
 
-//#include "../mesh/entities.hpp"
-#include <Eigen/Dense>
-#include <vector>
-#include <algorithm>
-#include <iostream>
 
 template<class T> class Quadrature;
 

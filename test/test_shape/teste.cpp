@@ -44,11 +44,11 @@ int main(int argc, char *argv[]) {
     
 	if(DIM == 3)
 	{
-		malha.readFileMSH("malha/tettet.msh");
+		malha.readFileMsh("malha/tettet.msh");
 	}
 	else
 	{
-		malha.readFileMSH("malha/tritri.msh");
+		malha.readFileMsh("malha/tritri.msh");
 	}
 	 
     
@@ -98,32 +98,32 @@ int main(int argc, char *argv[]) {
 		
 	//}
 	
-	malha.writeVTK();
+	malha.writeVtk();
 	for (int k = 0; k < Phi.getNumDof(); k++)
 	{	
 		stringstream ss;
 		ss << "func" << std::setfill('0') << std::setw(5) << k;
 		//cout << ss.str().data() << endl;
-		malha.addScalarVTK(ss.str().data(), func[k], func[k].size());
+		malha.addScalarVtk(ss.str().data(), func[k], func[k].size());
 		ss.str(std::string());
         
 	}	
 
-	//malha.getCell(5)->printSelfVTK(std::cout);
+	//malha.getCell(5)->printSelfVtk(std::cout);
 
 	//int IAJSHDKJAD[]={0,0,0};
 	//vector<int> a(3);
 	//int BBB[] = {1,1}
 	//uint nodes[] = {21,5,13};
 	//uint halfID;
-	//cout << iMesh<MyT>::theseVerticesFormAMHalf(nodes, halfID) << endl;
+	//cout << iMesh<MyT>::theseVerticesFormAHalfl(nodes, halfID) << endl;
 	
 	//cell = malha.getCell(0);
 	
 	//malha.writeFileState();
-    //malha.writeVTK();
-    //malha.addNodeLabelVTK("Node_Labes");
-    //malha.addNodeHalfVTK("Node_Half");
+    //malha.writeVtk();
+    //malha.addNodeLabelVtk("Node_Labes");
+    //malha.addNodeHalfVtk("Node_Half");
 
 	//cout << "sucesso\n";
 	return 0.;

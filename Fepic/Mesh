@@ -19,24 +19,50 @@
 // License and a copy of the GNU General Public License along with
 // FEPiC++. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef FEPIC_MESH
-#define FEPIC_MESH
+#ifndef FEPIC_MESH_NE
+#define FEPIC_MESH_NE
 
 
+//#include <algorithm>
+//#include <cmath>
+#include <deque>
+#include <fstream>
+#include <iomanip>
 #include <iostream>
+#include <list>
+#include <map>
+#include <sstream>
+#include <string>
+#include <vector>
 
 
 
+#include "Fepic/src/custom_eigen/custom_eigen.hpp"
+
+#include "Fepic/src/util/macros.hpp"
+
+#include "Fepic/src/util/forward_declarations.hpp"
+#include "Fepic/src/mesh/msh_tags.hpp"
+#include "Fepic/src/util/misc.hpp"
+#include "Fepic/src/shapefunctions/parametric_pts.hpp"
+#include "Fepic/src/shapefunctions/shapefunctions.hpp"
+#include "Fepic/src/mesh/metamesh.hpp"
 
 
-
-
-
-
-
-
-
-
+#include "Fepic/src/mesh/entities.hpp"
+#include "Fepic/src/mesh/labelable.hpp"
+#include "Fepic/src/mesh/halfedge.hpp"
+#include "Fepic/src/mesh/halfedgelab.hpp"
+#include "Fepic/src/mesh/halfface.hpp"
+#include "Fepic/src/mesh/halffacelab.hpp"
+#include "Fepic/src/mesh/point.hpp"
+#include "Fepic/src/mesh/edge.hpp"
+#include "Fepic/src/mesh/poly2d.hpp"
+#include "Fepic/src/mesh/poly3d.hpp"
+#include "Fepic/src/mesh/triangle.hpp"
+#include "Fepic/src/mesh/tetrahedron.hpp"
+#include "Fepic/src/mesh/imesh.hpp"
+#include "Fepic/src/mesh/imeshIO.hpp"
 
 #endif
 

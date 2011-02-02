@@ -19,14 +19,12 @@
 // License and a copy of the GNU General Public License along with
 // FEPiC++. If not, see <http://www.gnu.org/licenses/>.
 
+#ifndef FEPIC_IMESH_HPP
+#define FEPIC_IMESH_HPP
 
-#ifndef IMESH_HPP
-#define IMESH_HPP
 
 
-#include "Fepic/src/mesh/entities.hpp"
-#include "Fepic/src/custom_eigen/custom_eigen.hpp"
-#include "Fepic/src/mesh/metamesh.hpp"
+
 
 
 template<class Traits>
@@ -37,29 +35,29 @@ public:
   typedef typename VolumeDef<CellT::Dim, CellT>::VolumeT VolumeT;
   typedef typename FaceDef<CellT::Dim, CellT>::FaceT     FaceT;
 
-  typedef iEdge<Traits>                 EdgeT;
+  typedef Edge<Traits>                 EdgeT;
   typedef typename Traits::PointT       PointT;
   typedef typename CellT::BorderT       CellBT;         // cell border type
   typedef typename CellT::BndBorderT    BndCellBT;  // boundary of the cell border type
 
   typedef typename HalfDef<CellT::Dim, Traits>::HalfT   HalfT;
-  typedef typename MHalfDef<CellT::Dim, Traits>::MHalfT MHalfT;
-  typedef iHalfEdge<Traits> HalfEdgeT;
-  typedef iHalfFace<Traits> HalfFaceT;
-  typedef iMarkedHalfEdge<Traits>       MHalfEdgeT;
-  typedef iMarkedHalfFace<Traits>       MHalfFaceT;
+  typedef typename HalflDef<CellT::Dim, Traits>::HalflT HalflT;
+  typedef HalfEdge<Traits> HalfEdgeLabT;
+  typedef HalfFace<Traits> HalfFaceLabT;
+  typedef HalfEdgeLab<Traits>       HalflEdgeLabT;
+  typedef HalfFaceLab<Traits>       HalflFaceLabT;
 
   typedef std::deque<CellT>     CellList;
   typedef std::deque<PointT>    PointList;
-  typedef std::deque<MHalfT>    MHalfList;
+  typedef std::deque<HalflT>    HalflList;
 
   typedef typename CellList::iterator  CellIterator;
   typedef typename PointList::iterator PointIterator;
-  typedef typename MHalfList::iterator MHalfIterator;
+  typedef typename HalflList::iterator HalflIterator;
 
   typedef typename CellList::const_iterator  CellConstIterator;
   typedef typename PointList::const_iterator PointConstIterator;
-  typedef typename MHalfList::const_iterator MHalfConstIterator;
+  typedef typename HalflList::const_iterator HalflConstIterator;
 
   typedef Eigen::Matrix<double, Traits::spacedim, 1> VecT;
 
@@ -70,7 +68,7 @@ public:
     _add_scalar_vtk_n_calls=0;
     _add_vector_vtk_n_calls=0;
     _order = 1;
-    MeshMethods<iMesh<Traits>, CellT::Dim>::buildCellLocalNodes(*this);
+    _MeshMethods<iMesh<Traits>, CellT::Dim>::buildCellLocalNodes(*this);
   };
 
   iMesh(iMesh const&) = delete;
@@ -88,23 +86,23 @@ public:
   /* Em todas as funções de leitura de arquivo, DEVE ser chamado
      * a função setOrder() */
 
-  void readFileMSH(const char *filename);
+  void readFileMsh(const char *filename);
 
-  void readMarkedElementsMSH4edge(std::ifstream &File);
-  void readMarkedElementsMSH4face(std::ifstream &File);
-  void readMarkedElementsMSH4volume(std::ifstream &File);
+  void readMarkedElementsMsh4edge(std::ifstream &File);
+  void readMarkedElementsMsh4face(std::ifstream &File);
+  void readMarkedElementsMsh4volume(std::ifstream &File);
 
   void buildAdjacency4face();
   void buildAdjacency4volume();
 
   void writeFileState();
-  void writeVTK(bool flinear=false);
+  void writeVtk(bool flinear=false);
   template<class T>
-  void addScalarVTK(const char* nome_var, T&& scalar, uint num_pts);
+  void addScalarVtk(const char* nome_var, T&& scalar, uint num_pts);
   template<class T>
-  void addVectorVTK(const char* nome_var, T&& arrayos, int dim, uint num_pts);
-  void addPointLabelVTK(const char* nome_var); // para debug
-  void addPointHalfVTK(const char* nome_var);  // para debug
+  void addVectorVtk(const char* nome_var, T&& arrayos, int dim, uint num_pts);
+  void addPointLabelVtk(const char* nome_var); // para debug
+  void addPointHalfVtk(const char* nome_var);  // para debug
 
         /*-------------------------------------------------------------*/
         /*-------------------------------------------------------------*/
@@ -118,7 +116,7 @@ public:
     std::cout << "order:     " << this->_order << std::endl;
     std::cout << "# nodes:   " << getNumNodes() << std::endl;
     std::cout << "# cells:   " << getNumCells() << std::endl;
-    std::cout << "# mhalfs:  " << getNumMHalfs() << std::endl;
+    std::cout << "# mhalfs:  " << getNumHalfls() << std::endl;
   }
 
   /** Altera a ordem da malha.
@@ -134,10 +132,10 @@ public:
         it->setOrder(_order);
 
       /* atualiando a matriz que contém a numeração dos nós locais da célula */
-      MeshMethods<iMesh<Traits>, CellT::Dim>::buildCellLocalNodes(*this);
+      _MeshMethods<iMesh<Traits>, CellT::Dim>::buildCellLocalNodes(*this);
 
       /* (re)cria os nós que são compartilhados entre as células. */
-      MeshMethods<iMesh<Traits>, CellT::Dim>::remodelCellsNodes(*this, order);
+      _MeshMethods<iMesh<Traits>, CellT::Dim>::remodelCellsNodes(*this, order);
     }
   }
 
@@ -166,18 +164,18 @@ public:
   * @param[in] dead_mh bool indicando se as Mhalf (dead) incluem na pesquisa.
   * @note o critério de existência é se os nós são ciclicamente iguais aos da Mhalf.
   */
-  bool theseVerticesFormAMHalf(Fepic::vectorui const& vtx, uint &half_id, bool dead_mh = false)
+  bool theseVerticesFormAHalfl(Fepic::vectorui const& vtx, uint &half_id, bool dead_mh = false)
   {
     // OTIMIZAR
 
     bool RET=false;
-    uint nummhalf = getNumMHalfTotal();
+    uint nummhalf = getNumHalflTotal();
     // IMPLEMENTAR ITERADOR
     for(uint i=0; i<nummhalf; ++i)
     {
-      bool b = this->getMHalf(i)->hasTheseVertices(vtx, *this);
+      bool b = this->getHalfl(i)->hasTheseVertices(vtx, *this);
 
-      if(b && (dead_mh || (!getMHalf(i)->isDead())) )
+      if(b && (dead_mh || (!getHalfl(i)->isDead())) )
       {
         half_id = i;
         RET = true;
@@ -200,12 +198,12 @@ public:
 
   /** Retorna a n-ésima mhalf-edge/face (adivinha pelo tipo da malha)
   */
-  MHalfT* getMHalf(uint nth)
+  HalflT* getHalfl(uint nth)
   {
     return &_mhalfL[nth];
   }
 
-  const MHalfT* getMHalf(uint nth) const
+  const HalflT* getHalfl(uint nth) const
   {
     return &_mhalfL[nth];
   }
@@ -275,7 +273,7 @@ public:
   *  @param h A half-xxxx a ser adicionada.
   *  @return A posição da half-xxxx na lista
   */
-  uint addMHalf(MHalfT const& h)
+  uint addHalfl(HalflT const& h)
   {
     if (_dead_mhalf.empty())
     {
@@ -324,7 +322,7 @@ public:
   /** Retorna número de mhalfs.
   * @note não conta com o/a(s) marcado/a(s) como killed.
   */
-  uint getNumMHalfs() const
+  uint getNumHalfls() const
   {
     return _mhalfL.size() - _dead_mhalf.size();
   }
@@ -332,7 +330,7 @@ public:
   /** Retorna o número de mhalfs.
   *  @note incluindo o/a(s) marcado/a(s) como killed.
   */
-  uint getNumMHalfTotal() const
+  uint getNumHalflTotal() const
   {
     return _mhalfL.size();
   }
@@ -391,14 +389,14 @@ public:
 
   /** Retorna um iterador apontando para o começo da lista de mhalfs.
   */
-  MHalfIterator mhalfBegin()
+  HalflIterator mhalfBegin()
   {
     return _mhalfL.begin();
   }
 
   /** Retorna um iterador apontando para o depois-do-final da lista de mhalfs.
   */
-  MHalfIterator mhalfEnd()
+  HalflIterator mhalfEnd()
   {
     return _mhalfL.end();
   }
@@ -421,7 +419,7 @@ public:
   // entities
   CellList      _cellL;
   PointList     _pointL;
-  MHalfList     _mhalfL;
+  HalflList     _mhalfL;
 
 private:
 

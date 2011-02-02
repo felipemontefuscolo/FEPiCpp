@@ -52,24 +52,23 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
-<a href="#pro-attribs">Protected Attributes</a>  </div>
+<a href="#pub-static-attribs">Static Public Attributes</a>  </div>
   <div class="headertitle">
 <h1>iPolyhedron&lt; Traits &gt; Class Template Reference</h1>  </div>
 </div>
 <div class="contents">
-<!-- doxytag: class="iPolyhedron" --><!-- doxytag: inherits="iMarkedEntity" -->
-<p><code>#include &lt;<a class="el" href="entities_8hpp_source.html">entities.hpp</a>&gt;</code></p>
+<!-- doxytag: class="iPolyhedron" --><!-- doxytag: inherits="iLabelable" -->
+<p><code>#include &lt;<a class="el" href="ipolyhedron_8hpp_source.html">ipolyhedron.hpp</a>&gt;</code></p>
 
-<p>Inherits <a class="el" href="classi_marked_entity.html">iMarkedEntity</a>.</p>
+<p>Inherits <a class="el" href="classi_labelable.html">iLabelable</a>.</p>
 
-<p>Inherited by <a class="el" href="classi_tetrahedron.html">iTetrahedron&lt; Traits &gt;</a>.</p>
+<p>Inherited by <a class="el" href="class_tetrahedron.html">Tetrahedron&lt; Traits &gt;</a>.</p>
 <div class="dynheader">
 Collaboration diagram for iPolyhedron&lt; Traits &gt;:</div>
 <div class="dyncontent">
 <div class="center"><img src="classi_polyhedron__coll__graph.png" border="0" usemap="#i_polyhedron_3_01_traits_01_4_coll__map" alt="Collaboration graph"/></div>
 <map name="i_polyhedron_3_01_traits_01_4_coll__map" id="i_polyhedron_3_01_traits_01_4_coll__map">
-<area shape="rect" id="node2" href="classi_marked_entity.html" title="iMarkedEntity" alt="" coords="5,197,112,227"/><area shape="rect" id="node6" title="STL class." alt="" coords="145,101,271,131"/></map>
+<area shape="rect" id="node2" href="classi_labelable.html" title="iLabelable" alt="" coords="41,5,127,35"/></map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 
 <p><a href="classi_polyhedron-members.html">List of all members.</a></p>
@@ -103,17 +102,13 @@ Static Public Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static const int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi_polyhedron.html#a735633b0e803b52f6249b6ec416d4476">Dim</a> = 3</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static const int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi_polyhedron.html#abb159e1e207559e2cf4270e9f65cc484">N_borders</a> = ElementProperties&lt;<a class="el" href="classi_polyhedron.html#a57530eb360a9d2c48f0bb959c27d5d9e">CellT</a>, Traits&gt;::<a class="el" href="classi_polyhedron.html#abb159e1e207559e2cf4270e9f65cc484">N_borders</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static const int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi_polyhedron.html#a67dee7d3f14b1180b8cd15c734cab290">N_vertices</a> = ElementProperties&lt;<a class="el" href="classi_polyhedron.html#a57530eb360a9d2c48f0bb959c27d5d9e">CellT</a>, Traits&gt;::<a class="el" href="classi_polyhedron.html#a67dee7d3f14b1180b8cd15c734cab290">N_vertices</a></td></tr>
-<tr><td colspan="2"><h2><a name="pro-attribs"></a>
-Protected Attributes</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_fepic.html#ab4c35fc828fb5a816f610e02b9ac2df9">Fepic::vectorui</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi_polyhedron.html#a6763e77f5278894c6c79cb7022dc3b6c">_node</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classi_half_face.html">iHalfFace</a>&lt; Traits &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi_polyhedron.html#a3e0b033a99ba321e6a9b5d0e07e630fa">_hf</a> [<a class="el" href="classi_polyhedron.html#abb159e1e207559e2cf4270e9f65cc484">N_borders</a>]</td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
 <h3>template&lt;class Traits&gt;<br/>
  class iPolyhedron&lt; Traits &gt;</h3>
 
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01803">1803</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipolyhedron_8hpp_source.html#l00028">28</a> of file <a class="el" href="ipolyhedron_8hpp_source.html">ipolyhedron.hpp</a>.</p>
 <hr/><h2>Member Typedef Documentation</h2>
 <a class="anchor" id="a57530eb360a9d2c48f0bb959c27d5d9e"></a><!-- doxytag: member="iPolyhedron::CellT" ref="a57530eb360a9d2c48f0bb959c27d5d9e" args="" -->
 <div class="memitem">
@@ -128,7 +123,7 @@ template&lt;class Traits &gt; </div>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01809">1809</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipolyhedron_8hpp_source.html#l00034">34</a> of file <a class="el" href="ipolyhedron_8hpp_source.html">ipolyhedron.hpp</a>.</p>
 
 </div>
 </div>
@@ -145,9 +140,9 @@ template&lt;class Traits &gt; </div>
 </div>
 <div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="classi_tetrahedron.html#ae16794a808afe95a71ca263b72e0957a">iTetrahedron&lt; Traits &gt;</a>.</p>
+<p>Reimplemented in <a class="el" href="class_tetrahedron.html#af9080ce1e8a3a4d369f12e6049203186">Tetrahedron&lt; Traits &gt;</a>.</p>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01810">1810</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipolyhedron_8hpp_source.html#l00035">35</a> of file <a class="el" href="ipolyhedron_8hpp_source.html">ipolyhedron.hpp</a>.</p>
 
 </div>
 </div>
@@ -164,9 +159,9 @@ template&lt;class Traits &gt; </div>
 </div>
 <div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="classi_tetrahedron.html#a361888d7282dd4b82fa135030d265da7">iTetrahedron&lt; Traits &gt;</a>.</p>
+<p>Reimplemented in <a class="el" href="class_tetrahedron.html#aabd56ce532c829682ff47b1d24e536f6">Tetrahedron&lt; Traits &gt;</a>.</p>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01811">1811</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipolyhedron_8hpp_source.html#l00036">36</a> of file <a class="el" href="ipolyhedron_8hpp_source.html">ipolyhedron.hpp</a>.</p>
 
 </div>
 </div>
@@ -183,9 +178,9 @@ template&lt;class Traits &gt; </div>
 </div>
 <div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="classi_tetrahedron.html#a34239a7bfdc6b286a984048c6626cfb7">iTetrahedron&lt; Traits &gt;</a>.</p>
+<p>Reimplemented in <a class="el" href="class_tetrahedron.html#a3181017961b828c62420a914a96712b1">Tetrahedron&lt; Traits &gt;</a>.</p>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01816">1816</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipolyhedron_8hpp_source.html#l00041">41</a> of file <a class="el" href="ipolyhedron_8hpp_source.html">ipolyhedron.hpp</a>.</p>
 
 </div>
 </div>
@@ -207,14 +202,14 @@ template&lt;class Traits &gt; </div>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01818">1818</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipolyhedron_8hpp_source.html#l00043">43</a> of file <a class="el" href="ipolyhedron_8hpp_source.html">ipolyhedron.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l01530">iPolygon&lt; Traits &gt;::_node</a>, and <a class="el" href="entities_8hpp_source.html#l01280">iPolygon&lt; Traits &gt;::N_vertices</a>.</p>
+<p>References <a class="el" href="ipolyhedron_8hpp_source.html#l00039">iPolyhedron&lt; Traits &gt;::N_vertices</a>.</p>
 
-<p><div class="fragment"><pre class="fragment">                      : <a class="code" href="classi_marked_entity.html#a3c47487f8856ca9629b02c480907ba82">iMarkedEntity</a>()
-        {
-        <a class="code" href="classi_polyhedron.html#a6763e77f5278894c6c79cb7022dc3b6c">_node</a>.resize(<a class="code" href="classi_polyhedron.html#a67dee7d3f14b1180b8cd15c734cab290">N_vertices</a>);
-        }
+<p><div class="fragment"><pre class="fragment">                : <a class="code" href="classi_labelable.html#a1d8758bd62102cd3a8a1cda3e47c9655">iLabelable</a>()
+  {
+    _node.resize(<a class="code" href="classi_polyhedron.html#a67dee7d3f14b1180b8cd15c734cab290">N_vertices</a>);
+  }
 </pre></div></p>
 
 </div>
@@ -252,20 +247,20 @@ template&lt;class Traits &gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01825">1825</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipolyhedron_8hpp_source.html#l00050">50</a> of file <a class="el" href="ipolyhedron_8hpp_source.html">ipolyhedron.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l01530">iPolygon&lt; Traits &gt;::_node</a>, and <a class="el" href="entities_8hpp_source.html#l01280">iPolygon&lt; Traits &gt;::N_vertices</a>.</p>
+<p>References <a class="el" href="ipolyhedron_8hpp_source.html#l00039">iPolyhedron&lt; Traits &gt;::N_vertices</a>.</p>
 
-<p><div class="fragment"><pre class="fragment">                                                             : <a class="code" href="classi_marked_entity.html#a3c47487f8856ca9629b02c480907ba82">iMarkedEntity</a>(label), <a class="code" href="classi_polyhedron.html#a6763e77f5278894c6c79cb7022dc3b6c">_node</a>(nodes)
-        {
-<span class="preprocessor">#ifdef ENTTS_DEBUG</span>
-<span class="preprocessor"></span>        <span class="keywordflow">if</span> (<a class="code" href="classi_polyhedron.html#a6763e77f5278894c6c79cb7022dc3b6c">_node</a>.size() &lt; <span class="keyword">static_cast&lt;</span>uint<span class="keyword">&gt;</span>(<a class="code" href="classi_polyhedron.html#a67dee7d3f14b1180b8cd15c734cab290">N_vertices</a>))
-        {
-            std::cout &lt;&lt; <span class="stringliteral">&quot;error:iPolyhedron constructor: número insuficiente de nós.\n&quot;</span>;
-            <span class="keywordflow">throw</span>;
-        }
+<p><div class="fragment"><pre class="fragment">                                                       : <a class="code" href="classi_labelable.html#a1d8758bd62102cd3a8a1cda3e47c9655">iLabelable</a>(label), _node(nodes)
+  {
+<span class="preprocessor">#ifdef FEPIC_DEBUG_ON</span>
+<span class="preprocessor"></span>    <span class="keywordflow">if</span> (_node.size() &lt; <span class="keyword">static_cast&lt;</span>uint<span class="keyword">&gt;</span>(<a class="code" href="classi_polyhedron.html#a67dee7d3f14b1180b8cd15c734cab290">N_vertices</a>))
+    {
+      std::cout &lt;&lt; <span class="stringliteral">&quot;error:iPolyhedron constructor: número insuficiente de nós.\n&quot;</span>;
+      <span class="keywordflow">throw</span>;
+    }
 <span class="preprocessor">#endif</span>
-<span class="preprocessor"></span>        }
+<span class="preprocessor"></span>  }
 </pre></div></p>
 
 </div>
@@ -303,20 +298,20 @@ template&lt;class Traits &gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01838">1838</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipolyhedron_8hpp_source.html#l00063">63</a> of file <a class="el" href="ipolyhedron_8hpp_source.html">ipolyhedron.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l01530">iPolygon&lt; Traits &gt;::_node</a>, and <a class="el" href="entities_8hpp_source.html#l01280">iPolygon&lt; Traits &gt;::N_vertices</a>.</p>
+<p>References <a class="el" href="ipolyhedron_8hpp_source.html#l00039">iPolyhedron&lt; Traits &gt;::N_vertices</a>.</p>
 
-<p><div class="fragment"><pre class="fragment">                                                        : <a class="code" href="classi_marked_entity.html#a3c47487f8856ca9629b02c480907ba82">iMarkedEntity</a>(label), <a class="code" href="classi_polyhedron.html#a6763e77f5278894c6c79cb7022dc3b6c">_node</a>(std::move(nodes))
-        {
-<span class="preprocessor">#ifdef ENTTS_DEBUG</span>
-<span class="preprocessor"></span>        <span class="keywordflow">if</span> (<a class="code" href="classi_polyhedron.html#a6763e77f5278894c6c79cb7022dc3b6c">_node</a>.size() &lt; <a class="code" href="classi_polyhedron.html#a67dee7d3f14b1180b8cd15c734cab290">N_vertices</a>)
-        {
-            std::cout &lt;&lt; <span class="stringliteral">&quot;error:iPolyhedron constructor: número insuficiente de nós.\n&quot;</span>;
-            <span class="keywordflow">throw</span>;
-        }
+<p><div class="fragment"><pre class="fragment">                                                  : <a class="code" href="classi_labelable.html#a1d8758bd62102cd3a8a1cda3e47c9655">iLabelable</a>(label), _node(std::move(nodes))
+  {
+<span class="preprocessor">#ifdef FEPIC_DEBUG_ON</span>
+<span class="preprocessor"></span>    <span class="keywordflow">if</span> (_node.size() &lt; <a class="code" href="classi_polyhedron.html#a67dee7d3f14b1180b8cd15c734cab290">N_vertices</a>)
+    {
+      std::cout &lt;&lt; <span class="stringliteral">&quot;error:iPolyhedron constructor: número insuficiente de nós.\n&quot;</span>;
+      <span class="keywordflow">throw</span>;
+    }
 <span class="preprocessor">#endif</span>
-<span class="preprocessor"></span>        }
+<span class="preprocessor"></span>  }
 </pre></div></p>
 
 </div>
@@ -356,19 +351,16 @@ template&lt;class Traits &gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01962">1962</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipolyhedron_8hpp_source.html#l00184">184</a> of file <a class="el" href="ipolyhedron_8hpp_source.html">ipolyhedron.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l01530">iPolygon&lt; Traits &gt;::_node</a>.</p>
-
-<p><div class="fragment"><pre class="fragment">        {
-                <a class="code" href="namespace_fepic.html#ab4c35fc828fb5a816f610e02b9ac2df9">Fepic::vectorui</a> nodes;
-                
-                <span class="keywordflow">for</span> (uint i = 0, tam=mesh.faces_local_nodes[ith].size(); i &lt; tam; i++)
-                {
-                        nodes.push_back( <a class="code" href="classi_polyhedron.html#a6763e77f5278894c6c79cb7022dc3b6c">_node</a>[ mesh.faces_local_nodes[ith][i] ] );
-                }
-                <span class="keywordflow">return</span> nodes;
-        }
+<p><div class="fragment"><pre class="fragment">  {
+    <a class="code" href="namespace_fepic.html#ab4c35fc828fb5a816f610e02b9ac2df9">Fepic::vectorui</a> nodes;
+    
+    <span class="keywordflow">for</span> (uint i = 0, tam=mesh.faces_local_nodes[ith].size(); i &lt; tam; i++)
+      nodes.push_back( _node[ mesh.faces_local_nodes[ith][i] ] );
+      
+    <span class="keywordflow">return</span> nodes;
+  }
 </pre></div></p>
 
 </div>
@@ -392,21 +384,18 @@ template&lt;class Traits &gt; </div>
 <div class="memdoc">
 <p>Retorna um vetor com os vértices da i-ésima face </p>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01975">1975</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipolyhedron_8hpp_source.html#l00196">196</a> of file <a class="el" href="ipolyhedron_8hpp_source.html">ipolyhedron.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l01530">iPolygon&lt; Traits &gt;::_node</a>.</p>
-
-<p><div class="fragment"><pre class="fragment">        {
-            <span class="keyword">static</span> <a class="code" href="namespace_fepic.html#abbbdadaf306261d88c414f904b483bf0">Fepic::matrixi</a> faces_vtx(ElementProperties&lt;CellT, Traits&gt;::get_faces_vtx());
-            uint vsize = faces_vtx[ith].size();
-            <a class="code" href="namespace_fepic.html#ab4c35fc828fb5a816f610e02b9ac2df9">Fepic::vectorui</a> vtx(vsize);
-            
-            <span class="keywordflow">for</span> (uint i = 0; i &lt; vsize; ++i)
-            {
-                    vtx[i] = <a class="code" href="classi_polyhedron.html#a6763e77f5278894c6c79cb7022dc3b6c">_node</a>[faces_vtx[ith][i]];
-            }
-            <span class="keywordflow">return</span> vtx;
-        }
+<p><div class="fragment"><pre class="fragment">  {
+    <span class="keyword">static</span> <a class="code" href="namespace_fepic.html#abbbdadaf306261d88c414f904b483bf0">Fepic::matrixi</a> faces_vtx(ElementProperties&lt;CellT, Traits&gt;::get_faces_vtx());
+    uint vsize = faces_vtx[ith].size();
+    <a class="code" href="namespace_fepic.html#ab4c35fc828fb5a816f610e02b9ac2df9">Fepic::vectorui</a> vtx(vsize);
+    
+    <span class="keywordflow">for</span> (uint i = 0; i &lt; vsize; ++i)
+      vtx[i] = _node[faces_vtx[ith][i]];
+      
+    <span class="keywordflow">return</span> vtx;
+  }
 </pre></div></p>
 
 </div>
@@ -430,20 +419,20 @@ template&lt;class Traits &gt; </div>
 <div class="memdoc">
 <p>Retorna a i-ésima half-edge. </p>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01878">1878</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipolyhedron_8hpp_source.html#l00103">103</a> of file <a class="el" href="ipolyhedron_8hpp_source.html">ipolyhedron.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l01279">iPolygon&lt; Traits &gt;::N_borders</a>.</p>
+<p>References <a class="el" href="ipolyhedron_8hpp_source.html#l00038">iPolyhedron&lt; Traits &gt;::N_borders</a>.</p>
 
-<p><div class="fragment"><pre class="fragment">        {
-<span class="preprocessor">#ifdef ENTTS_DEBUG</span>
-<span class="preprocessor"></span>        <span class="keywordflow">if</span> (ith &gt;= <a class="code" href="classi_polyhedron.html#abb159e1e207559e2cf4270e9f65cc484">N_borders</a>)
-        {
-            std::cout &lt;&lt; <span class="stringliteral">&quot;getHalf: out of range&quot;</span> &lt;&lt; std::endl;
-            <span class="keywordflow">throw</span>;
-        }
+<p><div class="fragment"><pre class="fragment">  {
+<span class="preprocessor">#ifdef FEPIC_DEBUG_ON</span>
+<span class="preprocessor"></span>    <span class="keywordflow">if</span> (ith &gt;= <a class="code" href="classi_polyhedron.html#abb159e1e207559e2cf4270e9f65cc484">N_borders</a>)
+    {
+      std::cout &lt;&lt; <span class="stringliteral">&quot;getHalf: out of range&quot;</span> &lt;&lt; std::endl;
+      <span class="keywordflow">throw</span>;
+    }
 <span class="preprocessor">#endif</span>
-<span class="preprocessor"></span>                <span class="keywordflow">return</span> &amp;<a class="code" href="classi_polyhedron.html#a3e0b033a99ba321e6a9b5d0e07e630fa">_hf</a>[ith];
-        }
+<span class="preprocessor"></span>    <span class="keywordflow">return</span> &amp;_hf[ith];
+  }
 </pre></div></p>
 
 </div>
@@ -467,18 +456,27 @@ template&lt;class Traits &gt; </div>
 <div class="memdoc">
 <p>Retorna o índice do i-ésimo nó do polígono. </p>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01856">1856</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipolyhedron_8hpp_source.html#l00081">81</a> of file <a class="el" href="ipolyhedron_8hpp_source.html">ipolyhedron.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l01530">iPolygon&lt; Traits &gt;::_node</a>.</p>
+<p>Referenced by <a class="el" href="ipolyhedron_8hpp_source.html#l00174">iPolyhedron&lt; Traits &gt;::printSelfState()</a>, and <a class="el" href="itetrahedron_8hpp_source.html#l00066">Tetrahedron&lt; Traits &gt;::printSelfVTK()</a>.</p>
 
-<p><div class="fragment"><pre class="fragment">        {   
-<span class="preprocessor">#ifdef ENTTS_DEBUG</span>
-<span class="preprocessor"></span>                <span class="keywordflow">return</span> <a class="code" href="classi_polyhedron.html#a6763e77f5278894c6c79cb7022dc3b6c">_node</a>.at(ith);
+<p><div class="fragment"><pre class="fragment">  {   
+<span class="preprocessor">#ifdef FEPIC_DEBUG_ON</span>
+<span class="preprocessor"></span>    <span class="keywordflow">return</span> _node.at(ith);
 <span class="preprocessor">#else</span>
-<span class="preprocessor"></span>        <span class="keywordflow">return</span> <a class="code" href="classi_polyhedron.html#a6763e77f5278894c6c79cb7022dc3b6c">_node</a>[ith];
+<span class="preprocessor"></span>    <span class="keywordflow">return</span> _node[ith];
 <span class="preprocessor">#endif</span>
-<span class="preprocessor"></span>        }
+<span class="preprocessor"></span>  }
 </pre></div></p>
+
+<p><div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classi_polyhedron_abc8e0970a110c2729985d108a24f3ba6_icgraph.png" border="0" usemap="#classi_polyhedron_abc8e0970a110c2729985d108a24f3ba6_icgraph" alt=""/></div>
+<map name="classi_polyhedron_abc8e0970a110c2729985d108a24f3ba6_icgraph" id="classi_polyhedron_abc8e0970a110c2729985d108a24f3ba6_icgraph">
+<area shape="rect" id="node3" href="classi_polyhedron.html#a93558cdd3782da5e731726029969aa5a" title="iPolyhedron::printSelfState" alt="" coords="232,5,424,35"/><area shape="rect" id="node5" href="class_tetrahedron.html#a0af58336eb51b94fda409ea7f6c620e4" title="Tetrahedron::printSelfVTK" alt="" coords="237,59,419,88"/></map>
+</div>
+</p>
 
 </div>
 </div>
@@ -499,13 +497,11 @@ template&lt;class Traits &gt; </div>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01849">1849</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipolyhedron_8hpp_source.html#l00074">74</a> of file <a class="el" href="ipolyhedron_8hpp_source.html">ipolyhedron.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l01530">iPolygon&lt; Traits &gt;::_node</a>.</p>
-
-<p><div class="fragment"><pre class="fragment">    {
-        <span class="keywordflow">return</span> <a class="code" href="classi_polyhedron.html#a6763e77f5278894c6c79cb7022dc3b6c">_node</a>.size();
-    }
+<p><div class="fragment"><pre class="fragment">  {
+    <span class="keywordflow">return</span> _node.size();
+  }
 </pre></div></p>
 
 </div>
@@ -555,47 +551,58 @@ template&lt;class Traits &gt; </div>
 <dl class="warning"><dt><b>Warning:</b></dt><dd>A ordem da numeração dos nós é importante! </dd></dl>
 <dl class="note"><dt><b>Note:</b></dt><dd>definição para ancora: dada uma face n0,n1,...,nB, se ela é a face F e ancora A de um poliedro, então, o nó B-A é o primeiro nó da face F do poliedro. </dd></dl>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01900">1900</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipolyhedron_8hpp_source.html#l00125">125</a> of file <a class="el" href="ipolyhedron_8hpp_source.html">ipolyhedron.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l01530">iPolygon&lt; Traits &gt;::_node</a>, and <a class="el" href="entities_8hpp_source.html#l01279">iPolygon&lt; Traits &gt;::N_borders</a>.</p>
+<p>References <a class="el" href="ipolyhedron_8hpp_source.html#l00038">iPolyhedron&lt; Traits &gt;::N_borders</a>.</p>
 
-<p><div class="fragment"><pre class="fragment">        {
-        <span class="keyword">static</span> <span class="keyword">const</span> <a class="code" href="namespace_fepic.html#abbbdadaf306261d88c414f904b483bf0">Fepic::matrixi</a> faces_vtx(ElementProperties&lt;CellT, Traits&gt;::get_faces_vtx());
+<p>Referenced by <a class="el" href="ipolyhedron_8hpp_source.html#l00165">iPolyhedron&lt; Traits &gt;::isAnParallelFace()</a>.</p>
+
+<p><div class="fragment"><pre class="fragment">  {
+    <span class="keyword">static</span> <span class="keyword">const</span> <a class="code" href="namespace_fepic.html#abbbdadaf306261d88c414f904b483bf0">Fepic::matrixi</a> faces_vtx(ElementProperties&lt;CellT, Traits&gt;::get_faces_vtx());
+  
+    <span class="comment">// CHECK</span>
+    <span class="keywordflow">if</span> (<span class="keywordtype">int</span>(vertices.size()) != FaceT::N_borders)
+    {
+      std::cout &lt;&lt; <span class="stringliteral">&quot;isAnFace error: wrong parameter!&quot;</span> &lt;&lt; std::endl;
+      std::cout &lt;&lt; <span class="stringliteral">&quot;vertices.size() = &quot;</span> &lt;&lt; vertices.size() &lt;&lt; std::endl;
+    }
+    
+    <a class="code" href="namespace_fepic.html#ab4c35fc828fb5a816f610e02b9ac2df9">Fepic::vectorui</a> temp(FaceT::N_borders);
+    <a class="code" href="namespace_fepic.html#ab4c35fc828fb5a816f610e02b9ac2df9">Fepic::vectorui</a> this_vtx(FaceT::N_borders);
+    
+    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> f = 0; f &lt; <a class="code" href="classi_polyhedron.html#abb159e1e207559e2cf4270e9f65cc484">N_borders</a>; ++f) <span class="comment">// para cada face</span>
+    {
+      <span class="keywordflow">for</span> (<span class="keywordtype">int</span> n = 0; n &lt; FaceT::N_borders; n++)
+      {
+        this_vtx[n] = _node[ faces_vtx[f][n] ];
+      }                       
+      <span class="keywordflow">for</span> (<span class="keywordtype">int</span> a = 0; a &lt; FaceT::N_borders; ++a) <span class="comment">// para cada ancora</span>
+      {
+        rotate_copy(vertices.begin(), vertices.begin()+a, vertices.end(), temp.begin()); <span class="comment">// temp = rot(vertices + a);</span>
         
-                <span class="comment">// CHECK</span>
-                <span class="keywordflow">if</span> (<span class="keywordtype">int</span>(vertices.size()) != FaceT::N_borders)
-                {
-                        std::cout &lt;&lt; <span class="stringliteral">&quot;isAnFace error: wrong parameter!&quot;</span> &lt;&lt; std::endl;
-                        std::cout &lt;&lt; <span class="stringliteral">&quot;vertices.size() = &quot;</span> &lt;&lt; vertices.size() &lt;&lt; std::endl;
-                }
-                
-                <a class="code" href="namespace_fepic.html#ab4c35fc828fb5a816f610e02b9ac2df9">Fepic::vectorui</a> temp(FaceT::N_borders);
-                <a class="code" href="namespace_fepic.html#ab4c35fc828fb5a816f610e02b9ac2df9">Fepic::vectorui</a> this_vtx(FaceT::N_borders);
-                
-                <span class="keywordflow">for</span> (<span class="keywordtype">int</span> f = 0; f &lt; <a class="code" href="classi_polyhedron.html#abb159e1e207559e2cf4270e9f65cc484">N_borders</a>; ++f) <span class="comment">// para cada face</span>
-                {
-                        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> n = 0; n &lt; FaceT::N_borders; n++)
-                        {
-                                this_vtx[n] = <a class="code" href="classi_polyhedron.html#a6763e77f5278894c6c79cb7022dc3b6c">_node</a>[ faces_vtx[f][n] ];
-                        }                       
-                        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> a = 0; a &lt; FaceT::N_borders; ++a) <span class="comment">// para cada ancora</span>
-                        {
-                                rotate_copy(vertices.begin(), vertices.begin()+a, vertices.end(), temp.begin()); <span class="comment">// temp = rot(vertices + a);</span>
-
-                                <span class="keywordflow">if</span>(temp == this_vtx)
-                                {
-                                        face = f;
-                                        anchor = a;
-                                        <span class="keywordflow">return</span> <span class="keyword">true</span>;
-                                }
-                                
-                        }
-                }
-                
-                <span class="keywordflow">return</span> <span class="keyword">false</span>;
-                
+        <span class="keywordflow">if</span>(temp == this_vtx)
+        {
+          face = f;
+          anchor = a;
+          <span class="keywordflow">return</span> <span class="keyword">true</span>;
         }
+              
+      }
+    }
+    
+    <span class="keywordflow">return</span> <span class="keyword">false</span>;
+  
+  }
 </pre></div></p>
+
+<p><div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classi_polyhedron_aaad453b33d66a98126bed71019726965_icgraph.png" border="0" usemap="#classi_polyhedron_aaad453b33d66a98126bed71019726965_icgraph" alt=""/></div>
+<map name="classi_polyhedron_aaad453b33d66a98126bed71019726965_icgraph" id="classi_polyhedron_aaad453b33d66a98126bed71019726965_icgraph">
+<area shape="rect" id="node3" href="classi_polyhedron.html#a816507b78e3a89cb2f42f907409b345b" title="iPolyhedron::isAnParallelFace" alt="" coords="213,5,419,35"/></map>
+</div>
+</p>
 
 </div>
 </div>
@@ -633,16 +640,27 @@ template&lt;class Traits &gt; </div>
 <div class="memdoc">
 <p>O mesmo que a função isAnFace, mas aqui a ordem dos vértices podem ser anti-paralelos a face. </p>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01940">1940</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipolyhedron_8hpp_source.html#l00165">165</a> of file <a class="el" href="ipolyhedron_8hpp_source.html">ipolyhedron.hpp</a>.</p>
 
-<p><div class="fragment"><pre class="fragment">        {
-                <span class="keywordflow">if</span> (this-&gt;<a class="code" href="classi_polyhedron.html#aaad453b33d66a98126bed71019726965">isAnFace</a>(vertices, face, anchor))
-                        <span class="keywordflow">return</span> <span class="keyword">true</span>;
-                        
-                reverse(vertices.begin(), vertices.end());
-                <span class="keywordflow">return</span> (this-&gt;<a class="code" href="classi_polyhedron.html#aaad453b33d66a98126bed71019726965">isAnFace</a>(vertices, face, anchor));
-        }
+<p>References <a class="el" href="ipolyhedron_8hpp_source.html#l00125">iPolyhedron&lt; Traits &gt;::isAnFace()</a>.</p>
+
+<p><div class="fragment"><pre class="fragment">  {
+    <span class="keywordflow">if</span> (this-&gt;<a class="code" href="classi_polyhedron.html#aaad453b33d66a98126bed71019726965">isAnFace</a>(vertices, face, anchor))
+      <span class="keywordflow">return</span> <span class="keyword">true</span>;
+            
+    reverse(vertices.begin(), vertices.end());
+    <span class="keywordflow">return</span> (this-&gt;<a class="code" href="classi_polyhedron.html#aaad453b33d66a98126bed71019726965">isAnFace</a>(vertices, face, anchor));
+  }
 </pre></div></p>
+
+<p><div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classi_polyhedron_a816507b78e3a89cb2f42f907409b345b_cgraph.png" border="0" usemap="#classi_polyhedron_a816507b78e3a89cb2f42f907409b345b_cgraph" alt=""/></div>
+<map name="classi_polyhedron_a816507b78e3a89cb2f42f907409b345b_cgraph" id="classi_polyhedron_a816507b78e3a89cb2f42f907409b345b_cgraph">
+<area shape="rect" id="node3" href="classi_polyhedron.html#aaad453b33d66a98126bed71019726965" title="iPolyhedron::isAnFace" alt="" coords="259,5,419,35"/></map>
+</div>
+</p>
 
 </div>
 </div>
@@ -664,18 +682,15 @@ template&lt;class Traits &gt; </div>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01949">1949</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipolyhedron_8hpp_source.html#l00174">174</a> of file <a class="el" href="ipolyhedron_8hpp_source.html">ipolyhedron.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l01530">iPolygon&lt; Traits &gt;::_node</a>, and <a class="el" href="entities_8hpp_source.html#l01314">iPolygon&lt; Traits &gt;::getNodeIdx()</a>.</p>
+<p>References <a class="el" href="ipolyhedron_8hpp_source.html#l00081">iPolyhedron&lt; Traits &gt;::getNodeIdx()</a>.</p>
 
-<p><div class="fragment"><pre class="fragment">        {
-                o &lt;&lt; <a class="code" href="classi_polyhedron.html#abc8e0970a110c2729985d108a24f3ba6">getNodeIdx</a>(0);
-                <span class="keywordflow">for</span> (uint i = 1, tam=this-&gt;<a class="code" href="classi_polyhedron.html#a6763e77f5278894c6c79cb7022dc3b6c">_node</a>.size(); i &lt; tam; i++)
-                {
-                        o &lt;&lt; <span class="stringliteral">&quot; &quot;</span> &lt;&lt; <a class="code" href="classi_polyhedron.html#abc8e0970a110c2729985d108a24f3ba6">getNodeIdx</a>(i);
-                }
-                
-        }       
+<p><div class="fragment"><pre class="fragment">  {
+    o &lt;&lt; <a class="code" href="classi_polyhedron.html#abc8e0970a110c2729985d108a24f3ba6">getNodeIdx</a>(0);
+    <span class="keywordflow">for</span> (uint i = 1, tam=this-&gt;_node.size(); i &lt; tam; i++)
+      o &lt;&lt; <span class="stringliteral">&quot; &quot;</span> &lt;&lt; <a class="code" href="classi_polyhedron.html#abc8e0970a110c2729985d108a24f3ba6">getNodeIdx</a>(i);
+  }       
 </pre></div></p>
 
 <p><div class="dynheader">
@@ -683,7 +698,7 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classi_polyhedron_a93558cdd3782da5e731726029969aa5a_cgraph.png" border="0" usemap="#classi_polyhedron_a93558cdd3782da5e731726029969aa5a_cgraph" alt=""/></div>
 <map name="classi_polyhedron_a93558cdd3782da5e731726029969aa5a_cgraph" id="classi_polyhedron_a93558cdd3782da5e731726029969aa5a_cgraph">
-<area shape="rect" id="node3" href="classi_polygon.html#a4b0063e97ea7648c9f0a7d04d970f4bf" title="iPolygon::getNodeIdx" alt="" coords="247,5,401,35"/></map>
+<area shape="rect" id="node3" href="classi_polyhedron.html#abc8e0970a110c2729985d108a24f3ba6" title="iPolyhedron::getNodeIdx" alt="" coords="247,5,423,35"/></map>
 </div>
 </p>
 
@@ -708,19 +723,15 @@ template&lt;class Traits &gt; </div>
 <div class="memdoc">
 <p>Atribui a cada nó deste tetraedro sua respectiva half-face. </p>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01990">1990</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipolyhedron_8hpp_source.html#l00210">210</a> of file <a class="el" href="ipolyhedron_8hpp_source.html">ipolyhedron.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l01530">iPolygon&lt; Traits &gt;::_node</a>, and <a class="el" href="entities_8hpp_source.html#l01279">iPolygon&lt; Traits &gt;::N_borders</a>.</p>
+<p>References <a class="el" href="ipolyhedron_8hpp_source.html#l00038">iPolyhedron&lt; Traits &gt;::N_borders</a>.</p>
 
-<p><div class="fragment"><pre class="fragment">        {
-                <span class="keywordflow">for</span> (<span class="keywordtype">int</span> f = 0; f &lt; <a class="code" href="classi_polyhedron.html#abb159e1e207559e2cf4270e9f65cc484">N_borders</a>; ++f) <span class="comment">// loop  nas faces</span>
-                {
-                        <span class="keywordflow">for</span> (uint i = 0, tam=mesh.faces_local_nodes[0].size(); i &lt; tam; ++i)
-                        {
-                                mesh.getNode(<a class="code" href="classi_polyhedron.html#a6763e77f5278894c6c79cb7022dc3b6c">_node</a>[mesh.faces_local_nodes[f][i]])-&gt;setHalf(<a class="code" href="classi_polyhedron.html#a3e0b033a99ba321e6a9b5d0e07e630fa">_hf</a>[f]);
-                        }
-                }
-        }
+<p><div class="fragment"><pre class="fragment">  {
+    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> f = 0; f &lt; <a class="code" href="classi_polyhedron.html#abb159e1e207559e2cf4270e9f65cc484">N_borders</a>; ++f) <span class="comment">// loop  nas faces</span>
+      <span class="keywordflow">for</span> (uint i = 0, tam=mesh.faces_local_nodes[0].size(); i &lt; tam; ++i)
+        mesh.getNode(_node[mesh.faces_local_nodes[f][i]])-&gt;setHalf(_hf[f]);
+  }
 </pre></div></p>
 
 </div>
@@ -760,29 +771,19 @@ template&lt;class Traits &gt; </div>
 </dl>
 <dl class="warning"><dt><b>Warning:</b></dt><dd>CONFERIR!! </dd></dl>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l02006">2006</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipolyhedron_8hpp_source.html#l00222">222</a> of file <a class="el" href="ipolyhedron_8hpp_source.html">ipolyhedron.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l01530">iPolygon&lt; Traits &gt;::_node</a>, and <a class="el" href="entities_8hpp_source.html#l00302">iMarkedEntity::getLabel()</a>.</p>
+<p>References <a class="el" href="ilabelable_8hpp_source.html#l00062">iLabelable::getLabel()</a>.</p>
 
-<p><div class="fragment"><pre class="fragment">        {
-                <span class="keywordflow">if</span> (force)
-                {
-                        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; this-&gt;node.size(); i++)
-                        {
-                                mesh.getNode(<a class="code" href="classi_polyhedron.html#a6763e77f5278894c6c79cb7022dc3b6c">_node</a>[i])-&gt;setLabel(this-&gt;<a class="code" href="classi_marked_entity.html#af5896a8b27fd4cfd27b11f44d0d5500f">getLabel</a>());
-                        }
-                }
-                <span class="keywordflow">else</span>
-                {
-                        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; this-&gt;node.size(); i++)
-                        {
-                                <span class="keywordflow">if</span> (mesh.getNode(<a class="code" href="classi_polyhedron.html#a6763e77f5278894c6c79cb7022dc3b6c">_node</a>[i])-&gt;getLabel() == 0)
-                                {
-                                        mesh.getNode(<a class="code" href="classi_polyhedron.html#a6763e77f5278894c6c79cb7022dc3b6c">_node</a>[i])-&gt;setLabel(this-&gt;<a class="code" href="classi_marked_entity.html#af5896a8b27fd4cfd27b11f44d0d5500f">getLabel</a>());
-                                }
-                        }
-                }
-        }
+<p><div class="fragment"><pre class="fragment">  {
+    <span class="keywordflow">if</span> (force)
+      <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; this-&gt;node.size(); i++)
+        mesh.getNode(_node[i])-&gt;setLabel(this-&gt;<a class="code" href="classi_labelable.html#acbe77acaa7b3d07a01cd9496144586df">getLabel</a>());
+    <span class="keywordflow">else</span>
+      <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; this-&gt;node.size(); i++)
+        <span class="keywordflow">if</span> (mesh.getNode(_node[i])-&gt;getLabel() == 0)
+          mesh.getNode(_node[i])-&gt;setLabel(this-&gt;<a class="code" href="classi_labelable.html#acbe77acaa7b3d07a01cd9496144586df">getLabel</a>());
+  }
 </pre></div></p>
 
 <p><div class="dynheader">
@@ -790,7 +791,7 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classi_polyhedron_add6b638aa26486ca8533b8fe27bb9619_cgraph.png" border="0" usemap="#classi_polyhedron_add6b638aa26486ca8533b8fe27bb9619_cgraph" alt=""/></div>
 <map name="classi_polyhedron_add6b638aa26486ca8533b8fe27bb9619_cgraph" id="classi_polyhedron_add6b638aa26486ca8533b8fe27bb9619_cgraph">
-<area shape="rect" id="node3" href="classi_marked_entity.html#af5896a8b27fd4cfd27b11f44d0d5500f" title="iMarkedEntity::getLabel" alt="" coords="259,5,429,35"/></map>
+<area shape="rect" id="node3" href="classi_labelable.html#acbe77acaa7b3d07a01cd9496144586df" title="iLabelable::getLabel" alt="" coords="259,5,408,35"/></map>
 </div>
 </p>
 
@@ -824,56 +825,20 @@ template&lt;class Traits &gt; </div>
 <div class="memdoc">
 <p>Defini o i-ésimo nó do polígono como nodeid </p>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01867">1867</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipolyhedron_8hpp_source.html#l00092">92</a> of file <a class="el" href="ipolyhedron_8hpp_source.html">ipolyhedron.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l01530">iPolygon&lt; Traits &gt;::_node</a>.</p>
-
-<p><div class="fragment"><pre class="fragment">        {
-<span class="preprocessor">#ifdef ENTTS_DEBUG</span>
-<span class="preprocessor"></span>                <a class="code" href="classi_polyhedron.html#a6763e77f5278894c6c79cb7022dc3b6c">_node</a>.at(ith) = nodeid;
+<p><div class="fragment"><pre class="fragment">  {
+<span class="preprocessor">#ifdef FEPIC_DEBUG_ON</span>
+<span class="preprocessor"></span>    _node.at(ith) = nodeid;
 <span class="preprocessor">#else</span>
-<span class="preprocessor"></span>        <a class="code" href="classi_polyhedron.html#a6763e77f5278894c6c79cb7022dc3b6c">_node</a>[ith] = nodeid;
+<span class="preprocessor"></span>    _node[ith] = nodeid;
 <span class="preprocessor">#endif</span>
-<span class="preprocessor"></span>        }
+<span class="preprocessor"></span>  }
 </pre></div></p>
 
 </div>
 </div>
 <hr/><h2>Member Data Documentation</h2>
-<a class="anchor" id="a3e0b033a99ba321e6a9b5d0e07e630fa"></a><!-- doxytag: member="iPolyhedron::_hf" ref="a3e0b033a99ba321e6a9b5d0e07e630fa" args="[N_borders]" -->
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;class Traits &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classi_half_face.html">iHalfFace</a>&lt;Traits&gt; <a class="el" href="classi_polyhedron.html">iPolyhedron</a>&lt; Traits &gt;::<a class="el" href="classi_polyhedron.html#a3e0b033a99ba321e6a9b5d0e07e630fa">_hf</a>[<a class="el" href="classi_polyhedron.html#abb159e1e207559e2cf4270e9f65cc484">N_borders</a>]<code> [protected]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l02030">2030</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a6763e77f5278894c6c79cb7022dc3b6c"></a><!-- doxytag: member="iPolyhedron::_node" ref="a6763e77f5278894c6c79cb7022dc3b6c" args="" -->
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;class Traits &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespace_fepic.html#ab4c35fc828fb5a816f610e02b9ac2df9">Fepic::vectorui</a> <a class="el" href="classi_polyhedron.html">iPolyhedron</a>&lt; Traits &gt;::<a class="el" href="classi_polyhedron.html#a6763e77f5278894c6c79cb7022dc3b6c">_node</a><code> [protected]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l02029">2029</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
-
-</div>
-</div>
 <a class="anchor" id="a735633b0e803b52f6249b6ec416d4476"></a><!-- doxytag: member="iPolyhedron::Dim" ref="a735633b0e803b52f6249b6ec416d4476" args="" -->
 <div class="memitem">
 <div class="memproto">
@@ -887,9 +852,9 @@ template&lt;class Traits &gt; </div>
 </div>
 <div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="classi_tetrahedron.html#ab3c7bc50fe639ee5157df2f92a77de89">iTetrahedron&lt; Traits &gt;</a>.</p>
+<p>Reimplemented in <a class="el" href="class_tetrahedron.html#a3fe00403d2621085d88952d31008cf41">Tetrahedron&lt; Traits &gt;</a>.</p>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01806">1806</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipolyhedron_8hpp_source.html#l00031">31</a> of file <a class="el" href="ipolyhedron_8hpp_source.html">ipolyhedron.hpp</a>.</p>
 
 </div>
 </div>
@@ -906,7 +871,9 @@ template&lt;class Traits &gt; </div>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01813">1813</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipolyhedron_8hpp_source.html#l00038">38</a> of file <a class="el" href="ipolyhedron_8hpp_source.html">ipolyhedron.hpp</a>.</p>
+
+<p>Referenced by <a class="el" href="ipolyhedron_8hpp_source.html#l00103">iPolyhedron&lt; Traits &gt;::getHalf()</a>, <a class="el" href="ipolyhedron_8hpp_source.html#l00125">iPolyhedron&lt; Traits &gt;::isAnFace()</a>, and <a class="el" href="ipolyhedron_8hpp_source.html#l00210">iPolyhedron&lt; Traits &gt;::propagateHalf()</a>.</p>
 
 </div>
 </div>
@@ -923,12 +890,14 @@ template&lt;class Traits &gt; </div>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01814">1814</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipolyhedron_8hpp_source.html#l00039">39</a> of file <a class="el" href="ipolyhedron_8hpp_source.html">ipolyhedron.hpp</a>.</p>
+
+<p>Referenced by <a class="el" href="ipolyhedron_8hpp_source.html#l00043">iPolyhedron&lt; Traits &gt;::iPolyhedron()</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li><a class="el" href="entities_8hpp_source.html">entities.hpp</a></li>
+<li><a class="el" href="ipolyhedron_8hpp_source.html">ipolyhedron.hpp</a></li>
 </ul>
 </div>
 <!--- window showing the filter options -->
@@ -945,7 +914,7 @@ template&lt;class Traits &gt; </div>
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Fri Jan 28 2011 19:32:29 for FEPiCpp by&nbsp;
+<hr class="footer"/><address class="footer"><small>Generated on Wed Feb 2 2011 20:53:23 for FEPiCpp by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.1 </small></address>
 </body>

@@ -19,18 +19,9 @@
 // License and a copy of the GNU General Public License along with
 // FEPiC++. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef MISC_HPP
-#define MISC_HPP
+#ifndef FEPIC_MISC_HPP
+#define FEPIC_MISC_HPP
 
-#include <algorithm>
-#include <vector>
-#include <array>
-#include <deque>
-#include <iostream>
-#include <iomanip>
-#include <fstream>
-
-//typedef unsigned int uint;
 
 namespace Fepic
 {
@@ -75,20 +66,6 @@ void copy_from(In_it a_begin, Out_it c_begin, Out_it c_end)
 }
 
 
-/* prefixo M_ := Meta, de Metaprogramação */
-
-/* verifica se a classe C1 é igual a C2 */
-template<class C1, class C2>
-class M_Compare {
-public:
-  static const bool isEqual = false;
-};
-
-template<class C1>
-class M_Compare<C1, C1> {
-public:
-  static const bool isEqual = true;
-};
 
 
 

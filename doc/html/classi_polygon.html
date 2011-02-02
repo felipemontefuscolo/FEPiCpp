@@ -52,24 +52,23 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
-<a href="#pro-attribs">Protected Attributes</a>  </div>
+<a href="#pub-static-attribs">Static Public Attributes</a>  </div>
   <div class="headertitle">
 <h1>iPolygon&lt; Traits &gt; Class Template Reference</h1>  </div>
 </div>
 <div class="contents">
-<!-- doxytag: class="iPolygon" --><!-- doxytag: inherits="iMarkedEntity" -->
-<p><code>#include &lt;<a class="el" href="entities_8hpp_source.html">entities.hpp</a>&gt;</code></p>
+<!-- doxytag: class="iPolygon" --><!-- doxytag: inherits="iLabelable" -->
+<p><code>#include &lt;<a class="el" href="ipolygon_8hpp_source.html">ipolygon.hpp</a>&gt;</code></p>
 
-<p>Inherits <a class="el" href="classi_marked_entity.html">iMarkedEntity</a>.</p>
+<p>Inherits <a class="el" href="classi_labelable.html">iLabelable</a>.</p>
 
-<p>Inherited by <a class="el" href="classi_triangle.html">iTriangle&lt; Traits &gt;</a>.</p>
+<p>Inherited by <a class="el" href="class_triangle.html">Triangle&lt; Traits &gt;</a>.</p>
 <div class="dynheader">
 Collaboration diagram for iPolygon&lt; Traits &gt;:</div>
 <div class="dyncontent">
 <div class="center"><img src="classi_polygon__coll__graph.png" border="0" usemap="#i_polygon_3_01_traits_01_4_coll__map" alt="Collaboration graph"/></div>
 <map name="i_polygon_3_01_traits_01_4_coll__map" id="i_polygon_3_01_traits_01_4_coll__map">
-<area shape="rect" id="node2" href="classi_marked_entity.html" title="iMarkedEntity" alt="" coords="5,197,112,227"/><area shape="rect" id="node6" title="STL class." alt="" coords="145,101,271,131"/></map>
+<area shape="rect" id="node2" href="classi_labelable.html" title="iLabelable" alt="" coords="32,5,117,35"/></map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 
 <p><a href="classi_polygon-members.html">List of all members.</a></p>
@@ -101,10 +100,6 @@ Static Public Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static const int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi_polygon.html#a6ffe4db157e79370e804a8affabda2d1">Dim</a> = 2</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static const int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi_polygon.html#a0e28e36cf1ff6c8f93bb43d4d90aef1c">N_borders</a> = ElementProperties&lt;<a class="el" href="classi_polygon.html#a2bb5db73b330cfdd3c3e0e348ee63976">FaceT</a>, Traits&gt;::<a class="el" href="classi_polygon.html#a0e28e36cf1ff6c8f93bb43d4d90aef1c">N_borders</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static const int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi_polygon.html#a49f48e5edc0e2ec388155633cfabb69b">N_vertices</a> = ElementProperties&lt;<a class="el" href="classi_polygon.html#a2bb5db73b330cfdd3c3e0e348ee63976">FaceT</a>, Traits&gt;::<a class="el" href="classi_polygon.html#a49f48e5edc0e2ec388155633cfabb69b">N_vertices</a></td></tr>
-<tr><td colspan="2"><h2><a name="pro-attribs"></a>
-Protected Attributes</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_fepic.html#ab4c35fc828fb5a816f610e02b9ac2df9">Fepic::vectorui</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi_polygon.html#ab9c01c2e68c8ead316e3d345925c586b">_node</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classi_half_edge.html">iHalfEdge</a>&lt; Traits &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi_polygon.html#ac74b5d04e24c8450632b569c128342fb">_he</a> [<a class="el" href="classi_polygon.html#a0e28e36cf1ff6c8f93bb43d4d90aef1c">N_borders</a>]</td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
 <h3>template&lt;class Traits&gt;<br/>
@@ -113,7 +108,7 @@ Protected Attributes</h2></td></tr>
 <p>A classe <a class="el" href="classi_polygon.html">iPolygon</a> representa os polígonos (triângulo, quadrângulos, ...), entidades da malha de dimensão 2. Dependendo da ordem, os polígonos dessa classe podem ter arestas curvas.</p>
 <dl class="note"><dt><b>Note:</b></dt><dd>Esta é uma classe de conceito abstrato (apesar se não ser abstrata sob o ponto de vista da linguagem c++ pois não tem funções virtuais puras), logo não se deve instanciá-la a não ser que se saiba exatamente o que se está fazendo. </dd></dl>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01270">1270</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipolygon_8hpp_source.html#l00035">35</a> of file <a class="el" href="ipolygon_8hpp_source.html">ipolygon.hpp</a>.</p>
 <hr/><h2>Member Typedef Documentation</h2>
 <a class="anchor" id="a2bb5db73b330cfdd3c3e0e348ee63976"></a><!-- doxytag: member="iPolygon::FaceT" ref="a2bb5db73b330cfdd3c3e0e348ee63976" args="" -->
 <div class="memitem">
@@ -128,9 +123,9 @@ template&lt;class Traits &gt; </div>
 </div>
 <div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="classi_triangle.html#a76e742d2c880b3702decfad3326f63a3">iTriangle&lt; Traits &gt;</a>.</p>
+<p>Reimplemented in <a class="el" href="class_triangle.html#aae0c52ab71f85233f938d08cad25a839">Triangle&lt; Traits &gt;</a>.</p>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01276">1276</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipolygon_8hpp_source.html#l00041">41</a> of file <a class="el" href="ipolygon_8hpp_source.html">ipolygon.hpp</a>.</p>
 
 </div>
 </div>
@@ -147,9 +142,9 @@ template&lt;class Traits &gt; </div>
 </div>
 <div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="classi_triangle.html#a91121f06a67b4a1cf02b9d5aa3ee30e6">iTriangle&lt; Traits &gt;</a>.</p>
+<p>Reimplemented in <a class="el" href="class_triangle.html#ac6d34fc7e4948c04e66dabec9f33b969">Triangle&lt; Traits &gt;</a>.</p>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01277">1277</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipolygon_8hpp_source.html#l00042">42</a> of file <a class="el" href="ipolygon_8hpp_source.html">ipolygon.hpp</a>.</p>
 
 </div>
 </div>
@@ -166,9 +161,9 @@ template&lt;class Traits &gt; </div>
 </div>
 <div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="classi_triangle.html#a795ccfa83212236d04e2d1d03501dc63">iTriangle&lt; Traits &gt;</a>.</p>
+<p>Reimplemented in <a class="el" href="class_triangle.html#a6b18ecd6756c433989f2c563f5e72638">Triangle&lt; Traits &gt;</a>.</p>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01282">1282</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipolygon_8hpp_source.html#l00047">47</a> of file <a class="el" href="ipolygon_8hpp_source.html">ipolygon.hpp</a>.</p>
 
 </div>
 </div>
@@ -191,14 +186,14 @@ template&lt;class Traits &gt; </div>
 <div class="memdoc">
 <p>Construtor. </p>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01286">1286</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipolygon_8hpp_source.html#l00051">51</a> of file <a class="el" href="ipolygon_8hpp_source.html">ipolygon.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l01530">iPolygon&lt; Traits &gt;::_node</a>, and <a class="el" href="entities_8hpp_source.html#l01280">iPolygon&lt; Traits &gt;::N_vertices</a>.</p>
+<p>References <a class="el" href="ipolygon_8hpp_source.html#l00045">iPolygon&lt; Traits &gt;::N_vertices</a>.</p>
 
-<p><div class="fragment"><pre class="fragment">                   : <a class="code" href="classi_marked_entity.html#a3c47487f8856ca9629b02c480907ba82">iMarkedEntity</a>()
-        {
-        <a class="code" href="classi_polygon.html#ab9c01c2e68c8ead316e3d345925c586b">_node</a>.resize(<a class="code" href="classi_polygon.html#a49f48e5edc0e2ec388155633cfabb69b">N_vertices</a>);
-        }
+<p><div class="fragment"><pre class="fragment">             : <a class="code" href="classi_labelable.html#a1d8758bd62102cd3a8a1cda3e47c9655">iLabelable</a>()
+  {
+    _node.resize(<a class="code" href="classi_polygon.html#a49f48e5edc0e2ec388155633cfabb69b">N_vertices</a>);
+  }
 </pre></div></p>
 
 </div>
@@ -237,20 +232,20 @@ template&lt;class Traits &gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01294">1294</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipolygon_8hpp_source.html#l00059">59</a> of file <a class="el" href="ipolygon_8hpp_source.html">ipolygon.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l01530">iPolygon&lt; Traits &gt;::_node</a>, and <a class="el" href="entities_8hpp_source.html#l01280">iPolygon&lt; Traits &gt;::N_vertices</a>.</p>
+<p>References <a class="el" href="ipolygon_8hpp_source.html#l00045">iPolygon&lt; Traits &gt;::N_vertices</a>.</p>
 
-<p><div class="fragment"><pre class="fragment">                                                          : <a class="code" href="classi_marked_entity.html#a3c47487f8856ca9629b02c480907ba82">iMarkedEntity</a>(label), <a class="code" href="classi_polygon.html#ab9c01c2e68c8ead316e3d345925c586b">_node</a>(nodes)
-        {
-<span class="preprocessor">#ifdef ENTTS_DEBUG</span>
-<span class="preprocessor"></span>        <span class="keywordflow">if</span> (<a class="code" href="classi_polygon.html#ab9c01c2e68c8ead316e3d345925c586b">_node</a>.size() &lt; <span class="keyword">static_cast&lt;</span>uint<span class="keyword">&gt;</span>(<a class="code" href="classi_polygon.html#a49f48e5edc0e2ec388155633cfabb69b">N_vertices</a>))
-        {
-            std::cout &lt;&lt; <span class="stringliteral">&quot;error:iPolygon constructor: número insuficiente de nós.\n&quot;</span>;
-            <span class="keywordflow">throw</span>;
-        }
+<p><div class="fragment"><pre class="fragment">                                                    : <a class="code" href="classi_labelable.html#a1d8758bd62102cd3a8a1cda3e47c9655">iLabelable</a>(label), _node(nodes)
+  {
+<span class="preprocessor">#ifdef FEPIC_DEBUG_ON</span>
+<span class="preprocessor"></span>    <span class="keywordflow">if</span> (_node.size() &lt; <span class="keyword">static_cast&lt;</span>uint<span class="keyword">&gt;</span>(<a class="code" href="classi_polygon.html#a49f48e5edc0e2ec388155633cfabb69b">N_vertices</a>))
+    {
+      std::cout &lt;&lt; <span class="stringliteral">&quot;error:iPolygon constructor: número insuficiente de nós.\n&quot;</span>;
+      <span class="keywordflow">throw</span>;
+    }
 <span class="preprocessor">#endif</span>
-<span class="preprocessor"></span>        }
+<span class="preprocessor"></span>  }
 </pre></div></p>
 
 </div>
@@ -284,19 +279,15 @@ template&lt;class Traits &gt; </div>
 <div class="memdoc">
 <p>Retorna um vetor com os nós da i-ésima edge. </p>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01492">1492</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipolygon_8hpp_source.html#l00242">242</a> of file <a class="el" href="ipolygon_8hpp_source.html">ipolygon.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l01530">iPolygon&lt; Traits &gt;::_node</a>.</p>
-
-<p><div class="fragment"><pre class="fragment">        {
-                <a class="code" href="namespace_fepic.html#ab4c35fc828fb5a816f610e02b9ac2df9">Fepic::vectorui</a> nodes;
-                
-                <span class="keywordflow">for</span> (uint i = 0; i &lt; mesh.edges_local_nodes[ith].size(); i++)
-                {
-                        nodes.push_back(<a class="code" href="classi_polygon.html#ab9c01c2e68c8ead316e3d345925c586b">_node</a>[ mesh.edges_local_nodes[ith][i] ]);
-                }
-                <span class="keywordflow">return</span> nodes;
-        }
+<p><div class="fragment"><pre class="fragment">  {
+    <a class="code" href="namespace_fepic.html#ab4c35fc828fb5a816f610e02b9ac2df9">Fepic::vectorui</a> nodes;
+    
+    <span class="keywordflow">for</span> (uint i = 0; i &lt; mesh.edges_local_nodes[ith].size(); i++)
+      nodes.push_back(_node[ mesh.edges_local_nodes[ith][i] ]);
+    <span class="keywordflow">return</span> nodes;
+  }
 </pre></div></p>
 
 </div>
@@ -320,22 +311,22 @@ template&lt;class Traits &gt; </div>
 <div class="memdoc">
 <p>Retorna um vetor com os vértices da i-ésima edge </p>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01505">1505</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipolygon_8hpp_source.html#l00253">253</a> of file <a class="el" href="ipolygon_8hpp_source.html">ipolygon.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l01530">iPolygon&lt; Traits &gt;::_node</a>, and <a class="el" href="entities_8hpp_source.html#l01279">iPolygon&lt; Traits &gt;::N_borders</a>.</p>
+<p>References <a class="el" href="ipolygon_8hpp_source.html#l00044">iPolygon&lt; Traits &gt;::N_borders</a>.</p>
 
-<p>Referenced by <a class="el" href="entities_8hpp_source.html#l01415">iPolygon&lt; Traits &gt;::getCommonBorder()</a>.</p>
+<p>Referenced by <a class="el" href="ipolygon_8hpp_source.html#l00177">iPolygon&lt; Traits &gt;::getCommonBorder()</a>.</p>
 
-<p><div class="fragment"><pre class="fragment">        {
-<span class="preprocessor">#ifdef ENTTS_DEBUG</span>
-<span class="preprocessor"></span>        <span class="keywordflow">if</span> (ith &gt;= <a class="code" href="classi_polygon.html#a0e28e36cf1ff6c8f93bb43d4d90aef1c">N_borders</a>)
-        {
-            std::cout &lt;&lt; <span class="stringliteral">&quot;getCommonBorder: null FaceT.\n&quot;</span> &lt;&lt; std::endl;
-            <span class="keywordflow">throw</span>;
-        }
+<p><div class="fragment"><pre class="fragment">  {
+<span class="preprocessor">#ifdef FEPIC_DEBUG_ON</span>
+<span class="preprocessor"></span>    <span class="keywordflow">if</span> (ith &gt;= <a class="code" href="classi_polygon.html#a0e28e36cf1ff6c8f93bb43d4d90aef1c">N_borders</a>)
+    {
+      std::cout &lt;&lt; <span class="stringliteral">&quot;getCommonBorder: null FaceT.\n&quot;</span> &lt;&lt; std::endl;
+      <span class="keywordflow">throw</span>;
+    }
 <span class="preprocessor">#endif</span>
-<span class="preprocessor"></span>                <span class="keywordflow">return</span> {<a class="code" href="classi_polygon.html#ab9c01c2e68c8ead316e3d345925c586b">_node</a>[ith], <a class="code" href="classi_polygon.html#ab9c01c2e68c8ead316e3d345925c586b">_node</a>[(ith+1)%FaceT::N_borders]};
-        }
+<span class="preprocessor"></span>    <span class="keywordflow">return</span> {_node[ith], _node[(ith+1)%FaceT::N_borders]};
+  }
 </pre></div></p>
 
 <p><div class="dynheader">
@@ -384,35 +375,33 @@ template&lt;class Traits &gt; </div>
 <p>OBSOLETO: refazer<br/>
  Procura por uma edge em comum com outro polígono: se encontra retorna true, caso contrário retorna false. </p>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01415">1415</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipolygon_8hpp_source.html#l00177">177</a> of file <a class="el" href="ipolygon_8hpp_source.html">ipolygon.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l01505">iPolygon&lt; Traits &gt;::getBorderVertices()</a>, and <a class="el" href="entities_8hpp_source.html#l01279">iPolygon&lt; Traits &gt;::N_borders</a>.</p>
+<p>References <a class="el" href="ipolygon_8hpp_source.html#l00253">iPolygon&lt; Traits &gt;::getBorderVertices()</a>, and <a class="el" href="ipolygon_8hpp_source.html#l00044">iPolygon&lt; Traits &gt;::N_borders</a>.</p>
 
-<p><div class="fragment"><pre class="fragment">        {
-<span class="preprocessor">#ifdef ENTTS_DEBUG</span>
-<span class="preprocessor"></span>        <span class="keywordflow">if</span> (other==NULL)
-        {
-            std::cout &lt;&lt; <span class="stringliteral">&quot;getCommonBorder: null FaceT.\n&quot;</span> &lt;&lt; std::endl;
-            <span class="keywordflow">throw</span>;
-        }
+<p><div class="fragment"><pre class="fragment">  {
+<span class="preprocessor">#ifdef FEPIC_DEBUG_ON</span>
+<span class="preprocessor"></span>    <span class="keywordflow">if</span> (other==NULL)
+    {
+      std::cout &lt;&lt; <span class="stringliteral">&quot;getCommonBorder: null FaceT.\n&quot;</span> &lt;&lt; std::endl;
+      <span class="keywordflow">throw</span>;
+    }
 <span class="preprocessor">#endif</span>
-<span class="preprocessor"></span>                <a class="code" href="namespace_fepic.html#ab4c35fc828fb5a816f610e02b9ac2df9">Fepic::vectorui</a> this_edge_vtx(2);
-                
-                <span class="keywordflow">for</span> (<span class="keywordtype">int</span> s = 0; s &lt; <a class="code" href="classi_polygon.html#a0e28e36cf1ff6c8f93bb43d4d90aef1c">N_borders</a>; ++s)
-                {
-                        this_edge_vtx = this-&gt;<a class="code" href="classi_polygon.html#a414d7ea3959cbd1f3b7880e50aa93dd0">getBorderVertices</a>(s);
-                        reverse(this_edge_vtx.begin(), this_edge_vtx.end());
-                        <span class="keywordflow">if</span> (other-&gt;isAnEdge(this_edge_vtx, otherborder))
-                        {
-                                thisborder = s;
-                                <span class="keywordflow">return</span> <span class="keyword">true</span>;
-                        }
-                        
-                }
-                
-                <span class="keywordflow">return</span> <span class="keyword">false</span>;
-                
-        }
+<span class="preprocessor"></span>    <a class="code" href="namespace_fepic.html#ab4c35fc828fb5a816f610e02b9ac2df9">Fepic::vectorui</a> this_edge_vtx(2);
+  
+    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> s = 0; s &lt; <a class="code" href="classi_polygon.html#a0e28e36cf1ff6c8f93bb43d4d90aef1c">N_borders</a>; ++s)
+    {
+      this_edge_vtx = this-&gt;<a class="code" href="classi_polygon.html#a414d7ea3959cbd1f3b7880e50aa93dd0">getBorderVertices</a>(s);
+      reverse(this_edge_vtx.begin(), this_edge_vtx.end());
+      <span class="keywordflow">if</span> (other-&gt;isAnEdge(this_edge_vtx, otherborder))
+      {
+        thisborder = s;
+        <span class="keywordflow">return</span> <span class="keyword">true</span>;
+      }
+    }
+  
+    <span class="keywordflow">return</span> <span class="keyword">false</span>;
+  }
 </pre></div></p>
 
 <p><div class="dynheader">
@@ -445,20 +434,20 @@ template&lt;class Traits &gt; </div>
 <div class="memdoc">
 <p>Retorna um ponteiro para a i-ésima <a class="el" href="classi_half_edge.html">iHalfEdge</a>. </p>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01336">1336</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipolygon_8hpp_source.html#l00101">101</a> of file <a class="el" href="ipolygon_8hpp_source.html">ipolygon.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l01531">iPolygon&lt; Traits &gt;::_he</a>, and <a class="el" href="entities_8hpp_source.html#l01279">iPolygon&lt; Traits &gt;::N_borders</a>.</p>
+<p>References <a class="el" href="ipolygon_8hpp_source.html#l00044">iPolygon&lt; Traits &gt;::N_borders</a>.</p>
 
-<p><div class="fragment"><pre class="fragment">        {
-<span class="preprocessor">#ifdef ENTTS_DEBUG</span>
-<span class="preprocessor"></span>        <span class="keywordflow">if</span> (ith &gt;= <a class="code" href="classi_polygon.html#a0e28e36cf1ff6c8f93bb43d4d90aef1c">N_borders</a>)
-        {
-            std::cout &lt;&lt; <span class="stringliteral">&quot;getHalf: out of range&quot;</span> &lt;&lt; std::endl;
-            <span class="keywordflow">throw</span>;
-        }
+<p><div class="fragment"><pre class="fragment">  {
+<span class="preprocessor">#ifdef FEPIC_DEBUG_ON</span>
+<span class="preprocessor"></span>    <span class="keywordflow">if</span> (ith &gt;= <a class="code" href="classi_polygon.html#a0e28e36cf1ff6c8f93bb43d4d90aef1c">N_borders</a>)
+    {
+      std::cout &lt;&lt; <span class="stringliteral">&quot;getHalf: out of range&quot;</span> &lt;&lt; std::endl;
+      <span class="keywordflow">throw</span>;
+    }
 <span class="preprocessor">#endif</span>
-<span class="preprocessor"></span>                <span class="keywordflow">return</span> &amp;<a class="code" href="classi_polygon.html#ac74b5d04e24c8450632b569c128342fb">_he</a>[ith];
-        }
+<span class="preprocessor"></span>    <span class="keywordflow">return</span> &amp;_he[ith];
+  }
 </pre></div></p>
 
 </div>
@@ -482,19 +471,17 @@ template&lt;class Traits &gt; </div>
 <div class="memdoc">
 <p>Retorna o índice do i-ésimo nó do polígono. </p>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01314">1314</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipolygon_8hpp_source.html#l00079">79</a> of file <a class="el" href="ipolygon_8hpp_source.html">ipolygon.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l01530">iPolygon&lt; Traits &gt;::_node</a>.</p>
+<p>Referenced by <a class="el" href="ipolygon_8hpp_source.html#l00268">iPolygon&lt; Traits &gt;::printSelfState()</a>, and <a class="el" href="itriangle_8hpp_source.html#l00102">Triangle&lt; Traits &gt;::printSelfVTK()</a>.</p>
 
-<p>Referenced by <a class="el" href="entities_8hpp_source.html#l01949">iPolyhedron&lt; Traits &gt;::printSelfState()</a>, <a class="el" href="entities_8hpp_source.html#l01520">iPolygon&lt; Traits &gt;::printSelfState()</a>, <a class="el" href="entities_8hpp_source.html#l02080">iTetrahedron&lt; Traits &gt;::printSelfVTK()</a>, and <a class="el" href="entities_8hpp_source.html#l01609">iTriangle&lt; Traits &gt;::printSelfVTK()</a>.</p>
-
-<p><div class="fragment"><pre class="fragment">        {   
-<span class="preprocessor">#ifdef ENTTS_DEBUG</span>
-<span class="preprocessor"></span>                <span class="keywordflow">return</span> <a class="code" href="classi_polygon.html#ab9c01c2e68c8ead316e3d345925c586b">_node</a>.at(ith);
+<p><div class="fragment"><pre class="fragment">  {   
+<span class="preprocessor">#ifdef FEPIC_DEBUG_ON</span>
+<span class="preprocessor"></span>    <span class="keywordflow">return</span> _node.at(ith);
 <span class="preprocessor">#else</span>
-<span class="preprocessor"></span>        <span class="keywordflow">return</span> <a class="code" href="classi_polygon.html#ab9c01c2e68c8ead316e3d345925c586b">_node</a>[ith];
+<span class="preprocessor"></span>    <span class="keywordflow">return</span> _node[ith];
 <span class="preprocessor">#endif</span>
-<span class="preprocessor"></span>        }
+<span class="preprocessor"></span>  }
 </pre></div></p>
 
 <p><div class="dynheader">
@@ -502,7 +489,7 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classi_polygon_a4b0063e97ea7648c9f0a7d04d970f4bf_icgraph.png" border="0" usemap="#classi_polygon_a4b0063e97ea7648c9f0a7d04d970f4bf_icgraph" alt=""/></div>
 <map name="classi_polygon_a4b0063e97ea7648c9f0a7d04d970f4bf_icgraph" id="classi_polygon_a4b0063e97ea7648c9f0a7d04d970f4bf_icgraph">
-<area shape="rect" id="node3" href="classi_polyhedron.html#a93558cdd3782da5e731726029969aa5a" title="iPolyhedron::printSelfState" alt="" coords="211,5,403,35"/><area shape="rect" id="node5" href="classi_polygon.html#a33c3a4437f001b161172e908bae699e4" title="iPolygon::printSelfState" alt="" coords="221,59,392,88"/><area shape="rect" id="node7" href="classi_tetrahedron.html#a18d850e707572f60853786f5a7e91765" title="iTetrahedron::printSelfVTK" alt="" coords="213,112,400,141"/><area shape="rect" id="node9" href="classi_triangle.html#a4be8c19bd8b74a870c0b6c62c0653dc8" title="iTriangle::printSelfVTK" alt="" coords="228,165,385,195"/></map>
+<area shape="rect" id="node3" href="classi_polygon.html#a33c3a4437f001b161172e908bae699e4" title="iPolygon::printSelfState" alt="" coords="211,5,381,35"/><area shape="rect" id="node5" href="class_triangle.html#a487713510dfc159b5327c983a5beb1da" title="Triangle::printSelfVTK" alt="" coords="219,59,373,88"/></map>
 </div>
 </p>
 
@@ -526,13 +513,11 @@ template&lt;class Traits &gt; </div>
 <div class="memdoc">
 <p>Retorna o número de nós deste polígono. </p>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01307">1307</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipolygon_8hpp_source.html#l00072">72</a> of file <a class="el" href="ipolygon_8hpp_source.html">ipolygon.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l01530">iPolygon&lt; Traits &gt;::_node</a>.</p>
-
-<p><div class="fragment"><pre class="fragment">    {
-        <span class="keywordflow">return</span> <a class="code" href="classi_polygon.html#ab9c01c2e68c8ead316e3d345925c586b">_node</a>.size();
-    }
+<p><div class="fragment"><pre class="fragment">  {
+    <span class="keywordflow">return</span> _node.size();
+  }
 </pre></div></p>
 
 </div>
@@ -574,39 +559,36 @@ template&lt;class Traits &gt; </div>
 <dl class="return"><dt><b>Returns:</b></dt><dd>true se e somente se forma uma aresta. </dd></dl>
 <dl class="warning"><dt><b>Warning:</b></dt><dd>a ordem dos nós É importante. </dd></dl>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01354">1354</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipolygon_8hpp_source.html#l00119">119</a> of file <a class="el" href="ipolygon_8hpp_source.html">ipolygon.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l01530">iPolygon&lt; Traits &gt;::_node</a>, and <a class="el" href="entities_8hpp_source.html#l01279">iPolygon&lt; Traits &gt;::N_borders</a>.</p>
+<p>References <a class="el" href="ipolygon_8hpp_source.html#l00044">iPolygon&lt; Traits &gt;::N_borders</a>.</p>
 
-<p>Referenced by <a class="el" href="entities_8hpp_source.html#l01389">iPolygon&lt; Traits &gt;::isAnParallelEdge()</a>.</p>
+<p>Referenced by <a class="el" href="ipolygon_8hpp_source.html#l00151">iPolygon&lt; Traits &gt;::isAnParallelEdge()</a>.</p>
 
-<p><div class="fragment"><pre class="fragment">        {
-                <span class="comment">//  testado. 14/09/2010</span>
-                
-<span class="preprocessor">#ifdef ENTTS_DEBUG</span>
-<span class="preprocessor"></span>        <span class="keywordflow">if</span> (vertices.size() != 2)
-        {
-            std::cout &lt;&lt; <span class="stringliteral">&quot;isAnEdge: first argument has wrong dimension.\n&quot;</span> &lt;&lt; std::endl;
-            <span class="keywordflow">throw</span>;
-        }
+<p><div class="fragment"><pre class="fragment">  {
+          
+<span class="preprocessor">#ifdef FEPIC_DEBUG_ON</span>
+<span class="preprocessor"></span>    <span class="keywordflow">if</span> (vertices.size() != 2)
+    {
+      std::cout &lt;&lt; <span class="stringliteral">&quot;isAnEdge: first argument has wrong dimension.\n&quot;</span> &lt;&lt; std::endl;
+      <span class="keywordflow">throw</span>;
+    }
 <span class="preprocessor">#endif        </span>
-<span class="preprocessor"></span>                <a class="code" href="namespace_fepic.html#ab4c35fc828fb5a816f610e02b9ac2df9">Fepic::vectorui</a> vtx(2);
+<span class="preprocessor"></span>    <a class="code" href="namespace_fepic.html#ab4c35fc828fb5a816f610e02b9ac2df9">Fepic::vectorui</a> vtx(2);
                 
-                <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i != <a class="code" href="classi_polygon.html#a0e28e36cf1ff6c8f93bb43d4d90aef1c">N_borders</a>; ++i)
-                {
-                        vtx[0] = <a class="code" href="classi_polygon.html#ab9c01c2e68c8ead316e3d345925c586b">_node</a>[i];
-                        vtx[1] = <a class="code" href="classi_polygon.html#ab9c01c2e68c8ead316e3d345925c586b">_node</a>[(i+1)%<a class="code" href="classi_polygon.html#a0e28e36cf1ff6c8f93bb43d4d90aef1c">N_borders</a>];
-                        
-                        <span class="keywordflow">if</span> (vtx == vertices)
-                        {
-                                ith = i;
-                                <span class="keywordflow">return</span> <span class="keyword">true</span>;
-                        }
-                        
-                }
-                
-                <span class="keywordflow">return</span> <span class="keyword">false</span>;
-        }
+    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i != <a class="code" href="classi_polygon.html#a0e28e36cf1ff6c8f93bb43d4d90aef1c">N_borders</a>; ++i)
+    {
+      vtx[0] = _node[i];
+      vtx[1] = _node[(i+1)%<a class="code" href="classi_polygon.html#a0e28e36cf1ff6c8f93bb43d4d90aef1c">N_borders</a>];
+      
+      <span class="keywordflow">if</span> (vtx == vertices)
+      {
+        ith = i;
+        <span class="keywordflow">return</span> <span class="keyword">true</span>;
+      }
+    }
+    <span class="keywordflow">return</span> <span class="keyword">false</span>;
+  }
 </pre></div></p>
 
 <p><div class="dynheader">
@@ -657,30 +639,30 @@ template&lt;class Traits &gt; </div>
 <dl class="return"><dt><b>Returns:</b></dt><dd>true se e somente se forma uma aresta. </dd></dl>
 <dl class="warning"><dt><b>Warning:</b></dt><dd>a ordem dos nós NÃO é importante. </dd></dl>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01389">1389</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipolygon_8hpp_source.html#l00151">151</a> of file <a class="el" href="ipolygon_8hpp_source.html">ipolygon.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l01354">iPolygon&lt; Traits &gt;::isAnEdge()</a>, and <a class="el" href="entities_8hpp_source.html#l00032">swap()</a>.</p>
+<p>References <a class="el" href="ipolygon_8hpp_source.html#l00119">iPolygon&lt; Traits &gt;::isAnEdge()</a>.</p>
 
-<p><div class="fragment"><pre class="fragment">        {
-<span class="preprocessor">#ifdef ENTTS_DEBUG</span>
-<span class="preprocessor"></span>        <span class="keywordflow">if</span> (vertices.size() != 2)
-        {
-            std::cout &lt;&lt; <span class="stringliteral">&quot;isAnEdge: first argument has wrong dimension.\n&quot;</span> &lt;&lt; std::endl;
-            <span class="keywordflow">throw</span>;
-        }
+<p><div class="fragment"><pre class="fragment">  {
+<span class="preprocessor">#ifdef FEPIC_DEBUG_ON</span>
+<span class="preprocessor"></span>    <span class="keywordflow">if</span> (vertices.size() != 2)
+    {
+      std::cout &lt;&lt; <span class="stringliteral">&quot;isAnEdge: first argument has wrong dimension.\n&quot;</span> &lt;&lt; std::endl;
+      <span class="keywordflow">throw</span>;
+    }
 <span class="preprocessor">#endif        </span>
-<span class="preprocessor"></span>                <span class="keywordflow">if</span> (this-&gt;<a class="code" href="classi_polygon.html#a4c3ee7f8a3a8cd08620ac08a36d424f6">isAnEdge</a>(vertices, ith))
-                        <span class="keywordflow">return</span> <span class="keyword">true</span>;
+<span class="preprocessor"></span>    <span class="keywordflow">if</span> (this-&gt;<a class="code" href="classi_polygon.html#a4c3ee7f8a3a8cd08620ac08a36d424f6">isAnEdge</a>(vertices, ith))
+      <span class="keywordflow">return</span> <span class="keyword">true</span>;
                         
-                <a class="code" href="entities_8hpp.html#a8c6a16881d4ab28d222f7ac896ced037">swap</a>(vertices[0], vertices[1]);
-                <span class="keywordflow">if</span> (this-&gt;<a class="code" href="classi_polygon.html#a4c3ee7f8a3a8cd08620ac08a36d424f6">isAnEdge</a>(vertices, ith))
-                {
-            <a class="code" href="entities_8hpp.html#a8c6a16881d4ab28d222f7ac896ced037">swap</a>(vertices[0], vertices[1]);
-                        <span class="keywordflow">return</span> <span class="keyword">true</span>;
-                }
-        <a class="code" href="entities_8hpp.html#a8c6a16881d4ab28d222f7ac896ced037">swap</a>(vertices[0], vertices[1]);
-                <span class="keywordflow">return</span> <span class="keyword">false</span>;
-        }
+    std::swap(vertices[0], vertices[1]);
+    <span class="keywordflow">if</span> (this-&gt;<a class="code" href="classi_polygon.html#a4c3ee7f8a3a8cd08620ac08a36d424f6">isAnEdge</a>(vertices, ith))
+    {
+      std::swap(vertices[0], vertices[1]);
+      <span class="keywordflow">return</span> <span class="keyword">true</span>;
+    }
+    std::swap(vertices[0], vertices[1]);
+    <span class="keywordflow">return</span> <span class="keyword">false</span>;
+  }
 </pre></div></p>
 
 <p><div class="dynheader">
@@ -688,7 +670,7 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classi_polygon_af6202cc944d3d4fd0fdd25bd2476f13b_cgraph.png" border="0" usemap="#classi_polygon_af6202cc944d3d4fd0fdd25bd2476f13b_cgraph" alt=""/></div>
 <map name="classi_polygon_af6202cc944d3d4fd0fdd25bd2476f13b_cgraph" id="classi_polygon_af6202cc944d3d4fd0fdd25bd2476f13b_cgraph">
-<area shape="rect" id="node3" href="classi_polygon.html#a4c3ee7f8a3a8cd08620ac08a36d424f6" title="iPolygon::isAnEdge" alt="" coords="241,5,383,35"/><area shape="rect" id="node5" href="entities_8hpp.html#a8c6a16881d4ab28d222f7ac896ced037" title="swap" alt="" coords="285,59,339,88"/></map>
+<area shape="rect" id="node3" href="classi_polygon.html#a4c3ee7f8a3a8cd08620ac08a36d424f6" title="iPolygon::isAnEdge" alt="" coords="241,5,383,35"/></map>
 </div>
 </p>
 
@@ -719,17 +701,15 @@ template&lt;class Traits &gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01520">1520</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipolygon_8hpp_source.html#l00268">268</a> of file <a class="el" href="ipolygon_8hpp_source.html">ipolygon.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l01530">iPolygon&lt; Traits &gt;::_node</a>, and <a class="el" href="entities_8hpp_source.html#l01314">iPolygon&lt; Traits &gt;::getNodeIdx()</a>.</p>
+<p>References <a class="el" href="ipolygon_8hpp_source.html#l00079">iPolygon&lt; Traits &gt;::getNodeIdx()</a>.</p>
 
-<p><div class="fragment"><pre class="fragment">        {
-                o &lt;&lt; <a class="code" href="classi_polygon.html#a4b0063e97ea7648c9f0a7d04d970f4bf">getNodeIdx</a>(0);
-                <span class="keywordflow">for</span> (uint i = 1; i &lt; <a class="code" href="classi_polygon.html#ab9c01c2e68c8ead316e3d345925c586b">_node</a>.size(); ++i)
-                {
-                        o &lt;&lt; <span class="stringliteral">&quot; &quot;</span> &lt;&lt; <a class="code" href="classi_polygon.html#a4b0063e97ea7648c9f0a7d04d970f4bf">getNodeIdx</a>(i);
-                }
-        }
+<p><div class="fragment"><pre class="fragment">  {
+    o &lt;&lt; <a class="code" href="classi_polygon.html#a4b0063e97ea7648c9f0a7d04d970f4bf">getNodeIdx</a>(0);
+    <span class="keywordflow">for</span> (uint i = 1; i &lt; _node.size(); ++i)
+      o &lt;&lt; <span class="stringliteral">&quot; &quot;</span> &lt;&lt; <a class="code" href="classi_polygon.html#a4b0063e97ea7648c9f0a7d04d970f4bf">getNodeIdx</a>(i);
+  }
 </pre></div></p>
 
 <p><div class="dynheader">
@@ -768,26 +748,26 @@ template&lt;class Traits &gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01445">1445</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipolygon_8hpp_source.html#l00205">205</a> of file <a class="el" href="ipolygon_8hpp_source.html">ipolygon.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l01531">iPolygon&lt; Traits &gt;::_he</a>, <a class="el" href="entities_8hpp_source.html#l01530">iPolygon&lt; Traits &gt;::_node</a>, and <a class="el" href="entities_8hpp_source.html#l01279">iPolygon&lt; Traits &gt;::N_borders</a>.</p>
+<p>References <a class="el" href="ipolygon_8hpp_source.html#l00044">iPolygon&lt; Traits &gt;::N_borders</a>.</p>
 
-<p><div class="fragment"><pre class="fragment">        {
-<span class="preprocessor">#ifdef ENTTS_DEBUG</span>
-<span class="preprocessor"></span>        <span class="keywordflow">if</span> (mesh.edges_local_nodes.empty())
-        {
-            std::cout &lt;&lt; <span class="stringliteral">&quot;edges_local_nodes must be initializated.&quot;</span> &lt;&lt; std::endl;
-            <span class="keywordflow">throw</span>;
-        }
+<p><div class="fragment"><pre class="fragment">  {
+<span class="preprocessor">#ifdef FEPIC_DEBUG_ON</span>
+<span class="preprocessor"></span>    <span class="keywordflow">if</span> (mesh.edges_local_nodes.empty())
+    {
+      std::cout &lt;&lt; <span class="stringliteral">&quot;edges_local_nodes must be initializated.&quot;</span> &lt;&lt; std::endl;
+      <span class="keywordflow">throw</span>;
+    }
 <span class="preprocessor">#endif</span>
-<span class="preprocessor"></span>                <span class="keywordflow">for</span> (uint s = 0; s &lt; static_cast&lt;uint&gt;(<a class="code" href="classi_polygon.html#a0e28e36cf1ff6c8f93bb43d4d90aef1c">N_borders</a>); ++s) <span class="comment">// loop  nas arestas</span>
-                {
-                        <span class="keywordflow">for</span> (uint i = 0, tam=mesh.edges_local_nodes[0].size(); i &lt; tam; ++i)
-                        {
-                                mesh.getNode(<a class="code" href="classi_polygon.html#ab9c01c2e68c8ead316e3d345925c586b">_node</a>[mesh.edges_local_nodes[s][i]])-&gt;setHalf(<a class="code" href="classi_polygon.html#ac74b5d04e24c8450632b569c128342fb">_he</a>[s]);
-                        }
-                }
-        }
+<span class="preprocessor"></span>    <span class="keywordflow">for</span> (uint s = 0; s &lt; static_cast&lt;uint&gt;(<a class="code" href="classi_polygon.html#a0e28e36cf1ff6c8f93bb43d4d90aef1c">N_borders</a>); ++s) <span class="comment">// loop  nas arestas</span>
+    {
+      <span class="keywordflow">for</span> (uint i = 0, tam=mesh.edges_local_nodes[0].size(); i &lt; tam; ++i)
+      {
+        mesh.getNode(_node[mesh.edges_local_nodes[s][i]])-&gt;setHalf(_he[s]);
+      }
+    }
+  }
 </pre></div></p>
 
 </div>
@@ -828,29 +808,19 @@ template&lt;class Traits &gt; </div>
 </dl>
 <dl class="warning"><dt><b>Warning:</b></dt><dd>CONFERIR! </dd></dl>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01469">1469</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipolygon_8hpp_source.html#l00229">229</a> of file <a class="el" href="ipolygon_8hpp_source.html">ipolygon.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l01530">iPolygon&lt; Traits &gt;::_node</a>, and <a class="el" href="entities_8hpp_source.html#l00302">iMarkedEntity::getLabel()</a>.</p>
+<p>References <a class="el" href="ilabelable_8hpp_source.html#l00062">iLabelable::getLabel()</a>.</p>
 
-<p><div class="fragment"><pre class="fragment">        {
-                <span class="keywordflow">if</span> (force)
-                {
-                        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; <a class="code" href="classi_polygon.html#ab9c01c2e68c8ead316e3d345925c586b">_node</a>.size(); i++)
-                        {
-                                mesh.getNode(<a class="code" href="classi_polygon.html#ab9c01c2e68c8ead316e3d345925c586b">_node</a>[i])-&gt;setLabel(this-&gt;<a class="code" href="classi_marked_entity.html#af5896a8b27fd4cfd27b11f44d0d5500f">getLabel</a>());
-                        }
-                }
-                <span class="keywordflow">else</span>
-                {
-                        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; <a class="code" href="classi_polygon.html#ab9c01c2e68c8ead316e3d345925c586b">_node</a>.size(); i++)
-                        {
-                                <span class="keywordflow">if</span> (mesh.getNode(<a class="code" href="classi_polygon.html#ab9c01c2e68c8ead316e3d345925c586b">_node</a>[i])-&gt;getLabel() == 0)
-                                {
-                                        mesh.getNode(<a class="code" href="classi_polygon.html#ab9c01c2e68c8ead316e3d345925c586b">_node</a>[i])-&gt;setLabel(this-&gt;<a class="code" href="classi_marked_entity.html#af5896a8b27fd4cfd27b11f44d0d5500f">getLabel</a>());
-                                }
-                        }
-                }
-        }
+<p><div class="fragment"><pre class="fragment">  {
+    <span class="keywordflow">if</span> (force)
+      <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; _node.size(); i++)
+        mesh.getNode(_node[i])-&gt;setLabel(this-&gt;<a class="code" href="classi_labelable.html#acbe77acaa7b3d07a01cd9496144586df">getLabel</a>());
+    <span class="keywordflow">else</span>
+      <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; _node.size(); i++)
+        <span class="keywordflow">if</span> (mesh.getNode(_node[i])-&gt;getLabel() == 0)
+          mesh.getNode(_node[i])-&gt;setLabel(this-&gt;<a class="code" href="classi_labelable.html#acbe77acaa7b3d07a01cd9496144586df">getLabel</a>());
+  }
 </pre></div></p>
 
 <p><div class="dynheader">
@@ -858,7 +828,7 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classi_polygon_a3e6f8cc8302d25a9860becd940400e16_cgraph.png" border="0" usemap="#classi_polygon_a3e6f8cc8302d25a9860becd940400e16_cgraph" alt=""/></div>
 <map name="classi_polygon_a3e6f8cc8302d25a9860becd940400e16_cgraph" id="classi_polygon_a3e6f8cc8302d25a9860becd940400e16_cgraph">
-<area shape="rect" id="node3" href="classi_marked_entity.html#af5896a8b27fd4cfd27b11f44d0d5500f" title="iMarkedEntity::getLabel" alt="" coords="237,5,408,35"/></map>
+<area shape="rect" id="node3" href="classi_labelable.html#acbe77acaa7b3d07a01cd9496144586df" title="iLabelable::getLabel" alt="" coords="237,5,387,35"/></map>
 </div>
 </p>
 
@@ -892,60 +862,20 @@ template&lt;class Traits &gt; </div>
 <div class="memdoc">
 <p>Defini o i-ésimo nó do polígono como nodeid </p>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01325">1325</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipolygon_8hpp_source.html#l00090">90</a> of file <a class="el" href="ipolygon_8hpp_source.html">ipolygon.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l01530">iPolygon&lt; Traits &gt;::_node</a>.</p>
-
-<p><div class="fragment"><pre class="fragment">        {
-<span class="preprocessor">#ifdef ENTTS_DEBUG</span>
-<span class="preprocessor"></span>                <a class="code" href="classi_polygon.html#ab9c01c2e68c8ead316e3d345925c586b">_node</a>.at(ith) = nodeid;
+<p><div class="fragment"><pre class="fragment">  {
+<span class="preprocessor">#ifdef FEPIC_DEBUG_ON</span>
+<span class="preprocessor"></span>    _node.at(ith) = nodeid;
 <span class="preprocessor">#else</span>
-<span class="preprocessor"></span>        <a class="code" href="classi_polygon.html#ab9c01c2e68c8ead316e3d345925c586b">_node</a>[ith] = nodeid;
+<span class="preprocessor"></span>    _node[ith] = nodeid;
 <span class="preprocessor">#endif</span>
-<span class="preprocessor"></span>        }
+<span class="preprocessor"></span>  }
 </pre></div></p>
 
 </div>
 </div>
 <hr/><h2>Member Data Documentation</h2>
-<a class="anchor" id="ac74b5d04e24c8450632b569c128342fb"></a><!-- doxytag: member="iPolygon::_he" ref="ac74b5d04e24c8450632b569c128342fb" args="[N_borders]" -->
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;class Traits &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classi_half_edge.html">iHalfEdge</a>&lt;Traits&gt; <a class="el" href="classi_polygon.html">iPolygon</a>&lt; Traits &gt;::<a class="el" href="classi_polygon.html#ac74b5d04e24c8450632b569c128342fb">_he</a>[<a class="el" href="classi_polygon.html#a0e28e36cf1ff6c8f93bb43d4d90aef1c">N_borders</a>]<code> [protected]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01531">1531</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
-
-<p>Referenced by <a class="el" href="entities_8hpp_source.html#l01336">iPolygon&lt; Traits &gt;::getHalf()</a>, and <a class="el" href="entities_8hpp_source.html#l01445">iPolygon&lt; Traits &gt;::propagateHalf()</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="ab9c01c2e68c8ead316e3d345925c586b"></a><!-- doxytag: member="iPolygon::_node" ref="ab9c01c2e68c8ead316e3d345925c586b" args="" -->
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;class Traits &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespace_fepic.html#ab4c35fc828fb5a816f610e02b9ac2df9">Fepic::vectorui</a> <a class="el" href="classi_polygon.html">iPolygon</a>&lt; Traits &gt;::<a class="el" href="classi_polygon.html#ab9c01c2e68c8ead316e3d345925c586b">_node</a><code> [protected]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01530">1530</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
-
-<p>Referenced by <a class="el" href="entities_8hpp_source.html#l01962">iPolyhedron&lt; Traits &gt;::getBorderNodes()</a>, <a class="el" href="entities_8hpp_source.html#l01492">iPolygon&lt; Traits &gt;::getBorderNodes()</a>, <a class="el" href="entities_8hpp_source.html#l01975">iPolyhedron&lt; Traits &gt;::getBorderVertices()</a>, <a class="el" href="entities_8hpp_source.html#l01505">iPolygon&lt; Traits &gt;::getBorderVertices()</a>, <a class="el" href="entities_8hpp_source.html#l01856">iPolyhedron&lt; Traits &gt;::getNodeIdx()</a>, <a class="el" href="entities_8hpp_source.html#l01314">iPolygon&lt; Traits &gt;::getNodeIdx()</a>, <a class="el" href="entities_8hpp_source.html#l01849">iPolyhedron&lt; Traits &gt;::getNumNodes()</a>, <a class="el" href="entities_8hpp_source.html#l01307">iPolygon&lt; Traits &gt;::getNumNodes()</a>, <a class="el" href="entities_8hpp_source.html#l01286">iPolygon&lt; Traits &gt;::iPolygon()</a>, <a class="el" href="entities_8hpp_source.html#l01818">iPolyhedron&lt; Traits &gt;::iPolyhedron()</a>, <a class="el" href="entities_8hpp_source.html#l01354">iPolygon&lt; Traits &gt;::isAnEdge()</a>, <a class="el" href="entities_8hpp_source.html#l01900">iPolyhedron&lt; Traits &gt;::isAnFace()</a>, <a class="el" href="entities_8hpp_source.html#l01949">iPolyhedron&lt; Traits &gt;::printSelfState()</a>, <a class="el" href="entities_8hpp_source.html#l01520">iPolygon&lt; Traits &gt;::printSelfState()</a>, <a class="el" href="entities_8hpp_source.html#l01990">iPolyhedron&lt; Traits &gt;::propagateHalf()</a>, <a class="el" href="entities_8hpp_source.html#l01445">iPolygon&lt; Traits &gt;::propagateHalf()</a>, <a class="el" href="entities_8hpp_source.html#l02006">iPolyhedron&lt; Traits &gt;::propagateLabel()</a>, <a class="el" href="entities_8hpp_source.html#l01469">iPolygon&lt; Traits &gt;::propagateLabel()</a>, <a class="el" href="entities_8hpp_source.html#l01867">iPolyhedron&lt; Traits &gt;::setNode()</a>, <a class="el" href="entities_8hpp_source.html#l01325">iPolygon&lt; Traits &gt;::setNode()</a>, <a class="el" href="entities_8hpp_source.html#l02121">iTetrahedron&lt; Traits &gt;::setOrder()</a>, and <a class="el" href="entities_8hpp_source.html#l01637">iTriangle&lt; Traits &gt;::setOrder()</a>.</p>
-
-</div>
-</div>
 <a class="anchor" id="a6ffe4db157e79370e804a8affabda2d1"></a><!-- doxytag: member="iPolygon::Dim" ref="a6ffe4db157e79370e804a8affabda2d1" args="" -->
 <div class="memitem">
 <div class="memproto">
@@ -959,7 +889,7 @@ template&lt;class Traits &gt; </div>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01273">1273</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipolygon_8hpp_source.html#l00038">38</a> of file <a class="el" href="ipolygon_8hpp_source.html">ipolygon.hpp</a>.</p>
 
 </div>
 </div>
@@ -976,11 +906,11 @@ template&lt;class Traits &gt; </div>
 </div>
 <div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="classi_triangle.html#aa3511fc46c2aa4eccae51d4906c24f52">iTriangle&lt; Traits &gt;</a>.</p>
+<p>Reimplemented in <a class="el" href="class_triangle.html#a904485f27968bcfd11e1f2dfce3be3f5">Triangle&lt; Traits &gt;</a>.</p>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01279">1279</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipolygon_8hpp_source.html#l00044">44</a> of file <a class="el" href="ipolygon_8hpp_source.html">ipolygon.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="entities_8hpp_source.html#l01505">iPolygon&lt; Traits &gt;::getBorderVertices()</a>, <a class="el" href="entities_8hpp_source.html#l01415">iPolygon&lt; Traits &gt;::getCommonBorder()</a>, <a class="el" href="entities_8hpp_source.html#l01878">iPolyhedron&lt; Traits &gt;::getHalf()</a>, <a class="el" href="entities_8hpp_source.html#l01336">iPolygon&lt; Traits &gt;::getHalf()</a>, <a class="el" href="entities_8hpp_source.html#l01354">iPolygon&lt; Traits &gt;::isAnEdge()</a>, <a class="el" href="entities_8hpp_source.html#l01900">iPolyhedron&lt; Traits &gt;::isAnFace()</a>, <a class="el" href="entities_8hpp_source.html#l01990">iPolyhedron&lt; Traits &gt;::propagateHalf()</a>, and <a class="el" href="entities_8hpp_source.html#l01445">iPolygon&lt; Traits &gt;::propagateHalf()</a>.</p>
+<p>Referenced by <a class="el" href="ipolygon_8hpp_source.html#l00253">iPolygon&lt; Traits &gt;::getBorderVertices()</a>, <a class="el" href="ipolygon_8hpp_source.html#l00177">iPolygon&lt; Traits &gt;::getCommonBorder()</a>, <a class="el" href="ipolygon_8hpp_source.html#l00101">iPolygon&lt; Traits &gt;::getHalf()</a>, <a class="el" href="ipolygon_8hpp_source.html#l00119">iPolygon&lt; Traits &gt;::isAnEdge()</a>, and <a class="el" href="ipolygon_8hpp_source.html#l00205">iPolygon&lt; Traits &gt;::propagateHalf()</a>.</p>
 
 </div>
 </div>
@@ -997,16 +927,16 @@ template&lt;class Traits &gt; </div>
 </div>
 <div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="classi_triangle.html#aabe332f303b708418af2c62cda4447ea">iTriangle&lt; Traits &gt;</a>.</p>
+<p>Reimplemented in <a class="el" href="class_triangle.html#a343d7a36eb014b1b2ff79fc06c6c8a50">Triangle&lt; Traits &gt;</a>.</p>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l01280">1280</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ipolygon_8hpp_source.html#l00045">45</a> of file <a class="el" href="ipolygon_8hpp_source.html">ipolygon.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="entities_8hpp_source.html#l01286">iPolygon&lt; Traits &gt;::iPolygon()</a>, and <a class="el" href="entities_8hpp_source.html#l01818">iPolyhedron&lt; Traits &gt;::iPolyhedron()</a>.</p>
+<p>Referenced by <a class="el" href="ipolygon_8hpp_source.html#l00051">iPolygon&lt; Traits &gt;::iPolygon()</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li><a class="el" href="entities_8hpp_source.html">entities.hpp</a></li>
+<li><a class="el" href="ipolygon_8hpp_source.html">ipolygon.hpp</a></li>
 </ul>
 </div>
 <!--- window showing the filter options -->
@@ -1023,7 +953,7 @@ template&lt;class Traits &gt; </div>
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Fri Jan 28 2011 19:32:29 for FEPiCpp by&nbsp;
+<hr class="footer"/><address class="footer"><small>Generated on Wed Feb 2 2011 20:53:23 for FEPiCpp by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.1 </small></address>
 </body>

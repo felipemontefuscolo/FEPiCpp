@@ -1,5 +1,5 @@
 <map id="G" name="G">
-<area shape="rect" id="node3" href="$classi_marked_entity.html#a8feb2dfa4d426700bfab3c77fed0ef38" title="iMarkedEntity::dontKillMe" alt="" coords="148,5,327,35"/>
-<area shape="rect" id="node5" href="$classi_marked_entity.html#a3040c35a15a16c8578b487b703a07d79" title="iMarkedEntity::iMarkedEntity" alt="" coords="137,59,337,88"/>
-<area shape="rect" id="node7" href="$classi_marked_entity.html#ae970e849313805fa29f377c764bcabc3" title="iMarkedEntity::reviveMe" alt="" coords="152,112,323,141"/>
+<area shape="rect" id="node3" href="$classi_labelable.html#a8a6120620485337a1f336bd6ed69db3a" title="iLabelable::dontKillMe" alt="" coords="137,5,295,35"/>
+<area shape="rect" id="node5" href="$classi_labelable.html#a2dde128b568fd7d6ec671bf7536c323e" title="iLabelable::iLabelable" alt="" coords="137,59,295,88"/>
+<area shape="rect" id="node7" href="$classi_labelable.html#a79447061b6ffa7f426b69a4ddf7b488c" title="iLabelable::reviveMe" alt="" coords="141,112,291,141"/>
 </map>

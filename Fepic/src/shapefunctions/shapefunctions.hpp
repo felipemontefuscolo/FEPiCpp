@@ -19,12 +19,11 @@
 // License and a copy of the GNU General Public License along with
 // FEPiC++. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef SHAPEFUNCTIONS_HPP
-#define SHAPEFUNCTIONS_HPP
+#ifndef FEPIC_SHAPEFUNCTIONS_HPP
+#define FEPIC_SHAPEFUNCTIONS_HPP
 
-#include "Fepic/src/shapefunctions/parametric_pts.hpp"
-#include <algorithm>
-#include "Fepic/src/util/misc.hpp"
+
+
 
 /* Computa:  product(n*x-k, k, 0, Q-1)
  * É a definição que está na documentação.

@@ -1,7 +1,7 @@
 <map id="G" name="G">
-<area shape="rect" id="node3" href="$classi_marked_entity.html#a3040c35a15a16c8578b487b703a07d79" title="iMarkedEntity::iMarkedEntity" alt="" coords="189,5,389,35"/>
-<area shape="rect" id="node5" href="$classi_marked_entity.html#ad3009960d298859a9fc5ca57a64fe090" title="iMarkedEntity::killMe" alt="" coords="215,59,364,88"/>
-<area shape="rect" id="node7" href="$classi_marked_entity.html#a01b93264f00ae6cba4fca2f9d5466d0a" title="iMarkedEntity::killMeLater" alt="" coords="199,112,380,141"/>
+<area shape="rect" id="node3" href="$classi_labelable.html#a2dde128b568fd7d6ec671bf7536c323e" title="iLabelable::iLabelable" alt="" coords="211,5,368,35"/>
+<area shape="rect" id="node5" href="$classi_labelable.html#ae329d43d09dcecd04d8cea91ca4b7d99" title="iLabelable::killMe" alt="" coords="225,59,353,88"/>
+<area shape="rect" id="node7" href="$classi_labelable.html#a7d76929d759f6f95831b5db8c4a1530f" title="iLabelable::killMeLater" alt="" coords="208,112,371,141"/>
 <area shape="rect" id="node9" href="$class_shape_function_3_01_simplex_3_013_01_4_01_4.html#a2e966005bc3920556eb59c9bd9d5e476" title="ShapeFunction\&lt; Simplex\&lt; 3 \&gt; \&gt;::setDegree" alt="" coords="135,165,444,195"/>
 <area shape="rect" id="node11" href="$class_shape_function_3_01_simplex_3_012_01_4_01_4.html#ad27fb4b42f52d7617015ebf19194634e" title="ShapeFunction\&lt; Simplex\&lt; 2 \&gt; \&gt;::setDegree" alt="" coords="135,219,444,248"/>
 <area shape="rect" id="node13" href="$class_shape_function_3_01_simplex_3_013_01_4_01_4.html#a3f0580a574ab21b2ac643adfa771c087" title="ShapeFunction\&lt; Simplex\&lt; 3 \&gt; \&gt;::ShapeFunction" alt="" coords="121,272,457,301"/>

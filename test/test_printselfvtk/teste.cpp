@@ -40,11 +40,11 @@ int main(int argc, char *argv[]) {
     
 	//if(DIM == 3)
 	//{
-		//malha.readFileMSH("malha/tettet.msh");
+		//malha.readFileMsh("malha/tettet.msh");
 	//}
 	//else
 	//{
-		//malha.readFileMSH("malha/tritri.msh");
+		//malha.readFileMsh("malha/tritri.msh");
 	//}
 	 
     //malha.printInfo(std::cout);
@@ -73,11 +73,11 @@ int main(int argc, char *argv[]) {
         malha.addCell(MyCell(v));
     }
     
-    malha.writeVTK();
+    malha.writeVtk();
     
     cout << temp.size() << endl;
     
-    c.printSelfVTK(cout,n); cout << endl;
+    c.printSelfVtk(cout,n); cout << endl;
 
 	return 0.;
 }

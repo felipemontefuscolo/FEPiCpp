@@ -19,23 +19,22 @@
 // License and a copy of the GNU General Public License along with
 // FEPiC++. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef METAMESH_HPP
-#define METAMESH_HPP
+#ifndef FEPIC_METAMESH_HPP
+#define FEPIC_METAMESH_HPP
 
-#include <fstream>
-#include <iostream>
+
 
 /*
   ==================================================================
-  ========================== MeshMethods ===========================
+  ========================== _MeshMethods ===========================
   ==================================================================
 */
 
 template<class Mesh, int CellDim>
-class MeshMethods;
+class _MeshMethods;
 
 template<class Mesh>
-class MeshMethods<Mesh, 2>
+class _MeshMethods<Mesh, 2>
 {
 public:
   template<class T>
@@ -58,7 +57,7 @@ public:
 };
 
 template<class Mesh>
-class MeshMethods<Mesh, 3>
+class _MeshMethods<Mesh, 3>
 {
 public:
     template<class Traits>
@@ -85,41 +84,41 @@ public:
 
 /*
 	==================================================================
-	================== MeshReadMarkedElementsMSH =====================
+	================== _MeshReadMarkedElementsMsh =====================
 	==================================================================
 */
 
 template<class Mesh, int CellDim>
-class MeshReadMarkedElementsMSH;
+class _MeshReadMarkedElementsMsh;
 
 template<class Mesh>
-class MeshReadMarkedElementsMSH<Mesh, 1>
+class _MeshReadMarkedElementsMsh<Mesh, 1>
 {
 public:
   static void buildAdjacency(std::ifstream &File)
   {
-    Mesh::readMarkedElementsMSH4edge(File);
+    Mesh::readMarkedElementsMsh4edge(File);
   }
 };
 
 template<class Mesh>
-class MeshReadMarkedElementsMSH<Mesh, 2>
+class _MeshReadMarkedElementsMsh<Mesh, 2>
 {
 public:
   static void buildAdjacency(std::ifstream &File)
   {
-    Mesh::readMarkedElementsMSH4face(File);
+    Mesh::readMarkedElementsMsh4face(File);
   }
 };
 
 
 template<class Mesh>
-class MeshReadMarkedElementsMSH<Mesh, 3>
+class _MeshReadMarkedElementsMsh<Mesh, 3>
 {
 public:
   static void buildAdjacency(std::ifstream &File)
   {
-    Mesh::readMarkedElementsMSH4volume(File);
+    Mesh::readMarkedElementsMsh4volume(File);
   }
 };
 

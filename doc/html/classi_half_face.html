@@ -53,16 +53,15 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
-<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="#pro-static-attribs">Static Protected Attributes</a>  </div>
   <div class="headertitle">
 <h1>iHalfFace&lt; Traits &gt; Class Template Reference</h1>  </div>
 </div>
 <div class="contents">
 <!-- doxytag: class="iHalfFace" -->
-<p><code>#include &lt;<a class="el" href="entities_8hpp_source.html">entities.hpp</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="ihalfface_8hpp_source.html">ihalfface.hpp</a>&gt;</code></p>
 
-<p>Inherited by <a class="el" href="classi_marked_half_face.html">iMarkedHalfFace&lt; Traits &gt;</a>.</p>
+<p>Inherited by <a class="el" href="classi_half_face_lab.html">iHalfFaceLab&lt; Traits &gt;</a>.</p>
 
 <p><a href="classi_half_face-members.html">List of all members.</a></p>
 <table class="memberdecls">
@@ -89,9 +88,6 @@ Public Member Functions</h2></td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static std::string&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi_half_face.html#a043a430abc32f0d9403c39e6711c7409">getName</a> ()</td></tr>
-<tr><td colspan="2"><h2><a name="pro-attribs"></a>
-Protected Attributes</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">uint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi_half_face.html#a9f54eb2fad203a8da061bd36b13b56e7">_compositeID</a></td></tr>
 <tr><td colspan="2"><h2><a name="pro-static-attribs"></a>
 Static Protected Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static const uint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi_half_face.html#ac117ad39a79e1e0f1f9c6e7cd144a241">AnchorMask</a> = 3</td></tr>
@@ -123,7 +119,7 @@ Static Protected Attributes</h2></td></tr>
 </ul>
 <p><b> definição para âncora </b>: dada uma <a class="el" href="classi_half_face.html">iHalfFace</a> que contenha os vértices n0,n1,...,nB, se ela é a face F e âncora A de um poliedro, então, o nó B-A é o primeiro nó da face F do poliedro. </p>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l00578">578</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ihalfface_8hpp_source.html#l00053">53</a> of file <a class="el" href="ihalfface_8hpp_source.html">ihalfface.hpp</a>.</p>
 <hr/><h2>Member Typedef Documentation</h2>
 <a class="anchor" id="a696ca52fbb812d0ce4351e8862826265"></a><!-- doxytag: member="iHalfFace::CellT" ref="a696ca52fbb812d0ce4351e8862826265" args="" -->
 <div class="memitem">
@@ -138,7 +134,7 @@ template&lt;class Traits &gt; </div>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l00582">582</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ihalfface_8hpp_source.html#l00057">57</a> of file <a class="el" href="ihalfface_8hpp_source.html">ihalfface.hpp</a>.</p>
 
 </div>
 </div>
@@ -155,7 +151,7 @@ template&lt;class Traits &gt; </div>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l00581">581</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ihalfface_8hpp_source.html#l00056">56</a> of file <a class="el" href="ihalfface_8hpp_source.html">ihalfface.hpp</a>.</p>
 
 </div>
 </div>
@@ -201,18 +197,18 @@ template&lt;class Traits &gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l00588">588</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ihalfface_8hpp_source.html#l00063">63</a> of file <a class="el" href="ihalfface_8hpp_source.html">ihalfface.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l00726">iHalfFace&lt; Traits &gt;::_compositeID</a>, <a class="el" href="entities_8hpp_source.html#l00731">iHalfFace&lt; Traits &gt;::OffSet0</a>, and <a class="el" href="entities_8hpp_source.html#l00732">iHalfFace&lt; Traits &gt;::OffSet1</a>.</p>
+<p>References <a class="el" href="ihalfface_8hpp_source.html#l00206">iHalfFace&lt; Traits &gt;::OffSet0</a>, and <a class="el" href="ihalfface_8hpp_source.html#l00207">iHalfFace&lt; Traits &gt;::OffSet1</a>.</p>
 
-<p><div class="fragment"><pre class="fragment">        {
-                <span class="comment">/* &lt;v, ith, anchor&gt;</span>
-<span class="comment">                  27b   3b    2b    */</span>
-                
-                <a class="code" href="classi_half_face.html#a9f54eb2fad203a8da061bd36b13b56e7">_compositeID</a> = (cellid &lt;&lt; <a class="code" href="classi_half_face.html#a7111179951d95b69d918c4db07b6ba9d">OffSet1</a>);
-                <a class="code" href="classi_half_face.html#a9f54eb2fad203a8da061bd36b13b56e7">_compositeID</a> |= ((uint)(ith+1) &lt;&lt; <a class="code" href="classi_half_face.html#a75d1f0d45f75a84de8fa2e78259e0a95">OffSet0</a>);
-                <a class="code" href="classi_half_face.html#a9f54eb2fad203a8da061bd36b13b56e7">_compositeID</a> |= (uint)(anchor);
-        }
+<p><div class="fragment"><pre class="fragment">  {
+    <span class="comment">/* &lt;v, ith, anchor&gt;</span>
+<span class="comment">      27b   3b    2b    */</span>
+    
+    _compositeID = (cellid &lt;&lt; <a class="code" href="classi_half_face.html#a7111179951d95b69d918c4db07b6ba9d">OffSet1</a>);
+    _compositeID |= ((uint)(ith+1) &lt;&lt; <a class="code" href="classi_half_face.html#a75d1f0d45f75a84de8fa2e78259e0a95">OffSet0</a>);
+    _compositeID |= (uint)(anchor);
+  }
 </pre></div></p>
 
 </div>
@@ -235,14 +231,14 @@ template&lt;class Traits &gt; </div>
 <div class="memdoc">
 <p>Construtor. </p>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l00600">600</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ihalfface_8hpp_source.html#l00075">75</a> of file <a class="el" href="ihalfface_8hpp_source.html">ihalfface.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l00726">iHalfFace&lt; Traits &gt;::_compositeID</a>, and <a class="el" href="entities_8hpp_source.html#l00639">iHalfFace&lt; Traits &gt;::setIDPosition()</a>.</p>
+<p>References <a class="el" href="ihalfface_8hpp_source.html#l00114">iHalfFace&lt; Traits &gt;::setIDPosition()</a>.</p>
 
-<p><div class="fragment"><pre class="fragment">        {
-                this-&gt;<a class="code" href="classi_half_face.html#a9f54eb2fad203a8da061bd36b13b56e7">_compositeID</a> = 0;
-        this-&gt;<a class="code" href="classi_half_face.html#a5b98ec61807aa954cd3dece0b6dd2e88">setIDPosition</a>(-1);
-        }
+<p><div class="fragment"><pre class="fragment">  {
+    this-&gt;_compositeID = 0;
+    this-&gt;<a class="code" href="classi_half_face.html#a5b98ec61807aa954cd3dece0b6dd2e88">setIDPosition</a>(-1);
+  }
 </pre></div></p>
 
 <p><div class="dynheader">
@@ -274,7 +270,7 @@ template&lt;class Traits &gt; </div>
 <div class="memdoc">
 <p>Destrutor. </p>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l00724">724</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ihalfface_8hpp_source.html#l00199">199</a> of file <a class="el" href="ihalfface_8hpp_source.html">ihalfface.hpp</a>.</p>
 
 <p><div class="fragment"><pre class="fragment">{}
 </pre></div></p>
@@ -300,15 +296,15 @@ template&lt;class Traits &gt; </div>
 <div class="memdoc">
 <dl class="return"><dt><b>Returns:</b></dt><dd>O índice âncora </dd></dl>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l00622">622</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ihalfface_8hpp_source.html#l00097">97</a> of file <a class="el" href="ihalfface_8hpp_source.html">ihalfface.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l00726">iHalfFace&lt; Traits &gt;::_compositeID</a>, and <a class="el" href="entities_8hpp_source.html#l00727">iHalfFace&lt; Traits &gt;::AnchorMask</a>.</p>
+<p>References <a class="el" href="ihalfface_8hpp_source.html#l00202">iHalfFace&lt; Traits &gt;::AnchorMask</a>.</p>
 
-<p>Referenced by <a class="el" href="entities_8hpp_source.html#l00672">iHalfFace&lt; Traits &gt;::printSelf()</a>.</p>
+<p>Referenced by <a class="el" href="ihalfface_8hpp_source.html#l00147">iHalfFace&lt; Traits &gt;::printSelf()</a>.</p>
 
-<p><div class="fragment"><pre class="fragment">        {
-                <span class="keywordflow">return</span> <a class="code" href="classi_half_face.html#a9f54eb2fad203a8da061bd36b13b56e7">_compositeID</a> &amp; <a class="code" href="classi_half_face.html#ac117ad39a79e1e0f1f9c6e7cd144a241">AnchorMask</a>;
-        }
+<p><div class="fragment"><pre class="fragment">  {
+    <span class="keywordflow">return</span> _compositeID &amp; <a class="code" href="classi_half_face.html#ac117ad39a79e1e0f1f9c6e7cd144a241">AnchorMask</a>;
+  }
 </pre></div></p>
 
 <p><div class="dynheader">
@@ -340,15 +336,15 @@ template&lt;class Traits &gt; </div>
 <div class="memdoc">
 <dl class="return"><dt><b>Returns:</b></dt><dd>iD da célula incidente </dd></dl>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l00608">608</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ihalfface_8hpp_source.html#l00083">83</a> of file <a class="el" href="ihalfface_8hpp_source.html">ihalfface.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l00726">iHalfFace&lt; Traits &gt;::_compositeID</a>, and <a class="el" href="entities_8hpp_source.html#l00732">iHalfFace&lt; Traits &gt;::OffSet1</a>.</p>
+<p>References <a class="el" href="ihalfface_8hpp_source.html#l00207">iHalfFace&lt; Traits &gt;::OffSet1</a>.</p>
 
-<p>Referenced by <a class="el" href="entities_8hpp_source.html#l00697">iHalfFace&lt; Traits &gt;::getNodes()</a>, <a class="el" href="entities_8hpp_source.html#l00687">iHalfFace&lt; Traits &gt;::getVertices()</a>, <a class="el" href="entities_8hpp_source.html#l00711">iHalfFace&lt; Traits &gt;::hasTheseVertices()</a>, <a class="el" href="entities_8hpp_source.html#l00672">iHalfFace&lt; Traits &gt;::printSelf()</a>, <a class="el" href="entities_8hpp_source.html#l00831">iMarkedHalfFace&lt; Traits &gt;::propagateHalf()</a>, and <a class="el" href="entities_8hpp_source.html#l00846">iMarkedHalfFace&lt; Traits &gt;::propagateLabel()</a>.</p>
+<p>Referenced by <a class="el" href="ihalfface_8hpp_source.html#l00172">iHalfFace&lt; Traits &gt;::getNodes()</a>, <a class="el" href="ihalfface_8hpp_source.html#l00162">iHalfFace&lt; Traits &gt;::getVertices()</a>, <a class="el" href="ihalfface_8hpp_source.html#l00186">iHalfFace&lt; Traits &gt;::hasTheseVertices()</a>, <a class="el" href="ihalfface_8hpp_source.html#l00147">iHalfFace&lt; Traits &gt;::printSelf()</a>, <a class="el" href="ihalffacelab_8hpp_source.html#l00055">iHalfFaceLab&lt; Traits &gt;::propagateHalf()</a>, and <a class="el" href="ihalffacelab_8hpp_source.html#l00069">iHalfFaceLab&lt; Traits &gt;::propagateLabel()</a>.</p>
 
-<p><div class="fragment"><pre class="fragment">        {
-                <span class="keywordflow">return</span> <a class="code" href="classi_half_face.html#a9f54eb2fad203a8da061bd36b13b56e7">_compositeID</a> &gt;&gt; <a class="code" href="classi_half_face.html#a7111179951d95b69d918c4db07b6ba9d">OffSet1</a>;
-        }
+<p><div class="fragment"><pre class="fragment">  {
+    <span class="keywordflow">return</span> _compositeID &gt;&gt; <a class="code" href="classi_half_face.html#a7111179951d95b69d918c4db07b6ba9d">OffSet1</a>;
+  }
 </pre></div></p>
 
 <p><div class="dynheader">
@@ -356,7 +352,7 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classi_half_face_a52f6b3d966896239e4e11993e528a47a_icgraph.png" border="0" usemap="#classi_half_face_a52f6b3d966896239e4e11993e528a47a_icgraph" alt=""/></div>
 <map name="classi_half_face_a52f6b3d966896239e4e11993e528a47a_icgraph" id="classi_half_face_a52f6b3d966896239e4e11993e528a47a_icgraph">
-<area shape="rect" id="node3" href="classi_half_face.html#aa4c2e21e2ab57f962d6ac0209741aa3c" title="iHalfFace::getNodes" alt="" coords="240,5,389,35"/><area shape="rect" id="node5" href="classi_half_face.html#a4980a7ea57bd1316200630133d3de9d8" title="iHalfFace::getVertices" alt="" coords="236,59,393,88"/><area shape="rect" id="node7" href="classi_half_face.html#a32ec53fea3689a4c39af5465f66f32a8" title="iHalfFace::hasTheseVertices" alt="" coords="216,112,413,141"/><area shape="rect" id="node9" href="classi_half_face.html#af93d8a89fba02e323f91b1a14370b598" title="iHalfFace::printSelf" alt="" coords="245,165,384,195"/><area shape="rect" id="node11" href="classi_marked_half_face.html#a636fc17cdb54609d8a172109faa96e87" title="iMarkedHalfFace::propagateHalf" alt="" coords="203,219,427,248"/><area shape="rect" id="node13" href="classi_marked_half_face.html#adfeb6a84bef39a3b8f598041014a1f81" title="iMarkedHalfFace::propagateLabel" alt="" coords="197,272,432,301"/></map>
+<area shape="rect" id="node3" href="classi_half_face.html#aa4c2e21e2ab57f962d6ac0209741aa3c" title="iHalfFace::getNodes" alt="" coords="228,5,377,35"/><area shape="rect" id="node5" href="classi_half_face.html#a4980a7ea57bd1316200630133d3de9d8" title="iHalfFace::getVertices" alt="" coords="224,59,381,88"/><area shape="rect" id="node7" href="classi_half_face.html#a32ec53fea3689a4c39af5465f66f32a8" title="iHalfFace::hasTheseVertices" alt="" coords="204,112,401,141"/><area shape="rect" id="node9" href="classi_half_face.html#af93d8a89fba02e323f91b1a14370b598" title="iHalfFace::printSelf" alt="" coords="233,165,372,195"/><area shape="rect" id="node11" href="classi_half_face_lab.html#a7800883fa4f296e96bb2befd3d494c63" title="iHalfFaceLab::propagateHalf" alt="" coords="203,219,403,248"/><area shape="rect" id="node13" href="classi_half_face_lab.html#afd323622372235b0a685b9a2312d0d17" title="iHalfFaceLab::propagateLabel" alt="" coords="197,272,408,301"/></map>
 </div>
 </p>
 
@@ -380,15 +376,15 @@ template&lt;class Traits &gt; </div>
 <div class="memdoc">
 <dl class="return"><dt><b>Returns:</b></dt><dd>A posição desta <a class="el" href="classi_half_face.html">iHalfFace</a> na célula </dd></dl>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l00615">615</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ihalfface_8hpp_source.html#l00090">90</a> of file <a class="el" href="ihalfface_8hpp_source.html">ihalfface.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l00726">iHalfFace&lt; Traits &gt;::_compositeID</a>, <a class="el" href="entities_8hpp_source.html#l00728">iHalfFace&lt; Traits &gt;::IndexMask</a>, and <a class="el" href="entities_8hpp_source.html#l00731">iHalfFace&lt; Traits &gt;::OffSet0</a>.</p>
+<p>References <a class="el" href="ihalfface_8hpp_source.html#l00203">iHalfFace&lt; Traits &gt;::IndexMask</a>, and <a class="el" href="ihalfface_8hpp_source.html#l00206">iHalfFace&lt; Traits &gt;::OffSet0</a>.</p>
 
-<p>Referenced by <a class="el" href="entities_8hpp_source.html#l00697">iHalfFace&lt; Traits &gt;::getNodes()</a>, <a class="el" href="entities_8hpp_source.html#l00687">iHalfFace&lt; Traits &gt;::getVertices()</a>, <a class="el" href="entities_8hpp_source.html#l00711">iHalfFace&lt; Traits &gt;::hasTheseVertices()</a>, <a class="el" href="entities_8hpp_source.html#l00672">iHalfFace&lt; Traits &gt;::printSelf()</a>, <a class="el" href="entities_8hpp_source.html#l00831">iMarkedHalfFace&lt; Traits &gt;::propagateHalf()</a>, and <a class="el" href="entities_8hpp_source.html#l00846">iMarkedHalfFace&lt; Traits &gt;::propagateLabel()</a>.</p>
+<p>Referenced by <a class="el" href="ihalfface_8hpp_source.html#l00172">iHalfFace&lt; Traits &gt;::getNodes()</a>, <a class="el" href="ihalfface_8hpp_source.html#l00162">iHalfFace&lt; Traits &gt;::getVertices()</a>, <a class="el" href="ihalfface_8hpp_source.html#l00186">iHalfFace&lt; Traits &gt;::hasTheseVertices()</a>, <a class="el" href="ihalfface_8hpp_source.html#l00147">iHalfFace&lt; Traits &gt;::printSelf()</a>, <a class="el" href="ihalffacelab_8hpp_source.html#l00055">iHalfFaceLab&lt; Traits &gt;::propagateHalf()</a>, and <a class="el" href="ihalffacelab_8hpp_source.html#l00069">iHalfFaceLab&lt; Traits &gt;::propagateLabel()</a>.</p>
 
-<p><div class="fragment"><pre class="fragment">        {
-                <span class="keywordflow">return</span> ((<a class="code" href="classi_half_face.html#a9f54eb2fad203a8da061bd36b13b56e7">_compositeID</a> &amp; <a class="code" href="classi_half_face.html#a8ba268cf65de5981a68a77d1a07fd532">IndexMask</a>) &gt;&gt; <a class="code" href="classi_half_face.html#a75d1f0d45f75a84de8fa2e78259e0a95">OffSet0</a>) - 1;
-        }
+<p><div class="fragment"><pre class="fragment">  {
+    <span class="keywordflow">return</span> ((_compositeID &amp; <a class="code" href="classi_half_face.html#a8ba268cf65de5981a68a77d1a07fd532">IndexMask</a>) &gt;&gt; <a class="code" href="classi_half_face.html#a75d1f0d45f75a84de8fa2e78259e0a95">OffSet0</a>) - 1;
+  }
 </pre></div></p>
 
 <p><div class="dynheader">
@@ -396,7 +392,7 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classi_half_face_a613996294b3d0e95e6fac18d09c219b6_icgraph.png" border="0" usemap="#classi_half_face_a613996294b3d0e95e6fac18d09c219b6_icgraph" alt=""/></div>
 <map name="classi_half_face_a613996294b3d0e95e6fac18d09c219b6_icgraph" id="classi_half_face_a613996294b3d0e95e6fac18d09c219b6_icgraph">
-<area shape="rect" id="node3" href="classi_half_face.html#aa4c2e21e2ab57f962d6ac0209741aa3c" title="iHalfFace::getNodes" alt="" coords="267,5,416,35"/><area shape="rect" id="node5" href="classi_half_face.html#a4980a7ea57bd1316200630133d3de9d8" title="iHalfFace::getVertices" alt="" coords="263,59,420,88"/><area shape="rect" id="node7" href="classi_half_face.html#a32ec53fea3689a4c39af5465f66f32a8" title="iHalfFace::hasTheseVertices" alt="" coords="243,112,440,141"/><area shape="rect" id="node9" href="classi_half_face.html#af93d8a89fba02e323f91b1a14370b598" title="iHalfFace::printSelf" alt="" coords="272,165,411,195"/><area shape="rect" id="node11" href="classi_marked_half_face.html#a636fc17cdb54609d8a172109faa96e87" title="iMarkedHalfFace::propagateHalf" alt="" coords="229,219,453,248"/><area shape="rect" id="node13" href="classi_marked_half_face.html#adfeb6a84bef39a3b8f598041014a1f81" title="iMarkedHalfFace::propagateLabel" alt="" coords="224,272,459,301"/></map>
+<area shape="rect" id="node3" href="classi_half_face.html#aa4c2e21e2ab57f962d6ac0209741aa3c" title="iHalfFace::getNodes" alt="" coords="255,5,404,35"/><area shape="rect" id="node5" href="classi_half_face.html#a4980a7ea57bd1316200630133d3de9d8" title="iHalfFace::getVertices" alt="" coords="251,59,408,88"/><area shape="rect" id="node7" href="classi_half_face.html#a32ec53fea3689a4c39af5465f66f32a8" title="iHalfFace::hasTheseVertices" alt="" coords="231,112,428,141"/><area shape="rect" id="node9" href="classi_half_face.html#af93d8a89fba02e323f91b1a14370b598" title="iHalfFace::printSelf" alt="" coords="260,165,399,195"/><area shape="rect" id="node11" href="classi_half_face_lab.html#a7800883fa4f296e96bb2befd3d494c63" title="iHalfFaceLab::propagateHalf" alt="" coords="229,219,429,248"/><area shape="rect" id="node13" href="classi_half_face_lab.html#afd323622372235b0a685b9a2312d0d17" title="iHalfFaceLab::propagateLabel" alt="" coords="224,272,435,301"/></map>
 </div>
 </p>
 
@@ -420,11 +416,11 @@ template&lt;class Traits &gt; </div>
 <div class="memdoc">
 <dl class="return"><dt><b>Returns:</b></dt><dd>uma string com o nome Half-Face. </dd></dl>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l00679">679</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ihalfface_8hpp_source.html#l00154">154</a> of file <a class="el" href="ihalfface_8hpp_source.html">ihalfface.hpp</a>.</p>
 
-<p><div class="fragment"><pre class="fragment">        {
-                <span class="keywordflow">return</span> std::string(<span class="stringliteral">&quot;Half-Face&quot;</span>);
-        }
+<p><div class="fragment"><pre class="fragment">  {
+    <span class="keywordflow">return</span> std::string(<span class="stringliteral">&quot;Half-Face&quot;</span>);
+  }
 </pre></div></p>
 
 </div>
@@ -454,15 +450,15 @@ template&lt;class Traits &gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l00697">697</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ihalfface_8hpp_source.html#l00172">172</a> of file <a class="el" href="ihalfface_8hpp_source.html">ihalfface.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l00608">iHalfFace&lt; Traits &gt;::getIDCell()</a>, and <a class="el" href="entities_8hpp_source.html#l00615">iHalfFace&lt; Traits &gt;::getIDPosition()</a>.</p>
+<p>References <a class="el" href="ihalfface_8hpp_source.html#l00083">iHalfFace&lt; Traits &gt;::getIDCell()</a>, and <a class="el" href="ihalfface_8hpp_source.html#l00090">iHalfFace&lt; Traits &gt;::getIDPosition()</a>.</p>
 
-<p><div class="fragment"><pre class="fragment">    {
-        <a class="code" href="classi_half_face.html#a696ca52fbb812d0ce4351e8862826265">CellT</a> *cell = mesh.getCell(this-&gt;<a class="code" href="classi_half_face.html#a52f6b3d966896239e4e11993e528a47a">getIDCell</a>());
-        
-        <span class="keywordflow">return</span> cell-&gt;getBorderNodes(this-&gt;<a class="code" href="classi_half_face.html#a613996294b3d0e95e6fac18d09c219b6">getIDPosition</a>(), mesh);
-    }
+<p><div class="fragment"><pre class="fragment">  {
+      <a class="code" href="classi_half_face.html#a696ca52fbb812d0ce4351e8862826265">CellT</a> *cell = mesh.getCell(this-&gt;<a class="code" href="classi_half_face.html#a52f6b3d966896239e4e11993e528a47a">getIDCell</a>());
+      
+      <span class="keywordflow">return</span> cell-&gt;getBorderNodes(this-&gt;<a class="code" href="classi_half_face.html#a613996294b3d0e95e6fac18d09c219b6">getIDPosition</a>(), mesh);
+  }
 </pre></div></p>
 
 <p><div class="dynheader">
@@ -501,15 +497,15 @@ template&lt;class Traits &gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l00687">687</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ihalfface_8hpp_source.html#l00162">162</a> of file <a class="el" href="ihalfface_8hpp_source.html">ihalfface.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l00608">iHalfFace&lt; Traits &gt;::getIDCell()</a>, and <a class="el" href="entities_8hpp_source.html#l00615">iHalfFace&lt; Traits &gt;::getIDPosition()</a>.</p>
+<p>References <a class="el" href="ihalfface_8hpp_source.html#l00083">iHalfFace&lt; Traits &gt;::getIDCell()</a>, and <a class="el" href="ihalfface_8hpp_source.html#l00090">iHalfFace&lt; Traits &gt;::getIDPosition()</a>.</p>
 
-<p><div class="fragment"><pre class="fragment">    {
-        <a class="code" href="classi_half_face.html#a696ca52fbb812d0ce4351e8862826265">CellT</a> *cell = mesh.getCell(this-&gt;<a class="code" href="classi_half_face.html#a52f6b3d966896239e4e11993e528a47a">getIDCell</a>());
-        
-        <span class="keywordflow">return</span> cell-&gt;getBorderVertices(this-&gt;<a class="code" href="classi_half_face.html#a613996294b3d0e95e6fac18d09c219b6">getIDPosition</a>(), mesh);
-    }
+<p><div class="fragment"><pre class="fragment">  {
+    <a class="code" href="classi_half_face.html#a696ca52fbb812d0ce4351e8862826265">CellT</a> *cell = mesh.getCell(this-&gt;<a class="code" href="classi_half_face.html#a52f6b3d966896239e4e11993e528a47a">getIDCell</a>());
+    
+    <span class="keywordflow">return</span> cell-&gt;getBorderVertices(this-&gt;<a class="code" href="classi_half_face.html#a613996294b3d0e95e6fac18d09c219b6">getIDPosition</a>(), mesh);
+  }
 </pre></div></p>
 
 <p><div class="dynheader">
@@ -560,19 +556,19 @@ template&lt;class Traits &gt; </div>
 <dl class="return"><dt><b>Returns:</b></dt><dd>true se os nós formam a <a class="el" href="classi_half_face.html">iHalfFace</a> e false caso contrário. </dd></dl>
 <dl class="note"><dt><b>Note:</b></dt><dd>Os nós podem estar em qualquer orientação cíclica da original. </dd></dl>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l00711">711</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ihalfface_8hpp_source.html#l00186">186</a> of file <a class="el" href="ihalfface_8hpp_source.html">ihalfface.hpp</a>.</p>
 
-<p>References <a class="el" href="misc_8hpp_source.html#l00081">arrayIsCyclicallyEqual()</a>, <a class="el" href="entities_8hpp_source.html#l00608">iHalfFace&lt; Traits &gt;::getIDCell()</a>, and <a class="el" href="entities_8hpp_source.html#l00615">iHalfFace&lt; Traits &gt;::getIDPosition()</a>.</p>
+<p>References <a class="el" href="misc_8hpp_source.html#l00079">arrayIsCyclicallyEqual()</a>, <a class="el" href="ihalfface_8hpp_source.html#l00083">iHalfFace&lt; Traits &gt;::getIDCell()</a>, and <a class="el" href="ihalfface_8hpp_source.html#l00090">iHalfFace&lt; Traits &gt;::getIDPosition()</a>.</p>
 
-<p><div class="fragment"><pre class="fragment">        {
-                <a class="code" href="namespace_fepic.html#ab4c35fc828fb5a816f610e02b9ac2df9">Fepic::vectorui</a> vtx(mesh.faces_local_nodes[0].size());
-                
-                <a class="code" href="classi_half_face.html#a696ca52fbb812d0ce4351e8862826265">CellT</a> *cell = mesh.getCell(this-&gt;<a class="code" href="classi_half_face.html#a52f6b3d966896239e4e11993e528a47a">getIDCell</a>());
-                
-                vtx = cell-&gt;getBorderVertices(this-&gt;<a class="code" href="classi_half_face.html#a613996294b3d0e95e6fac18d09c219b6">getIDPosition</a>()) ;
-                
-                <span class="keywordflow">return</span> <a class="code" href="misc_8hpp.html#a9c7873dbac537e314e618c9ede995ce1">arrayIsCyclicallyEqual</a>(v, vtx);
-        }
+<p><div class="fragment"><pre class="fragment">  {
+    <a class="code" href="namespace_fepic.html#ab4c35fc828fb5a816f610e02b9ac2df9">Fepic::vectorui</a> vtx(mesh.faces_local_nodes[0].size());
+    
+    <a class="code" href="classi_half_face.html#a696ca52fbb812d0ce4351e8862826265">CellT</a> *cell = mesh.getCell(this-&gt;<a class="code" href="classi_half_face.html#a52f6b3d966896239e4e11993e528a47a">getIDCell</a>());
+    
+    vtx = cell-&gt;getBorderVertices(this-&gt;<a class="code" href="classi_half_face.html#a613996294b3d0e95e6fac18d09c219b6">getIDPosition</a>()) ;
+    
+    <span class="keywordflow">return</span> <a class="code" href="misc_8hpp.html#a9c7873dbac537e314e618c9ede995ce1">arrayIsCyclicallyEqual</a>(v, vtx);
+  }
 </pre></div></p>
 
 <p><div class="dynheader">
@@ -612,13 +608,13 @@ template&lt;class Traits &gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l00672">672</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ihalfface_8hpp_source.html#l00147">147</a> of file <a class="el" href="ihalfface_8hpp_source.html">ihalfface.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l00622">iHalfFace&lt; Traits &gt;::getIDAnchor()</a>, <a class="el" href="entities_8hpp_source.html#l00608">iHalfFace&lt; Traits &gt;::getIDCell()</a>, and <a class="el" href="entities_8hpp_source.html#l00615">iHalfFace&lt; Traits &gt;::getIDPosition()</a>.</p>
+<p>References <a class="el" href="ihalfface_8hpp_source.html#l00097">iHalfFace&lt; Traits &gt;::getIDAnchor()</a>, <a class="el" href="ihalfface_8hpp_source.html#l00083">iHalfFace&lt; Traits &gt;::getIDCell()</a>, and <a class="el" href="ihalfface_8hpp_source.html#l00090">iHalfFace&lt; Traits &gt;::getIDPosition()</a>.</p>
 
-<p><div class="fragment"><pre class="fragment">        {
-                o &lt;&lt; <a class="code" href="classi_half_face.html#a52f6b3d966896239e4e11993e528a47a">getIDCell</a>() &lt;&lt; <span class="stringliteral">&quot; &quot;</span> &lt;&lt; <a class="code" href="classi_half_face.html#a613996294b3d0e95e6fac18d09c219b6">getIDPosition</a>() &lt;&lt; <span class="stringliteral">&quot; &quot;</span> &lt;&lt; <a class="code" href="classi_half_face.html#a5246fc11afc93ba21ceb85ab3958fa81">getIDAnchor</a>();
-        }
+<p><div class="fragment"><pre class="fragment">  {
+    o &lt;&lt; <a class="code" href="classi_half_face.html#a52f6b3d966896239e4e11993e528a47a">getIDCell</a>() &lt;&lt; <span class="stringliteral">&quot; &quot;</span> &lt;&lt; <a class="code" href="classi_half_face.html#a613996294b3d0e95e6fac18d09c219b6">getIDPosition</a>() &lt;&lt; <span class="stringliteral">&quot; &quot;</span> &lt;&lt; <a class="code" href="classi_half_face.html#a5246fc11afc93ba21ceb85ab3958fa81">getIDAnchor</a>();
+  }
 </pre></div></p>
 
 <p><div class="dynheader">
@@ -673,18 +669,18 @@ template&lt;class Traits &gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l00658">658</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ihalfface_8hpp_source.html#l00133">133</a> of file <a class="el" href="ihalfface_8hpp_source.html">ihalfface.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l00726">iHalfFace&lt; Traits &gt;::_compositeID</a>, <a class="el" href="entities_8hpp_source.html#l00731">iHalfFace&lt; Traits &gt;::OffSet0</a>, and <a class="el" href="entities_8hpp_source.html#l00732">iHalfFace&lt; Traits &gt;::OffSet1</a>.</p>
+<p>References <a class="el" href="ihalfface_8hpp_source.html#l00206">iHalfFace&lt; Traits &gt;::OffSet0</a>, and <a class="el" href="ihalfface_8hpp_source.html#l00207">iHalfFace&lt; Traits &gt;::OffSet1</a>.</p>
 
-<p><div class="fragment"><pre class="fragment">        {
-                <span class="comment">/* &lt;v, ith, anchor&gt;</span>
-<span class="comment">                    R   3b    2b    */</span>
-                
-                <a class="code" href="classi_half_face.html#a9f54eb2fad203a8da061bd36b13b56e7">_compositeID</a> = (v &lt;&lt; <a class="code" href="classi_half_face.html#a7111179951d95b69d918c4db07b6ba9d">OffSet1</a>);
-                <a class="code" href="classi_half_face.html#a9f54eb2fad203a8da061bd36b13b56e7">_compositeID</a> |= ((uint)(ith+1) &lt;&lt; <a class="code" href="classi_half_face.html#a75d1f0d45f75a84de8fa2e78259e0a95">OffSet0</a>);
-                <a class="code" href="classi_half_face.html#a9f54eb2fad203a8da061bd36b13b56e7">_compositeID</a> |= (uint)(anchor);
-        }
+<p><div class="fragment"><pre class="fragment">  {
+    <span class="comment">/* &lt;v, ith, anchor&gt;</span>
+<span class="comment">        R   3b    2b    */</span>
+    
+    _compositeID = (v &lt;&lt; <a class="code" href="classi_half_face.html#a7111179951d95b69d918c4db07b6ba9d">OffSet1</a>);
+    _compositeID |= ((uint)(ith+1) &lt;&lt; <a class="code" href="classi_half_face.html#a75d1f0d45f75a84de8fa2e78259e0a95">OffSet0</a>);
+    _compositeID |= (uint)(anchor);
+  }
 </pre></div></p>
 
 </div>
@@ -714,14 +710,14 @@ template&lt;class Traits &gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l00648">648</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ihalfface_8hpp_source.html#l00123">123</a> of file <a class="el" href="ihalfface_8hpp_source.html">ihalfface.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l00726">iHalfFace&lt; Traits &gt;::_compositeID</a>, and <a class="el" href="entities_8hpp_source.html#l00727">iHalfFace&lt; Traits &gt;::AnchorMask</a>.</p>
+<p>References <a class="el" href="ihalfface_8hpp_source.html#l00202">iHalfFace&lt; Traits &gt;::AnchorMask</a>.</p>
 
-<p><div class="fragment"><pre class="fragment">        {
-                <a class="code" href="classi_half_face.html#a9f54eb2fad203a8da061bd36b13b56e7">_compositeID</a> &amp;= ~<a class="code" href="classi_half_face.html#ac117ad39a79e1e0f1f9c6e7cd144a241">AnchorMask</a>;
-                <a class="code" href="classi_half_face.html#a9f54eb2fad203a8da061bd36b13b56e7">_compositeID</a> |= (uint)(anchor);
-        }
+<p><div class="fragment"><pre class="fragment">  {
+    _compositeID &amp;= ~<a class="code" href="classi_half_face.html#ac117ad39a79e1e0f1f9c6e7cd144a241">AnchorMask</a>;
+    _compositeID |= (uint)(anchor);
+  }
 </pre></div></p>
 
 </div>
@@ -751,14 +747,14 @@ template&lt;class Traits &gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l00630">630</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ihalfface_8hpp_source.html#l00105">105</a> of file <a class="el" href="ihalfface_8hpp_source.html">ihalfface.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l00726">iHalfFace&lt; Traits &gt;::_compositeID</a>, <a class="el" href="entities_8hpp_source.html#l00729">iHalfFace&lt; Traits &gt;::FlagsMask</a>, and <a class="el" href="entities_8hpp_source.html#l00732">iHalfFace&lt; Traits &gt;::OffSet1</a>.</p>
+<p>References <a class="el" href="ihalfface_8hpp_source.html#l00204">iHalfFace&lt; Traits &gt;::FlagsMask</a>, and <a class="el" href="ihalfface_8hpp_source.html#l00207">iHalfFace&lt; Traits &gt;::OffSet1</a>.</p>
 
-<p><div class="fragment"><pre class="fragment">        {
-                <a class="code" href="classi_half_face.html#a9f54eb2fad203a8da061bd36b13b56e7">_compositeID</a> &amp;= <a class="code" href="classi_half_face.html#a2eb4cfb1f82d009637cdae808af377ff">FlagsMask</a>;
-                <a class="code" href="classi_half_face.html#a9f54eb2fad203a8da061bd36b13b56e7">_compositeID</a> |= (cellid &lt;&lt; <a class="code" href="classi_half_face.html#a7111179951d95b69d918c4db07b6ba9d">OffSet1</a>);
-        }
+<p><div class="fragment"><pre class="fragment">  {
+    _compositeID &amp;= <a class="code" href="classi_half_face.html#a2eb4cfb1f82d009637cdae808af377ff">FlagsMask</a>;
+    _compositeID |= (cellid &lt;&lt; <a class="code" href="classi_half_face.html#a7111179951d95b69d918c4db07b6ba9d">OffSet1</a>);
+  }
 </pre></div></p>
 
 </div>
@@ -788,16 +784,16 @@ template&lt;class Traits &gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l00639">639</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ihalfface_8hpp_source.html#l00114">114</a> of file <a class="el" href="ihalfface_8hpp_source.html">ihalfface.hpp</a>.</p>
 
-<p>References <a class="el" href="entities_8hpp_source.html#l00726">iHalfFace&lt; Traits &gt;::_compositeID</a>, <a class="el" href="entities_8hpp_source.html#l00728">iHalfFace&lt; Traits &gt;::IndexMask</a>, and <a class="el" href="entities_8hpp_source.html#l00731">iHalfFace&lt; Traits &gt;::OffSet0</a>.</p>
+<p>References <a class="el" href="ihalfface_8hpp_source.html#l00203">iHalfFace&lt; Traits &gt;::IndexMask</a>, and <a class="el" href="ihalfface_8hpp_source.html#l00206">iHalfFace&lt; Traits &gt;::OffSet0</a>.</p>
 
-<p>Referenced by <a class="el" href="entities_8hpp_source.html#l00600">iHalfFace&lt; Traits &gt;::iHalfFace()</a>.</p>
+<p>Referenced by <a class="el" href="ihalfface_8hpp_source.html#l00075">iHalfFace&lt; Traits &gt;::iHalfFace()</a>.</p>
 
-<p><div class="fragment"><pre class="fragment">        {
-                <a class="code" href="classi_half_face.html#a9f54eb2fad203a8da061bd36b13b56e7">_compositeID</a> &amp;= ~<a class="code" href="classi_half_face.html#a8ba268cf65de5981a68a77d1a07fd532">IndexMask</a>;
-                <a class="code" href="classi_half_face.html#a9f54eb2fad203a8da061bd36b13b56e7">_compositeID</a> |= (uint)(ith+1) &lt;&lt; <a class="code" href="classi_half_face.html#a75d1f0d45f75a84de8fa2e78259e0a95">OffSet0</a>;
-        }
+<p><div class="fragment"><pre class="fragment">  {
+    _compositeID &amp;= ~<a class="code" href="classi_half_face.html#a8ba268cf65de5981a68a77d1a07fd532">IndexMask</a>;
+    _compositeID |= (uint)(ith+1) &lt;&lt; <a class="code" href="classi_half_face.html#a75d1f0d45f75a84de8fa2e78259e0a95">OffSet0</a>;
+  }
 </pre></div></p>
 
 <p><div class="dynheader">
@@ -812,25 +808,6 @@ Here is the caller graph for this function:</div>
 </div>
 </div>
 <hr/><h2>Member Data Documentation</h2>
-<a class="anchor" id="a9f54eb2fad203a8da061bd36b13b56e7"></a><!-- doxytag: member="iHalfFace::_compositeID" ref="a9f54eb2fad203a8da061bd36b13b56e7" args="" -->
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;class Traits &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">uint <a class="el" href="classi_half_face.html">iHalfFace</a>&lt; Traits &gt;::<a class="el" href="classi_half_face.html#a9f54eb2fad203a8da061bd36b13b56e7">_compositeID</a><code> [protected]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l00726">726</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
-
-<p>Referenced by <a class="el" href="entities_8hpp_source.html#l00622">iHalfFace&lt; Traits &gt;::getIDAnchor()</a>, <a class="el" href="entities_8hpp_source.html#l00608">iHalfFace&lt; Traits &gt;::getIDCell()</a>, <a class="el" href="entities_8hpp_source.html#l00615">iHalfFace&lt; Traits &gt;::getIDPosition()</a>, <a class="el" href="entities_8hpp_source.html#l00588">iHalfFace&lt; Traits &gt;::iHalfFace()</a>, <a class="el" href="entities_8hpp_source.html#l00658">iHalfFace&lt; Traits &gt;::setCompleteID()</a>, <a class="el" href="entities_8hpp_source.html#l00648">iHalfFace&lt; Traits &gt;::setIDAnchor()</a>, <a class="el" href="entities_8hpp_source.html#l00630">iHalfFace&lt; Traits &gt;::setIDCell()</a>, and <a class="el" href="entities_8hpp_source.html#l00639">iHalfFace&lt; Traits &gt;::setIDPosition()</a>.</p>
-
-</div>
-</div>
 <a class="anchor" id="ac117ad39a79e1e0f1f9c6e7cd144a241"></a><!-- doxytag: member="iHalfFace::AnchorMask" ref="ac117ad39a79e1e0f1f9c6e7cd144a241" args="" -->
 <div class="memitem">
 <div class="memproto">
@@ -844,9 +821,9 @@ template&lt;class Traits &gt; </div>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l00727">727</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ihalfface_8hpp_source.html#l00202">202</a> of file <a class="el" href="ihalfface_8hpp_source.html">ihalfface.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="entities_8hpp_source.html#l00622">iHalfFace&lt; Traits &gt;::getIDAnchor()</a>, and <a class="el" href="entities_8hpp_source.html#l00648">iHalfFace&lt; Traits &gt;::setIDAnchor()</a>.</p>
+<p>Referenced by <a class="el" href="ihalfface_8hpp_source.html#l00097">iHalfFace&lt; Traits &gt;::getIDAnchor()</a>, and <a class="el" href="ihalfface_8hpp_source.html#l00123">iHalfFace&lt; Traits &gt;::setIDAnchor()</a>.</p>
 
 </div>
 </div>
@@ -863,9 +840,9 @@ template&lt;class Traits &gt; </div>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l00729">729</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ihalfface_8hpp_source.html#l00204">204</a> of file <a class="el" href="ihalfface_8hpp_source.html">ihalfface.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="entities_8hpp_source.html#l00630">iHalfFace&lt; Traits &gt;::setIDCell()</a>.</p>
+<p>Referenced by <a class="el" href="ihalfface_8hpp_source.html#l00105">iHalfFace&lt; Traits &gt;::setIDCell()</a>.</p>
 
 </div>
 </div>
@@ -882,7 +859,7 @@ template&lt;class Traits &gt; </div>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l00730">730</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ihalfface_8hpp_source.html#l00205">205</a> of file <a class="el" href="ihalfface_8hpp_source.html">ihalfface.hpp</a>.</p>
 
 </div>
 </div>
@@ -899,9 +876,9 @@ template&lt;class Traits &gt; </div>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l00728">728</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ihalfface_8hpp_source.html#l00203">203</a> of file <a class="el" href="ihalfface_8hpp_source.html">ihalfface.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="entities_8hpp_source.html#l00615">iHalfFace&lt; Traits &gt;::getIDPosition()</a>, and <a class="el" href="entities_8hpp_source.html#l00639">iHalfFace&lt; Traits &gt;::setIDPosition()</a>.</p>
+<p>Referenced by <a class="el" href="ihalfface_8hpp_source.html#l00090">iHalfFace&lt; Traits &gt;::getIDPosition()</a>, and <a class="el" href="ihalfface_8hpp_source.html#l00114">iHalfFace&lt; Traits &gt;::setIDPosition()</a>.</p>
 
 </div>
 </div>
@@ -918,9 +895,9 @@ template&lt;class Traits &gt; </div>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l00731">731</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ihalfface_8hpp_source.html#l00206">206</a> of file <a class="el" href="ihalfface_8hpp_source.html">ihalfface.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="entities_8hpp_source.html#l00615">iHalfFace&lt; Traits &gt;::getIDPosition()</a>, <a class="el" href="entities_8hpp_source.html#l00588">iHalfFace&lt; Traits &gt;::iHalfFace()</a>, <a class="el" href="entities_8hpp_source.html#l00658">iHalfFace&lt; Traits &gt;::setCompleteID()</a>, and <a class="el" href="entities_8hpp_source.html#l00639">iHalfFace&lt; Traits &gt;::setIDPosition()</a>.</p>
+<p>Referenced by <a class="el" href="ihalfface_8hpp_source.html#l00090">iHalfFace&lt; Traits &gt;::getIDPosition()</a>, <a class="el" href="ihalfface_8hpp_source.html#l00063">iHalfFace&lt; Traits &gt;::iHalfFace()</a>, <a class="el" href="ihalfface_8hpp_source.html#l00133">iHalfFace&lt; Traits &gt;::setCompleteID()</a>, and <a class="el" href="ihalfface_8hpp_source.html#l00114">iHalfFace&lt; Traits &gt;::setIDPosition()</a>.</p>
 
 </div>
 </div>
@@ -937,14 +914,14 @@ template&lt;class Traits &gt; </div>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l00732">732</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ihalfface_8hpp_source.html#l00207">207</a> of file <a class="el" href="ihalfface_8hpp_source.html">ihalfface.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="entities_8hpp_source.html#l00608">iHalfFace&lt; Traits &gt;::getIDCell()</a>, <a class="el" href="entities_8hpp_source.html#l00588">iHalfFace&lt; Traits &gt;::iHalfFace()</a>, <a class="el" href="entities_8hpp_source.html#l00658">iHalfFace&lt; Traits &gt;::setCompleteID()</a>, and <a class="el" href="entities_8hpp_source.html#l00630">iHalfFace&lt; Traits &gt;::setIDCell()</a>.</p>
+<p>Referenced by <a class="el" href="ihalfface_8hpp_source.html#l00083">iHalfFace&lt; Traits &gt;::getIDCell()</a>, <a class="el" href="ihalfface_8hpp_source.html#l00063">iHalfFace&lt; Traits &gt;::iHalfFace()</a>, <a class="el" href="ihalfface_8hpp_source.html#l00133">iHalfFace&lt; Traits &gt;::setCompleteID()</a>, and <a class="el" href="ihalfface_8hpp_source.html#l00105">iHalfFace&lt; Traits &gt;::setIDCell()</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li><a class="el" href="entities_8hpp_source.html">entities.hpp</a></li>
+<li><a class="el" href="ihalfface_8hpp_source.html">ihalfface.hpp</a></li>
 </ul>
 </div>
 <!--- window showing the filter options -->
@@ -961,7 +938,7 @@ template&lt;class Traits &gt; </div>
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Fri Jan 28 2011 19:32:29 for FEPiCpp by&nbsp;
+<hr class="footer"/><address class="footer"><small>Generated on Wed Feb 2 2011 20:53:23 for FEPiCpp by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.1 </small></address>
 </body>

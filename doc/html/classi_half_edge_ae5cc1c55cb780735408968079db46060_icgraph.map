@@ -1,9 +1,9 @@
 <map id="G" name="G">
-<area shape="rect" id="node3" href="$classi_half_edge.html#a7a839ccb9a6c3aea311c3911a3686d9b" title="iHalfEdge::getNodes" alt="" coords="272,5,424,35"/>
-<area shape="rect" id="node7" href="$classi_half_edge.html#aa54a18319c9f8c3a34015564e415a76b" title="iHalfEdge::getVertices" alt="" coords="267,59,429,88"/>
-<area shape="rect" id="node9" href="$classi_half_edge.html#a8cd053f989be20aee6146ed1e7f92972" title="iHalfEdge::hasTheseVertices" alt="" coords="247,112,449,141"/>
-<area shape="rect" id="node11" href="$classi_half_edge.html#a709d79254a61fd6f29003b9c2c68c9a2" title="iHalfEdge::printSelf" alt="" coords="277,165,419,195"/>
-<area shape="rect" id="node13" href="$classi_marked_half_edge.html#ade7858024c37bf27469284e3e6cd2057" title="iMarkedHalfEdge::propagateHalf" alt="" coords="235,219,461,248"/>
-<area shape="rect" id="node15" href="$classi_marked_half_edge.html#a558b0f04838e5ccb88c152dda1093c53" title="iMarkedHalfEdge::propagateLabel" alt="" coords="229,272,467,301"/>
-<area shape="rect" id="node5" href="$classi_half_edge.html#a6ce4855f97fb22aeb89fc52ff605772f" title="iHalfEdge::getLenght" alt="" coords="515,5,669,35"/>
+<area shape="rect" id="node3" href="$classi_half_edge.html#a7a839ccb9a6c3aea311c3911a3686d9b" title="iHalfEdge::getNodes" alt="" coords="260,5,412,35"/>
+<area shape="rect" id="node7" href="$classi_half_edge.html#aa54a18319c9f8c3a34015564e415a76b" title="iHalfEdge::getVertices" alt="" coords="255,59,417,88"/>
+<area shape="rect" id="node9" href="$classi_half_edge.html#a8cd053f989be20aee6146ed1e7f92972" title="iHalfEdge::hasTheseVertices" alt="" coords="235,112,437,141"/>
+<area shape="rect" id="node11" href="$classi_half_edge.html#a709d79254a61fd6f29003b9c2c68c9a2" title="iHalfEdge::printSelf" alt="" coords="265,165,407,195"/>
+<area shape="rect" id="node13" href="$classi_half_edge_lab.html#a339e2a75a64088851f88b9b0cabf72c8" title="iHalfEdgeLab::propagateHalf" alt="" coords="235,219,437,248"/>
+<area shape="rect" id="node15" href="$classi_half_edge_lab.html#aa47eb3743c0d7adfaf5e51294c4b4c75" title="iHalfEdgeLab::propagateLabel" alt="" coords="229,272,443,301"/>
+<area shape="rect" id="node5" href="$classi_half_edge.html#a6ce4855f97fb22aeb89fc52ff605772f" title="iHalfEdge::getLenght" alt="" coords="491,5,645,35"/>
 </map>

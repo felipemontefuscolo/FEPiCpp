@@ -19,19 +19,11 @@
 // License and a copy of the GNU General Public License along with
 // FEPiC++. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef IMESHIO_HPP
-#define IMESHIO_HPP
+#ifndef FEPIC_IMESHIO_HPP
+#define FEPIC_IMESHIO_HPP
 
-#include "Fepic/src/mesh/imesh.hpp"
-#include "Fepic/src/util/misc.hpp"
-#include <iostream>
-#include <string>
-#include <sstream>
-#include <vector>
-#include <list>
-#include <iomanip>
-#include <algorithm>
-#include <map>
+
+
 
 
 /* Este arquivo contém iterações em células. Para melhorar o desempenho deve-se
@@ -60,7 +52,7 @@ template<class Traits>
 void iMesh<Traits>::buildAdjacency4face()
 {
 
-  int n_borders = CellT::N_borders;
+  int n_borders = CellT::n_borders;
   Fepic::vectorui edge_vtx(2);
   Fepic::vectorui cell_ith(2);
   std::map<Fepic::vectorui, Fepic::vectorui> table; // Key: (n0, n1) ... atributos (elemento, ith)
@@ -110,8 +102,8 @@ void iMesh<Traits>::buildAdjacency4face()
       thisC = tab_it->second[0];
       thisith =  tab_it->second[1];
       thislabel = this->getCell(thisC)->getLabel();
-      MHalfEdgeT temp(thisC, thisith, thislabel);
-      uint mHE_universal_iD = addMHalf(temp);
+      HalflEdgeLabT temp(thisC, thisith, thislabel);
+      uint mHE_universal_iD = addHalfl(temp);
       this->getCell(thisC)->getHalf(thisith)->setCompleteID(mHE_universal_iD, -1);
       table.erase(tab_it);
     }
@@ -126,8 +118,8 @@ template<class Traits>
 void iMesh<Traits>::buildAdjacency4volume()
 {
 
-  //const int n_borders = CellT::N_borders;
-  //const int n_anch    = FaceT::N_borders;
+  //const int n_borders = CellT::n_borders;
+  //const int n_anch    = FaceT::n_borders;
 
     //typedef std::pair<std::array<uint, n_anch>, std::array<uint, 2> > PairT; // < (vértices da face) , (elemento, ith) >
     //typedef std::unordered_map<std::array<uint, n_anch>, std::array<uint, 2> >  MapT;
@@ -188,8 +180,8 @@ void iMesh<Traits>::buildAdjacency4volume()
       //thisC = tab_it->second[0];
       //thisith =  tab_it->second[1];
       //thislabel = this->getCell(thisC)->getLabel();
-      //MHalfFaceT temp(thisC, thisith, 0, thislabel);
-      //uint mHE_universal_iD = addMHalf(temp);
+      //HalflFaceLabT temp(thisC, thisith, 0, thislabel);
+      //uint mHE_universal_iD = addHalfl(temp);
       //this->getCell(thisC)->getHalf(thisith)->setCompleteID(mHE_universal_iD, -1, 0);
       //table.erase(tab_it);
     //}
@@ -197,13 +189,13 @@ void iMesh<Traits>::buildAdjacency4volume()
   //}
 
 
-  const int n_borders = CellT::N_borders;
-  const int n_anch    = FaceT::N_borders;
+  const int n_borders = CellT::n_borders;
+  const int n_anch    = FaceT::n_borders;
 
   typedef std::pair<Fepic::vectorui, Fepic::vectorui>   PairT; // < (vértices da face) , (elemento, ith) >
   typedef std::map<Fepic::vectorui, Fepic::vectorui>  MapT;
 
-  Fepic::vectorui face_vtx(FaceT::N_borders);
+  Fepic::vectorui face_vtx(FaceT::n_borders);
   Fepic::vectorui cell_ith(2);
   MapT            table; // < (nós da face) , (elemento, ith) >
   MapT::iterator  tab_it, tab_it2;
@@ -259,8 +251,8 @@ void iMesh<Traits>::buildAdjacency4volume()
       thisC = tab_it->second[0];
       thisith =  tab_it->second[1];
       thislabel = this->getCell(thisC)->getLabel();
-      MHalfFaceT temp(thisC, thisith, 0, thislabel);
-      uint mHE_universal_iD = addMHalf(temp);
+      HalflFaceLabT temp(thisC, thisith, 0, thislabel);
+      uint mHE_universal_iD = addHalfl(temp);
       this->getCell(thisC)->getHalf(thisith)->setCompleteID(mHE_universal_iD, -1, 0);
       table.erase(tab_it);
     }
@@ -274,7 +266,7 @@ void iMesh<Traits>::buildAdjacency4volume()
  * altomaticamente.
  */
 template<class Traits>
-void iMesh<Traits>::readFileMSH(const char* filename)
+void iMesh<Traits>::readFileMsh(const char* filename)
 {
 
   /*
@@ -334,10 +326,10 @@ void iMesh<Traits>::readFileMSH(const char* filename)
   {
     File >> lixo; // numero do elemento
     File >> type_aux;
-    int elm_dim = getDimForElementTypeMSH(type_aux);
+    int elm_dim = getDimForElementTypeMsh(type_aux);
     if (elm_dim == CellT::Dim)
     {
-      this->setOrder( getOrderForElementTypeMSH(type_aux) );
+      this->setOrder( getOrderForElementTypeMsh(type_aux) );
       break;
     }
 
@@ -369,7 +361,7 @@ void iMesh<Traits>::readFileMSH(const char* filename)
     }
 
     File >> type_aux;
-    int elm_dim = getDimForElementTypeMSH(type_aux);
+    int elm_dim = getDimForElementTypeMsh(type_aux);
 
     File >> num_tags;
 
@@ -390,13 +382,13 @@ void iMesh<Traits>::readFileMSH(const char* filename)
 
       case 1: // caso aresta
         {
-          if (M_Compare<EdgeT, CellT>::isEqual)
+          if (std::is_same<EdgeT, CellT>::value)
           {
-            if (CellT::getMSHTag(order) != type_aux)
+            if (CellT::getMshTag(order) != type_aux)
             {
-              std::cout << "Invalid edge! file has: " << getElementNameMSH(type_aux) << std::endl;
+              std::cout << "Invalid edge! file has: " << getElementNameMsh(type_aux) << std::endl;
               std::cout << "But Mesh is configured to support: "
-                                      << getElementNameMSH(EdgeT::getMSHTag(order)) << std::endl;
+                                      << getElementNameMsh(EdgeT::getMshTag(order)) << std::endl;
               throw;
             }
             for (int i=0; i<Cell.getNumNodes(); ++i)
@@ -417,13 +409,13 @@ void iMesh<Traits>::readFileMSH(const char* filename)
 
       case 2: // caso face
         {
-          if (M_Compare<FaceT, CellT>::isEqual)
+          if (std::is_same<FaceT, CellT>::value)
           {
-            if (CellT::getMSHTag(order) != type_aux)
+            if (CellT::getMshTag(order) != type_aux)
             {
-              std::cout << "Invalid face! file has: " << getElementNameMSH(type_aux) << std::endl;
+              std::cout << "Invalid face! file has: " << getElementNameMsh(type_aux) << std::endl;
               std::cout << "But Mesh is configured to support: "
-                                      << getElementNameMSH(FaceT::getMSHTag(order)) << std::endl;
+                                      << getElementNameMsh(FaceT::getMshTag(order)) << std::endl;
               throw;
             }
             for (int i=0; i<Cell.getNumNodes(); ++i)
@@ -444,13 +436,13 @@ void iMesh<Traits>::readFileMSH(const char* filename)
 
       case 3: // caso volume
         {
-          if (M_Compare<VolumeT, CellT>::isEqual)
+          if (std::is_same<VolumeT, CellT>::value)
           {
-            if (CellT::getMSHTag(order) != type_aux)
+            if (CellT::getMshTag(order) != type_aux)
             {
-              std::cout << "Invalid volume! file has: " << getElementNameMSH(type_aux) << std::endl;
+              std::cout << "Invalid volume! file has: " << getElementNameMsh(type_aux) << std::endl;
               std::cout << "But Mesh is configured to support: "
-                                      << getElementNameMSH(FaceT::getMSHTag(order)) << std::endl;
+                                      << getElementNameMsh(FaceT::getMshTag(order)) << std::endl;
               throw;
             }
             for (int i=0; i<Cell.getNumNodes(); ++i)
@@ -478,13 +470,13 @@ void iMesh<Traits>::readFileMSH(const char* filename)
 
   if (num_cells == 0)
     std::cout << "WARNING: mesh file don't have any "
-              << getElementNameMSH(CellT::getMSHTag(order)) << std::endl;
+              << getElementNameMsh(CellT::getMshTag(order)) << std::endl;
 
   /* até aqui, apenas foi lido a conectividade
    */
 
   /* constroi as halfs e Mhalfs */
-  MeshMethods<iMesh<Traits>, CellT::Dim>::buildAdjacency(*this);
+  _MeshMethods<iMesh<Traits>, CellT::Dim>::buildAdjacency(*this);
 
 
   /*
@@ -511,7 +503,7 @@ void iMesh<Traits>::readFileMSH(const char* filename)
     }
 
     File >> type_aux;
-    int elm_dim = getDimForElementTypeMSH(type_aux);
+    int elm_dim = getDimForElementTypeMsh(type_aux);
 
     File >> num_tags;
 
@@ -529,7 +521,7 @@ void iMesh<Traits>::readFileMSH(const char* filename)
         break;
 
       case 1: // caso aresta
-        if (M_Compare<EdgeT, CellBT>::isEqual)
+        if (std::is_same<EdgeT, CellBT>::value)
         {
           Fepic::vectorui nodes(CellBT::getNumNodesCell(order));
           Fepic::vectorui vtx(2);
@@ -542,13 +534,13 @@ void iMesh<Traits>::readFileMSH(const char* filename)
               this->getNode(nodes[i])->setLabel(label_aux);
           }
           copy( nodes.begin(), nodes.begin()+2, vtx.begin() );
-          if( this->theseVerticesFormAMHalf(vtx, half_id) )
-            this->getMHalf(half_id)->setLabel(label_aux);
+          if( this->theseVerticesFormAHalfl(vtx, half_id) )
+            this->getHalfl(half_id)->setLabel(label_aux);
         }
         else
         {
           uint nodeid;
-          for (int i=0; i<getNumVerticesForElementTypeMSH(type_aux); ++i)
+          for (int i=0; i<getNumVerticesForElementTypeMsh(type_aux); ++i)
           {
             File >> nodeid;
             --nodeid;
@@ -559,10 +551,10 @@ void iMesh<Traits>::readFileMSH(const char* filename)
         break;
 
       case 2: // caso face
-        if (M_Compare<FaceT, CellBT>::isEqual)
+        if (std::is_same<FaceT, CellBT>::value)
         {
           Fepic::vectorui nodes(CellBT::getNumNodesCell(order));
-          Fepic::vectorui vtx(CellBT::N_borders);
+          Fepic::vectorui vtx(CellBT::n_borders);
           uint half_id=0;
           for (int i=0; i<CellBT::getNumNodesCell(order); ++i)
           {
@@ -571,14 +563,14 @@ void iMesh<Traits>::readFileMSH(const char* filename)
             if (this->getNode(nodes[i])->getLabel() == 0)
               this->getNode(nodes[i])->setLabel(label_aux);
           }
-          copy( nodes.begin(), nodes.begin()+CellBT::N_borders, vtx.begin() );
-          if( this->theseVerticesFormAMHalf(vtx, half_id) )
-            this->getMHalf(half_id)->setLabel(label_aux); //std::cout << (++TESTE) << std::endl;
+          copy( nodes.begin(), nodes.begin()+CellBT::n_borders, vtx.begin() );
+          if( this->theseVerticesFormAHalfl(vtx, half_id) )
+            this->getHalfl(half_id)->setLabel(label_aux); //std::cout << (++TESTE) << std::endl;
         }
         else
         {
           uint nodeid;
-          for (int i=0; i<getNumVerticesForElementTypeMSH(type_aux); ++i)
+          for (int i=0; i<getNumVerticesForElementTypeMsh(type_aux); ++i)
           {
             File >> nodeid;
             --nodeid;
@@ -591,7 +583,7 @@ void iMesh<Traits>::readFileMSH(const char* filename)
 
       case 3: // caso volume
         uint nodeid;
-        for (int i=0; i<getNumVerticesForElementTypeMSH(type_aux); ++i)
+        for (int i=0; i<getNumVerticesForElementTypeMsh(type_aux); ++i)
         {
           File >> nodeid;
           --nodeid;
@@ -611,7 +603,7 @@ void iMesh<Traits>::readFileMSH(const char* filename)
     if (!cit->isDead())
       cit->propagateHalf(*this);
 
-  for (MHalfIterator hit= _mhalfL.begin(), hend=_mhalfL.end(); hit != hend; ++hit)
+  for (HalflIterator hit= _mhalfL.begin(), hend=_mhalfL.end(); hit != hend; ++hit)
     if (!hit->isDead())
       hit->propagateHalf(*this);
 
@@ -636,13 +628,13 @@ void iMesh<Traits>::writeFileState() {
 
   for (uint k=0, tam=getNumNodesTotal(); k< tam; ++k)
   {
-    this->getNode(k)->printSelfVTK(Fout);
+    this->getNode(k)->printSelfVtk(Fout);
     Fout << " " << this->getNode(k)->getLabel() << std::endl;
 	}
 
   CellT *cell;
   Fout << std::endl;
-  Fout << getElementNameMSH(CellT::getMSHTag(order)) << std::endl;
+  Fout << getElementNameMsh(CellT::getMshTag(order)) << std::endl;
   for (uint i = 0; i < this->getNumCells(); i++)
   {
     cell = this->getCell(i);
@@ -658,7 +650,7 @@ void iMesh<Traits>::writeFileState() {
 
     HalfT *h_obj = cell->getHalf(0);
 
-    for (int j = 1; j < CellT::N_borders; j++)
+    for (int j = 1; j < CellT::n_borders; j++)
     {
       h_obj->printSelf(Fout);
       Fout << " | ";
@@ -669,11 +661,11 @@ void iMesh<Traits>::writeFileState() {
     Fout << std::endl;
   }
 
-  Fout << std::endl << "Marked " << HalfT::getName() << " " << this->getNumMHalfTotal() << std::endl;
+  Fout << std::endl << "Marked " << HalfT::getName() << " " << this->getNumHalflTotal() << std::endl;
   Fout << "CELL  POSIT  (ANC)  LABEL\n";
-  for (uint i = 0, tam=this->getNumMHalfTotal(); i < tam; i++)
+  for (uint i = 0, tam=this->getNumHalflTotal(); i < tam; i++)
   {
-    MHalfT *h_obj = this->getMHalf(i);
+    HalflT *h_obj = this->getHalfl(i);
     h_obj->printSelf(Fout); Fout << " " << h_obj->getLabel();
     Fout << std::endl;
   }
@@ -690,7 +682,7 @@ void iMesh<Traits>::writeFileState() {
  * ESTA DESCRIÇÃO PRECISA SER MELHORADA
  */
 template<class Traits>
-void iMesh<Traits>::writeVTK(bool flinear)
+void iMesh<Traits>::writeVtk(bool flinear)
 {
   /*
   *
@@ -730,23 +722,23 @@ void iMesh<Traits>::writeVTK(bool flinear)
   PointIterator pit = _pointL.begin();
   for (auto pend=_pointL.end(); pit != pend ; ++pit)
   {
-    pit->printSelfVTK(Fout);
+    pit->printSelfVtk(Fout);
     Fout << std::endl;
   }
 
   /* imprimindo células */
   Fout << std::endl;
-  Fout << "CELLS " << ncells << " " << ncells*(1+CellT::N_vertices) << std::endl;
+  Fout << "CELLS " << ncells << " " << ncells*(1+CellT::n_vertices) << std::endl;
   CellIterator cit = _cellL.begin();
   for (auto cellend=_cellL.end(); cit != cellend ; ++cit)
   {
     if(!cit->isDead())
     {
-      cit->printSelfVTK(Fout, order);
+      cit->printSelfVtk(Fout, order);
       Fout << std::endl;
     }
   }
-    int type = CellT::getCellTypeVTK();
+    int type = CellT::getCellTypeVtk();
   Fout << std::endl; cit = _cellL.begin();
   Fout << "CELL_TYPES " << ncells << std::endl;
   for (auto cellend=_cellL.end(); cit != cellend ; ++cit)
@@ -768,7 +760,7 @@ void iMesh<Traits>::writeVTK(bool flinear)
  */
 template<class Traits>
 template<class T>
-void iMesh<Traits>::addScalarVTK(const char* nome_var, T&& scalar, uint num_pts)
+void iMesh<Traits>::addScalarVtk(const char* nome_var, T&& scalar, uint num_pts)
 {
 
   std::stringstream ss;
@@ -809,7 +801,7 @@ void iMesh<Traits>::addScalarVTK(const char* nome_var, T&& scalar, uint num_pts)
 
 
 template<class Traits>
-void iMesh<Traits>::addPointLabelVTK(const char* nome_var="node labels")
+void iMesh<Traits>::addPointLabelVtk(const char* nome_var="node labels")
 {
 
   std::stringstream ss;
@@ -852,7 +844,7 @@ void iMesh<Traits>::addPointLabelVTK(const char* nome_var="node labels")
 
 
 template<class Traits>
-void iMesh<Traits>::addPointHalfVTK(const char* nome_var="node labels")
+void iMesh<Traits>::addPointHalfVtk(const char* nome_var="node labels")
 {
 
   std::stringstream ss;

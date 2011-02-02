@@ -56,54 +56,25 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#define-members">Defines</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <h1>entities.hpp File Reference</h1>  </div>
 </div>
 <div class="contents">
-<code>#include &quot;<a class="el" href="msh__tags_8hpp_source.html">msh_tags.hpp</a>&quot;</code><br/>
-<code>#include &lt;Fepic/misc/misc.hpp&gt;</code><br/>
-<code>#include &lt;Fepic/custom_eigen/custom_eigen.hpp&gt;</code><br/>
-<code>#include &lt;Fepic/shapefunctions/parametric_pts.hpp&gt;</code><br/>
-<code>#include &lt;iostream&gt;</code><br/>
-<code>#include &lt;iomanip&gt;</code><br/>
-<code>#include &lt;deque&gt;</code><br/>
-<code>#include &lt;vector&gt;</code><br/>
-<code>#include &lt;map&gt;</code><br/>
-<code>#include &lt;cmath&gt;</code><br/>
-<code>#include &lt;algorithm&gt;</code><br/>
-<code>#include &lt;type_traits&gt;</code><br/>
-<div class="dynheader">
-Include dependency graph for entities.hpp:</div>
-<div class="dyncontent">
-<div class="center"><img src="entities_8hpp__incl.png" border="0" usemap="#entities_8hpp" alt=""/></div>
-<map name="entities_8hpp" id="entities_8hpp">
-<area shape="rect" id="node3" href="msh__tags_8hpp.html" title="msh_tags.hpp" alt="" coords="81,83,193,112"/></map>
-</div>
-<div class="dynheader">
-This graph shows which files directly or indirectly include this file:</div>
-<div class="dyncontent">
-<div class="center"><img src="entities_8hpp__dep__incl.png" border="0" usemap="#entities_8hppdep" alt=""/></div>
-<map name="entities_8hppdep" id="entities_8hppdep">
-<area shape="rect" id="node3" href="imesh_8hpp.html" title="imesh.hpp" alt="" coords="56,83,144,112"/><area shape="rect" id="node5" href="imesh_i_o_8hpp.html" title="imeshIO.hpp" alt="" coords="5,160,107,189"/><area shape="rect" id="node7" href="mesh_8hpp.html" title="mesh.hpp" alt="" coords="57,237,143,267"/><area shape="rect" id="node9" href="mesh_8cpp.html" title="mesh.cpp" alt="" coords="57,315,143,344"/></map>
-</div>
 
 <p><a href="entities_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_simplex.html">Simplex&lt; dim &gt;</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hypercube.html">Hypercube&lt; dim &gt;</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_element_properties_3_01_simplex_3_011_01_4_00_01_traits_01_4.html">ElementProperties&lt; Simplex&lt; 1 &gt;, Traits &gt;</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_element_properties_3_01_simplex_3_012_01_4_00_01_traits_01_4.html">ElementProperties&lt; Simplex&lt; 2 &gt;, Traits &gt;</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_element_properties_3_01_simplex_3_013_01_4_00_01_traits_01_4.html">ElementProperties&lt; Simplex&lt; 3 &gt;, Traits &gt;</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_element_properties_3_01_hypercube_3_011_01_4_00_01_traits_01_4.html">ElementProperties&lt; Hypercube&lt; 1 &gt;, Traits &gt;</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_element_properties_3_01_hypercube_3_012_01_4_00_01_traits_01_4.html">ElementProperties&lt; Hypercube&lt; 2 &gt;, Traits &gt;</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_element_properties_3_01_hypercube_3_013_01_4_00_01_traits_01_4.html">ElementProperties&lt; Hypercube&lt; 3 &gt;, Traits &gt;</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_element_properties_3_01i_edge_3_01_traits_01_4_00_01_traits_01_4.html">ElementProperties&lt; iEdge&lt; Traits &gt;, Traits &gt;</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_element_properties_3_01i_triangle_3_01_traits_01_4_00_01_traits_01_4.html">ElementProperties&lt; iTriangle&lt; Traits &gt;, Traits &gt;</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_element_properties_3_01i_tetrahedron_3_01_traits_01_4_00_01_traits_01_4.html">ElementProperties&lt; iTetrahedron&lt; Traits &gt;, Traits &gt;</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_element_properties_3_01_edge_3_01_traits_01_4_00_01_traits_01_4.html">ElementProperties&lt; Edge&lt; Traits &gt;, Traits &gt;</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_element_properties_3_01_triangle_3_01_traits_01_4_00_01_traits_01_4.html">ElementProperties&lt; Triangle&lt; Traits &gt;, Traits &gt;</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_element_properties_3_01_tetrahedron_3_01_traits_01_4_00_01_traits_01_4.html">ElementProperties&lt; Tetrahedron&lt; Traits &gt;, Traits &gt;</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_undef_element.html">UndefElement</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_volume_def_3_011_00_01_cell_01_4.html">VolumeDef&lt; 1, Cell &gt;</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_volume_def_3_012_00_01_cell_01_4.html">VolumeDef&lt; 2, Cell &gt;</a></td></tr>
@@ -118,86 +89,11 @@ Classes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_half_def_3_012_00_01_traits_01_4.html">MHalfDef&lt; 2, Traits &gt;</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_half_def_3_013_00_01_traits_01_4.html">MHalfDef&lt; 3, Traits &gt;</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_default_traits.html">DefaultTraits&lt; _spacedim, CellType &gt;</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi_marked_entity.html">iMarkedEntity</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi_half_edge.html">iHalfEdge&lt; Traits &gt;</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi_half_face.html">iHalfFace&lt; Traits &gt;</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi_marked_half_edge.html">iMarkedHalfEdge&lt; Traits &gt;</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi_marked_half_face.html">iMarkedHalfFace&lt; Traits &gt;</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi_point.html">iPoint&lt; Traits &gt;</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi_edge.html">iEdge&lt; Traits &gt;</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi_polygon.html">iPolygon&lt; Traits &gt;</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi_triangle.html">iTriangle&lt; Traits &gt;</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi_triangle_1_1i_cell_data.html">iTriangle&lt; Traits &gt;::iCellData</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi_polyhedron.html">iPolyhedron&lt; Traits &gt;</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi_tetrahedron.html">iTetrahedron&lt; Traits &gt;</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi_tetrahedron_1_1i_cell_data.html">iTetrahedron&lt; Traits &gt;::iCellData</a></td></tr>
-<tr><td colspan="2"><h2><a name="define-members"></a>
-Defines</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="entities_8hpp.html#af225cc6ca26484ead286085858504f8e">ENTTS_DEBUG</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="entities_8hpp.html#a8f0b5b0dedaf5c25c4887f03ebfdd425">PAIR</a>&nbsp;&nbsp;&nbsp;std::pair&lt;int, Eigen::Vector2i&gt;</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="entities_8hpp.html#ab15b413e947cab706020f91524e84a7a">DO_TRANSFORMATION_AND_APPLY</a></td></tr>
 <tr><td colspan="2"><h2><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
-<tr><td class="memTemplItemLeft" align="right" valign="top">void&nbsp;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="entities_8hpp.html#a8c6a16881d4ab28d222f7ac896ced037">swap</a> (T &amp;a, T &amp;b)</td></tr>
 <tr><td class="memTemplParams" colspan="2">template&lt;class Traits , class ShapeFun , int sdim = Traits::spacedim, int cdim = Traits::CellT::Dim, class VecT  = Eigen::Matrix&lt;double, sdim, 1&gt;, class VecU  = Eigen::Matrix&lt;double, cdim, 1&gt;&gt; </td></tr>
 <tr><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; VecT &gt;&nbsp;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="entities_8hpp.html#a67233385579e9921a28497c9882f8f43">map2RealCell</a> (std::vector&lt; VecU &gt; const &amp;list_pts, std::vector&lt; VecT &gt; const &amp;intp_pts, ShapeFun const &amp;Phi)</td></tr>
 </table>
-<hr/><h2>Define Documentation</h2>
-<a class="anchor" id="ab15b413e947cab706020f91524e84a7a"></a><!-- doxytag: member="entities.hpp::DO_TRANSFORMATION_AND_APPLY" ref="ab15b413e947cab706020f91524e84a7a" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define DO_TRANSFORMATION_AND_APPLY</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<b>Value:</b><div class="fragment"><pre class="fragment"><span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i != N; ++i)                                             \
-                                    {                                                                        \
-                                        X[i] = A*Coords[i] + b;                                              \
-                                    }                                                                        \
-                                                                                                             \
-                                    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i != N; ++i)                                             \
-                                    {                                                                        \
-                                        k = find_if(X.begin(), X.end(), [i, &amp;Coords](<a class="code" href="entities_8hpp.html#a8f0b5b0dedaf5c25c4887f03ebfdd425">PAIR</a> <span class="keyword">const</span>&amp; p)-&gt;<span class="keywordtype">bool</span> {  \
-                                                <span class="keywordflow">return</span> (p.second==Coords[i]);                                \
-                                            })-&gt;first;                                                       \
-                                                                                                             \
-                                        opp_fln[anch][i] = k;                                                \
-                                    }
-</pre></div>
-</div>
-</div>
-<a class="anchor" id="af225cc6ca26484ead286085858504f8e"></a><!-- doxytag: member="entities.hpp::ENTTS_DEBUG" ref="af225cc6ca26484ead286085858504f8e" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define ENTTS_DEBUG</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l00005">5</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a8f0b5b0dedaf5c25c4887f03ebfdd425"></a><!-- doxytag: member="entities.hpp::PAIR" ref="a8f0b5b0dedaf5c25c4887f03ebfdd425" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define PAIR&nbsp;&nbsp;&nbsp;std::pair&lt;int, Eigen::Vector2i&gt;</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
 <hr/><h2>Function Documentation</h2>
 <a class="anchor" id="a67233385579e9921a28497c9882f8f43"></a><!-- doxytag: member="entities.hpp::map2RealCell" ref="a67233385579e9921a28497c9882f8f43" args="(std::vector&lt; VecU &gt; const &amp;list_pts, std::vector&lt; VecT &gt; const &amp;intp_pts, ShapeFun const &amp;Phi)" -->
 <div class="memitem">
@@ -244,70 +140,19 @@ template&lt;class Traits , class ShapeFun , int sdim = Traits::spacedim, int cdi
 <dl class="return"><dt><b>Returns:</b></dt><dd>uma lista com as coordenadas dos pontos passados em list_pts na célula real </dd></dl>
 <dl class="warning"><dt><b>Warning:</b></dt><dd>as funções Phi DEVEM corresponder aos pontos de interpolação </dd></dl>
 
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l02494">2494</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
+<p>Definition at line <a class="el" href="entities_8hpp_source.html#l00245">245</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
 
 <p><div class="fragment"><pre class="fragment">{
-    <span class="keywordtype">int</span>               tam = <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>( list_pts.size() );
-    std::vector&lt;VecT&gt; ret(tam, VecT::Zero());
-    
-    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; tam; ++i)
-    {
-        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k = 0, size=static_cast&lt;int&gt;( intp_pts.size() ); k &lt; size; ++k)
-        {
-            ret[i] += Phi(list_pts[i], k)*intp_pts[k];
-        }
-    }
-    
-    <span class="keywordflow">return</span> ret;
+  <span class="keywordtype">int</span> tam = <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>( list_pts.size() );
+  std::vector&lt;VecT&gt; ret(tam, VecT::Zero());
+  
+  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; tam; ++i)
+    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k = 0, size=static_cast&lt;int&gt;( intp_pts.size() ); k &lt; size; ++k)
+      ret[i] += Phi(list_pts[i], k)*intp_pts[k];
+  
+  <span class="keywordflow">return</span> ret;
 }
 </pre></div></p>
-
-</div>
-</div>
-<a class="anchor" id="a8c6a16881d4ab28d222f7ac896ced037"></a><!-- doxytag: member="entities.hpp::swap" ref="a8c6a16881d4ab28d222f7ac896ced037" args="(T &amp;a, T &amp;b)" -->
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;class T &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">void swap </td>
-          <td>(</td>
-          <td class="paramtype">T &amp;&nbsp;</td>
-          <td class="paramname"> <em>a</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">T &amp;&nbsp;</td>
-          <td class="paramname"> <em>b</em></td><td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td><td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Definition at line <a class="el" href="entities_8hpp_source.html#l00032">32</a> of file <a class="el" href="entities_8hpp_source.html">entities.hpp</a>.</p>
-
-<p>Referenced by <a class="el" href="entities_8hpp_source.html#l01389">iPolygon&lt; Traits &gt;::isAnParallelEdge()</a>.</p>
-
-<p><div class="fragment"><pre class="fragment">{
-        T c(a); a=b; b=c;
-}
-</pre></div></p>
-
-<p><div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="entities_8hpp_a8c6a16881d4ab28d222f7ac896ced037_icgraph.png" border="0" usemap="#entities_8hpp_a8c6a16881d4ab28d222f7ac896ced037_icgraph" alt=""/></div>
-<map name="entities_8hpp_a8c6a16881d4ab28d222f7ac896ced037_icgraph" id="entities_8hpp_a8c6a16881d4ab28d222f7ac896ced037_icgraph">
-<area shape="rect" id="node3" href="classi_polygon.html#af6202cc944d3d4fd0fdd25bd2476f13b" title="iPolygon::isAnParallelEdge" alt="" coords="109,5,296,35"/></map>
-</div>
-</p>
 
 </div>
 </div>
@@ -326,7 +171,7 @@ Here is the caller graph for this function:</div>
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Fri Jan 28 2011 19:32:29 for FEPiCpp by&nbsp;
+<hr class="footer"/><address class="footer"><small>Generated on Wed Feb 2 2011 20:53:23 for FEPiCpp by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.1 </small></address>
 </body>

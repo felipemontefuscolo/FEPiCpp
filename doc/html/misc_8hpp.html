@@ -49,7 +49,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     <ul>
       <li><a class="el" href="dir_2f6c976607e07ccd2606a363afeb3b16.html">Fepic</a>      </li>
       <li><a class="el" href="dir_bab4b9c6d359a434e685b15956975109.html">src</a>      </li>
-      <li><a class="el" href="dir_5015f565c24a4a9c40666e17598266f8.html">misc</a>      </li>
+      <li><a class="el" href="dir_0675d40ac545f6632a37abe460e5186c.html">util</a>      </li>
     </ul>
   </div>
 </div>
@@ -63,32 +63,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <h1>misc.hpp File Reference</h1>  </div>
 </div>
 <div class="contents">
-<code>#include &lt;algorithm&gt;</code><br/>
-<code>#include &lt;vector&gt;</code><br/>
-<code>#include &lt;array&gt;</code><br/>
-<code>#include &lt;deque&gt;</code><br/>
-<code>#include &lt;iostream&gt;</code><br/>
-<code>#include &lt;iomanip&gt;</code><br/>
-<code>#include &lt;fstream&gt;</code><br/>
-<div class="dynheader">
-Include dependency graph for misc.hpp:</div>
-<div class="dyncontent">
-<div class="center"><img src="misc_8hpp__incl.png" border="0" usemap="#misc_8hpp" alt=""/></div>
-</div>
-<div class="dynheader">
-This graph shows which files directly or indirectly include this file:</div>
-<div class="dyncontent">
-<div class="center"><img src="misc_8hpp__dep__incl.png" border="0" usemap="#misc_8hppdep" alt=""/></div>
-<map name="misc_8hppdep" id="misc_8hppdep">
-<area shape="rect" id="node3" href="imesh_i_o_8hpp.html" title="imeshIO.hpp" alt="" coords="5,83,107,112"/><area shape="rect" id="node5" href="mesh_8hpp.html" title="mesh.hpp" alt="" coords="13,160,99,189"/><area shape="rect" id="node7" href="mesh_8cpp.html" title="mesh.cpp" alt="" coords="13,237,99,267"/></map>
-</div>
 
 <p><a href="misc_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m___compare.html">M_Compare&lt; C1, C2 &gt;</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m___compare_3_01_c1_00_01_c1_01_4.html">M_Compare&lt; C1, C1 &gt;</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m___if_then_else_3_01true_00_01_ta_00_01_tb_01_4.html">M_IfThenElse&lt; true, Ta, Tb &gt;</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m___if_then_else_3_01false_00_01_ta_00_01_tb_01_4.html">M_IfThenElse&lt; false, Ta, Tb &gt;</a></td></tr>
 <tr><td colspan="2"><h2><a name="namespaces"></a>
@@ -160,15 +139,15 @@ template&lt;class T &gt; </div>
 <div class="memdoc">
 <p>Verifica se dois vetores são (anti)ciclicamente iguais. TESTAR, POIS FIZ MUDANÇAS </p>
 
-<p>Definition at line <a class="el" href="misc_8hpp_source.html#l00081">81</a> of file <a class="el" href="misc_8hpp_source.html">misc.hpp</a>.</p>
+<p>Definition at line <a class="el" href="misc_8hpp_source.html#l00079">79</a> of file <a class="el" href="misc_8hpp_source.html">misc.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="entities_8hpp_source.html#l00711">iHalfFace&lt; Traits &gt;::hasTheseVertices()</a>, and <a class="el" href="entities_8hpp_source.html#l00520">iHalfEdge&lt; Traits &gt;::hasTheseVertices()</a>.</p>
+<p>Referenced by <a class="el" href="ihalfface_8hpp_source.html#l00186">iHalfFace&lt; Traits &gt;::hasTheseVertices()</a>, and <a class="el" href="ihalfedge_8hpp_source.html#l00163">iHalfEdge&lt; Traits &gt;::hasTheseVertices()</a>.</p>
 
 <p><div class="fragment"><pre class="fragment">{
   std::vector&lt;T&gt; vaux(v2);
-    uint vsize = v2.size();
-    <span class="keyword">auto</span> vaux_begin = vaux.begin(), vaux_end = vaux.end();
-  
+  uint vsize = v2.size();
+  <span class="keyword">auto</span> vaux_begin = vaux.begin(), vaux_end = vaux.end();
+
   <span class="keywordflow">for</span> (uint i = 0; i &lt; vsize; ++i)
   {
     <span class="keywordflow">if</span> (v1 == vaux)
@@ -177,10 +156,10 @@ template&lt;class T &gt; </div>
     }
     rotate(vaux_begin, vaux_begin+1, vaux_end);
   }
-  
+
   reverse(vaux_begin, vaux_end);
   <span class="keywordflow">if</span>(vaux == v1) <span class="keywordflow">return</span> <span class="keyword">true</span>;
-  
+
   <span class="keywordflow">for</span> (uint i = 1; i &lt; vsize; ++i)
   {
     rotate(vaux_begin, vaux_begin+1, vaux_end);
@@ -189,7 +168,7 @@ template&lt;class T &gt; </div>
       <span class="keywordflow">return</span> <span class="keyword">true</span>;
     }
   }
-  
+
   <span class="keywordflow">return</span> <span class="keyword">false</span>;
 }
 </pre></div></p>
@@ -248,10 +227,10 @@ template&lt;class In_it , class Out_it &gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="misc_8hpp_source.html#l00051">51</a> of file <a class="el" href="misc_8hpp_source.html">misc.hpp</a>.</p>
+<p>Definition at line <a class="el" href="misc_8hpp_source.html#l00063">63</a> of file <a class="el" href="misc_8hpp_source.html">misc.hpp</a>.</p>
 
 <p><div class="fragment"><pre class="fragment">{
-    <span class="keywordflow">while</span>(c_begin != c_end) *c_begin++ = *a_begin++;
+  <span class="keywordflow">while</span>(c_begin != c_end) *c_begin++ = *a_begin++;
 }
 </pre></div></p>
 
@@ -285,9 +264,9 @@ template&lt;class T &gt; </div>
 <div class="memdoc">
 <p>Retorna o n-ésimo bit da constante c passada. </p>
 
-<p>Definition at line <a class="el" href="misc_8hpp_source.html#l00165">165</a> of file <a class="el" href="misc_8hpp_source.html">misc.hpp</a>.</p>
+<p>Definition at line <a class="el" href="misc_8hpp_source.html#l00163">163</a> of file <a class="el" href="misc_8hpp_source.html">misc.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="shapefunctions_8hpp_source.html#l00653">ShapeFunction&lt; Simplex&lt; 3 &gt; &gt;::getNumDof()</a>, <a class="el" href="shapefunctions_8hpp_source.html#l00404">ShapeFunction&lt; Simplex&lt; 2 &gt; &gt;::getNumDof()</a>, <a class="el" href="shapefunctions_8hpp_source.html#l00576">ShapeFunction&lt; Simplex&lt; 3 &gt; &gt;::gradL()</a>, <a class="el" href="shapefunctions_8hpp_source.html#l00340">ShapeFunction&lt; Simplex&lt; 2 &gt; &gt;::gradL()</a>, <a class="el" href="entities_8hpp_source.html#l00325">iMarkedEntity::isDead()</a>, <a class="el" href="entities_8hpp_source.html#l00332">iMarkedEntity::mustBeKilled()</a>, <a class="el" href="shapefunctions_8hpp_source.html#l00523">ShapeFunction&lt; Simplex&lt; 3 &gt; &gt;::operator()()</a>, <a class="el" href="shapefunctions_8hpp_source.html#l00290">ShapeFunction&lt; Simplex&lt; 2 &gt; &gt;::operator()()</a>, <a class="el" href="shapefunctions_8hpp_source.html#l00459">ShapeFunction&lt; Simplex&lt; 3 &gt; &gt;::setDegree()</a>, <a class="el" href="shapefunctions_8hpp_source.html#l00228">ShapeFunction&lt; Simplex&lt; 2 &gt; &gt;::setDegree()</a>, <a class="el" href="shapefunctions_8hpp_source.html#l00450">ShapeFunction&lt; Simplex&lt; 3 &gt; &gt;::ShapeFunction()</a>, and <a class="el" href="shapefunctions_8hpp_source.html#l00219">ShapeFunction&lt; Simplex&lt; 2 &gt; &gt;::ShapeFunction()</a>.</p>
+<p>Referenced by <a class="el" href="shapefunctions_8hpp_source.html#l00661">ShapeFunction&lt; Simplex&lt; 3 &gt; &gt;::getNumDof()</a>, <a class="el" href="shapefunctions_8hpp_source.html#l00412">ShapeFunction&lt; Simplex&lt; 2 &gt; &gt;::getNumDof()</a>, <a class="el" href="shapefunctions_8hpp_source.html#l00584">ShapeFunction&lt; Simplex&lt; 3 &gt; &gt;::gradL()</a>, <a class="el" href="shapefunctions_8hpp_source.html#l00348">ShapeFunction&lt; Simplex&lt; 2 &gt; &gt;::gradL()</a>, <a class="el" href="ilabelable_8hpp_source.html#l00085">iLabelable::isDead()</a>, <a class="el" href="ilabelable_8hpp_source.html#l00092">iLabelable::mustBeKilled()</a>, <a class="el" href="shapefunctions_8hpp_source.html#l00531">ShapeFunction&lt; Simplex&lt; 3 &gt; &gt;::operator()()</a>, <a class="el" href="shapefunctions_8hpp_source.html#l00302">ShapeFunction&lt; Simplex&lt; 2 &gt; &gt;::operator()()</a>, <a class="el" href="shapefunctions_8hpp_source.html#l00467">ShapeFunction&lt; Simplex&lt; 3 &gt; &gt;::setDegree()</a>, <a class="el" href="shapefunctions_8hpp_source.html#l00240">ShapeFunction&lt; Simplex&lt; 2 &gt; &gt;::setDegree()</a>, <a class="el" href="shapefunctions_8hpp_source.html#l00458">ShapeFunction&lt; Simplex&lt; 3 &gt; &gt;::ShapeFunction()</a>, and <a class="el" href="shapefunctions_8hpp_source.html#l00231">ShapeFunction&lt; Simplex&lt; 2 &gt; &gt;::ShapeFunction()</a>.</p>
 
 <p><div class="fragment"><pre class="fragment">{
     T bitmask = ( 1 &lt;&lt; bitoffset) ;
@@ -300,7 +279,7 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="misc_8hpp_a0d04dc456d7b1b3aced24c06e99b5143_icgraph.png" border="0" usemap="#misc_8hpp_a0d04dc456d7b1b3aced24c06e99b5143_icgraph" alt=""/></div>
 <map name="misc_8hpp_a0d04dc456d7b1b3aced24c06e99b5143_icgraph" id="misc_8hpp_a0d04dc456d7b1b3aced24c06e99b5143_icgraph">
-<area shape="rect" id="node3" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#a2e3a21f5a8421bf4f0b8349fd4f0b9b0" title="ShapeFunction\&lt; Simplex\&lt; 3 \&gt; \&gt;::getNumDof" alt="" coords="131,5,448,35"/><area shape="rect" id="node5" href="class_shape_function_3_01_simplex_3_012_01_4_01_4.html#aec32386ff8711c5388334ba1f6ba534e" title="ShapeFunction\&lt; Simplex\&lt; 2 \&gt; \&gt;::getNumDof" alt="" coords="131,59,448,88"/><area shape="rect" id="node7" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#adc7073096ed40e82e961a07390c5a25e" title="ShapeFunction\&lt; Simplex\&lt; 3 \&gt; \&gt;::gradL" alt="" coords="151,112,428,141"/><area shape="rect" id="node9" href="class_shape_function_3_01_simplex_3_012_01_4_01_4.html#a208cf52a358198dfabbb0844860f170a" title="ShapeFunction\&lt; Simplex\&lt; 2 \&gt; \&gt;::gradL" alt="" coords="151,165,428,195"/><area shape="rect" id="node11" href="classi_marked_entity.html#a5a240052d6cd68fac9777cd69f5eb62e" title="iMarkedEntity::isDead" alt="" coords="211,219,368,248"/><area shape="rect" id="node13" href="classi_marked_entity.html#a94f4f7447cb082c3b1289f09db8acdc6" title="iMarkedEntity::mustBeKilled" alt="" coords="191,272,388,301"/><area shape="rect" id="node15" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#aa30f08f898a856db959138eaf2274063" title="ShapeFunction\&lt; Simplex\&lt; 3 \&gt; \&gt;::operator()" alt="" coords="136,325,443,355"/><area shape="rect" id="node17" href="class_shape_function_3_01_simplex_3_012_01_4_01_4.html#a320d96d5dcae6c488c4570ed07a81048" title="ShapeFunction\&lt; Simplex\&lt; 2 \&gt; \&gt;::operator()" alt="" coords="136,379,443,408"/><area shape="rect" id="node19" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#a2e966005bc3920556eb59c9bd9d5e476" title="ShapeFunction\&lt; Simplex\&lt; 3 \&gt; \&gt;::setDegree" alt="" coords="135,432,444,461"/><area shape="rect" id="node21" href="class_shape_function_3_01_simplex_3_012_01_4_01_4.html#ad27fb4b42f52d7617015ebf19194634e" title="ShapeFunction\&lt; Simplex\&lt; 2 \&gt; \&gt;::setDegree" alt="" coords="135,485,444,515"/><area shape="rect" id="node23" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#a3f0580a574ab21b2ac643adfa771c087" title="ShapeFunction\&lt; Simplex\&lt; 3 \&gt; \&gt;::ShapeFunction" alt="" coords="121,539,457,568"/><area shape="rect" id="node25" href="class_shape_function_3_01_simplex_3_012_01_4_01_4.html#a33b1e34fe111c95b9b3d53660c6e4efa" title="ShapeFunction\&lt; Simplex\&lt; 2 \&gt; \&gt;::ShapeFunction" alt="" coords="121,592,457,621"/></map>
+<area shape="rect" id="node3" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#a2e3a21f5a8421bf4f0b8349fd4f0b9b0" title="ShapeFunction\&lt; Simplex\&lt; 3 \&gt; \&gt;::getNumDof" alt="" coords="131,5,448,35"/><area shape="rect" id="node5" href="class_shape_function_3_01_simplex_3_012_01_4_01_4.html#aec32386ff8711c5388334ba1f6ba534e" title="ShapeFunction\&lt; Simplex\&lt; 2 \&gt; \&gt;::getNumDof" alt="" coords="131,59,448,88"/><area shape="rect" id="node7" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#adc7073096ed40e82e961a07390c5a25e" title="ShapeFunction\&lt; Simplex\&lt; 3 \&gt; \&gt;::gradL" alt="" coords="151,112,428,141"/><area shape="rect" id="node9" href="class_shape_function_3_01_simplex_3_012_01_4_01_4.html#a208cf52a358198dfabbb0844860f170a" title="ShapeFunction\&lt; Simplex\&lt; 2 \&gt; \&gt;::gradL" alt="" coords="151,165,428,195"/><area shape="rect" id="node11" href="classi_labelable.html#accf4e78cc09e860d0ae0123a4dcfcb7f" title="iLabelable::isDead" alt="" coords="220,219,359,248"/><area shape="rect" id="node13" href="classi_labelable.html#a022b14ee7533b352deb56beeabf616da" title="iLabelable::mustBeKilled" alt="" coords="201,272,377,301"/><area shape="rect" id="node15" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#aa30f08f898a856db959138eaf2274063" title="ShapeFunction\&lt; Simplex\&lt; 3 \&gt; \&gt;::operator()" alt="" coords="136,325,443,355"/><area shape="rect" id="node17" href="class_shape_function_3_01_simplex_3_012_01_4_01_4.html#a320d96d5dcae6c488c4570ed07a81048" title="ShapeFunction\&lt; Simplex\&lt; 2 \&gt; \&gt;::operator()" alt="" coords="136,379,443,408"/><area shape="rect" id="node19" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#a2e966005bc3920556eb59c9bd9d5e476" title="ShapeFunction\&lt; Simplex\&lt; 3 \&gt; \&gt;::setDegree" alt="" coords="135,432,444,461"/><area shape="rect" id="node21" href="class_shape_function_3_01_simplex_3_012_01_4_01_4.html#ad27fb4b42f52d7617015ebf19194634e" title="ShapeFunction\&lt; Simplex\&lt; 2 \&gt; \&gt;::setDegree" alt="" coords="135,485,444,515"/><area shape="rect" id="node23" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#a3f0580a574ab21b2ac643adfa771c087" title="ShapeFunction\&lt; Simplex\&lt; 3 \&gt; \&gt;::ShapeFunction" alt="" coords="121,539,457,568"/><area shape="rect" id="node25" href="class_shape_function_3_01_simplex_3_012_01_4_01_4.html#a33b1e34fe111c95b9b3d53660c6e4efa" title="ShapeFunction\&lt; Simplex\&lt; 2 \&gt; \&gt;::ShapeFunction" alt="" coords="121,592,457,621"/></map>
 </div>
 </p>
 
@@ -339,7 +318,7 @@ template&lt;class T &gt; </div>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="misc_8hpp_source.html#l00114">114</a> of file <a class="el" href="misc_8hpp_source.html">misc.hpp</a>.</p>
+<p>Definition at line <a class="el" href="misc_8hpp_source.html#l00112">112</a> of file <a class="el" href="misc_8hpp_source.html">misc.hpp</a>.</p>
 
 <p><div class="fragment"><pre class="fragment">{
   o &lt;&lt; v[0];
@@ -391,7 +370,7 @@ template&lt;class T &gt; </div>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="misc_8hpp_source.html#l00125">125</a> of file <a class="el" href="misc_8hpp_source.html">misc.hpp</a>.</p>
+<p>Definition at line <a class="el" href="misc_8hpp_source.html#l00123">123</a> of file <a class="el" href="misc_8hpp_source.html">misc.hpp</a>.</p>
 
 <p><div class="fragment"><pre class="fragment">{
   <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; N; i++)
@@ -432,14 +411,14 @@ template&lt;class T &gt; </div>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="misc_8hpp_source.html#l00141">141</a> of file <a class="el" href="misc_8hpp_source.html">misc.hpp</a>.</p>
+<p>Definition at line <a class="el" href="misc_8hpp_source.html#l00139">139</a> of file <a class="el" href="misc_8hpp_source.html">misc.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="imesh_i_o_8hpp_source.html#l00256">iMesh&lt; Traits &gt;::readFileMSH()</a>.</p>
+<p>Referenced by <a class="el" href="imesh_i_o_8hpp_source.html#l00269">iMesh&lt; Traits &gt;::readFileMSH()</a>.</p>
 
 <p><div class="fragment"><pre class="fragment">                                                        {
   std::string s;
   std::string word_s = std::string(word);
-  
+
     <span class="keywordflow">do</span>
   {
     s=<span class="stringliteral">&quot;&quot;</span>;
@@ -450,9 +429,9 @@ template&lt;class T &gt; </div>
       <span class="keywordflow">return</span> -1;
     }
   } <span class="keywordflow">while</span>(s!=word_s);
-  
+
   <span class="keywordflow">return</span> size_t(File.tellg());
-  
+
 }
 </pre></div></p>
 
@@ -495,9 +474,9 @@ template&lt;class T &gt; </div>
 <div class="memdoc">
 <p>Seta o n-ésimo bit da constante c passada. </p>
 
-<p>Definition at line <a class="el" href="misc_8hpp_source.html#l00174">174</a> of file <a class="el" href="misc_8hpp_source.html">misc.hpp</a>.</p>
+<p>Definition at line <a class="el" href="misc_8hpp_source.html#l00172">172</a> of file <a class="el" href="misc_8hpp_source.html">misc.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="entities_8hpp_source.html#l00287">iMarkedEntity::iMarkedEntity()</a>, <a class="el" href="entities_8hpp_source.html#l00339">iMarkedEntity::killMe()</a>, <a class="el" href="entities_8hpp_source.html#l00353">iMarkedEntity::killMeLater()</a>, <a class="el" href="shapefunctions_8hpp_source.html#l00459">ShapeFunction&lt; Simplex&lt; 3 &gt; &gt;::setDegree()</a>, <a class="el" href="shapefunctions_8hpp_source.html#l00228">ShapeFunction&lt; Simplex&lt; 2 &gt; &gt;::setDegree()</a>, <a class="el" href="shapefunctions_8hpp_source.html#l00450">ShapeFunction&lt; Simplex&lt; 3 &gt; &gt;::ShapeFunction()</a>, and <a class="el" href="shapefunctions_8hpp_source.html#l00219">ShapeFunction&lt; Simplex&lt; 2 &gt; &gt;::ShapeFunction()</a>.</p>
+<p>Referenced by <a class="el" href="ilabelable_8hpp_source.html#l00047">iLabelable::iLabelable()</a>, <a class="el" href="ilabelable_8hpp_source.html#l00099">iLabelable::killMe()</a>, <a class="el" href="ilabelable_8hpp_source.html#l00113">iLabelable::killMeLater()</a>, <a class="el" href="shapefunctions_8hpp_source.html#l00467">ShapeFunction&lt; Simplex&lt; 3 &gt; &gt;::setDegree()</a>, <a class="el" href="shapefunctions_8hpp_source.html#l00240">ShapeFunction&lt; Simplex&lt; 2 &gt; &gt;::setDegree()</a>, <a class="el" href="shapefunctions_8hpp_source.html#l00458">ShapeFunction&lt; Simplex&lt; 3 &gt; &gt;::ShapeFunction()</a>, and <a class="el" href="shapefunctions_8hpp_source.html#l00231">ShapeFunction&lt; Simplex&lt; 2 &gt; &gt;::ShapeFunction()</a>.</p>
 
 <p><div class="fragment"><pre class="fragment">{
     T bitmask = 1 &lt;&lt; bitoffset;
@@ -510,7 +489,7 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="misc_8hpp_af4f762668d32397e0576a85a69d69d48_icgraph.png" border="0" usemap="#misc_8hpp_af4f762668d32397e0576a85a69d69d48_icgraph" alt=""/></div>
 <map name="misc_8hpp_af4f762668d32397e0576a85a69d69d48_icgraph" id="misc_8hpp_af4f762668d32397e0576a85a69d69d48_icgraph">
-<area shape="rect" id="node3" href="classi_marked_entity.html#a3040c35a15a16c8578b487b703a07d79" title="iMarkedEntity::iMarkedEntity" alt="" coords="189,5,389,35"/><area shape="rect" id="node5" href="classi_marked_entity.html#ad3009960d298859a9fc5ca57a64fe090" title="iMarkedEntity::killMe" alt="" coords="215,59,364,88"/><area shape="rect" id="node7" href="classi_marked_entity.html#a01b93264f00ae6cba4fca2f9d5466d0a" title="iMarkedEntity::killMeLater" alt="" coords="199,112,380,141"/><area shape="rect" id="node9" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#a2e966005bc3920556eb59c9bd9d5e476" title="ShapeFunction\&lt; Simplex\&lt; 3 \&gt; \&gt;::setDegree" alt="" coords="135,165,444,195"/><area shape="rect" id="node11" href="class_shape_function_3_01_simplex_3_012_01_4_01_4.html#ad27fb4b42f52d7617015ebf19194634e" title="ShapeFunction\&lt; Simplex\&lt; 2 \&gt; \&gt;::setDegree" alt="" coords="135,219,444,248"/><area shape="rect" id="node13" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#a3f0580a574ab21b2ac643adfa771c087" title="ShapeFunction\&lt; Simplex\&lt; 3 \&gt; \&gt;::ShapeFunction" alt="" coords="121,272,457,301"/><area shape="rect" id="node15" href="class_shape_function_3_01_simplex_3_012_01_4_01_4.html#a33b1e34fe111c95b9b3d53660c6e4efa" title="ShapeFunction\&lt; Simplex\&lt; 2 \&gt; \&gt;::ShapeFunction" alt="" coords="121,325,457,355"/></map>
+<area shape="rect" id="node3" href="classi_labelable.html#a2dde128b568fd7d6ec671bf7536c323e" title="iLabelable::iLabelable" alt="" coords="211,5,368,35"/><area shape="rect" id="node5" href="classi_labelable.html#ae329d43d09dcecd04d8cea91ca4b7d99" title="iLabelable::killMe" alt="" coords="225,59,353,88"/><area shape="rect" id="node7" href="classi_labelable.html#a7d76929d759f6f95831b5db8c4a1530f" title="iLabelable::killMeLater" alt="" coords="208,112,371,141"/><area shape="rect" id="node9" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#a2e966005bc3920556eb59c9bd9d5e476" title="ShapeFunction\&lt; Simplex\&lt; 3 \&gt; \&gt;::setDegree" alt="" coords="135,165,444,195"/><area shape="rect" id="node11" href="class_shape_function_3_01_simplex_3_012_01_4_01_4.html#ad27fb4b42f52d7617015ebf19194634e" title="ShapeFunction\&lt; Simplex\&lt; 2 \&gt; \&gt;::setDegree" alt="" coords="135,219,444,248"/><area shape="rect" id="node13" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#a3f0580a574ab21b2ac643adfa771c087" title="ShapeFunction\&lt; Simplex\&lt; 3 \&gt; \&gt;::ShapeFunction" alt="" coords="121,272,457,301"/><area shape="rect" id="node15" href="class_shape_function_3_01_simplex_3_012_01_4_01_4.html#a33b1e34fe111c95b9b3d53660c6e4efa" title="ShapeFunction\&lt; Simplex\&lt; 2 \&gt; \&gt;::ShapeFunction" alt="" coords="121,325,457,355"/></map>
 </div>
 </p>
 
@@ -544,9 +523,9 @@ template&lt;class T &gt; </div>
 <div class="memdoc">
 <p>Zera o n-ésimo bit da constante c passada. </p>
 
-<p>Definition at line <a class="el" href="misc_8hpp_source.html#l00183">183</a> of file <a class="el" href="misc_8hpp_source.html">misc.hpp</a>.</p>
+<p>Definition at line <a class="el" href="misc_8hpp_source.html#l00181">181</a> of file <a class="el" href="misc_8hpp_source.html">misc.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="entities_8hpp_source.html#l00360">iMarkedEntity::dontKillMe()</a>, <a class="el" href="entities_8hpp_source.html#l00287">iMarkedEntity::iMarkedEntity()</a>, and <a class="el" href="entities_8hpp_source.html#l00346">iMarkedEntity::reviveMe()</a>.</p>
+<p>Referenced by <a class="el" href="ilabelable_8hpp_source.html#l00120">iLabelable::dontKillMe()</a>, <a class="el" href="ilabelable_8hpp_source.html#l00047">iLabelable::iLabelable()</a>, and <a class="el" href="ilabelable_8hpp_source.html#l00106">iLabelable::reviveMe()</a>.</p>
 
 <p><div class="fragment"><pre class="fragment">{
     T bitmask = 1 &lt;&lt; bitoffset;
@@ -559,7 +538,7 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="misc_8hpp_a79aa7c7b2ff90d680c7e0c6006cc8715_icgraph.png" border="0" usemap="#misc_8hpp_a79aa7c7b2ff90d680c7e0c6006cc8715_icgraph" alt=""/></div>
 <map name="misc_8hpp_a79aa7c7b2ff90d680c7e0c6006cc8715_icgraph" id="misc_8hpp_a79aa7c7b2ff90d680c7e0c6006cc8715_icgraph">
-<area shape="rect" id="node3" href="classi_marked_entity.html#a8feb2dfa4d426700bfab3c77fed0ef38" title="iMarkedEntity::dontKillMe" alt="" coords="148,5,327,35"/><area shape="rect" id="node5" href="classi_marked_entity.html#a3040c35a15a16c8578b487b703a07d79" title="iMarkedEntity::iMarkedEntity" alt="" coords="137,59,337,88"/><area shape="rect" id="node7" href="classi_marked_entity.html#ae970e849313805fa29f377c764bcabc3" title="iMarkedEntity::reviveMe" alt="" coords="152,112,323,141"/></map>
+<area shape="rect" id="node3" href="classi_labelable.html#a8a6120620485337a1f336bd6ed69db3a" title="iLabelable::dontKillMe" alt="" coords="137,5,295,35"/><area shape="rect" id="node5" href="classi_labelable.html#a2dde128b568fd7d6ec671bf7536c323e" title="iLabelable::iLabelable" alt="" coords="137,59,295,88"/><area shape="rect" id="node7" href="classi_labelable.html#a79447061b6ffa7f426b69a4ddf7b488c" title="iLabelable::reviveMe" alt="" coords="141,112,291,141"/></map>
 </div>
 </p>
 
@@ -580,7 +559,7 @@ Here is the caller graph for this function:</div>
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Fri Jan 28 2011 19:32:29 for FEPiCpp by&nbsp;
+<hr class="footer"/><address class="footer"><small>Generated on Wed Feb 2 2011 20:53:23 for FEPiCpp by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.1 </small></address>
 </body>

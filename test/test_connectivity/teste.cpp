@@ -40,11 +40,11 @@ int main(int argc, char *argv[]) {
     
 	if(DIM == 3)
 	{
-		malha.readFileMSH("tet1.msh");
+		malha.readFileMsh("tet1.msh");
 	}
 	else
 	{
-		malha.readFileMSH("malha/tritri.msh");
+		malha.readFileMsh("malha/tritri.msh");
 	}
 
 	return 0.;

@@ -31,9 +31,9 @@ int main(int argc, char *argv[]) {
 	
 	MyMesh malha;
 	
-	malha.readFileMSH("mesh/circleA.msh");
+	malha.readFileMsh("mesh/circleA.msh");
 	
-	malha.writeVTK();
+	malha.writeVtk();
 	
 	vector<double> value(malha.getNumNodes());
 	vector<double>::iterator vit = value.begin();
@@ -44,14 +44,14 @@ int main(int argc, char *argv[]) {
 		*vit = counter++;
 	}
 	
-	malha.addScalarVTK("value", value);
+	malha.addScalarVtk("value", value);
 	counter=0;
 	vit = value.begin();
 	for (; vit != value.end() ; ++vit)
 	{
 		*vit = malha.getNode(counter++)->getCoord(0);
 	}	
-	malha.addScalarVTK("other", value);
+	malha.addScalarVtk("other", value);
 	
     PetscFinalize();
     

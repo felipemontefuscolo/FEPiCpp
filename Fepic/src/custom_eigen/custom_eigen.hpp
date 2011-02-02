@@ -19,8 +19,8 @@
 // License and a copy of the GNU General Public License along with
 // FEPiC++. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef CUSTOM_EIGEN_HPP
-#define CUSTOM_EIGEN_HPP
+#ifndef FEPIC_CUSTOM_EIGEN_HPP
+#define FEPIC_CUSTOM_EIGEN_HPP
 
 #define EIGEN_DEFAULT_TO_ROW_MAJOR
 //#include <Eigen/Dense>

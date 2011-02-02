@@ -24,10 +24,54 @@
 
 
 
+template<class Traits> class iMesh;
+
+class _Labelable;
+
+// volume
+template<class Traits> class _Poly3d;
+template<class Traits> class Tetrahedron;
+template<class Traits> class iHexahedron;
+
+// surface
+template<class Traits> class _Poly2d;
+template<class Traits> class Triangle;
+template<class Traits> class iQuadrangle;
+
+// line
+template<class Traits> class Edge;
+
+//Point
+template<class Traits> class Point;
+
+// Halfs
+template<class Traits> class HalfEdge;
+template<class Traits> class HalfFace;
+
+// Halfls
+template<class Traits> class HalfEdgeLab;
+template<class Traits> class HalfFaceLab;
+
+
+template<class ElmType, class Traits> class ElementProperties;
+
+template<int CellDim, class Cell> class VolumeDef; 
+
+template<int Dim, class Cell> class FaceDef;
+
+template<int Dim, class Traits> class HalfDef;
+
+template<int Dim, class Traits> class HalflDef;
 
 
 
 
+
+/* Empty classes */
+
+template<int dim> class Simplex {};
+
+template<int dim> class Hypercube {};
 
 
 

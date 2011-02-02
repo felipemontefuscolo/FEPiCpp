@@ -1,13 +1,13 @@
 <map id="G" name="G">
 <area shape="rect" id="node1" href="$classi_half_edge.html" title="iHalfEdge\&lt; Traits \&gt;" alt="" coords="7,5,151,35"/>
-<area shape="rect" id="node3" href="$classi_marked_half_edge.html" title="iMarkedHalfEdge\&lt; Traits \&gt;" alt="" coords="200,5,392,35"/>
+<area shape="rect" id="node3" href="$classi_half_edge_lab.html" title="iHalfEdgeLab\&lt; Traits \&gt;" alt="" coords="200,5,368,35"/>
 <area shape="rect" id="node4" href="$classi_half_face.html" title="iHalfFace\&lt; Traits \&gt;" alt="" coords="8,59,149,88"/>
-<area shape="rect" id="node6" href="$classi_marked_half_face.html" title="iMarkedHalfFace\&lt; Traits \&gt;" alt="" coords="201,59,391,88"/>
-<area shape="rect" id="node7" href="$classi_marked_entity.html" title="iMarkedEntity" alt="" coords="25,139,132,168"/>
-<area shape="rect" id="node9" href="$classi_edge.html" title="iEdge\&lt; Traits \&gt;" alt="" coords="236,219,356,248"/>
-<area shape="rect" id="node13" href="$classi_point.html" title="iPoint\&lt; Traits \&gt;" alt="" coords="236,272,356,301"/>
-<area shape="rect" id="node15" href="$classi_polygon.html" title="iPolygon\&lt; Traits \&gt;" alt="" coords="227,112,365,141"/>
-<area shape="rect" id="node19" href="$classi_polyhedron.html" title="iPolyhedron\&lt; Traits \&gt;" alt="" coords="217,165,375,195"/>
-<area shape="rect" id="node17" href="$classi_triangle.html" title="iTriangle\&lt; Traits \&gt;" alt="" coords="455,112,591,141"/>
-<area shape="rect" id="node21" href="$classi_tetrahedron.html" title="iTetrahedron\&lt; Traits \&gt;" alt="" coords="441,165,604,195"/>
+<area shape="rect" id="node6" href="$classi_half_face_lab.html" title="iHalfFaceLab\&lt; Traits \&gt;" alt="" coords="201,59,367,88"/>
+<area shape="rect" id="node7" href="$classi_labelable.html" title="iLabelable" alt="" coords="36,139,121,168"/>
+<area shape="rect" id="node9" href="$class_edge.html" title="Edge\&lt; Traits \&gt;" alt="" coords="225,219,343,248"/>
+<area shape="rect" id="node13" href="$classi_point.html" title="iPoint\&lt; Traits \&gt;" alt="" coords="224,272,344,301"/>
+<area shape="rect" id="node15" href="$classi_polygon.html" title="iPolygon\&lt; Traits \&gt;" alt="" coords="215,112,353,141"/>
+<area shape="rect" id="node19" href="$classi_polyhedron.html" title="iPolyhedron\&lt; Traits \&gt;" alt="" coords="205,165,363,195"/>
+<area shape="rect" id="node17" href="$class_triangle.html" title="Triangle\&lt; Traits \&gt;" alt="" coords="431,112,564,141"/>
+<area shape="rect" id="node21" href="$class_tetrahedron.html" title="Tetrahedron\&lt; Traits \&gt;" alt="" coords="417,165,577,195"/>
 </map>
