@@ -1,0 +1,8 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$class_half_face.html#a23ac2c126cacfd124115201a649a344b" title="HalfFace::getNodes" alt="" coords="237,5,384,35"/>
+<area shape="rect" id="node5" href="$class_half_face.html#a9a66ce3f91ee0edd8d9791bfa20cc292" title="HalfFace::getVertices" alt="" coords="233,59,388,88"/>
+<area shape="rect" id="node7" href="$class_half_face.html#a728742bbbc7082df967721350f12d749" title="HalfFace::hasTheseVertices" alt="" coords="213,112,408,141"/>
+<area shape="rect" id="node9" href="$class_half_face.html#a6675d6248067bc8be824dc659ee69719" title="HalfFace::printSelf" alt="" coords="243,165,379,195"/>
+<area shape="rect" id="node11" href="$class_half_face_lab.html#acabbc434079175dac87481ea4cf28e12" title="HalfFaceLab::propagateHalf" alt="" coords="212,219,409,248"/>
+<area shape="rect" id="node13" href="$class_half_face_lab.html#a27bcf2ee5900549497746a9136df5aad" title="HalfFaceLab::propagateTag" alt="" coords="213,272,408,301"/>
+</map>

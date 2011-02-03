@@ -1,0 +1,6 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$class___poly3d.html#aa60921e0068f48bc217c5d53c06a6c87" title="_Poly3d::propagateTag" alt="" coords="211,5,376,35"/>
+<area shape="rect" id="node5" href="$class___poly2d.html#a5d32eed7be2db98569a0b4fd77c8d7f5" title="_Poly2d::propagateTag" alt="" coords="211,59,376,88"/>
+<area shape="rect" id="node7" href="$class_half_face_lab.html#a27bcf2ee5900549497746a9136df5aad" title="HalfFaceLab::propagateTag" alt="" coords="196,112,391,141"/>
+<area shape="rect" id="node9" href="$class_half_edge_lab.html#aee9b20ae0048adef3cebe9d1ef0c5101" title="HalfEdgeLab::propagateTag" alt="" coords="195,165,392,195"/>
+</map>
