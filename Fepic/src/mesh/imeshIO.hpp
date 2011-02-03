@@ -91,8 +91,8 @@ void iMesh<Traits>::buildAdjacency4face()
       thisC = tab_it->second[0];
       thisith =  tab_it->second[1];
 
-      this->getCell(thisC)->getHalf(thisith)->setCompleteId(otherC, otherith,0);
-      this->getCell(otherC)->getHalf(otherith)->setCompleteId(thisC, thisith,0);
+      this->getCell(thisC)->getHalf(thisith)->setCompleteID(otherC, otherith);
+      this->getCell(otherC)->getHalf(otherith)->setCompleteID(thisC, thisith);
 
       table.erase(tab_it2);
       table.erase(tab_it);
@@ -104,7 +104,7 @@ void iMesh<Traits>::buildAdjacency4face()
       thislabel = this->getCell(thisC)->getTag();
       HalflEdgeLabT temp(thisC, thisith, thislabel);
       uint mHE_universal_iD = addHalfl(temp);
-      this->getCell(thisC)->getHalf(thisith)->setCompleteId(mHE_universal_iD, -1,0);
+      this->getCell(thisC)->getHalf(thisith)->setCompleteID(mHE_universal_iD, -1);
       table.erase(tab_it);
     }
   }
@@ -165,8 +165,8 @@ void iMesh<Traits>::buildAdjacency4volume()
         //thisC = tab_it->second[0];
         //thisith =  tab_it->second[1];
 
-        //this->getCell(thisC)->getHalf(thisith)->setCompleteId(otherC, otherith, a);
-        //this->getCell(otherC)->getHalf(otherith)->setCompleteId(thisC, thisith, a);
+        //this->getCell(thisC)->getHalf(thisith)->setCompleteID(otherC, otherith, a);
+        //this->getCell(otherC)->getHalf(otherith)->setCompleteID(thisC, thisith, a);
 
         //table.erase(tab_it2);
         //table.erase(tab_it);
@@ -182,7 +182,7 @@ void iMesh<Traits>::buildAdjacency4volume()
       //thislabel = this->getCell(thisC)->getTag();
       //HalflFaceLabT temp(thisC, thisith, 0, thislabel);
       //uint mHE_universal_iD = addHalfl(temp);
-      //this->getCell(thisC)->getHalf(thisith)->setCompleteId(mHE_universal_iD, -1, 0);
+      //this->getCell(thisC)->getHalf(thisith)->setCompleteID(mHE_universal_iD, -1, 0);
       //table.erase(tab_it);
     //}
 
@@ -236,8 +236,8 @@ void iMesh<Traits>::buildAdjacency4volume()
         thisC = tab_it->second[0];
         thisith =  tab_it->second[1];
 
-        _cellL[thisC].getHalf(thisith)->setCompleteId(otherC, otherith, a);
-        _cellL[otherC].getHalf(otherith)->setCompleteId(thisC, thisith, a);
+        _cellL[thisC].getHalf(thisith)->setCompleteID(otherC, otherith, a);
+        _cellL[otherC].getHalf(otherith)->setCompleteID(thisC, thisith, a);
 
         table.erase(tab_it2);
         table.erase(tab_it);
@@ -253,7 +253,7 @@ void iMesh<Traits>::buildAdjacency4volume()
       thislabel = this->getCell(thisC)->getTag();
       HalflFaceLabT temp(thisC, thisith, 0, thislabel);
       uint mHE_universal_iD = addHalfl(temp);
-      this->getCell(thisC)->getHalf(thisith)->setCompleteId(mHE_universal_iD, -1, 0);
+      this->getCell(thisC)->getHalf(thisith)->setCompleteID(mHE_universal_iD, -1, 0);
       table.erase(tab_it);
     }
 

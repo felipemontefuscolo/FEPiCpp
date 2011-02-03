@@ -41,7 +41,6 @@
 
 #include "Fepic/src/util/macros.hpp"
 
-#include "Fepic/src/util/assert.hpp"
 #include "Fepic/src/util/forward_declarations.hpp"
 #include "Fepic/src/mesh/msh_tags.hpp"
 #include "Fepic/src/util/misc.hpp"
