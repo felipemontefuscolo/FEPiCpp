@@ -411,10 +411,10 @@ public:
 
   // propriedades da célula da malha e outros atributos auxiliares
   Fepic::matrixi edges_local_nodes; // face, volume
-  Fepic::matrixi border_local_nodes; // volume
+  Fepic::matrixi faces_local_nodes; // volume
   Fepic::vectori opp_eln; // opposite edges_local_nodes
-  Fepic::matrixi opp_fln; // opposite border_local_nodes
-                          // ex: border_local_nodes[f][opp_fln[i]] := é o que a célula oposta enxerga
+  Fepic::matrixi opp_fln; // opposite faces_local_nodes
+                          // ex: faces_local_nodes[f][opp_fln[i]] := é o que a célula oposta enxerga
 
   // entities
   CellList      _cellL;

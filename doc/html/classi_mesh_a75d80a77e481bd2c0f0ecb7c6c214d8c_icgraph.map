@@ -1,7 +1,7 @@
 <map id="G" name="G">
-<area shape="rect" id="node3" href="$classi_mesh.html#af0a96ef60b7344ce4d227b9df7351c08" title="iMesh::addPointHalfVtk" alt="" coords="177,5,345,35"/>
-<area shape="rect" id="node5" href="$classi_mesh.html#ac55ab3580e5f34c0e0123572ac8ef7a0" title="iMesh::addPointTagVtk" alt="" coords="179,59,344,88"/>
-<area shape="rect" id="node7" href="$classi_mesh.html#a70207fd44442a17956672ee386191d99" title="iMesh::getCellCoords" alt="" coords="184,112,339,141"/>
-<area shape="rect" id="node9" href="$classi_mesh.html#a6a21c3d9f59a9bef3b6d36760ea7aa85" title="iMesh::readFileMsh" alt="" coords="191,165,332,195"/>
-<area shape="rect" id="node11" href="$classi_mesh.html#ac2fe9559d61d7e6196e8bb2b89ae8514" title="iMesh::writeFileState" alt="" coords="185,219,337,248"/>
+<area shape="rect" id="node3" href="$classi_mesh.html#a59656098ab87a9eec054852afd1c57f9" title="iMesh::addPointHalfVTK" alt="" coords="181,5,352,35"/>
+<area shape="rect" id="node5" href="$classi_mesh.html#a4f5131f0d50a9e7c490906e06850376c" title="iMesh::addPointLabelVTK" alt="" coords="176,59,357,88"/>
+<area shape="rect" id="node7" href="$classi_mesh.html#a70207fd44442a17956672ee386191d99" title="iMesh::getCellCoords" alt="" coords="189,112,344,141"/>
+<area shape="rect" id="node9" href="$classi_mesh.html#aa34bf90a461cabeba3c6fd917734a828" title="iMesh::readFileMSH" alt="" coords="193,165,340,195"/>
+<area shape="rect" id="node11" href="$classi_mesh.html#ac2fe9559d61d7e6196e8bb2b89ae8514" title="iMesh::writeFileState" alt="" coords="191,219,343,248"/>
 </map>

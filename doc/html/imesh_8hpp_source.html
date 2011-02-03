@@ -79,352 +79,353 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00019"></a>00019 <span class="comment">// License and a copy of the GNU General Public License along with</span>
 <a name="l00020"></a>00020 <span class="comment">// FEPiC++. If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
 <a name="l00021"></a>00021 
-<a name="l00022"></a>00022 <span class="preprocessor">#ifndef FEPIC_IMESH_HPP</span>
-<a name="l00023"></a>00023 <span class="preprocessor"></span><span class="preprocessor">#define FEPIC_IMESH_HPP</span>
-<a name="l00024"></a>00024 <span class="preprocessor"></span>
-<a name="l00025"></a>00025 
+<a name="l00022"></a>00022 
+<a name="l00023"></a>00023 <span class="preprocessor">#ifndef FEPIC_IMESH_HPP</span>
+<a name="l00024"></a>00024 <span class="preprocessor"></span><span class="preprocessor">#define FEPIC_IMESH_HPP</span>
+<a name="l00025"></a>00025 <span class="preprocessor"></span>
 <a name="l00026"></a>00026 
 <a name="l00027"></a>00027 
 <a name="l00028"></a>00028 
 <a name="l00029"></a>00029 
-<a name="l00030"></a>00030 <span class="keyword">template</span>&lt;<span class="keyword">class</span> Traits&gt;
-<a name="l00031"></a><a class="code" href="classi_mesh.html">00031</a> <span class="keyword">class </span><a class="code" href="classi_mesh.html">iMesh</a> {
-<a name="l00032"></a>00032 
-<a name="l00033"></a>00033 <span class="keyword">public</span>:
-<a name="l00034"></a><a class="code" href="classi_mesh.html#ab8391e0482fbeb2d0c0be7fb63bfa695">00034</a>   <span class="keyword">typedef</span> <span class="keyword">typename</span> Traits::CellT                         CellT;
-<a name="l00035"></a><a class="code" href="classi_mesh.html#a849bbc9ce614f4517241d4bec8f816b3">00035</a>   <span class="keyword">typedef</span> <span class="keyword">typename</span> VolumeDef&lt;CellT::Dim, CellT&gt;::VolumeT VolumeT;
-<a name="l00036"></a><a class="code" href="classi_mesh.html#abb70f6dd3e5d889401bc2f89505b4231">00036</a>   <span class="keyword">typedef</span> <span class="keyword">typename</span> FaceDef&lt;CellT::Dim, CellT&gt;::FaceT     FaceT;
-<a name="l00037"></a>00037 
-<a name="l00038"></a><a class="code" href="classi_mesh.html#a44b15e93490b13dc175cb28b62c416f8">00038</a>   <span class="keyword">typedef</span> <a class="code" href="class_edge.html">Edge&lt;Traits&gt;</a>                 <a class="code" href="class_edge.html">EdgeT</a>;
-<a name="l00039"></a><a class="code" href="classi_mesh.html#a7102482b390258c1f767818528ef9765">00039</a>   <span class="keyword">typedef</span> <span class="keyword">typename</span> Traits::PointT       PointT;
-<a name="l00040"></a><a class="code" href="classi_mesh.html#af1a21e2113c8c41bb48c392475ac1b06">00040</a>   <span class="keyword">typedef</span> <span class="keyword">typename</span> CellT::BorderT       CellBT;         <span class="comment">// cell border type</span>
-<a name="l00041"></a><a class="code" href="classi_mesh.html#a116cf4d6d5834075059ec5baab6d170c">00041</a>   <span class="keyword">typedef</span> <span class="keyword">typename</span> CellT::BndBorderT    BndCellBT;  <span class="comment">// boundary of the cell border type</span>
-<a name="l00042"></a>00042 
-<a name="l00043"></a><a class="code" href="classi_mesh.html#a815aad728047d68239ff4a9ced2638d1">00043</a>   <span class="keyword">typedef</span> <span class="keyword">typename</span> HalfDef&lt;CellT::Dim, Traits&gt;::HalfT   HalfT;
-<a name="l00044"></a><a class="code" href="classi_mesh.html#aab0ea4568e4244da807774d0208707fc">00044</a>   <span class="keyword">typedef</span> <span class="keyword">typename</span> HalflDef&lt;CellT::Dim, Traits&gt;::HalflT HalflT;
-<a name="l00045"></a><a class="code" href="classi_mesh.html#aa1d597083301a4d82510fd01e272ffa4">00045</a>   <span class="keyword">typedef</span> <a class="code" href="class_half_edge.html">HalfEdge&lt;Traits&gt;</a> <a class="code" href="class_half_edge.html">HalfEdgeLabT</a>;
-<a name="l00046"></a><a class="code" href="classi_mesh.html#a4f48f26514dbbe2407e673cf41043fd3">00046</a>   <span class="keyword">typedef</span> <a class="code" href="class_half_face.html">HalfFace&lt;Traits&gt;</a> <a class="code" href="class_half_face.html">HalfFaceLabT</a>;
-<a name="l00047"></a><a class="code" href="classi_mesh.html#af481bf25b3d6fc84d2bbfe83a5a82e2e">00047</a>   <span class="keyword">typedef</span> <a class="code" href="class_half_edge_lab.html">HalfEdgeLab&lt;Traits&gt;</a>       <a class="code" href="class_half_edge_lab.html">HalflEdgeLabT</a>;
-<a name="l00048"></a><a class="code" href="classi_mesh.html#a9fe4eaf9e0fab466c16a016c479373a7">00048</a>   <span class="keyword">typedef</span> <a class="code" href="class_half_face_lab.html">HalfFaceLab&lt;Traits&gt;</a>       <a class="code" href="class_half_face_lab.html">HalflFaceLabT</a>;
-<a name="l00049"></a>00049 
-<a name="l00050"></a><a class="code" href="classi_mesh.html#a3c12fa1a7af15573c953da39b545456a">00050</a>   <span class="keyword">typedef</span> std::deque&lt;CellT&gt;     CellList;
-<a name="l00051"></a><a class="code" href="classi_mesh.html#a69da714100e62667a56c2a725f466675">00051</a>   <span class="keyword">typedef</span> std::deque&lt;PointT&gt;    PointList;
-<a name="l00052"></a><a class="code" href="classi_mesh.html#a0b23087b22591f27bc4e30ee5248ea3a">00052</a>   <span class="keyword">typedef</span> std::deque&lt;HalflT&gt;    HalflList;
-<a name="l00053"></a>00053 
-<a name="l00054"></a><a class="code" href="classi_mesh.html#afdcd85427603bc47ba9f6e5fb0a756e2">00054</a>   <span class="keyword">typedef</span> <span class="keyword">typename</span> CellList::iterator  CellIterator;
-<a name="l00055"></a><a class="code" href="classi_mesh.html#a63679d2d1ff8ebd7641cb12a2c62ee04">00055</a>   <span class="keyword">typedef</span> <span class="keyword">typename</span> PointList::iterator PointIterator;
-<a name="l00056"></a><a class="code" href="classi_mesh.html#ab6865791f3bbd0c9e0fd04eebdda7425">00056</a>   <span class="keyword">typedef</span> <span class="keyword">typename</span> HalflList::iterator HalflIterator;
-<a name="l00057"></a>00057 
-<a name="l00058"></a><a class="code" href="classi_mesh.html#aa30c592fe94da9e4ac580463844d94b9">00058</a>   <span class="keyword">typedef</span> <span class="keyword">typename</span> CellList::const_iterator  CellConstIterator;
-<a name="l00059"></a><a class="code" href="classi_mesh.html#aadecf82c87b883d029783d0d57069187">00059</a>   <span class="keyword">typedef</span> <span class="keyword">typename</span> PointList::const_iterator PointConstIterator;
-<a name="l00060"></a><a class="code" href="classi_mesh.html#ac1d79f6acee9dd8983ae13d4324d5282">00060</a>   <span class="keyword">typedef</span> <span class="keyword">typename</span> HalflList::const_iterator HalflConstIterator;
-<a name="l00061"></a>00061 
-<a name="l00062"></a><a class="code" href="classi_mesh.html#a2265fc9f6acb984c9b1944bf4de6432d">00062</a>   <span class="keyword">typedef</span> Eigen::Matrix&lt;double, Traits::spacedim, 1&gt; VecT;
-<a name="l00063"></a>00063 
+<a name="l00030"></a>00030 
+<a name="l00031"></a>00031 <span class="keyword">template</span>&lt;<span class="keyword">class</span> Traits&gt;
+<a name="l00032"></a><a class="code" href="classi_mesh.html">00032</a> <span class="keyword">class </span><a class="code" href="classi_mesh.html">iMesh</a> {
+<a name="l00033"></a>00033 
+<a name="l00034"></a>00034 <span class="keyword">public</span>:
+<a name="l00035"></a><a class="code" href="classi_mesh.html#ab8391e0482fbeb2d0c0be7fb63bfa695">00035</a>   <span class="keyword">typedef</span> <span class="keyword">typename</span> Traits::CellT                         CellT;
+<a name="l00036"></a><a class="code" href="classi_mesh.html#a849bbc9ce614f4517241d4bec8f816b3">00036</a>   <span class="keyword">typedef</span> <span class="keyword">typename</span> VolumeDef&lt;CellT::Dim, CellT&gt;::VolumeT VolumeT;
+<a name="l00037"></a><a class="code" href="classi_mesh.html#abb70f6dd3e5d889401bc2f89505b4231">00037</a>   <span class="keyword">typedef</span> <span class="keyword">typename</span> FaceDef&lt;CellT::Dim, CellT&gt;::FaceT     FaceT;
+<a name="l00038"></a>00038 
+<a name="l00039"></a><a class="code" href="classi_mesh.html#a44b15e93490b13dc175cb28b62c416f8">00039</a>   <span class="keyword">typedef</span> <a class="code" href="class_edge.html">Edge&lt;Traits&gt;</a>                 <a class="code" href="class_edge.html">EdgeT</a>;
+<a name="l00040"></a><a class="code" href="classi_mesh.html#a7102482b390258c1f767818528ef9765">00040</a>   <span class="keyword">typedef</span> <span class="keyword">typename</span> Traits::PointT       PointT;
+<a name="l00041"></a><a class="code" href="classi_mesh.html#af1a21e2113c8c41bb48c392475ac1b06">00041</a>   <span class="keyword">typedef</span> <span class="keyword">typename</span> CellT::BorderT       CellBT;         <span class="comment">// cell border type</span>
+<a name="l00042"></a><a class="code" href="classi_mesh.html#a116cf4d6d5834075059ec5baab6d170c">00042</a>   <span class="keyword">typedef</span> <span class="keyword">typename</span> CellT::BndBorderT    BndCellBT;  <span class="comment">// boundary of the cell border type</span>
+<a name="l00043"></a>00043 
+<a name="l00044"></a><a class="code" href="classi_mesh.html#a815aad728047d68239ff4a9ced2638d1">00044</a>   <span class="keyword">typedef</span> <span class="keyword">typename</span> HalfDef&lt;CellT::Dim, Traits&gt;::HalfT   HalfT;
+<a name="l00045"></a><a class="code" href="classi_mesh.html#a6002d07b8242383927b08b95061a7318">00045</a>   <span class="keyword">typedef</span> <span class="keyword">typename</span> MHalfDef&lt;CellT::Dim, Traits&gt;::MHalfT MHalfT;
+<a name="l00046"></a><a class="code" href="classi_mesh.html#a92a6a7f84f6a7053207b47afea7a7c0f">00046</a>   <span class="keyword">typedef</span> <a class="code" href="classi_half_edge.html">iHalfEdge&lt;Traits&gt;</a> <a class="code" href="classi_half_edge.html">HalfEdgeT</a>;
+<a name="l00047"></a><a class="code" href="classi_mesh.html#a333d6ee66f3245c9dc7c9e6d6251c5d1">00047</a>   <span class="keyword">typedef</span> <a class="code" href="classi_half_face.html">iHalfFace&lt;Traits&gt;</a> <a class="code" href="classi_half_face.html">HalfFaceT</a>;
+<a name="l00048"></a><a class="code" href="classi_mesh.html#a2baafefa70c979361d5bee46778094e2">00048</a>   <span class="keyword">typedef</span> <a class="code" href="classi_half_edge_lab.html">iHalfEdgeLab&lt;Traits&gt;</a>       <a class="code" href="classi_half_edge_lab.html">MHalfEdgeT</a>;
+<a name="l00049"></a><a class="code" href="classi_mesh.html#ad6c9ce0aef5bdf8a4861c5eaa5984797">00049</a>   <span class="keyword">typedef</span> <a class="code" href="classi_half_face_lab.html">iHalfFaceLab&lt;Traits&gt;</a>       <a class="code" href="classi_half_face_lab.html">MHalfFaceT</a>;
+<a name="l00050"></a>00050 
+<a name="l00051"></a><a class="code" href="classi_mesh.html#a3c12fa1a7af15573c953da39b545456a">00051</a>   <span class="keyword">typedef</span> std::deque&lt;CellT&gt;     CellList;
+<a name="l00052"></a><a class="code" href="classi_mesh.html#a69da714100e62667a56c2a725f466675">00052</a>   <span class="keyword">typedef</span> std::deque&lt;PointT&gt;    PointList;
+<a name="l00053"></a><a class="code" href="classi_mesh.html#a03420055ac31c00760f9c257b4cb8d07">00053</a>   <span class="keyword">typedef</span> std::deque&lt;MHalfT&gt;    MHalfList;
+<a name="l00054"></a>00054 
+<a name="l00055"></a><a class="code" href="classi_mesh.html#afdcd85427603bc47ba9f6e5fb0a756e2">00055</a>   <span class="keyword">typedef</span> <span class="keyword">typename</span> CellList::iterator  CellIterator;
+<a name="l00056"></a><a class="code" href="classi_mesh.html#a63679d2d1ff8ebd7641cb12a2c62ee04">00056</a>   <span class="keyword">typedef</span> <span class="keyword">typename</span> PointList::iterator PointIterator;
+<a name="l00057"></a><a class="code" href="classi_mesh.html#ab1ca5bd626a1ffc3a7a33831b614737b">00057</a>   <span class="keyword">typedef</span> <span class="keyword">typename</span> MHalfList::iterator MHalfIterator;
+<a name="l00058"></a>00058 
+<a name="l00059"></a><a class="code" href="classi_mesh.html#aa30c592fe94da9e4ac580463844d94b9">00059</a>   <span class="keyword">typedef</span> <span class="keyword">typename</span> CellList::const_iterator  CellConstIterator;
+<a name="l00060"></a><a class="code" href="classi_mesh.html#aadecf82c87b883d029783d0d57069187">00060</a>   <span class="keyword">typedef</span> <span class="keyword">typename</span> PointList::const_iterator PointConstIterator;
+<a name="l00061"></a><a class="code" href="classi_mesh.html#a1590a75b28733b02078ec07e139fdf97">00061</a>   <span class="keyword">typedef</span> <span class="keyword">typename</span> MHalfList::const_iterator MHalfConstIterator;
+<a name="l00062"></a>00062 
+<a name="l00063"></a><a class="code" href="classi_mesh.html#a2265fc9f6acb984c9b1944bf4de6432d">00063</a>   <span class="keyword">typedef</span> Eigen::Matrix&lt;double, Traits::spacedim, 1&gt; VecT;
 <a name="l00064"></a>00064 
-<a name="l00065"></a><a class="code" href="classi_mesh.html#a64b90d7a580730debb9136e6076048a2">00065</a>   <a class="code" href="classi_mesh.html#a64b90d7a580730debb9136e6076048a2">iMesh</a>()
-<a name="l00066"></a>00066   {
-<a name="l00067"></a>00067     _is_family=0;
-<a name="l00068"></a>00068     _add_scalar_vtk_n_calls=0;
-<a name="l00069"></a>00069     _add_vector_vtk_n_calls=0;
-<a name="l00070"></a>00070     _order = 1;
-<a name="l00071"></a>00071     _MeshMethods&lt;iMesh&lt;Traits&gt;, CellT::Dim&gt;::buildCellLocalNodes(*this);
-<a name="l00072"></a>00072   };
-<a name="l00073"></a>00073 
-<a name="l00074"></a>00074   <a class="code" href="classi_mesh.html#a64b90d7a580730debb9136e6076048a2">iMesh</a>(<a class="code" href="classi_mesh.html">iMesh</a> <span class="keyword">const</span>&amp;) = <span class="keyword">delete</span>;
-<a name="l00075"></a>00075   <a class="code" href="classi_mesh.html#a501bd368529cbf247399c32eef02cb4d">~iMesh</a>() = <span class="keywordflow">default</span>;
-<a name="l00076"></a>00076 
-<a name="l00077"></a>00077   <span class="comment">/* ------------------------------------------------------------</span>
-<a name="l00078"></a>00078 <span class="comment">  * IO members</span>
-<a name="l00079"></a>00079 <span class="comment">  * ------------------------------------------------------------*/</span>
-<a name="l00080"></a>00080 
-<a name="l00081"></a><a class="code" href="classi_mesh.html#a4007351699247de6caea4ce591762636">00081</a>   <span class="keywordtype">void</span> <a class="code" href="classi_mesh.html#a4007351699247de6caea4ce591762636">setFamilyFiles</a>()
-<a name="l00082"></a>00082   {
-<a name="l00083"></a>00083     _is_family=<span class="keyword">true</span>;
-<a name="l00084"></a>00084   }
-<a name="l00085"></a>00085 
-<a name="l00086"></a>00086   <span class="comment">/* Em todas as funções de leitura de arquivo, DEVE ser chamado</span>
-<a name="l00087"></a>00087 <span class="comment">     * a função setOrder() */</span>
-<a name="l00088"></a>00088 
-<a name="l00089"></a>00089   <span class="keywordtype">void</span> <a class="code" href="classi_mesh.html#a6a21c3d9f59a9bef3b6d36760ea7aa85">readFileMsh</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *filename);
-<a name="l00090"></a>00090 
-<a name="l00091"></a>00091   <span class="keywordtype">void</span> <a class="code" href="classi_mesh.html#a7b928f2e4fb26a2ace808543ad67c6d4">readMarkedElementsMsh4edge</a>(std::ifstream &amp;File);
-<a name="l00092"></a>00092   <span class="keywordtype">void</span> <a class="code" href="classi_mesh.html#ae870005ebe90e2ec8d172c71ea686754">readMarkedElementsMsh4face</a>(std::ifstream &amp;File);
-<a name="l00093"></a>00093   <span class="keywordtype">void</span> <a class="code" href="classi_mesh.html#a9c8f7982c746f05b9d35b0fd5fbf84ec">readMarkedElementsMsh4volume</a>(std::ifstream &amp;File);
-<a name="l00094"></a>00094 
-<a name="l00095"></a>00095   <span class="keywordtype">void</span> <a class="code" href="classi_mesh.html#abf3dcfff0a586a137d1c641b66d5ca67">buildAdjacency4face</a>();
-<a name="l00096"></a>00096   <span class="keywordtype">void</span> <a class="code" href="classi_mesh.html#aa86dff248af77c3d4a88e7f8dd02b47e">buildAdjacency4volume</a>();
-<a name="l00097"></a>00097 
-<a name="l00098"></a>00098   <span class="keywordtype">void</span> <a class="code" href="classi_mesh.html#ac2fe9559d61d7e6196e8bb2b89ae8514">writeFileState</a>();
-<a name="l00099"></a>00099   <span class="keywordtype">void</span> <a class="code" href="classi_mesh.html#a4515cb48a7723f71d6989712b8c0ee2e">writeVtk</a>(<span class="keywordtype">bool</span> flinear=<span class="keyword">false</span>);
-<a name="l00100"></a>00100   <span class="keyword">template</span>&lt;<span class="keyword">class</span> T&gt;
-<a name="l00101"></a>00101   <span class="keywordtype">void</span> <a class="code" href="classi_mesh.html#a7ceb2e39eaca4d86cd55ec9eba65187f">addScalarVtk</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* nome_var, T&amp;&amp; scalar, uint num_pts);
-<a name="l00102"></a>00102   <span class="keyword">template</span>&lt;<span class="keyword">class</span> T&gt;
-<a name="l00103"></a>00103   <span class="keywordtype">void</span> <a class="code" href="classi_mesh.html#a1be53784ee5fc01f0db63df378ffb5bb">addVectorVtk</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* nome_var, T&amp;&amp; arrayos, <span class="keywordtype">int</span> dim, uint num_pts);
-<a name="l00104"></a>00104   <span class="keywordtype">void</span> <a class="code" href="classi_mesh.html#ac55ab3580e5f34c0e0123572ac8ef7a0">addPointTagVtk</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* nome_var); <span class="comment">// para debug</span>
-<a name="l00105"></a>00105   <span class="keywordtype">void</span> <a class="code" href="classi_mesh.html#af0a96ef60b7344ce4d227b9df7351c08">addPointHalfVtk</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* nome_var);  <span class="comment">// para debug</span>
-<a name="l00106"></a>00106 
-<a name="l00107"></a>00107         <span class="comment">/*-------------------------------------------------------------*/</span>
+<a name="l00065"></a>00065 
+<a name="l00066"></a><a class="code" href="classi_mesh.html#a64b90d7a580730debb9136e6076048a2">00066</a>   <a class="code" href="classi_mesh.html#a64b90d7a580730debb9136e6076048a2">iMesh</a>()
+<a name="l00067"></a>00067   {
+<a name="l00068"></a>00068     _is_family=0;
+<a name="l00069"></a>00069     _add_scalar_vtk_n_calls=0;
+<a name="l00070"></a>00070     _add_vector_vtk_n_calls=0;
+<a name="l00071"></a>00071     _order = 1;
+<a name="l00072"></a>00072     MeshMethods&lt;iMesh&lt;Traits&gt;, CellT::Dim&gt;::buildCellLocalNodes(*this);
+<a name="l00073"></a>00073   };
+<a name="l00074"></a>00074 
+<a name="l00075"></a>00075   <a class="code" href="classi_mesh.html#a64b90d7a580730debb9136e6076048a2">iMesh</a>(<a class="code" href="classi_mesh.html">iMesh</a> <span class="keyword">const</span>&amp;) = <span class="keyword">delete</span>;
+<a name="l00076"></a>00076   <a class="code" href="classi_mesh.html#a501bd368529cbf247399c32eef02cb4d">~iMesh</a>() = <span class="keywordflow">default</span>;
+<a name="l00077"></a>00077 
+<a name="l00078"></a>00078   <span class="comment">/* ------------------------------------------------------------</span>
+<a name="l00079"></a>00079 <span class="comment">  * IO members</span>
+<a name="l00080"></a>00080 <span class="comment">  * ------------------------------------------------------------*/</span>
+<a name="l00081"></a>00081 
+<a name="l00082"></a><a class="code" href="classi_mesh.html#a4007351699247de6caea4ce591762636">00082</a>   <span class="keywordtype">void</span> <a class="code" href="classi_mesh.html#a4007351699247de6caea4ce591762636">setFamilyFiles</a>()
+<a name="l00083"></a>00083   {
+<a name="l00084"></a>00084     _is_family=<span class="keyword">true</span>;
+<a name="l00085"></a>00085   }
+<a name="l00086"></a>00086 
+<a name="l00087"></a>00087   <span class="comment">/* Em todas as funções de leitura de arquivo, DEVE ser chamado</span>
+<a name="l00088"></a>00088 <span class="comment">     * a função setOrder() */</span>
+<a name="l00089"></a>00089 
+<a name="l00090"></a>00090   <span class="keywordtype">void</span> <a class="code" href="classi_mesh.html#aa34bf90a461cabeba3c6fd917734a828">readFileMSH</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *filename);
+<a name="l00091"></a>00091 
+<a name="l00092"></a>00092   <span class="keywordtype">void</span> <a class="code" href="classi_mesh.html#a2e68b8ee8a2b1f1047d179f43ce55dfd">readMarkedElementsMSH4edge</a>(std::ifstream &amp;File);
+<a name="l00093"></a>00093   <span class="keywordtype">void</span> <a class="code" href="classi_mesh.html#a25f8aeb9505bb584533bb8cf5626aa81">readMarkedElementsMSH4face</a>(std::ifstream &amp;File);
+<a name="l00094"></a>00094   <span class="keywordtype">void</span> <a class="code" href="classi_mesh.html#a080725f696d11e8cbb71846ab89a01b8">readMarkedElementsMSH4volume</a>(std::ifstream &amp;File);
+<a name="l00095"></a>00095 
+<a name="l00096"></a>00096   <span class="keywordtype">void</span> <a class="code" href="classi_mesh.html#abf3dcfff0a586a137d1c641b66d5ca67">buildAdjacency4face</a>();
+<a name="l00097"></a>00097   <span class="keywordtype">void</span> <a class="code" href="classi_mesh.html#aa86dff248af77c3d4a88e7f8dd02b47e">buildAdjacency4volume</a>();
+<a name="l00098"></a>00098 
+<a name="l00099"></a>00099   <span class="keywordtype">void</span> <a class="code" href="classi_mesh.html#ac2fe9559d61d7e6196e8bb2b89ae8514">writeFileState</a>();
+<a name="l00100"></a>00100   <span class="keywordtype">void</span> <a class="code" href="classi_mesh.html#a808c90321c241c1799b1a1eaf1833dce">writeVTK</a>(<span class="keywordtype">bool</span> flinear=<span class="keyword">false</span>);
+<a name="l00101"></a>00101   <span class="keyword">template</span>&lt;<span class="keyword">class</span> T&gt;
+<a name="l00102"></a>00102   <span class="keywordtype">void</span> <a class="code" href="classi_mesh.html#a0a0a5053ff2e3c25dc295fe063adc3e9">addScalarVTK</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* nome_var, T&amp;&amp; scalar, uint num_pts);
+<a name="l00103"></a>00103   <span class="keyword">template</span>&lt;<span class="keyword">class</span> T&gt;
+<a name="l00104"></a>00104   <span class="keywordtype">void</span> <a class="code" href="classi_mesh.html#a3607492a7b78555734ee30d6a4bab309">addVectorVTK</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* nome_var, T&amp;&amp; arrayos, <span class="keywordtype">int</span> dim, uint num_pts);
+<a name="l00105"></a>00105   <span class="keywordtype">void</span> <a class="code" href="classi_mesh.html#a4f5131f0d50a9e7c490906e06850376c">addPointLabelVTK</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* nome_var); <span class="comment">// para debug</span>
+<a name="l00106"></a>00106   <span class="keywordtype">void</span> <a class="code" href="classi_mesh.html#a59656098ab87a9eec054852afd1c57f9">addPointHalfVTK</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* nome_var);  <span class="comment">// para debug</span>
+<a name="l00107"></a>00107 
 <a name="l00108"></a>00108         <span class="comment">/*-------------------------------------------------------------*/</span>
-<a name="l00109"></a>00109 
-<a name="l00112"></a><a class="code" href="classi_mesh.html#a4056b32f5bc50157fe96601ffd073cc5">00112</a>   <span class="keywordtype">void</span> <a class="code" href="classi_mesh.html#a4056b32f5bc50157fe96601ffd073cc5">printInfo</a>(std::ostream &amp;o = std::cout)<span class="keyword"> const</span>
-<a name="l00113"></a>00113 <span class="keyword">  </span>{
-<a name="l00114"></a>00114     std::cout &lt;&lt; <span class="stringliteral">&quot;mesh file: &quot;</span> &lt;&lt; _meshfile &lt;&lt; std::endl;
-<a name="l00115"></a>00115     std::cout &lt;&lt; <span class="stringliteral">&quot;cell type: &quot;</span> &lt;&lt; CellT::name() &lt;&lt; std::endl;
-<a name="l00116"></a>00116     std::cout &lt;&lt; <span class="stringliteral">&quot;order:     &quot;</span> &lt;&lt; this-&gt;_order &lt;&lt; std::endl;
-<a name="l00117"></a>00117     std::cout &lt;&lt; <span class="stringliteral">&quot;# nodes:   &quot;</span> &lt;&lt; <a class="code" href="classi_mesh.html#a3cc1393958177010a967c03e4a6ddca6">getNumNodes</a>() &lt;&lt; std::endl;
-<a name="l00118"></a>00118     std::cout &lt;&lt; <span class="stringliteral">&quot;# cells:   &quot;</span> &lt;&lt; <a class="code" href="classi_mesh.html#aebf94052acaf0b5273585bc9bd45c55a">getNumCells</a>() &lt;&lt; std::endl;
-<a name="l00119"></a>00119     std::cout &lt;&lt; <span class="stringliteral">&quot;# mhalfs:  &quot;</span> &lt;&lt; <a class="code" href="classi_mesh.html#aae4daef8e62bbaf5d1c83dc9612d7fc2">getNumHalfls</a>() &lt;&lt; std::endl;
-<a name="l00120"></a>00120   }
-<a name="l00121"></a>00121 
-<a name="l00126"></a><a class="code" href="classi_mesh.html#a742ec26bec38cad2aaffeb2907878d11">00126</a>   <span class="keywordtype">void</span> <a class="code" href="classi_mesh.html#a742ec26bec38cad2aaffeb2907878d11">setOrder</a>(<span class="keywordtype">int</span> order)
-<a name="l00127"></a>00127   {
-<a name="l00128"></a>00128     <span class="keywordflow">if</span> ((_order != order) &amp;&amp; (order&gt;0))
-<a name="l00129"></a>00129     {
-<a name="l00130"></a>00130       _order = order;
-<a name="l00131"></a>00131       <span class="keywordflow">for</span> (<span class="keyword">auto</span> it= <a class="code" href="classi_mesh.html#a9b744ad41dd3a2fb21298062e3766c9e">_cellL</a>.begin(), cend=<a class="code" href="classi_mesh.html#a9b744ad41dd3a2fb21298062e3766c9e">_cellL</a>.end(); it != cend; ++it)
-<a name="l00132"></a>00132         it-&gt;setOrder(_order);
-<a name="l00133"></a>00133 
-<a name="l00134"></a>00134       <span class="comment">/* atualiando a matriz que contém a numeração dos nós locais da célula */</span>
-<a name="l00135"></a>00135       _MeshMethods&lt;iMesh&lt;Traits&gt;, CellT::Dim&gt;::buildCellLocalNodes(*this);
-<a name="l00136"></a>00136 
-<a name="l00137"></a>00137       <span class="comment">/* (re)cria os nós que são compartilhados entre as células. */</span>
-<a name="l00138"></a>00138       _MeshMethods&lt;iMesh&lt;Traits&gt;, CellT::Dim&gt;::remodelCellsNodes(*<span class="keyword">this</span>, order);
-<a name="l00139"></a>00139     }
-<a name="l00140"></a>00140   }
-<a name="l00141"></a>00141 
-<a name="l00147"></a><a class="code" href="classi_mesh.html#a0b5f2a3c0c8019a3fc1f0dae8b6ec5ee">00147</a>   <span class="keywordtype">void</span> <a class="code" href="classi_mesh.html#a0b5f2a3c0c8019a3fc1f0dae8b6ec5ee">remodelCellsNodes4face</a>(<span class="keywordtype">int</span> n)
-<a name="l00148"></a>00148   {
-<a name="l00149"></a>00149 
-<a name="l00150"></a>00150   } <span class="comment">// end remodelCellsNodes4face()</span>
-<a name="l00151"></a>00151 
-<a name="l00156"></a><a class="code" href="classi_mesh.html#ae37e474eb8968265b9eefe425e9d1b6d">00156</a>   <span class="keywordtype">void</span> <a class="code" href="classi_mesh.html#ae37e474eb8968265b9eefe425e9d1b6d">remodelCellsNodes4volume</a>(<span class="keywordtype">int</span> n)
-<a name="l00157"></a>00157   {
-<a name="l00158"></a>00158 
-<a name="l00159"></a>00159   }
-<a name="l00160"></a>00160 
-<a name="l00167"></a><a class="code" href="classi_mesh.html#a36e9924d26bf3d6fe9d066184cf99174">00167</a>   <span class="keywordtype">bool</span> <a class="code" href="classi_mesh.html#a36e9924d26bf3d6fe9d066184cf99174">theseVerticesFormAHalfl</a>(<a class="code" href="namespace_fepic.html#ab4c35fc828fb5a816f610e02b9ac2df9">Fepic::vectorui</a> <span class="keyword">const</span>&amp; vtx, uint &amp;half_id, <span class="keywordtype">bool</span> dead_mh = <span class="keyword">false</span>)
-<a name="l00168"></a>00168   {
-<a name="l00169"></a>00169     <span class="comment">// OTIMIZAR</span>
-<a name="l00170"></a>00170 
-<a name="l00171"></a>00171     <span class="keywordtype">bool</span> RET=<span class="keyword">false</span>;
-<a name="l00172"></a>00172     uint nummhalf = <a class="code" href="classi_mesh.html#ab446ba0dd26d64e7ce05ee4e1c2d7286">getNumHalflTotal</a>();
-<a name="l00173"></a>00173     <span class="comment">// IMPLEMENTAR ITERADOR</span>
-<a name="l00174"></a>00174     <span class="keywordflow">for</span>(uint i=0; i&lt;nummhalf; ++i)
-<a name="l00175"></a>00175     {
-<a name="l00176"></a>00176       <span class="keywordtype">bool</span> b = this-&gt;<a class="code" href="classi_mesh.html#a2461ba94fa48cfd569e16d02e1fd3918">getHalfl</a>(i)-&gt;hasTheseVertices(vtx, *<span class="keyword">this</span>);
-<a name="l00177"></a>00177 
-<a name="l00178"></a>00178       <span class="keywordflow">if</span>(b &amp;&amp; (dead_mh || (!<a class="code" href="classi_mesh.html#a2461ba94fa48cfd569e16d02e1fd3918">getHalfl</a>(i)-&gt;disabled())) )
-<a name="l00179"></a>00179       {
-<a name="l00180"></a>00180         half_id = i;
-<a name="l00181"></a>00181         RET = <span class="keyword">true</span>;
-<a name="l00182"></a>00182       }
-<a name="l00183"></a>00183     }
-<a name="l00184"></a>00184     <span class="keywordflow">return</span> RET;
-<a name="l00185"></a>00185   }
-<a name="l00186"></a>00186 
-<a name="l00189"></a><a class="code" href="classi_mesh.html#a75d80a77e481bd2c0f0ecb7c6c214d8c">00189</a>   <a class="code" href="classi_mesh.html#a7102482b390258c1f767818528ef9765">PointT</a>* <a class="code" href="classi_mesh.html#a75d80a77e481bd2c0f0ecb7c6c214d8c">getNode</a>(uint nth)
-<a name="l00190"></a>00190   {
-<a name="l00191"></a>00191     <span class="keywordflow">return</span> &amp;<a class="code" href="classi_mesh.html#a6c51fe83bf5ece0b32e86eb6c75c5053">_pointL</a>[nth];
-<a name="l00192"></a>00192   }
-<a name="l00193"></a>00193 
-<a name="l00194"></a><a class="code" href="classi_mesh.html#ac58a43b7095a81dabae9b5bff7d16e95">00194</a>   <span class="keyword">const</span> <a class="code" href="classi_mesh.html#a7102482b390258c1f767818528ef9765">PointT</a>* <a class="code" href="classi_mesh.html#a75d80a77e481bd2c0f0ecb7c6c214d8c">getNode</a>(uint nth)<span class="keyword"> const</span>
-<a name="l00195"></a>00195 <span class="keyword">  </span>{
-<a name="l00196"></a>00196     <span class="keywordflow">return</span> &amp;<a class="code" href="classi_mesh.html#a6c51fe83bf5ece0b32e86eb6c75c5053">_pointL</a>[nth];
-<a name="l00197"></a>00197   }
-<a name="l00198"></a>00198 
-<a name="l00201"></a><a class="code" href="classi_mesh.html#a2461ba94fa48cfd569e16d02e1fd3918">00201</a>   <a class="code" href="classi_mesh.html#aab0ea4568e4244da807774d0208707fc">HalflT</a>* <a class="code" href="classi_mesh.html#a2461ba94fa48cfd569e16d02e1fd3918">getHalfl</a>(uint nth)
-<a name="l00202"></a>00202   {
-<a name="l00203"></a>00203     <span class="keywordflow">return</span> &amp;<a class="code" href="classi_mesh.html#a38aed4cd3cb979f56d8898e2bdf18c34">_mhalfL</a>[nth];
-<a name="l00204"></a>00204   }
-<a name="l00205"></a>00205 
-<a name="l00206"></a><a class="code" href="classi_mesh.html#a60d5b51b0ec779c91c01fa17c10c7cf7">00206</a>   <span class="keyword">const</span> <a class="code" href="classi_mesh.html#aab0ea4568e4244da807774d0208707fc">HalflT</a>* <a class="code" href="classi_mesh.html#a2461ba94fa48cfd569e16d02e1fd3918">getHalfl</a>(uint nth)<span class="keyword"> const</span>
-<a name="l00207"></a>00207 <span class="keyword">  </span>{
-<a name="l00208"></a>00208     <span class="keywordflow">return</span> &amp;<a class="code" href="classi_mesh.html#a38aed4cd3cb979f56d8898e2bdf18c34">_mhalfL</a>[nth];
-<a name="l00209"></a>00209   }
-<a name="l00210"></a>00210 
+<a name="l00109"></a>00109         <span class="comment">/*-------------------------------------------------------------*/</span>
+<a name="l00110"></a>00110 
+<a name="l00113"></a><a class="code" href="classi_mesh.html#a4056b32f5bc50157fe96601ffd073cc5">00113</a>   <span class="keywordtype">void</span> <a class="code" href="classi_mesh.html#a4056b32f5bc50157fe96601ffd073cc5">printInfo</a>(std::ostream &amp;o = std::cout)<span class="keyword"> const</span>
+<a name="l00114"></a>00114 <span class="keyword">  </span>{
+<a name="l00115"></a>00115     std::cout &lt;&lt; <span class="stringliteral">&quot;mesh file: &quot;</span> &lt;&lt; _meshfile &lt;&lt; std::endl;
+<a name="l00116"></a>00116     std::cout &lt;&lt; <span class="stringliteral">&quot;cell type: &quot;</span> &lt;&lt; CellT::name() &lt;&lt; std::endl;
+<a name="l00117"></a>00117     std::cout &lt;&lt; <span class="stringliteral">&quot;order:     &quot;</span> &lt;&lt; this-&gt;_order &lt;&lt; std::endl;
+<a name="l00118"></a>00118     std::cout &lt;&lt; <span class="stringliteral">&quot;# nodes:   &quot;</span> &lt;&lt; <a class="code" href="classi_mesh.html#a3cc1393958177010a967c03e4a6ddca6">getNumNodes</a>() &lt;&lt; std::endl;
+<a name="l00119"></a>00119     std::cout &lt;&lt; <span class="stringliteral">&quot;# cells:   &quot;</span> &lt;&lt; <a class="code" href="classi_mesh.html#aebf94052acaf0b5273585bc9bd45c55a">getNumCells</a>() &lt;&lt; std::endl;
+<a name="l00120"></a>00120     std::cout &lt;&lt; <span class="stringliteral">&quot;# mhalfs:  &quot;</span> &lt;&lt; <a class="code" href="classi_mesh.html#aa218e186a1c2d7d2e173930fc806aac9">getNumMHalfs</a>() &lt;&lt; std::endl;
+<a name="l00121"></a>00121   }
+<a name="l00122"></a>00122 
+<a name="l00127"></a><a class="code" href="classi_mesh.html#a742ec26bec38cad2aaffeb2907878d11">00127</a>   <span class="keywordtype">void</span> <a class="code" href="classi_mesh.html#a742ec26bec38cad2aaffeb2907878d11">setOrder</a>(<span class="keywordtype">int</span> order)
+<a name="l00128"></a>00128   {
+<a name="l00129"></a>00129     <span class="keywordflow">if</span> ((_order != order) &amp;&amp; (order&gt;0))
+<a name="l00130"></a>00130     {
+<a name="l00131"></a>00131       _order = order;
+<a name="l00132"></a>00132       <span class="keywordflow">for</span> (<span class="keyword">auto</span> it= _cellL.begin(), cend=_cellL.end(); it != cend; ++it)
+<a name="l00133"></a>00133         it-&gt;setOrder(_order);
+<a name="l00134"></a>00134 
+<a name="l00135"></a>00135       <span class="comment">/* atualiando a matriz que contém a numeração dos nós locais da célula */</span>
+<a name="l00136"></a>00136       MeshMethods&lt;iMesh&lt;Traits&gt;, CellT::Dim&gt;::buildCellLocalNodes(*this);
+<a name="l00137"></a>00137 
+<a name="l00138"></a>00138       <span class="comment">/* (re)cria os nós que são compartilhados entre as células. */</span>
+<a name="l00139"></a>00139       MeshMethods&lt;iMesh&lt;Traits&gt;, CellT::Dim&gt;::remodelCellsNodes(*<span class="keyword">this</span>, order);
+<a name="l00140"></a>00140     }
+<a name="l00141"></a>00141   }
+<a name="l00142"></a>00142 
+<a name="l00148"></a><a class="code" href="classi_mesh.html#a0b5f2a3c0c8019a3fc1f0dae8b6ec5ee">00148</a>   <span class="keywordtype">void</span> <a class="code" href="classi_mesh.html#a0b5f2a3c0c8019a3fc1f0dae8b6ec5ee">remodelCellsNodes4face</a>(<span class="keywordtype">int</span> n)
+<a name="l00149"></a>00149   {
+<a name="l00150"></a>00150 
+<a name="l00151"></a>00151   } <span class="comment">// end remodelCellsNodes4face()</span>
+<a name="l00152"></a>00152 
+<a name="l00157"></a><a class="code" href="classi_mesh.html#ae37e474eb8968265b9eefe425e9d1b6d">00157</a>   <span class="keywordtype">void</span> <a class="code" href="classi_mesh.html#ae37e474eb8968265b9eefe425e9d1b6d">remodelCellsNodes4volume</a>(<span class="keywordtype">int</span> n)
+<a name="l00158"></a>00158   {
+<a name="l00159"></a>00159 
+<a name="l00160"></a>00160   }
+<a name="l00161"></a>00161 
+<a name="l00168"></a><a class="code" href="classi_mesh.html#a61ce27dbd66689c8c0db694262f79db5">00168</a>   <span class="keywordtype">bool</span> <a class="code" href="classi_mesh.html#a61ce27dbd66689c8c0db694262f79db5">theseVerticesFormAMHalf</a>(<a class="code" href="namespace_fepic.html#ab4c35fc828fb5a816f610e02b9ac2df9">Fepic::vectorui</a> <span class="keyword">const</span>&amp; vtx, uint &amp;half_id, <span class="keywordtype">bool</span> dead_mh = <span class="keyword">false</span>)
+<a name="l00169"></a>00169   {
+<a name="l00170"></a>00170     <span class="comment">// OTIMIZAR</span>
+<a name="l00171"></a>00171 
+<a name="l00172"></a>00172     <span class="keywordtype">bool</span> RET=<span class="keyword">false</span>;
+<a name="l00173"></a>00173     uint nummhalf = <a class="code" href="classi_mesh.html#ad32a1ab93dcee03d47c763ee9e0fdf11">getNumMHalfTotal</a>();
+<a name="l00174"></a>00174     <span class="comment">// IMPLEMENTAR ITERADOR</span>
+<a name="l00175"></a>00175     <span class="keywordflow">for</span>(uint i=0; i&lt;nummhalf; ++i)
+<a name="l00176"></a>00176     {
+<a name="l00177"></a>00177       <span class="keywordtype">bool</span> b = this-&gt;<a class="code" href="classi_mesh.html#a931cd02ff7cd77a1e0b7ddcba1806818">getMHalf</a>(i)-&gt;hasTheseVertices(vtx, *<span class="keyword">this</span>);
+<a name="l00178"></a>00178 
+<a name="l00179"></a>00179       <span class="keywordflow">if</span>(b &amp;&amp; (dead_mh || (!<a class="code" href="classi_mesh.html#a931cd02ff7cd77a1e0b7ddcba1806818">getMHalf</a>(i)-&gt;isDead())) )
+<a name="l00180"></a>00180       {
+<a name="l00181"></a>00181         half_id = i;
+<a name="l00182"></a>00182         RET = <span class="keyword">true</span>;
+<a name="l00183"></a>00183       }
+<a name="l00184"></a>00184     }
+<a name="l00185"></a>00185     <span class="keywordflow">return</span> RET;
+<a name="l00186"></a>00186   }
+<a name="l00187"></a>00187 
+<a name="l00190"></a><a class="code" href="classi_mesh.html#a75d80a77e481bd2c0f0ecb7c6c214d8c">00190</a>   <a class="code" href="classi_mesh.html#a7102482b390258c1f767818528ef9765">PointT</a>* <a class="code" href="classi_mesh.html#a75d80a77e481bd2c0f0ecb7c6c214d8c">getNode</a>(uint nth)
+<a name="l00191"></a>00191   {
+<a name="l00192"></a>00192     <span class="keywordflow">return</span> &amp;_pointL[nth];
+<a name="l00193"></a>00193   }
+<a name="l00194"></a>00194 
+<a name="l00195"></a><a class="code" href="classi_mesh.html#ac58a43b7095a81dabae9b5bff7d16e95">00195</a>   <span class="keyword">const</span> <a class="code" href="classi_mesh.html#a7102482b390258c1f767818528ef9765">PointT</a>* <a class="code" href="classi_mesh.html#a75d80a77e481bd2c0f0ecb7c6c214d8c">getNode</a>(uint nth)<span class="keyword"> const</span>
+<a name="l00196"></a>00196 <span class="keyword">  </span>{
+<a name="l00197"></a>00197     <span class="keywordflow">return</span> &amp;_pointL[nth];
+<a name="l00198"></a>00198   }
+<a name="l00199"></a>00199 
+<a name="l00202"></a><a class="code" href="classi_mesh.html#a931cd02ff7cd77a1e0b7ddcba1806818">00202</a>   <a class="code" href="classi_mesh.html#a6002d07b8242383927b08b95061a7318">MHalfT</a>* <a class="code" href="classi_mesh.html#a931cd02ff7cd77a1e0b7ddcba1806818">getMHalf</a>(uint nth)
+<a name="l00203"></a>00203   {
+<a name="l00204"></a>00204     <span class="keywordflow">return</span> &amp;_mhalfL[nth];
+<a name="l00205"></a>00205   }
+<a name="l00206"></a>00206 
+<a name="l00207"></a><a class="code" href="classi_mesh.html#a21024f21b50e78db388ab5d1314f0ccf">00207</a>   <span class="keyword">const</span> <a class="code" href="classi_mesh.html#a6002d07b8242383927b08b95061a7318">MHalfT</a>* <a class="code" href="classi_mesh.html#a931cd02ff7cd77a1e0b7ddcba1806818">getMHalf</a>(uint nth)<span class="keyword"> const</span>
+<a name="l00208"></a>00208 <span class="keyword">  </span>{
+<a name="l00209"></a>00209     <span class="keywordflow">return</span> &amp;_mhalfL[nth];
+<a name="l00210"></a>00210   }
 <a name="l00211"></a>00211 
-<a name="l00214"></a><a class="code" href="classi_mesh.html#ac95a252213e864ed8a42b85459da610f">00214</a>   <a class="code" href="classi_mesh.html#ab8391e0482fbeb2d0c0be7fb63bfa695">CellT</a>* <a class="code" href="classi_mesh.html#ac95a252213e864ed8a42b85459da610f">getCell</a>(uint nth)
-<a name="l00215"></a>00215   {
-<a name="l00216"></a>00216     <span class="keywordflow">return</span> &amp;<a class="code" href="classi_mesh.html#a9b744ad41dd3a2fb21298062e3766c9e">_cellL</a>[nth];
-<a name="l00217"></a>00217   }
-<a name="l00218"></a>00218 
-<a name="l00219"></a><a class="code" href="classi_mesh.html#abb7b116a0de4c63315790582dc125e32">00219</a>   <span class="keyword">const</span> <a class="code" href="classi_mesh.html#ab8391e0482fbeb2d0c0be7fb63bfa695">CellT</a>* <a class="code" href="classi_mesh.html#ac95a252213e864ed8a42b85459da610f">getCell</a>(uint nth)<span class="keyword"> const</span>
-<a name="l00220"></a>00220 <span class="keyword">  </span>{
-<a name="l00221"></a>00221     <span class="keywordflow">return</span> &amp;<a class="code" href="classi_mesh.html#a9b744ad41dd3a2fb21298062e3766c9e">_cellL</a>[nth];
-<a name="l00222"></a>00222   }
-<a name="l00223"></a>00223 
-<a name="l00228"></a><a class="code" href="classi_mesh.html#a70207fd44442a17956672ee386191d99">00228</a>   <span class="keywordtype">void</span> <a class="code" href="classi_mesh.html#a70207fd44442a17956672ee386191d99">getCellCoords</a>(Eigen::MatrixXd &amp;X, Eigen::VectorXi <span class="keyword">const</span>&amp; map)
-<a name="l00229"></a>00229   {
-<a name="l00230"></a>00230     X.resize(map.size(), Traits::spacedim);
-<a name="l00231"></a>00231 
-<a name="l00232"></a>00232     <span class="keywordflow">for</span> (<span class="keywordtype">int</span> n = 0; n &lt; map.size(); ++n)
-<a name="l00233"></a>00233       X.row(n) = this-&gt;<a class="code" href="classi_mesh.html#a75d80a77e481bd2c0f0ecb7c6c214d8c">getNode</a>(map(n))-&gt;getCoord().transpose();
-<a name="l00234"></a>00234   }
-<a name="l00235"></a>00235 
-<a name="l00238"></a><a class="code" href="classi_mesh.html#abb6047181a2267638db01543a217c0b1">00238</a>   uint <a class="code" href="classi_mesh.html#abb6047181a2267638db01543a217c0b1">addCell</a>(<a class="code" href="classi_mesh.html#ab8391e0482fbeb2d0c0be7fb63bfa695">CellT</a> <span class="keyword">const</span>&amp; C)
-<a name="l00239"></a>00239   {
-<a name="l00240"></a>00240     <span class="keywordflow">if</span> (_dead_cells.empty())
-<a name="l00241"></a>00241     {
-<a name="l00242"></a>00242       <a class="code" href="classi_mesh.html#a9b744ad41dd3a2fb21298062e3766c9e">_cellL</a>.push_back(C);
-<a name="l00243"></a>00243       <span class="keywordflow">return</span> <a class="code" href="classi_mesh.html#a9b744ad41dd3a2fb21298062e3766c9e">_cellL</a>.size()-1;
-<a name="l00244"></a>00244     }
-<a name="l00245"></a>00245     <span class="keywordflow">else</span>
-<a name="l00246"></a>00246     {
-<a name="l00247"></a>00247       uint <span class="keywordtype">id</span> = _dead_cells.back();
-<a name="l00248"></a>00248       <a class="code" href="classi_mesh.html#a9b744ad41dd3a2fb21298062e3766c9e">_cellL</a>.at(<span class="keywordtype">id</span>) = C;
-<a name="l00249"></a>00249       _dead_cells.pop_back();
-<a name="l00250"></a>00250       <span class="keywordflow">return</span> id;
-<a name="l00251"></a>00251     }
-<a name="l00252"></a>00252   }
-<a name="l00253"></a>00253 
-<a name="l00256"></a><a class="code" href="classi_mesh.html#a9601df33a58d1797858a1f236f11ef82">00256</a>   uint <a class="code" href="classi_mesh.html#a9601df33a58d1797858a1f236f11ef82">addPoint</a>(<a class="code" href="classi_mesh.html#a7102482b390258c1f767818528ef9765">PointT</a> <span class="keyword">const</span>&amp; P)
-<a name="l00257"></a>00257   {
-<a name="l00258"></a>00258     <span class="keywordflow">if</span> (_dead_points.empty())
-<a name="l00259"></a>00259     {
-<a name="l00260"></a>00260       <a class="code" href="classi_mesh.html#a6c51fe83bf5ece0b32e86eb6c75c5053">_pointL</a>.push_back(P);
-<a name="l00261"></a>00261       <span class="keywordflow">return</span> <a class="code" href="classi_mesh.html#a6c51fe83bf5ece0b32e86eb6c75c5053">_pointL</a>.size()-1;
-<a name="l00262"></a>00262     }
-<a name="l00263"></a>00263     <span class="keywordflow">else</span>
-<a name="l00264"></a>00264     {
-<a name="l00265"></a>00265       uint <span class="keywordtype">id</span> = _dead_points.back();
-<a name="l00266"></a>00266       <a class="code" href="classi_mesh.html#a6c51fe83bf5ece0b32e86eb6c75c5053">_pointL</a>.at(<span class="keywordtype">id</span>) = P;
-<a name="l00267"></a>00267       _dead_points.pop_back();
-<a name="l00268"></a>00268       <span class="keywordflow">return</span> id;
-<a name="l00269"></a>00269     }
-<a name="l00270"></a>00270   }
-<a name="l00271"></a>00271 
-<a name="l00276"></a><a class="code" href="classi_mesh.html#afebcf134e36c660646768779ed6cf903">00276</a>   uint <a class="code" href="classi_mesh.html#afebcf134e36c660646768779ed6cf903">addHalfl</a>(<a class="code" href="classi_mesh.html#aab0ea4568e4244da807774d0208707fc">HalflT</a> <span class="keyword">const</span>&amp; h)
-<a name="l00277"></a>00277   {
-<a name="l00278"></a>00278     <span class="keywordflow">if</span> (_dead_mhalf.empty())
-<a name="l00279"></a>00279     {
-<a name="l00280"></a>00280       <a class="code" href="classi_mesh.html#a38aed4cd3cb979f56d8898e2bdf18c34">_mhalfL</a>.push_back(h);
-<a name="l00281"></a>00281       <span class="keywordflow">return</span> <a class="code" href="classi_mesh.html#a38aed4cd3cb979f56d8898e2bdf18c34">_mhalfL</a>.size()-1;
-<a name="l00282"></a>00282     }
-<a name="l00283"></a>00283     <span class="keywordflow">else</span>
-<a name="l00284"></a>00284     {
-<a name="l00285"></a>00285       uint <span class="keywordtype">id</span> = _dead_mhalf.back();
-<a name="l00286"></a>00286       <a class="code" href="classi_mesh.html#a38aed4cd3cb979f56d8898e2bdf18c34">_mhalfL</a>.at(<span class="keywordtype">id</span>) = h;
-<a name="l00287"></a>00287       _dead_mhalf.pop_back();
-<a name="l00288"></a>00288       <span class="keywordflow">return</span> id;
-<a name="l00289"></a>00289     }
-<a name="l00290"></a>00290   }
-<a name="l00291"></a>00291 
-<a name="l00295"></a><a class="code" href="classi_mesh.html#aebf94052acaf0b5273585bc9bd45c55a">00295</a>   uint <a class="code" href="classi_mesh.html#aebf94052acaf0b5273585bc9bd45c55a">getNumCells</a>()<span class="keyword"> const</span>
-<a name="l00296"></a>00296 <span class="keyword">  </span>{
-<a name="l00297"></a>00297     <span class="keywordflow">return</span> <a class="code" href="classi_mesh.html#a9b744ad41dd3a2fb21298062e3766c9e">_cellL</a>.size() - _dead_cells.size();
-<a name="l00298"></a>00298   }
-<a name="l00299"></a>00299 
-<a name="l00303"></a><a class="code" href="classi_mesh.html#ad3bcf12da58f94d97c83fbcd1a9a60cd">00303</a>   uint <a class="code" href="classi_mesh.html#ad3bcf12da58f94d97c83fbcd1a9a60cd">getNumCellsTotal</a>()<span class="keyword"> const</span>{
-<a name="l00304"></a>00304     <span class="keywordflow">return</span> <a class="code" href="classi_mesh.html#a9b744ad41dd3a2fb21298062e3766c9e">_cellL</a>.size();
-<a name="l00305"></a>00305   }
-<a name="l00306"></a>00306 
-<a name="l00310"></a><a class="code" href="classi_mesh.html#a3cc1393958177010a967c03e4a6ddca6">00310</a>   uint <a class="code" href="classi_mesh.html#a3cc1393958177010a967c03e4a6ddca6">getNumNodes</a>()<span class="keyword"> const</span>
-<a name="l00311"></a>00311 <span class="keyword">  </span>{
-<a name="l00312"></a>00312     <span class="keywordflow">return</span> <a class="code" href="classi_mesh.html#a6c51fe83bf5ece0b32e86eb6c75c5053">_pointL</a>.size() - _dead_points.size();
-<a name="l00313"></a>00313   }
-<a name="l00314"></a>00314 
-<a name="l00318"></a><a class="code" href="classi_mesh.html#aabaa3731d72f3fa3cbb353c3ddfd6522">00318</a>   uint <a class="code" href="classi_mesh.html#aabaa3731d72f3fa3cbb353c3ddfd6522">getNumNodesTotal</a>()<span class="keyword"> const</span>{
-<a name="l00319"></a>00319     <span class="keywordflow">return</span> <a class="code" href="classi_mesh.html#a6c51fe83bf5ece0b32e86eb6c75c5053">_pointL</a>.size();
-<a name="l00320"></a>00320   }
-<a name="l00321"></a>00321 
-<a name="l00325"></a><a class="code" href="classi_mesh.html#aae4daef8e62bbaf5d1c83dc9612d7fc2">00325</a>   uint <a class="code" href="classi_mesh.html#aae4daef8e62bbaf5d1c83dc9612d7fc2">getNumHalfls</a>()<span class="keyword"> const</span>
-<a name="l00326"></a>00326 <span class="keyword">  </span>{
-<a name="l00327"></a>00327     <span class="keywordflow">return</span> <a class="code" href="classi_mesh.html#a38aed4cd3cb979f56d8898e2bdf18c34">_mhalfL</a>.size() - _dead_mhalf.size();
-<a name="l00328"></a>00328   }
-<a name="l00329"></a>00329 
-<a name="l00333"></a><a class="code" href="classi_mesh.html#ab446ba0dd26d64e7ce05ee4e1c2d7286">00333</a>   uint <a class="code" href="classi_mesh.html#ab446ba0dd26d64e7ce05ee4e1c2d7286">getNumHalflTotal</a>()<span class="keyword"> const</span>
-<a name="l00334"></a>00334 <span class="keyword">  </span>{
-<a name="l00335"></a>00335     <span class="keywordflow">return</span> <a class="code" href="classi_mesh.html#a38aed4cd3cb979f56d8898e2bdf18c34">_mhalfL</a>.size();
-<a name="l00336"></a>00336   }
-<a name="l00337"></a>00337 
-<a name="l00341"></a><a class="code" href="classi_mesh.html#a2b8c72792c59527331d6aee83f99e02d">00341</a>   <span class="keywordtype">double</span> <a class="code" href="classi_mesh.html#a2b8c72792c59527331d6aee83f99e02d">getPerimeter</a>()
-<a name="l00342"></a>00342   {
-<a name="l00343"></a>00343     <span class="keyword">auto</span> it = <a class="code" href="classi_mesh.html#a38aed4cd3cb979f56d8898e2bdf18c34">_mhalfL</a>.begin();
-<a name="l00344"></a>00344     <a class="code" href="namespace_fepic.html#ab4c35fc828fb5a816f610e02b9ac2df9">Fepic::vectorui</a> vtx;
-<a name="l00345"></a>00345     <span class="keywordtype">double</span> sum=0.;
-<a name="l00346"></a>00346 
-<a name="l00347"></a>00347     std::cout &lt;&lt; <a class="code" href="classi_mesh.html#a38aed4cd3cb979f56d8898e2bdf18c34">_mhalfL</a>.size() &lt;&lt; std::endl;
-<a name="l00348"></a>00348 
-<a name="l00349"></a>00349     <span class="keywordflow">for</span> (; it!= <a class="code" href="classi_mesh.html#a38aed4cd3cb979f56d8898e2bdf18c34">_mhalfL</a>.end(); ++it)
-<a name="l00350"></a>00350       sum += it-&gt;HalfT::getLenght(*<span class="keyword">this</span>);
-<a name="l00351"></a>00351 
-<a name="l00352"></a>00352     <span class="keywordflow">return</span> sum;
-<a name="l00353"></a>00353   }
-<a name="l00354"></a>00354 
-<a name="l00357"></a><a class="code" href="classi_mesh.html#a7b7a01a935aca37faf538eb9dcb1eff9">00357</a>   <span class="keywordtype">int</span> <a class="code" href="classi_mesh.html#a7b7a01a935aca37faf538eb9dcb1eff9">getOrder</a>()<span class="keyword"> const</span>
-<a name="l00358"></a>00358 <span class="keyword">  </span>{
-<a name="l00359"></a>00359     <span class="keywordflow">return</span> _order;
-<a name="l00360"></a>00360   }
-<a name="l00361"></a>00361 
-<a name="l00364"></a><a class="code" href="classi_mesh.html#a77f23527b6ac61d2d21600bcab467b02">00364</a>   <a class="code" href="classi_mesh.html#afdcd85427603bc47ba9f6e5fb0a756e2">CellIterator</a> <a class="code" href="classi_mesh.html#a77f23527b6ac61d2d21600bcab467b02">cellBegin</a>()
-<a name="l00365"></a>00365   {
-<a name="l00366"></a>00366     <span class="keywordflow">return</span> <a class="code" href="classi_mesh.html#a9b744ad41dd3a2fb21298062e3766c9e">_cellL</a>.begin();
-<a name="l00367"></a>00367   }
-<a name="l00368"></a>00368 
-<a name="l00371"></a><a class="code" href="classi_mesh.html#a59c535ee30ce767309689deb4e662b05">00371</a>   <a class="code" href="classi_mesh.html#afdcd85427603bc47ba9f6e5fb0a756e2">CellIterator</a> <a class="code" href="classi_mesh.html#a59c535ee30ce767309689deb4e662b05">cellEnd</a>()
-<a name="l00372"></a>00372   {
-<a name="l00373"></a>00373     <span class="keywordflow">return</span> <a class="code" href="classi_mesh.html#a9b744ad41dd3a2fb21298062e3766c9e">_cellL</a>.end();
-<a name="l00374"></a>00374   }
-<a name="l00375"></a>00375 
-<a name="l00378"></a><a class="code" href="classi_mesh.html#af85be03276b96bb9f82e8cc460c46606">00378</a>   <a class="code" href="classi_mesh.html#a63679d2d1ff8ebd7641cb12a2c62ee04">PointIterator</a> <a class="code" href="classi_mesh.html#af85be03276b96bb9f82e8cc460c46606">pointBegin</a>()
-<a name="l00379"></a>00379   {
-<a name="l00380"></a>00380     <span class="keywordflow">return</span> <a class="code" href="classi_mesh.html#a6c51fe83bf5ece0b32e86eb6c75c5053">_pointL</a>.begin();
-<a name="l00381"></a>00381   }
-<a name="l00382"></a>00382 
-<a name="l00385"></a><a class="code" href="classi_mesh.html#a7d2921a5e5fd4d7505aa32b97a139dba">00385</a>   <a class="code" href="classi_mesh.html#a63679d2d1ff8ebd7641cb12a2c62ee04">PointIterator</a> <a class="code" href="classi_mesh.html#a7d2921a5e5fd4d7505aa32b97a139dba">pointEnd</a>()
-<a name="l00386"></a>00386   {
-<a name="l00387"></a>00387     <span class="keywordflow">return</span> <a class="code" href="classi_mesh.html#a6c51fe83bf5ece0b32e86eb6c75c5053">_pointL</a>.end();
-<a name="l00388"></a>00388   }
-<a name="l00389"></a>00389 
-<a name="l00392"></a><a class="code" href="classi_mesh.html#a1557799c9552ea2ea5197feadc38c9ff">00392</a>   <a class="code" href="classi_mesh.html#ab6865791f3bbd0c9e0fd04eebdda7425">HalflIterator</a> <a class="code" href="classi_mesh.html#a1557799c9552ea2ea5197feadc38c9ff">mhalfBegin</a>()
-<a name="l00393"></a>00393   {
-<a name="l00394"></a>00394     <span class="keywordflow">return</span> <a class="code" href="classi_mesh.html#a38aed4cd3cb979f56d8898e2bdf18c34">_mhalfL</a>.begin();
-<a name="l00395"></a>00395   }
-<a name="l00396"></a>00396 
-<a name="l00399"></a><a class="code" href="classi_mesh.html#aefc721128327e9edee0491abf724da85">00399</a>   <a class="code" href="classi_mesh.html#ab6865791f3bbd0c9e0fd04eebdda7425">HalflIterator</a> <a class="code" href="classi_mesh.html#aefc721128327e9edee0491abf724da85">mhalfEnd</a>()
-<a name="l00400"></a>00400   {
-<a name="l00401"></a>00401     <span class="keywordflow">return</span> <a class="code" href="classi_mesh.html#a38aed4cd3cb979f56d8898e2bdf18c34">_mhalfL</a>.end();
-<a name="l00402"></a>00402   }
-<a name="l00403"></a>00403 
-<a name="l00406"></a><a class="code" href="classi_mesh.html#ab13285789ad48d8313bcf93fa6db0eac">00406</a>   std::string <a class="code" href="classi_mesh.html#ab13285789ad48d8313bcf93fa6db0eac">getBaseName</a>()<span class="keyword"> const</span>
-<a name="l00407"></a>00407 <span class="keyword">  </span>{
-<a name="l00408"></a>00408     <span class="keywordflow">return</span> _basename;
-<a name="l00409"></a>00409   }
-<a name="l00410"></a>00410 
+<a name="l00212"></a>00212 
+<a name="l00215"></a><a class="code" href="classi_mesh.html#ac95a252213e864ed8a42b85459da610f">00215</a>   <a class="code" href="classi_mesh.html#ab8391e0482fbeb2d0c0be7fb63bfa695">CellT</a>* <a class="code" href="classi_mesh.html#ac95a252213e864ed8a42b85459da610f">getCell</a>(uint nth)
+<a name="l00216"></a>00216   {
+<a name="l00217"></a>00217     <span class="keywordflow">return</span> &amp;_cellL[nth];
+<a name="l00218"></a>00218   }
+<a name="l00219"></a>00219 
+<a name="l00220"></a><a class="code" href="classi_mesh.html#abb7b116a0de4c63315790582dc125e32">00220</a>   <span class="keyword">const</span> <a class="code" href="classi_mesh.html#ab8391e0482fbeb2d0c0be7fb63bfa695">CellT</a>* <a class="code" href="classi_mesh.html#ac95a252213e864ed8a42b85459da610f">getCell</a>(uint nth)<span class="keyword"> const</span>
+<a name="l00221"></a>00221 <span class="keyword">  </span>{
+<a name="l00222"></a>00222     <span class="keywordflow">return</span> &amp;_cellL[nth];
+<a name="l00223"></a>00223   }
+<a name="l00224"></a>00224 
+<a name="l00229"></a><a class="code" href="classi_mesh.html#a70207fd44442a17956672ee386191d99">00229</a>   <span class="keywordtype">void</span> <a class="code" href="classi_mesh.html#a70207fd44442a17956672ee386191d99">getCellCoords</a>(Eigen::MatrixXd &amp;X, Eigen::VectorXi <span class="keyword">const</span>&amp; map)
+<a name="l00230"></a>00230   {
+<a name="l00231"></a>00231     X.resize(map.size(), Traits::spacedim);
+<a name="l00232"></a>00232 
+<a name="l00233"></a>00233     <span class="keywordflow">for</span> (<span class="keywordtype">int</span> n = 0; n &lt; map.size(); ++n)
+<a name="l00234"></a>00234       X.row(n) = this-&gt;<a class="code" href="classi_mesh.html#a75d80a77e481bd2c0f0ecb7c6c214d8c">getNode</a>(map(n))-&gt;getCoord().transpose();
+<a name="l00235"></a>00235   }
+<a name="l00236"></a>00236 
+<a name="l00239"></a><a class="code" href="classi_mesh.html#abb6047181a2267638db01543a217c0b1">00239</a>   uint <a class="code" href="classi_mesh.html#abb6047181a2267638db01543a217c0b1">addCell</a>(<a class="code" href="classi_mesh.html#ab8391e0482fbeb2d0c0be7fb63bfa695">CellT</a> <span class="keyword">const</span>&amp; C)
+<a name="l00240"></a>00240   {
+<a name="l00241"></a>00241     <span class="keywordflow">if</span> (_dead_cells.empty())
+<a name="l00242"></a>00242     {
+<a name="l00243"></a>00243       _cellL.push_back(C);
+<a name="l00244"></a>00244       <span class="keywordflow">return</span> _cellL.size()-1;
+<a name="l00245"></a>00245     }
+<a name="l00246"></a>00246     <span class="keywordflow">else</span>
+<a name="l00247"></a>00247     {
+<a name="l00248"></a>00248       uint <span class="keywordtype">id</span> = _dead_cells.back();
+<a name="l00249"></a>00249       _cellL.at(<span class="keywordtype">id</span>) = C;
+<a name="l00250"></a>00250       _dead_cells.pop_back();
+<a name="l00251"></a>00251       <span class="keywordflow">return</span> id;
+<a name="l00252"></a>00252     }
+<a name="l00253"></a>00253   }
+<a name="l00254"></a>00254 
+<a name="l00257"></a><a class="code" href="classi_mesh.html#a9601df33a58d1797858a1f236f11ef82">00257</a>   uint <a class="code" href="classi_mesh.html#a9601df33a58d1797858a1f236f11ef82">addPoint</a>(<a class="code" href="classi_mesh.html#a7102482b390258c1f767818528ef9765">PointT</a> <span class="keyword">const</span>&amp; P)
+<a name="l00258"></a>00258   {
+<a name="l00259"></a>00259     <span class="keywordflow">if</span> (_dead_points.empty())
+<a name="l00260"></a>00260     {
+<a name="l00261"></a>00261       _pointL.push_back(P);
+<a name="l00262"></a>00262       <span class="keywordflow">return</span> _pointL.size()-1;
+<a name="l00263"></a>00263     }
+<a name="l00264"></a>00264     <span class="keywordflow">else</span>
+<a name="l00265"></a>00265     {
+<a name="l00266"></a>00266       uint <span class="keywordtype">id</span> = _dead_points.back();
+<a name="l00267"></a>00267       _pointL.at(<span class="keywordtype">id</span>) = P;
+<a name="l00268"></a>00268       _dead_points.pop_back();
+<a name="l00269"></a>00269       <span class="keywordflow">return</span> id;
+<a name="l00270"></a>00270     }
+<a name="l00271"></a>00271   }
+<a name="l00272"></a>00272 
+<a name="l00277"></a><a class="code" href="classi_mesh.html#a702b9c7c5250615cc64771d7ab96606a">00277</a>   uint <a class="code" href="classi_mesh.html#a702b9c7c5250615cc64771d7ab96606a">addMHalf</a>(<a class="code" href="classi_mesh.html#a6002d07b8242383927b08b95061a7318">MHalfT</a> <span class="keyword">const</span>&amp; h)
+<a name="l00278"></a>00278   {
+<a name="l00279"></a>00279     <span class="keywordflow">if</span> (_dead_mhalf.empty())
+<a name="l00280"></a>00280     {
+<a name="l00281"></a>00281       _mhalfL.push_back(h);
+<a name="l00282"></a>00282       <span class="keywordflow">return</span> _mhalfL.size()-1;
+<a name="l00283"></a>00283     }
+<a name="l00284"></a>00284     <span class="keywordflow">else</span>
+<a name="l00285"></a>00285     {
+<a name="l00286"></a>00286       uint <span class="keywordtype">id</span> = _dead_mhalf.back();
+<a name="l00287"></a>00287       _mhalfL.at(<span class="keywordtype">id</span>) = h;
+<a name="l00288"></a>00288       _dead_mhalf.pop_back();
+<a name="l00289"></a>00289       <span class="keywordflow">return</span> id;
+<a name="l00290"></a>00290     }
+<a name="l00291"></a>00291   }
+<a name="l00292"></a>00292 
+<a name="l00296"></a><a class="code" href="classi_mesh.html#aebf94052acaf0b5273585bc9bd45c55a">00296</a>   uint <a class="code" href="classi_mesh.html#aebf94052acaf0b5273585bc9bd45c55a">getNumCells</a>()<span class="keyword"> const</span>
+<a name="l00297"></a>00297 <span class="keyword">  </span>{
+<a name="l00298"></a>00298     <span class="keywordflow">return</span> _cellL.size() - _dead_cells.size();
+<a name="l00299"></a>00299   }
+<a name="l00300"></a>00300 
+<a name="l00304"></a><a class="code" href="classi_mesh.html#ad3bcf12da58f94d97c83fbcd1a9a60cd">00304</a>   uint <a class="code" href="classi_mesh.html#ad3bcf12da58f94d97c83fbcd1a9a60cd">getNumCellsTotal</a>()<span class="keyword"> const</span>{
+<a name="l00305"></a>00305     <span class="keywordflow">return</span> _cellL.size();
+<a name="l00306"></a>00306   }
+<a name="l00307"></a>00307 
+<a name="l00311"></a><a class="code" href="classi_mesh.html#a3cc1393958177010a967c03e4a6ddca6">00311</a>   uint <a class="code" href="classi_mesh.html#a3cc1393958177010a967c03e4a6ddca6">getNumNodes</a>()<span class="keyword"> const</span>
+<a name="l00312"></a>00312 <span class="keyword">  </span>{
+<a name="l00313"></a>00313     <span class="keywordflow">return</span> _pointL.size() - _dead_points.size();
+<a name="l00314"></a>00314   }
+<a name="l00315"></a>00315 
+<a name="l00319"></a><a class="code" href="classi_mesh.html#aabaa3731d72f3fa3cbb353c3ddfd6522">00319</a>   uint <a class="code" href="classi_mesh.html#aabaa3731d72f3fa3cbb353c3ddfd6522">getNumNodesTotal</a>()<span class="keyword"> const</span>{
+<a name="l00320"></a>00320     <span class="keywordflow">return</span> _pointL.size();
+<a name="l00321"></a>00321   }
+<a name="l00322"></a>00322 
+<a name="l00326"></a><a class="code" href="classi_mesh.html#aa218e186a1c2d7d2e173930fc806aac9">00326</a>   uint <a class="code" href="classi_mesh.html#aa218e186a1c2d7d2e173930fc806aac9">getNumMHalfs</a>()<span class="keyword"> const</span>
+<a name="l00327"></a>00327 <span class="keyword">  </span>{
+<a name="l00328"></a>00328     <span class="keywordflow">return</span> _mhalfL.size() - _dead_mhalf.size();
+<a name="l00329"></a>00329   }
+<a name="l00330"></a>00330 
+<a name="l00334"></a><a class="code" href="classi_mesh.html#ad32a1ab93dcee03d47c763ee9e0fdf11">00334</a>   uint <a class="code" href="classi_mesh.html#ad32a1ab93dcee03d47c763ee9e0fdf11">getNumMHalfTotal</a>()<span class="keyword"> const</span>
+<a name="l00335"></a>00335 <span class="keyword">  </span>{
+<a name="l00336"></a>00336     <span class="keywordflow">return</span> _mhalfL.size();
+<a name="l00337"></a>00337   }
+<a name="l00338"></a>00338 
+<a name="l00342"></a><a class="code" href="classi_mesh.html#a2b8c72792c59527331d6aee83f99e02d">00342</a>   <span class="keywordtype">double</span> <a class="code" href="classi_mesh.html#a2b8c72792c59527331d6aee83f99e02d">getPerimeter</a>()
+<a name="l00343"></a>00343   {
+<a name="l00344"></a>00344     <span class="keyword">auto</span> it = _mhalfL.begin();
+<a name="l00345"></a>00345     <a class="code" href="namespace_fepic.html#ab4c35fc828fb5a816f610e02b9ac2df9">Fepic::vectorui</a> vtx;
+<a name="l00346"></a>00346     <span class="keywordtype">double</span> sum=0.;
+<a name="l00347"></a>00347 
+<a name="l00348"></a>00348     std::cout &lt;&lt; _mhalfL.size() &lt;&lt; std::endl;
+<a name="l00349"></a>00349 
+<a name="l00350"></a>00350     <span class="keywordflow">for</span> (; it!= _mhalfL.end(); ++it)
+<a name="l00351"></a>00351       sum += it-&gt;HalfT::getLenght(*<span class="keyword">this</span>);
+<a name="l00352"></a>00352 
+<a name="l00353"></a>00353     <span class="keywordflow">return</span> sum;
+<a name="l00354"></a>00354   }
+<a name="l00355"></a>00355 
+<a name="l00358"></a><a class="code" href="classi_mesh.html#a7b7a01a935aca37faf538eb9dcb1eff9">00358</a>   <span class="keywordtype">int</span> <a class="code" href="classi_mesh.html#a7b7a01a935aca37faf538eb9dcb1eff9">getOrder</a>()<span class="keyword"> const</span>
+<a name="l00359"></a>00359 <span class="keyword">  </span>{
+<a name="l00360"></a>00360     <span class="keywordflow">return</span> _order;
+<a name="l00361"></a>00361   }
+<a name="l00362"></a>00362 
+<a name="l00365"></a><a class="code" href="classi_mesh.html#a77f23527b6ac61d2d21600bcab467b02">00365</a>   <a class="code" href="classi_mesh.html#afdcd85427603bc47ba9f6e5fb0a756e2">CellIterator</a> <a class="code" href="classi_mesh.html#a77f23527b6ac61d2d21600bcab467b02">cellBegin</a>()
+<a name="l00366"></a>00366   {
+<a name="l00367"></a>00367     <span class="keywordflow">return</span> _cellL.begin();
+<a name="l00368"></a>00368   }
+<a name="l00369"></a>00369 
+<a name="l00372"></a><a class="code" href="classi_mesh.html#a59c535ee30ce767309689deb4e662b05">00372</a>   <a class="code" href="classi_mesh.html#afdcd85427603bc47ba9f6e5fb0a756e2">CellIterator</a> <a class="code" href="classi_mesh.html#a59c535ee30ce767309689deb4e662b05">cellEnd</a>()
+<a name="l00373"></a>00373   {
+<a name="l00374"></a>00374     <span class="keywordflow">return</span> _cellL.end();
+<a name="l00375"></a>00375   }
+<a name="l00376"></a>00376 
+<a name="l00379"></a><a class="code" href="classi_mesh.html#af85be03276b96bb9f82e8cc460c46606">00379</a>   <a class="code" href="classi_mesh.html#a63679d2d1ff8ebd7641cb12a2c62ee04">PointIterator</a> <a class="code" href="classi_mesh.html#af85be03276b96bb9f82e8cc460c46606">pointBegin</a>()
+<a name="l00380"></a>00380   {
+<a name="l00381"></a>00381     <span class="keywordflow">return</span> _pointL.begin();
+<a name="l00382"></a>00382   }
+<a name="l00383"></a>00383 
+<a name="l00386"></a><a class="code" href="classi_mesh.html#a7d2921a5e5fd4d7505aa32b97a139dba">00386</a>   <a class="code" href="classi_mesh.html#a63679d2d1ff8ebd7641cb12a2c62ee04">PointIterator</a> <a class="code" href="classi_mesh.html#a7d2921a5e5fd4d7505aa32b97a139dba">pointEnd</a>()
+<a name="l00387"></a>00387   {
+<a name="l00388"></a>00388     <span class="keywordflow">return</span> _pointL.end();
+<a name="l00389"></a>00389   }
+<a name="l00390"></a>00390 
+<a name="l00393"></a><a class="code" href="classi_mesh.html#a54e5e224fd85e0dcd9a7a667a6733f8d">00393</a>   <a class="code" href="classi_mesh.html#ab1ca5bd626a1ffc3a7a33831b614737b">MHalfIterator</a> <a class="code" href="classi_mesh.html#a54e5e224fd85e0dcd9a7a667a6733f8d">mhalfBegin</a>()
+<a name="l00394"></a>00394   {
+<a name="l00395"></a>00395     <span class="keywordflow">return</span> _mhalfL.begin();
+<a name="l00396"></a>00396   }
+<a name="l00397"></a>00397 
+<a name="l00400"></a><a class="code" href="classi_mesh.html#a7528d594b457b08b755d487b6c82ed1f">00400</a>   <a class="code" href="classi_mesh.html#ab1ca5bd626a1ffc3a7a33831b614737b">MHalfIterator</a> <a class="code" href="classi_mesh.html#a7528d594b457b08b755d487b6c82ed1f">mhalfEnd</a>()
+<a name="l00401"></a>00401   {
+<a name="l00402"></a>00402     <span class="keywordflow">return</span> _mhalfL.end();
+<a name="l00403"></a>00403   }
+<a name="l00404"></a>00404 
+<a name="l00407"></a><a class="code" href="classi_mesh.html#ab13285789ad48d8313bcf93fa6db0eac">00407</a>   std::string <a class="code" href="classi_mesh.html#ab13285789ad48d8313bcf93fa6db0eac">getBaseName</a>()<span class="keyword"> const</span>
+<a name="l00408"></a>00408 <span class="keyword">  </span>{
+<a name="l00409"></a>00409     <span class="keywordflow">return</span> _basename;
+<a name="l00410"></a>00410   }
 <a name="l00411"></a>00411 
-<a name="l00412"></a>00412   <span class="comment">// propriedades da célula da malha e outros atributos auxiliares</span>
-<a name="l00413"></a><a class="code" href="classi_mesh.html#adeaa31436a5d674697e6273e7a359559">00413</a>   <a class="code" href="namespace_fepic.html#abbbdadaf306261d88c414f904b483bf0">Fepic::matrixi</a> <a class="code" href="classi_mesh.html#adeaa31436a5d674697e6273e7a359559">edges_local_nodes</a>; <span class="comment">// face, volume</span>
-<a name="l00414"></a><a class="code" href="classi_mesh.html#ab168771b22fc7b1568ab59efc882dce7">00414</a>   <a class="code" href="namespace_fepic.html#abbbdadaf306261d88c414f904b483bf0">Fepic::matrixi</a> <a class="code" href="classi_mesh.html#ab168771b22fc7b1568ab59efc882dce7">faces_local_nodes</a>; <span class="comment">// volume</span>
-<a name="l00415"></a><a class="code" href="classi_mesh.html#aab45ba8801b39298808b9e912e51c243">00415</a>   <a class="code" href="namespace_fepic.html#a44ac784dffec81a4ae33f31e4def845d">Fepic::vectori</a> <a class="code" href="classi_mesh.html#aab45ba8801b39298808b9e912e51c243">opp_eln</a>; <span class="comment">// opposite edges_local_nodes</span>
-<a name="l00416"></a><a class="code" href="classi_mesh.html#abb16d81636498f8804d38dd298cfc83f">00416</a>   <a class="code" href="namespace_fepic.html#abbbdadaf306261d88c414f904b483bf0">Fepic::matrixi</a> <a class="code" href="classi_mesh.html#abb16d81636498f8804d38dd298cfc83f">opp_fln</a>; <span class="comment">// opposite faces_local_nodes</span>
-<a name="l00417"></a>00417                           <span class="comment">// ex: faces_local_nodes[f][opp_fln[i]] := é o que a célula oposta enxerga</span>
-<a name="l00418"></a>00418 
-<a name="l00419"></a>00419   <span class="comment">// entities</span>
-<a name="l00420"></a><a class="code" href="classi_mesh.html#a9b744ad41dd3a2fb21298062e3766c9e">00420</a>   <a class="code" href="classi_mesh.html#a3c12fa1a7af15573c953da39b545456a">CellList</a>      <a class="code" href="classi_mesh.html#a9b744ad41dd3a2fb21298062e3766c9e">_cellL</a>;
-<a name="l00421"></a><a class="code" href="classi_mesh.html#a6c51fe83bf5ece0b32e86eb6c75c5053">00421</a>   <a class="code" href="classi_mesh.html#a69da714100e62667a56c2a725f466675">PointList</a>     <a class="code" href="classi_mesh.html#a6c51fe83bf5ece0b32e86eb6c75c5053">_pointL</a>;
-<a name="l00422"></a><a class="code" href="classi_mesh.html#a38aed4cd3cb979f56d8898e2bdf18c34">00422</a>   <a class="code" href="classi_mesh.html#a0b23087b22591f27bc4e30ee5248ea3a">HalflList</a>     <a class="code" href="classi_mesh.html#a38aed4cd3cb979f56d8898e2bdf18c34">_mhalfL</a>;
-<a name="l00423"></a>00423 
-<a name="l00424"></a>00424 <span class="keyword">private</span>:
-<a name="l00425"></a>00425 
-<a name="l00426"></a>00426   <span class="comment">// deleted entities id&#39;s</span>
-<a name="l00427"></a>00427   <a class="code" href="namespace_fepic.html#a3d27a531581a8457e305ed90cf0956cc">Fepic::dequeui</a>  _dead_cells;
-<a name="l00428"></a>00428   <a class="code" href="namespace_fepic.html#a3d27a531581a8457e305ed90cf0956cc">Fepic::dequeui</a>  _dead_points;
-<a name="l00429"></a>00429   <a class="code" href="namespace_fepic.html#a3d27a531581a8457e305ed90cf0956cc">Fepic::dequeui</a>  _dead_mhalf;
-<a name="l00430"></a>00430 
-<a name="l00431"></a>00431   <span class="comment">// I/O</span>
-<a name="l00432"></a>00432   <span class="keywordtype">int</span>           _order;
-<a name="l00433"></a>00433   std::string   _meshfile;  <span class="comment">// eg.   /home/user/test.msh</span>
-<a name="l00434"></a>00434   std::string   _basename;  <span class="comment">// eg.   /home/user/test</span>
-<a name="l00435"></a>00435   uint          _family;      <span class="comment">// num do output</span>
-<a name="l00436"></a>00436   <span class="keywordtype">bool</span>          _is_family; <span class="comment">// se o output sera impresso como familia</span>
-<a name="l00437"></a>00437   uint          _add_scalar_vtk_n_calls;
-<a name="l00438"></a>00438   uint          _add_vector_vtk_n_calls;
-<a name="l00439"></a>00439 
+<a name="l00412"></a>00412 
+<a name="l00413"></a>00413   <span class="comment">// propriedades da célula da malha e outros atributos auxiliares</span>
+<a name="l00414"></a><a class="code" href="classi_mesh.html#adeaa31436a5d674697e6273e7a359559">00414</a>   <a class="code" href="namespace_fepic.html#abbbdadaf306261d88c414f904b483bf0">Fepic::matrixi</a> <a class="code" href="classi_mesh.html#adeaa31436a5d674697e6273e7a359559">edges_local_nodes</a>; <span class="comment">// face, volume</span>
+<a name="l00415"></a><a class="code" href="classi_mesh.html#ab168771b22fc7b1568ab59efc882dce7">00415</a>   <a class="code" href="namespace_fepic.html#abbbdadaf306261d88c414f904b483bf0">Fepic::matrixi</a> <a class="code" href="classi_mesh.html#ab168771b22fc7b1568ab59efc882dce7">faces_local_nodes</a>; <span class="comment">// volume</span>
+<a name="l00416"></a><a class="code" href="classi_mesh.html#aab45ba8801b39298808b9e912e51c243">00416</a>   <a class="code" href="namespace_fepic.html#a44ac784dffec81a4ae33f31e4def845d">Fepic::vectori</a> <a class="code" href="classi_mesh.html#aab45ba8801b39298808b9e912e51c243">opp_eln</a>; <span class="comment">// opposite edges_local_nodes</span>
+<a name="l00417"></a><a class="code" href="classi_mesh.html#abb16d81636498f8804d38dd298cfc83f">00417</a>   <a class="code" href="namespace_fepic.html#abbbdadaf306261d88c414f904b483bf0">Fepic::matrixi</a> <a class="code" href="classi_mesh.html#abb16d81636498f8804d38dd298cfc83f">opp_fln</a>; <span class="comment">// opposite faces_local_nodes</span>
+<a name="l00418"></a>00418                           <span class="comment">// ex: faces_local_nodes[f][opp_fln[i]] := é o que a célula oposta enxerga</span>
+<a name="l00419"></a>00419 
+<a name="l00420"></a>00420   <span class="comment">// entities</span>
+<a name="l00421"></a>00421   <a class="code" href="classi_mesh.html#a3c12fa1a7af15573c953da39b545456a">CellList</a>      _cellL;
+<a name="l00422"></a>00422   <a class="code" href="classi_mesh.html#a69da714100e62667a56c2a725f466675">PointList</a>     _pointL;
+<a name="l00423"></a>00423   <a class="code" href="classi_mesh.html#a03420055ac31c00760f9c257b4cb8d07">MHalfList</a>     _mhalfL;
+<a name="l00424"></a>00424 
+<a name="l00425"></a>00425 <span class="keyword">private</span>:
+<a name="l00426"></a>00426 
+<a name="l00427"></a>00427   <span class="comment">// deleted entities id&#39;s</span>
+<a name="l00428"></a>00428   <a class="code" href="namespace_fepic.html#a3d27a531581a8457e305ed90cf0956cc">Fepic::dequeui</a>  _dead_cells;
+<a name="l00429"></a>00429   <a class="code" href="namespace_fepic.html#a3d27a531581a8457e305ed90cf0956cc">Fepic::dequeui</a>  _dead_points;
+<a name="l00430"></a>00430   <a class="code" href="namespace_fepic.html#a3d27a531581a8457e305ed90cf0956cc">Fepic::dequeui</a>  _dead_mhalf;
+<a name="l00431"></a>00431 
+<a name="l00432"></a>00432   <span class="comment">// I/O</span>
+<a name="l00433"></a>00433   <span class="keywordtype">int</span>           _order;
+<a name="l00434"></a>00434   std::string   _meshfile;  <span class="comment">// eg.   /home/user/test.msh</span>
+<a name="l00435"></a>00435   std::string   _basename;  <span class="comment">// eg.   /home/user/test</span>
+<a name="l00436"></a>00436   uint          _family;      <span class="comment">// num do output</span>
+<a name="l00437"></a>00437   <span class="keywordtype">bool</span>          _is_family; <span class="comment">// se o output sera impresso como familia</span>
+<a name="l00438"></a>00438   uint          _add_scalar_vtk_n_calls;
+<a name="l00439"></a>00439   uint          _add_vector_vtk_n_calls;
 <a name="l00440"></a>00440 
-<a name="l00441"></a>00441 };
-<a name="l00442"></a>00442 
-<a name="l00443"></a>00443 <span class="preprocessor">#endif // IMESH</span>
+<a name="l00441"></a>00441 
+<a name="l00442"></a>00442 };
+<a name="l00443"></a>00443 
+<a name="l00444"></a>00444 <span class="preprocessor">#endif // IMESH</span>
 </pre></div></div>
 </div>
 <!--- window showing the filter options -->
@@ -432,7 +433,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&nbsp;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&nbsp;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&nbsp;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&nbsp;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&nbsp;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&nbsp;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&nbsp;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&nbsp;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&nbsp;</span>Defines</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&nbsp;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&nbsp;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&nbsp;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&nbsp;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&nbsp;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&nbsp;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&nbsp;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&nbsp;</span>Defines</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -441,7 +442,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Thu Feb 3 2011 09:30:19 for FEPiCpp by&nbsp;
+<hr class="footer"/><address class="footer"><small>Generated on Wed Feb 2 2011 20:53:23 for FEPiCpp by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.1 </small></address>
 </body>

@@ -3,7 +3,7 @@
 # ----------------------------------------------#
 # lembre-se que a opção "-pg" deve ser colocado na hora de linkar e compilar
 
-CXX	    = g++-4.5
+CXX	    = g++-4.6
 #CFLAGS	= -Wall -Winline -g -DEIGEN_NO_DEBUG
 CFLAGS	= -std=c++0x -Wall -g
 LD	    = $(CXX)

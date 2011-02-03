@@ -71,230 +71,57 @@ Classes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html">ShapeFunction&lt; Simplex&lt; 3 &gt; &gt;</a></td></tr>
 <tr><td colspan="2"><h2><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a> (int n, int Q, double x)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="shapefunctions_8hpp.html#a01a3613e30bb59632126479e171e8387">_ddxomega</a> (int n, int Q, double x)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">long int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="shapefunctions_8hpp.html#a2c2e417bea1d1a08adba588a7435ed57">_prod3</a> (int n, int Q)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">long int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="shapefunctions_8hpp.html#a843ec23c6fa7974a11eefc8b20588ec4">_prod4</a> (int n, int Q)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="shapefunctions_8hpp.html#a9f1fe2875f8438e7a3b5324211449393">gradL</a> (double const &amp;L, ShapeFunction&lt; <a class="el" href="class_simplex.html">Simplex</a>&lt; 1 &gt; &gt; PHI, int ith)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Eigen::Vector2d&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="shapefunctions_8hpp.html#acc0b01fd6028dd30243de61b83aec943">gradL</a> (Eigen::Vector2d const &amp;L, ShapeFunction&lt; <a class="el" href="class_simplex.html">Simplex</a>&lt; 2 &gt; &gt; PHI, int ith)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Eigen::Vector3d&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="shapefunctions_8hpp.html#aa260cb1fa0dd2d83054b97d10ab73128">gradL</a> (Eigen::Vector3d const &amp;L, ShapeFunction&lt; <a class="el" href="class_simplex.html">Simplex</a>&lt; 3 &gt; &gt; PHI, int ith)</td></tr>
 </table>
 <hr/><h2>Function Documentation</h2>
-<a class="anchor" id="a01a3613e30bb59632126479e171e8387"></a><!-- doxytag: member="shapefunctions.hpp::_ddxomega" ref="a01a3613e30bb59632126479e171e8387" args="(int n, int Q, double x)" -->
+<a class="anchor" id="a9f1fe2875f8438e7a3b5324211449393"></a><!-- doxytag: member="shapefunctions.hpp::gradL" ref="a9f1fe2875f8438e7a3b5324211449393" args="(double const &amp;L, ShapeFunction&lt; Simplex&lt; 1 &gt; &gt; PHI, int ith)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">double _ddxomega </td>
+          <td class="memname">double gradL </td>
           <td>(</td>
-          <td class="paramtype">int&nbsp;</td>
-          <td class="paramname"> <em>n</em>, </td>
+          <td class="paramtype">double const &amp;&nbsp;</td>
+          <td class="paramname"> <em>L</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ShapeFunction&lt; <a class="el" href="class_simplex.html">Simplex</a>&lt; 1 &gt; &gt;&nbsp;</td>
+          <td class="paramname"> <em>PHI</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&nbsp;</td>
-          <td class="paramname"> <em>Q</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double&nbsp;</td>
-          <td class="paramname"> <em>x</em></td><td>&nbsp;</td>
+          <td class="paramname"> <em>ith</em></td><td>&nbsp;</td>
         </tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td><code> [inline]</code></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
-<p>NOT FOR USERS </p>
 
-<p>Definition at line <a class="el" href="shapefunctions_8hpp_source.html#l00050">50</a> of file <a class="el" href="shapefunctions_8hpp_source.html">shapefunctions.hpp</a>.</p>
+<p>Definition at line <a class="el" href="shapefunctions_8hpp_source.html#l00673">673</a> of file <a class="el" href="shapefunctions_8hpp_source.html">shapefunctions.hpp</a>.</p>
 
-<p>References <a class="el" href="shapefunctions_8hpp_source.html#l00034">_omega()</a>.</p>
-
-<p>Referenced by <a class="el" href="shapefunctions_8hpp_source.html#l00584">ShapeFunction&lt; Simplex&lt; 3 &gt; &gt;::gradL()</a>, and <a class="el" href="shapefunctions_8hpp_source.html#l00348">ShapeFunction&lt; Simplex&lt; 2 &gt; &gt;::gradL()</a>.</p>
+<p>Referenced by <a class="el" href="shapefunctions_8hpp_source.html#l00647">ShapeFunction&lt; Simplex&lt; 3 &gt; &gt;::gradL()</a>, and <a class="el" href="shapefunctions_8hpp_source.html#l00398">ShapeFunction&lt; Simplex&lt; 2 &gt; &gt;::gradL()</a>.</p>
 
 <p><div class="fragment"><pre class="fragment">{
-  <span class="keywordflow">if</span> (Q==0)
-    <span class="keywordflow">return</span> 0.;
-  <span class="keywordflow">return</span> (n*x - Q + 1.)*<a class="code" href="shapefunctions_8hpp.html#a01a3613e30bb59632126479e171e8387">_ddxomega</a>(n, Q-1, x) + n*<a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(n, Q-1, x);
-}
-</pre></div></p>
-
-<p><div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="shapefunctions_8hpp_a01a3613e30bb59632126479e171e8387_cgraph.png" border="0" usemap="#shapefunctions_8hpp_a01a3613e30bb59632126479e171e8387_cgraph" alt=""/></div>
-<map name="shapefunctions_8hpp_a01a3613e30bb59632126479e171e8387_cgraph" id="shapefunctions_8hpp_a01a3613e30bb59632126479e171e8387_cgraph">
-<area shape="rect" id="node3" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e" title="_omega" alt="" coords="152,5,227,35"/></map>
-</div>
-</p>
-
-<p><div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="shapefunctions_8hpp_a01a3613e30bb59632126479e171e8387_icgraph.png" border="0" usemap="#shapefunctions_8hpp_a01a3613e30bb59632126479e171e8387_icgraph" alt=""/></div>
-<map name="shapefunctions_8hpp_a01a3613e30bb59632126479e171e8387_icgraph" id="shapefunctions_8hpp_a01a3613e30bb59632126479e171e8387_icgraph">
-<area shape="rect" id="node3" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#adc7073096ed40e82e961a07390c5a25e" title="ShapeFunction\&lt; Simplex\&lt; 3 \&gt; \&gt;::gradL" alt="" coords="153,5,431,35"/><area shape="rect" id="node5" href="class_shape_function_3_01_simplex_3_012_01_4_01_4.html#a208cf52a358198dfabbb0844860f170a" title="ShapeFunction\&lt; Simplex\&lt; 2 \&gt; \&gt;::gradL" alt="" coords="153,59,431,88"/></map>
-</div>
-</p>
-
-</div>
-</div>
-<a class="anchor" id="a0010ff1942fe9e76ff98f36beeb2122e"></a><!-- doxytag: member="shapefunctions.hpp::_omega" ref="a0010ff1942fe9e76ff98f36beeb2122e" args="(int n, int Q, double x)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">double _omega </td>
-          <td>(</td>
-          <td class="paramtype">int&nbsp;</td>
-          <td class="paramname"> <em>n</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&nbsp;</td>
-          <td class="paramname"> <em>Q</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double&nbsp;</td>
-          <td class="paramname"> <em>x</em></td><td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td><td><code> [inline]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>NOT FOR USERS </p>
-
-<p>Definition at line <a class="el" href="shapefunctions_8hpp_source.html#l00034">34</a> of file <a class="el" href="shapefunctions_8hpp_source.html">shapefunctions.hpp</a>.</p>
-
-<p>Referenced by <a class="el" href="shapefunctions_8hpp_source.html#l00050">_ddxomega()</a>, <a class="el" href="shapefunctions_8hpp_source.html#l00584">ShapeFunction&lt; Simplex&lt; 3 &gt; &gt;::gradL()</a>, <a class="el" href="shapefunctions_8hpp_source.html#l00348">ShapeFunction&lt; Simplex&lt; 2 &gt; &gt;::gradL()</a>, <a class="el" href="shapefunctions_8hpp_source.html#l00531">ShapeFunction&lt; Simplex&lt; 3 &gt; &gt;::operator()()</a>, and <a class="el" href="shapefunctions_8hpp_source.html#l00302">ShapeFunction&lt; Simplex&lt; 2 &gt; &gt;::operator()()</a>.</p>
-
-<p><div class="fragment"><pre class="fragment">{
-  <span class="keywordtype">double</span> prod=1;
-  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k = 0; k &lt; Q; k++)
-  {
-    prod *= n*x-k;
-  }
-  <span class="keywordflow">return</span> prod;
+  <span class="keywordflow">return</span> PHI.<a class="code" href="class_shape_function_3_01_simplex_3_011_01_4_01_4.html#a560713b0e35ca51557c9db2d884067a9">gradL</a>(L,ith);
 }
 </pre></div></p>
 
 <p><div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="shapefunctions_8hpp_a0010ff1942fe9e76ff98f36beeb2122e_icgraph.png" border="0" usemap="#shapefunctions_8hpp_a0010ff1942fe9e76ff98f36beeb2122e_icgraph" alt=""/></div>
-<map name="shapefunctions_8hpp_a0010ff1942fe9e76ff98f36beeb2122e_icgraph" id="shapefunctions_8hpp_a0010ff1942fe9e76ff98f36beeb2122e_icgraph">
-<area shape="rect" id="node3" href="shapefunctions_8hpp.html#a01a3613e30bb59632126479e171e8387" title="_ddxomega" alt="" coords="235,58,331,87"/><area shape="rect" id="node5" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#adc7073096ed40e82e961a07390c5a25e" title="ShapeFunction\&lt; Simplex\&lt; 3 \&gt; \&gt;::gradL" alt="" coords="487,19,764,49"/><area shape="rect" id="node7" href="class_shape_function_3_01_simplex_3_012_01_4_01_4.html#a208cf52a358198dfabbb0844860f170a" title="ShapeFunction\&lt; Simplex\&lt; 2 \&gt; \&gt;::gradL" alt="" coords="487,85,764,114"/><area shape="rect" id="node11" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#aa30f08f898a856db959138eaf2274063" title="ShapeFunction\&lt; Simplex\&lt; 3 \&gt; \&gt;::operator()" alt="" coords="129,162,436,191"/><area shape="rect" id="node13" href="class_shape_function_3_01_simplex_3_012_01_4_01_4.html#a320d96d5dcae6c488c4570ed07a81048" title="ShapeFunction\&lt; Simplex\&lt; 2 \&gt; \&gt;::operator()" alt="" coords="129,215,436,245"/></map>
-</div>
-</p>
-
-</div>
-</div>
-<a class="anchor" id="a2c2e417bea1d1a08adba588a7435ed57"></a><!-- doxytag: member="shapefunctions.hpp::_prod3" ref="a2c2e417bea1d1a08adba588a7435ed57" args="(int n, int Q)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">long int _prod3 </td>
-          <td>(</td>
-          <td class="paramtype">int&nbsp;</td>
-          <td class="paramname"> <em>n</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&nbsp;</td>
-          <td class="paramname"> <em>Q</em></td><td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td><td><code> [inline]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>NOT FOR USERS </p>
-
-<p>Definition at line <a class="el" href="shapefunctions_8hpp_source.html#l00063">63</a> of file <a class="el" href="shapefunctions_8hpp_source.html">shapefunctions.hpp</a>.</p>
-
-<p>Referenced by <a class="el" href="shapefunctions_8hpp_source.html#l00348">ShapeFunction&lt; Simplex&lt; 2 &gt; &gt;::gradL()</a>, and <a class="el" href="shapefunctions_8hpp_source.html#l00302">ShapeFunction&lt; Simplex&lt; 2 &gt; &gt;::operator()()</a>.</p>
-
-<p><div class="fragment"><pre class="fragment">{
-  <span class="keywordtype">long</span> <span class="keywordtype">int</span> prod=1;
-  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k = 0; k &lt; Q; k++)
-    prod *= n-3*k;
-  <span class="keywordflow">return</span> prod;
-}
-</pre></div></p>
-
-<p><div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="shapefunctions_8hpp_a2c2e417bea1d1a08adba588a7435ed57_icgraph.png" border="0" usemap="#shapefunctions_8hpp_a2c2e417bea1d1a08adba588a7435ed57_icgraph" alt=""/></div>
-<map name="shapefunctions_8hpp_a2c2e417bea1d1a08adba588a7435ed57_icgraph" id="shapefunctions_8hpp_a2c2e417bea1d1a08adba588a7435ed57_icgraph">
-<area shape="rect" id="node3" href="class_shape_function_3_01_simplex_3_012_01_4_01_4.html#a208cf52a358198dfabbb0844860f170a" title="ShapeFunction\&lt; Simplex\&lt; 2 \&gt; \&gt;::gradL" alt="" coords="136,5,413,35"/><area shape="rect" id="node5" href="class_shape_function_3_01_simplex_3_012_01_4_01_4.html#a320d96d5dcae6c488c4570ed07a81048" title="ShapeFunction\&lt; Simplex\&lt; 2 \&gt; \&gt;::operator()" alt="" coords="121,59,428,88"/></map>
-</div>
-</p>
-
-</div>
-</div>
-<a class="anchor" id="a843ec23c6fa7974a11eefc8b20588ec4"></a><!-- doxytag: member="shapefunctions.hpp::_prod4" ref="a843ec23c6fa7974a11eefc8b20588ec4" args="(int n, int Q)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">long int _prod4 </td>
-          <td>(</td>
-          <td class="paramtype">int&nbsp;</td>
-          <td class="paramname"> <em>n</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&nbsp;</td>
-          <td class="paramname"> <em>Q</em></td><td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td><td><code> [inline]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>NOT FOR USERS </p>
-
-<p>Definition at line <a class="el" href="shapefunctions_8hpp_source.html#l00077">77</a> of file <a class="el" href="shapefunctions_8hpp_source.html">shapefunctions.hpp</a>.</p>
-
-<p>Referenced by <a class="el" href="shapefunctions_8hpp_source.html#l00584">ShapeFunction&lt; Simplex&lt; 3 &gt; &gt;::gradL()</a>, and <a class="el" href="shapefunctions_8hpp_source.html#l00531">ShapeFunction&lt; Simplex&lt; 3 &gt; &gt;::operator()()</a>.</p>
-
-<p><div class="fragment"><pre class="fragment">{
-  <span class="keywordtype">long</span> <span class="keywordtype">int</span> prod=1;
-  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k = 0; k &lt; Q; k++)
-    prod *= n-4*k;
-  <span class="keywordflow">return</span> prod;
-}
-</pre></div></p>
-
-<p><div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="shapefunctions_8hpp_a843ec23c6fa7974a11eefc8b20588ec4_icgraph.png" border="0" usemap="#shapefunctions_8hpp_a843ec23c6fa7974a11eefc8b20588ec4_icgraph" alt=""/></div>
-<map name="shapefunctions_8hpp_a843ec23c6fa7974a11eefc8b20588ec4_icgraph" id="shapefunctions_8hpp_a843ec23c6fa7974a11eefc8b20588ec4_icgraph">
-<area shape="rect" id="node3" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#adc7073096ed40e82e961a07390c5a25e" title="ShapeFunction\&lt; Simplex\&lt; 3 \&gt; \&gt;::gradL" alt="" coords="136,5,413,35"/><area shape="rect" id="node5" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#aa30f08f898a856db959138eaf2274063" title="ShapeFunction\&lt; Simplex\&lt; 3 \&gt; \&gt;::operator()" alt="" coords="121,59,428,88"/></map>
+<div class="center"><img src="shapefunctions_8hpp_a9f1fe2875f8438e7a3b5324211449393_icgraph.png" border="0" usemap="#shapefunctions_8hpp_a9f1fe2875f8438e7a3b5324211449393_icgraph" alt=""/></div>
+<map name="shapefunctions_8hpp_a9f1fe2875f8438e7a3b5324211449393_icgraph" id="shapefunctions_8hpp_a9f1fe2875f8438e7a3b5324211449393_icgraph">
+<area shape="rect" id="node3" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#a4b80cdbe6326783aee06278c64cd815e" title="ShapeFunction\&lt; Simplex\&lt; 3 \&gt; \&gt;::gradL" alt="" coords="113,5,391,35"/><area shape="rect" id="node5" href="class_shape_function_3_01_simplex_3_012_01_4_01_4.html#a6ac03dc0bcfec575b4e331e6ee8b1963" title="ShapeFunction\&lt; Simplex\&lt; 2 \&gt; \&gt;::gradL" alt="" coords="113,59,391,88"/></map>
 </div>
 </p>
 
@@ -380,64 +207,13 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a class="anchor" id="a9f1fe2875f8438e7a3b5324211449393"></a><!-- doxytag: member="shapefunctions.hpp::gradL" ref="a9f1fe2875f8438e7a3b5324211449393" args="(double const &amp;L, ShapeFunction&lt; Simplex&lt; 1 &gt; &gt; PHI, int ith)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">double gradL </td>
-          <td>(</td>
-          <td class="paramtype">double const &amp;&nbsp;</td>
-          <td class="paramname"> <em>L</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">ShapeFunction&lt; <a class="el" href="class_simplex.html">Simplex</a>&lt; 1 &gt; &gt;&nbsp;</td>
-          <td class="paramname"> <em>PHI</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&nbsp;</td>
-          <td class="paramname"> <em>ith</em></td><td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td><td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Definition at line <a class="el" href="shapefunctions_8hpp_source.html#l00673">673</a> of file <a class="el" href="shapefunctions_8hpp_source.html">shapefunctions.hpp</a>.</p>
-
-<p>Referenced by <a class="el" href="shapefunctions_8hpp_source.html#l00647">ShapeFunction&lt; Simplex&lt; 3 &gt; &gt;::gradL()</a>, and <a class="el" href="shapefunctions_8hpp_source.html#l00398">ShapeFunction&lt; Simplex&lt; 2 &gt; &gt;::gradL()</a>.</p>
-
-<p><div class="fragment"><pre class="fragment">{
-  <span class="keywordflow">return</span> PHI.<a class="code" href="class_shape_function_3_01_simplex_3_011_01_4_01_4.html#a560713b0e35ca51557c9db2d884067a9">gradL</a>(L,ith);
-}
-</pre></div></p>
-
-<p><div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="shapefunctions_8hpp_a9f1fe2875f8438e7a3b5324211449393_icgraph.png" border="0" usemap="#shapefunctions_8hpp_a9f1fe2875f8438e7a3b5324211449393_icgraph" alt=""/></div>
-<map name="shapefunctions_8hpp_a9f1fe2875f8438e7a3b5324211449393_icgraph" id="shapefunctions_8hpp_a9f1fe2875f8438e7a3b5324211449393_icgraph">
-<area shape="rect" id="node3" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#a4b80cdbe6326783aee06278c64cd815e" title="ShapeFunction\&lt; Simplex\&lt; 3 \&gt; \&gt;::gradL" alt="" coords="113,5,391,35"/><area shape="rect" id="node5" href="class_shape_function_3_01_simplex_3_012_01_4_01_4.html#a6ac03dc0bcfec575b4e331e6ee8b1963" title="ShapeFunction\&lt; Simplex\&lt; 2 \&gt; \&gt;::gradL" alt="" coords="113,59,391,88"/></map>
-</div>
-</p>
-
-</div>
-</div>
 </div>
 <!--- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&nbsp;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&nbsp;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&nbsp;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&nbsp;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&nbsp;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&nbsp;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&nbsp;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&nbsp;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&nbsp;</span>Defines</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&nbsp;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&nbsp;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&nbsp;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&nbsp;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&nbsp;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&nbsp;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&nbsp;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&nbsp;</span>Defines</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -446,7 +222,7 @@ Here is the caller graph for this function:</div>
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Thu Feb 3 2011 09:30:20 for FEPiCpp by&nbsp;
+<hr class="footer"/><address class="footer"><small>Generated on Wed Feb 2 2011 20:53:23 for FEPiCpp by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.1 </small></address>
 </body>
