@@ -1,9 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="node3" href="$class_half_edge.html#afcb12acbea16ed7c9144bf2eefa5c855" title="HalfEdge::getNodes" alt="" coords="240,5,389,35"/>
-<area shape="rect" id="node7" href="$class_half_edge.html#abb0ab4b519841b7045acf6d9a6ae1ef6" title="HalfEdge::getVertices" alt="" coords="236,59,393,88"/>
-<area shape="rect" id="node9" href="$class_half_edge.html#a431702daa45fb282603912cd86c20168" title="HalfEdge::hasTheseVertices" alt="" coords="216,112,413,141"/>
-<area shape="rect" id="node11" href="$class_half_edge.html#a32cf907fc83694f30a9a6930003944b1" title="HalfEdge::printSelf" alt="" coords="245,165,384,195"/>
-<area shape="rect" id="node13" href="$class_half_edge_lab.html#a36ab0e33b103f54868e475bbe954a747" title="HalfEdgeLab::propagateHalf" alt="" coords="215,219,415,248"/>
-<area shape="rect" id="node15" href="$class_half_edge_lab.html#aee9b20ae0048adef3cebe9d1ef0c5101" title="HalfEdgeLab::propagateTag" alt="" coords="216,272,413,301"/>
-<area shape="rect" id="node5" href="$class_half_edge.html#a0a5ab804bcae5c5510b439011e7e8c10" title="HalfEdge::getLenght" alt="" coords="464,5,616,35"/>
-</map>

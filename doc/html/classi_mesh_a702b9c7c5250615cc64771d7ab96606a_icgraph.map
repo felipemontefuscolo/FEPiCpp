@@ -1,6 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="node3" href="$classi_mesh.html#abf3dcfff0a586a137d1c641b66d5ca67" title="iMesh::buildAdjacency4face" alt="" coords="192,5,389,35"/>
-<area shape="rect" id="node7" href="$classi_mesh.html#aa86dff248af77c3d4a88e7f8dd02b47e" title="iMesh::buildAdjacency4volume" alt="" coords="183,59,399,88"/>
-<area shape="rect" id="node5" href="$class_mesh_methods_3_01_mesh_00_012_01_4.html#afa5fc02d35559551aeb95ba11b559a62" title="MeshMethods\&lt; Mesh, 2 \&gt;::buildAdjacency" alt="" coords="449,5,743,35"/>
-<area shape="rect" id="node9" href="$class_mesh_methods_3_01_mesh_00_013_01_4.html#ad4538cac83f816465c8723691dca7b4a" title="MeshMethods\&lt; Mesh, 3 \&gt;::buildAdjacency" alt="" coords="449,59,743,88"/>
-</map>

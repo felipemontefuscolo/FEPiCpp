@@ -1,8 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="node3" href="$classi_half_face.html#aa4c2e21e2ab57f962d6ac0209741aa3c" title="iHalfFace::getNodes" alt="" coords="228,5,377,35"/>
-<area shape="rect" id="node5" href="$classi_half_face.html#a4980a7ea57bd1316200630133d3de9d8" title="iHalfFace::getVertices" alt="" coords="224,59,381,88"/>
-<area shape="rect" id="node7" href="$classi_half_face.html#a32ec53fea3689a4c39af5465f66f32a8" title="iHalfFace::hasTheseVertices" alt="" coords="204,112,401,141"/>
-<area shape="rect" id="node9" href="$classi_half_face.html#af93d8a89fba02e323f91b1a14370b598" title="iHalfFace::printSelf" alt="" coords="233,165,372,195"/>
-<area shape="rect" id="node11" href="$classi_half_face_lab.html#a7800883fa4f296e96bb2befd3d494c63" title="iHalfFaceLab::propagateHalf" alt="" coords="203,219,403,248"/>
-<area shape="rect" id="node13" href="$classi_half_face_lab.html#afd323622372235b0a685b9a2312d0d17" title="iHalfFaceLab::propagateLabel" alt="" coords="197,272,408,301"/>
-</map>
