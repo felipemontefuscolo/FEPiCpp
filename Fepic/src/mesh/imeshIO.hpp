@@ -66,7 +66,7 @@ void iMesh<Traits>::buildAdjacency4face()
   uint k=0;
   for (auto cellend=_cellL.end(); cell != cellend ; ++cell)
   {
-    if (!cell->isDead())
+    if (!cell->disabled())
     {
       for (int ith = 0; ith < n_borders; ++ith)
       {
@@ -101,7 +101,7 @@ void iMesh<Traits>::buildAdjacency4face()
     {
       thisC = tab_it->second[0];
       thisith =  tab_it->second[1];
-      thislabel = this->getCell(thisC)->getLabel();
+      thislabel = this->getCell(thisC)->getTag();
       HalflEdgeLabT temp(thisC, thisith, thislabel);
       uint mHE_universal_iD = addHalfl(temp);
       this->getCell(thisC)->getHalf(thisith)->setCompleteID(mHE_universal_iD, -1);
@@ -136,7 +136,7 @@ void iMesh<Traits>::buildAdjacency4volume()
 
   //for (auto cellend=_cellL.end(); cell != cellend ; ++cell)
   //{
-    //if (!cell->isDead())
+    //if (!cell->disabled())
     //{
       //for (int ith = 0; ith < n_borders; ++ith)
       //{
@@ -179,7 +179,7 @@ void iMesh<Traits>::buildAdjacency4volume()
     //{
       //thisC = tab_it->second[0];
       //thisith =  tab_it->second[1];
-      //thislabel = this->getCell(thisC)->getLabel();
+      //thislabel = this->getCell(thisC)->getTag();
       //HalflFaceLabT temp(thisC, thisith, 0, thislabel);
       //uint mHE_universal_iD = addHalfl(temp);
       //this->getCell(thisC)->getHalf(thisith)->setCompleteID(mHE_universal_iD, -1, 0);
@@ -207,7 +207,7 @@ void iMesh<Traits>::buildAdjacency4volume()
   uint k=0;
   for (auto cellend=_cellL.end(); cell != cellend ; ++cell)
   {
-    if (!cell->isDead())
+    if (!cell->disabled())
     {
       for (int ith = 0; ith != n_borders; ++ith)
       {
@@ -250,7 +250,7 @@ void iMesh<Traits>::buildAdjacency4volume()
     {
       thisC = tab_it->second[0];
       thisith =  tab_it->second[1];
-      thislabel = this->getCell(thisC)->getLabel();
+      thislabel = this->getCell(thisC)->getTag();
       HalflFaceLabT temp(thisC, thisith, 0, thislabel);
       uint mHE_universal_iD = addHalfl(temp);
       this->getCell(thisC)->getHalf(thisith)->setCompleteID(mHE_universal_iD, -1, 0);
@@ -377,7 +377,7 @@ void iMesh<Traits>::readFileMsh(const char* filename)
       case 0: // caso ponto
         File >> id_aux;
         --id_aux;
-        this->getNode(id_aux)->setLabel(label_aux);
+        this->getNode(id_aux)->setTag(label_aux);
         break;
 
       case 1: // caso aresta
@@ -398,7 +398,7 @@ void iMesh<Traits>::readFileMsh(const char* filename)
               --nodeid;
               Cell.setNode(i, nodeid);
             }
-            Cell.setLabel(label_aux);
+            Cell.setTag(label_aux);
             this->addCell(Cell);
             ++num_cells;
           }
@@ -425,7 +425,7 @@ void iMesh<Traits>::readFileMsh(const char* filename)
               --nodeid;
               Cell.setNode(i, nodeid);
             }
-            Cell.setLabel(label_aux);
+            Cell.setTag(label_aux);
             this->addCell(Cell);
             ++num_cells;
           }
@@ -452,7 +452,7 @@ void iMesh<Traits>::readFileMsh(const char* filename)
               --nodeid;
               Cell.setNode(i, nodeid);
             }
-            Cell.setLabel(label_aux);
+            Cell.setTag(label_aux);
             this->addCell(Cell);
             ++num_cells;
           }
@@ -530,12 +530,12 @@ void iMesh<Traits>::readFileMsh(const char* filename)
           {
             File >> nodes[i];
             --nodes[i];
-            if (this->getNode(nodes[i])->getLabel() == 0)
-              this->getNode(nodes[i])->setLabel(label_aux);
+            if (this->getNode(nodes[i])->getTag() == 0)
+              this->getNode(nodes[i])->setTag(label_aux);
           }
           copy( nodes.begin(), nodes.begin()+2, vtx.begin() );
           if( this->theseVerticesFormAHalfl(vtx, half_id) )
-            this->getHalfl(half_id)->setLabel(label_aux);
+            this->getHalfl(half_id)->setTag(label_aux);
         }
         else
         {
@@ -544,8 +544,8 @@ void iMesh<Traits>::readFileMsh(const char* filename)
           {
             File >> nodeid;
             --nodeid;
-            if (this->getNode(nodeid)->getLabel() == 0)
-              this->getNode(nodeid)->setLabel(label_aux);
+            if (this->getNode(nodeid)->getTag() == 0)
+              this->getNode(nodeid)->setTag(label_aux);
           }
         }
         break;
@@ -560,12 +560,12 @@ void iMesh<Traits>::readFileMsh(const char* filename)
           {
             File >> nodes[i];
             --nodes[i];
-            if (this->getNode(nodes[i])->getLabel() == 0)
-              this->getNode(nodes[i])->setLabel(label_aux);
+            if (this->getNode(nodes[i])->getTag() == 0)
+              this->getNode(nodes[i])->setTag(label_aux);
           }
           copy( nodes.begin(), nodes.begin()+CellBT::n_borders, vtx.begin() );
           if( this->theseVerticesFormAHalfl(vtx, half_id) )
-            this->getHalfl(half_id)->setLabel(label_aux); //std::cout << (++TESTE) << std::endl;
+            this->getHalfl(half_id)->setTag(label_aux); //std::cout << (++TESTE) << std::endl;
         }
         else
         {
@@ -575,8 +575,8 @@ void iMesh<Traits>::readFileMsh(const char* filename)
             File >> nodeid;
             --nodeid;
 
-            if ((this->getNode(nodeid)->getLabel()) == 0)
-              this->getNode(nodeid)->setLabel(label_aux);
+            if ((this->getNode(nodeid)->getTag()) == 0)
+              this->getNode(nodeid)->setTag(label_aux);
           }
         }
         break;
@@ -587,8 +587,8 @@ void iMesh<Traits>::readFileMsh(const char* filename)
         {
           File >> nodeid;
           --nodeid;
-          if (this->getNode(nodeid)->getLabel() == 0)
-            this->getNode(nodeid)->setLabel(label_aux);
+          if (this->getNode(nodeid)->getTag() == 0)
+            this->getNode(nodeid)->setTag(label_aux);
         }
         break;
 
@@ -600,11 +600,11 @@ void iMesh<Traits>::readFileMsh(const char* filename)
 
 
   for (CellIterator cit = _cellL.begin(), cellend=_cellL.end() ; cit != cellend; ++cit)
-    if (!cit->isDead())
+    if (!cit->disabled())
       cit->propagateHalf(*this);
 
   for (HalflIterator hit= _mhalfL.begin(), hend=_mhalfL.end(); hit != hend; ++hit)
-    if (!hit->isDead())
+    if (!hit->disabled())
       hit->propagateHalf(*this);
 
 
@@ -629,7 +629,7 @@ void iMesh<Traits>::writeFileState() {
   for (uint k=0, tam=getNumNodesTotal(); k< tam; ++k)
   {
     this->getNode(k)->printSelfVtk(Fout);
-    Fout << " " << this->getNode(k)->getLabel() << std::endl;
+    Fout << " " << this->getNode(k)->getTag() << std::endl;
 	}
 
   CellT *cell;
@@ -638,7 +638,7 @@ void iMesh<Traits>::writeFileState() {
   for (uint i = 0; i < this->getNumCells(); i++)
   {
     cell = this->getCell(i);
-    cell->printSelfState(Fout); Fout << " label:" << cell->getLabel();
+    cell->printSelfState(Fout); Fout << " label:" << cell->getTag();
     Fout << std::endl;
   }
 
@@ -666,7 +666,7 @@ void iMesh<Traits>::writeFileState() {
   for (uint i = 0, tam=this->getNumHalflTotal(); i < tam; i++)
   {
     HalflT *h_obj = this->getHalfl(i);
-    h_obj->printSelf(Fout); Fout << " " << h_obj->getLabel();
+    h_obj->printSelf(Fout); Fout << " " << h_obj->getTag();
     Fout << std::endl;
   }
 
@@ -732,7 +732,7 @@ void iMesh<Traits>::writeVtk(bool flinear)
   CellIterator cit = _cellL.begin();
   for (auto cellend=_cellL.end(); cit != cellend ; ++cit)
   {
-    if(!cit->isDead())
+    if(!cit->disabled())
     {
       cit->printSelfVtk(Fout, order);
       Fout << std::endl;
@@ -743,7 +743,7 @@ void iMesh<Traits>::writeVtk(bool flinear)
   Fout << "CELL_TYPES " << ncells << std::endl;
   for (auto cellend=_cellL.end(); cit != cellend ; ++cit)
   {
-    if(!cit->isDead())
+    if(!cit->disabled())
     {
 			for (int i = 0; i < nc_mm; i++)
 				Fout << type << std::endl;
@@ -801,7 +801,7 @@ void iMesh<Traits>::addScalarVtk(const char* nome_var, T&& scalar, uint num_pts)
 
 
 template<class Traits>
-void iMesh<Traits>::addPointLabelVtk(const char* nome_var="node labels")
+void iMesh<Traits>::addPointTagVtk(const char* nome_var="node labels")
 {
 
   std::stringstream ss;
@@ -834,7 +834,7 @@ void iMesh<Traits>::addPointLabelVtk(const char* nome_var="node labels")
   Fout << "LOOKUP_TABLE default"            << std::endl;
 
   for (uint i=0; i<num_pts; ++i) {
-    Fout << (getNode(i)->getLabel()) << std::endl;
+    Fout << (getNode(i)->getTag()) << std::endl;
   };
 
   Fout << std::endl << std::endl;

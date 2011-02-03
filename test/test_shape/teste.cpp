@@ -122,7 +122,7 @@ int main(int argc, char *argv[]) {
 	
 	//malha.writeFileState();
     //malha.writeVtk();
-    //malha.addNodeLabelVtk("Node_Labes");
+    //malha.addNodeTagVtk("Node_Labes");
     //malha.addNodeHalfVtk("Node_Half");
 
 	//cout << "sucesso\n";

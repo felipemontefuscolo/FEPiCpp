@@ -101,7 +101,7 @@ public:
   void addScalarVtk(const char* nome_var, T&& scalar, uint num_pts);
   template<class T>
   void addVectorVtk(const char* nome_var, T&& arrayos, int dim, uint num_pts);
-  void addPointLabelVtk(const char* nome_var); // para debug
+  void addPointTagVtk(const char* nome_var); // para debug
   void addPointHalfVtk(const char* nome_var);  // para debug
 
         /*-------------------------------------------------------------*/
@@ -175,7 +175,7 @@ public:
     {
       bool b = this->getHalfl(i)->hasTheseVertices(vtx, *this);
 
-      if(b && (dead_mh || (!getHalfl(i)->isDead())) )
+      if(b && (dead_mh || (!getHalfl(i)->disabled())) )
       {
         half_id = i;
         RET = true;
