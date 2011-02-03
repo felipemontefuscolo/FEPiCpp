@@ -1,3 +1,6 @@
 <map id="G" name="G">
-<area shape="rect" id="node3" href="$misc_8hpp.html#a0d04dc456d7b1b3aced24c06e99b5143" title="get_bit" alt="" coords="333,5,400,35"/>
+<area shape="rect" id="node3" href="$shapefunctions_8hpp.html#a01a3613e30bb59632126479e171e8387" title="_ddxomega" alt="" coords="335,5,431,35"/>
+<area shape="rect" id="node5" href="$shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e" title="_omega" alt="" coords="480,32,555,61"/>
+<area shape="rect" id="node8" href="$shapefunctions_8hpp.html#a843ec23c6fa7974a11eefc8b20588ec4" title="_prod4" alt="" coords="349,109,416,139"/>
+<area shape="rect" id="node10" href="$misc_8hpp.html#a0d04dc456d7b1b3aced24c06e99b5143" title="get_bit" alt="" coords="349,163,416,192"/>
 </map>

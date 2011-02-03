@@ -1,3 +1,13 @@
 <map id="G" name="G">
-<area shape="rect" id="node1" href="$class_mesh_methods_3_01_mesh_00_013_01_4.html" title="MeshMethods\&lt; Mesh, 3 \&gt;" alt="" coords="7,5,196,35"/>
+<area shape="rect" id="node1" href="$class___labelable.html" title="_Labelable" alt="" coords="32,165,123,195"/>
+<area shape="rect" id="node3" href="$class___poly2d.html" title="_Poly2d\&lt; Traits \&gt;" alt="" coords="213,112,347,141"/>
+<area shape="rect" id="node7" href="$class___poly3d.html" title="_Poly3d\&lt; Traits \&gt;" alt="" coords="213,165,347,195"/>
+<area shape="rect" id="node11" href="$class_edge.html" title="Edge\&lt; Traits \&gt;" alt="" coords="221,5,339,35"/>
+<area shape="rect" id="node13" href="$class_half_edge_lab.html" title="HalfEdgeLab\&lt; Traits \&gt;" alt="" coords="197,219,363,248"/>
+<area shape="rect" id="node15" href="$class_half_face_lab.html" title="HalfFaceLab\&lt; Traits \&gt;" alt="" coords="199,272,361,301"/>
+<area shape="rect" id="node17" href="$class_point.html" title="Point\&lt; Traits \&gt;" alt="" coords="221,59,339,88"/>
+<area shape="rect" id="node5" href="$class_triangle.html" title="Triangle\&lt; Traits \&gt;" alt="" coords="425,112,559,141"/>
+<area shape="rect" id="node9" href="$class_tetrahedron.html" title="Tetrahedron\&lt; Traits \&gt;" alt="" coords="412,165,572,195"/>
+<area shape="rect" id="node18" href="$class_half_edge.html" title="HalfEdge\&lt; Traits \&gt;" alt="" coords="7,219,148,248"/>
+<area shape="rect" id="node20" href="$class_half_face.html" title="HalfFace\&lt; Traits \&gt;" alt="" coords="8,272,147,301"/>
 </map>

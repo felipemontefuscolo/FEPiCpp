@@ -76,7 +76,7 @@ public:
   static void buildCellLocalNodes(iMesh<Traits> & mesh)
   {
     mesh.edges_local_nodes = Traits::CellT::getEdgesLocalNodes(mesh.getOrder());
-    mesh.faces_local_nodes = Traits::CellT::getFacesLocalNodes(mesh.getOrder());
+    mesh.border_local_nodes = Traits::CellT::getFacesLocalNodes(mesh.getOrder());
   }
 };
 

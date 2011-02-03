@@ -50,7 +50,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 <div class="header">
   <div class="summary">
-<a href="#pub-methods">Public Member Functions</a>  </div>
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-attribs">Public Attributes</a>  </div>
   <div class="headertitle">
 <h1>ShapeFunction&lt; Simplex&lt; 1 &gt; &gt; Class Template Reference</h1>  </div>
 </div>
@@ -68,6 +69,9 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_shape_function_3_01_simplex_3_011_01_4_01_4.html#a560713b0e35ca51557c9db2d884067a9">gradL</a> (double qsi, int ith) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_shape_function_3_01_simplex_3_011_01_4_01_4.html#ae185406835191febc4eee374dff492b8">getDegree</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_shape_function_3_01_simplex_3_011_01_4_01_4.html#af7b36f6c9bb5835370e060ba96a29ba0">getNumDof</a> () const </td></tr>
+<tr><td colspan="2"><h2><a name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_shape_function_3_01_simplex_3_011_01_4_01_4.html#a78bc90286f52aa7ad4e23038055464b6">_degree</a></td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
 <h3>template&lt;&gt;<br/>
@@ -94,7 +98,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="shapefunctions_8hpp_source.html#l00100">100</a> of file <a class="el" href="shapefunctions_8hpp_source.html">shapefunctions.hpp</a>.</p>
 
-<p><div class="fragment"><pre class="fragment">                              : _degree(degree)
+<p><div class="fragment"><pre class="fragment">                              : <a class="code" href="class_shape_function_3_01_simplex_3_011_01_4_01_4.html#a78bc90286f52aa7ad4e23038055464b6">_degree</a>(degree)
   {
   };
 </pre></div></p>
@@ -120,7 +124,7 @@ Public Member Functions</h2></td></tr>
 <p>Definition at line <a class="el" href="shapefunctions_8hpp_source.html#l00190">190</a> of file <a class="el" href="shapefunctions_8hpp_source.html">shapefunctions.hpp</a>.</p>
 
 <p><div class="fragment"><pre class="fragment">  {
-    <span class="keywordflow">return</span> _degree;
+    <span class="keywordflow">return</span> <a class="code" href="class_shape_function_3_01_simplex_3_011_01_4_01_4.html#a78bc90286f52aa7ad4e23038055464b6">_degree</a>;
   }
 </pre></div></p>
 
@@ -144,7 +148,7 @@ Public Member Functions</h2></td></tr>
 <p>Definition at line <a class="el" href="shapefunctions_8hpp_source.html#l00195">195</a> of file <a class="el" href="shapefunctions_8hpp_source.html">shapefunctions.hpp</a>.</p>
 
 <p><div class="fragment"><pre class="fragment">  {
-    <span class="keywordflow">return</span> _degree+1;
+    <span class="keywordflow">return</span> <a class="code" href="class_shape_function_3_01_simplex_3_011_01_4_01_4.html#a78bc90286f52aa7ad4e23038055464b6">_degree</a>+1;
   }
 </pre></div></p>
 
@@ -180,10 +184,10 @@ Public Member Functions</h2></td></tr>
 
 <p><div class="fragment"><pre class="fragment">  {
 
-    <span class="keywordflow">if</span> (_degree == 0)
+    <span class="keywordflow">if</span> (<a class="code" href="class_shape_function_3_01_simplex_3_011_01_4_01_4.html#a78bc90286f52aa7ad4e23038055464b6">_degree</a> == 0)
       <span class="keywordflow">return</span> 0;
 
-    <span class="keywordflow">if</span> (_degree == 1)
+    <span class="keywordflow">if</span> (<a class="code" href="class_shape_function_3_01_simplex_3_011_01_4_01_4.html#a78bc90286f52aa7ad4e23038055464b6">_degree</a> == 1)
     {
       <span class="keywordflow">switch</span> (ith)
       {
@@ -201,9 +205,9 @@ Public Member Functions</h2></td></tr>
     <span class="keywordtype">double</span> denom = 1;
     <span class="keywordtype">double</span> prod;
     <span class="keywordtype">double</span> sum=0;
-    <span class="keywordtype">double</span> xl,xk,xi = (2.*ith-_degree)/_degree;
+    <span class="keywordtype">double</span> xl,xk,xi = (2.*ith-<a class="code" href="class_shape_function_3_01_simplex_3_011_01_4_01_4.html#a78bc90286f52aa7ad4e23038055464b6">_degree</a>)/<a class="code" href="class_shape_function_3_01_simplex_3_011_01_4_01_4.html#a78bc90286f52aa7ad4e23038055464b6">_degree</a>;
 
-    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k = 0; k &lt; _degree+1; ++k)
+    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k = 0; k &lt; <a class="code" href="class_shape_function_3_01_simplex_3_011_01_4_01_4.html#a78bc90286f52aa7ad4e23038055464b6">_degree</a>+1; ++k)
       <span class="keywordflow">if</span> (k!=ith)
       {
         xk = (2.*k-_degree)/_degree;
@@ -255,11 +259,11 @@ Public Member Functions</h2></td></tr>
 <p>Definition at line <a class="el" href="shapefunctions_8hpp_source.html#l00112">112</a> of file <a class="el" href="shapefunctions_8hpp_source.html">shapefunctions.hpp</a>.</p>
 
 <p><div class="fragment"><pre class="fragment">  {
-    <span class="keywordflow">if</span> (_degree==0)
+    <span class="keywordflow">if</span> (<a class="code" href="class_shape_function_3_01_simplex_3_011_01_4_01_4.html#a78bc90286f52aa7ad4e23038055464b6">_degree</a>==0)
     {
       <span class="keywordflow">return</span> 1.;
     }
-    <span class="keywordflow">if</span> (_degree==1)
+    <span class="keywordflow">if</span> (<a class="code" href="class_shape_function_3_01_simplex_3_011_01_4_01_4.html#a78bc90286f52aa7ad4e23038055464b6">_degree</a>==1)
     {
       <span class="keywordflow">switch</span> (ith)
       {
@@ -270,8 +274,8 @@ Public Member Functions</h2></td></tr>
 
     <span class="keywordtype">double</span> prod=1;
         <span class="keywordtype">double</span> xk;
-        <span class="keywordtype">double</span> xi = (2.*ith-_degree)/_degree;
-    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k = 0; k &lt; _degree+1; ++k)
+        <span class="keywordtype">double</span> xi = (2.*ith-<a class="code" href="class_shape_function_3_01_simplex_3_011_01_4_01_4.html#a78bc90286f52aa7ad4e23038055464b6">_degree</a>)/<a class="code" href="class_shape_function_3_01_simplex_3_011_01_4_01_4.html#a78bc90286f52aa7ad4e23038055464b6">_degree</a>;
+    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k = 0; k &lt; <a class="code" href="class_shape_function_3_01_simplex_3_011_01_4_01_4.html#a78bc90286f52aa7ad4e23038055464b6">_degree</a>+1; ++k)
       <span class="keywordflow">if</span> (k!=ith)
       {
         xk = (2.*k-_degree)/_degree;
@@ -303,9 +307,25 @@ Public Member Functions</h2></td></tr>
 <p>Definition at line <a class="el" href="shapefunctions_8hpp_source.html#l00104">104</a> of file <a class="el" href="shapefunctions_8hpp_source.html">shapefunctions.hpp</a>.</p>
 
 <p><div class="fragment"><pre class="fragment">  {
-    _degree=(degree);
+    <a class="code" href="class_shape_function_3_01_simplex_3_011_01_4_01_4.html#a78bc90286f52aa7ad4e23038055464b6">_degree</a>=(degree);
   }
 </pre></div></p>
+
+</div>
+</div>
+<hr/><h2>Member Data Documentation</h2>
+<a class="anchor" id="a78bc90286f52aa7ad4e23038055464b6"></a><!-- doxytag: member="ShapeFunction&lt; Simplex&lt; 1 &gt; &gt;::_degree" ref="a78bc90286f52aa7ad4e23038055464b6" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int ShapeFunction&lt; <a class="el" href="class_simplex.html">Simplex</a>&lt; 1 &gt; &gt;::<a class="el" href="class_shape_function_3_01_simplex_3_011_01_4_01_4.html#a78bc90286f52aa7ad4e23038055464b6">_degree</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Definition at line <a class="el" href="shapefunctions_8hpp_source.html#l00201">201</a> of file <a class="el" href="shapefunctions_8hpp_source.html">shapefunctions.hpp</a>.</p>
 
 </div>
 </div>
@@ -318,7 +338,7 @@ Public Member Functions</h2></td></tr>
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&nbsp;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&nbsp;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&nbsp;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&nbsp;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&nbsp;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&nbsp;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&nbsp;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&nbsp;</span>Defines</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&nbsp;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&nbsp;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&nbsp;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&nbsp;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&nbsp;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&nbsp;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&nbsp;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&nbsp;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&nbsp;</span>Defines</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -327,7 +347,7 @@ Public Member Functions</h2></td></tr>
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Wed Feb 2 2011 20:53:23 for FEPiCpp by&nbsp;
+<hr class="footer"/><address class="footer"><small>Generated on Thu Feb 3 2011 09:30:20 for FEPiCpp by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.1 </small></address>
 </body>

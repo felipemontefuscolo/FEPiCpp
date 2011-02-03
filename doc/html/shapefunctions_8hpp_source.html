@@ -89,7 +89,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00029"></a>00029 <span class="comment"> * É a definição que está na documentação.</span>
 <a name="l00030"></a>00030 <span class="comment"> */</span>
 <a name="l00033"></a>00033 <span class="keyword">inline</span>
-<a name="l00034"></a>00034 <span class="keywordtype">double</span> _omega(<span class="keywordtype">int</span> n, <span class="keywordtype">int</span> Q, <span class="keywordtype">double</span> x)
+<a name="l00034"></a><a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">00034</a> <span class="keywordtype">double</span> <a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(<span class="keywordtype">int</span> n, <span class="keywordtype">int</span> Q, <span class="keywordtype">double</span> x)
 <a name="l00035"></a>00035 {
 <a name="l00036"></a>00036   <span class="keywordtype">double</span> prod=1;
 <a name="l00037"></a>00037   <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k = 0; k &lt; Q; k++)
@@ -103,18 +103,18 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00045"></a>00045 <span class="comment"> * É a definição que está na documentação.</span>
 <a name="l00046"></a>00046 <span class="comment"> */</span>
 <a name="l00049"></a>00049 <span class="keyword">inline</span>
-<a name="l00050"></a>00050 <span class="keywordtype">double</span> _ddxomega(<span class="keywordtype">int</span> n, <span class="keywordtype">int</span> Q, <span class="keywordtype">double</span> x)
+<a name="l00050"></a><a class="code" href="shapefunctions_8hpp.html#a01a3613e30bb59632126479e171e8387">00050</a> <span class="keywordtype">double</span> <a class="code" href="shapefunctions_8hpp.html#a01a3613e30bb59632126479e171e8387">_ddxomega</a>(<span class="keywordtype">int</span> n, <span class="keywordtype">int</span> Q, <span class="keywordtype">double</span> x)
 <a name="l00051"></a>00051 {
 <a name="l00052"></a>00052   <span class="keywordflow">if</span> (Q==0)
 <a name="l00053"></a>00053     <span class="keywordflow">return</span> 0.;
-<a name="l00054"></a>00054   <span class="keywordflow">return</span> (n*x - Q + 1.)*_ddxomega(n, Q-1, x) + n*_omega(n, Q-1, x);
+<a name="l00054"></a>00054   <span class="keywordflow">return</span> (n*x - Q + 1.)*<a class="code" href="shapefunctions_8hpp.html#a01a3613e30bb59632126479e171e8387">_ddxomega</a>(n, Q-1, x) + n*<a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(n, Q-1, x);
 <a name="l00055"></a>00055 }
 <a name="l00056"></a>00056 
 <a name="l00057"></a>00057 <span class="comment">/*</span>
 <a name="l00058"></a>00058 <span class="comment"> * Computa: product(n-3*k,k,0,Q-1)</span>
 <a name="l00059"></a>00059 <span class="comment"> */</span>
 <a name="l00062"></a>00062 <span class="keyword">inline</span>
-<a name="l00063"></a>00063 <span class="keywordtype">long</span> <span class="keywordtype">int</span> _prod3(<span class="keywordtype">int</span> n, <span class="keywordtype">int</span> Q)
+<a name="l00063"></a><a class="code" href="shapefunctions_8hpp.html#a2c2e417bea1d1a08adba588a7435ed57">00063</a> <span class="keywordtype">long</span> <span class="keywordtype">int</span> <a class="code" href="shapefunctions_8hpp.html#a2c2e417bea1d1a08adba588a7435ed57">_prod3</a>(<span class="keywordtype">int</span> n, <span class="keywordtype">int</span> Q)
 <a name="l00064"></a>00064 {
 <a name="l00065"></a>00065   <span class="keywordtype">long</span> <span class="keywordtype">int</span> prod=1;
 <a name="l00066"></a>00066   <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k = 0; k &lt; Q; k++)
@@ -126,7 +126,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00072"></a>00072 <span class="comment"> * Computa: product(n-4*k,k,0,Q-1)</span>
 <a name="l00073"></a>00073 <span class="comment"> */</span>
 <a name="l00076"></a>00076 <span class="keyword">inline</span>
-<a name="l00077"></a>00077 <span class="keywordtype">long</span> <span class="keywordtype">int</span> _prod4(<span class="keywordtype">int</span> n, <span class="keywordtype">int</span> Q)
+<a name="l00077"></a><a class="code" href="shapefunctions_8hpp.html#a843ec23c6fa7974a11eefc8b20588ec4">00077</a> <span class="keywordtype">long</span> <span class="keywordtype">int</span> <a class="code" href="shapefunctions_8hpp.html#a843ec23c6fa7974a11eefc8b20588ec4">_prod4</a>(<span class="keywordtype">int</span> n, <span class="keywordtype">int</span> Q)
 <a name="l00078"></a>00078 {
 <a name="l00079"></a>00079   <span class="keywordtype">long</span> <span class="keywordtype">int</span> prod=1;
 <a name="l00080"></a>00080   <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k = 0; k &lt; Q; k++)
@@ -244,7 +244,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00198"></a>00198   }
 <a name="l00199"></a>00199 
 <a name="l00200"></a>00200   <span class="comment">/* member functions */</span>
-<a name="l00201"></a>00201   <span class="keywordtype">int</span> _degree;
+<a name="l00201"></a><a class="code" href="class_shape_function_3_01_simplex_3_011_01_4_01_4.html#a78bc90286f52aa7ad4e23038055464b6">00201</a>   <span class="keywordtype">int</span> _degree;
 <a name="l00202"></a>00202 };
 <a name="l00203"></a>00203 
 <a name="l00204"></a>00204 <span class="comment">/*</span>
@@ -340,16 +340,16 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00319"></a>00319         Q2 = this-&gt;_bar_nodes[ith][1],
 <a name="l00320"></a>00320         Q0 = this-&gt;_degree-Q1-Q2;
 <a name="l00321"></a>00321 
-<a name="l00322"></a>00322     <span class="keywordtype">double</span> result = _omega(_degree, Q0, L0)*
-<a name="l00323"></a>00323                     _omega(_degree, Q1, L1)*
-<a name="l00324"></a>00324                     _omega(_degree, Q2, L2);
+<a name="l00322"></a>00322     <span class="keywordtype">double</span> result = <a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(_degree, Q0, L0)*
+<a name="l00323"></a>00323                     <a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(_degree, Q1, L1)*
+<a name="l00324"></a>00324                     <a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(_degree, Q2, L2);
 <a name="l00325"></a>00325 
 <a name="l00326"></a>00326     <span class="comment">/* correção da bolha */</span>
 <a name="l00327"></a>00327     <span class="keywordflow">if</span> (<a class="code" href="misc_8hpp.html#a0d04dc456d7b1b3aced24c06e99b5143">get_bit</a>(_flags,0) &amp;&amp; (!<a class="code" href="misc_8hpp.html#a0d04dc456d7b1b3aced24c06e99b5143">get_bit</a>(_flags,1)))
 <a name="l00328"></a>00328     {
-<a name="l00329"></a>00329       result -= pow(3,3-_degree)*_prod3(_degree, Q0)*
-<a name="l00330"></a>00330       _prod3(_degree, Q1)*
-<a name="l00331"></a>00331       _prod3(_degree, Q2)* (L0*L1*L2);
+<a name="l00329"></a>00329       result -= pow(3,3-_degree)*<a class="code" href="shapefunctions_8hpp.html#a2c2e417bea1d1a08adba588a7435ed57">_prod3</a>(_degree, Q0)*
+<a name="l00330"></a>00330       <a class="code" href="shapefunctions_8hpp.html#a2c2e417bea1d1a08adba588a7435ed57">_prod3</a>(_degree, Q1)*
+<a name="l00331"></a>00331       <a class="code" href="shapefunctions_8hpp.html#a2c2e417bea1d1a08adba588a7435ed57">_prod3</a>(_degree, Q2)* (L0*L1*L2);
 <a name="l00332"></a>00332     }
 <a name="l00333"></a>00333 
 <a name="l00334"></a>00334     <span class="keywordflow">return</span> result / _denom[ith];
@@ -388,23 +388,23 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00373"></a>00373     }
 <a name="l00374"></a>00374 
 <a name="l00375"></a>00375     <span class="comment">/* lembrete: ddL1 = -ddL0 */</span>
-<a name="l00376"></a>00376     V[0] = -_ddxomega(n, Q0, L0)*_omega(n, Q1, L1)*_omega(n, Q2, L2) +
-<a name="l00377"></a>00377             _ddxomega(n, Q1, L1)*_omega(n, Q2, L2)*_omega(n, Q0, L0);
+<a name="l00376"></a>00376     V[0] = -<a class="code" href="shapefunctions_8hpp.html#a01a3613e30bb59632126479e171e8387">_ddxomega</a>(n, Q0, L0)*<a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(n, Q1, L1)*<a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(n, Q2, L2) +
+<a name="l00377"></a>00377             <a class="code" href="shapefunctions_8hpp.html#a01a3613e30bb59632126479e171e8387">_ddxomega</a>(n, Q1, L1)*<a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(n, Q2, L2)*<a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(n, Q0, L0);
 <a name="l00378"></a>00378 
 <a name="l00379"></a>00379     <span class="comment">/* lembrete: ddL2 = -ddL0 */</span>
-<a name="l00380"></a>00380     V[1] = -_ddxomega(n, Q0, L0)*_omega(n, Q1, L1)*_omega(n, Q2, L2) +
-<a name="l00381"></a>00381             _ddxomega(n, Q2, L2)*_omega(n, Q1, L1)*_omega(n, Q0, L0);
+<a name="l00380"></a>00380     V[1] = -<a class="code" href="shapefunctions_8hpp.html#a01a3613e30bb59632126479e171e8387">_ddxomega</a>(n, Q0, L0)*<a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(n, Q1, L1)*<a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(n, Q2, L2) +
+<a name="l00381"></a>00381             <a class="code" href="shapefunctions_8hpp.html#a01a3613e30bb59632126479e171e8387">_ddxomega</a>(n, Q2, L2)*<a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(n, Q1, L1)*<a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(n, Q0, L0);
 <a name="l00382"></a>00382 
 <a name="l00383"></a>00383     <span class="comment">/* correção da bolha */</span>
 <a name="l00384"></a>00384     <span class="keywordflow">if</span> (<a class="code" href="misc_8hpp.html#a0d04dc456d7b1b3aced24c06e99b5143">get_bit</a>(_flags,0) &amp;&amp; (!<a class="code" href="misc_8hpp.html#a0d04dc456d7b1b3aced24c06e99b5143">get_bit</a>(_flags,1)))
 <a name="l00385"></a>00385     {
-<a name="l00386"></a>00386       V[0] -= pow(3,3-_degree)*_prod3(_degree, Q0)*
-<a name="l00387"></a>00387                                _prod3(_degree, Q1)*
-<a name="l00388"></a>00388                                _prod3(_degree, Q2)* L2*(L0-L1);
+<a name="l00386"></a>00386       V[0] -= pow(3,3-_degree)*<a class="code" href="shapefunctions_8hpp.html#a2c2e417bea1d1a08adba588a7435ed57">_prod3</a>(_degree, Q0)*
+<a name="l00387"></a>00387                                <a class="code" href="shapefunctions_8hpp.html#a2c2e417bea1d1a08adba588a7435ed57">_prod3</a>(_degree, Q1)*
+<a name="l00388"></a>00388                                <a class="code" href="shapefunctions_8hpp.html#a2c2e417bea1d1a08adba588a7435ed57">_prod3</a>(_degree, Q2)* L2*(L0-L1);
 <a name="l00389"></a>00389 
-<a name="l00390"></a>00390       V[1] -= pow(3,3-_degree)*_prod3(_degree, Q0)*
-<a name="l00391"></a>00391                                _prod3(_degree, Q1)*
-<a name="l00392"></a>00392                                _prod3(_degree, Q2)* L1*(L0-L2);
+<a name="l00390"></a>00390       V[1] -= pow(3,3-_degree)*<a class="code" href="shapefunctions_8hpp.html#a2c2e417bea1d1a08adba588a7435ed57">_prod3</a>(_degree, Q0)*
+<a name="l00391"></a>00391                                <a class="code" href="shapefunctions_8hpp.html#a2c2e417bea1d1a08adba588a7435ed57">_prod3</a>(_degree, Q1)*
+<a name="l00392"></a>00392                                <a class="code" href="shapefunctions_8hpp.html#a2c2e417bea1d1a08adba588a7435ed57">_prod3</a>(_degree, Q2)* L1*(L0-L2);
 <a name="l00393"></a>00393     }
 <a name="l00394"></a>00394 
 <a name="l00395"></a>00395     <span class="keywordflow">return</span> V/_denom[ith];
@@ -425,11 +425,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00414"></a>00414     <span class="keywordflow">return</span> (_degree+1)*(_degree+2)/2. + <a class="code" href="misc_8hpp.html#a0d04dc456d7b1b3aced24c06e99b5143">get_bit</a>(_flags,0);
 <a name="l00415"></a>00415   }
 <a name="l00416"></a>00416 
-<a name="l00417"></a>00417   std::vector&lt;Eigen::Vector2i&gt; _bar_nodes; <span class="comment">// integer baricentric nodes</span>
-<a name="l00418"></a>00418   std::vector&lt;long int&gt;    _denom;   <span class="comment">// ver doc</span>
-<a name="l00419"></a>00419   <span class="keywordtype">int</span>  _degree;
-<a name="l00420"></a>00420   <span class="keywordtype">char</span> _flags;                             <span class="comment">// _flags[0] : enriched_bubble;  _flags[1] : hierarc_bubble</span>
-<a name="l00421"></a>00421   <span class="keywordtype">int</span>  _ndof;
+<a name="l00417"></a><a class="code" href="class_shape_function_3_01_simplex_3_012_01_4_01_4.html#a194fe274c89c885d30fe081569c93569">00417</a>   std::vector&lt;Eigen::Vector2i&gt; _bar_nodes; <span class="comment">// integer baricentric nodes</span>
+<a name="l00418"></a><a class="code" href="class_shape_function_3_01_simplex_3_012_01_4_01_4.html#a784abf95e968a6290cc438482425b348">00418</a>   std::vector&lt;long int&gt;    _denom;   <span class="comment">// ver doc</span>
+<a name="l00419"></a><a class="code" href="class_shape_function_3_01_simplex_3_012_01_4_01_4.html#a2b1f6a76d22f9d725a4fda78f59f3bef">00419</a>   <span class="keywordtype">int</span>  _degree;
+<a name="l00420"></a><a class="code" href="class_shape_function_3_01_simplex_3_012_01_4_01_4.html#a5ecbe73eebf7caea35675d37062626f3">00420</a>   <span class="keywordtype">char</span> _flags;                             <span class="comment">// _flags[0] : enriched_bubble;  _flags[1] : hierarc_bubble</span>
+<a name="l00421"></a><a class="code" href="class_shape_function_3_01_simplex_3_012_01_4_01_4.html#a7465290710dc4f78f34299fd9ec9dacc">00421</a>   <span class="keywordtype">int</span>  _ndof;
 <a name="l00422"></a>00422 };
 <a name="l00423"></a>00423 
 <a name="l00424"></a>00424 <span class="comment">/*</span>
@@ -539,18 +539,18 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00553"></a>00553         Q3 = this-&gt;_bar_nodes[ith][2],
 <a name="l00554"></a>00554         Q0 = this-&gt;_degree-Q1-Q2-Q3;
 <a name="l00555"></a>00555 
-<a name="l00556"></a>00556     <span class="keywordtype">double</span> result = _omega(_degree, Q0, L0)*
-<a name="l00557"></a>00557                     _omega(_degree, Q1, L1)*
-<a name="l00558"></a>00558                     _omega(_degree, Q2, L2)*
-<a name="l00559"></a>00559                     _omega(_degree, Q3, L3);
+<a name="l00556"></a>00556     <span class="keywordtype">double</span> result = <a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(_degree, Q0, L0)*
+<a name="l00557"></a>00557                     <a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(_degree, Q1, L1)*
+<a name="l00558"></a>00558                     <a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(_degree, Q2, L2)*
+<a name="l00559"></a>00559                     <a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(_degree, Q3, L3);
 <a name="l00560"></a>00560 
 <a name="l00561"></a>00561     <span class="comment">/* correção da bolha */</span>
 <a name="l00562"></a>00562     <span class="keywordflow">if</span> (<a class="code" href="misc_8hpp.html#a0d04dc456d7b1b3aced24c06e99b5143">get_bit</a>(_flags,0) &amp;&amp; (!<a class="code" href="misc_8hpp.html#a0d04dc456d7b1b3aced24c06e99b5143">get_bit</a>(_flags,1)))
 <a name="l00563"></a>00563     {
-<a name="l00564"></a>00564       result -= pow(4,4-_degree)*_prod4(_degree, Q0)*
-<a name="l00565"></a>00565                                  _prod4(_degree, Q1)*
-<a name="l00566"></a>00566                                  _prod4(_degree, Q2)*
-<a name="l00567"></a>00567                                  _prod4(_degree, Q3)* (L0*L1*L2*L3);
+<a name="l00564"></a>00564       result -= pow(4,4-_degree)*<a class="code" href="shapefunctions_8hpp.html#a843ec23c6fa7974a11eefc8b20588ec4">_prod4</a>(_degree, Q0)*
+<a name="l00565"></a>00565                                  <a class="code" href="shapefunctions_8hpp.html#a843ec23c6fa7974a11eefc8b20588ec4">_prod4</a>(_degree, Q1)*
+<a name="l00566"></a>00566                                  <a class="code" href="shapefunctions_8hpp.html#a843ec23c6fa7974a11eefc8b20588ec4">_prod4</a>(_degree, Q2)*
+<a name="l00567"></a>00567                                  <a class="code" href="shapefunctions_8hpp.html#a843ec23c6fa7974a11eefc8b20588ec4">_prod4</a>(_degree, Q3)* (L0*L1*L2*L3);
 <a name="l00568"></a>00568     }
 <a name="l00569"></a>00569 
 <a name="l00570"></a>00570     <span class="keywordflow">return</span> result / _denom[ith];
@@ -591,34 +591,34 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00611"></a>00611     }
 <a name="l00612"></a>00612 
 <a name="l00613"></a>00613     <span class="comment">/* lembrete: ddL1 = -ddL0 */</span>
-<a name="l00614"></a>00614     V[0] = -_ddxomega(n, Q0, L0)*_omega(n, Q1, L1)*_omega(n, Q2, L2)*_omega(n, Q3, L3) +
-<a name="l00615"></a>00615             _ddxomega(n, Q1, L1)*_omega(n, Q0, L0)*_omega(n, Q2, L2)*_omega(n, Q3, L3);
+<a name="l00614"></a>00614     V[0] = -<a class="code" href="shapefunctions_8hpp.html#a01a3613e30bb59632126479e171e8387">_ddxomega</a>(n, Q0, L0)*<a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(n, Q1, L1)*<a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(n, Q2, L2)*<a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(n, Q3, L3) +
+<a name="l00615"></a>00615             <a class="code" href="shapefunctions_8hpp.html#a01a3613e30bb59632126479e171e8387">_ddxomega</a>(n, Q1, L1)*<a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(n, Q0, L0)*<a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(n, Q2, L2)*<a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(n, Q3, L3);
 <a name="l00616"></a>00616 
 <a name="l00617"></a>00617     <span class="comment">/* lembrete: ddL2 = -ddL0 */</span>
-<a name="l00618"></a>00618     V[1] = -_ddxomega(n, Q0, L0)*_omega(n, Q1, L1)*_omega(n, Q2, L2)*_omega(n, Q3, L3) +
-<a name="l00619"></a>00619             _ddxomega(n, Q2, L2)*_omega(n, Q1, L1)*_omega(n, Q0, L0)*_omega(n, Q3, L3);
+<a name="l00618"></a>00618     V[1] = -<a class="code" href="shapefunctions_8hpp.html#a01a3613e30bb59632126479e171e8387">_ddxomega</a>(n, Q0, L0)*<a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(n, Q1, L1)*<a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(n, Q2, L2)*<a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(n, Q3, L3) +
+<a name="l00619"></a>00619             <a class="code" href="shapefunctions_8hpp.html#a01a3613e30bb59632126479e171e8387">_ddxomega</a>(n, Q2, L2)*<a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(n, Q1, L1)*<a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(n, Q0, L0)*<a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(n, Q3, L3);
 <a name="l00620"></a>00620 
 <a name="l00621"></a>00621     <span class="comment">/* lembrete: ddL3 = -ddL0 */</span>
-<a name="l00622"></a>00622     V[2] = -_ddxomega(n, Q0, L0)*_omega(n, Q1, L1)*_omega(n, Q2, L2)*_omega(n, Q3, L3) +
-<a name="l00623"></a>00623             _ddxomega(n, Q3, L3)*_omega(n, Q1, L1)*_omega(n, Q2, L2)*_omega(n, Q0, L0);
+<a name="l00622"></a>00622     V[2] = -<a class="code" href="shapefunctions_8hpp.html#a01a3613e30bb59632126479e171e8387">_ddxomega</a>(n, Q0, L0)*<a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(n, Q1, L1)*<a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(n, Q2, L2)*<a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(n, Q3, L3) +
+<a name="l00623"></a>00623             <a class="code" href="shapefunctions_8hpp.html#a01a3613e30bb59632126479e171e8387">_ddxomega</a>(n, Q3, L3)*<a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(n, Q1, L1)*<a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(n, Q2, L2)*<a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(n, Q0, L0);
 <a name="l00624"></a>00624 
 <a name="l00625"></a>00625     <span class="comment">/* correção da bolha */</span>
 <a name="l00626"></a>00626     <span class="keywordflow">if</span> (<a class="code" href="misc_8hpp.html#a0d04dc456d7b1b3aced24c06e99b5143">get_bit</a>(_flags,0) &amp;&amp; (!<a class="code" href="misc_8hpp.html#a0d04dc456d7b1b3aced24c06e99b5143">get_bit</a>(_flags,1)))
 <a name="l00627"></a>00627     {
-<a name="l00628"></a>00628       V[0] -= pow(4,4-_degree)*_prod4(_degree, Q0)*
-<a name="l00629"></a>00629                                _prod4(_degree, Q1)*
-<a name="l00630"></a>00630                                _prod4(_degree, Q2)*
-<a name="l00631"></a>00631                                _prod4(_degree, Q3)* L2*L3*(L0-L1);
+<a name="l00628"></a>00628       V[0] -= pow(4,4-_degree)*<a class="code" href="shapefunctions_8hpp.html#a843ec23c6fa7974a11eefc8b20588ec4">_prod4</a>(_degree, Q0)*
+<a name="l00629"></a>00629                                <a class="code" href="shapefunctions_8hpp.html#a843ec23c6fa7974a11eefc8b20588ec4">_prod4</a>(_degree, Q1)*
+<a name="l00630"></a>00630                                <a class="code" href="shapefunctions_8hpp.html#a843ec23c6fa7974a11eefc8b20588ec4">_prod4</a>(_degree, Q2)*
+<a name="l00631"></a>00631                                <a class="code" href="shapefunctions_8hpp.html#a843ec23c6fa7974a11eefc8b20588ec4">_prod4</a>(_degree, Q3)* L2*L3*(L0-L1);
 <a name="l00632"></a>00632 
-<a name="l00633"></a>00633       V[1] -= pow(4,4-_degree)*_prod4(_degree, Q0)*
-<a name="l00634"></a>00634                                _prod4(_degree, Q1)*
-<a name="l00635"></a>00635                                _prod4(_degree, Q2)*
-<a name="l00636"></a>00636                                _prod4(_degree, Q3)* L1*L3*(L0-L2);
+<a name="l00633"></a>00633       V[1] -= pow(4,4-_degree)*<a class="code" href="shapefunctions_8hpp.html#a843ec23c6fa7974a11eefc8b20588ec4">_prod4</a>(_degree, Q0)*
+<a name="l00634"></a>00634                                <a class="code" href="shapefunctions_8hpp.html#a843ec23c6fa7974a11eefc8b20588ec4">_prod4</a>(_degree, Q1)*
+<a name="l00635"></a>00635                                <a class="code" href="shapefunctions_8hpp.html#a843ec23c6fa7974a11eefc8b20588ec4">_prod4</a>(_degree, Q2)*
+<a name="l00636"></a>00636                                <a class="code" href="shapefunctions_8hpp.html#a843ec23c6fa7974a11eefc8b20588ec4">_prod4</a>(_degree, Q3)* L1*L3*(L0-L2);
 <a name="l00637"></a>00637 
-<a name="l00638"></a>00638       V[2] -= pow(4,4-_degree)*_prod4(_degree, Q0)*
-<a name="l00639"></a>00639                                _prod4(_degree, Q1)*
-<a name="l00640"></a>00640                                _prod4(_degree, Q2)*
-<a name="l00641"></a>00641                                _prod4(_degree, Q3)* L1*L2*(L0-L3);
+<a name="l00638"></a>00638       V[2] -= pow(4,4-_degree)*<a class="code" href="shapefunctions_8hpp.html#a843ec23c6fa7974a11eefc8b20588ec4">_prod4</a>(_degree, Q0)*
+<a name="l00639"></a>00639                                <a class="code" href="shapefunctions_8hpp.html#a843ec23c6fa7974a11eefc8b20588ec4">_prod4</a>(_degree, Q1)*
+<a name="l00640"></a>00640                                <a class="code" href="shapefunctions_8hpp.html#a843ec23c6fa7974a11eefc8b20588ec4">_prod4</a>(_degree, Q2)*
+<a name="l00641"></a>00641                                <a class="code" href="shapefunctions_8hpp.html#a843ec23c6fa7974a11eefc8b20588ec4">_prod4</a>(_degree, Q3)* L1*L2*(L0-L3);
 <a name="l00642"></a>00642     }
 <a name="l00643"></a>00643 
 <a name="l00644"></a>00644     <span class="keywordflow">return</span> V/_denom[ith];
@@ -639,11 +639,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00663"></a>00663     <span class="keywordflow">return</span> (_degree+1)*(_degree+2)*(_degree+3)/6 + <a class="code" href="misc_8hpp.html#a0d04dc456d7b1b3aced24c06e99b5143">get_bit</a>(_flags,0);
 <a name="l00664"></a>00664   }
 <a name="l00665"></a>00665 
-<a name="l00666"></a>00666   std::vector&lt;Eigen::Vector3i&gt; _bar_nodes; <span class="comment">// integer baricentric nodes</span>
-<a name="l00667"></a>00667   std::vector&lt;long int&gt;    _denom;   <span class="comment">// ver doc</span>
-<a name="l00668"></a>00668   <span class="keywordtype">int</span>  _degree;
-<a name="l00669"></a>00669   <span class="keywordtype">char</span> _flags;                             <span class="comment">// _flags[0] : enriched_bubble;  _flags[1] : hierarc_bubble</span>
-<a name="l00670"></a>00670   <span class="keywordtype">int</span>  _ndof;
+<a name="l00666"></a><a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ada1e0b3af8fc6cfb2a71070fc614baf4">00666</a>   std::vector&lt;Eigen::Vector3i&gt; _bar_nodes; <span class="comment">// integer baricentric nodes</span>
+<a name="l00667"></a><a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ad37bfa8793b2acf1ea518a7cfc19458c">00667</a>   std::vector&lt;long int&gt;    _denom;   <span class="comment">// ver doc</span>
+<a name="l00668"></a><a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ae7a952a6f189f7fa8180668e6476430f">00668</a>   <span class="keywordtype">int</span>  _degree;
+<a name="l00669"></a><a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#a1a80bde1feb65341894fe28324e2069b">00669</a>   <span class="keywordtype">char</span> _flags;                             <span class="comment">// _flags[0] : enriched_bubble;  _flags[1] : hierarc_bubble</span>
+<a name="l00670"></a><a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#a6eae48790ce524c4555b9d6df775a61f">00670</a>   <span class="keywordtype">int</span>  _ndof;
 <a name="l00671"></a>00671 };
 <a name="l00672"></a>00672 
 <a name="l00673"></a><a class="code" href="shapefunctions_8hpp.html#a9f1fe2875f8438e7a3b5324211449393">00673</a> <span class="keywordtype">double</span> <a class="code" href="shapefunctions_8hpp.html#a9f1fe2875f8438e7a3b5324211449393">gradL</a>(<span class="keywordtype">double</span> <span class="keyword">const</span>&amp; L, ShapeFunction&lt;<a class="code" href="class_simplex.html">Simplex&lt;1&gt;</a> &gt; PHI, <span class="keywordtype">int</span> ith)
@@ -676,7 +676,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&nbsp;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&nbsp;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&nbsp;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&nbsp;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&nbsp;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&nbsp;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&nbsp;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&nbsp;</span>Defines</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&nbsp;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&nbsp;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&nbsp;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&nbsp;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&nbsp;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&nbsp;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&nbsp;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&nbsp;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&nbsp;</span>Defines</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -685,7 +685,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Wed Feb 2 2011 20:53:23 for FEPiCpp by&nbsp;
+<hr class="footer"/><address class="footer"><small>Generated on Thu Feb 3 2011 09:30:19 for FEPiCpp by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.1 </small></address>
 </body>

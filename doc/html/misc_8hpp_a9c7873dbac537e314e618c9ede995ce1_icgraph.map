@@ -1,4 +1,5 @@
 <map id="G" name="G">
-<area shape="rect" id="node3" href="$classi_half_face.html#a32ec53fea3689a4c39af5465f66f32a8" title="iHalfFace::hasTheseVertices" alt="" coords="213,5,411,35"/>
-<area shape="rect" id="node5" href="$classi_half_edge.html#a8cd053f989be20aee6146ed1e7f92972" title="iHalfEdge::hasTheseVertices" alt="" coords="211,59,413,88"/>
+<area shape="rect" id="node3" href="$class___half_thing_core.html#a9d6bbf9300a08cf614bde8c636f358bf" title="_HalfThingCore::hasTheseVertices" alt="" coords="212,5,449,35"/>
+<area shape="rect" id="node5" href="$class_half_face.html#a728742bbbc7082df967721350f12d749" title="HalfFace::hasTheseVertices" alt="" coords="233,59,428,88"/>
+<area shape="rect" id="node7" href="$class_half_edge.html#a431702daa45fb282603912cd86c20168" title="HalfEdge::hasTheseVertices" alt="" coords="232,112,429,141"/>
 </map>

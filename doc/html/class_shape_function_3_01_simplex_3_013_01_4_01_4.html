@@ -50,13 +50,21 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 <div class="header">
   <div class="summary">
-<a href="#pub-methods">Public Member Functions</a>  </div>
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-attribs">Public Attributes</a>  </div>
   <div class="headertitle">
 <h1>ShapeFunction&lt; Simplex&lt; 3 &gt; &gt; Class Template Reference</h1>  </div>
 </div>
 <div class="contents">
 <!-- doxytag: class="ShapeFunction&lt; Simplex&lt; 3 &gt; &gt;" -->
 <p><code>#include &lt;<a class="el" href="shapefunctions_8hpp_source.html">shapefunctions.hpp</a>&gt;</code></p>
+<div class="dynheader">
+Collaboration diagram for ShapeFunction&lt; Simplex&lt; 3 &gt; &gt;:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_shape_function_3_01_simplex_3_013_01_4_01_4__coll__graph.png" border="0" usemap="#_shape_function_3_01_simplex_3_013_01_4_01_4_coll__map" alt="Collaboration graph"/></div>
+<map name="_shape_function_3_01_simplex_3_013_01_4_01_4_coll__map" id="_shape_function_3_01_simplex_3_013_01_4_01_4_coll__map">
+<area shape="rect" id="node4" title="STL class." alt="" coords="105,101,231,131"/></map>
+<center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 
 <p><a href="class_shape_function_3_01_simplex_3_013_01_4_01_4-members.html">List of all members.</a></p>
 <table class="memberdecls">
@@ -72,6 +80,13 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Eigen::Vector3d&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#a4b80cdbe6326783aee06278c64cd815e">gradL</a> (Eigen::Vector3d const &amp;L, int ith)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ae9164e8ade4e0e0229629ae37cfd94b8">getDegree</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#a2e3a21f5a8421bf4f0b8349fd4f0b9b0">getNumDof</a> () const </td></tr>
+<tr><td colspan="2"><h2><a name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">std::vector&lt; Eigen::Vector3i &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ada1e0b3af8fc6cfb2a71070fc614baf4">_bar_nodes</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">std::vector&lt; long int &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ad37bfa8793b2acf1ea518a7cfc19458c">_denom</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ae7a952a6f189f7fa8180668e6476430f">_degree</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">char&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#a1a80bde1feb65341894fe28324e2069b">_flags</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#a6eae48790ce524c4555b9d6df775a61f">_ndof</a></td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
 <h3>template&lt;&gt;<br/>
@@ -120,12 +135,12 @@ Public Member Functions</h2></td></tr>
 
 <p>References <a class="el" href="parametric__pts_8hpp_source.html#l00247">genTetParametricPtsINT()</a>, <a class="el" href="misc_8hpp_source.html#l00163">get_bit()</a>, and <a class="el" href="misc_8hpp_source.html#l00172">set_bit()</a>.</p>
 
-<p><div class="fragment"><pre class="fragment">                                            : _degree(degree), _flags(flags)
+<p><div class="fragment"><pre class="fragment">                                            : <a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ae7a952a6f189f7fa8180668e6476430f">_degree</a>(degree), <a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#a1a80bde1feb65341894fe28324e2069b">_flags</a>(flags)
   {
-    <span class="keywordflow">if</span> (<a class="code" href="misc_8hpp.html#a0d04dc456d7b1b3aced24c06e99b5143">get_bit</a>(_flags,1))
-      <a class="code" href="misc_8hpp.html#af4f762668d32397e0576a85a69d69d48">set_bit</a>(_flags,0);
-    _ndof = (degree+1)*(degree+2)*(degree+3)/6 + <a class="code" href="misc_8hpp.html#a0d04dc456d7b1b3aced24c06e99b5143">get_bit</a>(_flags,0);
-    this-&gt;_bar_nodes = <a class="code" href="parametric__pts_8hpp.html#ac6dc5f797dca9f0799ed7265819d29ef">genTetParametricPtsINT</a>(degree);
+    <span class="keywordflow">if</span> (<a class="code" href="misc_8hpp.html#a0d04dc456d7b1b3aced24c06e99b5143">get_bit</a>(<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#a1a80bde1feb65341894fe28324e2069b">_flags</a>,1))
+      <a class="code" href="misc_8hpp.html#af4f762668d32397e0576a85a69d69d48">set_bit</a>(<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#a1a80bde1feb65341894fe28324e2069b">_flags</a>,0);
+    <a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#a6eae48790ce524c4555b9d6df775a61f">_ndof</a> = (degree+1)*(degree+2)*(degree+3)/6 + <a class="code" href="misc_8hpp.html#a0d04dc456d7b1b3aced24c06e99b5143">get_bit</a>(<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#a1a80bde1feb65341894fe28324e2069b">_flags</a>,0);
+    this-&gt;<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ada1e0b3af8fc6cfb2a71070fc614baf4">_bar_nodes</a> = <a class="code" href="parametric__pts_8hpp.html#ac6dc5f797dca9f0799ed7265819d29ef">genTetParametricPtsINT</a>(degree);
     this-&gt;<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#a29f3c8eb14caba5ea649481f66b3d6a7">calculateDenomList</a>();
   };
 </pre></div></p>
@@ -163,22 +178,22 @@ Here is the call graph for this function:</div>
 <p>References <a class="el" href="misc_8hpp_source.html#l00042">Fepic::max()</a>.</p>
 
 <p><div class="fragment"><pre class="fragment">  {
-    this-&gt;_denom.resize(_bar_nodes.size());
+    this-&gt;<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ad37bfa8793b2acf1ea518a7cfc19458c">_denom</a>.resize(<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ada1e0b3af8fc6cfb2a71070fc614baf4">_bar_nodes</a>.size());
 
     <span class="keywordtype">long</span> <span class="keywordtype">int</span>  denom_partF, denom_partG, denom_partH, denom_partI, Q0, Q1, Q2, Q3;
 
     <span class="comment">// para cada ponto, calcular o denominador</span>
-    <span class="keywordflow">for</span> (uint i = 0; i &lt; _bar_nodes.size(); i++)
+    <span class="keywordflow">for</span> (uint i = 0; i &lt; <a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ada1e0b3af8fc6cfb2a71070fc614baf4">_bar_nodes</a>.size(); i++)
     {
       denom_partF = 1;
       denom_partG = 1;
       denom_partH = 1;
       denom_partI = 1;
 
-      Q1 = this-&gt;_bar_nodes[i][0];
-      Q2 = this-&gt;_bar_nodes[i][1];
-      Q3 = this-&gt;_bar_nodes[i][2];
-      Q0 = this-&gt;_degree-Q1-Q2-Q3;
+      Q1 = this-&gt;<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ada1e0b3af8fc6cfb2a71070fc614baf4">_bar_nodes</a>[i][0];
+      Q2 = this-&gt;<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ada1e0b3af8fc6cfb2a71070fc614baf4">_bar_nodes</a>[i][1];
+      Q3 = this-&gt;<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ada1e0b3af8fc6cfb2a71070fc614baf4">_bar_nodes</a>[i][2];
+      Q0 = this-&gt;<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ae7a952a6f189f7fa8180668e6476430f">_degree</a>-Q1-Q2-Q3;
 
       <span class="keywordflow">for</span> (uint k = 0; k &lt; <a class="code" href="namespace_fepic.html#ae390ed9f44a2201fda530b0f82d5b104">Fepic::max</a>(Q0,Q1,Q2,Q3); ++k)
       {
@@ -188,7 +203,7 @@ Here is the call graph for this function:</div>
         <span class="keywordflow">if</span> (k&lt;Q3) denom_partI *= Q3 - k;
       }
 
-      this-&gt;_denom[i] = denom_partF*denom_partG*denom_partH*denom_partI;
+      this-&gt;<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ad37bfa8793b2acf1ea518a7cfc19458c">_denom</a>[i] = denom_partF*denom_partG*denom_partH*denom_partI;
 
     }
   }
@@ -224,7 +239,7 @@ Here is the call graph for this function:</div>
 <p>Definition at line <a class="el" href="shapefunctions_8hpp_source.html#l00654">654</a> of file <a class="el" href="shapefunctions_8hpp_source.html">shapefunctions.hpp</a>.</p>
 
 <p><div class="fragment"><pre class="fragment">  {
-    <span class="keywordflow">return</span> _degree;
+    <span class="keywordflow">return</span> <a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ae7a952a6f189f7fa8180668e6476430f">_degree</a>;
   }
 </pre></div></p>
 
@@ -251,7 +266,7 @@ Here is the call graph for this function:</div>
 <p>References <a class="el" href="misc_8hpp_source.html#l00163">get_bit()</a>.</p>
 
 <p><div class="fragment"><pre class="fragment">  {
-    <span class="keywordflow">return</span> (_degree+1)*(_degree+2)*(_degree+3)/6 + <a class="code" href="misc_8hpp.html#a0d04dc456d7b1b3aced24c06e99b5143">get_bit</a>(_flags,0);
+    <span class="keywordflow">return</span> (<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ae7a952a6f189f7fa8180668e6476430f">_degree</a>+1)*(<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ae7a952a6f189f7fa8180668e6476430f">_degree</a>+2)*(<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ae7a952a6f189f7fa8180668e6476430f">_degree</a>+3)/6 + <a class="code" href="misc_8hpp.html#a0d04dc456d7b1b3aced24c06e99b5143">get_bit</a>(<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#a1a80bde1feb65341894fe28324e2069b">_flags</a>,0);
   }
 </pre></div></p>
 
@@ -351,29 +366,29 @@ Here is the call graph for this function:</div>
 
 <p>Definition at line <a class="el" href="shapefunctions_8hpp_source.html#l00584">584</a> of file <a class="el" href="shapefunctions_8hpp_source.html">shapefunctions.hpp</a>.</p>
 
-<p>References <a class="el" href="misc_8hpp_source.html#l00163">get_bit()</a>.</p>
+<p>References <a class="el" href="shapefunctions_8hpp_source.html#l00050">_ddxomega()</a>, <a class="el" href="shapefunctions_8hpp_source.html#l00034">_omega()</a>, <a class="el" href="shapefunctions_8hpp_source.html#l00077">_prod4()</a>, and <a class="el" href="misc_8hpp_source.html#l00163">get_bit()</a>.</p>
 
 <p><div class="fragment"><pre class="fragment">  {
-    <span class="keywordflow">if</span> ((ith&lt;0) || (ith&gt;=_ndof))
+    <span class="keywordflow">if</span> ((ith&lt;0) || (ith&gt;=<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#a6eae48790ce524c4555b9d6df775a61f">_ndof</a>))
     {
       std::cout &lt;&lt; <span class="stringliteral">&quot;error:ShapeFunction::gradL(): invalid index.&quot;</span> &lt;&lt; std::endl;
       <span class="keywordflow">throw</span>;
     }
 
-    <span class="keywordflow">if</span> (_degree == 0)
+    <span class="keywordflow">if</span> (<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ae7a952a6f189f7fa8180668e6476430f">_degree</a> == 0)
       <span class="keywordflow">return</span> Eigen::Vector3d(0,0,0);
 
     <span class="keywordtype">double</span> L0 = 1.-L1-L2-L3;
-    <span class="keywordtype">int</span> Q1 = this-&gt;_bar_nodes[ith][0],
-        Q2 = this-&gt;_bar_nodes[ith][1],
-        Q3 = this-&gt;_bar_nodes[ith][2],
-        Q0 = this-&gt;_degree-Q1-Q2-Q3,
-        n  = _degree;
+    <span class="keywordtype">int</span> Q1 = this-&gt;<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ada1e0b3af8fc6cfb2a71070fc614baf4">_bar_nodes</a>[ith][0],
+        Q2 = this-&gt;<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ada1e0b3af8fc6cfb2a71070fc614baf4">_bar_nodes</a>[ith][1],
+        Q3 = this-&gt;<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ada1e0b3af8fc6cfb2a71070fc614baf4">_bar_nodes</a>[ith][2],
+        Q0 = this-&gt;<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ae7a952a6f189f7fa8180668e6476430f">_degree</a>-Q1-Q2-Q3,
+        n  = <a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ae7a952a6f189f7fa8180668e6476430f">_degree</a>;
 
     Eigen::Vector3d V;
 
     <span class="comment">/* função bolha */</span>
-    <span class="keywordflow">if</span> (<a class="code" href="misc_8hpp.html#a0d04dc456d7b1b3aced24c06e99b5143">get_bit</a>(_flags,0) &amp;&amp; (ith==_ndof-1))
+    <span class="keywordflow">if</span> (<a class="code" href="misc_8hpp.html#a0d04dc456d7b1b3aced24c06e99b5143">get_bit</a>(<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#a1a80bde1feb65341894fe28324e2069b">_flags</a>,0) &amp;&amp; (ith==<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#a6eae48790ce524c4555b9d6df775a61f">_ndof</a>-1))
     {
       V[0] = 256.*L2*L3*(L0-L1);
       V[1] = 256.*L1*L3*(L0-L2);
@@ -382,37 +397,37 @@ Here is the call graph for this function:</div>
     }
 
     <span class="comment">/* lembrete: ddL1 = -ddL0 */</span>
-    V[0] = -_ddxomega(n, Q0, L0)*_omega(n, Q1, L1)*_omega(n, Q2, L2)*_omega(n, Q3, L3) +
-            _ddxomega(n, Q1, L1)*_omega(n, Q0, L0)*_omega(n, Q2, L2)*_omega(n, Q3, L3);
+    V[0] = -<a class="code" href="shapefunctions_8hpp.html#a01a3613e30bb59632126479e171e8387">_ddxomega</a>(n, Q0, L0)*<a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(n, Q1, L1)*<a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(n, Q2, L2)*<a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(n, Q3, L3) +
+            <a class="code" href="shapefunctions_8hpp.html#a01a3613e30bb59632126479e171e8387">_ddxomega</a>(n, Q1, L1)*<a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(n, Q0, L0)*<a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(n, Q2, L2)*<a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(n, Q3, L3);
 
     <span class="comment">/* lembrete: ddL2 = -ddL0 */</span>
-    V[1] = -_ddxomega(n, Q0, L0)*_omega(n, Q1, L1)*_omega(n, Q2, L2)*_omega(n, Q3, L3) +
-            _ddxomega(n, Q2, L2)*_omega(n, Q1, L1)*_omega(n, Q0, L0)*_omega(n, Q3, L3);
+    V[1] = -<a class="code" href="shapefunctions_8hpp.html#a01a3613e30bb59632126479e171e8387">_ddxomega</a>(n, Q0, L0)*<a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(n, Q1, L1)*<a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(n, Q2, L2)*<a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(n, Q3, L3) +
+            <a class="code" href="shapefunctions_8hpp.html#a01a3613e30bb59632126479e171e8387">_ddxomega</a>(n, Q2, L2)*<a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(n, Q1, L1)*<a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(n, Q0, L0)*<a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(n, Q3, L3);
 
     <span class="comment">/* lembrete: ddL3 = -ddL0 */</span>
-    V[2] = -_ddxomega(n, Q0, L0)*_omega(n, Q1, L1)*_omega(n, Q2, L2)*_omega(n, Q3, L3) +
-            _ddxomega(n, Q3, L3)*_omega(n, Q1, L1)*_omega(n, Q2, L2)*_omega(n, Q0, L0);
+    V[2] = -<a class="code" href="shapefunctions_8hpp.html#a01a3613e30bb59632126479e171e8387">_ddxomega</a>(n, Q0, L0)*<a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(n, Q1, L1)*<a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(n, Q2, L2)*<a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(n, Q3, L3) +
+            <a class="code" href="shapefunctions_8hpp.html#a01a3613e30bb59632126479e171e8387">_ddxomega</a>(n, Q3, L3)*<a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(n, Q1, L1)*<a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(n, Q2, L2)*<a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(n, Q0, L0);
 
     <span class="comment">/* correção da bolha */</span>
-    <span class="keywordflow">if</span> (<a class="code" href="misc_8hpp.html#a0d04dc456d7b1b3aced24c06e99b5143">get_bit</a>(_flags,0) &amp;&amp; (!<a class="code" href="misc_8hpp.html#a0d04dc456d7b1b3aced24c06e99b5143">get_bit</a>(_flags,1)))
+    <span class="keywordflow">if</span> (<a class="code" href="misc_8hpp.html#a0d04dc456d7b1b3aced24c06e99b5143">get_bit</a>(<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#a1a80bde1feb65341894fe28324e2069b">_flags</a>,0) &amp;&amp; (!<a class="code" href="misc_8hpp.html#a0d04dc456d7b1b3aced24c06e99b5143">get_bit</a>(<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#a1a80bde1feb65341894fe28324e2069b">_flags</a>,1)))
     {
-      V[0] -= pow(4,4-_degree)*_prod4(_degree, Q0)*
-                               _prod4(_degree, Q1)*
-                               _prod4(_degree, Q2)*
-                               _prod4(_degree, Q3)* L2*L3*(L0-L1);
+      V[0] -= pow(4,4-<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ae7a952a6f189f7fa8180668e6476430f">_degree</a>)*<a class="code" href="shapefunctions_8hpp.html#a843ec23c6fa7974a11eefc8b20588ec4">_prod4</a>(<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ae7a952a6f189f7fa8180668e6476430f">_degree</a>, Q0)*
+                               <a class="code" href="shapefunctions_8hpp.html#a843ec23c6fa7974a11eefc8b20588ec4">_prod4</a>(<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ae7a952a6f189f7fa8180668e6476430f">_degree</a>, Q1)*
+                               <a class="code" href="shapefunctions_8hpp.html#a843ec23c6fa7974a11eefc8b20588ec4">_prod4</a>(<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ae7a952a6f189f7fa8180668e6476430f">_degree</a>, Q2)*
+                               <a class="code" href="shapefunctions_8hpp.html#a843ec23c6fa7974a11eefc8b20588ec4">_prod4</a>(<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ae7a952a6f189f7fa8180668e6476430f">_degree</a>, Q3)* L2*L3*(L0-L1);
 
-      V[1] -= pow(4,4-_degree)*_prod4(_degree, Q0)*
-                               _prod4(_degree, Q1)*
-                               _prod4(_degree, Q2)*
-                               _prod4(_degree, Q3)* L1*L3*(L0-L2);
+      V[1] -= pow(4,4-<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ae7a952a6f189f7fa8180668e6476430f">_degree</a>)*<a class="code" href="shapefunctions_8hpp.html#a843ec23c6fa7974a11eefc8b20588ec4">_prod4</a>(<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ae7a952a6f189f7fa8180668e6476430f">_degree</a>, Q0)*
+                               <a class="code" href="shapefunctions_8hpp.html#a843ec23c6fa7974a11eefc8b20588ec4">_prod4</a>(<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ae7a952a6f189f7fa8180668e6476430f">_degree</a>, Q1)*
+                               <a class="code" href="shapefunctions_8hpp.html#a843ec23c6fa7974a11eefc8b20588ec4">_prod4</a>(<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ae7a952a6f189f7fa8180668e6476430f">_degree</a>, Q2)*
+                               <a class="code" href="shapefunctions_8hpp.html#a843ec23c6fa7974a11eefc8b20588ec4">_prod4</a>(<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ae7a952a6f189f7fa8180668e6476430f">_degree</a>, Q3)* L1*L3*(L0-L2);
 
-      V[2] -= pow(4,4-_degree)*_prod4(_degree, Q0)*
-                               _prod4(_degree, Q1)*
-                               _prod4(_degree, Q2)*
-                               _prod4(_degree, Q3)* L1*L2*(L0-L3);
+      V[2] -= pow(4,4-<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ae7a952a6f189f7fa8180668e6476430f">_degree</a>)*<a class="code" href="shapefunctions_8hpp.html#a843ec23c6fa7974a11eefc8b20588ec4">_prod4</a>(<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ae7a952a6f189f7fa8180668e6476430f">_degree</a>, Q0)*
+                               <a class="code" href="shapefunctions_8hpp.html#a843ec23c6fa7974a11eefc8b20588ec4">_prod4</a>(<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ae7a952a6f189f7fa8180668e6476430f">_degree</a>, Q1)*
+                               <a class="code" href="shapefunctions_8hpp.html#a843ec23c6fa7974a11eefc8b20588ec4">_prod4</a>(<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ae7a952a6f189f7fa8180668e6476430f">_degree</a>, Q2)*
+                               <a class="code" href="shapefunctions_8hpp.html#a843ec23c6fa7974a11eefc8b20588ec4">_prod4</a>(<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ae7a952a6f189f7fa8180668e6476430f">_degree</a>, Q3)* L1*L2*(L0-L3);
     }
 
-    <span class="keywordflow">return</span> V/_denom[ith];
+    <span class="keywordflow">return</span> V/<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ad37bfa8793b2acf1ea518a7cfc19458c">_denom</a>[ith];
   }
 </pre></div></p>
 
@@ -421,7 +436,7 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_shape_function_3_01_simplex_3_013_01_4_01_4_adc7073096ed40e82e961a07390c5a25e_cgraph.png" border="0" usemap="#class_shape_function_3_01_simplex_3_013_01_4_01_4_adc7073096ed40e82e961a07390c5a25e_cgraph" alt=""/></div>
 <map name="class_shape_function_3_01_simplex_3_013_01_4_01_4_adc7073096ed40e82e961a07390c5a25e_cgraph" id="class_shape_function_3_01_simplex_3_013_01_4_01_4_adc7073096ed40e82e961a07390c5a25e_cgraph">
-<area shape="rect" id="node3" href="misc_8hpp.html#a0d04dc456d7b1b3aced24c06e99b5143" title="get_bit" alt="" coords="333,5,400,35"/></map>
+<area shape="rect" id="node3" href="shapefunctions_8hpp.html#a01a3613e30bb59632126479e171e8387" title="_ddxomega" alt="" coords="335,5,431,35"/><area shape="rect" id="node5" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e" title="_omega" alt="" coords="480,32,555,61"/><area shape="rect" id="node8" href="shapefunctions_8hpp.html#a843ec23c6fa7974a11eefc8b20588ec4" title="_prod4" alt="" coords="349,109,416,139"/><area shape="rect" id="node10" href="misc_8hpp.html#a0d04dc456d7b1b3aced24c06e99b5143" title="get_bit" alt="" coords="349,163,416,192"/></map>
 </div>
 </p>
 
@@ -502,47 +517,47 @@ Here is the call graph for this function:</div>
 
 <p>Definition at line <a class="el" href="shapefunctions_8hpp_source.html#l00531">531</a> of file <a class="el" href="shapefunctions_8hpp_source.html">shapefunctions.hpp</a>.</p>
 
-<p>References <a class="el" href="misc_8hpp_source.html#l00163">get_bit()</a>.</p>
+<p>References <a class="el" href="shapefunctions_8hpp_source.html#l00034">_omega()</a>, <a class="el" href="shapefunctions_8hpp_source.html#l00077">_prod4()</a>, and <a class="el" href="misc_8hpp_source.html#l00163">get_bit()</a>.</p>
 
 <p><div class="fragment"><pre class="fragment">  {
-    <span class="keywordflow">if</span> ((ith&lt;0) || (ith&gt;=_ndof))
+    <span class="keywordflow">if</span> ((ith&lt;0) || (ith&gt;=<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#a6eae48790ce524c4555b9d6df775a61f">_ndof</a>))
     {
       std::cout &lt;&lt; <span class="stringliteral">&quot;error:ShapeFunction::operator(): invalid index.&quot;</span> &lt;&lt; std::endl;
       <span class="keywordflow">throw</span>;
     }
 
-    <span class="keywordflow">if</span> (_degree==0)
+    <span class="keywordflow">if</span> (<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ae7a952a6f189f7fa8180668e6476430f">_degree</a>==0)
     {
       <span class="keywordflow">return</span> 1.;
     }
 
     <span class="comment">/* função bolha */</span>
-    <span class="keywordflow">if</span> (<a class="code" href="misc_8hpp.html#a0d04dc456d7b1b3aced24c06e99b5143">get_bit</a>(_flags,0) &amp;&amp; (ith==_ndof-1))
+    <span class="keywordflow">if</span> (<a class="code" href="misc_8hpp.html#a0d04dc456d7b1b3aced24c06e99b5143">get_bit</a>(<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#a1a80bde1feb65341894fe28324e2069b">_flags</a>,0) &amp;&amp; (ith==<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#a6eae48790ce524c4555b9d6df775a61f">_ndof</a>-1))
     {
       <span class="keywordflow">return</span> 256.*(1.-L1-L2-L3)*L1*L2*L3;
     }
 
     <span class="keywordtype">double</span> L0 = 1.-L1-L2-L3;
-    <span class="keywordtype">int</span> Q1 = this-&gt;_bar_nodes[ith][0],
-        Q2 = this-&gt;_bar_nodes[ith][1],
-        Q3 = this-&gt;_bar_nodes[ith][2],
-        Q0 = this-&gt;_degree-Q1-Q2-Q3;
+    <span class="keywordtype">int</span> Q1 = this-&gt;<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ada1e0b3af8fc6cfb2a71070fc614baf4">_bar_nodes</a>[ith][0],
+        Q2 = this-&gt;<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ada1e0b3af8fc6cfb2a71070fc614baf4">_bar_nodes</a>[ith][1],
+        Q3 = this-&gt;<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ada1e0b3af8fc6cfb2a71070fc614baf4">_bar_nodes</a>[ith][2],
+        Q0 = this-&gt;<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ae7a952a6f189f7fa8180668e6476430f">_degree</a>-Q1-Q2-Q3;
 
-    <span class="keywordtype">double</span> result = _omega(_degree, Q0, L0)*
-                    _omega(_degree, Q1, L1)*
-                    _omega(_degree, Q2, L2)*
-                    _omega(_degree, Q3, L3);
+    <span class="keywordtype">double</span> result = <a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ae7a952a6f189f7fa8180668e6476430f">_degree</a>, Q0, L0)*
+                    <a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ae7a952a6f189f7fa8180668e6476430f">_degree</a>, Q1, L1)*
+                    <a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ae7a952a6f189f7fa8180668e6476430f">_degree</a>, Q2, L2)*
+                    <a class="code" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e">_omega</a>(<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ae7a952a6f189f7fa8180668e6476430f">_degree</a>, Q3, L3);
 
     <span class="comment">/* correção da bolha */</span>
-    <span class="keywordflow">if</span> (<a class="code" href="misc_8hpp.html#a0d04dc456d7b1b3aced24c06e99b5143">get_bit</a>(_flags,0) &amp;&amp; (!<a class="code" href="misc_8hpp.html#a0d04dc456d7b1b3aced24c06e99b5143">get_bit</a>(_flags,1)))
+    <span class="keywordflow">if</span> (<a class="code" href="misc_8hpp.html#a0d04dc456d7b1b3aced24c06e99b5143">get_bit</a>(<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#a1a80bde1feb65341894fe28324e2069b">_flags</a>,0) &amp;&amp; (!<a class="code" href="misc_8hpp.html#a0d04dc456d7b1b3aced24c06e99b5143">get_bit</a>(<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#a1a80bde1feb65341894fe28324e2069b">_flags</a>,1)))
     {
-      result -= pow(4,4-_degree)*_prod4(_degree, Q0)*
-                                 _prod4(_degree, Q1)*
-                                 _prod4(_degree, Q2)*
-                                 _prod4(_degree, Q3)* (L0*L1*L2*L3);
+      result -= pow(4,4-<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ae7a952a6f189f7fa8180668e6476430f">_degree</a>)*<a class="code" href="shapefunctions_8hpp.html#a843ec23c6fa7974a11eefc8b20588ec4">_prod4</a>(<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ae7a952a6f189f7fa8180668e6476430f">_degree</a>, Q0)*
+                                 <a class="code" href="shapefunctions_8hpp.html#a843ec23c6fa7974a11eefc8b20588ec4">_prod4</a>(<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ae7a952a6f189f7fa8180668e6476430f">_degree</a>, Q1)*
+                                 <a class="code" href="shapefunctions_8hpp.html#a843ec23c6fa7974a11eefc8b20588ec4">_prod4</a>(<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ae7a952a6f189f7fa8180668e6476430f">_degree</a>, Q2)*
+                                 <a class="code" href="shapefunctions_8hpp.html#a843ec23c6fa7974a11eefc8b20588ec4">_prod4</a>(<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ae7a952a6f189f7fa8180668e6476430f">_degree</a>, Q3)* (L0*L1*L2*L3);
     }
 
-    <span class="keywordflow">return</span> result / _denom[ith];
+    <span class="keywordflow">return</span> result / <a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ad37bfa8793b2acf1ea518a7cfc19458c">_denom</a>[ith];
   }
 </pre></div></p>
 
@@ -551,7 +566,7 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_shape_function_3_01_simplex_3_013_01_4_01_4_aa30f08f898a856db959138eaf2274063_cgraph.png" border="0" usemap="#class_shape_function_3_01_simplex_3_013_01_4_01_4_aa30f08f898a856db959138eaf2274063_cgraph" alt=""/></div>
 <map name="class_shape_function_3_01_simplex_3_013_01_4_01_4_aa30f08f898a856db959138eaf2274063_cgraph" id="class_shape_function_3_01_simplex_3_013_01_4_01_4_aa30f08f898a856db959138eaf2274063_cgraph">
-<area shape="rect" id="node3" href="misc_8hpp.html#a0d04dc456d7b1b3aced24c06e99b5143" title="get_bit" alt="" coords="363,5,429,35"/></map>
+<area shape="rect" id="node3" href="shapefunctions_8hpp.html#a0010ff1942fe9e76ff98f36beeb2122e" title="_omega" alt="" coords="363,5,437,35"/><area shape="rect" id="node5" href="shapefunctions_8hpp.html#a843ec23c6fa7974a11eefc8b20588ec4" title="_prod4" alt="" coords="367,59,433,88"/><area shape="rect" id="node7" href="misc_8hpp.html#a0d04dc456d7b1b3aced24c06e99b5143" title="get_bit" alt="" coords="367,112,433,141"/></map>
 </div>
 </p>
 
@@ -578,12 +593,12 @@ Here is the call graph for this function:</div>
 <p>References <a class="el" href="parametric__pts_8hpp_source.html#l00247">genTetParametricPtsINT()</a>, <a class="el" href="misc_8hpp_source.html#l00163">get_bit()</a>, and <a class="el" href="misc_8hpp_source.html#l00172">set_bit()</a>.</p>
 
 <p><div class="fragment"><pre class="fragment">  {
-    <span class="keywordflow">if</span> (<a class="code" href="misc_8hpp.html#a0d04dc456d7b1b3aced24c06e99b5143">get_bit</a>(_flags,1))
-      <a class="code" href="misc_8hpp.html#af4f762668d32397e0576a85a69d69d48">set_bit</a>(_flags,0);
-    _ndof = (degree+1)*(degree+2)*(degree+3)/6 + <a class="code" href="misc_8hpp.html#a0d04dc456d7b1b3aced24c06e99b5143">get_bit</a>(_flags,0);
-    this-&gt;_bar_nodes = <a class="code" href="parametric__pts_8hpp.html#ac6dc5f797dca9f0799ed7265819d29ef">genTetParametricPtsINT</a>(degree);
+    <span class="keywordflow">if</span> (<a class="code" href="misc_8hpp.html#a0d04dc456d7b1b3aced24c06e99b5143">get_bit</a>(<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#a1a80bde1feb65341894fe28324e2069b">_flags</a>,1))
+      <a class="code" href="misc_8hpp.html#af4f762668d32397e0576a85a69d69d48">set_bit</a>(<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#a1a80bde1feb65341894fe28324e2069b">_flags</a>,0);
+    <a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#a6eae48790ce524c4555b9d6df775a61f">_ndof</a> = (degree+1)*(degree+2)*(degree+3)/6 + <a class="code" href="misc_8hpp.html#a0d04dc456d7b1b3aced24c06e99b5143">get_bit</a>(<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#a1a80bde1feb65341894fe28324e2069b">_flags</a>,0);
+    this-&gt;<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ada1e0b3af8fc6cfb2a71070fc614baf4">_bar_nodes</a> = <a class="code" href="parametric__pts_8hpp.html#ac6dc5f797dca9f0799ed7265819d29ef">genTetParametricPtsINT</a>(degree);
     this-&gt;<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#a29f3c8eb14caba5ea649481f66b3d6a7">calculateDenomList</a>();
-        _degree = degree;
+        <a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ae7a952a6f189f7fa8180668e6476430f">_degree</a> = degree;
   }
 </pre></div></p>
 
@@ -638,10 +653,86 @@ Here is the call graph for this function:</div>
 <p>Definition at line <a class="el" href="shapefunctions_8hpp_source.html#l00486">486</a> of file <a class="el" href="shapefunctions_8hpp_source.html">shapefunctions.hpp</a>.</p>
 
 <p><div class="fragment"><pre class="fragment">  {
-    _flags = flags;
+    <a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#a1a80bde1feb65341894fe28324e2069b">_flags</a> = flags;
     this-&gt;<a class="code" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#a2e966005bc3920556eb59c9bd9d5e476">setDegree</a>(degree);
   }
 </pre></div></p>
+
+</div>
+</div>
+<hr/><h2>Member Data Documentation</h2>
+<a class="anchor" id="ada1e0b3af8fc6cfb2a71070fc614baf4"></a><!-- doxytag: member="ShapeFunction&lt; Simplex&lt; 3 &gt; &gt;::_bar_nodes" ref="ada1e0b3af8fc6cfb2a71070fc614baf4" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;Eigen::Vector3i&gt; ShapeFunction&lt; <a class="el" href="class_simplex.html">Simplex</a>&lt; 3 &gt; &gt;::<a class="el" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ada1e0b3af8fc6cfb2a71070fc614baf4">_bar_nodes</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Definition at line <a class="el" href="shapefunctions_8hpp_source.html#l00666">666</a> of file <a class="el" href="shapefunctions_8hpp_source.html">shapefunctions.hpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae7a952a6f189f7fa8180668e6476430f"></a><!-- doxytag: member="ShapeFunction&lt; Simplex&lt; 3 &gt; &gt;::_degree" ref="ae7a952a6f189f7fa8180668e6476430f" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int ShapeFunction&lt; <a class="el" href="class_simplex.html">Simplex</a>&lt; 3 &gt; &gt;::<a class="el" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ae7a952a6f189f7fa8180668e6476430f">_degree</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Definition at line <a class="el" href="shapefunctions_8hpp_source.html#l00668">668</a> of file <a class="el" href="shapefunctions_8hpp_source.html">shapefunctions.hpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad37bfa8793b2acf1ea518a7cfc19458c"></a><!-- doxytag: member="ShapeFunction&lt; Simplex&lt; 3 &gt; &gt;::_denom" ref="ad37bfa8793b2acf1ea518a7cfc19458c" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;long int&gt; ShapeFunction&lt; <a class="el" href="class_simplex.html">Simplex</a>&lt; 3 &gt; &gt;::<a class="el" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#ad37bfa8793b2acf1ea518a7cfc19458c">_denom</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Definition at line <a class="el" href="shapefunctions_8hpp_source.html#l00667">667</a> of file <a class="el" href="shapefunctions_8hpp_source.html">shapefunctions.hpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1a80bde1feb65341894fe28324e2069b"></a><!-- doxytag: member="ShapeFunction&lt; Simplex&lt; 3 &gt; &gt;::_flags" ref="a1a80bde1feb65341894fe28324e2069b" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char ShapeFunction&lt; <a class="el" href="class_simplex.html">Simplex</a>&lt; 3 &gt; &gt;::<a class="el" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#a1a80bde1feb65341894fe28324e2069b">_flags</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Definition at line <a class="el" href="shapefunctions_8hpp_source.html#l00669">669</a> of file <a class="el" href="shapefunctions_8hpp_source.html">shapefunctions.hpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a6eae48790ce524c4555b9d6df775a61f"></a><!-- doxytag: member="ShapeFunction&lt; Simplex&lt; 3 &gt; &gt;::_ndof" ref="a6eae48790ce524c4555b9d6df775a61f" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int ShapeFunction&lt; <a class="el" href="class_simplex.html">Simplex</a>&lt; 3 &gt; &gt;::<a class="el" href="class_shape_function_3_01_simplex_3_013_01_4_01_4.html#a6eae48790ce524c4555b9d6df775a61f">_ndof</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Definition at line <a class="el" href="shapefunctions_8hpp_source.html#l00670">670</a> of file <a class="el" href="shapefunctions_8hpp_source.html">shapefunctions.hpp</a>.</p>
 
 </div>
 </div>
@@ -654,7 +745,7 @@ Here is the call graph for this function:</div>
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&nbsp;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&nbsp;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&nbsp;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&nbsp;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&nbsp;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&nbsp;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&nbsp;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&nbsp;</span>Defines</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&nbsp;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&nbsp;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&nbsp;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&nbsp;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&nbsp;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&nbsp;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&nbsp;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&nbsp;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&nbsp;</span>Defines</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -663,7 +754,7 @@ Here is the call graph for this function:</div>
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Wed Feb 2 2011 20:53:23 for FEPiCpp by&nbsp;
+<hr class="footer"/><address class="footer"><small>Generated on Thu Feb 3 2011 09:30:20 for FEPiCpp by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.1 </small></address>
 </body>

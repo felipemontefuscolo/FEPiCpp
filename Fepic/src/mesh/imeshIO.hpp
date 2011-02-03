@@ -877,7 +877,7 @@ void iMesh<Traits>::addPointHalfVtk(const char* nome_var="node labels")
   Fout << "LOOKUP_TABLE default"            << std::endl;
 
   for (uint i=0; i<num_pts; ++i) {
-    Fout << (this->getNode(i)->getHalf()->getIDCell()) << std::endl;
+    Fout << (this->getNode(i)->getHalf()->getIncidCell()) << std::endl;
   };
 
   Fout << std::endl << std::endl;

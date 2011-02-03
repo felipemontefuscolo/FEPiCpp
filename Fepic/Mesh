@@ -51,6 +51,7 @@
 
 #include "Fepic/src/mesh/entities.hpp"
 #include "Fepic/src/mesh/labelable.hpp"
+#include "Fepic/src/mesh/halfthingcore.hpp"
 #include "Fepic/src/mesh/halfedge.hpp"
 #include "Fepic/src/mesh/halfedgelab.hpp"
 #include "Fepic/src/mesh/halfface.hpp"
