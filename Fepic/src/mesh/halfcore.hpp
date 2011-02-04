@@ -23,16 +23,30 @@
 #ifndef FEPIC_HALFCORE_HPP
 #define FEPIC_HALFCORE_HPP
 
-template<class _Der>
+template<class _Traits>
 class _HalfCore
 {
-public:
-
 #if !defined(THIS) && !defined(CONST_THIS)
-  #define THIS static_cast<_Der*>(this)
-  #define CONST_THIS static_cast<const _Der*>(this)
+  #define THIS static_cast<HalfT*>(this)
+  #define CONST_THIS static_cast<const HalfT*>(this)
 #endif
+
+protected:
+  _HalfCore() {};
+  _HalfCore(_HalfCore const&) {};
   
+  /** HalfT class has:
+    * uint _incid_cell :   ??;
+    * uint _position   :   ??;
+    * uint _anchor     :   ??;
+    * enum {cell_id_limit= ??};
+    * enum {position_limit=??};
+    * enum {anchor_limit=  ??};
+    * */
+    
+public:
+  typedef typename _Traits::MeshT MeshT;
+  typedef typename _Traits::HalfT HalfT;
 
   uint getIncidCell() const
   {
@@ -52,27 +66,27 @@ public:
   
   void setIncidCell(uint cellid)
   {
-    FEPIC_ASSERT(cellid<=_Der::cell_id_limit, "cell id limit exceeded");
+    FEPIC_ASSERT(cellid<=HalfT::cell_id_limit, "cell id limit exceeded");
     THIS->_incid_cell = cellid;
   }
 
   void setPosition(int pos)
   {
-    FEPIC_ASSERT((pos>=-1)||(pos<=_Der::position_limit), "position limit exceeded");
+    FEPIC_ASSERT((pos>=-1)||(pos<=HalfT::position_limit), "position limit exceeded");
     THIS->_position = pos;
   }
   
   void setAnchor(uint anchor)
   {
-    FEPIC_ASSERT(anchor<=_Der::anchor_limit, "anchor limit exceeded");
+    FEPIC_ASSERT(anchor<=HalfT::anchor_limit, "anchor limit exceeded");
     THIS->_anchor = anchor;
   }
 
   void setCompleteId(uint cellid, int pos, uint anchor=0)
   {
-    FEPIC_ASSERT(cellid<=_Der::cell_id_limit, "cell id limit exceeded");
-    FEPIC_ASSERT((pos>=-1)||(pos<=_Der::position_limit), "position limit exceeded");
-    FEPIC_ASSERT(anchor<=_Der::anchor_limit, "anchor limit exceeded");
+    FEPIC_ASSERT(cellid<=HalfT::cell_id_limit, "cell id limit exceeded");
+    FEPIC_ASSERT((pos>=-1)||(pos<=HalfT::position_limit), "position limit exceeded");
+    FEPIC_ASSERT(anchor<=HalfT::anchor_limit, "anchor limit exceeded");
     THIS->_incid_cell = cellid;
     THIS->_position = pos;
     THIS->_anchor = anchor;
@@ -81,8 +95,7 @@ public:
   /** Retorna um vetor com os índices dos vértices que esta HalfFace contém.
   *  @param mesh a malha na qual a HalfFace está contida.
   */
-  template<class Mesh>
-  Fepic::vectorui getVertices(Mesh const& mesh) const
+  vectorui getVertices(MeshT const& mesh) const
   {
     return mesh.getCell(this->getIncidCell()) // CELL->
                 
@@ -93,8 +106,7 @@ public:
   /** Retorna um vetor com os índices dos nós que esta HalfFace contém.
   *  @param mesh a malha na qual a HalfFace está contida.
   */
-  template<class Mesh>
-  Fepic::vectorui getNodes(Mesh const& mesh) const
+  vectorui getNodes(MeshT const& mesh) const
   {
       return  mesh.getCell(this->getIncidCell()) // CELL->
               
@@ -109,33 +121,18 @@ public:
   *  @return true se os nós formam a HalfFace e false caso contrário.
   *  @note Os nós podem estar em qualquer orientação cíclica da original.
   */
-  template<class Mesh>
-  bool hasTheseVertices(Fepic::vectorui const& v, Mesh const& mesh) const
+  bool hasTheseVertices(vectorui const& v, MeshT const& mesh) const
   {
     const auto cell = mesh.getCell(this->getIncidCell());
     
-    Fepic::vectorui vtx (cell->getBorderVertices(this->getPosition()));
+    vectorui vtx (cell->getBorderVertices(this->getPosition()));
     
     return arrayIsCyclicallyEqual(v, vtx);
   }
   
 #undef THIS
 #undef CONST_THIS
-protected:
-  _HalfCore() {};
-  _HalfCore(_HalfCore const&) {};
-  
-  /** _Der class has:
-    * uint _incid_cell : ??;
-    * uint _position   : ??;
-    * uint _anchor     : ??;
-    * enum {cell_id_limit=??};
-    * enum {position_limit=??};
-    * enum {anchor_limit=??};
-    * */
-    
-    
-    
+
 };
 
 

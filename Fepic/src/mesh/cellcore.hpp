@@ -22,31 +22,113 @@
 #ifndef FEPIC_CELLCORE_HPP
 #define FEPIC_CELLCORE_HPP
 
-template<class _Poly>
-class _CellCore : public _Labelable
+template<class _Traits>
+class _CellCore
 {
 #if !defined(THIS) && !defined(CONST_THIS)
-  #define THIS static_cast<_Poly*>(this)
-  #define CONST_THIS static_cast<const _Poly*>(this)
-  #define 
+  #define THIS static_cast<CellT*>(this)
+  #define CONST_THIS static_cast<const CellT*>(this)
 #endif  
 
 public:
-  _CellCore(int tag, bool disabled=false, bool wb_disabled=false, bool useless=false) :
-                                      _Labelable(tag, disabled, wb_disabled, useless) {}
-  _CellCore() = default;
-  _CellCore(_CellCore const&) = default;
-  ~_CellCore() = default;
+  typedef typename _Traits::CellT  CellT;
+  typedef typename _Traits::HalfT  HalfT;
+  typedef typename _Traits::HalfLT HalfLT;
+  typedef typename _Traits::MeshT  MeshT;
+
+protected:
+  _CellCore() {};
+  _CellCore(_CellCore const&) {};
   
+public:
   int getNumNodes() const
   {
-    return THIS->_node.size();
+    return CONST_THIS->_nodes.size();
+  }
+
+  int getNumBorders() const
+  {
+    return CellT::n_borders;
+  }
+
+  int getNumVertices() const
+  {
+    return CellT::n_vertices;
+  }
+
+  uint getNodeIdx(int ith) const
+  {   
+#ifdef FEPIC_DEBUG_ON
+    return CONST_THIS->_nodes.at(ith);
+#else
+    return CONST_THIS->_nodes[ith];
+#endif
+  }
+
+  vectorui getBorderVertices(int ith) const
+  {
+    //static matrixi faces_vtx(ElementProperties<CellT, _Traits>::get_faces_vtx());
+    uint vsize = CONST_THIS->borders_local_vertices[ith].size();
+    vectorui vtx(vsize);
+    
+    for (uint i = 0; i < vsize; ++i)
+      vtx[i] = CONST_THIS->_nodes[CONST_THIS->borders_local_vertices[ith][i]];
+      
+    return vtx;
+  }
+
+  vectorui getBorderNodes(int ith, MeshT const& mesh) const
+  {
+    uint tam(mesh.borders_local_nodes[ith].size());
+    vectorui nodes(tam);
+    
+    for (uint i = 0; i < tam; ++i)
+      nodes[i] =  CONST_THIS->_nodes[ mesh.borders_local_nodes[ith][i] ];
+      
+    return nodes;
+  }
+  
+  void setNode(int ith, uint nodeid)
+  {
+#ifdef FEPIC_DEBUG_ON
+    THIS->_nodes.at(ith) = nodeid;
+#else
+    THIS->_nodes[ith] = nodeid;
+#endif
+  }  
+
+  HalfT* getHalf(int ith)
+  {
+    FEPIC_ASSERT(ith<CellT::n_borders, "out of range");
+    return &THIS->_halfs[ith];
+  }
+
+  const HalfT* getHalf(int ith) const
+  {
+    FEPIC_ASSERT(ith<CellT::n_borders, "out of range");
+    return &CONST_THIS->_halfs[ith];
+  }
+
+  void broadcastHalf2Nodes(MeshT & mesh) const
+  {
+    for (int f = 0; f < CellT::n_borders; ++f) // loop  nas faces
+      for (uint i = 0, tam=mesh.borders_local_nodes[0].size(); i < tam; ++i)
+        mesh.getNode(CONST_THIS->_nodes[mesh.borders_local_nodes[f][i]])->setHalf(CONST_THIS->_halfs[f]);
+  }
+
+  void broadcastTag2Nodes(MeshT & mesh, bool force=false) const
+  {
+    if (force)
+      for (int i = 0; i < this->node.size(); ++i)
+        mesh.getNode(THIS->_nodes[i])->setTag(this->getTag());
+    else
+      for (int i = 0; i < this->node.size(); ++i)
+        if (mesh.getNode(THIS->_nodes[i])->getTag() == 0)
+          mesh.getNode(THIS->_nodes[i])->setTag(this->getTag());
   }
 
 #undef THIS
 #undef CONST_THIS  
-protected:
-
   
 };
 

@@ -35,30 +35,30 @@
  * como a direção ao longo da Edge de n0 até n1.
  * 
  */ 
-template<class Traits>
+template<class _Traits>
 class Edge : public _Labelable {
 public:
   static const int Dim = 1;
 
   typedef Simplex<1>  ElmClass;
     
-  typedef typename Traits::CellT                         CellT;
+  typedef typename _Traits::CellT                         CellT;
   typedef typename VolumeDef<CellT::Dim, CellT>::VolumeT VolumeT;
   typedef typename FaceDef<CellT::Dim, CellT>::FaceT     FaceT; 
     
-  typedef typename Traits::PointT  PointT;       
-  typedef typename Traits::MeshT   MeshT;        
-  typedef typename Traits::PointT  BorderT;  
+  typedef typename _Traits::PointT  PointT;       
+  typedef typename _Traits::MeshT   MeshT;        
+  typedef typename _Traits::PointT  BorderT;  
   typedef UndefElement             BndBorderT;
 
   /** Construtor.
   * @param nodes vetor com os nós que compõe a edge.
   * @note devem ser passados pelo menos dois nós.
   */ 
-  Edge(Fepic::vectorui const& nodes, int label=0) : _Labelable(label), _node(nodes)
+  Edge(vectorui const& nodes, int label=0) : _Labelable(label), _nodes(nodes)
   {
 #ifdef FEPIC_DEBUG_ON
-    if (_node.size() < 2)
+    if (_nodes.size() < 2)
     {
       std::cout << "erro: Edge constructor: devem ser passados pelo menos dois nós\n";
       throw;
@@ -68,7 +68,7 @@ public:
     
   /** Construtor.
   */ 
-  Edge() : _Labelable(), _node({0,0})
+  Edge() : _Labelable(), _nodes({0,0})
   {
   }
   
@@ -83,14 +83,14 @@ public:
   */ 
   int getNumNodes() const
   {
-    return _node.size();
+    return _nodes.size();
   }
   
   /** Retorna o ith-ésimo nó desta Edge.
   */ 
   uint getNodeIdx(int const ith) const
   {
-    return _node[ith];
+    return _nodes[ith];
   }
   
   /** Verifica se esta Edge está alinha com outra Edge. O alinhamento é verificado
@@ -100,9 +100,9 @@ public:
   */
   int isAligned (Edge const& e) const
   {
-    if ( (_node[0] == e._node[0]) && (_node[1] == e._node[1]) )
+    if ( (_nodes[0] == e._nodes[0]) && (_nodes[1] == e._nodes[1]) )
       return 1;
-    else if ( (_node[0] == e._node[1]) && (_node[1] == e._node[0]) )
+    else if ( (_nodes[0] == e._nodes[1]) && (_nodes[1] == e._nodes[0]) )
       return -1;
     else
       return 0;
@@ -113,11 +113,11 @@ public:
   *  @param nodes os vetor com os dois nós nos quais se vai verificar o alinhamento.
   *  @return 1 se a edge é paralela, -1 se a edge é anti-paralela, e 0 se não é paralela.
   */
-  int isAligned (Fepic::vectorui const& nodes) const
+  int isAligned (vectorui const& nodes) const
   {
-    if ((_node[1] == nodes[1]) && (_node[0] == nodes[0]) )
+    if ((_nodes[1] == nodes[1]) && (_nodes[0] == nodes[0]) )
       return 1;
-    else if ( (_node[0] == nodes[1]) && (_node[1] == nodes[0]) )
+    else if ( (_nodes[0] == nodes[1]) && (_nodes[1] == nodes[0]) )
       return -1;
     else
       return 0;
@@ -127,7 +127,7 @@ public:
   */ 
   void setNode(int const ith, uint const nth)
   {
-    _node[ith] = nth;
+    _nodes[ith] = nth;
   }
   
   /** NÃO IMPLEMENTADO
@@ -143,17 +143,17 @@ public:
   {
   
     if (order<=1)
-      o << "2 " << _node[0] << " " << _node[1];
+      o << "2 " << _nodes[0] << " " << _nodes[1];
     else
     {
-      o << "2 " << _node[0] << " " << _node[2];
+      o << "2 " << _nodes[0] << " " << _nodes[2];
       for (int i = 0; i < order-2; i++)
       {   
         o << std::endl;
-        o << "2 " << _node[2+i] << " " << _node[3+i];
+        o << "2 " << _nodes[2+i] << " " << _nodes[3+i];
       }
       o << std::endl;
-      o << "2 " << _node[order] << " " << _node[1];
+      o << "2 " << _nodes[order] << " " << _nodes[1];
     }
           
   }
@@ -203,7 +203,7 @@ public:
   */ 
   void setOrder(int order)
   {
-    _node.resize(order+1);
+    _nodes.resize(order+1);
   }
   
   static const int n_borders = 2;
@@ -214,7 +214,7 @@ public:
   ~Edge() {}
   
 protected:
-  Fepic::vectori _node;
+  vectori _nodes;
 };
 
 

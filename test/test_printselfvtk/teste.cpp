@@ -24,7 +24,7 @@ using namespace std;
 using namespace Eigen;
 
 
-typedef DefaultTraits<DIM, Simplex<DIM> > MyT;
+typedef Default_Traits<DIM, Simplex<DIM> > MyT;
 typedef iMesh<MyT> 						  MyMesh;
 typedef MyMesh::CellT 					  MyCell;
 typedef MyMesh::PointT 					  MyPoint;
@@ -69,7 +69,7 @@ int main(int argc, char *argv[]) {
     
     for (uint i = 0; i < temp.size(); i++)
     {
-        Fepic::vectorui v(temp[i].begin(), temp[i].end());
+        vectorui v(temp[i].begin(), temp[i].end());
         malha.addCell(MyCell(v));
     }
     

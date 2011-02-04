@@ -19,35 +19,36 @@
 // License and a copy of the GNU General Public License along with
 // FEPiC++. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef FEPIC_HALFEDGELAB_HPP
-#define FEPIC_HALFEDGELAB_HPP
+#ifndef FEPIC_HalfEdgeLab_HPP
+#define FEPIC_HalfEdgeLab_HPP
 
 
 /** @class HalfEdgeLab
  * 
  * Trata-se da classe HalfEdge com herança de classe _Labelable.
  */ 
-template<class Traits>
-class HalfEdgeLab : public HalfEdge<Traits>, public _Labelable
+template<class _Traits>
+class HalfEdgeLab : public HalfEdge<_Traits>, public _Labelable
 {
 public:
 
-  typedef typename Traits::MeshT MeshT;    
+  typedef typename _Traits::MeshT MeshT;    
   
   /** Construtor.
   *  @param cellid O iD da célula incidente.
   *  @param ith A posição da aresta nesta célula.
   *  @param label o rótulo.
   */ 
-  HalfEdgeLab(uint cellid, int ith, int label=0) : HalfEdge<Traits>(cellid, ith), _Labelable(label) {}
-  HalfEdgeLab() : HalfEdge<Traits>(), _Labelable() {};
+  HalfEdgeLab(uint cellid, int ith, int label=0) : HalfEdge<_Traits>(cellid, ith), _Labelable(label) {}
+  HalfEdgeLab() : HalfEdge<_Traits>(), _Labelable() {};
+  ~HalfEdgeLab() = default;
   
   /** Faz com que cada nó desta HalfEdgeLab aponte para ela.
   *  @param mesh a malha na qual a HalfEdgeLab está contida.
   */ 
-  void propagateHalf(MeshT & mesh) const
+  void broadcastHalf2Nodes(MeshT & mesh) const
   {
-    Fepic::vectorui v (mesh.getCell( this->getIncidCell() )->getBorderNodes( this->getPosition(), mesh ));
+    vectorui v (mesh.getCell( this->getIncidCell() )->getBorderNodes( this->getPosition(), mesh ));
     
     for (uint i = 0; i < v.size(); i++)
       mesh.getNode(v[i])->setHalf(*this);
@@ -58,9 +59,9 @@ public:
   * @param force quando true indica atribuição incondicional, quando false,
   * a atribuição é feita somente se cada nó tem label=0;
   */ 
-  void propagateTag(MeshT & mesh, bool force=false) const
+  void broadcastTag2Nodes(MeshT & mesh, bool force=false) const
   {
-    Fepic::vectori v (mesh.getCell( this->getIncidCell() )->getBorderNodes( this->getPosition(), mesh));
+    vectori v (mesh.getCell( this->getIncidCell() )->getBorderNodes( this->getPosition(), mesh));
     
     if (force)
       for (int i = 0; i < v.size(); ++i)
@@ -71,9 +72,6 @@ public:
           mesh.getNode(v[i])->setTag(this->getTag());
   }                                                                                                                        
   
-  /** Destrutor.
-  */ 
-  ~HalfEdgeLab() {}
 };
 
 

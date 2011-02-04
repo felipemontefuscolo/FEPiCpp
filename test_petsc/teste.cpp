@@ -18,7 +18,7 @@ using namespace std;
 
 const int DIM=2;
 typedef uint uint;
-typedef DefaultTraits<DIM, Simplex<DIM> > MyT;
+typedef Default_Traits<DIM, Simplex<DIM> > MyT;
 typedef iMesh<MyT> MyMesh;
 
 int main(int argc, char *argv[]) {

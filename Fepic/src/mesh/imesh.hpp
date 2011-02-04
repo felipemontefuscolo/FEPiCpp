@@ -27,29 +27,22 @@
 
 
 
-template<class Traits>
+template<class _Traits>
 class iMesh {
 
 public:
-  typedef typename Traits::CellT                         CellT;
-  typedef typename VolumeDef<CellT::Dim, CellT>::VolumeT VolumeT;
-  typedef typename FaceDef<CellT::Dim, CellT>::FaceT     FaceT;
+  typedef typename _Traits::CellT  CellT;
+  typedef typename _Traits::PointT PointT;
 
-  typedef Edge<Traits>                 EdgeT;
-  typedef typename Traits::PointT       PointT;
-  typedef typename CellT::BorderT       CellBT;         // cell border type
-  typedef typename CellT::BndBorderT    BndCellBT;  // boundary of the cell border type
+  typedef typename _Traits::HalfT  HalfT;
+  typedef typename _Traits::HalfLT HalfLT;
 
-  typedef typename HalfDef<CellT::Dim, Traits>::HalfT   HalfT;
-  typedef typename HalflDef<CellT::Dim, Traits>::HalflT HalflT;
-  typedef HalfEdge<Traits> HalfEdgeLabT;
-  typedef HalfFace<Traits> HalfFaceLabT;
-  typedef HalfEdgeLab<Traits>       HalflEdgeLabT;
-  typedef HalfFaceLab<Traits>       HalflFaceLabT;
+  typedef typename CellT::PolytopeT CellPolytopeT;
+  typedef typename CellPolytopeT::Derived CellDerivedPolytopeT;
 
   typedef std::deque<CellT>     CellList;
   typedef std::deque<PointT>    PointList;
-  typedef std::deque<HalflT>    HalflList;
+  typedef std::deque<HalfLT>    HalflList;
 
   typedef typename CellList::iterator  CellIterator;
   typedef typename PointList::iterator PointIterator;
@@ -59,7 +52,7 @@ public:
   typedef typename PointList::const_iterator PointConstIterator;
   typedef typename HalflList::const_iterator HalflConstIterator;
 
-  typedef Eigen::Matrix<double, Traits::spacedim, 1> VecT;
+  typedef Eigen::Matrix<double, _Traits::spacedim, 1> VecT;
 
 
   iMesh()
@@ -68,7 +61,7 @@ public:
     _add_scalar_vtk_n_calls=0;
     _add_vector_vtk_n_calls=0;
     _order = 1;
-    _MeshMethods<iMesh<Traits>, CellT::Dim>::buildCellLocalNodes(*this);
+    _MeshMethods<iMesh<_Traits>, CellT::dim>::buildCellLocalNodes(*this);
   };
 
   iMesh(iMesh const&) = delete;
@@ -132,10 +125,10 @@ public:
         it->setOrder(_order);
 
       /* atualiando a matriz que contém a numeração dos nós locais da célula */
-      _MeshMethods<iMesh<Traits>, CellT::Dim>::buildCellLocalNodes(*this);
+      _MeshMethods<iMesh<_Traits>, CellT::dim>::buildCellLocalNodes(*this);
 
       /* (re)cria os nós que são compartilhados entre as células. */
-      _MeshMethods<iMesh<Traits>, CellT::Dim>::remodelCellsNodes(*this, order);
+      _MeshMethods<iMesh<_Traits>, CellT::dim>::remodelCellsNodes(*this, order);
     }
   }
 
@@ -164,12 +157,12 @@ public:
   * @param[in] dead_mh bool indicando se as Mhalf (dead) incluem na pesquisa.
   * @note o critério de existência é se os nós são ciclicamente iguais aos da Mhalf.
   */
-  bool theseVerticesFormAHalfl(Fepic::vectorui const& vtx, uint &half_id, bool dead_mh = false)
+  bool theseVerticesFormAHalfl(vectorui const& vtx, uint &half_id, bool dead_mh = false)
   {
     // OTIMIZAR
 
     bool RET=false;
-    uint nummhalf = getNumHalflTotal();
+    uint nummhalf = getNumHalfLTotal();
     // IMPLEMENTAR ITERADOR
     for(uint i=0; i<nummhalf; ++i)
     {
@@ -198,12 +191,12 @@ public:
 
   /** Retorna a n-ésima mhalf-edge/face (adivinha pelo tipo da malha)
   */
-  HalflT* getHalfl(uint nth)
+  HalfLT* getHalfl(uint nth)
   {
     return &_mhalfL[nth];
   }
 
-  const HalflT* getHalfl(uint nth) const
+  const HalfLT* getHalfl(uint nth) const
   {
     return &_mhalfL[nth];
   }
@@ -227,7 +220,7 @@ public:
   * */
   void getCellCoords(Eigen::MatrixXd &X, Eigen::VectorXi const& map)
   {
-    X.resize(map.size(), Traits::spacedim);
+    X.resize(map.size(), _Traits::spacedim);
 
     for (int n = 0; n < map.size(); ++n)
       X.row(n) = this->getNode(map(n))->getCoord().transpose();
@@ -273,7 +266,7 @@ public:
   *  @param h A half-xxxx a ser adicionada.
   *  @return A posição da half-xxxx na lista
   */
-  uint addHalfl(HalflT const& h)
+  uint addHalfl(HalfLT const& h)
   {
     if (_dead_mhalf.empty())
     {
@@ -330,7 +323,7 @@ public:
   /** Retorna o número de mhalfs.
   *  @note incluindo o/a(s) marcado/a(s) como killed.
   */
-  uint getNumHalflTotal() const
+  uint getNumHalfLTotal() const
   {
     return _mhalfL.size();
   }
@@ -341,7 +334,7 @@ public:
   double getPerimeter()
   {
     auto it = _mhalfL.begin();
-    Fepic::vectorui vtx;
+    vectorui vtx;
     double sum=0.;
 
     std::cout << _mhalfL.size() << std::endl;
@@ -410,11 +403,11 @@ public:
 
 
   // propriedades da célula da malha e outros atributos auxiliares
-  Fepic::matrixi edges_local_nodes; // face, volume
-  Fepic::matrixi faces_local_nodes; // volume
-  Fepic::vectori opp_eln; // opposite edges_local_nodes
-  Fepic::matrixi opp_fln; // opposite faces_local_nodes
-                          // ex: faces_local_nodes[f][opp_fln[i]] := é o que a célula oposta enxerga
+  matrixi edges_local_nodes; // face, volume
+  matrixi borders_local_nodes; // volume
+  vectori opp_eln; // opposite edges_local_nodes
+  matrixi opp_fln; // opposite borders_local_nodes
+                          // ex: borders_local_nodes[f][opp_fln[i]] := é o que a célula oposta enxerga
 
   // entities
   CellList      _cellL;
@@ -424,9 +417,9 @@ public:
 private:
 
   // deleted entities id's
-  Fepic::dequeui  _dead_cells;
-  Fepic::dequeui  _dead_points;
-  Fepic::dequeui  _dead_mhalf;
+  dequeui  _dead_cells;
+  dequeui  _dead_points;
+  dequeui  _dead_mhalf;
 
   // I/O
   int           _order;

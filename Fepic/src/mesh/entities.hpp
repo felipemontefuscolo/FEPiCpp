@@ -25,79 +25,91 @@
 
 
 
+template<int dim>
+class Polytope { public:
+  typedef Polytope<dim-1> Derived;
+};
 
+template<int dim>
+class Simplex { public:
+  typedef Simplex<dim-1> Derived;
+};
 
-/* pre declarações */
+template<int dim>
+class Hypercube { public:
+  typedef Hypercube<dim-1> Derived;
+};
+
 
 
 /*--------------------------------------------------------------------*/
 
 
 
-template<class Traits>
-class ElementProperties<Simplex<1>, Traits> {
+template<class _Traits>
+class ElementProperties<Simplex<1>, _Traits> {
 public:
-  typedef Edge<Traits> Type;
+  typedef Edge<_Traits> Type;
 };
 
-template<class Traits>
-class ElementProperties<Simplex<2>, Traits> {
+template<class _Traits>
+class ElementProperties<Simplex<2>, _Traits> {
 public:
-  typedef Triangle<Traits> Type;
+  typedef Triangle<_Traits> Type;
 };
 
-template<class Traits>
-class ElementProperties<Simplex<3>, Traits> {
+template<class _Traits>
+class ElementProperties<Simplex<3>, _Traits> {
 public:
-  typedef Tetrahedron<Traits> Type;
+  typedef Tetrahedron<_Traits> Type;
 };
 
-template<class Traits>
-class ElementProperties<Hypercube<1>, Traits> {
+template<class _Traits>
+class ElementProperties<Hypercube<1>, _Traits> {
 public:
-  typedef Edge<Traits> Type;
+  typedef Edge<_Traits> Type;
 };
 
-template<class Traits>
-class ElementProperties<Hypercube<2>, Traits> {
+template<class _Traits>
+class ElementProperties<Hypercube<2>, _Traits> {
 public:
-  typedef iQuadrangle<Traits> Type;
+  typedef iQuadrangle<_Traits> Type;
 };
 
-template<class Traits>
-class ElementProperties<Hypercube<3>, Traits> {
+template<class _Traits>
+class ElementProperties<Hypercube<3>, _Traits> {
 public:
-  typedef iHexahedron<Traits> Type;
+  typedef iHexahedron<_Traits> Type;
 };
 
-template<class Traits>
-class ElementProperties<Edge<Traits>, Traits> {
+template<class _Traits>
+class ElementProperties<Edge<_Traits>, _Traits> {
 public:
   static const int n_borders = 2;
   static const int n_vertices = 2;
 };
-template<class Traits>
-class ElementProperties<Triangle<Traits>, Traits> {
+template<class _Traits>
+class ElementProperties<Triangle<_Traits>, _Traits> {
 public:
   static const int n_borders = 3;
   static const int n_vertices = 3;
 };
-template<class Traits>
-class ElementProperties<Tetrahedron<Traits>, Traits> {
+template<class _Traits>
+class ElementProperties<Tetrahedron<_Traits>, _Traits> {
 public: static const int n_borders = 4;
   static const int n_vertices = 4;
-  static Fepic::matrixi get_faces_vtx()
+  static matrixi get_faces_vtx()
   {
-    static const Fepic::matrixi temp = { {1,0,2}, {0,1,3}, {3,2,0}, {2,3,1} };
+    static const matrixi temp = { {1,0,2}, {0,1,3}, {3,2,0}, {2,3,1} };
     return temp;
   }
-  static Fepic::matrixi get_edges_vtx()
+  static matrixi get_edges_vtx()
   {
-    static const Fepic::matrixi temp = { {0,1}, {1,2}, {2,0}, {3,0}, {3,2}, {3,1} };
+    static const matrixi temp = { {0,1}, {1,2}, {2,0}, {3,0}, {3,2}, {3,1} };
     return temp;
   }
   
-  typedef Triangle<Traits> FaceT;
+  typedef Triangle<_Traits> FaceT;
 };
 
 
@@ -151,79 +163,70 @@ public:
 
 //------------------------------------
 
+#define FEPIC_HALFOF(obj, type) template<class _Traits>                    \
+                                class _MetaHalfOf<obj, _Traits> { public:  \
+                                typedef type<_Traits> Type; }
+                                
+FEPIC_HALFOF(Polytope<2>, HalfEdge);
+FEPIC_HALFOF(Polytope<3>, HalfFace);
+FEPIC_HALFOF(Simplex<2>, HalfEdge);
+FEPIC_HALFOF(Simplex<3>, HalfFace);
+FEPIC_HALFOF(Hypercube<2>, HalfEdge);
+FEPIC_HALFOF(Hypercube<3>, HalfFace);
 
-
-template<class Traits>
-class HalfDef<1, Traits> {
-public: 
-  typedef HalfEdge<Traits> HalfT;
-};
-
-template<class Traits>
-class HalfDef<2, Traits> {
-public: 
-  typedef HalfEdge<Traits> HalfT;
-};
-
-template<class Traits>
-class HalfDef<3, Traits> {
-public: 
-  typedef HalfFace<Traits> HalfT;
-};
-
+#undef FEPIC_HALFOF
 
 //------------------------------------
 
+#define FEPIC_HALFLABOF(obj, type) template<class _Traits>                       \
+                                   class _MetaHalfLabOf<obj, _Traits> { public:  \
+                                   typedef type<_Traits> Type; }
 
+FEPIC_HALFLABOF(Polytope<2>, HalfEdgeLab);
+FEPIC_HALFLABOF(Polytope<3>, HalfFaceLab);
+FEPIC_HALFLABOF(Simplex<2>, HalfEdgeLab);
+FEPIC_HALFLABOF(Simplex<3>, HalfFaceLab);
+FEPIC_HALFLABOF(Hypercube<2>, HalfEdgeLab);
+FEPIC_HALFLABOF(Hypercube<3>, HalfFaceLab);
 
-template<class Traits>
-class HalflDef<1, Traits> {
-public: 
-  typedef HalfEdgeLab<Traits> HalflT;
-};
+#undef FEPIC_HALFLABOF
 
-template<class Traits>
-class HalflDef<2, Traits> {
-public: 
-  typedef HalfEdgeLab<Traits> HalflT;
-};
-
-template<class Traits>
-class HalflDef<3, Traits> {
-public: 
-  typedef HalfFaceLab<Traits> HalflT;
-};
-
-
-/** @class DefaultTraits
+/** @class Default_Traits
  * 
- * Default definitions of a traits.
+ * Default definitions of a _Traits.
  * 
- * Users can do their own traits.
+ * Users can do their own _Traits.
  * 
- * In custom traits must be defined:
+ * In custom _Traits must be defined:
  * - CellT      := type of grid cell
  * - EdgeT
  * - PointT
+ * - HalfT
+ * - HalfLT
  * - MeshT
  * - spacedim   := dimension of the space
  * 
  * 
  */
 template<int _spacedim, class CellType = Simplex<_spacedim> >
-class DefaultTraits {
+class Default_Traits {
 public:
 
-  DefaultTraits(DefaultTraits const&) = delete; // dont copy me
-  ~DefaultTraits() = delete;
+  Default_Traits(Default_Traits const&) = delete; // dont copy me
+  ~Default_Traits() = delete;
   
-  typedef DefaultTraits Traits;
+  typedef Default_Traits _Traits;
   
-  typedef typename ElementProperties<CellType, Traits>::Type CellT;
+  typedef typename ElementProperties<CellType, _Traits>::Type CellT;
   
-  typedef Point<Traits>  PointT;
+  typedef typename _MetaHalfOf<CellType, _Traits>::Type HalfT;
   
-  typedef iMesh<Traits>   MeshT;
+  typedef typename _MetaHalfLabOf<CellType, _Traits>::Type HalfLT;
+  
+  typedef Point<_Traits>  PointT;
+  
+  typedef iMesh<_Traits>   MeshT;
+  
   
   static const int spacedim = _spacedim;
 };
@@ -237,9 +240,9 @@ public:
  *  @return uma lista com as coordenadas dos pontos passados em list_pts na célula real
  *  @warning as funções Phi DEVEM corresponder aos pontos de interpolação
  */
-template<class Traits, class ShapeFun, 
-         int   sdim = Traits::spacedim,
-         int   cdim = Traits::CellT::Dim,
+template<class _Traits, class ShapeFun, 
+         int   sdim = _Traits::spacedim,
+         int   cdim = _Traits::CellT::Dim,
          class VecT = Eigen::Matrix<double, sdim, 1>,   // vetor no espaço da célula real
          class VecU = Eigen::Matrix<double, cdim, 1> >  // vetor na espaço da célula unitária
 std::vector<VecT> map2RealCell(std::vector<VecU> const& list_pts,

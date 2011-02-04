@@ -23,8 +23,8 @@
 #define FEPIC_MISC_HPP
 
 
-namespace Fepic
-{
+//namespace Fepic {
+  
   typedef std::vector<std::vector<int> >      matrixi;
   typedef std::vector<std::vector<uint> >     matrixUi;
   typedef std::vector<std::vector<double> >     matrixd;
@@ -38,6 +38,7 @@ namespace Fepic
 
   /* vetores para representar os espaços R² e R³ são os do Eigen*/
 
+namespace Fepic {
   template <class T>
   const T& max ( const T& a) {
     return a;

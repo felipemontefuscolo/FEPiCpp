@@ -44,6 +44,7 @@
 #include "Fepic/src/util/forward_declarations.hpp"
 #include "Fepic/src/mesh/msh_tags.hpp"
 #include "Fepic/src/util/misc.hpp"
+#include "Fepic/src/util/assert.hpp"
 #include "Fepic/src/shapefunctions/parametric_pts.hpp"
 #include "Fepic/src/shapefunctions/shapefunctions.hpp"
 #include "Fepic/src/mesh/metamesh.hpp"
@@ -51,6 +52,9 @@
 
 #include "Fepic/src/mesh/entities.hpp"
 #include "Fepic/src/mesh/labelable.hpp"
+#include "Fepic/src/mesh/cellcore.hpp"
+#include "Fepic/src/mesh/cell_functions.hpp"
+#include "Fepic/src/mesh/halfcore.hpp"
 #include "Fepic/src/mesh/halfedge.hpp"
 #include "Fepic/src/mesh/halfedgelab.hpp"
 #include "Fepic/src/mesh/halfface.hpp"

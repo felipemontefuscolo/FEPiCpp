@@ -29,13 +29,13 @@
  * 
  * Trata-se da classe HalfFace com herança de classe _Labelable.
  */ 
-template<class Traits>
-class HalfFaceLab : public HalfFace<Traits>, public _Labelable
+template<class _Traits>
+class HalfFaceLab : public HalfFace<_Traits>, public _Labelable
 {
 public:
 
-  typedef typename Traits::MeshT MeshT;
-  typedef typename Traits::CellT CellT;
+  typedef typename _Traits::MeshT MeshT;
+  typedef typename _Traits::CellT CellT;
   
   
   /** Construtor.
@@ -44,16 +44,16 @@ public:
   *  @param anchor o índice âncora.
   *  @param tag o rótulo.
   */ 
-  HalfFaceLab(uint incid_cell, int ith, int anchor, int tag=0) : HalfFace<Traits> (incid_cell, ith, anchor), _Labelable(tag) {}
+  HalfFaceLab(uint incid_cell, int ith, int anchor, int tag=0) : HalfFace<_Traits> (incid_cell, ith, anchor), _Labelable(tag) {}
   
-  HalfFaceLab() : HalfFace<Traits>(), _Labelable() {}
+  HalfFaceLab() : HalfFace<_Traits>(), _Labelable() {}
   
   /** Faz com que cada nó desta HalfFaceLab aponte para ela.
   *  @param mesh a malha na qual a HalfFaceLab está contida.
   */ 
-  void propagateHalf(MeshT& mesh) const
+  void broadcastHalf2Nodes(MeshT& mesh) const
   {
-    Fepic::vectorui v (mesh.getCell( this->getIncidCell() )->getBorderNodes( this->getPosition(),mesh ));
+    vectorui v (mesh.getCell( this->getIncidCell() )->getBorderNodes( this->getPosition(),mesh ));
     
     for (uint i = 0; i < v.size(); i++)
     {
@@ -61,13 +61,13 @@ public:
     }
   }
   
-  /** Atribui o rótulo desta HalfEdgeLab a seus nós.
+  /** Atribui o rótulo desta _MetaHalfLabOf a seus nós.
   * @param force quando true indica atribuição incondicional, quando false,
   * a atribuição é feita somente se cada nó tem tag=0;
   */ 
-  void propagateTag(MeshT& mesh, bool force=false) const
+  void broadcastTag2Nodes(MeshT& mesh, bool force=false) const
   {
-    Fepic::vectori v (mesh.getCell( this->getIncidCell() )->getBorderNodes( this->getPosition(),mesh ));
+    vectori v (mesh.getCell( this->getIncidCell() )->getBorderNodes( this->getPosition(),mesh ));
     
     if (force)
       for (int i = 0; i < v.size(); ++i)

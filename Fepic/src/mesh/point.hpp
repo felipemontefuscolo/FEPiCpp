@@ -25,20 +25,18 @@
 /** 
  *  Os objetos desta classe representam pontos no espaço.
  */ 
-template<class Traits>
+template<class _Traits>
 class Point : public _Labelable {
 public:
-  static const int Dim = 0;
+  enum {dim=0};
   
-  typedef typename Traits::CellT                         CellT;
-  typedef typename VolumeDef<CellT::Dim, CellT>::VolumeT VolumeT;      // CellT::dim < 3 ? UndefVol : CellT::Volume
-  typedef typename FaceDef<CellT::Dim, CellT>::FaceT     FaceT;        // análogo
-  typedef typename HalfDef<CellT::Dim, Traits>::HalfT    HalfT;
+  typedef typename _Traits::CellT                         CellT;
+  typedef typename _MetaHalfOf<typename CellT::PolytopeT, _Traits>::Type    HalfT;
       
-  typedef Edge<Traits>          EdgeT;
-  typedef typename Traits::MeshT MeshT;
+  typedef Edge<_Traits>          EdgeT;
+  typedef typename _Traits::MeshT MeshT;
   
-  typedef Eigen::Matrix<double, Traits::spacedim, 1> VecT;
+  typedef Eigen::Matrix<double, _Traits::spacedim, 1> VecT;
     
   /** Construtor.
   *  @param coord um vetor com Dim elementos que armazena a coordenada.
@@ -47,7 +45,7 @@ public:
   template<class T>
   Point(T const& coord, char label=0) : _Labelable(label)
   {
-    for (int i = 0; i < Traits::spacedim; ++i)
+    for (int i = 0; i < _Traits::spacedim; ++i)
       _coord[i] = coord[i];
   }
   
@@ -60,7 +58,7 @@ public:
   */  
   int getSpaceDim() const 
   {
-    return Traits::spacedim;
+    return _Traits::spacedim;
   }
   
   /** Faz com que este ponto tenha a HalfT ha.
@@ -90,7 +88,7 @@ public:
   */ 
   void printSelfVtk(std::ostream &o, int space = 22) const
   {
-    switch (Traits::spacedim) {
+    switch (_Traits::spacedim) {
       case 1:
       {
         o << std::left << std::setw(space) << _coord[0] << " 0.0 0.0";
@@ -123,7 +121,7 @@ public:
   template<class Vec>
   void setCoord(Vec const& coord) 
   {
-    for (int i = 0; i < Traits::spacedim; ++i)
+    for (int i = 0; i < _Traits::spacedim; ++i)
       _coord[i] = coord[i];
   }
   
@@ -133,7 +131,7 @@ public:
   template<class Vec>
   void getCoord(Vec & coord) const 
   {
-    for (int i = 0; i < Traits::spacedim; ++i)
+    for (int i = 0; i < _Traits::spacedim; ++i)
       coord[i] = _coord[i];
   }
   

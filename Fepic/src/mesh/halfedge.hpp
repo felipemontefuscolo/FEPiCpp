@@ -24,18 +24,18 @@
 
 
 
-template<class Traits>
-class HalfEdge : public _HalfCore<HalfEdge<Traits>>
+template<class _Traits>
+class HalfEdge : public _HalfCore<_Traits>
 {
 public:
-  typedef typename Traits::MeshT MeshT;
-  typedef typename Traits::CellT CellT;
+  typedef typename _Traits::MeshT MeshT;
+  typedef typename _Traits::CellT CellT;
 
   enum {cell_id_limit=134217727};
   enum {position_limit=6};
   enum {anchor_limit=3};
   
-  friend class _HalfCore<HalfEdge<Traits>>;
+  friend class _HalfCore<_Traits>;
 
   HalfEdge(uint incid_cell, int position, int=0) : _incid_cell(incid_cell), _position(position)
   {
@@ -62,7 +62,7 @@ public:
   */ 
   double getLenght(MeshT& mesh) const
   {
-    Fepic::vectorui nodes(this->getNodes(mesh));
+    vectorui nodes(this->getNodes(mesh));
     double sum=0;
     for (int i = 0; i < nodes.size()-1; i++)
       sum += mesh.getNode(nodes[i])->getDistance(*mesh.getNode(nodes[i+1]));

@@ -31,42 +31,41 @@
  * triângulo linear). Um triângulo de ordem <em>n</em> tem <em>
  * (n+1)(n+2)/2</em> nós.
  */ 
-template<class Traits>
-class Triangle : public _Poly2d<Traits>
+template<class _Traits>
+class Triangle : public _Labelable, public _Poly2d<_Traits>
 {
 public:
-  static const int n_borders = 3; 
-  static const int n_vertices = 3;        
-        
-  typedef Simplex<2>           ElmClass;
-  
-  typedef UndefElement           VolumeT;  // CellT::dim < 3 ? UndefVol : CellT::Volume
-  typedef Triangle<Traits>        FaceT;
 
-  /* Se Triangle é instanciado, então ele é a célula */
-  typedef Triangle<Traits>    CellT;
-        
-  typedef Edge<Traits>             BorderT;
-  typedef typename Traits::PointT   BndBorderT;
+  typedef          Simplex<2>      PolytopeT;
+  typedef typename _Traits::PointT PointT;
+  typedef typename _Traits::HalfT  HalfT;      
+  typedef typename _Traits::MeshT  MeshT;  
   
-  typedef Edge<Traits>             EdgeT;
-  typedef typename Traits::PointT   PointT;
-  typedef typename Traits::MeshT    MeshT;
+  friend class _Poly2d<_Traits>;
+  friend class _CellCore<_Traits>;
   
-  typedef Eigen::Matrix<double, Traits::spacedim, 1> VecT;
+  enum { dim=2,
+         n_vertices=3,
+         n_borders=3,
+         n_vertices_per_border=2};
   
-  /** Construtor.
-  */ 
-  Triangle() : _Poly2d<Traits>()
+  template<class... LabeableArgs>
+  Triangle(vectorui const& nodes, uint order, LabeableArgs... args) :
+                          _Labelable(args...), _nodes(nodes), _order(static_cast<unsigned char>(order))
   {
+    FEPIC_ASSERT(nodes.size()==numNodes<Simplex<2>>(order), "");
   }
   
-  /** Construtor.
-  * @param nodes vetor com os nós que compõe o Triangle.
-  */
-  Triangle(Fepic::vectorui const& nodes, int label=0) : _Poly2d<Traits>(nodes, label)
+  template<class... LabeableArgs>
+  Triangle(vectorui && nodes, uint order, LabeableArgs... args) :
+                      _Labelable(args...), _nodes(nodes), _order(static_cast<unsigned char>(order))
   {
-  }
+    FEPIC_ASSERT(nodes.size()==numNodes<Simplex<2>>(order), "");
+  }  
+  
+  Triangle(Triangle const&) = default;
+  Triangle() = default;
+  ~Triangle() = default;
   
   /** Retorna a tag do formato Msh correspondente a um triângulo de ordem <em>order</em>.
   */ 
@@ -76,7 +75,7 @@ public:
     {
       case 1: return Msh_TRI_3;
       case 2: return Msh_TRI_6;
-      case 3: return Msh_TRI_10; // TRABALHO, muito TRABALHO
+      case 3: return Msh_TRI_10;
       case 4: return Msh_TRI_15;
       case 5: return Msh_TRI_21;
       default:
@@ -87,13 +86,6 @@ public:
     }
   }
   
-  /** Retorna o número de nós de um triângulo de ordem <em>order</em>
-   */ 
-  static int getNumCellNodes(int order)
-  {
-    return (order+1)*(order+2)/2;
-  }
-    
   /**
   *  Imprime a célula no formate Vtk.
   *  @note O número de subdivisões necessários para imprimir o triângulo é order^2
@@ -102,7 +94,7 @@ public:
   void printSelfVtk(std::ostream &o, int order) const
   {
     static iCellData  data;
-    Fepic::matrixi    minimesh;
+    matrixi    minimesh;
   
     minimesh = data.getMinimesh(order);
   
@@ -128,12 +120,13 @@ public:
   */ 
   void setOrder(int order)
   {
-    this->_node.resize((order+1)*(order+2)/2);
+    this->_nodes.resize((order+1)*(order+2)/2);
+    _order = static_cast<unsigned char>(order);
   }
   
   /**INICIALIZADOR ... NOT FOR USERS!
   */ 
-  static Fepic::matrixi getEdgesLocalNodes(int order)
+  static matrixi getEdgesLocalNodes(int order)
   {
     /* Essa função é usada para atualizar o vetor edges_local_nodes
     * que tem no imesh. Esse vetor contém a numeração local dos nós de
@@ -142,7 +135,7 @@ public:
     
     const int E = order - 1;
     
-    Fepic::matrixi en(3, Fepic::vectori(order + 1));
+    matrixi en(3, vectori(order + 1));
     
     for (int i = 0; i < 3; i++)
     {
@@ -159,9 +152,9 @@ public:
   /** NOT FO USERS
   * @param n ordem
   */ 
-  static Fepic::vectori getOppELN(int n)
+  static vectori getOppELN(int n)
   {
-    Fepic::vectori opp_eln(n+1);
+    vectori opp_eln(n+1);
     
     opp_eln[0]=1;
     opp_eln[n]=0;
@@ -176,7 +169,7 @@ public:
   
   /** Retorna o número de mini-células de uma mini-malha de ordem n.
   */ 
-  static int getNumCellsMM(int n)
+  static int getNumSubdivisions(int n)
   {
     return n*n;
   }
@@ -203,7 +196,7 @@ public:
   class iCellData
   {
   public:
-    typedef Fepic::matrixi Minimesh;
+    typedef matrixi Minimesh;
     typedef int          Order;
     
     /** NOT FOR USERS \n
@@ -221,7 +214,7 @@ public:
         * - (a,b), (a+1,b), (a,b+1)
         * - (a,b), (a,b+1), (a-1,b+1)
         */ 
-        Fepic::matrixi                  minimesh;       // mini-malha, inicialmente vazia
+        matrixi                  minimesh;       // mini-malha, inicialmente vazia
         int                           n2, n3;         // id do segundo e terceiro nó na mini-malha
         int                           a,b;            // coordenada inteira
         std::vector<Eigen::Vector2i>  coords_list = genTriParametricPtsINT(n);
@@ -243,7 +236,7 @@ public:
             n2 = distance(clbegin, clit2);
             n3 = distance(clbegin, clit3);
             
-            minimesh.push_back(Fepic::vectori{i,n2,n3});
+            minimesh.push_back(vectori{i,n2,n3});
           }
           
           /* Segundo padrão: (a,b), (a,b+1), (a-1,b+1)  */
@@ -255,7 +248,7 @@ public:
             n2 = distance(clbegin, clit2);
             n3 = distance(clbegin, clit3);
             
-            minimesh.push_back(Fepic::vectori{i,n2,n3});
+            minimesh.push_back(vectori{i,n2,n3});
           }
           
         } // end for
@@ -272,14 +265,23 @@ public:
     // atributos
     std::map<Order, Minimesh> table;
   }; // iCellData
-  
-  /** Destrutor.
-  */ 
-  ~Triangle() {}
-  
-protected:
 
+
+  static const matrixi borders_local_vertices;
+  static const matrixi bndborders_local_vertices;  
+
+protected:
+  vectorui      _nodes;
+  HalfT         _halfs[n_borders];
+  unsigned char _order; 
+  
 };
+
+template<class _Traits>
+const matrixi Triangle<_Traits>::borders_local_vertices = { {0,1}, {1,2}, {2,0} };
+
+template<class _Traits>
+const matrixi Triangle<_Traits>::bndborders_local_vertices = { {0}, {1}, {2} };
 
 
 

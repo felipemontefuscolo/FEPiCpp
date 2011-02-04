@@ -24,7 +24,7 @@ using namespace std;
 using namespace Eigen;
 
 
-typedef DefaultTraits<DIM, Simplex<DIM> > MyT;
+typedef Default_Traits<DIM, Simplex<DIM> > MyT;
 typedef iMesh<MyT> MyMesh;
 typedef MyMesh::CellT MyCell;
 typedef MyMesh::PointT MyPoint;

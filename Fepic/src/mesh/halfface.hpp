@@ -24,18 +24,18 @@
 
 
 
-template<class Traits>
-class HalfFace : public _HalfCore<HalfFace<Traits>>
+template<class _Traits>
+class HalfFace : public _HalfCore<_Traits>
 {
 public:
-  typedef typename Traits::MeshT MeshT;
-  typedef typename Traits::CellT CellT;
+  typedef typename _Traits::MeshT MeshT;
+  typedef typename _Traits::CellT CellT;
 
   enum {cell_id_limit=134217727};
   enum {position_limit=6};
   enum {anchor_limit=3};
   
-  friend class _HalfCore<HalfEdge<Traits>>;
+  friend class _HalfCore<_Traits>;
 
   HalfFace(uint incid_cell, int position, int anchor) : _incid_cell(incid_cell), _position(position), _anchor(anchor)
   {

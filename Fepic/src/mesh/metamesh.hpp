@@ -52,7 +52,7 @@ public:
   template<class T>
   static void buildCellLocalNodes(iMesh<T> & mesh)
   {
-    mesh.edges_local_nodes = T::CellT::FaceT::getEdgesLocalNodes(mesh.getOrder());
+    mesh.edges_local_nodes = T::CellT::getEdgesLocalNodes(mesh.getOrder());
   }
 };
 
@@ -60,8 +60,8 @@ template<class Mesh>
 class _MeshMethods<Mesh, 3>
 {
 public:
-    template<class Traits>
-  static void buildAdjacency(iMesh<Traits> & mesh)
+    template<class _Traits>
+  static void buildAdjacency(iMesh<_Traits> & mesh)
   {
     mesh.buildAdjacency4volume();
   }
@@ -72,11 +72,11 @@ public:
     mesh.remodelCellsNodes4volume(order);
   }
   
-  template<class Traits>
-  static void buildCellLocalNodes(iMesh<Traits> & mesh)
+  template<class _Traits>
+  static void buildCellLocalNodes(iMesh<_Traits> & mesh)
   {
-    mesh.edges_local_nodes = Traits::CellT::getEdgesLocalNodes(mesh.getOrder());
-    mesh.faces_local_nodes = Traits::CellT::getFacesLocalNodes(mesh.getOrder());
+    mesh.edges_local_nodes = _Traits::CellT::getEdgesLocalNodes(mesh.getOrder());
+    mesh.borders_local_nodes = _Traits::CellT::getFacesLocalNodes(mesh.getOrder());
   }
 };
 

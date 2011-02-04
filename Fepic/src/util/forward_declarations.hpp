@@ -24,59 +24,58 @@
 
 
 
-template<class Traits> class iMesh;
+template<class _Traits> class iMesh;
 
 class _Labelable;
 
 // volume
-template<class Traits> class _Poly3d;
-template<class Traits> class Tetrahedron;
-template<class Traits> class iHexahedron;
+template<class _Traits> class _Poly3d;
+template<class _Traits> class Tetrahedron;
+template<class _Traits> class iHexahedron;
 
 // surface
-template<class Traits> class _Poly2d;
-template<class Traits> class Triangle;
-template<class Traits> class iQuadrangle;
+template<class _Traits> class _Poly2d;
+template<class _Traits> class Triangle;
+template<class _Traits> class iQuadrangle;
 
 // line
-template<class Traits> class Edge;
+template<class _Traits> class Edge;
 
 //Point
-template<class Traits> class Point;
+template<class _Traits> class Point;
 
 // Halfs
-template<class Traits> class HalfEdge;
-template<class Traits> class HalfFace;
+template<class _Traits> class HalfEdge;
+template<class _Traits> class HalfFace;
 
 // Halfls
-template<class Traits> class HalfEdgeLab;
-template<class Traits> class HalfFaceLab;
+template<class _Traits> class HalfEdgeLab;
+template<class _Traits> class HalfFaceLab;
 
 
-template<class ElmType, class Traits> class ElementProperties;
+template<class ElmType, class _Traits> class ElementProperties;
 
 template<int CellDim, class Cell> class VolumeDef; 
 
 template<int Dim, class Cell> class FaceDef;
 
-template<int Dim, class Traits> class HalfDef;
+template<typename Dim, class _Traits> class _MetaHalfOf;
 
-template<int Dim, class Traits> class HalflDef;
-
-
+template<typename Dim, class _Traits> class _MetaHalfLabOf;
 
 
+template<int dim> class Polytope;
 
-/* Empty classes */
+template<int dim> class Simplex;
 
-template<int dim> class Simplex {};
-
-template<int dim> class Hypercube {};
+template<int dim> class Hypercube;
 
 
 
+/* Cell Functions */
 
-
+template<class CellType> uint numNodes(uint order);
+template<class CellType> uint numBubbles(uint order);
 
 
 #endif

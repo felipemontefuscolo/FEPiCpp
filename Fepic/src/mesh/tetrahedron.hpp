@@ -24,49 +24,45 @@
 
 
 
-template<class Traits>
-class Tetrahedron : public _Poly3d<Traits> {
+template<class _Traits>
+class Tetrahedron : public _Labelable, public _Poly3d<_Traits>  {
 public:
-  static const int Dim = 3;
   
-  typedef          Simplex<3>           ElmClass;
-  typedef          Tetrahedron<Traits> VolumeT;
-  typedef          Triangle<Traits>    FaceT;
-  typedef          FaceT                BorderT;
-  typedef          Edge<Traits>        BndBorderT;
-  typedef          BndBorderT           EdgeT;
-  typedef typename Traits::PointT       PointT;       
-  typedef typename Traits::MeshT        MeshT;  
+  typedef          Simplex<3>      PolytopeT;
+  typedef typename _Traits::PointT PointT;
+  typedef typename _Traits::HalfT  HalfT;      
+  typedef typename _Traits::MeshT  MeshT;  
   
-  typedef Eigen::Matrix<double, Traits::spacedim, 1>  VecT;      
+  friend class _Poly3d<_Traits>;
+  friend class _CellCore<_Traits>;
   
-  Tetrahedron() : _Poly3d<Traits>()
+  enum { dim=3,
+         n_vertices=4,
+         n_borders=4,
+         n_vertices_per_border=3};
+         
+  template<class... LabeableArgs>
+  Tetrahedron(vectorui const& nodes, uint order, LabeableArgs... args) :
+                          _Labelable(args...), _nodes(nodes), _order(static_cast<unsigned char>(order))
   {
+    FEPIC_ASSERT(nodes.size()==numNodes<Simplex<3>>(order), "");
   }
   
-  /** @param nodes vetor com os nós que compõe o polígono.
-  */ 
-  Tetrahedron(Fepic::vectorui const& nodes, int label=0) : _Poly3d<Traits>(nodes, label)
+  template<class... LabeableArgs>
+  Tetrahedron(vectorui && nodes, uint order, LabeableArgs... args) :
+                      _Labelable(args...), _nodes(nodes), _order(static_cast<unsigned char>(order))
   {
-  }
+    FEPIC_ASSERT(nodes.size()==numNodes<Simplex<3>>(order), "");
+  }  
   
-  /** @param nodes vetor com os nós que compõe o polígono.
-  */ 
-  Tetrahedron(Fepic::vectorui && nodes, int label=0) : _Poly3d<Traits>(nodes, label)
-  {
-  }
-  
-  /** Retorna o número de nós desse poliedro.
-  */ 
-  static int getNumCellNodes(int order)
-  {
-    return (order+1)*(order+2)*(order+3)/6;;
-  }
+  Tetrahedron(Tetrahedron const&) = default;
+  Tetrahedron() = default;
+  ~Tetrahedron() = default;
                   
   void printSelfVtk(std::ostream &o, int order) const
   {
     static iCellData data;
-    Fepic::matrixi   minimesh;
+    matrixi   minimesh;
   
     minimesh = data.getMinimesh(order);
     
@@ -103,24 +99,24 @@ public:
     }
   }
   
-  
   /** @warning Toda vez que a ordem da malha for alterada, essa função DEVE SER CHAMADA.
   */ 
   void setOrder(int order)
   {
-    this->_node.resize((order+1)*(order+2)*(order+3)/6);
+    this->_nodes.resize((order+1)*(order+2)*(order+3)/6);
+    _order = static_cast<unsigned char>(order);
   }
   
   
   /**INICIALIZADOR ... NÃO UTILIZAR
   */ 
-  static Fepic::matrixi getEdgesLocalNodes(int order)
+  static matrixi getEdgesLocalNodes(int order)
   {
-    static Fepic::matrixi edges_vtx = ElementProperties<Tetrahedron, Traits>::get_edges_vtx();
+    static matrixi edges_vtx = ElementProperties<Tetrahedron, _Traits>::get_edges_vtx();
   
     const int E = order - 1;
     
-    Fepic::matrixi en(6, std::vector<int>(order + 1));
+    matrixi en(6, std::vector<int>(order + 1));
     
     for (int i = 0; i < 6; i++)
     {
@@ -136,17 +132,17 @@ public:
   
   /**INICIALIZADOR ... NÃO UTILIZAR
   */ 
-  static Fepic::matrixi getFacesLocalNodes(int order)
+  static matrixi getFacesLocalNodes(int order)
   {       
-    static Fepic::matrixi faces_vtx(ElementProperties<Tetrahedron, Traits>::get_faces_vtx());
+    static matrixi faces_vtx(ElementProperties<Tetrahedron, _Traits>::get_faces_vtx());
   
     const int E = order - 1;
     const int C = 4 + E*6;
     const int F = (order-1)*(order-2)/2;
     
-    Fepic::matrixi fn(4, Fepic::vectori((order+1)*(order+2)/2));
+    matrixi fn(4, vectori((order+1)*(order+2)/2));
     
-    Fepic::matrixi ed_nds = Tetrahedron::getEdgesLocalNodes(order);
+    matrixi ed_nds = Tetrahedron::getEdgesLocalNodes(order);
     
     for (int i = 0; i < 4; i++)
       for (int j = 0; j < 3; j++)
@@ -191,9 +187,9 @@ public:
   /** NOT FOR USERS
   * @param n ordem
   */ 
-  static Fepic::vectori getOppELN(int n)
+  static vectori getOppELN(int n)
   {
-    Fepic::vectori opp_eln(n+1);
+    vectori opp_eln(n+1);
     
     opp_eln[0]=1;
     opp_eln[n]=0;
@@ -208,12 +204,12 @@ public:
   * getOppFLN(n)[anchor] = vetor com a visão da face oposta de âncora anchor.
   * @param n ordem
   */ 
-  static Fepic::matrixi getOppFLN(int n)
+  static matrixi getOppFLN(int n)
   {
     int k;
     int anch;
     const int                           N = (n+1)*(n+2)/2;
-    Fepic::matrixi                      opp_fln(3, Fepic::vectori(N));
+    matrixi                      opp_fln(3, vectori(N));
     const std::vector<Eigen::Vector2i>  Coords = genTriParametricPtsINT(n);
     
     std::map<int, Eigen::Vector2i>      X;
@@ -279,7 +275,7 @@ public:
 
   /** Retorna o número de mini-células de uma mini-malha de ordem n.
   */ 
-  static int getNumCellsMM(int n)
+  static int getNumSubdivisions(int n)
   {
     return n*n*n;
   }
@@ -292,7 +288,7 @@ public:
   class iCellData
   {
   public:
-    typedef Fepic::matrixi Minimesh;
+    typedef matrixi Minimesh;
     typedef int            Order;
   
     /** NOT FOR USERS \n
@@ -316,7 +312,7 @@ public:
         * - (a,b,c), (a+0,b+1,c+0), (a-1,b+1,c+1), (a+0,b+0,c+1)
         * - (a,b,c), (a+1,b+0,c-1), (a+1,b+0,c+0), (a+1,b-1,c+0)
         */ 
-        Fepic::matrixi                  minimesh;       // mini-malha, inicialmente vazia
+        matrixi                  minimesh;       // mini-malha, inicialmente vazia
         int                           n2, n3, n4;     // id do segundo e terceiro nó na mini-malha
         int                           a,b,c;          // coordenada inteira
         std::vector<Eigen::Vector3i>  coords_list = genTetParametricPtsINT(n);
@@ -341,7 +337,7 @@ public:
               n3 = distance(clbegin, clit3);
               n4 = distance(clbegin, clit4);
               
-              minimesh.push_back(Fepic::vectori{i,n2,n3,n4});
+              minimesh.push_back(vectori{i,n2,n3,n4});
             }
             
             /* Segundo padrão: (a,b,c), (a+1,b+0,c-1), (a+0,b+1,c-1), (a+0,b+1,c+0)  */
@@ -355,7 +351,7 @@ public:
               n3 = distance(clbegin, clit3);
               n4 = distance(clbegin, clit4);
               
-              minimesh.push_back(Fepic::vectori{i,n2,n3,n4});
+              minimesh.push_back(vectori{i,n2,n3,n4});
             }
             
             /* Terceiro padrão: (a,b,c), (a+0,b+0,c+1), (a+1,b-1,c+0), (a+1,b+0,c+0)  */
@@ -369,7 +365,7 @@ public:
               n3 = distance(clbegin, clit3);
               n4 = distance(clbegin, clit4);
               
-              minimesh.push_back(Fepic::vectori{i,n2,n3,n4});
+              minimesh.push_back(vectori{i,n2,n3,n4});
             }
             
             /* Quarto padrão: (a,b,c), (a+1,b+0,c-1), (a+0,b+1,c+0), (a+1,b+0,c+0)  */
@@ -383,7 +379,7 @@ public:
               n3 = distance(clbegin, clit3);
               n4 = distance(clbegin, clit4);
               
-              minimesh.push_back(Fepic::vectori{i,n2,n3,n4});
+              minimesh.push_back(vectori{i,n2,n3,n4});
             }
             
             /* Quinto padrão: (a,b,c), (a+0,b+1,c+0), (a-1,b+1,c+1), (a+0,b+0,c+1)  */
@@ -397,7 +393,7 @@ public:
               n3 = distance(clbegin, clit3);
               n4 = distance(clbegin, clit4);
               
-              minimesh.push_back(Fepic::vectori{i,n2,n3,n4});
+              minimesh.push_back(vectori{i,n2,n3,n4});
             }
             
             /* Sexto padrão: (a,b,c), (a+1,b+0,c-1), (a+1,b+0,c+0), (a+1,b-1,c+0)   */
@@ -411,7 +407,7 @@ public:
               n3 = distance(clbegin, clit3);
               n4 = distance(clbegin, clit4);
               
-              minimesh.push_back(Fepic::vectori{i,n2,n3,n4});
+              minimesh.push_back(vectori{i,n2,n3,n4});
             }
             
             
@@ -433,14 +429,23 @@ public:
   {
     return "Tetrahedron";
   }
-    
-protected:
 
-        
+
+  static const matrixi borders_local_vertices;
+  static const matrixi bndborders_local_vertices;
+  
+protected:
+  vectorui      _nodes;
+  HalfT         _halfs[n_borders];
+  unsigned char _order;
+  
 };
 
+template<class _Traits>
+const matrixi Tetrahedron<_Traits>::borders_local_vertices = { {1,0,2}, {0,1,3}, {3,2,0}, {2,3,1} };
 
-
+template<class _Traits>
+const matrixi Tetrahedron<_Traits>::bndborders_local_vertices = { {0,1}, {1,2}, {2,0}, {3,0}, {3,2}, {3,1} };
 
 
 

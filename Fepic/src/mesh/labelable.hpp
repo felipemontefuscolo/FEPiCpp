@@ -26,23 +26,21 @@
 class _Labelable
 {
 public:
-
   enum {tag_size = 32};
 
+protected:
   _Labelable(int tag, bool disabled=false, bool wb_disabled=false, bool useless=false) :
         _tag(static_cast<unsigned char>(tag)), _disabled(disabled), _wb_disabled(wb_disabled), _useless(useless)
   {
-#ifdef FEPIC_DEBUG_ON
-    if ((tag<0) || (tag>=tag_size))
-    {
-      std::cout << "invalid tag\n";
-      throw;
-    }
-#endif
+    FEPIC_ASSERT((tag>=0)&&(tag<tag_size), "tag number must be less than 32 and greater than 0");
   }
   
   _Labelable() : _tag(0), _disabled(false), _wb_disabled(false), _useless(false) {};
+
+  _Labelable(_Labelable const& L) :
+        _tag(L._tag), _disabled(L._disabled), _wb_disabled(L._wb_disabled), _useless(L._useless) {};
   
+public:
   int getTag() const
   {
     return static_cast<int>(_tag);
@@ -65,13 +63,7 @@ public:
   
   void setTag(int tag)
   {
-#ifdef FEPIC_DEBUG_ON
-    if ((tag<0) || (tag>=tag_size))
-    {
-      std::cout << "invalid tag\n";
-      throw;
-    }
-#endif
+    FEPIC_ASSERT((tag>=0)&&(tag<tag_size), "tag number must be less or equal 31");
     _tag = static_cast<unsigned char>(tag);
   }
   
@@ -96,10 +88,6 @@ public:
     _disabled = _wb_disabled = _useless = false;
   }
 
-  ~_Labelable() {}
-  
-  
-  
 protected:
   unsigned char _tag            : 5; // 0 a 31
   bool          _disabled       : 1;
