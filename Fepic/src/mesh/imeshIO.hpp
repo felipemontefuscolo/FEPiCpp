@@ -59,7 +59,7 @@ void iMesh<_Traits>::buildAdjacency4face()
   std::map<vectorui, vectorui>::iterator tab_it, tab_it2;
   CellIterator cell = iMesh::_cellL.begin();
   uint otherC, otherith, thisC, thisith;
-  int thislabel;
+  int thistag;
 
 
 
@@ -101,8 +101,8 @@ void iMesh<_Traits>::buildAdjacency4face()
     {
       thisC = tab_it->second[0];
       thisith =  tab_it->second[1];
-      thislabel = this->getCell(thisC)->getTag();
-      HalfLT temp(thisC, thisith, thislabel);
+      thistag = this->getCell(thisC)->getTag();
+      HalfLT temp(thisC, thisith, 0, thistag);
       uint mHE_universal_iD = addHalfl(temp);
       this->getCell(thisC)->getHalf(thisith)->setCompleteId(mHE_universal_iD, -1);
       table.erase(tab_it);
@@ -130,7 +130,7 @@ void iMesh<_Traits>::buildAdjacency4volume()
   MapT::iterator  tab_it, tab_it2;
   CellIterator    cell = this->_cellL.begin();
   uint            otherC, otherith, thisC, thisith;
-  int             thislabel;
+  int             thistag;
   int             a;
 
   uint k=0;
@@ -179,8 +179,8 @@ void iMesh<_Traits>::buildAdjacency4volume()
     {
       thisC = tab_it->second[0];
       thisith =  tab_it->second[1];
-      thislabel = this->getCell(thisC)->getTag();
-      HalfLT temp(thisC, thisith, 0, thislabel);
+      thistag = this->getCell(thisC)->getTag();
+      HalfLT temp(thisC, thisith, 0, thistag);
       uint mHE_universal_iD = addHalfl(temp);
       this->getCell(thisC)->getHalf(thisith)->setCompleteId(mHE_universal_iD, -1, 0);
       table.erase(tab_it);
@@ -516,6 +516,7 @@ void iMesh<_Traits>::readFileMsh(const char* filename)
         for (int i=0; i<getNumVerticesForElementTypeMsh(type_aux); ++i)
         {
           File >> nodeid;
+      
           --nodeid;
           if (this->getNode(nodeid)->getTag() == 0)
             this->getNode(nodeid)->setTag(label_aux);
@@ -526,7 +527,7 @@ void iMesh<_Traits>::readFileMsh(const char* filename)
         std::cout << "invalid element ...\n";
     }
 
-  }
+  } // end for
 
 
   for (CellIterator cit = _cellL.begin(), cellend=_cellL.end() ; cit != cellend; ++cit)

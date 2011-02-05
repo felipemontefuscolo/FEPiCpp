@@ -22,8 +22,6 @@
 #ifndef FEPIC_HALFEDGE_HPP
 #define FEPIC_HALFEDGE_HPP
 
-
-
 template<class _Traits>
 class HalfEdge : public _HalfCore<_Traits>
 {
@@ -37,17 +35,22 @@ public:
   
   friend class _HalfCore<_Traits>;
 
-  HalfEdge(uint incid_cell, int position, int=0) : _incid_cell(incid_cell), _position(position)
+  /** 0 <= incid_cell <= HalfEdge::cell_id_limit (134217727)
+   * -1 <= position   <= HalfEdge::position_limit (6)
+   *  0 <= anchor     <= HalfEdge::anchor_limit (3)
+   */ 
+  HalfEdge(uint incid_cell, int position, int=0) : _incid_cell(incid_cell),
+                                                   _position(position),
+                                                   _anchor(0)
   {
-  
+    FEPIC_ASSERT((incid_cell<=cell_id_limit) && (position<=position_limit), "");
   }
   
   /** Construtor.
   */ 
-  HalfEdge() : _incid_cell(0), _position(0)
-  {
-  }
-
+  HalfEdge() : _incid_cell(0), _position(0), _anchor(0) { }
+  HalfEdge(HalfEdge const&) = default;
+  ~HalfEdge() = default;
 
   /** Imprime a composição do iD desta HalfEdge.
   *  @param o o stream onde se vai escrever, e.g., std::cout.
@@ -77,10 +80,6 @@ public:
     return std::string("Half-Edge");
   }
   
-  /** Destrutor.
-  */ 
-  ~HalfEdge() {}
-      
 protected:
   uint _incid_cell : 27;
   uint _position   : 3;

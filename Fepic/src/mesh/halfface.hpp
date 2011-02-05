@@ -37,16 +37,18 @@ public:
   
   friend class _HalfCore<_Traits>;
 
-  HalfFace(uint incid_cell, int position, int anchor) : _incid_cell(incid_cell), _position(position), _anchor(anchor)
+  HalfFace(uint incid_cell, int position, uint anchor) : _incid_cell(incid_cell),
+                                                         _position(position),
+                                                         _anchor(anchor)
   {
-  
+    FEPIC_ASSERT((incid_cell<=cell_id_limit)&&
+                 (position<=position_limit)&&
+                 (anchor<=anchor_limit), "");
   }
   
-  /** Construtor.
-  */ 
-  HalfFace() : _incid_cell(0), _position(0), _anchor(0)
-  {
-  }
+  HalfFace(HalfFace const&) = default;
+  HalfFace() : _incid_cell(0), _position(0), _anchor(0) {}
+  ~HalfFace() = default;
   
   /** Imprime em um stream a composição do iD, i.e, imprime \n
   *  getIncidCell() << " " << getPosition() << " " << getAnchor()
@@ -64,9 +66,7 @@ public:
     return std::string("Half-Face");
   }
   
-  /** Destrutor.
-  */ 
-  ~HalfFace() {}
+
 protected:
   uint _incid_cell : 27;
   uint _position   : 3;

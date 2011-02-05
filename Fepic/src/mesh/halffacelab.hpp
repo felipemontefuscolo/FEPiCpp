@@ -43,11 +43,13 @@ public:
   *  @param ith a posição da aresta nesta célula.
   *  @param anchor o índice âncora.
   *  @param tag o rótulo.
-  */ 
-  HalfFaceLab(uint incid_cell, int ith, int anchor, int tag=0) : HalfFace<_Traits> (incid_cell, ith, anchor), _Labelable(tag) {}
-  
-  HalfFaceLab() : HalfFace<_Traits>(), _Labelable() {}
-  
+  */
+  template<class... LabelArgs>
+  HalfFaceLab(uint incid_cell, int ith, int anchor, LabelArgs... args) : HalfFace<_Traits>(incid_cell, ith, anchor),
+                                                                         _Labelable(args...) {}
+  HalfFaceLab(HalfFaceLab const&) = default;
+  HalfFaceLab() = default;
+  ~HalfFaceLab() = default;
   /** Faz com que cada nó desta HalfFaceLab aponte para ela.
   *  @param mesh a malha na qual a HalfFaceLab está contida.
   */ 
@@ -78,9 +80,7 @@ public:
           mesh.getNode(v[i])->setTag(this->getTag());
   }                                                                                                                        
   
-  /** Destrutor.
-  */ 
-  ~HalfFaceLab() {}
+
 };
 
 

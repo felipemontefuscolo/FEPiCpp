@@ -37,10 +37,14 @@ public:
   /** Construtor.
   *  @param cellid O iD da célula incidente.
   *  @param ith A posição da aresta nesta célula.
-  *  @param label o rótulo.
-  */ 
-  HalfEdgeLab(uint cellid, int ith, int label=0) : HalfEdge<_Traits>(cellid, ith), _Labelable(label) {}
-  HalfEdgeLab() : HalfEdge<_Traits>(), _Labelable() {};
+  *  @param tag o rótulo.
+  */
+  template<class... LabelArgs>
+  HalfEdgeLab(uint incid_cell, int position, int, LabelArgs... args) :
+                                    HalfEdge<_Traits>(incid_cell, position),
+                                    _Labelable(args...) {}
+  HalfEdgeLab(HalfEdgeLab const&) = default;
+  HalfEdgeLab() =default;
   ~HalfEdgeLab() = default;
   
   /** Faz com que cada nó desta HalfEdgeLab aponte para ela.
@@ -57,7 +61,7 @@ public:
   
   /** Atribui o rótulo desta HalfEdgeLab a seus nós.
   * @param force quando true indica atribuição incondicional, quando false,
-  * a atribuição é feita somente se cada nó tem label=0;
+  * a atribuição é feita somente se cada nó tem tag=0;
   */ 
   void broadcastTag2Nodes(MeshT & mesh, bool force=false) const
   {
