@@ -48,7 +48,7 @@ public:
   */ 
   void broadcastHalf2Nodes(MeshT & mesh) const
   {
-    vectorui v (mesh.getCell( this->getIncidCell() )->getBorderNodes( this->getPosition(), mesh ));
+    vectorui v (mesh.getCell( this->getIncidCell() )->getBorderNodes( this->getPosition()));
     
     for (uint i = 0; i < v.size(); i++)
       mesh.getNode(v[i])->setHalf(*this);

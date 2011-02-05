@@ -1,7 +1,7 @@
 #include <Fepic/Mesh>
 
 
-int const DIM = 3;
+int const DIM = 2;
 
 using namespace std;
 using namespace Eigen;

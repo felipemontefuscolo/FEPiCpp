@@ -41,6 +41,12 @@ protected:
   _CellCore(_CellCore const&) {};
   
 public:
+  
+  int getOrder() const
+  {
+    return static_cast<int>(CONST_THIS->_order);
+  }
+
   int getNumNodes() const
   {
     return CONST_THIS->_nodes.size();
@@ -68,22 +74,23 @@ public:
   vectorui getBorderVertices(int ith) const
   {
     //static matrixi faces_vtx(ElementProperties<CellT, _Traits>::get_faces_vtx());
-    uint vsize = CONST_THIS->borders_local_vertices[ith].size();
+    uint vsize = CellT::borders_local_vertices[ith].size();
     vectorui vtx(vsize);
     
     for (uint i = 0; i < vsize; ++i)
-      vtx[i] = CONST_THIS->_nodes[CONST_THIS->borders_local_vertices[ith][i]];
+      vtx[i] = CONST_THIS->_nodes[CellT::borders_local_vertices[ith][i]];
       
     return vtx;
   }
 
-  vectorui getBorderNodes(int ith, MeshT const& mesh) const
+  vectorui getBorderNodes(int ith) const
   {
-    uint tam(mesh.borders_local_nodes[ith].size());
+    matrixi const& borders_local_nodes = CellT::getBordersLocalNodes(CONST_THIS->getOrder());
+    uint tam(borders_local_nodes[ith].size());
     vectorui nodes(tam);
     
     for (uint i = 0; i < tam; ++i)
-      nodes[i] =  CONST_THIS->_nodes[ mesh.borders_local_nodes[ith][i] ];
+      nodes[i] =  CONST_THIS->_nodes[ borders_local_nodes[ith][i] ];
       
     return nodes;
   }
@@ -111,9 +118,10 @@ public:
 
   void broadcastHalf2Nodes(MeshT & mesh) const
   {
+    matrixi const& borders_local_nodes(CellT::getBordersLocalNodes(CONST_THIS->getOrder()));
     for (int f = 0; f < CellT::n_borders; ++f) // loop  nas faces
-      for (uint i = 0, tam=mesh.borders_local_nodes[0].size(); i < tam; ++i)
-        mesh.getNode(CONST_THIS->_nodes[mesh.borders_local_nodes[f][i]])->setHalf(CONST_THIS->_halfs[f]);
+      for (uint i = 0, tam=borders_local_nodes[0].size(); i < tam; ++i)
+        mesh.getNode(CONST_THIS->_nodes[borders_local_nodes[f][i]])->setHalf(CONST_THIS->_halfs[f]);
   }
 
   void broadcastTag2Nodes(MeshT & mesh, bool force=false) const

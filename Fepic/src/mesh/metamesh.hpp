@@ -49,11 +49,6 @@ public:
     mesh.remodelCellsNodes4face(order);
   }
   
-  template<class T>
-  static void buildCellLocalNodes(iMesh<T> & mesh)
-  {
-    mesh.edges_local_nodes = T::CellT::getEdgesLocalNodes(mesh.getOrder());
-  }
 };
 
 template<class Mesh>
@@ -72,12 +67,6 @@ public:
     mesh.remodelCellsNodes4volume(order);
   }
   
-  template<class _Traits>
-  static void buildCellLocalNodes(iMesh<_Traits> & mesh)
-  {
-    mesh.edges_local_nodes = _Traits::CellT::getEdgesLocalNodes(mesh.getOrder());
-    mesh.borders_local_nodes = _Traits::CellT::getFacesLocalNodes(mesh.getOrder());
-  }
 };
 
 

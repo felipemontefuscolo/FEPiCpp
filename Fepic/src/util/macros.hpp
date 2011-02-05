@@ -25,7 +25,7 @@
 /* user config */
 #define FEPIC_DEBUG_ON
 
-
+#define MAX_CELLS_ORDER 50
 
 
 #endif

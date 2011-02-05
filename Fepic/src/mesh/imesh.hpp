@@ -61,7 +61,6 @@ public:
     _add_scalar_vtk_n_calls=0;
     _add_vector_vtk_n_calls=0;
     _order = 1;
-    _MeshMethods<iMesh<_Traits>, CellT::dim>::buildCellLocalNodes(*this);
   };
 
   iMesh(iMesh const&) = delete;
@@ -123,9 +122,6 @@ public:
       _order = order;
       for (auto it= _cellL.begin(), cend=_cellL.end(); it != cend; ++it)
         it->setOrder(_order);
-
-      /* atualiando a matriz que contém a numeração dos nós locais da célula */
-      _MeshMethods<iMesh<_Traits>, CellT::dim>::buildCellLocalNodes(*this);
 
       /* (re)cria os nós que são compartilhados entre as células. */
       _MeshMethods<iMesh<_Traits>, CellT::dim>::remodelCellsNodes(*this, order);
@@ -403,8 +399,8 @@ public:
 
 
   // propriedades da célula da malha e outros atributos auxiliares
-  matrixi edges_local_nodes; // face, volume
-  matrixi borders_local_nodes; // volume
+  //matrixi edges_local_nodes; // face, volume
+  //matrixi borders_local_nodes; // volume
   vectori opp_eln; // opposite edges_local_nodes
   matrixi opp_fln; // opposite borders_local_nodes
                           // ex: borders_local_nodes[f][opp_fln[i]] := é o que a célula oposta enxerga
