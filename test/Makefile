@@ -19,16 +19,16 @@ SRCS	= teste.cpp
 OBJS	= ${SRCS:.cpp=.o}
 
 
+# default target by convention is ``all''
+all : $(OBJS) $(EXE) clean
+
 # define a suffix rule for .c -> .o
 $(OBJS) :
 	$(CXX) $(INCPATH) $(CFLAGS) -c $(SRCS)
 
-# default target by convention is ``all''
-all : $(OBJS) $(EXE) clean
-
 # colocar -pg aqui também
 $(EXE) : $(OBJS)
-	$(LD) -o $@ $(OBJS)
+	$(LD) $(CFLAGS) -o $@ $(OBJS)
 
 clean :
 	-$(RM) -f *.o

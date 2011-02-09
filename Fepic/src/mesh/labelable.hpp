@@ -26,73 +26,68 @@
 class _Labelable
 {
 public:
-  enum {tag_size = 32};
+  enum {tag_size = 256,
+        flags_size = 256};
+
+  enum Masks {
+    mk_disabled=1,
+    mk_marked=2
+  };
 
 protected:
-  _Labelable(int tag, bool disabled=false, bool wb_disabled=false, bool useless=false) :
-        _tag(static_cast<unsigned char>(tag)), _disabled(disabled), _wb_disabled(wb_disabled), _useless(useless)
+  _Labelable(int tag, int flags=0) : _tag(static_cast<unsigned char>(tag)), _flags(static_cast<unsigned char>(flags))
   {
-    FEPIC_ASSERT((tag>=0)&&(tag<tag_size), "tag number must be less than 32 and greater than 0");
+    FEPIC_CHECK((tag>=0)&&(tag<tag_size), "tag number must be less than "+std::string(itoa(tag_size))+" and greater than 0", std::out_of_range);
+    FEPIC_CHECK((flags>=0)&&(flags<flags_size), "wrong flags", std::out_of_range);
   }
   
-  _Labelable() : _tag(0), _disabled(false), _wb_disabled(false), _useless(false) {};
+  _Labelable() : _tag(0), _flags(0) {};
 
-  _Labelable(_Labelable const& L) :
-        _tag(L._tag), _disabled(L._disabled), _wb_disabled(L._wb_disabled), _useless(L._useless) {};
-  
 public:
   int getTag() const
   {
     return static_cast<int>(_tag);
   }
-  
-  bool disabled() const
-  {
-    return _disabled;
-  }
-  
-  bool willBeDisabled() const
-  {
-    return _wb_disabled;
-  }
-  
-  bool useless() const
-  {
-    return _useless;
-  }
-  
+
   void setTag(int tag)
   {
-    FEPIC_ASSERT((tag>=0)&&(tag<tag_size), "tag number must be less or equal 31");
+    FEPIC_CHECK((tag>=0)&&(tag<tag_size), "tag number must be less or equal "+std::string(itoa(tag_size)), std::out_of_range);
     _tag = static_cast<unsigned char>(tag);
   }
   
-  void disable(bool dis=true)
+  bool disabled() const
   {
-    _disabled=dis;
-  }
-  
-  void disableLater(bool dis=true)
-  {
-    _wb_disabled=dis;
-  }
-  
-  void setUseless(bool ul=true)
-  {
-    _useless=ul;
-  }
-  
-  void resetFlags()
-  {
-    _tag=0;
-    _disabled = _wb_disabled = _useless = false;
+    return _flags & mk_disabled;
   }
 
+  void disabled(bool disable_this)
+  {
+    _flags = disable_this ? (_flags | mk_disabled) : (_flags & (~mk_disabled));
+  }
+  
+  bool marked() const
+  {
+    return _flags & mk_marked;
+  }
+
+  bool marked(bool mark_this)
+  {
+    _flags = mark_this ? (_flags | mk_marked) : (_flags & (~mark_this));
+  }
+
+  bool getFlag(unsigned flag_no) const
+  {
+    return ((_flags & ( 1 << flag_no))!=0) ? 1 : 0;
+  }
+    
+  void setFlag(unsigned flag_no, bool set=true)
+  {
+    _flags = set ? (_flags | (1<<flag_no)) : (_flags & (~(1<<flag_no)));
+  }
+  
 protected:
-  unsigned char _tag            : 5; // 0 a 31
-  bool          _disabled       : 1;
-  bool          _wb_disabled    : 1;
-  bool          _useless        : 1;
+  unsigned char _tag; // 0 a 256
+  unsigned char _flags; // 256 flags ...
   
 };
 

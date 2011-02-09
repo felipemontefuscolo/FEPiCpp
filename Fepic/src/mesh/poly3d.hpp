@@ -38,7 +38,7 @@ public:
   typedef typename _Traits::HalfT  HalfT;
   typedef typename _Traits::HalfLT HalfLT;
   typedef typename _Traits::MeshT  MeshT;
-  //typedef typename ElementProperties<CellT, _Traits>::FaceT FaceT;
+  //typedef typename _MetaCellOf<CellT, _Traits>::FaceT FaceT;
 
 protected:      
   _Poly3d(_Poly3d const&) {};
@@ -57,9 +57,9 @@ public:
   */ 
   bool isAnFace(vectorui const& vertices, int &face, int &anchor) const
   {
-    static const matrixi faces_vtx(ElementProperties<CellT, _Traits>::get_faces_vtx());
+    static const matrixi faces_vtx(_MetaCellOf<CellT, _Traits>::get_faces_vtx());
   
-    FEPIC_ASSERT(static_cast<int>(vertices.size())==CellT::n_vertices_per_border, "");
+    FEPIC_CHECK(static_cast<int>(vertices.size())==CellT::n_vertices_per_border, "", std::invalid_argument);
     
     vectorui temp(CellT::n_vertices_per_border);
     vectorui this_vtx(CellT::n_vertices_per_border);

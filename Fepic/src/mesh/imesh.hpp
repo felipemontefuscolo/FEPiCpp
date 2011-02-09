@@ -28,9 +28,15 @@
 
 
 template<class _Traits>
-class iMesh {
+class iMesh : public _iMeshNameHandler, public _MeshIoMsh<_Traits>, public _MeshIoVtk<_Traits>
+{
 
 public:
+
+  friend class _MeshIoMsh<_Traits>;
+  friend class _MeshIoVtk<_Traits>;
+  friend class _iMeshNameHandler;
+
   typedef typename _Traits::CellT  CellT;
   typedef typename _Traits::PointT PointT;
 
@@ -57,9 +63,6 @@ public:
 
   iMesh()
   {
-    _is_family=0;
-    _add_scalar_vtk_n_calls=0;
-    _add_vector_vtk_n_calls=0;
     _order = 1;
   };
 
@@ -78,23 +81,12 @@ public:
   /* Em todas as funções de leitura de arquivo, DEVE ser chamado
      * a função setOrder() */
 
-  void readFileMsh(const char *filename);
-
-  void readMarkedElementsMsh4edge(std::ifstream &File);
-  void readMarkedElementsMsh4face(std::ifstream &File);
-  void readMarkedElementsMsh4volume(std::ifstream &File);
+  //void readFileMsh(const char *filename);
 
   void buildAdjacency4face();
   void buildAdjacency4volume();
 
   void writeFileState();
-  void writeVtk(bool flinear=false);
-  template<class T>
-  void addScalarVtk(const char* nome_var, T&& scalar, uint num_pts);
-  template<class T>
-  void addVectorVtk(const char* nome_var, T&& arrayos, int dim, uint num_pts);
-  void addPointTagVtk(const char* nome_var); // para debug
-  void addPointHalfVtk(const char* nome_var);  // para debug
 
         /*-------------------------------------------------------------*/
         /*-------------------------------------------------------------*/
@@ -103,13 +95,14 @@ public:
   */
   void printInfo(std::ostream &o = std::cout) const
   {
-    std::cout << "mesh file: " << _meshfile << std::endl;
+    //std::cout << "mesh file: " << _meshfile << std::endl;
     std::cout << "cell type: " << CellT::name() << std::endl;
     std::cout << "order:     " << this->_order << std::endl;
     std::cout << "# nodes:   " << getNumNodes() << std::endl;
     std::cout << "# cells:   " << getNumCells() << std::endl;
     std::cout << "# mhalfs:  " << getNumHalfls() << std::endl;
   }
+
 
   /** Altera a ordem da malha.
   *  @param order a nova ordem da malha
@@ -158,13 +151,13 @@ public:
     // OTIMIZAR
 
     bool RET=false;
-    uint nummhalf = getNumHalfLTotal();
+    uint nummhalf = this->getNumHalfLTotal();
     // IMPLEMENTAR ITERADOR
     for(uint i=0; i<nummhalf; ++i)
     {
       bool b = this->getHalfl(i)->hasTheseVertices(vtx, *this);
 
-      if(b && (dead_mh || (!getHalfl(i)->disabled())) )
+      if(b && (dead_mh || (!this->getHalfl(i)->disabled())) )
       {
         half_id = i;
         RET = true;
@@ -177,11 +170,13 @@ public:
   */
   PointT* getNode(uint nth)
   {
+    FEPIC_CHECK(nth<this->_pointL.size(), "invalid index", std::out_of_range);
     return &_pointL[nth];
   }
 
   const PointT* getNode(uint nth) const
   {
+    FEPIC_CHECK(nth<this->_pointL.size(), "invalid index", std::out_of_range);
     return &_pointL[nth];
   }
 
@@ -189,11 +184,13 @@ public:
   */
   HalfLT* getHalfl(uint nth)
   {
+    FEPIC_CHECK(nth<this->_mhalfL.size(), "invalid index", std::out_of_range);
     return &_mhalfL[nth];
   }
 
   const HalfLT* getHalfl(uint nth) const
   {
+    FEPIC_CHECK(nth<this->_mhalfL.size(), "invalid index", std::out_of_range);
     return &_mhalfL[nth];
   }
 
@@ -202,11 +199,13 @@ public:
   */
   CellT* getCell(uint nth)
   {
+    FEPIC_CHECK(nth<this->_cellL.size(), "invalid index", std::out_of_range);
     return &_cellL[nth];
   }
 
   const CellT* getCell(uint nth) const
   {
+    FEPIC_CHECK(nth<this->_cellL.size(), "invalid index", std::out_of_range);
     return &_cellL[nth];
   }
 
@@ -390,13 +389,6 @@ public:
     return _mhalfL.end();
   }
 
-  /** Retorna o nome base. O nome base é o nome do arquivo passado para o iMesh, sem extensão.
-  */
-  std::string getBaseName() const
-  {
-    return _basename;
-  }
-
 
   // propriedades da célula da malha e outros atributos auxiliares
   //matrixi edges_local_nodes; // face, volume
@@ -417,14 +409,8 @@ private:
   dequeui  _dead_points;
   dequeui  _dead_mhalf;
 
-  // I/O
-  int           _order;
-  std::string   _meshfile;  // eg.   /home/user/test.msh
-  std::string   _basename;  // eg.   /home/user/test
-  uint          _family;      // num do output
-  bool          _is_family; // se o output sera impresso como familia
-  uint          _add_scalar_vtk_n_calls;
-  uint          _add_vector_vtk_n_calls;
+  int         _order;
+
 
 
 };

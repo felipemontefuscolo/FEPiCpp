@@ -38,12 +38,12 @@ public:
   friend class _HalfCore<_Traits>;
 
   HalfFace(uint incid_cell, int position, uint anchor) : _incid_cell(incid_cell),
-                                                         _position(position),
+                                                         _position(position+1),
                                                          _anchor(anchor)
   {
-    FEPIC_ASSERT((incid_cell<=cell_id_limit)&&
-                 (position<=position_limit)&&
-                 (anchor<=anchor_limit), "");
+    FEPIC_CHECK((incid_cell<=cell_id_limit)&&
+                 (position<=position_limit && position>-2)&&
+                 (anchor<=anchor_limit), "", std::out_of_range);
   }
   
   HalfFace(HalfFace const&) = default;

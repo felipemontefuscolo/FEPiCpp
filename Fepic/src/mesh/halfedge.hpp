@@ -22,6 +22,7 @@
 #ifndef FEPIC_HALFEDGE_HPP
 #define FEPIC_HALFEDGE_HPP
 
+
 template<class _Traits>
 class HalfEdge : public _HalfCore<_Traits>
 {
@@ -39,11 +40,13 @@ public:
    * -1 <= position   <= HalfEdge::position_limit (6)
    *  0 <= anchor     <= HalfEdge::anchor_limit (3)
    */ 
-  HalfEdge(uint incid_cell, int position, int=0) : _incid_cell(incid_cell),
-                                                   _position(position),
-                                                   _anchor(0)
+  HalfEdge(uint incid_cell, int position, uint anchor=0) : _incid_cell(incid_cell),
+                                                   _position(position+1),
+                                                   _anchor(anchor)
   {
-    FEPIC_ASSERT((incid_cell<=cell_id_limit) && (position<=position_limit), "");
+    FEPIC_CHECK((incid_cell<=cell_id_limit)&&
+                (position<=position_limit && position>-2)&&
+                (anchor<=anchor_limit), "", std::out_of_range);
   }
   
   /** Construtor.
@@ -84,7 +87,6 @@ protected:
   uint _incid_cell : 27;
   uint _position   : 3;
   uint _anchor     : 2;
-
 };      
 
 

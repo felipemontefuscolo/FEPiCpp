@@ -1,0 +1,15 @@
+TODO
+----
+
+  * trocar ordem da malha alterando a ordem de cada célula individualmente. Para isso
+  
+    + em cada célula, se order(CELLviz) == order(THIS):
+    
+      - reaproveita os nós do bordo.
+      
+    + se não:
+    
+      - cria novos nós.
+      
+  * unificar os algoritmos buildAdjacency
+

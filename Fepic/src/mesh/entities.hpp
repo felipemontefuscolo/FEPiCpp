@@ -44,124 +44,35 @@ class Hypercube { public:
 
 /*--------------------------------------------------------------------*/
 
+template<> class _MetaCellOf<void, void> {}; // for a sweet syntax highlight
 
 
-template<class _Traits>
-class ElementProperties<Simplex<1>, _Traits> {
-public:
-  typedef Edge<_Traits> Type;
-};
+#define FEPIC_CELLOF(obj, type) template<class _Traits>                  \
+                                class _MetaCellOf<obj, _Traits> {public: \
+                                typedef type<_Traits> Type;}
 
-template<class _Traits>
-class ElementProperties<Simplex<2>, _Traits> {
-public:
-  typedef Triangle<_Traits> Type;
-};
+FEPIC_CELLOF(Simplex<1>, Edge);
+FEPIC_CELLOF(Simplex<2>, Triangle);
+FEPIC_CELLOF(Simplex<3>, Tetrahedron);
+FEPIC_CELLOF(Hypercube<1>, Edge);
+FEPIC_CELLOF(Hypercube<2>, Quadrangle);
+FEPIC_CELLOF(Hypercube<3>, Hexahedron);
+FEPIC_CELLOF(Polytope<1>, Edge);
 
-template<class _Traits>
-class ElementProperties<Simplex<3>, _Traits> {
-public:
-  typedef Tetrahedron<_Traits> Type;
-};
-
-template<class _Traits>
-class ElementProperties<Hypercube<1>, _Traits> {
-public:
-  typedef Edge<_Traits> Type;
-};
-
-template<class _Traits>
-class ElementProperties<Hypercube<2>, _Traits> {
-public:
-  typedef iQuadrangle<_Traits> Type;
-};
-
-template<class _Traits>
-class ElementProperties<Hypercube<3>, _Traits> {
-public:
-  typedef iHexahedron<_Traits> Type;
-};
-
-template<class _Traits>
-class ElementProperties<Edge<_Traits>, _Traits> {
-public:
-  static const int n_borders = 2;
-  static const int n_vertices = 2;
-};
-template<class _Traits>
-class ElementProperties<Triangle<_Traits>, _Traits> {
-public:
-  static const int n_borders = 3;
-  static const int n_vertices = 3;
-};
-template<class _Traits>
-class ElementProperties<Tetrahedron<_Traits>, _Traits> {
-public: static const int n_borders = 4;
-  static const int n_vertices = 4;
-  static matrixi get_faces_vtx()
-  {
-    static const matrixi temp = { {1,0,2}, {0,1,3}, {3,2,0}, {2,3,1} };
-    return temp;
-  }
-  static matrixi get_edges_vtx()
-  {
-    static const matrixi temp = { {0,1}, {1,2}, {2,0}, {3,0}, {3,2}, {3,1} };
-    return temp;
-  }
-  
-  typedef Triangle<_Traits> FaceT;
-};
-
+#undef FEPIC_CELLOF
 
 class UndefElement {
 public:
   static int getMshTag()
   {
-    return Msh_UNDEFINED_ELEM;
+    return MSH_UNDEFINED_ELEM;
   }
 };
 
-/* Define type of volume: Cell::dim < 3 ? UndefVol : Cell::Volume */
-
-template<class Cell>
-class VolumeDef<1, Cell> {
-public:
-  typedef UndefElement VolumeT;
-}; 
-
-template<class Cell>
-class VolumeDef<2, Cell> {
-public:
-  typedef UndefElement VolumeT;
-};
-
-template<class Cell>
-class VolumeDef<3, Cell> {
-public:
-  typedef typename Cell::VolumeT VolumeT;
-};
-
-
-
-template<class Cell>
-class FaceDef<1, Cell> {
-public:
-  typedef UndefElement FaceT;
-};
-
-template<class Cell>
-class FaceDef<2, Cell> {
-public:
-  typedef typename Cell::FaceT FaceT;
-};
-
-template<class Cell>
-class FaceDef<3, Cell> {
-public:
-  typedef typename Cell::FaceT FaceT;
-};
 
 //------------------------------------
+
+template<> class _MetaHalfOf<void, void> {}; // for a sweet syntax highlight
 
 #define FEPIC_HALFOF(obj, type) template<class _Traits>                    \
                                 class _MetaHalfOf<obj, _Traits> { public:  \
@@ -178,6 +89,8 @@ FEPIC_HALFOF(Hypercube<3>, HalfFace);
 
 //------------------------------------
 
+template<> class _MetaHalfLabOf<void, void> {}; // for a sweet syntax highlight
+
 #define FEPIC_HALFLABOF(obj, type) template<class _Traits>                       \
                                    class _MetaHalfLabOf<obj, _Traits> { public:  \
                                    typedef type<_Traits> Type; }
@@ -191,7 +104,7 @@ FEPIC_HALFLABOF(Hypercube<3>, HalfFaceLab);
 
 #undef FEPIC_HALFLABOF
 
-/** @class Default_Traits
+/** @class DefaultTraits
  * 
  * Default definitions of a _Traits.
  * 
@@ -209,15 +122,15 @@ FEPIC_HALFLABOF(Hypercube<3>, HalfFaceLab);
  * 
  */
 template<int _spacedim, class CellType = Simplex<_spacedim> >
-class Default_Traits {
+class DefaultTraits {
 public:
 
-  Default_Traits(Default_Traits const&) = delete; // dont copy me
-  ~Default_Traits() = delete;
+  DefaultTraits(DefaultTraits const&) = delete; // dont copy me
+  ~DefaultTraits() = delete;
   
-  typedef Default_Traits _Traits;
+  typedef DefaultTraits _Traits;
   
-  typedef typename ElementProperties<CellType, _Traits>::Type CellT;
+  typedef typename _MetaCellOf<CellType, _Traits>::Type CellT;
   
   typedef typename _MetaHalfOf<CellType, _Traits>::Type HalfT;
   
@@ -225,10 +138,11 @@ public:
   
   typedef Point<_Traits>  PointT;
   
-  typedef iMesh<_Traits>   MeshT;
+  typedef iMesh<_Traits>  MeshT;
   
+  enum {spacedim = _spacedim};
   
-  static const int spacedim = _spacedim;
+  //static const int spacedim = _spacedim;
 };
 
 

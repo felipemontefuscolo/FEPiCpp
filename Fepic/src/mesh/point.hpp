@@ -168,7 +168,7 @@ public:
   */ 
   static int getMshTag()
   {
-    return Msh_PNT;
+    return MSH_PNT;
   }
   
   /** NOT FOR USERS

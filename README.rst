@@ -16,7 +16,7 @@ in C++.
 
 
 Requirements for users
-------------
+----------------------
 
 	* gcc 4.6 or higher
 	* experimental standard C++0x

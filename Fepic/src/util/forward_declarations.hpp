@@ -24,19 +24,17 @@
 
 
 
-template<class _Traits> class iMesh;
-
 class _Labelable;
 
 // volume
 template<class _Traits> class _Poly3d;
 template<class _Traits> class Tetrahedron;
-template<class _Traits> class iHexahedron;
+template<class _Traits> class Hexahedron;
 
 // surface
 template<class _Traits> class _Poly2d;
 template<class _Traits> class Triangle;
-template<class _Traits> class iQuadrangle;
+template<class _Traits> class Quadrangle;
 
 // line
 template<class _Traits> class Edge;
@@ -53,11 +51,7 @@ template<class _Traits> class HalfEdgeLab;
 template<class _Traits> class HalfFaceLab;
 
 
-template<class ElmType, class _Traits> class ElementProperties;
-
-template<int CellDim, class Cell> class VolumeDef; 
-
-template<int Dim, class Cell> class FaceDef;
+template<class ElmType, class _Traits> class _MetaCellOf;
 
 template<typename Dim, class _Traits> class _MetaHalfOf;
 
@@ -71,6 +65,12 @@ template<int dim> class Simplex;
 template<int dim> class Hypercube;
 
 
+
+/* mesh */
+class _iMeshNameHandler;
+template<class _Traits> class _MeshIoMsh;
+template<class _Traits> class _MeshIoVtk;
+template<class _Traits> class iMesh;
 
 /* Cell Functions */
 

@@ -19,42 +19,30 @@
 // License and a copy of the GNU General Public License along with
 // FEPiC++. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef FEPIC_ASSERT_HPP
-#define FEPIC_ASSERT_HPP
+#ifndef FEPIC_CHECK_HPP
+#define FEPIC_CHECK_HPP
 
-void assertion_failed(char const* expr, char const* function, char const* file, long line, const char* msg);
-bool verify_failed(char const* expr, char const* function, char const* file, long line, const char* msg);
-
-
+template<class Exception>
+void assertion_failed(std::string const& expr, std::string const& msg);
 
 
+// see boost
 #ifdef FEPIC_DEBUG_ON
-  #define FEPIC_ASSERT(ok, msg) if(!(ok)) \
-                                  assertion_failed(#ok, __PRETTY_FUNCTION__, __FILE__, __LINE__, msg)
+  #define FEPIC_CHECK(ok, msg, except) if(!(ok)) assertion_failed<except>(#ok, msg)
 #else
-  #define FEPIC_ASSERT(ok,msg) ((void)0)
+  #define FEPIC_CHECK(ok,msg, except) ((void)0)
 #endif
 
+#define FEPIC_ASSERT(ok, msg, except) if(!(ok)) assertion_failed<except>(#ok, msg)
 
-
-
-#define FEPIC_VERIFY(ok, msg) ((ok)? false : verify_failed(#ok, __PRETTY_FUNCTION__, __FILE__, __LINE__, msg))
-
-
-void assertion_failed(char const* expr, char const* function, char const* file, long line, const char* msg)
+template<class Exception>
+void assertion_failed(std::string const& expr, std::string const& msg)
 {
-  std::cout << "ERROR: " <<file<<":"<<line<<": "<<msg<<"\n"
-            << "ERROR: " <<file<<":"<<line<<": assertion '"<<expr<<"' failed\n"
-            << "ERROR: " <<file<<": in "<<"'"<<function<<"'"<<std::endl;
-  throw;
+  std::string what_arg ="\nERROR: "__FILE__":"+std::string(itoa(__LINE__))+": "+msg+"\n"
+                          "ERROR: "__FILE__":"+std::string(itoa(__LINE__))+": assertion '"+expr+"' failed\n"
+                          "ERROR: "__FILE__": in '"+std::string(__PRETTY_FUNCTION__)+"' \n";
+  throw Exception(what_arg);
 }
 
-bool verify_failed(char const* expr, char const* function, char const* file, long line, const char* msg)
-{
-  std::cout << "WARNING: " <<file<<":"<<line<<": "<<msg<<"\n"
-            << "WARNING: " <<file<<":"<<line<<": assertion '"<<expr<<"' failed\n"
-            << "WARNING: " <<file<<": in "<<"'"<<function<<"'"<<std::endl;
-  return true;
-}
 
 #endif

@@ -19,17 +19,20 @@
 // License and a copy of the GNU General Public License along with
 // FEPiC++. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef FEPIC_MACROS_HPP
-#define FEPIC_MACROS_HPP
+#ifndef FEPIC_QUADRANGLE_HPP
+#define FEPIC_QUADRANGLE_HPP
 
-/* user config */
-#define FEPIC_DEBUG_ON
 
-#define MAX_CELLS_ORDER 50
+template<class _Traits>
+class Quadrangle : public _Labelable, public _Poly2d<_Traits>
+{
+public:
+  // TODO
+  friend class _Poly2d<_Traits>;
+  friend class _CellCore<_Traits>;  
+};
 
-#define FEPIC_FILE_FILL 5
 
-#define FEPIC_COUT std::cout
-#define FEPIC_ENDL std::endl
 
 #endif
+

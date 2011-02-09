@@ -57,7 +57,7 @@ template<> inline uint numBubbles<Simplex<2>>(uint order) {
   return (order-1)*(order-2)/2; }
 
 template<> inline uint numBubbles<Simplex<3>>(uint order) {
-  return (order-1)*(order-2)*(order-3)/6;; }
+  return (order-1)*(order-2)*(order-3)/6; }
 
 template<> inline uint numBubbles<Hypercube<1>>(uint order) {
   return order-1; }

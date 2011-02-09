@@ -40,9 +40,12 @@ public:
   *  @param tag o rótulo.
   */
   template<class... LabelArgs>
-  HalfEdgeLab(uint incid_cell, int position, int, LabelArgs... args) :
+  HalfEdgeLab(uint incid_cell, int position, int anchor, LabelArgs... args) :
                                     HalfEdge<_Traits>(incid_cell, position),
-                                    _Labelable(args...) {}
+                                    _Labelable(args...) 
+  {
+    
+  }
   HalfEdgeLab(HalfEdgeLab const&) = default;
   HalfEdgeLab() =default;
   ~HalfEdgeLab() = default;

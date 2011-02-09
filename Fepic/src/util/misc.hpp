@@ -22,6 +22,13 @@
 #ifndef FEPIC_MISC_HPP
 #define FEPIC_MISC_HPP
 
+/* requirements
+ * <vector>
+ * <deque>
+ * <string>
+ * <fstream>
+ * 
+ */ 
 
 //namespace Fepic {
   
@@ -89,15 +96,15 @@ bool arrayIsCyclicallyEqual(std::vector<T> const& v1, std::vector<T> const& v2)
     {
       return true;
     }
-    rotate(vaux_begin, vaux_begin+1, vaux_end);
+    std::rotate(vaux_begin, vaux_begin+1, vaux_end);
   }
 
-  reverse(vaux_begin, vaux_end);
+  std::reverse(vaux_begin, vaux_end);
   if(vaux == v1) return true;
 
   for (uint i = 1; i < vsize; ++i)
   {
-    rotate(vaux_begin, vaux_begin+1, vaux_end);
+    std::rotate(vaux_begin, vaux_begin+1, vaux_end);
     if (v1 == vaux)
     {
       return true;
@@ -186,24 +193,137 @@ inline void unset_bit(T & c, unsigned bitoffset)
 }
 
 
+// files
 
+/**
+ * C++ version 0.4 std::string style "itoa":
+ * Contributions from Stuart Lowe, Ray-Yuan Sheu,
+ * Rodrigo de Salvo Braz, Luc Gallant, John Maloney
+ * and Brian Hunt
+ * 
+ * modified: Felipe Montefuscolo
+ */
+std::string itoa(int value)
+{
 
+	std::string buf;
 
-/* Meta: controle de fluxo if-then-else */
+	enum { kMaxDigits = 35, base=10 };
+	buf.reserve( kMaxDigits ); // Pre-allocate enough space.
 
-template<bool C, class Ta, class Tb>
-class M_IfThenElse;
+	int quotient = value;
 
-template<class Ta, class Tb>
-class M_IfThenElse<true, Ta, Tb> {
-public:
-  typedef Ta resultT;
-};
+	// Translating number to string with base:
+	do {
+		buf += "0123456789"[ std::abs( quotient % base ) ];
+		quotient /= base;
+	} while ( quotient );
 
-template<class Ta, class Tb>
-class M_IfThenElse<false, Ta, Tb> {
-public:
-  typedef Tb resultT;
-};
+	// Append the negative sign
+	if ( value < 0) buf += '-';
+
+	std::reverse( buf.begin(), buf.end() );
+	return buf;
+}
+
+std::string itoafill0(uint value, uint fill)
+{
+	std::string buf;
+
+	enum { kMaxDigits = 35, base=10 };
+	buf.reserve( kMaxDigits ); // Pre-allocate enough space.
+
+  fill = fill < kMaxDigits ? fill : kMaxDigits;
+
+	int quotient = value;
+
+	// Translating number to string with base:
+	do {
+		buf += "0123456789"[ std::abs( quotient % base ) ];
+		quotient /= base;
+	} while ( quotient );
+  
+  int i(fill - buf.size());
+  
+  while(i>0)
+  {
+    buf += '0';
+    i=fill - buf.size();
+  }
+  
+  std::reverse( buf.begin(), buf.end() );
+  return buf;
+}
+
+// remove espaços finais de strings
+inline
+std::string stripTrailingSpaces(std::string name)
+{
+  if (name.empty())
+    return name;
+  while( *(name.end()-1) == ' ')
+    name.erase(name.end()-1);
+  return name;
+}
+
+/** @example <tt>user/file.dat</tt> returns <tt>user/</tt>
+ *  @note aassumes that is a valid file name.
+ */ 
+inline
+std::string getRelativePath(std::string const& name)
+{
+  size_t bar = name.rfind("/");
+  
+  if (bar==std::string::npos)
+    return "./";
+  else
+    return name.substr(0,bar+1);
+}
+
+/** @example <tt>user/file.dat</tt> returns <tt>.dat</tt>
+ *  @note assumes that is a valid file name.
+ */ 
+inline
+std::string getExtension(std::string const& name)
+{
+  uint size = name.size();
+  if (size==0)
+    return name;
+  
+  size_t dot = name.rfind(".");
+  size_t bar = name.rfind("/");
+  if (dot==std::string::npos)
+    return "";
+  else if ((bar==dot-1) || (name[dot-1]=='.') || (dot==0) || 
+           ((bar!=std::string::npos) && (bar>dot)) || (dot==name.size()-1) )
+    return "";
+  else 
+    return name.substr(dot);
+}
+
+/** @example <tt>user/file.dat</tt> returns <tt>file</tt>
+ *  @note assumes that is a valid file name.
+ */ 
+inline
+std::string getBaseName(std::string name)
+{
+  size_t bar = name.rfind("/");
+  int npath;
+  
+  if (bar==std::string::npos)
+    npath=0;
+  else
+    npath = name.substr(0,bar+1).size();
+
+  int nexte = getExtension(name).size();
+  
+  for (int i = 0; i < nexte; ++i)
+    name.erase(name.end()-1);
+  for (int i = 0; i < npath; ++i)
+    name.erase(name.begin());
+  
+  return name;
+}
+
 
 #endif

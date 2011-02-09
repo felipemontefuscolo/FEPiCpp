@@ -47,11 +47,11 @@ protected:
 public:
   typedef typename _Traits::MeshT MeshT;
   typedef typename _Traits::HalfT HalfT;
+  typedef typename _Traits::CellT CellT;
 
   uint getIncidCell() const
   {
-    //return THIS->_incid_cell;
-    CONST_THIS->_incid_cell;
+    return CONST_THIS->_incid_cell;
   }
 
   int getPosition() const
@@ -66,29 +66,29 @@ public:
   
   void setIncidCell(uint cellid)
   {
-    FEPIC_ASSERT(cellid<=HalfT::cell_id_limit, "cell id limit exceeded");
+    FEPIC_CHECK(cellid<=HalfT::cell_id_limit, "cell id limit exceeded", std::out_of_range);
     THIS->_incid_cell = cellid;
   }
 
   void setPosition(int pos)
   {
-    FEPIC_ASSERT((pos>=-1)||(pos<=HalfT::position_limit), "position limit exceeded");
-    THIS->_position = pos;
+    FEPIC_CHECK((pos>=-1)||(pos<=HalfT::position_limit), "position limit exceeded", std::out_of_range);
+    THIS->_position = pos+1;
   }
   
   void setAnchor(uint anchor)
   {
-    FEPIC_ASSERT(anchor<=HalfT::anchor_limit, "anchor limit exceeded");
+    FEPIC_CHECK(anchor<=HalfT::anchor_limit, "anchor limit exceeded", std::out_of_range);
     THIS->_anchor = anchor;
   }
 
   void setCompleteId(uint cellid, int pos, uint anchor=0)
   {
-    FEPIC_ASSERT(cellid<=HalfT::cell_id_limit, "cell id limit exceeded");
-    FEPIC_ASSERT((pos>=-1)||(pos<=HalfT::position_limit), "position limit exceeded");
-    FEPIC_ASSERT(anchor<=HalfT::anchor_limit, "anchor limit exceeded");
+    FEPIC_CHECK(cellid<=HalfT::cell_id_limit, "cell id limit exceeded", std::out_of_range);
+    FEPIC_CHECK((pos>=-1)||(pos<=HalfT::position_limit), "position limit exceeded", std::out_of_range);
+    FEPIC_CHECK(anchor<=HalfT::anchor_limit, "anchor limit exceeded", std::out_of_range);
     THIS->_incid_cell = cellid;
-    THIS->_position = pos;
+    THIS->_position = pos+1;
     THIS->_anchor = anchor;
   }
 
@@ -123,6 +123,7 @@ public:
   */
   bool hasTheseVertices(vectorui const& v, MeshT const& mesh) const
   {
+    FEPIC_CHECK(v.size()==CellT::n_vertices_per_border, "", std::invalid_argument);
     const auto cell = mesh.getCell(this->getIncidCell());
     
     vectorui vtx (cell->getBorderVertices(this->getPosition()));

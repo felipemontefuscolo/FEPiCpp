@@ -73,7 +73,7 @@ public:
 
   vectorui getBorderVertices(int ith) const
   {
-    //static matrixi faces_vtx(ElementProperties<CellT, _Traits>::get_faces_vtx());
+    //static matrixi faces_vtx(_MetaCellOf<CellT, _Traits>::get_faces_vtx());
     uint vsize = CellT::borders_local_vertices[ith].size();
     vectorui vtx(vsize);
     
@@ -106,13 +106,13 @@ public:
 
   HalfT* getHalf(int ith)
   {
-    FEPIC_ASSERT(ith<CellT::n_borders, "out of range");
+    FEPIC_CHECK(ith<CellT::n_borders, "invalid index", std::out_of_range);
     return &THIS->_halfs[ith];
   }
 
   const HalfT* getHalf(int ith) const
   {
-    FEPIC_ASSERT(ith<CellT::n_borders, "out of range");
+    FEPIC_CHECK(ith<CellT::n_borders, "invalid index", std::out_of_range);
     return &CONST_THIS->_halfs[ith];
   }
 

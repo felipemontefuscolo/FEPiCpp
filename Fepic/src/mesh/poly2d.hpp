@@ -26,32 +26,32 @@
 
 /** A classe _Poly2d representa os polígonos (triângulo, quadrângulos, ...), entidades
  * da malha de dimensão 2. Dependendo da ordem, os polígonos dessa classe podem ter arestas curvas.
- * 
+ *
  * @note Esta é uma classe de conceito abstrato (apesar se não ser abstrata sob o ponto
  * de vista da linguagem c++ pois não tem funções virtuais puras), logo não se deve instanciá-la
  * a não ser que se saiba exatamente o que se está fazendo.
- */ 
+ */
 template<class _Traits>
 class _Poly2d : public _CellCore<_Traits>
 {
 #if !defined(THIS) && !defined(CONST_THIS)
   #define THIS static_cast<CellT*>(this)
   #define CONST_THIS static_cast<const CellT*>(this)
-#endif  
+#endif
 
 public:
-  
+
   typedef typename _Traits::CellT  CellT;
   typedef typename _Traits::HalfT  HalfT;
   typedef typename _Traits::HalfLT HalfLT;
   typedef typename _Traits::MeshT  MeshT;
-  //typedef typename ElementProperties<CellT, _Traits>::FaceT FaceT;
+  //typedef typename _MetaCellOf<CellT, _Traits>::FaceT FaceT;
 
-protected:      
+protected:
   _Poly2d(_Poly2d const&) {};
   _Poly2d() {};
 
-public:  
+public:
   /** Retorna se os vertices passados formam uma aresta do polígono.
   * @param[in] vertices um vetor com exatamente 2 vertices.
   * @param[out] ith o índice local da aresta que os pontos formam.
@@ -60,15 +60,15 @@ public:
   */
   bool isAnEdge(vectorui const& vertices, int &ith) const
   {
-    FEPIC_ASSERT(vertices.size()==2, "");
-       
+    FEPIC_CHECK(vertices.size()==2, "", std::invalid_argument);
+
     vectorui vtx(2);
-                
+
     for (int i = 0; i != CellT::n_borders; ++i)
     {
       vtx[0] = CONST_THIS->_nodes[i];
       vtx[1] = CONST_THIS->_nodes[(i+1)%CellT::n_borders];
-      
+
       if (vtx == vertices)
       {
         ith = i;
@@ -77,7 +77,7 @@ public:
     }
     return false;
   }
-        
+
   /** Retorna se os vertices passados formam uma aresta do polígono.
   * @param[in] vertices um vetor com exatamente 2 vertices.
   * @param[out] ith o índice local da aresta que os pontos formam.
@@ -88,7 +88,7 @@ public:
   {
     if (this->isAnEdge(vertices, ith))
       return true;
-                        
+
     std::swap(vertices[0], vertices[1]);
     if (this->isAnEdge(vertices, ith))
     {
@@ -101,7 +101,7 @@ public:
 
   /** Imprime este polígono no formato State (seus nós).
   * @param o a stream onde se vai imprimir, e.g., std::cout.
-  */ 
+  */
   void printSelfState(std::ostream &o) const
   {
     o << this->getNodeIdx(0);
@@ -110,7 +110,7 @@ public:
   }
 
 #undef THIS
-#undef CONST_THIS 
+#undef CONST_THIS
 };
 
 

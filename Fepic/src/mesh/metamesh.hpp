@@ -37,14 +37,12 @@ template<class Mesh>
 class _MeshMethods<Mesh, 2>
 {
 public:
-  template<class T>
-  static void buildAdjacency(iMesh<T> & mesh)
+  static void buildAdjacency(Mesh & mesh)
   {
     mesh.buildAdjacency4face();
   }
     
-  template<class T>
-  static void remodelCellsNodes(iMesh<T> & mesh, int order)
+  static void remodelCellsNodes(Mesh & mesh, int order)
   {
     mesh.remodelCellsNodes4face(order);
   }
@@ -55,14 +53,12 @@ template<class Mesh>
 class _MeshMethods<Mesh, 3>
 {
 public:
-    template<class _Traits>
-  static void buildAdjacency(iMesh<_Traits> & mesh)
+  static void buildAdjacency(Mesh & mesh)
   {
     mesh.buildAdjacency4volume();
   }
     
-  template<class T>
-  static void remodelCellsNodes(iMesh<T> & mesh, int order)
+  static void remodelCellsNodes(Mesh & mesh, int order)
   {
     mesh.remodelCellsNodes4volume(order);
   }
