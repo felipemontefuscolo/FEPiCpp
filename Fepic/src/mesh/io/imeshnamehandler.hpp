@@ -118,7 +118,7 @@ protected:
     return 0;
   }
  
-  std::string _popNextName(uint filenum, std::string const& ext)
+  std::string _popNextName(int filenum, std::string const& ext)
   {
     // filenum : a suffix to basename; the series number
     

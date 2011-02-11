@@ -36,7 +36,7 @@ class _MeshIoFsf
 public:  
   typedef typename _Traits::CellT   CellT;
   typedef typename _Traits::MeshT   MeshT;
-  typedef typename _Traits::HalfLT  HalfLT;
+  typedef typename _Traits::HalfT  HalfT;
   typedef typename _Traits::PointT  PointT;
   typedef typename CellT::PolytopeT CellPolytopeT;
   typedef typename CellPolytopeT::Derived CellDerivedPolytopeT;
@@ -50,9 +50,9 @@ public:
   void readFileFsf(const char* filename);
   void writeFsf(std::string outname);
   template<class T>
-  void addScalarFsf(const char* nome_var, T& scalar, uint num_pts);
+  void addScalarFsf(const char* nome_var, T& scalar, int num_pts);
   template<class T>
-  void addVectorFsf(const char* nome_var, T& arrayos, int dim, uint num_pts);
+  void addVectorFsf(const char* nome_var, T& arrayos, int dim, int num_pts);
   void addPointTagFsf(const char* nome_var); // para debug
   void addPointHalfFsf(const char* nome_var);  // para debug     
 
@@ -141,14 +141,14 @@ public:
     }
   }
  
-  static void printHalflsFsf(HalfLT const& hl, std::ostream &o)
+  static void printHalfsFsf(HalfT const& hl, std::ostream &o)
   {
     o << hl.getIncidCell() << " " << hl.getPosition() << " " << hl.getAnchor() << " " << hl.getTag() << " " << hl.getFlags();
   }
   
 protected:  
-  uint _filenumFsf;
-  uint _add_scalar_fsf_n_calls;
+  int _filenumFsf;
+  int _add_scalar_fsf_n_calls;
 };
 
 template<class _Traits>
@@ -166,7 +166,7 @@ void _MeshIoFsf<_Traits>::readFileFsf(const char* filename)
   std::string s;
   
   const char* keys[] = {"POINTS", "CELLS", "HALFLS"};
-  uint keys_size = std::extent<decltype(keys)>::value;
+  int keys_size = std::extent<decltype(keys)>::value;
 
   pos = search_word(File, "CELLTYPE");
   FEPIC_ASSERT(pos != static_cast<size_t>(-1), "invalid file format", std::invalid_argument);
@@ -185,7 +185,7 @@ void _MeshIoFsf<_Traits>::readFileFsf(const char* filename)
    * */
   pos = search_word(File, "POINTS");
   FEPIC_ASSERT(pos != static_cast<size_t>(-1), "invalid file format: can not find POINTS", std::invalid_argument);
-  uint n_pts;
+  int n_pts;
   int tag, flags;
   File >> n_pts;
   
@@ -193,7 +193,7 @@ void _MeshIoFsf<_Traits>::readFileFsf(const char* filename)
   
   int num;
   double coord[3];
-  for (uint i = 0; i < n_pts; ++i)
+  for (int i = 0; i < n_pts; ++i)
   {
     File >> coord[0] >> coord[1] >> coord[2] >> tag >> flags;
 
@@ -211,18 +211,18 @@ void _MeshIoFsf<_Traits>::readFileFsf(const char* filename)
    * */
   pos = search_word(File, "CELLS");
   FEPIC_ASSERT(pos != static_cast<size_t>(-1), "invalid file format: can not find CELLS", std::invalid_argument);
-  uint n_cells, nodeid;
+  int n_cells, nodeid;
   File >> n_cells;
   
   THIS->_cellL.resize(n_cells);
   
-  uint n_nodes_per_cell = ::numNodes<CellPolytopeT>(order);
+  int n_nodes_per_cell = ::numNodes<CellPolytopeT>(order);
   int n_borders = CellT::n_borders;
   int incid_cell;
   int position;
   int anchor;
   num=0;
-  for (uint i = 0; i < n_cells; i++)
+  for (int i = 0; i < n_cells; i++)
   {
     THIS->_cellL[i].setOrder(order);
     for (int n = 0; n < n_nodes_per_cell; ++n)
@@ -254,20 +254,20 @@ void _MeshIoFsf<_Traits>::readFileFsf(const char* filename)
    * */
   pos = search_word(File, "HALFLS");
   FEPIC_ASSERT(pos != static_cast<size_t>(-1), "invalid file format: can not find HALFLS", std::invalid_argument);
-  uint n_halfls;
-  File >> n_halfls;
+  int n_halfs;
+  File >> n_halfs;
   
-  THIS->_halflL.resize(n_halfls);
+  THIS->_halfL.resize(n_halfs);
   
   num=0;
-  for (uint i = 0; i < n_halfls; i++)
+  for (int i = 0; i < n_halfs; i++)
   {
     File >> incid_cell >> position >> anchor >> tag >> flags;
-    THIS->_halflL[i].setIncidCell(incid_cell);
-    THIS->_halflL[i].setPosition(position);
-    THIS->_halflL[i].setAnchor(anchor);
-    THIS->_halflL[i].setTag(tag);
-    THIS->_halflL[i].setFlags(flags);
+    THIS->_halfL[i].setIncidCell(incid_cell);
+    THIS->_halfL[i].setPosition(position);
+    THIS->_halfL[i].setAnchor(anchor);
+    THIS->_halfL[i].setTag(tag);
+    THIS->_halfL[i].setFlags(flags);
   }
   File >> s;
   FEPIC_ASSERT(s == std::string("END_HALFLS"), "can not find the key END_CELLS", std::invalid_argument);
@@ -286,9 +286,9 @@ void _MeshIoFsf<_Traits>::writeFsf(std::string outname = "")
   * NOTA: TODOS os pontos são impressos. APENAS AS CÉLULAS VIVAS
   * são impressas.
   */
-  uint order  = THIS->getOrder();
-  uint ncells = THIS->getNumCellsTotal();
-  uint nhalfls= THIS->getNumHalfLTotal();
+  int order  = THIS->getOrder();
+  int ncells = THIS->getNumCellsTotal();
+  int nhalfs= THIS->getNumHalfTotal();
 
   THIS->_add_scalar_fsf_n_calls=0;
 
@@ -326,10 +326,10 @@ void _MeshIoFsf<_Traits>::writeFsf(std::string outname = "")
   Fout << "END_CELLS\n\n";
 
   Fout << "#incident cell | position | anchor | tag | flags\n";
-  Fout << "HALFLS " << nhalfls << "\n";
-  for (auto hit = THIS->_halflL.begin(); hit != THIS->_halflL.end(); ++hit)
+  Fout << "HALFLS " << nhalfs << "\n";
+  for (auto hit = THIS->_halfL.begin(); hit != THIS->_halfL.end(); ++hit)
   {
-    _MeshIoFsf::printHalflsFsf(*hit, Fout);
+    _MeshIoFsf::printHalfsFsf(*hit, Fout);
     Fout << std::endl;
   }
   Fout << "END_HALFLS\n\n";

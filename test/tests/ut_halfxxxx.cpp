@@ -59,7 +59,6 @@ protected:
 };
 
 
-
 typedef ::testing::Types<Tri2dTraits, Tri3dTraits, Tet3dTraits> TraitsTypes;
 TYPED_TEST_CASE(HalfCoreTest, TraitsTypes);
 
@@ -72,41 +71,27 @@ TYPED_TEST(HalfCoreTest, Constructors) {
                HalfT(this->cell_id_limit, -1, this->anchor_limit),
                HalfT(2, 2, 2)};
 
-  EXPECT_EQ(0u, H[0].getIncidCell());
+  EXPECT_EQ(0, H[0].getIncidCell());
   EXPECT_EQ(0, H[0].getPosition());
-  EXPECT_EQ(0u, H[0].getAnchor());
+  EXPECT_EQ(0, H[0].getAnchor());
   
-  EXPECT_EQ( 0u, H[1].getIncidCell());
+  EXPECT_EQ( 0, H[1].getIncidCell());
   EXPECT_EQ(-1, H[1].getPosition());
-  EXPECT_EQ( 0u, H[1].getAnchor());
+  EXPECT_EQ( 0, H[1].getAnchor());
   
-  EXPECT_EQ( (uint)this->cell_id_limit, H[2].getIncidCell());
+  EXPECT_EQ( (int)this->cell_id_limit, H[2].getIncidCell());
   EXPECT_EQ( this->position_limit, H[2].getPosition());
-  EXPECT_EQ( (uint)this->anchor_limit, H[2].getAnchor());
+  EXPECT_EQ( (int)this->anchor_limit, H[2].getAnchor());
   
-  EXPECT_EQ( (uint)this->cell_id_limit, H[3].getIncidCell());
+  EXPECT_EQ( (int)this->cell_id_limit, H[3].getIncidCell());
   EXPECT_EQ( -1, H[3].getPosition());
-  EXPECT_EQ( (uint)this->anchor_limit, H[3].getAnchor());
+  EXPECT_EQ( (int)this->anchor_limit, H[3].getAnchor());
   
-  EXPECT_EQ( 2u, H[4].getIncidCell());
+  EXPECT_EQ( 2, H[4].getIncidCell());
   EXPECT_EQ( 2, H[4].getPosition());
-  EXPECT_EQ( 2u, H[4].getAnchor());
+  EXPECT_EQ( 2, H[4].getAnchor());
   
 }
-
-#ifdef FEPIC_DEBUG_ON
-TYPED_TEST(HalfCoreTest, ConstructorErrors) {
-  
-  typedef typename TypeParam::HalfT HalfT;
-  
-  ASSERT_ANY_THROW(HalfT(this->cell_id_limit+1,0,0));
-  ASSERT_ANY_THROW(HalfT(-1,0,0));
-  ASSERT_ANY_THROW(HalfT(0,0,-1));
-  ASSERT_ANY_THROW(HalfT(0,-2,-1));
-  ASSERT_ANY_THROW(HalfT(0,this->position_limit+1,0));
-  ASSERT_ANY_THROW(HalfT(0,0,this->anchor_limit+1));
-}
-#endif  
 
 
 TYPED_TEST(HalfCoreTest, Sets) {
@@ -117,42 +102,42 @@ TYPED_TEST(HalfCoreTest, Sets) {
   this->half.setPosition(-1);
   this->half.setAnchor(0);
   
-  EXPECT_EQ( 0u, this->half.getIncidCell());
+  EXPECT_EQ( 0, this->half.getIncidCell());
   EXPECT_EQ( -1, this->half.getPosition());
-  EXPECT_EQ( 0u, this->half.getAnchor());
+  EXPECT_EQ( 0, this->half.getAnchor());
   
   this->half.setIncidCell(this->cell_id_limit);
   this->half.setPosition(this->position_limit);
   this->half.setAnchor(this->anchor_limit);
   
-  EXPECT_EQ( (uint)this->cell_id_limit, this->half.getIncidCell());
+  EXPECT_EQ( (int)this->cell_id_limit, this->half.getIncidCell());
   EXPECT_EQ( this->position_limit,      this->half.getPosition());
-  EXPECT_EQ( (uint)this->anchor_limit,  this->half.getAnchor());
+  EXPECT_EQ( (int)this->anchor_limit,  this->half.getAnchor());
 
   this->half.setIncidCell(2);
   this->half.setPosition(2);
   this->half.setAnchor(2);
   
-  EXPECT_EQ( 2u, this->half.getIncidCell());
+  EXPECT_EQ( 2, this->half.getIncidCell());
   EXPECT_EQ( 2,  this->half.getPosition());
-  EXPECT_EQ( 2u, this->half.getAnchor());
+  EXPECT_EQ( 2, this->half.getAnchor());
 
   /* Repeat with getCompleteId */
   
   this->half.setCompleteId(0,-1,0);
-  EXPECT_EQ( 0u, this->half.getIncidCell());
+  EXPECT_EQ( 0, this->half.getIncidCell());
   EXPECT_EQ( -1, this->half.getPosition());
-  EXPECT_EQ( 0u, this->half.getAnchor());
+  EXPECT_EQ( 0, this->half.getAnchor());
 
   this->half.setCompleteId(this->cell_id_limit,this->position_limit,this->anchor_limit);
-  EXPECT_EQ( (uint)this->cell_id_limit, this->half.getIncidCell());
+  EXPECT_EQ( (int)this->cell_id_limit, this->half.getIncidCell());
   EXPECT_EQ( this->position_limit,      this->half.getPosition());
-  EXPECT_EQ( (uint)this->anchor_limit,  this->half.getAnchor());
+  EXPECT_EQ( (int)this->anchor_limit,  this->half.getAnchor());
   
   this->half.setCompleteId(2,2,2);
-  EXPECT_EQ( 2u, this->half.getIncidCell());
+  EXPECT_EQ( 2, this->half.getIncidCell());
   EXPECT_EQ( 2,  this->half.getPosition());
-  EXPECT_EQ( 2u, this->half.getAnchor());
+  EXPECT_EQ( 2, this->half.getAnchor());
   
 }
 

@@ -50,6 +50,12 @@ int main(int argc, char *argv[]) {
   malha.writeVtk();
   malha.writeFsf();
   
+  cout << sizeof(MyCell) << endl;
+  cout << sizeof(_Labelable) << endl;
+  cout << sizeof(MyT::HalfT) << endl;
+
+  cout << "-----------" << endl;
+  
   //malha.writeFileState();
   
   //auto v = MyCell::getOppFLN(malha.getOrder());
@@ -58,7 +64,7 @@ int main(int argc, char *argv[]) {
   //auto B = malha.getCell(1)->getBorderNodes(1, malha);
   
   //auto temp(B);
-  //for (uint i = 0; i < B.size(); ++i)
+  //for (int i = 0; i < B.size(); ++i)
   //{
       //B[i] = temp[v[0][i]];
   //}

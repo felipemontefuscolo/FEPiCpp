@@ -275,7 +275,7 @@ public:
     long int  denom_partF, denom_partG, denom_partH, Q0, Q1, Q2;
 
     // para cada ponto, calcular o denominador
-    for (uint i = 0; i < _bar_nodes.size(); i++)
+    for (int i = 0; i < _bar_nodes.size(); i++)
     {
       denom_partF = 1;
       denom_partG = 1;
@@ -285,7 +285,7 @@ public:
       Q2 = this->_bar_nodes[i][1];
       Q0 = this->_degree-Q1-Q2;
 
-      for (uint k = 0; k < Fepic::max(Q0, Q1, Q2); ++k)
+      for (int k = 0; k < Fepic::max(Q0, Q1, Q2); ++k)
       {
         if (k<Q0) denom_partF *= Q0 - k;
         if (k<Q1) denom_partG *= Q1 - k;
@@ -501,7 +501,7 @@ public:
     long int  denom_partF, denom_partG, denom_partH, denom_partI, Q0, Q1, Q2, Q3;
 
     // para cada ponto, calcular o denominador
-    for (uint i = 0; i < _bar_nodes.size(); i++)
+    for (int i = 0; i < _bar_nodes.size(); i++)
     {
       denom_partF = 1;
       denom_partG = 1;
@@ -513,7 +513,7 @@ public:
       Q3 = this->_bar_nodes[i][2];
       Q0 = this->_degree-Q1-Q2-Q3;
 
-      for (uint k = 0; k < Fepic::max(Q0,Q1,Q2,Q3); ++k)
+      for (int k = 0; k < Fepic::max(Q0,Q1,Q2,Q3); ++k)
       {
         if (k<Q0) denom_partF *= Q0 - k;
         if (k<Q1) denom_partG *= Q1 - k;

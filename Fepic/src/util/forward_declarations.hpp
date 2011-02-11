@@ -46,7 +46,7 @@ template<class _Traits> class Point;
 template<class _Traits> class HalfEdge;
 template<class _Traits> class HalfFace;
 
-// Halfls
+// Halfs
 template<class _Traits> class HalfEdgeLab;
 template<class _Traits> class HalfFaceLab;
 
@@ -74,8 +74,8 @@ template<class _Traits> class iMesh;
 
 /* Cell Functions */
 
-template<class CellType> uint numNodes(uint order);
-template<class CellType> uint numBubbles(uint order);
+template<class CellType> int numNodes(int order);
+template<class CellType> int numBubbles(int order);
 
 
 #endif

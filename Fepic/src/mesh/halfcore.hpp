@@ -36,9 +36,9 @@ protected:
   _HalfCore(_HalfCore const&) {};
   
   /** HalfT class has:
-    * uint _incid_cell :   ??;
-    * uint _position   :   ??;
-    * uint _anchor     :   ??;
+    * int _incid_cell :   ??;
+    * int _position   :   ??;
+    * int _anchor     :   ??;
     * enum {cell_id_limit= ??};
     * enum {position_limit=??};
     * enum {anchor_limit=  ??};
@@ -49,22 +49,22 @@ public:
   typedef typename _Traits::HalfT HalfT;
   typedef typename _Traits::CellT CellT;
 
-  uint getIncidCell() const
+  int getIncidCell() const
   {
     return CONST_THIS->_incid_cell;
   }
 
   int getPosition() const
   {
-    return CONST_THIS->_position-1;
+    return CONST_THIS->_position;
   }  
 
-  uint getAnchor() const
+  int getAnchor() const
   {
     return CONST_THIS->_anchor;
   }
   
-  void setIncidCell(uint cellid)
+  void setIncidCell(int cellid)
   {
     FEPIC_CHECK(cellid<=HalfT::cell_id_limit, "cell id limit exceeded", std::out_of_range);
     THIS->_incid_cell = cellid;
@@ -73,29 +73,29 @@ public:
   void setPosition(int pos)
   {
     FEPIC_CHECK((pos>=-1)||(pos<=HalfT::position_limit), "position limit exceeded", std::out_of_range);
-    THIS->_position = pos+1;
+    THIS->_position = pos;
   }
   
-  void setAnchor(uint anchor)
+  void setAnchor(int anchor)
   {
     FEPIC_CHECK(anchor<=HalfT::anchor_limit, "anchor limit exceeded", std::out_of_range);
     THIS->_anchor = anchor;
   }
 
-  void setCompleteId(uint cellid, int pos, uint anchor=0)
+  void setCompleteId(int cellid, int pos, int anchor=0)
   {
     FEPIC_CHECK(cellid<=HalfT::cell_id_limit, "cell id limit exceeded", std::out_of_range);
     FEPIC_CHECK((pos>=-1)||(pos<=HalfT::position_limit), "position limit exceeded", std::out_of_range);
     FEPIC_CHECK(anchor<=HalfT::anchor_limit, "anchor limit exceeded", std::out_of_range);
     THIS->_incid_cell = cellid;
-    THIS->_position = pos+1;
+    THIS->_position = pos;
     THIS->_anchor = anchor;
   }
 
   /** Retorna um vetor com os índices dos vértices que esta HalfFace contém.
   *  @param mesh a malha na qual a HalfFace está contida.
   */
-  vectorui getVertices(MeshT const& mesh) const
+  vectori getVertices(MeshT const& mesh) const
   {
     return mesh.getCell(this->getIncidCell()) // CELL->
                 
@@ -106,7 +106,7 @@ public:
   /** Retorna um vetor com os índices dos nós que esta HalfFace contém.
   *  @param mesh a malha na qual a HalfFace está contida.
   */
-  vectorui getNodes(MeshT const& mesh) const
+  vectori getNodes(MeshT const& mesh) const
   {
       return  mesh.getCell(this->getIncidCell()) // CELL->
               
@@ -121,15 +121,44 @@ public:
   *  @return true se os nós formam a HalfFace e false caso contrário.
   *  @note Os nós podem estar em qualquer orientação cíclica da original.
   */
-  bool hasTheseVertices(vectorui const& v, MeshT const& mesh) const
+  bool hasTheseVertices(vectori const& v, MeshT const& mesh) const
   {
     FEPIC_CHECK(v.size()==CellT::n_vertices_per_border, "", std::invalid_argument);
     const auto cell = mesh.getCell(this->getIncidCell());
     
-    vectorui vtx (cell->getBorderVertices(this->getPosition()));
+    vectori vtx (cell->getBorderVertices(this->getPosition()));
     
     return arrayIsCyclicallyEqual(v, vtx);
   }
+
+  /** Faz com que cada nó desta HalfEdgeLab aponte para ela.
+  *  @param mesh a malha na qual a HalfEdgeLab está contida.
+  */ 
+  void broadcastHalf2Nodes(MeshT & mesh) const
+  {
+    vectori v (mesh.getCell( this->getIncidCell() )->getBorderNodes( this->getPosition()));
+    
+    for (int i = 0; i < v.size(); i++)
+      mesh.getNode(v[i])->setHalf(*CONST_THIS);
+    
+  }
+
+    /** Atribui o rótulo desta HalfEdgeLab a seus nós.
+  * @param force quando true indica atribuição incondicional, quando false,
+  * a atribuição é feita somente se cada nó tem tag=0;
+  */ 
+  void broadcastTag2Nodes(MeshT & mesh, bool force=false) const
+  {
+    vectori v (mesh.getCell( this->getIncidCell() )->getBorderNodes( this->getPosition(), mesh));
+    
+    if (force)
+      for (int i = 0; i < v.size(); ++i)
+        mesh.getNode(v[i])->setTag(CONST_THIS->getTag());
+    else
+      for (int i = 0; i < v.size(); i++)
+        if (mesh.getNode(v[i])->getTag() == 0)
+          mesh.getNode(v[i])->setTag(CONST_THIS->getTag());
+  } 
   
 #undef THIS
 #undef CONST_THIS

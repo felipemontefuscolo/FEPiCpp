@@ -24,48 +24,48 @@
 
 // -------------------------------------------------------------------------
 
-template<> inline uint numNodes<Polytope<1>>(uint order) {
+template<> inline int numNodes<Polytope<1>>(int order) {
   return order+1; }
 
-template<> inline uint numNodes<Simplex<1>>(uint order) {
+template<> inline int numNodes<Simplex<1>>(int order) {
   return order+1; }
 
-template<> inline uint numNodes<Simplex<2>>(uint order) {
+template<> inline int numNodes<Simplex<2>>(int order) {
   return (order+1)*(order+2)/2; }
   
-template<> inline uint numNodes<Simplex<3>>(uint order) {
+template<> inline int numNodes<Simplex<3>>(int order) {
   return (order+1)*(order+2)*(order+3)/6; }
 
-template<> inline uint numNodes<Hypercube<1>>(uint order) {
+template<> inline int numNodes<Hypercube<1>>(int order) {
   return order+1; }
 
-template<> inline uint numNodes<Hypercube<2>>(uint order) {
+template<> inline int numNodes<Hypercube<2>>(int order) {
   return (order+1)*(order+1); }
 
-template<> inline uint numNodes<Hypercube<3>>(uint order) {
+template<> inline int numNodes<Hypercube<3>>(int order) {
   return (order+1)*(order+1)*(order+1); }
 
 // -------------------------------------------------------------------------
 
-template<> inline uint numBubbles<Polytope<1>>(uint order) {
+template<> inline int numBubbles<Polytope<1>>(int order) {
   return (order-1); }
 
-template<> inline uint numBubbles<Simplex<1>>(uint order) {
+template<> inline int numBubbles<Simplex<1>>(int order) {
   return (order-1); }
 
-template<> inline uint numBubbles<Simplex<2>>(uint order) {
+template<> inline int numBubbles<Simplex<2>>(int order) {
   return (order-1)*(order-2)/2; }
 
-template<> inline uint numBubbles<Simplex<3>>(uint order) {
+template<> inline int numBubbles<Simplex<3>>(int order) {
   return (order-1)*(order-2)*(order-3)/6; }
 
-template<> inline uint numBubbles<Hypercube<1>>(uint order) {
+template<> inline int numBubbles<Hypercube<1>>(int order) {
   return order-1; }
 
-template<> inline uint numBubbles<Hypercube<2>>(uint order) {
+template<> inline int numBubbles<Hypercube<2>>(int order) {
   return (order-1)*(order-1); }
 
-template<> inline uint numBubbles<Hypercube<3>>(uint order) {
+template<> inline int numBubbles<Hypercube<3>>(int order) {
   return (order-1)*(order-1)*(order-1); }
 
 

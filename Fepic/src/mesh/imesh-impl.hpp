@@ -37,17 +37,17 @@ void iMesh<_Traits>::buildAdjacency4face()
 {
 
   int n_borders = CellT::n_borders;
-  vectorui edge_vtx(2);
-  vectorui cell_ith(2);
-  std::map<vectorui, vectorui> table; // Key: (n0, n1) ... atributos (elemento, ith)
-  std::map<vectorui, vectorui>::iterator tab_it, tab_it2;
+  vectori edge_vtx(2);
+  vectori cell_ith(2);
+  std::map<vectori, vectori> table; // Key: (n0, n1) ... atributos (elemento, ith)
+  std::map<vectori, vectori>::iterator tab_it, tab_it2;
   CellIterator cell = iMesh::_cellL.begin();
-  uint otherC, otherith, thisC, thisith;
+  int otherC, otherith, thisC, thisith;
   int thistag;
 
 
 
-  uint k=0;
+  int k=0;
   for (auto cellend=_cellL.end(); cell != cellend ; ++cell)
   {
     if (!cell->disabled())
@@ -57,7 +57,7 @@ void iMesh<_Traits>::buildAdjacency4face()
         edge_vtx = cell->getBorderVertices(ith);
         cell_ith[0] = k;
         cell_ith[1] = ith;
-        table.insert(std::pair<vectorui, vectorui>(edge_vtx, cell_ith));
+        table.insert(std::pair<vectori, vectori>(edge_vtx, cell_ith));
       }
     }
     ++k;
@@ -86,8 +86,8 @@ void iMesh<_Traits>::buildAdjacency4face()
       thisC = tab_it->second[0];
       thisith =  tab_it->second[1];
       thistag = this->getCell(thisC)->getTag();
-      HalfLT temp(thisC, thisith, 0, thistag);
-      uint mHE_universal_iD = addHalfl(temp);
+      HalfT temp(thisC, thisith, 0, thistag);
+      int mHE_universal_iD = addHalf(temp);
       this->getCell(thisC)->getHalf(thisith)->setCompleteId(mHE_universal_iD, -1);
       table.erase(tab_it);
     }
@@ -106,19 +106,19 @@ void iMesh<_Traits>::buildAdjacency4volume()
   const int n_borders = CellT::n_borders;
   const int n_anch    = CellT::dim==3 ? n_vertices_per_border : 1;
 
-  typedef std::pair<vectorui, vectorui> PairT; // < (vértices da face) , (elemento, ith) >
-  typedef std::map<vectorui, vectorui>  MapT;
+  typedef std::pair<vectori, vectori> PairT; // < (vértices da face) , (elemento, ith) >
+  typedef std::map<vectori, vectori>  MapT;
 
-  vectorui face_vtx(n_vertices_per_border);
-  vectorui cell_ith(2);
+  vectori face_vtx(n_vertices_per_border);
+  vectori cell_ith(2);
   MapT            table; // < (nós da face) , (elemento, ith) >
   MapT::iterator  tab_it, tab_it2;
   CellIterator    cell = this->_cellL.begin();
-  uint            otherC, otherith, thisC, thisith;
+  int            otherC, otherith, thisC, thisith;
   int             thistag;
   int             a;
 
-  uint k=0;
+  int k=0;
   for (auto cellend=_cellL.end(); cell != cellend ; ++cell)
   {
     if (!cell->disabled())
@@ -165,8 +165,8 @@ void iMesh<_Traits>::buildAdjacency4volume()
       thisC = tab_it->second[0];
       thisith =  tab_it->second[1];
       thistag = this->getCell(thisC)->getTag();
-      HalfLT temp(thisC, thisith, 0, thistag);
-      uint mHE_universal_iD = addHalfl(temp);
+      HalfT temp(thisC, thisith, 0, thistag);
+      int mHE_universal_iD = addHalf(temp);
       this->getCell(thisC)->getHalf(thisith)->setCompleteId(mHE_universal_iD, -1, 0);
       table.erase(tab_it);
     }
@@ -190,7 +190,7 @@ void iMesh<_Traits>::buildAdjacency4volume()
 
   //Fout.precision(15);
 
-  //for (uint k=0, tam=getNumNodesTotal(); k< tam; ++k)
+  //for (int k=0, tam=getNumNodesTotal(); k< tam; ++k)
   //{
     //this->getNode(k)->printSelfVtk(Fout);
     //Fout << " " << this->getNode(k)->getTag() << std::endl;
@@ -199,7 +199,7 @@ void iMesh<_Traits>::buildAdjacency4volume()
   //CellT *cell;
   //Fout << std::endl;
   //Fout << getElementNameMsh(CellT::getMshTag(order)) << std::endl;
-  //for (uint i = 0; i < this->getNumCells(); i++)
+  //for (int i = 0; i < this->getNumCells(); i++)
   //{
     //cell = this->getCell(i);
     //cell->printSelfState(Fout); Fout << " label:" << cell->getTag();
@@ -208,7 +208,7 @@ void iMesh<_Traits>::buildAdjacency4volume()
 
   //// print Halfs
   //Fout << std::endl << HalfT::getName() << std::endl;
-  //for (uint i = 0, tam=this->getNumCells(); i < tam; i++)
+  //for (int i = 0, tam=this->getNumCells(); i < tam; i++)
   //{
     //cell = this->getCell(i);
 
@@ -225,11 +225,11 @@ void iMesh<_Traits>::buildAdjacency4volume()
     //Fout << std::endl;
   //}
 
-  //Fout << std::endl << "Marked " << HalfT::getName() << " " << this->getNumHalfLTotal() << std::endl;
+  //Fout << std::endl << "Marked " << HalfT::getName() << " " << this->getNumHalfTotal() << std::endl;
   //Fout << "CELL  POSIT  (ANC)  LABEL\n";
-  //for (uint i = 0, tam=this->getNumHalfLTotal(); i < tam; i++)
+  //for (int i = 0, tam=this->getNumHalfTotal(); i < tam; i++)
   //{
-    //HalfLT *h_obj = this->getHalfl(i);
+    //HalfT *h_obj = this->getHalf(i);
     //h_obj->printSelf(Fout); Fout << " " << h_obj->getTag();
     //Fout << std::endl;
   //}

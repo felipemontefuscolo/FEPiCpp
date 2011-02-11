@@ -43,7 +43,6 @@ public:
 
   typedef typename _Traits::CellT  CellT;
   typedef typename _Traits::HalfT  HalfT;
-  typedef typename _Traits::HalfLT HalfLT;
   typedef typename _Traits::MeshT  MeshT;
   //typedef typename _MetaCellOf<CellT, _Traits>::FaceT FaceT;
 
@@ -58,11 +57,11 @@ public:
   * @return true se e somente se forma uma aresta.
   * @warning a ordem dos nós É importante.
   */
-  bool isAnEdge(vectorui const& vertices, int &ith) const
+  bool isAnEdge(vectori const& vertices, int &ith) const
   {
     FEPIC_CHECK(vertices.size()==2, "", std::invalid_argument);
 
-    vectorui vtx(2);
+    vectori vtx(2);
 
     for (int i = 0; i != CellT::n_borders; ++i)
     {
@@ -84,7 +83,7 @@ public:
   * @return true se e somente se forma uma aresta.
   * @warning a ordem dos nós NÃO é importante.
   */
-  bool isAnParallelEdge(vectorui const& vertices, int &ith) const
+  bool isAnParallelEdge(vectori const& vertices, int &ith) const
   {
     if (this->isAnEdge(vertices, ith))
       return true;
@@ -105,7 +104,7 @@ public:
   void printSelfState(std::ostream &o) const
   {
     o << this->getNodeIdx(0);
-    for (uint i = 1; i < CONST_THIS->_nodes.size(); ++i)
+    for (int i = 1; i < CONST_THIS->_nodes.size(); ++i)
       o << " " << this->getNodeIdx(i);
   }
 

@@ -232,7 +232,7 @@ public:
     Eigen::Matrix<decltype(t(a...)), Eigen::Dynamic, 1> ret(L.size());
     auto it = ret.begin();
     
-    uint q=0;
+    int q=0;
     for (; it != ret.end(); ++it)
     {
       (*it) = t(L[q], a...);
@@ -471,7 +471,7 @@ public:
     Eigen::Matrix<decltype(t(a...)), Eigen::Dynamic, 1> ret(L.size());
     auto it = ret.begin();
     
-    uint q=0;
+    int q=0;
     for (; it != ret.end(); ++it)
     {
       (*it) = t(L[q], a...);

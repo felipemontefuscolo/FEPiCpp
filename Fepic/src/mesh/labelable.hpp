@@ -35,7 +35,7 @@ public:
   };
 
 protected:
-  _Labelable(int tag, int flags=0) : _tag(static_cast<unsigned char>(tag)), _flags(static_cast<unsigned char>(flags))
+  _Labelable(int tag, int flags=0) : _tag(tag), _flags(flags)
   {
     FEPIC_CHECK((tag>=0)&&(tag<tag_size), "tag number must be less than "+std::string(itoa(tag_size))+" and greater than 0", std::out_of_range);
     FEPIC_CHECK((flags>=0)&&(flags<flags_size), "wrong flags", std::out_of_range);
@@ -46,13 +46,13 @@ protected:
 public:
   int getTag() const
   {
-    return static_cast<int>(_tag);
+    return _tag;
   }
 
   void setTag(int tag)
   {
     FEPIC_CHECK((tag>=0)&&(tag<tag_size), "tag number must be less or equal "+std::string(itoa(tag_size)), std::out_of_range);
-    _tag = static_cast<unsigned char>(tag);
+    _tag = tag;
   }
   
   bool disabled() const
@@ -82,17 +82,17 @@ public:
   
   int getFlags() const
   {
-    return static_cast<int>(_flags);
+    return _flags;
   }
     
-  void setFlag(uint flag_no, bool set=true)
+  void setFlag(int flag_no, bool set=true)
   {
     _flags = set ? (_flags | (1<<flag_no)) : (_flags & (~(1<<flag_no)));
   }
   
-  void setFlags(uint flags)
+  void setFlags(int flags)
   {
-    _flags = static_cast<unsigned char>(flags);
+    _flags = flags;
   }
   
 protected:

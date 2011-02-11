@@ -24,7 +24,7 @@
 
 
 template<class _Traits>
-class HalfEdge : public _HalfCore<_Traits>
+class HalfEdge : public _HalfCore<_Traits>, public _Labelable
 {
 public:
   typedef typename _Traits::MeshT MeshT;
@@ -40,19 +40,20 @@ public:
    * -1 <= position   <= HalfEdge::position_limit (6)
    *  0 <= anchor     <= HalfEdge::anchor_limit (3)
    */ 
-  HalfEdge(uint incid_cell, int position, uint anchor=0) : _incid_cell(incid_cell),
-                                                   _position(position+1),
-                                                   _anchor(anchor)
+  template<class... LabelArgs>
+  HalfEdge(int incid_cell, int position, int anchor, LabelArgs... args) :
+                                                         _Labelable(args...),
+                                                         _incid_cell(incid_cell),
+                                                         _position(position),
+                                                         _anchor(anchor)
   {
     FEPIC_CHECK((incid_cell<=cell_id_limit)&&
-                (position<=position_limit && position>-2)&&
-                (anchor<=anchor_limit), "", std::out_of_range);
+                 (position<=position_limit && position>-2)&&
+                 (anchor<=anchor_limit), "", std::out_of_range);
   }
   
-  /** Construtor.
-  */ 
-  HalfEdge() : _incid_cell(0), _position(0), _anchor(0) { }
   HalfEdge(HalfEdge const&) = default;
+  HalfEdge() : _Labelable(), _incid_cell(0), _position(0), _anchor(0) {}
   ~HalfEdge() = default;
 
   /** Imprime a composição do iD desta HalfEdge.
@@ -68,7 +69,7 @@ public:
   */ 
   double getLenght(MeshT& mesh) const
   {
-    vectorui nodes(this->getNodes(mesh));
+    vectori nodes(this->getNodes(mesh));
     double sum=0;
     for (int i = 0; i < nodes.size()-1; i++)
       sum += mesh.getNode(nodes[i])->getDistance(*mesh.getNode(nodes[i+1]));
@@ -82,13 +83,13 @@ public:
   {
     return std::string("Half-Edge");
   }
+
   
 protected:
-  uint _incid_cell : 27;
-  uint _position   : 3;
-  uint _anchor     : 2;
+  int8_t _position;
+  int8_t _anchor;
+  int    _incid_cell;
 };      
-
 
 
 

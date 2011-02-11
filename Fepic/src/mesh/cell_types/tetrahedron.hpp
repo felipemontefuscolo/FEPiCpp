@@ -42,15 +42,15 @@ public:
          n_vertices_per_border=3};
          
   template<class... LabeableArgs>
-  Tetrahedron(vectorui const& nodes, uint order, LabeableArgs... args) :
-                          _Labelable(args...), _nodes(nodes), _order(static_cast<unsigned char>(order))
+  Tetrahedron(vectori const& nodes, int order, LabeableArgs... args) :
+                          _Labelable(args...), _nodes(nodes), _order(order)
   {
     FEPIC_CHECK(nodes.size()==numNodes<Simplex<3>>(order), "", std::invalid_argument);
   }
   
   template<class... LabeableArgs>
-  Tetrahedron(vectorui && nodes, uint order, LabeableArgs... args) :
-                      _Labelable(args...), _nodes(nodes), _order(static_cast<unsigned char>(order))
+  Tetrahedron(vectori && nodes, int order, LabeableArgs... args) :
+                      _Labelable(args...), _nodes(nodes), _order(order)
   {
     FEPIC_CHECK(nodes.size()==numNodes<Simplex<3>>(order), "", std::invalid_argument);
   }  
@@ -64,7 +64,7 @@ public:
   void setOrder(int order)
   {
     this->_nodes.resize((order+1)*(order+2)*(order+3)/6);
-    _order = static_cast<unsigned char>(order);
+    _order = order;
   }
 
   
@@ -364,7 +364,7 @@ protected:
         minimesh.push_back(vectori{i,n2,n3,n4});
       }
       
-      /* Quinto padrão: (a,b,c), (a+0,b+1,c+0), (a-1,b+1,c+1), (a+0,b+0,c+1)  */
+      /* Qinto padrão: (a,b,c), (a+0,b+1,c+0), (a-1,b+1,c+1), (a+0,b+0,c+1)  */
       clit2 = find(clbegin, clend, Eigen::Vector3i(a+0,b+1,c+0));
       clit3 = find(clbegin, clend, Eigen::Vector3i(a-1,b+1,c+1));
       clit4 = find(clbegin, clend, Eigen::Vector3i(a+0,b+0,c+1));
@@ -457,10 +457,11 @@ public:
   static const std::vector<matrixi> table2; // order / minimeshs
   
 protected:
-  vectorui      _nodes;
-  HalfT         _halfs[n_borders];
   unsigned char _order;
+  vectori       _nodes;
+  HalfT         _halfs[n_borders];
   
+ 
 };
 
 template<class _Traits>

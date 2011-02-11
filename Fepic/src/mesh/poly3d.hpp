@@ -36,7 +36,6 @@ public:
   
   typedef typename _Traits::CellT  CellT;
   typedef typename _Traits::HalfT  HalfT;
-  typedef typename _Traits::HalfLT HalfLT;
   typedef typename _Traits::MeshT  MeshT;
   //typedef typename _MetaCellOf<CellT, _Traits>::FaceT FaceT;
 
@@ -55,14 +54,14 @@ public:
   * @note definição para ancora: dada uma face n0,n1,...,nB, se ela é a face F
   * e ancora A de um poliedro, então, o nó B-A é o primeiro nó da face F do poliedro.
   */ 
-  bool isAnFace(vectorui const& vertices, int &face, int &anchor) const
+  bool isAnFace(vectori const& vertices, int &face, int &anchor) const
   {
     static const matrixi faces_vtx(_MetaCellOf<CellT, _Traits>::get_faces_vtx());
   
     FEPIC_CHECK(static_cast<int>(vertices.size())==CellT::n_vertices_per_border, "", std::invalid_argument);
     
-    vectorui temp(CellT::n_vertices_per_border);
-    vectorui this_vtx(CellT::n_vertices_per_border);
+    vectori temp(CellT::n_vertices_per_border);
+    vectori this_vtx(CellT::n_vertices_per_border);
     
     for (int f = 0; f < CellT::n_borders; ++f) // para cada face
     {
@@ -90,7 +89,7 @@ public:
   
   /** O mesmo que a função isAnFace, mas aqui a ordem dos vértices podem ser anti-paralelos a face.
   */ 
-  bool isAnParallelFace(vectorui vertices, int &face, int &anchor) const
+  bool isAnParallelFace(vectori vertices, int &face, int &anchor) const
   {
     if (this->isAnFace(vertices, face, anchor))
       return true;
@@ -102,7 +101,7 @@ public:
   void printSelfState(std::ostream &o) const
   {
     o << this->getNodeIdx(0);
-    for (uint i = 1, tam=CONST_THIS->_nodes.size(); i < tam; i++)
+    for (int i = 1, tam=CONST_THIS->_nodes.size(); i < tam; i++)
       o << " " << this->getNodeIdx(i);
   }       
   

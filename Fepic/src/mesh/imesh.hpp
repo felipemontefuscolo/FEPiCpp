@@ -45,22 +45,21 @@ public:
   typedef typename _Traits::PointT PointT;
 
   typedef typename _Traits::HalfT  HalfT;
-  typedef typename _Traits::HalfLT HalfLT;
 
-  typedef typename CellT::PolytopeT CellPolytopeT;
+  typedef typename CellT::PolytopeT       CellPolytopeT;
   typedef typename CellPolytopeT::Derived CellDerivedPolytopeT;
 
-  typedef std::deque<CellT>     CellList;
-  typedef std::deque<PointT>    PointList;
-  typedef std::deque<HalfLT>    HalflList;
+  typedef std::deque<CellT>    CellList;
+  typedef std::deque<PointT>   PointList;
+  typedef std::deque<HalfT>    HalfList;
 
   typedef typename CellList::iterator  CellIterator;
   typedef typename PointList::iterator PointIterator;
-  typedef typename HalflList::iterator HalflIterator;
+  typedef typename HalfList::iterator  HalfIterator;
 
   typedef typename CellList::const_iterator  CellConstIterator;
   typedef typename PointList::const_iterator PointConstIterator;
-  typedef typename HalflList::const_iterator HalflConstIterator;
+  typedef typename HalfList::const_iterator HalfConstIterator;
 
   typedef Eigen::Matrix<double, _Traits::spacedim, 1> VecT;
 
@@ -104,7 +103,7 @@ public:
     std::cout << "order:     " << this->_order << std::endl;
     std::cout << "# nodes:   " << getNumNodes() << std::endl;
     std::cout << "# cells:   " << getNumCells() << std::endl;
-    std::cout << "# mhalfs:  " << getNumHalfls() << std::endl;
+    std::cout << "# b halfs:  " << getNumHalfs() << std::endl;
   }
 
 
@@ -150,18 +149,18 @@ public:
   * @param[in] dead_mh bool indicando se as Mhalf (dead) incluem na pesquisa.
   * @note o critério de existência é se os nós são ciclicamente iguais aos da Mhalf.
   */
-  bool theseVerticesFormAHalfl(vectorui const& vtx, uint &half_id, bool dead_mh = false)
+  bool theseVerticesFormAHalf(vectori const& vtx, int &half_id, bool dead_mh = false)
   {
     // OTIMIZAR
 
     bool RET=false;
-    uint nummhalf = this->getNumHalfLTotal();
+    int nummhalf = this->getNumHalfTotal();
     // IMPLEMENTAR ITERADOR
-    for(uint i=0; i<nummhalf; ++i)
+    for(int i=0; i<nummhalf; ++i)
     {
-      bool b = this->getHalfl(i)->hasTheseVertices(vtx, *this);
+      bool b = this->getHalf(i)->hasTheseVertices(vtx, *this);
 
-      if(b && (dead_mh || (!this->getHalfl(i)->disabled())) )
+      if(b && (dead_mh || (!this->getHalf(i)->disabled())) )
       {
         half_id = i;
         RET = true;
@@ -172,13 +171,13 @@ public:
 
   /** Retorna o n-ésimo nó da malha.
   */
-  PointT* getNode(uint nth)
+  PointT* getNode(int nth)
   {
     FEPIC_CHECK(nth<this->_pointL.size(), "invalid index", std::out_of_range);
     return &_pointL[nth];
   }
 
-  const PointT* getNode(uint nth) const
+  const PointT* getNode(int nth) const
   {
     FEPIC_CHECK(nth<this->_pointL.size(), "invalid index", std::out_of_range);
     return &_pointL[nth];
@@ -186,28 +185,28 @@ public:
 
   /** Retorna a n-ésima mhalf-edge/face (adivinha pelo tipo da malha)
   */
-  HalfLT* getHalfl(uint nth)
+  HalfT* getHalf(int nth)
   {
-    FEPIC_CHECK(nth<this->_halflL.size(), "invalid index", std::out_of_range);
-    return &_halflL[nth];
+    FEPIC_CHECK(nth<this->_halfL.size(), "invalid index", std::out_of_range);
+    return &_halfL[nth];
   }
 
-  const HalfLT* getHalfl(uint nth) const
+  const HalfT* getHalf(int nth) const
   {
-    FEPIC_CHECK(nth<this->_halflL.size(), "invalid index", std::out_of_range);
-    return &_halflL[nth];
+    FEPIC_CHECK(nth<this->_halfL.size(), "invalid index", std::out_of_range);
+    return &_halfL[nth];
   }
 
 
   /** Retorna a n-ésima celula (adivinha o tipo de célula pelo tipo da malha)
   */
-  CellT* getCell(uint nth)
+  CellT* getCell(int nth)
   {
     FEPIC_CHECK(nth<this->_cellL.size(), "invalid index", std::out_of_range);
     return &_cellL[nth];
   }
 
-  const CellT* getCell(uint nth) const
+  const CellT* getCell(int nth) const
   {
     FEPIC_CHECK(nth<this->_cellL.size(), "invalid index", std::out_of_range);
     return &_cellL[nth];
@@ -227,7 +226,7 @@ public:
 
   /** Adiciona uma célula e retorna seu id.
   */
-  uint addCell(CellT const& C)
+  int addCell(CellT const& C)
   {
     if (_dead_cells.empty())
     {
@@ -236,7 +235,7 @@ public:
     }
     else
     {
-      uint id = _dead_cells.back();
+      int id = _dead_cells.back();
       _cellL.at(id) = C;
       _dead_cells.pop_back();
       return id;
@@ -245,7 +244,7 @@ public:
 
   /** Adiciona um ponto e retorna seu id.
   */
-  uint addPoint(PointT const& P)
+  int addPoint(PointT const& P)
   {
     if (_dead_points.empty())
     {
@@ -254,7 +253,7 @@ public:
     }
     else
     {
-      uint id = _dead_points.back();
+      int id = _dead_points.back();
       _pointL.at(id) = P;
       _dead_points.pop_back();
       return id;
@@ -265,17 +264,17 @@ public:
   *  @param h A half-xxxx a ser adicionada.
   *  @return A posição da half-xxxx na lista
   */
-  uint addHalfl(HalfLT const& h)
+  int addHalf(HalfT const& h)
   {
     if (_dead_mhalf.empty())
     {
-      _halflL.push_back(h);
-      return _halflL.size()-1;
+      _halfL.push_back(h);
+      return _halfL.size()-1;
     }
     else
     {
-      uint id = _dead_mhalf.back();
-      _halflL.at(id) = h;
+      int id = _dead_mhalf.back();
+      _halfL.at(id) = h;
       _dead_mhalf.pop_back();
       return id;
     }
@@ -284,7 +283,7 @@ public:
   /** Retorna o número células
   *  @note não conta com o/a(s) marcado/a(s) como killed.
   */
-  uint getNumCells() const
+  int getNumCells() const
   {
     return _cellL.size() - _dead_cells.size();
   }
@@ -292,14 +291,14 @@ public:
   /** Retorna o número de células.
   * @note incluindo o/a(s) marcado/a(s) como killed.
   */
-  uint getNumCellsTotal() const{
+  int getNumCellsTotal() const{
     return _cellL.size();
   }
 
   /** Retorna o número de nós.
   *  @note não conta com o/a(s) marcado/a(s) como killed.
   */
-  uint getNumNodes() const
+  int getNumNodes() const
   {
     return _pointL.size() - _dead_points.size();
   }
@@ -307,24 +306,24 @@ public:
   /** Retorna no número de nós.
   *  @note incluindo o/a(s) marcado/a(s) como killed.
   */
-  uint getNumNodesTotal() const{
+  int getNumNodesTotal() const{
     return _pointL.size();
   }
 
   /** Retorna número de mhalfs.
   * @note não conta com o/a(s) marcado/a(s) como killed.
   */
-  uint getNumHalfls() const
+  int getNumHalfs() const
   {
-    return _halflL.size() - _dead_mhalf.size();
+    return _halfL.size() - _dead_mhalf.size();
   }
 
   /** Retorna o número de mhalfs.
   *  @note incluindo o/a(s) marcado/a(s) como killed.
   */
-  uint getNumHalfLTotal() const
+  int getNumHalfTotal() const
   {
-    return _halflL.size();
+    return _halfL.size();
   }
 
   /** apenas para 2D ainda.
@@ -332,13 +331,13 @@ public:
   */
   double getPerimeter()
   {
-    auto it = _halflL.begin();
-    vectorui vtx;
+    auto it = _halfL.begin();
+    vectori vtx;
     double sum=0.;
 
-    std::cout << _halflL.size() << std::endl;
+    std::cout << _halfL.size() << std::endl;
 
-    for (; it!= _halflL.end(); ++it)
+    for (; it!= _halfL.end(); ++it)
       sum += it->HalfT::getLenght(*this);
 
     return sum;
@@ -381,16 +380,16 @@ public:
 
   /** Retorna um iterador apontando para o começo da lista de mhalfs.
   */
-  HalflIterator mhalfBegin()
+  HalfIterator mhalfBegin()
   {
-    return _halflL.begin();
+    return _halfL.begin();
   }
 
   /** Retorna um iterador apontando para o depois-do-final da lista de mhalfs.
   */
-  HalflIterator mhalfEnd()
+  HalfIterator mhalfEnd()
   {
-    return _halflL.end();
+    return _halfL.end();
   }
 
 
@@ -404,14 +403,14 @@ public:
   // entities
   CellList      _cellL;
   PointList     _pointL;
-  HalflList     _halflL;
+  HalfList     _halfL;
 
 private:
 
   // deleted entities id's
-  dequeui  _dead_cells;
-  dequeui  _dead_points;
-  dequeui  _dead_mhalf;
+  dequei  _dead_cells;
+  dequei  _dead_points;
+  dequei  _dead_mhalf;
 
   int         _order;
 

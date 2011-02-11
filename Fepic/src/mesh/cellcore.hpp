@@ -32,8 +32,7 @@ class _CellCore
 
 public:
   typedef typename _Traits::CellT  CellT;
-  typedef typename _Traits::HalfT  HalfT;
-  typedef typename _Traits::HalfLT HalfLT;
+  typedef typename _Traits::HalfT HalfT;
   typedef typename _Traits::MeshT  MeshT;
 
 protected:
@@ -44,7 +43,7 @@ public:
   
   int getOrder() const
   {
-    return static_cast<int>(CONST_THIS->_order);
+    return CONST_THIS->_order;
   }
 
   int getNumNodes() const
@@ -62,7 +61,7 @@ public:
     return CellT::n_vertices;
   }
 
-  uint getNodeIdx(int ith) const
+  int getNodeIdx(int ith) const
   {   
 #ifdef FEPIC_DEBUG_ON
     return CONST_THIS->_nodes.at(ith);
@@ -71,31 +70,31 @@ public:
 #endif
   }
 
-  vectorui getBorderVertices(int ith) const
+  vectori getBorderVertices(int ith) const
   {
     //static matrixi faces_vtx(_MetaCellOf<CellT, _Traits>::get_faces_vtx());
-    uint vsize = CellT::borders_local_vertices[ith].size();
-    vectorui vtx(vsize);
+    int vsize = CellT::borders_local_vertices[ith].size();
+    vectori vtx(vsize);
     
-    for (uint i = 0; i < vsize; ++i)
+    for (int i = 0; i < vsize; ++i)
       vtx[i] = CONST_THIS->_nodes[CellT::borders_local_vertices[ith][i]];
       
     return vtx;
   }
 
-  vectorui getBorderNodes(int ith) const
+  vectori getBorderNodes(int ith) const
   {
     matrixi const& borders_local_nodes = CellT::getBordersLocalNodes(CONST_THIS->getOrder());
-    uint tam(borders_local_nodes[ith].size());
-    vectorui nodes(tam);
+    int tam(borders_local_nodes[ith].size());
+    vectori nodes(tam);
     
-    for (uint i = 0; i < tam; ++i)
+    for (int i = 0; i < tam; ++i)
       nodes[i] =  CONST_THIS->_nodes[ borders_local_nodes[ith][i] ];
       
     return nodes;
   }
   
-  void setNode(int ith, uint nodeid)
+  void setNode(int ith, int nodeid)
   {
 #ifdef FEPIC_DEBUG_ON
     THIS->_nodes.at(ith) = nodeid;
@@ -120,7 +119,7 @@ public:
   {
     matrixi const& borders_local_nodes(CellT::getBordersLocalNodes(CONST_THIS->getOrder()));
     for (int f = 0; f < CellT::n_borders; ++f) // loop  nas faces
-      for (uint i = 0, tam=borders_local_nodes[0].size(); i < tam; ++i)
+      for (int i = 0, tam=borders_local_nodes[0].size(); i < tam; ++i)
         mesh.getNode(CONST_THIS->_nodes[borders_local_nodes[f][i]])->setHalf(CONST_THIS->_halfs[f]);
   }
 

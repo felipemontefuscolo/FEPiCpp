@@ -32,16 +32,10 @@
 
 //namespace Fepic {
   
-  typedef std::vector<std::vector<int> >      matrixi;
-  typedef std::vector<std::vector<uint> >     matrixUi;
-  typedef std::vector<std::vector<double> >     matrixd;
-  typedef std::vector<std::vector<bool> >         matrixb;
+  typedef std::vector<std::vector<int> > matrixi;
 
-  typedef std::vector<double> vectord;
-  typedef std::vector<int>  vectori;
-  typedef std::vector<bool>   vectorb;
-  typedef std::vector<uint>   vectorui;
-  typedef std::deque<uint>    dequeui;
+  typedef std::vector<int> vectori;
+  typedef std::deque<int>  dequei;
 
   /* vetores para representar os espaços R² e R³ são os do Eigen*/
 
@@ -87,10 +81,10 @@ template<class T>
 bool arrayIsCyclicallyEqual(std::vector<T> const& v1, std::vector<T> const& v2)
 {
   std::vector<T> vaux(v2);
-  uint vsize = v2.size();
+  int vsize = v2.size();
   auto vaux_begin = vaux.begin(), vaux_end = vaux.end();
 
-  for (uint i = 0; i < vsize; ++i)
+  for (int i = 0; i < vsize; ++i)
   {
     if (v1 == vaux)
     {
@@ -102,7 +96,7 @@ bool arrayIsCyclicallyEqual(std::vector<T> const& v1, std::vector<T> const& v2)
   std::reverse(vaux_begin, vaux_end);
   if(vaux == v1) return true;
 
-  for (uint i = 1; i < vsize; ++i)
+  for (int i = 1; i < vsize; ++i)
   {
     std::rotate(vaux_begin, vaux_begin+1, vaux_end);
     if (v1 == vaux)
@@ -225,7 +219,7 @@ std::string itoa(int value)
 	return buf;
 }
 
-std::string itoafill0(uint value, uint fill)
+std::string itoafill0(int value, int fill)
 {
 	std::string buf;
 
@@ -285,7 +279,7 @@ std::string getRelativePath(std::string const& name)
 inline
 std::string getExtension(std::string const& name)
 {
-  uint size = name.size();
+  int size = name.size();
   if (size==0)
     return name;
   

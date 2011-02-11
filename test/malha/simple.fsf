@@ -26,7 +26,7 @@ POINTS 18
 END_POINTS
 
 
-# nodes | tag | flags | [half1(c, ith, anc) | half2(...) | ...]
+# nodes | tag | flags | [half1(c, position, anc) | half2(...) | ...]
 CELLS 22
 8 3 13 0 0 3 -1 0 1 0 0 6 2 0
 13 3 7 0 0 0 1 0 8 -1 0 3 0 0

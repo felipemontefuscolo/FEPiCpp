@@ -126,13 +126,13 @@ void _MeshIoMsh<_Traits>::readFileMsh(const char* filename)
   NODE_POS = search_word(File, "$Nodes");
   NODE_POS++;  // only to avoid gcc warning: variable ‘NODE_POS’ set but not used [-Wunused-but-set-variable]
 
-  uint num_pts;
+  int num_pts;
   File >> num_pts;
   THIS->_pointL.resize(num_pts);
-  THIS->_halflL.resize(0);
+  THIS->_halfL.resize(0);
   THIS->_cellL.resize(0);
 
-  for (uint i=0; i< THIS->getNumNodes(); ++i) {
+  for (int i=0; i< THIS->getNumNodes(); ++i) {
     File >> lixo;  // nº do nó
     File >> coord[0];
     File >> coord[1];
@@ -144,15 +144,15 @@ void _MeshIoMsh<_Traits>::readFileMsh(const char* filename)
   // contagem de elementos e alocação
   ELEM_POS = search_word(File, "$Elements");
 
-  uint num_cells=0;
-  uint num_elms;
+  int num_cells=0;
+  int num_elms;
   File >> num_elms;
 
   /* ---------------------------------------
    * Detectando a ordem da malha
    * --------------------------------------- */
   bool wrong_file_err=true;
-  for (uint k = 0; k < num_elms; ++k)
+  for (int k = 0; k < num_elms; ++k)
   {
     File >> lixo; // numero do elemento
     File >> type_aux;
@@ -179,11 +179,11 @@ void _MeshIoMsh<_Traits>::readFileMsh(const char* filename)
   File >> num_elms;
   Cell.setOrder(order);
 
-  uint id_aux;
+  int id_aux;
   int  num_tags;
   int  label_aux;
-  uint counter; // contagem para verificação de erros.
-  for (uint k=0; k < num_elms; ++k)
+  int counter; // contagem para verificação de erros.
+  for (int k=0; k < num_elms; ++k)
   {
 
     File >> counter; // numero do elemento .. verificação de sincronia
@@ -222,7 +222,7 @@ void _MeshIoMsh<_Traits>::readFileMsh(const char* filename)
             }
             for (int i=0; i<Cell.getNumNodes(); ++i)
             {
-              uint nodeid;
+              int nodeid;
               File >> nodeid;
               --nodeid;
               Cell.setNode(i, nodeid);
@@ -249,7 +249,7 @@ void _MeshIoMsh<_Traits>::readFileMsh(const char* filename)
             }
             for (int i=0; i<Cell.getNumNodes(); ++i)
             {
-              uint nodeid;
+              int nodeid;
               File >> nodeid;
               --nodeid;
               Cell.setNode(i, nodeid);
@@ -276,7 +276,7 @@ void _MeshIoMsh<_Traits>::readFileMsh(const char* filename)
             }
             for (int i=0; i<Cell.getNumNodes(); ++i)
             {
-              uint nodeid;
+              int nodeid;
               File >> nodeid;
               --nodeid;
               Cell.setNode(i, nodeid);
@@ -321,7 +321,7 @@ void _MeshIoMsh<_Traits>::readFileMsh(const char* filename)
   File >> num_elms;
 
 
-  for (uint k=0; k < num_elms; ++k)
+  for (int k=0; k < num_elms; ++k)
   {
 
     File >> counter; // numero do elemento
@@ -343,7 +343,7 @@ void _MeshIoMsh<_Traits>::readFileMsh(const char* filename)
       File >> lixo;
     }
 
-    uint id_aux;
+    int id_aux;
     switch (elm_dim) {
       case 0: // caso ponto
         File >> id_aux;
@@ -352,9 +352,9 @@ void _MeshIoMsh<_Traits>::readFileMsh(const char* filename)
       case 1: // caso aresta
         if (CellT::dim-1==1)
         {
-          vectorui nodes(numNodes<CellDerivedPolytopeT>(order));
-          vectorui vtx(2);
-          uint half_id;
+          vectori nodes(numNodes<CellDerivedPolytopeT>(order));
+          vectori vtx(2);
+          int half_id;
           for (int i=0; i<nodes.size(); ++i)
           {
             File >> nodes[i];
@@ -363,12 +363,12 @@ void _MeshIoMsh<_Traits>::readFileMsh(const char* filename)
               THIS->getNode(nodes[i])->setTag(label_aux);
           }
           copy( nodes.begin(), nodes.begin()+2, vtx.begin() );
-          if( THIS->theseVerticesFormAHalfl(vtx, half_id) )
-            THIS->getHalfl(half_id)->setTag(label_aux);
+          if( THIS->theseVerticesFormAHalf(vtx, half_id) )
+            THIS->getHalf(half_id)->setTag(label_aux);
         }
         else
         {
-          uint nodeid;
+          int nodeid;
           for (int i=0; i<getNumVerticesForElementTypeMsh(type_aux); ++i)
           {
             File >> nodeid;
@@ -382,9 +382,9 @@ void _MeshIoMsh<_Traits>::readFileMsh(const char* filename)
       case 2: // caso face
         if (CellT::dim - 1 == 2)
         {
-          vectorui nodes(numNodes<CellDerivedPolytopeT>(order));
-          vectorui vtx(CellT::n_vertices_per_border);
-          uint half_id=0;
+          vectori nodes(numNodes<CellDerivedPolytopeT>(order));
+          vectori vtx(CellT::n_vertices_per_border);
+          int half_id=0;
           for (int i=0; i<nodes.size(); ++i)
           {
             File >> nodes[i];
@@ -393,12 +393,12 @@ void _MeshIoMsh<_Traits>::readFileMsh(const char* filename)
               THIS->getNode(nodes[i])->setTag(label_aux);
           }
           copy( nodes.begin(), nodes.begin()+CellT::n_vertices_per_border, vtx.begin() );
-          if( THIS->theseVerticesFormAHalfl(vtx, half_id) )
-            THIS->getHalfl(half_id)->setTag(label_aux); //std::cout << (++TESTE) << std::endl;
+          if( THIS->theseVerticesFormAHalf(vtx, half_id) )
+            THIS->getHalf(half_id)->setTag(label_aux); //std::cout << (++TESTE) << std::endl;
         }
         else
         {
-          uint nodeid;
+          int nodeid;
           for (int i=0; i<getNumVerticesForElementTypeMsh(type_aux); ++i)
           {
             File >> nodeid;
@@ -411,7 +411,7 @@ void _MeshIoMsh<_Traits>::readFileMsh(const char* filename)
         break;
 
       case 3: // caso volume
-        uint nodeid;
+        int nodeid;
         for (int i=0; i<getNumVerticesForElementTypeMsh(type_aux); ++i)
         {
           File >> nodeid;
@@ -433,7 +433,7 @@ void _MeshIoMsh<_Traits>::readFileMsh(const char* filename)
     if (!cit->disabled())
       cit->broadcastHalf2Nodes(*THIS);
 
-  for (auto hit= THIS->_halflL.begin(), hend=THIS->_halflL.end(); hit != hend; ++hit)
+  for (auto hit= THIS->_halfL.begin(), hend=THIS->_halfL.end(); hit != hend; ++hit)
     if (!hit->disabled())
       hit->broadcastHalf2Nodes(*THIS);
 

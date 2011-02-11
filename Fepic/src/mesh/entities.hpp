@@ -127,7 +127,7 @@ FEPIC_HALFLABOF(Hypercube<3>, HalfFaceLab);
  * - EdgeT
  * - PointT
  * - HalfT
- * - HalfLT
+ * - HalfT
  * - MeshT
  * - spacedim   := dimension of the space
  * 
@@ -145,8 +145,6 @@ public:
   typedef typename _MetaCellOf<CellType, _Traits>::Type CellT;
   
   typedef typename _MetaHalfOf<CellType, _Traits>::Type HalfT;
-  
-  typedef typename _MetaHalfLabOf<CellType, _Traits>::Type HalfLT;
   
   typedef Point<_Traits>  PointT;
   
@@ -175,11 +173,11 @@ std::vector<VecT> map2RealCell(std::vector<VecU> const& list_pts,
                                std::vector<VecT> const& intp_pts,
                                ShapeFun          const& Phi)
 {
-  int tam = static_cast<int>( list_pts.size() );
+  int tam = list_pts.size();
   std::vector<VecT> ret(tam, VecT::Zero());
   
   for (int i = 0; i < tam; ++i)
-    for (int k = 0, size=static_cast<int>( intp_pts.size() ); k < size; ++k)
+    for (int k = 0, size=intp_pts.size(); k < size; ++k)
       ret[i] += Phi(list_pts[i], k)*intp_pts[k];
   
   return ret;

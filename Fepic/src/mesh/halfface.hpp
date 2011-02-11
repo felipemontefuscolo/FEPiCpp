@@ -23,9 +23,8 @@
 #define FEPIC_HALFFACE_HPP
 
 
-
 template<class _Traits>
-class HalfFace : public _HalfCore<_Traits>
+class HalfFace : public _HalfCore<_Traits>, public _Labelable
 {
 public:
   typedef typename _Traits::MeshT MeshT;
@@ -37,17 +36,15 @@ public:
   
   friend class _HalfCore<_Traits>;
 
-  HalfFace(uint incid_cell, int position, uint anchor) : _incid_cell(incid_cell),
-                                                         _position(position+1),
-                                                         _anchor(anchor)
-  {
-    FEPIC_CHECK((incid_cell<=cell_id_limit)&&
-                 (position<=position_limit && position>-2)&&
-                 (anchor<=anchor_limit), "", std::out_of_range);
-  }
+  template<class... LabelArgs>
+  HalfFace(int incid_cell, int position, int anchor, LabelArgs... args) :
+                                                         _Labelable(args...),
+                                                         _incid_cell(incid_cell),
+                                                         _position(position),
+                                                         _anchor(anchor) {}
   
   HalfFace(HalfFace const&) = default;
-  HalfFace() : _incid_cell(0), _position(0), _anchor(0) {}
+  HalfFace() : _Labelable(), _incid_cell(-1), _position(-1), _anchor(-1) {}
   ~HalfFace() = default;
   
   /** Imprime em um stream a composição do iD, i.e, imprime \n
@@ -66,11 +63,40 @@ public:
     return std::string("Half-Face");
   }
   
+  /** Faz com que cada nó desta HalfFaceLab aponte para ela.
+  *  @param mesh a malha na qual a HalfFaceLab está contida.
+  */ 
+  void broadcastHalf2Nodes(MeshT& mesh) const
+  {
+    vectori v (mesh.getCell( this->getIncidCell() )->getBorderNodes( this->getPosition()));
+    
+    for (int i = 0; i < v.size(); i++)
+    {
+      mesh.getNode(v[i])->setHalf(*this);
+    }
+  }
+  
+  /** Atribui o rótulo desta _MetaHalfLabOf a seus nós.
+  * @param force quando true indica atribuição incondicional, quando false,
+  * a atribuição é feita somente se cada nó tem tag=0;
+  */ 
+  void broadcastTag2Nodes(MeshT& mesh, bool force=false) const
+  {
+    vectori v (mesh.getCell( this->getIncidCell() )->getBorderNodes( this->getPosition(),mesh ));
+    
+    if (force)
+      for (int i = 0; i < v.size(); ++i)
+        mesh.getNode(v[i])->setTag(this->getTag());
+    else
+      for (int i = 0; i < v.size(); i++)
+        if (mesh.getNode(v[i])->getTag() == 0)
+          mesh.getNode(v[i])->setTag(this->getTag());
+  } 
 
 protected:
-  uint _incid_cell : 27;
-  uint _position   : 3;
-  uint _anchor     : 2;
+  int8_t  _position;
+  int8_t  _anchor;
+  int     _incid_cell;
 };      
 
 

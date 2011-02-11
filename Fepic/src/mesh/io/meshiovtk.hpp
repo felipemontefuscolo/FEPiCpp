@@ -50,9 +50,9 @@ public:
 
   void writeVtk(std::string outname, bool flinear);
   template<class T>
-  void addScalarVtk(const char* nome_var, T&& scalar, uint num_pts);
+  void addScalarVtk(const char* nome_var, T&& scalar, int num_pts);
   template<class T>
-  void addVectorVtk(const char* nome_var, T&& arrayos, int dim, uint num_pts);
+  void addVectorVtk(const char* nome_var, T&& arrayos, int dim, int num_pts);
   void addPointTagVtk(const char* nome_var); // para debug
   void addPointHalfVtk(const char* nome_var);  // para debug  
 
@@ -126,7 +126,7 @@ public:
     o <<"3 "<<  cell.getNodeIdx(minimesh[0][0]) << " " <<
                 cell.getNodeIdx(minimesh[0][1]) << " " <<
                 cell.getNodeIdx(minimesh[0][2]);
-    for (uint i = 1; i < minimesh.size(); ++i)
+    for (int i = 1; i < minimesh.size(); ++i)
     {
       o << std::endl;
       o <<"3 "<<  cell.getNodeIdx(minimesh[i][0]) << " " <<
@@ -148,7 +148,7 @@ public:
             << cell.getNodeIdx(minimesh[0][1]) << " "
             << cell.getNodeIdx(minimesh[0][2]) << " "
             << cell.getNodeIdx(minimesh[0][3]);
-    for (uint i = 1; i < minimesh.size(); ++i)
+    for (int i = 1; i < minimesh.size(); ++i)
     {
       o << std::endl;
       o <<"4 "<< cell.getNodeIdx(minimesh[i][0]) << " "
@@ -182,8 +182,8 @@ public:
 
   
 protected:  
-  uint _filenumVtk;
-  uint _add_scalar_vtk_n_calls;
+  int _filenumVtk;
+  int _add_scalar_vtk_n_calls;
 };
 
 
@@ -202,7 +202,7 @@ void _MeshIoVtk<_Traits>::writeVtk(std::string outname = "", bool flinear = fals
 
   int  order  = flinear ? 1 : THIS->_order;
   int  nc_mm  = CellT::getNumSubdivisions(order);    // num de mini-células por mini-malha
-  uint ncells = THIS->getNumCells() * nc_mm;
+  int ncells = THIS->getNumCells() * nc_mm;
 
   THIS->_add_scalar_vtk_n_calls=0;
 
@@ -259,7 +259,7 @@ void _MeshIoVtk<_Traits>::writeVtk(std::string outname = "", bool flinear = fals
  */
 template<class _Traits>
 template<class T>
-void _MeshIoVtk<_Traits>::addScalarVtk(const char* nome_var, T&& scalar, uint num_pts)
+void _MeshIoVtk<_Traits>::addScalarVtk(const char* nome_var, T&& scalar, int num_pts)
 {
 
 	std::string ss = THIS->_popNextName(this->_filenumVtk, ".vtk");
@@ -280,7 +280,7 @@ void _MeshIoVtk<_Traits>::addScalarVtk(const char* nome_var, T&& scalar, uint nu
 	Fout << "SCALARS " << nome_var << " float"   << std::endl;
   Fout << "LOOKUP_TABLE default"            << std::endl;
 
-  for (uint i=0; i<num_pts; ++i)
+  for (int i=0; i<num_pts; ++i)
     Fout << scalar[i] << std::endl;
 
   Fout << std::endl << std::endl;
@@ -293,7 +293,7 @@ template<class _Traits>
 void _MeshIoVtk<_Traits>::addPointTagVtk(const char* nome_var="node labels")
 {
 
-  uint num_pts = THIS->getNumNodes();
+  int num_pts = THIS->getNumNodes();
 
 	std::string ss = THIS->_popNextName(_filenumVtk, ".vtk");
 
@@ -313,7 +313,7 @@ void _MeshIoVtk<_Traits>::addPointTagVtk(const char* nome_var="node labels")
 	Fout << "SCALARS " << nome_var << " int"   << std::endl;
   Fout << "LOOKUP_TABLE default"            << std::endl;
 
-  for (uint i=0; i<num_pts; ++i) {
+  for (int i=0; i<num_pts; ++i) {
     Fout << (THIS->getNode(i)->getTag()) << std::endl;
   };
 
@@ -327,7 +327,7 @@ template<class _Traits>
 void _MeshIoVtk<_Traits>::addPointHalfVtk(const char* nome_var="node labels")
 {
 
-  uint num_pts = THIS->getNumNodes();
+  int num_pts = THIS->getNumNodes();
 
 	std::string ss = THIS->_popNextName(_filenumVtk, ".vtk");
 
@@ -347,7 +347,7 @@ void _MeshIoVtk<_Traits>::addPointHalfVtk(const char* nome_var="node labels")
 	Fout << "SCALARS " << nome_var << " int"   << std::endl;
   Fout << "LOOKUP_TABLE default"            << std::endl;
 
-  for (uint i=0; i<num_pts; ++i) {
+  for (int i=0; i<num_pts; ++i) {
     Fout << (THIS->getNode(i)->getHalf()->getIDCell()) << std::endl;
   };
 

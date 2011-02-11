@@ -50,15 +50,15 @@ public:
          n_vertices_per_border=2};
   
   template<class... LabeableArgs>
-  Triangle(vectorui const& nodes, uint order, LabeableArgs... args) :
-                          _Labelable(args...), _nodes(nodes), _order(static_cast<unsigned char>(order))
+  Triangle(vectori const& nodes, int order, LabeableArgs... args) :
+                          _Labelable(args...), _nodes(nodes), _order(order)
   {
     FEPIC_CHECK(nodes.size()==numNodes<Simplex<2>>(order), "", std::invalid_argument);
   }
   
   template<class... LabeableArgs>
-  Triangle(vectorui && nodes, uint order, LabeableArgs... args) :
-                      _Labelable(args...), _nodes(nodes), _order(static_cast<unsigned char>(order))
+  Triangle(vectori && nodes, int order, LabeableArgs... args) :
+                      _Labelable(args...), _nodes(nodes), _order(order)
   {
     FEPIC_CHECK(nodes.size()==numNodes<Simplex<2>>(order), "", std::invalid_argument);
   }  
@@ -73,7 +73,7 @@ public:
   void setOrder(int order)
   {
     this->_nodes.resize((order+1)*(order+2)/2);
-    _order = static_cast<unsigned char>(order);
+    _order = order;
   }
   
   /** Retorna a tag do formato Msh correspondente a um triângulo de ordem <em>order</em>.
@@ -263,9 +263,10 @@ public:
   static const std::vector<matrixi> table2; // order / minimeshs
 
 protected:
-  vectorui      _nodes;
+  unsigned char _order;
+  vectori       _nodes;
   HalfT         _halfs[n_borders];
-  unsigned char _order; 
+   
   
 };
 

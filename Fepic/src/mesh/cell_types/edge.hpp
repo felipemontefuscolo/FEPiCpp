@@ -27,7 +27,7 @@
 /**
  *  Esta classe representa segmentos de linha orientados. As Edge podem
  * ter 2 ou mais nós, um nó em cada extremo e o restante no seu interior
- * com espaçamento constante. Uma Edge com N nós tem a seguinte forma: \n
+ * com espaçamento constante. Uma Edge com N nós tem a seginte forma: \n
  * 
  * *n0_____*n2______*n3____ ... ____*nN-1_____*n1 \n
  * 
@@ -36,7 +36,7 @@
  * 
  */ 
 template<class _Traits>
-class Edge : public _CellCore<_Traits>
+class Edge : public _Labelable, public _CellCore<_Traits>
 {
 public:
 
@@ -53,15 +53,15 @@ public:
          n_vertices_per_border=1};
 
   template<class... LabeableArgs>
-  Edge(vectorui const& nodes, uint order, LabeableArgs... args) :
-                          _Labelable(args...), _nodes(nodes), _order(static_cast<unsigned char>(order))
+  Edge(vectori const& nodes, int order, LabeableArgs... args) :
+                          _Labelable(args...), _nodes(nodes), _order(order)
   {
     FEPIC_CHECK(nodes.size()==numNodes<Polytope<1>>(order), "", std::invalid_argument);
   }
   
   template<class... LabeableArgs>
-  Edge(vectorui && nodes, uint order, LabeableArgs... args) :
-                      _Labelable(args...), _nodes(nodes), _order(static_cast<unsigned char>(order))
+  Edge(vectori && nodes, int order, LabeableArgs... args) :
+                      _Labelable(args...), _nodes(nodes), _order(order)
   {
     FEPIC_CHECK(nodes.size()==numNodes<Polytope<1>>(order), "", std::invalid_argument);
   }  
@@ -88,7 +88,7 @@ public:
   
   /** Retorna o ith-ésimo nó desta Edge.
   */ 
-  uint getNodeIdx(int const ith) const
+  int getNodeIdx(int const ith) const
   {
     return _nodes[ith];
   }
@@ -113,7 +113,7 @@ public:
   *  @param nodes os vetor com os dois nós nos quais se vai verificar o alinhamento.
   *  @return 1 se a edge é paralela, -1 se a edge é anti-paralela, e 0 se não é paralela.
   */
-  int isAligned (vectorui const& nodes) const
+  int isAligned (vectori const& nodes) const
   {
     if ((_nodes[1] == nodes[1]) && (_nodes[0] == nodes[0]) )
       return 1;
@@ -125,7 +125,7 @@ public:
   
   /** Atribui o i-ésimo nó da aresta como o n-ésimo nó da malha.
   */ 
-  void setNode(int const ith, uint const nth)
+  void setNode(int const ith, int const nth)
   {
     _nodes[ith] = nth;
   }
@@ -178,8 +178,8 @@ public:
   }
 
 protected:  
-  vectori _nodes;
-  unsigned char _order;  
+  unsigned char _order;
+  vectori       _nodes;
 };
 
 
