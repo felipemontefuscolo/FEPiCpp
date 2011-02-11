@@ -69,6 +69,15 @@ public:
   Edge() : _nodes({0,0}), _order(1) {};
   Edge(Edge const&) = default;
   ~Edge() = default;
+
+    /** Atualiza esta Edge para a ordem <em>order</em>.
+  *  @warning Toda vez que a ordem da malha for alterada, essa função DEVE SER CHAMADA.
+  */ 
+  void setOrder(int order)
+  {
+    _nodes.resize(order+1);
+    this->_order = order;
+  }
   
   /** Retorna o número de nós desta Edge.
   */ 
@@ -133,31 +142,10 @@ public:
   void printSelfVtk(std::ostream &o, int order) const
   {
   
-    if (order<=1)
-      o << "2 " << _nodes[0] << " " << _nodes[1];
-    else
-    {
-      o << "2 " << _nodes[0] << " " << _nodes[2];
-      for (int i = 0; i < order-2; i++)
-      {   
-        o << std::endl;
-        o << "2 " << _nodes[2+i] << " " << _nodes[3+i];
-      }
-      o << std::endl;
-      o << "2 " << _nodes[order] << " " << _nodes[1];
-    }
+
           
   }
   
-  /** INCOMPLETO: APENAS LINEAR
-  * Retorna a tag desta Edge definida no formato Vtk.
-  */ 
-  static int getCellTypeVtk()
-  {
-    /* TRABALHO: apenas linear
-    */
-    return 3; // Vtk_LINE (3)
-  }
   
   /** Imprime esta Edge no formato State
   */ 
@@ -188,16 +176,10 @@ public:
       }
     }
   }
+
+protected:  
   
-  /** Atualiza esta Edge para a ordem <em>order</em>.
-  *  @warning Toda vez que a ordem da malha for alterada, essa função DEVE SER CHAMADA.
-  */ 
-  void setOrder(int order)
-  {
-    _nodes.resize(order+1);
-  }
-  
-protected:
+
   vectori _nodes;
   unsigned char _order;  
 };

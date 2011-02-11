@@ -27,6 +27,8 @@ CXXFLAGS += -g -Wall -Wextra
 # created to the list.
 TESTS = ut_misc ut_labelable ut_halfxxxx
 
+EXECS = ./ut_misc && ./ut_labelable && ./ut_halfxxxx
+
 # All Google Test headers.  Usually you shouldn't change this
 # definition.
 GTEST_HEADERS = $(GTEST_DIR)/include/gtest/*.h \
@@ -35,6 +37,9 @@ GTEST_HEADERS = $(GTEST_DIR)/include/gtest/*.h \
 # House-keeping build targets.
 
 all : $(TESTS)
+
+run : $(TESTS)
+	$(EXECS)
 
 clean :
 	rm -f $(TESTS) gtest.a gtest_main.a *.o
@@ -93,3 +98,5 @@ ut_halfxxxx.o : $(USER_DIR)/ut_halfxxxx.cpp $(GTEST_HEADERS)
 
 ut_halfxxxx : ut_halfxxxx.o gtest_main.a
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
+
+

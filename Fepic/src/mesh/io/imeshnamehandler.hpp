@@ -85,7 +85,8 @@ protected:
 
 protected:
 
-  /* Before read a mesh, this function must be called
+  /* 
+   * Before read a mesh, this function must be called
    * @param filename file name
    * @param extension expected extension
    * @param is_family output

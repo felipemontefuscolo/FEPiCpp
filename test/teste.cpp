@@ -1,7 +1,7 @@
 #include <Fepic/Mesh>
 
 
-int const DIM = 3;
+int const DIM = 2;
 
 using namespace std;
 using namespace Eigen;
@@ -46,7 +46,7 @@ int main(int argc, char *argv[]) {
   
   //malha.setOrder(2);
   
-  //malha.writeVtk();
+  malha.writeVtk();
   
   
   //malha.writeFileState();

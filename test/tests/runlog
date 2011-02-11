@@ -1,0 +1,374 @@
+./ut_misc && ./ut_labelable && ./ut_halfxxxx
+Running main() from gtest_main.cc
+[==========] Running 149 tests from 7 test cases.
+[----------] Global test environment set-up.
+[----------] 1 test from getRelativePathTest
+[ RUN      ] getRelativePathTest.UsualCases
+[       OK ] getRelativePathTest.UsualCases (0 ms)
+[----------] 1 test from getRelativePathTest (0 ms total)
+
+[----------] 1 test from getBaseNameTest
+[ RUN      ] getBaseNameTest.UsualCases
+[       OK ] getBaseNameTest.UsualCases (0 ms)
+[----------] 1 test from getBaseNameTest (0 ms total)
+
+[----------] 1 test from stripTrailingSpacesTest
+[ RUN      ] stripTrailingSpacesTest.UsualCases
+[       OK ] stripTrailingSpacesTest.UsualCases (0 ms)
+[----------] 1 test from stripTrailingSpacesTest (0 ms total)
+
+[----------] 1 test from itoaTest
+[ RUN      ] itoaTest.UsualCases
+[       OK ] itoaTest.UsualCases (0 ms)
+[----------] 1 test from itoaTest (0 ms total)
+
+[----------] 1 test from itoafill0Test
+[ RUN      ] itoafill0Test.UsualCases
+[       OK ] itoafill0Test.UsualCases (0 ms)
+[----------] 1 test from itoafill0Test (0 ms total)
+
+[----------] 72 tests from Misc/getExtension1Test
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/0
+[       OK ] Misc/getExtension1Test.FilesWithExtension/0 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/1
+[       OK ] Misc/getExtension1Test.FilesWithExtension/1 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/2
+[       OK ] Misc/getExtension1Test.FilesWithExtension/2 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/3
+[       OK ] Misc/getExtension1Test.FilesWithExtension/3 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/4
+[       OK ] Misc/getExtension1Test.FilesWithExtension/4 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/5
+[       OK ] Misc/getExtension1Test.FilesWithExtension/5 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/6
+[       OK ] Misc/getExtension1Test.FilesWithExtension/6 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/7
+[       OK ] Misc/getExtension1Test.FilesWithExtension/7 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/8
+[       OK ] Misc/getExtension1Test.FilesWithExtension/8 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/9
+[       OK ] Misc/getExtension1Test.FilesWithExtension/9 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/10
+[       OK ] Misc/getExtension1Test.FilesWithExtension/10 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/11
+[       OK ] Misc/getExtension1Test.FilesWithExtension/11 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/12
+[       OK ] Misc/getExtension1Test.FilesWithExtension/12 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/13
+[       OK ] Misc/getExtension1Test.FilesWithExtension/13 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/14
+[       OK ] Misc/getExtension1Test.FilesWithExtension/14 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/15
+[       OK ] Misc/getExtension1Test.FilesWithExtension/15 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/16
+[       OK ] Misc/getExtension1Test.FilesWithExtension/16 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/17
+[       OK ] Misc/getExtension1Test.FilesWithExtension/17 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/18
+[       OK ] Misc/getExtension1Test.FilesWithExtension/18 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/19
+[       OK ] Misc/getExtension1Test.FilesWithExtension/19 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/20
+[       OK ] Misc/getExtension1Test.FilesWithExtension/20 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/21
+[       OK ] Misc/getExtension1Test.FilesWithExtension/21 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/22
+[       OK ] Misc/getExtension1Test.FilesWithExtension/22 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/23
+[       OK ] Misc/getExtension1Test.FilesWithExtension/23 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/24
+[       OK ] Misc/getExtension1Test.FilesWithExtension/24 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/25
+[       OK ] Misc/getExtension1Test.FilesWithExtension/25 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/26
+[       OK ] Misc/getExtension1Test.FilesWithExtension/26 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/27
+[       OK ] Misc/getExtension1Test.FilesWithExtension/27 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/28
+[       OK ] Misc/getExtension1Test.FilesWithExtension/28 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/29
+[       OK ] Misc/getExtension1Test.FilesWithExtension/29 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/30
+[       OK ] Misc/getExtension1Test.FilesWithExtension/30 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/31
+[       OK ] Misc/getExtension1Test.FilesWithExtension/31 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/32
+[       OK ] Misc/getExtension1Test.FilesWithExtension/32 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/33
+[       OK ] Misc/getExtension1Test.FilesWithExtension/33 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/34
+[       OK ] Misc/getExtension1Test.FilesWithExtension/34 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/35
+[       OK ] Misc/getExtension1Test.FilesWithExtension/35 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/36
+[       OK ] Misc/getExtension1Test.FilesWithExtension/36 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/37
+[       OK ] Misc/getExtension1Test.FilesWithExtension/37 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/38
+[       OK ] Misc/getExtension1Test.FilesWithExtension/38 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/39
+[       OK ] Misc/getExtension1Test.FilesWithExtension/39 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/40
+[       OK ] Misc/getExtension1Test.FilesWithExtension/40 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/41
+[       OK ] Misc/getExtension1Test.FilesWithExtension/41 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/42
+[       OK ] Misc/getExtension1Test.FilesWithExtension/42 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/43
+[       OK ] Misc/getExtension1Test.FilesWithExtension/43 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/44
+[       OK ] Misc/getExtension1Test.FilesWithExtension/44 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/45
+[       OK ] Misc/getExtension1Test.FilesWithExtension/45 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/46
+[       OK ] Misc/getExtension1Test.FilesWithExtension/46 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/47
+[       OK ] Misc/getExtension1Test.FilesWithExtension/47 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/48
+[       OK ] Misc/getExtension1Test.FilesWithExtension/48 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/49
+[       OK ] Misc/getExtension1Test.FilesWithExtension/49 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/50
+[       OK ] Misc/getExtension1Test.FilesWithExtension/50 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/51
+[       OK ] Misc/getExtension1Test.FilesWithExtension/51 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/52
+[       OK ] Misc/getExtension1Test.FilesWithExtension/52 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/53
+[       OK ] Misc/getExtension1Test.FilesWithExtension/53 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/54
+[       OK ] Misc/getExtension1Test.FilesWithExtension/54 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/55
+[       OK ] Misc/getExtension1Test.FilesWithExtension/55 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/56
+[       OK ] Misc/getExtension1Test.FilesWithExtension/56 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/57
+[       OK ] Misc/getExtension1Test.FilesWithExtension/57 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/58
+[       OK ] Misc/getExtension1Test.FilesWithExtension/58 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/59
+[       OK ] Misc/getExtension1Test.FilesWithExtension/59 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/60
+[       OK ] Misc/getExtension1Test.FilesWithExtension/60 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/61
+[       OK ] Misc/getExtension1Test.FilesWithExtension/61 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/62
+[       OK ] Misc/getExtension1Test.FilesWithExtension/62 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/63
+[       OK ] Misc/getExtension1Test.FilesWithExtension/63 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/64
+[       OK ] Misc/getExtension1Test.FilesWithExtension/64 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/65
+[       OK ] Misc/getExtension1Test.FilesWithExtension/65 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/66
+[       OK ] Misc/getExtension1Test.FilesWithExtension/66 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/67
+[       OK ] Misc/getExtension1Test.FilesWithExtension/67 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/68
+[       OK ] Misc/getExtension1Test.FilesWithExtension/68 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/69
+[       OK ] Misc/getExtension1Test.FilesWithExtension/69 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/70
+[       OK ] Misc/getExtension1Test.FilesWithExtension/70 (0 ms)
+[ RUN      ] Misc/getExtension1Test.FilesWithExtension/71
+[       OK ] Misc/getExtension1Test.FilesWithExtension/71 (0 ms)
+[----------] 72 tests from Misc/getExtension1Test (1 ms total)
+
+[----------] 72 tests from Misc/getExtension2Test
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/0
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/0 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/1
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/1 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/2
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/2 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/3
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/3 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/4
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/4 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/5
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/5 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/6
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/6 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/7
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/7 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/8
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/8 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/9
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/9 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/10
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/10 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/11
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/11 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/12
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/12 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/13
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/13 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/14
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/14 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/15
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/15 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/16
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/16 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/17
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/17 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/18
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/18 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/19
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/19 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/20
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/20 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/21
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/21 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/22
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/22 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/23
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/23 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/24
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/24 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/25
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/25 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/26
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/26 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/27
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/27 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/28
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/28 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/29
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/29 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/30
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/30 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/31
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/31 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/32
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/32 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/33
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/33 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/34
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/34 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/35
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/35 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/36
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/36 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/37
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/37 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/38
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/38 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/39
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/39 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/40
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/40 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/41
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/41 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/42
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/42 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/43
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/43 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/44
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/44 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/45
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/45 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/46
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/46 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/47
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/47 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/48
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/48 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/49
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/49 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/50
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/50 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/51
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/51 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/52
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/52 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/53
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/53 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/54
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/54 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/55
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/55 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/56
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/56 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/57
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/57 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/58
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/58 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/59
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/59 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/60
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/60 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/61
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/61 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/62
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/62 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/63
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/63 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/64
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/64 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/65
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/65 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/66
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/66 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/67
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/67 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/68
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/68 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/69
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/69 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/70
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/70 (0 ms)
+[ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/71
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/71 (0 ms)
+[----------] 72 tests from Misc/getExtension2Test (2 ms total)
+
+[----------] Global test environment tear-down
+[==========] 149 tests from 7 test cases ran. (4 ms total)
+[  PASSED  ] 149 tests.
+Running main() from gtest_main.cc
+[==========] Running 3 tests from 1 test case.
+[----------] Global test environment set-up.
+[----------] 3 tests from LabelableTest
+[ RUN      ] LabelableTest.ConstructorErrors
+[       OK ] LabelableTest.ConstructorErrors (0 ms)
+[ RUN      ] LabelableTest.Constructors
+[       OK ] LabelableTest.Constructors (0 ms)
+[ RUN      ] LabelableTest.SetUps
+[       OK ] LabelableTest.SetUps (0 ms)
+[----------] 3 tests from LabelableTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 3 tests from 1 test case ran. (1 ms total)
+[  PASSED  ] 3 tests.
+Running main() from gtest_main.cc
+[==========] Running 9 tests from 3 test cases.
+[----------] Global test environment set-up.
+[----------] 3 tests from HalfCoreTest/0, where TypeParam = DefaultTraits<2, Simplex<2> >
+[ RUN      ] HalfCoreTest/0.Constructors
+[       OK ] HalfCoreTest/0.Constructors (0 ms)
+[ RUN      ] HalfCoreTest/0.ConstructorErrors
+[       OK ] HalfCoreTest/0.ConstructorErrors (0 ms)
+[ RUN      ] HalfCoreTest/0.Sets
+[       OK ] HalfCoreTest/0.Sets (0 ms)
+[----------] 3 tests from HalfCoreTest/0 (1 ms total)
+
+[----------] 3 tests from HalfCoreTest/1, where TypeParam = DefaultTraits<3, Simplex<2> >
+[ RUN      ] HalfCoreTest/1.Constructors
+[       OK ] HalfCoreTest/1.Constructors (0 ms)
+[ RUN      ] HalfCoreTest/1.ConstructorErrors
+[       OK ] HalfCoreTest/1.ConstructorErrors (0 ms)
+[ RUN      ] HalfCoreTest/1.Sets
+[       OK ] HalfCoreTest/1.Sets (0 ms)
+[----------] 3 tests from HalfCoreTest/1 (0 ms total)
+
+[----------] 3 tests from HalfCoreTest/2, where TypeParam = DefaultTraits<3, Simplex<3> >
+[ RUN      ] HalfCoreTest/2.Constructors
+[       OK ] HalfCoreTest/2.Constructors (0 ms)
+[ RUN      ] HalfCoreTest/2.ConstructorErrors
+[       OK ] HalfCoreTest/2.ConstructorErrors (0 ms)
+[ RUN      ] HalfCoreTest/2.Sets
+[       OK ] HalfCoreTest/2.Sets (0 ms)
+[----------] 3 tests from HalfCoreTest/2 (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 9 tests from 3 test cases ran. (1 ms total)
+[  PASSED  ] 9 tests.

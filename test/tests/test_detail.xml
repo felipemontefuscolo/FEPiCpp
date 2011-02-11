@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites tests="9" failures="0" disabled="0" errors="0" time="0" name="AllTests">
+  <testsuite name="HalfCoreTest/0" tests="3" failures="0" disabled="0" errors="0" time="0">
+    <testcase name="Constructors" status="run" time="0" classname="HalfCoreTest/0" />
+    <testcase name="ConstructorErrors" status="run" time="0" classname="HalfCoreTest/0" />
+    <testcase name="Sets" status="run" time="0" classname="HalfCoreTest/0" />
+  </testsuite>
+  <testsuite name="HalfCoreTest/1" tests="3" failures="0" disabled="0" errors="0" time="0">
+    <testcase name="Constructors" status="run" time="0" classname="HalfCoreTest/1" />
+    <testcase name="ConstructorErrors" status="run" time="0" classname="HalfCoreTest/1" />
+    <testcase name="Sets" status="run" time="0" classname="HalfCoreTest/1" />
+  </testsuite>
+  <testsuite name="HalfCoreTest/2" tests="3" failures="0" disabled="0" errors="0" time="0">
+    <testcase name="Constructors" status="run" time="0" classname="HalfCoreTest/2" />
+    <testcase name="ConstructorErrors" status="run" time="0" classname="HalfCoreTest/2" />
+    <testcase name="Sets" status="run" time="0" classname="HalfCoreTest/2" />
+  </testsuite>
+</testsuites>

@@ -47,6 +47,45 @@ public:
   
   void readFileMsh(const char* filename);
   
+  /// return 1 if error
+  template<class Cell_T>
+  bool cellTypeCheckMsh(int tag_type, typename std::enable_if<std::is_same<Simplex<1>,  typename Cell_T::PolytopeT>::value ||
+                                                               std::is_same<Hypercube<1>,typename Cell_T::PolytopeT>::value ||
+                                                               std::is_same<Polytope<1>, typename Cell_T::PolytopeT>::value >::type* = NULL)
+  {
+    const int tags[] = {MSH_LIN_2, MSH_LIN_3, MSH_LIN_4, MSH_LIN_5, MSH_LIN_6};
+    const int* p = tags;
+    do
+      if (*p==tag_type) return false;
+    while (++p != tags+std::extent<decltype(tags)>::value);
+    return true;
+  }
+
+  /// return 1 if error
+  template<class Cell_T>
+  bool cellTypeCheckMsh(int tag_type, typename std::enable_if<std::is_same<Simplex<2>,  typename Cell_T::PolytopeT>::value>::type* = NULL)
+  {
+    const int tags[] = {MSH_TRI_3, MSH_TRI_6, MSH_TRI_9, MSH_TRI_10, MSH_TRI_12, MSH_TRI_15, MSH_TRI_21};
+    const int* p = tags;
+    do
+      if (*p==tag_type) return false;
+    while (++p != tags+std::extent<decltype(tags)>::value);
+    return true;
+  }
+  
+  /// return 1 if error
+  template<class Cell_T>
+  bool cellTypeCheckMsh(int tag_type, typename std::enable_if<std::is_same<Simplex<3>,  typename Cell_T::PolytopeT>::value>::type* = NULL)
+  {
+    const int tags[] = {MSH_TET_4, MSH_TET_10, MSH_TET_20, MSH_TET_35, MSH_TET_56, MSH_TET_34};
+    const int* p = tags;
+    do
+      if (*p==tag_type) return false;
+    while (++p != tags+std::extent<decltype(tags)>::value);
+    return true;
+  }
+  
+    
 protected:
 
 
@@ -71,6 +110,7 @@ void _MeshIoMsh<_Traits>::readFileMsh(const char* filename)
    *
    * */
 
+  
   THIS->_registerFile(filename, ".msh");
 
   std::ifstream File(filename);
@@ -109,6 +149,7 @@ void _MeshIoMsh<_Traits>::readFileMsh(const char* filename)
   /* ---------------------------------------
    * Detectando a ordem da malha
    * --------------------------------------- */
+  bool wrong_file_err=true;
   for (uint k = 0; k < num_elms; ++k)
   {
     File >> lixo; // numero do elemento
@@ -116,12 +157,16 @@ void _MeshIoMsh<_Traits>::readFileMsh(const char* filename)
     int elm_dim = getDimForElementTypeMsh(type_aux);
     if (elm_dim == CellT::dim)
     {
-      THIS->setOrder( getOrderForElementTypeMsh(type_aux) );
+      if (!_MeshIoMsh::cellTypeCheckMsh<CellT>(type_aux))
+      {
+        THIS->setOrder( getOrderForElementTypeMsh(type_aux) );
+        wrong_file_err=false;
+      }
       break;
     }
-
     File.getline(lixo, 256);
   }
+  FEPIC_ASSERT(!wrong_file_err, "wrong file format", std::invalid_argument);
   int order = THIS->_order;
 
   CellT   Cell;

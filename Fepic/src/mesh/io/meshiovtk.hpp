@@ -27,7 +27,7 @@
   #define CONST_THIS static_cast<const typename _Traits::MeshT*>(this)
 #endif 
 
-
+/* please add posfix */
 
 
 
@@ -38,6 +38,7 @@ class _MeshIoVtk
 public:  
   typedef typename _Traits::CellT  CellT;
   typedef typename _Traits::MeshT  MeshT;
+  typedef typename _Traits::PointT  PointT;
   typedef typename CellT::PolytopeT CellPolytopeT;
   typedef typename CellPolytopeT::Derived CellDerivedPolytopeT;
 
@@ -54,6 +55,131 @@ public:
   void addVectorVtk(const char* nome_var, T&& arrayos, int dim, uint num_pts);
   void addPointTagVtk(const char* nome_var); // para debug
   void addPointHalfVtk(const char* nome_var);  // para debug  
+
+  /** Imprime as coordenadas de um ponto em um stream dado.
+   * @param o ponto
+  *  @param o stream onde se vai imprimir.
+  *  @param space Espaço entre a impressão de cada dimensão da coordenada.
+  */ 
+  static void printPointVtk(PointT const& p, std::ostream &o, int space = 22)
+  {
+    switch (_Traits::spacedim) {
+      case 1:
+      {
+        o << std::left << std::setw(space) << p.getCoord(0) << " 0.0 0.0";
+        break;
+      }
+      case 2:
+      {
+        o << std::left << std::setw(space) << p.getCoord(0)
+                       << std::setw(space) << p.getCoord(1) << " 0.0";
+        break;
+      }
+      case 3:
+      {
+        o << std::left << std::setw(space) << p.getCoord(0)
+                       << std::setw(space) << p.getCoord(1)
+                       << std::setw(space) << p.getCoord(2);
+        break;
+      }
+      default:
+      {
+        std::cout << "Error: invalid dimension\n";
+        break;
+      }
+    }
+  }
+
+
+  /// Tetrahedron Cell printer
+  template<class Cell_T>
+  static void printCellVtk(Cell_T const& cell, std::ostream &o, int order=1,
+  typename std::enable_if<std::is_same<Simplex<1>,  typename Cell_T::PolytopeT>::value ||
+                          std::is_same<Hypercube<1>,typename Cell_T::PolytopeT>::value ||
+                          std::is_same<Polytope<1>, typename Cell_T::PolytopeT>::value >::type* = NULL)
+  {
+    FEPIC_CHECK( (order==1) || (order==cell.getOrder()), "invalid order", std::invalid_argument);
+    
+    if (order<=1)
+      o << "2 " << cell.getNodeIdx(0) << " " << cell.getNodeIdx(1);
+    else
+    {
+      o << "2 " << cell.getNodeIdx(0) << " " << cell.getNodeIdx(2);
+      for (int i = 0; i < order-2; i++)
+      {   
+        o << std::endl;
+        o << "2 " << cell.getNodeIdx(2+i) << " " << cell.getNodeIdx(3+i);
+      }
+      o << std::endl;
+      o << "2 " << cell.getNodeIdx(order) << " " << cell.getNodeIdx(1);
+    }          
+  }
+
+  /// Tetrahedron Cell printer
+  template<class Cell_T>
+  static void printCellVtk(Cell_T const& cell, std::ostream &o, int order=1,
+  typename std::enable_if<std::is_same<Simplex<2>, typename Cell_T::PolytopeT>::value>::type* = NULL)
+  {
+    FEPIC_CHECK( (order==1) || (order==cell.getOrder()), "invalid order", std::invalid_argument);
+    matrixi const& minimesh = Cell_T::getMinimesh(order);
+    
+    o <<"3 "<<  cell.getNodeIdx(minimesh[0][0]) << " " <<
+                cell.getNodeIdx(minimesh[0][1]) << " " <<
+                cell.getNodeIdx(minimesh[0][2]);
+    for (uint i = 1; i < minimesh.size(); ++i)
+    {
+      o << std::endl;
+      o <<"3 "<<  cell.getNodeIdx(minimesh[i][0]) << " " <<
+                  cell.getNodeIdx(minimesh[i][1]) << " " <<
+                  cell.getNodeIdx(minimesh[i][2]);
+    }          
+  }
+ 
+  
+  /// Tetrahedron Cell printer
+  template<class Cell_T>
+  static void printCellVtk(Cell_T const& cell, std::ostream &o, int order=1,
+  typename std::enable_if<std::is_same<Simplex<3>, typename Cell_T::PolytopeT>::value>::type* = NULL)
+  {
+    FEPIC_CHECK( (order==1) || (order==cell.getOrder()), "invalid order", std::invalid_argument);
+    matrixi const& minimesh = Cell_T::getMinimesh(order);
+    
+    o <<"4 "<< cell.getNodeIdx(minimesh[0][0]) << " "
+            << cell.getNodeIdx(minimesh[0][1]) << " "
+            << cell.getNodeIdx(minimesh[0][2]) << " "
+            << cell.getNodeIdx(minimesh[0][3]);
+    for (uint i = 1; i < minimesh.size(); ++i)
+    {
+      o << std::endl;
+      o <<"4 "<< cell.getNodeIdx(minimesh[i][0]) << " "
+              << cell.getNodeIdx(minimesh[i][1]) << " "
+              << cell.getNodeIdx(minimesh[i][2]) << " "
+              << cell.getNodeIdx(minimesh[i][3]);
+    }
+          
+  }
+  
+
+  /* ---- Edge ----*/
+  template<class Cell_T>
+  static int GetCellTypeVtk(typename std::enable_if<std::is_same<Simplex<1>,  typename Cell_T::PolytopeT>::value || 
+                                                    std::is_same<Hypercube<1>,typename Cell_T::PolytopeT>::value ||
+                                                    std::is_same<Polytope<1>, typename Cell_T::PolytopeT>::value >::type* = NULL)
+  {return 3; }
+
+
+  // triangle
+  template<class Cell_T>
+  static int getCellTypeVtk(typename std::enable_if<std::is_same<Simplex<2>, typename Cell_T::PolytopeT>::value>::type* = NULL)
+  {return 5; }
+  
+  // tetrahedron
+  template<class Cell_T>
+  static int getCellTypeVtk(typename std::enable_if<std::is_same<Simplex<3>, typename Cell_T::PolytopeT>::value>::type* = NULL)
+  {return 10; }   
+
+   
+
   
 protected:  
   uint _filenumVtk;
@@ -61,16 +187,15 @@ protected:
 };
 
 
-/** Imprime os pontos e células no arquivo vtk.
- * @param flinear se true, força a malha ser impressa como linear, se false (default), a malha é impressa da ordem que ela é.
- *
- * ESTA DESCRIÇÃO PRECISA SER MELHORADA
+/** Print mesh in vtk file format.
+ * @param flinear if the mesh has higher order elements and this flag is false, than
+ * the mesh print each higher order cell as a compound of linear cells, otherwise the
+ * cells are printed as if lienar cells, disregarding high order nodes..
  */
 template<class _Traits>
 void _MeshIoVtk<_Traits>::writeVtk(bool flinear)
 {
   /*
-  *
   * NOTA: TODOS os pontos são impressos. APENAS AS CÉLULAS VIVAS
   * são impressas.
   */
@@ -106,13 +231,13 @@ void _MeshIoVtk<_Traits>::writeVtk(bool flinear)
   auto cit = THIS->_cellL.begin();
   for (auto cellend=THIS->_cellL.end(); cit != cellend ; ++cit)
   {
-    if(!cit->disabled())
+    if(1)//if(!cit->disabled())
     {
-      cit->printSelfVtk(Fout, order);
+      _MeshIoVtk::printCellVtk(*cit, Fout, order);
       Fout << std::endl;
     }
   }
-  int type = CellT::getCellTypeVtk();
+  int type = _MeshIoVtk::getCellTypeVtk<CellT>();
   Fout << std::endl; cit = THIS->_cellL.begin();
   Fout << "CELL_TYPES " << ncells << std::endl;
   for (auto cellend=THIS->_cellL.end(); cit != cellend ; ++cit)

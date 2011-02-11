@@ -66,6 +66,15 @@ public:
   Triangle() : _nodes({0,0,0}), _order(1) {};
   Triangle(Triangle const&) = default;
   ~Triangle() = default;
+
+    /** Atualiza a ordem deste elemento.
+  *  @warning Toda vez que a ordem da malha for alterada, essa função DEVE SER CHAMADA.
+  */ 
+  void setOrder(int order)
+  {
+    this->_nodes.resize((order+1)*(order+2)/2);
+    _order = static_cast<unsigned char>(order);
+  }
   
   /** Retorna a tag do formato Msh correspondente a um triângulo de ordem <em>order</em>.
   */ 
@@ -86,26 +95,7 @@ public:
     }
   }
   
-  /**
-  *  Imprime a célula no formate Vtk.
-  *  @note O número de subdivisões necessários para imprimir o triângulo é order^2
-  *  @warning Pula linha no final.
-  */ 
-  void printSelfVtk(std::ostream &o, int order) const
-  {
-    matrixi const& minimesh = Triangle::getMinimesh(order);
-  
-    o <<"3 "<<  this->getNodeIdx(minimesh[0][0]) << " " <<
-                this->getNodeIdx(minimesh[0][1]) << " " <<
-                this->getNodeIdx(minimesh[0][2]);
-    for (uint i = 1, tam=minimesh.size(); i < tam; ++i)
-    {
-      o << std::endl;
-      o <<"3 "<<  this->getNodeIdx(minimesh[i][0]) << " " <<
-                  this->getNodeIdx(minimesh[i][1]) << " " <<
-                  this->getNodeIdx(minimesh[i][2]);
-    }
-  }
+
   
   /** TRABALHO: apenas linear
   * retorna a tag do formato Vtk correspondente a este elemento.
@@ -113,16 +103,6 @@ public:
   static int getCellTypeVtk()
   {
     return 5; // Vtk_TRIANGLE(=5)
-  }
-  
-  
-  /** Atualiza a ordem deste elemento.
-  *  @warning Toda vez que a ordem da malha for alterada, essa função DEVE SER CHAMADA.
-  */ 
-  void setOrder(int order)
-  {
-    this->_nodes.resize((order+1)*(order+2)/2);
-    _order = static_cast<unsigned char>(order);
   }
   
   /** NOT FO USERS
@@ -177,6 +157,7 @@ public:
   }
 
 protected:
+
   static matrixi _getBordersLocalNodes(int order)
   {
     const int E = order - 1;

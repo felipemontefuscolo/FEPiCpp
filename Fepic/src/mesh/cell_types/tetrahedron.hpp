@@ -59,25 +59,16 @@ public:
   Tetrahedron(Tetrahedron const&) = default;
   ~Tetrahedron() = default;
                   
-  void printSelfVtk(std::ostream &o, int order) const
-  {
-    matrixi const& minimesh = Tetrahedron::getMinimesh(order);
-    
-    o <<"4 "<<  this->getNodeIdx(minimesh[0][0]) << " " << this->getNodeIdx(minimesh[0][1]) << " " << this->getNodeIdx(minimesh[0][2]) << " " << this->getNodeIdx(minimesh[0][3]);
-    for (uint i = 1, tam=minimesh.size(); i < tam; ++i)
-    {
-      o << std::endl;
-      o <<"4 "<<  this->getNodeIdx(minimesh[i][0]) << " " << this->getNodeIdx(minimesh[i][1]) << " " << this->getNodeIdx(minimesh[i][2]) << " " << this->getNodeIdx(minimesh[i][3]);
-    }
-          
-  }
-  
-  /* OBS: apenas linear
+  /** @warning Toda vez que a ordem da malha for alterada, essa função DEVE SER CHAMADA.
   */ 
-  static int getCellTypeVtk()
+  void setOrder(int order)
   {
-    return 10; // Vtk_TETRA (=10)
-  }       
+    this->_nodes.resize((order+1)*(order+2)*(order+3)/6);
+    _order = static_cast<unsigned char>(order);
+  }
+
+  
+    
   
   static int getMshTag(int order)
   {
@@ -94,14 +85,6 @@ public:
         throw;
       }
     }
-  }
-  
-  /** @warning Toda vez que a ordem da malha for alterada, essa função DEVE SER CHAMADA.
-  */ 
-  void setOrder(int order)
-  {
-    this->_nodes.resize((order+1)*(order+2)*(order+3)/6);
-    _order = static_cast<unsigned char>(order);
   }
   
   /** NOT FOR USERS
@@ -224,6 +207,7 @@ public:
   }
   
 protected:
+
   static matrixi _getEdgesLocalNodes(int order)
   {
     // no problem with Tetrahedron::edges_local_vertices

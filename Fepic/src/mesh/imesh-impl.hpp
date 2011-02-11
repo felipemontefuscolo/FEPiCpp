@@ -19,25 +19,9 @@
 // License and a copy of the GNU General Public License along with
 // FEPiC++. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef FEPIC_IMESHIO_HPP
-#define FEPIC_IMESHIO_HPP
 
-
-
-
-
-/* Este arquivo contém iterações em células. Para melhorar o desempenho deve-se
- * refaze-los com iteradores.
- *
- * - na função buildAdjacency()
- *
- * Este arquivo contém:
- * - TERMINAR
- * - PENSAR EM ALGO MELHOR
- *
- *
- * */
-
+#ifndef FEPIC_IMESH_IMPL_HPP
+#define FEPIC_IMESH_IMPL_HPP
 
 /*
  * MUDANÇA: PARA MELHOR O DESEMPENHO, A FUNÇÃO PODE SER REFEITA USANDO ITERADORES
@@ -118,13 +102,14 @@ template<class _Traits>
 void iMesh<_Traits>::buildAdjacency4volume()
 {
 
+  const int n_vertices_per_border = CellT::n_vertices_per_border;
   const int n_borders = CellT::n_borders;
-  const int n_anch    = CellT::n_vertices_per_border;
+  const int n_anch    = CellT::dim==3 ? n_vertices_per_border : 1;
 
-  typedef std::pair<vectorui, vectorui>   PairT; // < (vértices da face) , (elemento, ith) >
+  typedef std::pair<vectorui, vectorui> PairT; // < (vértices da face) , (elemento, ith) >
   typedef std::map<vectorui, vectorui>  MapT;
 
-  vectorui face_vtx(CellT::n_vertices_per_border);
+  vectorui face_vtx(n_vertices_per_border);
   vectorui cell_ith(2);
   MapT            table; // < (nós da face) , (elemento, ith) >
   MapT::iterator  tab_it, tab_it2;
@@ -140,7 +125,7 @@ void iMesh<_Traits>::buildAdjacency4volume()
     {
       for (int ith = 0; ith != n_borders; ++ith)
       {
-        face_vtx = std::move( cell->getBorderVertices(ith) );
+        face_vtx = cell->getBorderVertices(ith);
         cell_ith[0] = k;
         cell_ith[1] = ith;
         table.insert(std::make_pair(face_vtx, cell_ith));
@@ -254,8 +239,4 @@ void iMesh<_Traits>::buildAdjacency4volume()
   //Fout.close();
 //}
 
-
-
-
-
-#endif // IMESHIO_HPP
+#endif // FEPIC_IMESH_IMPL_HPP
