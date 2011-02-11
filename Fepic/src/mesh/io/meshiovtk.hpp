@@ -48,7 +48,7 @@ protected:
   
 public:
 
-  void writeVtk(bool flinear=false);
+  void writeVtk(std::string outname, bool flinear);
   template<class T>
   void addScalarVtk(const char* nome_var, T&& scalar, uint num_pts);
   template<class T>
@@ -193,7 +193,7 @@ protected:
  * cells are printed as if lienar cells, disregarding high order nodes..
  */
 template<class _Traits>
-void _MeshIoVtk<_Traits>::writeVtk(bool flinear)
+void _MeshIoVtk<_Traits>::writeVtk(std::string outname = "", bool flinear = false)
 {
   /*
   * NOTA: TODOS os pontos são impressos. APENAS AS CÉLULAS VIVAS
@@ -206,7 +206,7 @@ void _MeshIoVtk<_Traits>::writeVtk(bool flinear)
 
   THIS->_add_scalar_vtk_n_calls=0;
 
-	std::string ss = THIS->_popNextName(this->_filenumVtk, ".vtk");
+	std::string ss = outname=="" ? THIS->_popNextName(this->_filenumVtk, ".vtk") : outname;
   ++_filenumVtk;
 
   std::ofstream Fout( ss.data() );

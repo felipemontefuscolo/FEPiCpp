@@ -1,7 +1,7 @@
 #include <Fepic/Mesh>
 
 
-int const DIM = 2;
+int const DIM = 3;
 
 using namespace std;
 using namespace Eigen;
@@ -34,11 +34,12 @@ int main(int argc, char *argv[]) {
 
   if(DIM==3)
   {
-    //malha.readFileMsh("malha/monotet.msh");
-    malha.readFileMsh("malha/tetbig.msh");
+    malha.readFileMsh("malha/monotet.msh");
+    //malha.readFileMsh("malha/tetbig.msh");
   }
   else
   {
+    malha.readFileFsf("malha/simple.fsf");
     malha.readFileMsh("malha/simple.msh");
   }
   

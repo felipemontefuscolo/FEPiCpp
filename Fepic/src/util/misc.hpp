@@ -154,8 +154,7 @@ size_t search_word(std::ifstream &File, const char* word) {
     File >> s;
     if (File.peek()==EOF)
     {
-      std::cout << "Incorrect file format" << std::endl;
-      return -1;
+      return static_cast<size_t>(-1);
     }
   } while(s!=word_s);
 

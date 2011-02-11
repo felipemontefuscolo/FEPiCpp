@@ -129,6 +129,8 @@ void _MeshIoMsh<_Traits>::readFileMsh(const char* filename)
   uint num_pts;
   File >> num_pts;
   THIS->_pointL.resize(num_pts);
+  THIS->_halflL.resize(0);
+  THIS->_cellL.resize(0);
 
   for (uint i=0; i< THIS->getNumNodes(); ++i) {
     File >> lixo;  // nº do nó
@@ -431,7 +433,7 @@ void _MeshIoMsh<_Traits>::readFileMsh(const char* filename)
     if (!cit->disabled())
       cit->broadcastHalf2Nodes(*THIS);
 
-  for (auto hit= THIS->_mhalfL.begin(), hend=THIS->_mhalfL.end(); hit != hend; ++hit)
+  for (auto hit= THIS->_halflL.begin(), hend=THIS->_halflL.end(); hit != hend; ++hit)
     if (!hit->disabled())
       hit->broadcastHalf2Nodes(*THIS);
 

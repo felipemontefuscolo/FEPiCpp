@@ -48,14 +48,13 @@ protected:
 public:
 
   void readFileFsf(const char* filename);
-  void writeFsf();
+  void writeFsf(std::string outname);
   template<class T>
   void addScalarFsf(const char* nome_var, T& scalar, uint num_pts);
   template<class T>
   void addVectorFsf(const char* nome_var, T& arrayos, int dim, uint num_pts);
   void addPointTagFsf(const char* nome_var); // para debug
   void addPointHalfFsf(const char* nome_var);  // para debug     
-
 
 
 
@@ -133,7 +132,7 @@ public:
       o << cell.getNodeIdx(i) << " ";
     }
     
-    o << cell.getOrder() << " " << cell.getTag() << " " << cell.getFlags();
+    o << cell.getTag() << " " << cell.getFlags();
     
     for (int i = 0; i < cell.n_borders; i++)
     {   
@@ -156,13 +155,132 @@ template<class _Traits>
 void _MeshIoFsf<_Traits>::readFileFsf(const char* filename)
 {
   
+  THIS->_registerFile(filename, ".fsf");
+
+  std::ifstream File(filename);
+
+  int     type_aux;
+  char    lixo[256];
+  int     order;
+  size_t  pos;
+  std::string s;
+  
+  const char* keys[] = {"POINTS", "CELLS", "HALFLS"};
+  uint keys_size = std::extent<decltype(keys)>::value;
+
+  pos = search_word(File, "CELLTYPE");
+  FEPIC_ASSERT(pos != static_cast<size_t>(-1), "invalid file format", std::invalid_argument);
+  File >> s;
+  FEPIC_ASSERT(CellPolytopeT::name() == s, "invalid mesh cell type", std::invalid_argument);
+  
+  pos = search_word(File, "MESHORDER");
+  FEPIC_ASSERT(pos != static_cast<size_t>(-1), "invalid file format", std::invalid_argument);
+  File >> order;
+  FEPIC_ASSERT((order > 0) && (order < MAX_CELLS_ORDER), "invalid or not supported order", std::invalid_argument);
+  
+
+  /*
+   *      READING POINTS
+   * 
+   * */
+  pos = search_word(File, "POINTS");
+  FEPIC_ASSERT(pos != static_cast<size_t>(-1), "invalid file format: can not find POINTS", std::invalid_argument);
+  uint n_pts;
+  int tag, flags;
+  File >> n_pts;
+  
+  THIS->_pointL.resize(n_pts);
+  
+  int num;
+  double coord[3];
+  for (uint i = 0; i < n_pts; ++i)
+  {
+    File >> coord[0] >> coord[1] >> coord[2] >> tag >> flags;
+
+    THIS->_pointL[i].setCoord(coord);
+    THIS->_pointL[i].setTag(tag);
+    THIS->_pointL[i].setFlags(flags);
+  }
+  File >> s;
+  FEPIC_ASSERT(s == std::string("END_POINTS"), "can not find the key END_CELLS", std::invalid_argument);
+
+
+  /*
+   *      READING CELLS
+   * 
+   * */
+  pos = search_word(File, "CELLS");
+  FEPIC_ASSERT(pos != static_cast<size_t>(-1), "invalid file format: can not find CELLS", std::invalid_argument);
+  uint n_cells, nodeid;
+  File >> n_cells;
+  
+  THIS->_cellL.resize(n_cells);
+  
+  uint n_nodes_per_cell = ::numNodes<CellPolytopeT>(order);
+  int n_borders = CellT::n_borders;
+  int incid_cell;
+  int position;
+  int anchor;
+  num=0;
+  for (uint i = 0; i < n_cells; i++)
+  {
+    THIS->_cellL[i].setOrder(order);
+    for (int n = 0; n < n_nodes_per_cell; ++n)
+    {
+      File >> nodeid; // node
+      THIS->_cellL[i].setNode(n, nodeid);
+    }
+    File >> tag >> flags;
+    THIS->_cellL[i].setTag(tag);
+    THIS->_cellL[i].setFlags(flags);
+    
+    for (int b = 0; b < n_borders; ++b)
+    {
+      File >> incid_cell >> position >> anchor;
+      THIS->_cellL[i].getHalf(b)->setIncidCell(incid_cell);
+      THIS->_cellL[i].getHalf(b)->setPosition(position);
+      THIS->_cellL[i].getHalf(b)->setAnchor(anchor);
+    }
+    
+  }
+  File >> s;
+  FEPIC_ASSERT(s == std::string("END_CELLS"), "can not find the key END_CELLS", std::invalid_argument);
+    
+
+
+  /*
+   *      READING HALFLS
+   * 
+   * */
+  pos = search_word(File, "HALFLS");
+  FEPIC_ASSERT(pos != static_cast<size_t>(-1), "invalid file format: can not find HALFLS", std::invalid_argument);
+  uint n_halfls;
+  File >> n_halfls;
+  
+  THIS->_halflL.resize(n_halfls);
+  
+  num=0;
+  for (uint i = 0; i < n_halfls; i++)
+  {
+    File >> incid_cell >> position >> anchor >> tag >> flags;
+    THIS->_halflL[i].setIncidCell(incid_cell);
+    THIS->_halflL[i].setPosition(position);
+    THIS->_halflL[i].setAnchor(anchor);
+    THIS->_halflL[i].setTag(tag);
+    THIS->_halflL[i].setFlags(flags);
+  }
+  File >> s;
+  FEPIC_ASSERT(s == std::string("END_HALFLS"), "can not find the key END_CELLS", std::invalid_argument);
+  
+  
+  File.close();
   
 }
 
 
 
 template<class _Traits>
-void _MeshIoFsf<_Traits>::writeFsf()
+void _MeshIoFsf<_Traits>::writeFsf(std::string outname = "")
 {
   /*
   * NOTA: TODOS os pontos são impressos. APENAS AS CÉLULAS VIVAS
@@ -174,13 +292,13 @@ void _MeshIoFsf<_Traits>::writeFsf()
 
   THIS->_add_scalar_fsf_n_calls=0;
 
-	std::string ss = THIS->_popNextName(this->_filenumFsf, ".fsf");
+  
+	std::string ss = outname=="" ? THIS->_popNextName(this->_filenumFsf, ".fsf") : outname;
   ++_filenumFsf;
 
   std::ofstream Fout( ss.data() );
 
   Fout << "# FEPiC++ file format : alpha version\n\n"
-       << "SPACEDIM " << _Traits::spacedim << "\n"
        << "CELLTYPE " << CellT::PolytopeT::name() << "\n"
        << "MESHORDER " << THIS->getOrder() << "\n\n"
        
@@ -194,9 +312,10 @@ void _MeshIoFsf<_Traits>::writeFsf()
     _MeshIoFsf::printPointFsf(*pit, Fout);
     Fout << "\n";
   }
+  Fout << "END_POINTS\n\n";
 
   /* imprimindo células */
-  Fout << "\n #_nodes | _order | _tag | _flags | [half1(c, ith, anc) | half2(...) | ...]\n";
+  Fout << "\n# nodes | tag | flags | [half1(c, position, anc) | half2(...) | ...]\n";
   Fout << "CELLS " << ncells << "\n";
   auto cit = THIS->_cellL.begin();
   for (auto cellend=THIS->_cellL.end(); cit != cellend ; ++cit)
@@ -204,15 +323,17 @@ void _MeshIoFsf<_Traits>::writeFsf()
     _MeshIoFsf::printCellFsf(*cit, Fout);
     Fout << std::endl;
   }
-  Fout << std::endl;
+  Fout << "END_CELLS\n\n";
 
   Fout << "#incident cell | position | anchor | tag | flags\n";
   Fout << "HALFLS " << nhalfls << "\n";
-  for (auto hit = THIS->_mhalfL.begin(); hit != THIS->_mhalfL.end(); ++hit)
+  for (auto hit = THIS->_halflL.begin(); hit != THIS->_halflL.end(); ++hit)
   {
     _MeshIoFsf::printHalflsFsf(*hit, Fout);
     Fout << std::endl;
   }
+  Fout << "END_HALFLS\n\n";
+
   Fout << std::endl;
 
   Fout.close();  

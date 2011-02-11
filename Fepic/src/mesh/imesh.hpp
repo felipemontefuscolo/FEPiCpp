@@ -188,14 +188,14 @@ public:
   */
   HalfLT* getHalfl(uint nth)
   {
-    FEPIC_CHECK(nth<this->_mhalfL.size(), "invalid index", std::out_of_range);
-    return &_mhalfL[nth];
+    FEPIC_CHECK(nth<this->_halflL.size(), "invalid index", std::out_of_range);
+    return &_halflL[nth];
   }
 
   const HalfLT* getHalfl(uint nth) const
   {
-    FEPIC_CHECK(nth<this->_mhalfL.size(), "invalid index", std::out_of_range);
-    return &_mhalfL[nth];
+    FEPIC_CHECK(nth<this->_halflL.size(), "invalid index", std::out_of_range);
+    return &_halflL[nth];
   }
 
 
@@ -269,13 +269,13 @@ public:
   {
     if (_dead_mhalf.empty())
     {
-      _mhalfL.push_back(h);
-      return _mhalfL.size()-1;
+      _halflL.push_back(h);
+      return _halflL.size()-1;
     }
     else
     {
       uint id = _dead_mhalf.back();
-      _mhalfL.at(id) = h;
+      _halflL.at(id) = h;
       _dead_mhalf.pop_back();
       return id;
     }
@@ -316,7 +316,7 @@ public:
   */
   uint getNumHalfls() const
   {
-    return _mhalfL.size() - _dead_mhalf.size();
+    return _halflL.size() - _dead_mhalf.size();
   }
 
   /** Retorna o número de mhalfs.
@@ -324,7 +324,7 @@ public:
   */
   uint getNumHalfLTotal() const
   {
-    return _mhalfL.size();
+    return _halflL.size();
   }
 
   /** apenas para 2D ainda.
@@ -332,13 +332,13 @@ public:
   */
   double getPerimeter()
   {
-    auto it = _mhalfL.begin();
+    auto it = _halflL.begin();
     vectorui vtx;
     double sum=0.;
 
-    std::cout << _mhalfL.size() << std::endl;
+    std::cout << _halflL.size() << std::endl;
 
-    for (; it!= _mhalfL.end(); ++it)
+    for (; it!= _halflL.end(); ++it)
       sum += it->HalfT::getLenght(*this);
 
     return sum;
@@ -383,14 +383,14 @@ public:
   */
   HalflIterator mhalfBegin()
   {
-    return _mhalfL.begin();
+    return _halflL.begin();
   }
 
   /** Retorna um iterador apontando para o depois-do-final da lista de mhalfs.
   */
   HalflIterator mhalfEnd()
   {
-    return _mhalfL.end();
+    return _halflL.end();
   }
 
 
@@ -404,7 +404,7 @@ public:
   // entities
   CellList      _cellL;
   PointList     _pointL;
-  HalflList     _mhalfL;
+  HalflList     _halflL;
 
 private:
 

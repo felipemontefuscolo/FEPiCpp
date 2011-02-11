@@ -85,9 +85,14 @@ public:
     return static_cast<int>(_flags);
   }
     
-  void setFlag(unsigned flag_no, bool set=true)
+  void setFlag(uint flag_no, bool set=true)
   {
     _flags = set ? (_flags | (1<<flag_no)) : (_flags & (~(1<<flag_no)));
+  }
+  
+  void setFlags(uint flags)
+  {
+    _flags = static_cast<unsigned char>(flags);
   }
   
 protected:
