@@ -178,8 +178,6 @@ public:
   }
 
 protected:  
-  
-
   vectori _nodes;
   unsigned char _order;  
 };

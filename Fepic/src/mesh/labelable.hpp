@@ -79,6 +79,11 @@ public:
   {
     return ((_flags & ( 1 << flag_no))!=0) ? 1 : 0;
   }
+  
+  int getFlags() const
+  {
+    return static_cast<int>(_flags);
+  }
     
   void setFlag(unsigned flag_no, bool set=true)
   {

@@ -28,16 +28,28 @@
 template<int dim>
 class Polytope { public:
   typedef Polytope<dim-1> Derived;
+  static std::string name()
+  {
+    return "Polytope"+std::string(itoa(dim));
+  }
 };
 
 template<int dim>
 class Simplex { public:
   typedef Simplex<dim-1> Derived;
+  static std::string name()
+  {
+    return "Simplex"+std::string(itoa(dim));
+  }
 };
 
 template<int dim>
 class Hypercube { public:
   typedef Hypercube<dim-1> Derived;
+  static std::string name()
+  {
+    return "Hypercube"+std::string(itoa(dim));
+  }
 };
 
 

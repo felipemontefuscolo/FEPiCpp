@@ -47,7 +47,7 @@ int main(int argc, char *argv[]) {
   //malha.setOrder(2);
   
   malha.writeVtk();
-  
+  malha.writeFsf();
   
   //malha.writeFileState();
   

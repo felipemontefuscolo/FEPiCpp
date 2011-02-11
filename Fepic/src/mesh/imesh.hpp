@@ -28,13 +28,17 @@
 
 
 template<class _Traits>
-class iMesh : public _iMeshNameHandler, public _MeshIoMsh<_Traits>, public _MeshIoVtk<_Traits>
+class iMesh : public _iMeshNameHandler,
+              public _MeshIoMsh<_Traits>,
+              public _MeshIoVtk<_Traits>,
+              public _MeshIoFsf<_Traits>
 {
 
 public:
 
   friend class _MeshIoMsh<_Traits>;
   friend class _MeshIoVtk<_Traits>;
+  friend class _MeshIoFsf<_Traits>;
   friend class _iMeshNameHandler;
 
   typedef typename _Traits::CellT  CellT;

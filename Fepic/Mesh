@@ -72,6 +72,7 @@
 #include "Fepic/src/mesh/io/imeshnamehandler.hpp"
 #include "Fepic/src/mesh/io/meshiomsh.hpp"
 #include "Fepic/src/mesh/io/meshiovtk.hpp"
+#include "Fepic/src/mesh/io/meshiofsf.hpp"
 #include "Fepic/src/mesh/imesh.hpp"
 #include "Fepic/src/mesh/imesh-impl.hpp"
 
