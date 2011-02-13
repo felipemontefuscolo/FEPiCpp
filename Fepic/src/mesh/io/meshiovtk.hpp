@@ -25,7 +25,7 @@
 #if !defined(THIS) && !defined(CONST_THIS)
   #define THIS static_cast<typename _Traits::MeshT*>(this)
   #define CONST_THIS static_cast<const typename _Traits::MeshT*>(this)
-#endif 
+#endif
 
 /* please add posfix */
 
@@ -34,8 +34,8 @@
 template<class _Traits>
 class _MeshIoVtk
 {
-  
-public:  
+
+public:
   typedef typename _Traits::CellT  CellT;
   typedef typename _Traits::MeshT  MeshT;
   typedef typename _Traits::PointT  PointT;
@@ -45,22 +45,22 @@ public:
 protected:
   _MeshIoVtk() : _filenumVtk(0), _add_scalar_vtk_n_calls(0) {};
   _MeshIoVtk(_MeshIoVtk const&) {};
-  
+
 public:
 
   void writeVtk(std::string outname, bool flinear);
   template<class T>
-  void addScalarVtk(const char* nome_var, T&& scalar, int num_pts);
+  void addScalarVtk(const char* nome_var, T& scalar, int num_pts);
   template<class T>
-  void addVectorVtk(const char* nome_var, T&& arrayos, int dim, int num_pts);
+  void addVectorVtk(const char* nome_var, T& arrayos, int dim, int num_pts);
   void addPointTagVtk(const char* nome_var); // para debug
-  void addPointHalfVtk(const char* nome_var);  // para debug  
+  void addPointHalfVtk(const char* nome_var);  // para debug
 
   /** Imprime as coordenadas de um ponto em um stream dado.
    * @param o ponto
   *  @param o stream onde se vai imprimir.
   *  @param space Espaço entre a impressão de cada dimensão da coordenada.
-  */ 
+  */
   static void printPointVtk(PointT const& p, std::ostream &o, int space = 22)
   {
     switch (_Traits::spacedim) {
@@ -99,20 +99,20 @@ public:
                           std::is_same<Polytope<1>, typename Cell_T::PolytopeT>::value >::type* = NULL)
   {
     FEPIC_CHECK( (order==1) || (order==cell.getOrder()), "invalid order", std::invalid_argument);
-    
+
     if (order<=1)
       o << "2 " << cell.getNodeIdx(0) << " " << cell.getNodeIdx(1);
     else
     {
       o << "2 " << cell.getNodeIdx(0) << " " << cell.getNodeIdx(2);
       for (int i = 0; i < order-2; i++)
-      {   
+      {
         o << std::endl;
         o << "2 " << cell.getNodeIdx(2+i) << " " << cell.getNodeIdx(3+i);
       }
       o << std::endl;
       o << "2 " << cell.getNodeIdx(order) << " " << cell.getNodeIdx(1);
-    }          
+    }
   }
 
   /// Tetrahedron Cell printer
@@ -122,7 +122,7 @@ public:
   {
     FEPIC_CHECK( (order==1) || (order==cell.getOrder()), "invalid order", std::invalid_argument);
     matrixi const& minimesh = Cell_T::getMinimesh(order);
-    
+
     o <<"3 "<<  cell.getNodeIdx(minimesh[0][0]) << " " <<
                 cell.getNodeIdx(minimesh[0][1]) << " " <<
                 cell.getNodeIdx(minimesh[0][2]);
@@ -132,10 +132,10 @@ public:
       o <<"3 "<<  cell.getNodeIdx(minimesh[i][0]) << " " <<
                   cell.getNodeIdx(minimesh[i][1]) << " " <<
                   cell.getNodeIdx(minimesh[i][2]);
-    }          
+    }
   }
- 
-  
+
+
   /// Tetrahedron Cell printer
   template<class Cell_T>
   static void printCellVtk(Cell_T const& cell, std::ostream &o, int order=1,
@@ -143,7 +143,7 @@ public:
   {
     FEPIC_CHECK( (order==1) || (order==cell.getOrder()), "invalid order", std::invalid_argument);
     matrixi const& minimesh = Cell_T::getMinimesh(order);
-    
+
     o <<"4 "<< cell.getNodeIdx(minimesh[0][0]) << " "
             << cell.getNodeIdx(minimesh[0][1]) << " "
             << cell.getNodeIdx(minimesh[0][2]) << " "
@@ -156,32 +156,32 @@ public:
               << cell.getNodeIdx(minimesh[i][2]) << " "
               << cell.getNodeIdx(minimesh[i][3]);
     }
-          
+
   }
-  
+
 
   /* ---- Edge ----*/
   template<class Cell_T>
-  static int GetCellTypeVtk(typename std::enable_if<std::is_same<Simplex<1>,  typename Cell_T::PolytopeT>::value || 
-                                                    std::is_same<Hypercube<1>,typename Cell_T::PolytopeT>::value ||
-                                                    std::is_same<Polytope<1>, typename Cell_T::PolytopeT>::value >::type* = NULL)
+  static int getTagVtk(typename std::enable_if<std::is_same<Simplex<1>,  typename Cell_T::PolytopeT>::value ||
+                                               std::is_same<Hypercube<1>,typename Cell_T::PolytopeT>::value ||
+                                               std::is_same<Polytope<1>, typename Cell_T::PolytopeT>::value >::type* = NULL)
   {return 3; }
 
 
   // triangle
   template<class Cell_T>
-  static int getCellTypeVtk(typename std::enable_if<std::is_same<Simplex<2>, typename Cell_T::PolytopeT>::value>::type* = NULL)
+  static int getTagVtk(typename std::enable_if<std::is_same<Simplex<2>, typename Cell_T::PolytopeT>::value>::type* = NULL)
   {return 5; }
-  
+
   // tetrahedron
   template<class Cell_T>
-  static int getCellTypeVtk(typename std::enable_if<std::is_same<Simplex<3>, typename Cell_T::PolytopeT>::value>::type* = NULL)
-  {return 10; }   
+  static int getTagVtk(typename std::enable_if<std::is_same<Simplex<3>, typename Cell_T::PolytopeT>::value>::type* = NULL)
+  {return 10; }
 
-   
 
-  
-protected:  
+
+
+protected:
   int _filenumVtk;
   int _add_scalar_vtk_n_calls;
 };
@@ -206,7 +206,7 @@ void _MeshIoVtk<_Traits>::writeVtk(std::string outname = "", bool flinear = fals
 
   THIS->_add_scalar_vtk_n_calls=0;
 
-	std::string ss = outname=="" ? THIS->_popNextName(this->_filenumVtk, ".vtk") : outname;
+  std::string ss = outname=="" ? THIS->_popNextName(this->_filenumVtk, ".vtk") : outname;
   ++_filenumVtk;
 
   std::ofstream Fout( ss.data() );
@@ -221,7 +221,7 @@ void _MeshIoVtk<_Traits>::writeVtk(std::string outname = "", bool flinear = fals
   auto pit = THIS->_pointL.begin();
   for (auto pend=THIS->_pointL.end(); pit != pend ; ++pit)
   {
-    pit->printSelfVtk(Fout);
+    _MeshIoVtk::printPointVtk(*pit, Fout);
     Fout << std::endl;
   }
 
@@ -237,15 +237,15 @@ void _MeshIoVtk<_Traits>::writeVtk(std::string outname = "", bool flinear = fals
       Fout << std::endl;
     }
   }
-  int type = _MeshIoVtk::getCellTypeVtk<CellT>();
+  int type = _MeshIoVtk::getTagVtk<CellT>();
   Fout << std::endl; cit = THIS->_cellL.begin();
   Fout << "CELL_TYPES " << ncells << std::endl;
   for (auto cellend=THIS->_cellL.end(); cit != cellend ; ++cit)
   {
     if(!cit->disabled())
     {
-			for (int i = 0; i < nc_mm; i++)
-				Fout << type << std::endl;
+      for (int i = 0; i < nc_mm; i++)
+        Fout << type << std::endl;
     }
   }
 
@@ -259,10 +259,10 @@ void _MeshIoVtk<_Traits>::writeVtk(std::string outname = "", bool flinear = fals
  */
 template<class _Traits>
 template<class T>
-void _MeshIoVtk<_Traits>::addScalarVtk(const char* nome_var, T&& scalar, int num_pts)
+void _MeshIoVtk<_Traits>::addScalarVtk(const char* nome_var, T& scalar, int num_pts)
 {
 
-	std::string ss = THIS->_popNextName(this->_filenumVtk, ".vtk");
+  std::string ss = THIS->_popNextName(this->_filenumVtk, ".vtk");
 
   std::ofstream Fout;
   Fout.open( ss.data(), std::ios::app);
@@ -277,7 +277,7 @@ void _MeshIoVtk<_Traits>::addScalarVtk(const char* nome_var, T&& scalar, int num
   }
   _add_scalar_vtk_n_calls++;
 
-	Fout << "SCALARS " << nome_var << " float"   << std::endl;
+  Fout << "SCALARS " << nome_var << " float"   << std::endl;
   Fout << "LOOKUP_TABLE default"            << std::endl;
 
   for (int i=0; i<num_pts; ++i)
@@ -285,7 +285,7 @@ void _MeshIoVtk<_Traits>::addScalarVtk(const char* nome_var, T&& scalar, int num
 
   Fout << std::endl << std::endl;
 
-	Fout.close();
+  Fout.close();
 };
 
 
@@ -295,7 +295,7 @@ void _MeshIoVtk<_Traits>::addPointTagVtk(const char* nome_var="node labels")
 
   int num_pts = THIS->getNumNodes();
 
-	std::string ss = THIS->_popNextName(_filenumVtk, ".vtk");
+  std::string ss = THIS->_popNextName(_filenumVtk, ".vtk");
 
   std::ofstream Fout;
   Fout.open( ss.data(), std::ios::app);
@@ -310,7 +310,7 @@ void _MeshIoVtk<_Traits>::addPointTagVtk(const char* nome_var="node labels")
   }
   _add_scalar_vtk_n_calls++;
 
-	Fout << "SCALARS " << nome_var << " int"   << std::endl;
+  Fout << "SCALARS " << nome_var << " int"   << std::endl;
   Fout << "LOOKUP_TABLE default"            << std::endl;
 
   for (int i=0; i<num_pts; ++i) {
@@ -319,7 +319,7 @@ void _MeshIoVtk<_Traits>::addPointTagVtk(const char* nome_var="node labels")
 
   Fout << std::endl << std::endl;
 
-	Fout.close();
+  Fout.close();
 };
 
 
@@ -329,7 +329,7 @@ void _MeshIoVtk<_Traits>::addPointHalfVtk(const char* nome_var="node labels")
 
   int num_pts = THIS->getNumNodes();
 
-	std::string ss = THIS->_popNextName(_filenumVtk, ".vtk");
+  std::string ss = THIS->_popNextName(_filenumVtk, ".vtk");
 
   std::ofstream Fout;
   Fout.open( ss.data(), std::ios::app);
@@ -344,7 +344,7 @@ void _MeshIoVtk<_Traits>::addPointHalfVtk(const char* nome_var="node labels")
   }
   _add_scalar_vtk_n_calls++;
 
-	Fout << "SCALARS " << nome_var << " int"   << std::endl;
+  Fout << "SCALARS " << nome_var << " int"   << std::endl;
   Fout << "LOOKUP_TABLE default"            << std::endl;
 
   for (int i=0; i<num_pts; ++i) {
@@ -353,7 +353,7 @@ void _MeshIoVtk<_Traits>::addPointHalfVtk(const char* nome_var="node labels")
 
   Fout << std::endl << std::endl;
 
-	Fout.close();
+  Fout.close();
 };
 
 

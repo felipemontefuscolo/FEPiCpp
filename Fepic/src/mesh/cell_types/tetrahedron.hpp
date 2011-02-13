@@ -55,7 +55,7 @@ public:
     FEPIC_CHECK(nodes.size()==numNodes<Simplex<3>>(order), "", std::invalid_argument);
   }  
   
-  Tetrahedron() : _nodes({0,0,0,0}), _order(1) {};
+  Tetrahedron() : _nodes({-1,-1,-1,-1}), _order(1) {};
   Tetrahedron(Tetrahedron const&) = default;
   ~Tetrahedron() = default;
                   
@@ -66,27 +66,7 @@ public:
     this->_nodes.resize((order+1)*(order+2)*(order+3)/6);
     _order = order;
   }
-
-  
     
-  
-  static int getMshTag(int order)
-  {
-    switch (order)
-    {
-      case 1: return MSH_TET_4;
-      case 2: return MSH_TET_10;
-      case 3: return MSH_TET_20;
-      case 4: return MSH_TET_35;
-      case 5: return MSH_TET_56;
-      default:
-      {
-        std::cout << "invalid tetrahedron order." << std::endl;
-        throw;
-      }
-    }
-  }
-  
   /** NOT FOR USERS
   * @param n ordem
   */ 
@@ -103,79 +83,6 @@ public:
     return opp_eln;
   }
   
-  /** NOT FOR USERS \n
-  * getOppFLN(n)[anchor] = vetor com a visão da face oposta de âncora anchor.
-  * @param n ordem
-  */ 
-  static matrixi getOppFLN(int n)
-  {
-    int k;
-    int anch;
-    const int                           N = (n+1)*(n+2)/2;
-    matrixi                      opp_fln(3, vectori(N));
-    const std::vector<Eigen::Vector2i>  Coords = genTriParametricPtsINT(n);
-    
-    std::map<int, Eigen::Vector2i>      X;
-    
-    Eigen::Matrix2i A;
-    Eigen::Vector2i b;
-  
-#define PAIR std::pair<int, Eigen::Vector2i>
-
-/* transformações são feitas fazendo A*x + b */
-#define DO_TRANSFORMATION_AND_APPLY \
-    for (int i = 0; i != N; ++i) \
-      X[i] = A*Coords[i] + b;    \
-                                 \
-    for (int i = 0; i != N; ++i) \
-    {                            \
-      k = find_if(X.begin(), X.end(), [i, &Coords](PAIR const& p)->bool {  \
-        return (p.second==Coords[i]);   \
-      })->first;                        \
-                                        \
-      opp_fln[anch][i] = k;             \
-    }                                                                   
-        
-    /* ----------------
-    *    ANCORA 0    
-    * ---------------- */
-    anch = 0;
-    A << +1, +0,
-         -1, -1;
-    b << +0,
-         +n;
-        
-    DO_TRANSFORMATION_AND_APPLY;
-    
-    /* ----------------
-    *    ANCORA 1    
-    * ---------------- */
-    anch = 1;
-    A << -1, -1,
-         +0, +1;
-    b << +n,
-         +0;
-        
-    DO_TRANSFORMATION_AND_APPLY;
-    
-    /* ----------------
-    *    ANCORA 0    
-    * ---------------- */
-    anch = 2;
-    A << +0, +1,
-         +1, +0;
-    b << +0,
-         +0;
-    
-        
-    DO_TRANSFORMATION_AND_APPLY;
-    
-#undef DO_TRANSFORMATION_AND_APPLY
-#undef PAIR
-
-      return opp_fln;
-    }
-
   /** Retorna o número de mini-células de uma mini-malha de ordem n.
   */ 
   static int getNumSubdivisions(int n)
@@ -204,6 +111,12 @@ public:
   {
     FEPIC_CHECK(order<=MAX_CELLS_ORDER, "order not supported yet", std::out_of_range);
     return Tetrahedron::table2[order];
+  }
+  
+  static matrixi const& getOppFLN(int order)
+  {
+    FEPIC_CHECK(order<=MAX_CELLS_ORDER, "order not supported yet", std::out_of_range);
+    return Tetrahedron::table3[order];
   }
   
 protected:
@@ -399,6 +312,79 @@ protected:
         
     
   } // end getMinimesh
+
+  static matrixi _getOppFLN(int n)
+  {
+    /* NOT FOR USERS \n
+    * getOppFLN(n)[anchor] = vetor com a visão da face oposta de âncora anchor.
+    * @param n ordem
+    */ 
+    int k;
+    int anch;
+    const int N = (n+1)*(n+2)/2;
+    matrixi   opp_fln(3, vectori(N));
+    const std::vector<Eigen::Vector2i>  Coords = genTriParametricPtsINT(n);
+    
+    std::map<int, Eigen::Vector2i>      X;
+    
+    Eigen::Matrix2i A;
+    Eigen::Vector2i b;
+  
+#define PAIR std::pair<int, Eigen::Vector2i>
+
+/* transformações são feitas fazendo A*x + b */
+#define DO_TRANSFORMATION_AND_APPLY \
+    for (int i = 0; i != N; ++i) \
+      X[i] = A*Coords[i] + b;    \
+                                 \
+    for (int i = 0; i != N; ++i) \
+    {                            \
+      k = find_if(X.begin(), X.end(), [i, &Coords](PAIR const& p)->bool {  \
+        return (p.second==Coords[i]);   \
+      })->first;                        \
+                                        \
+      opp_fln[anch][i] = k;             \
+    }                                                                   
+        
+    /* ----------------
+    *    ANCORA 0    
+    * ---------------- */
+    anch = 0;
+    A << +1, +0,
+         -1, -1;
+    b << +0,
+         +n;
+        
+    DO_TRANSFORMATION_AND_APPLY;
+    
+    /* ----------------
+    *    ANCORA 1    
+    * ---------------- */
+    anch = 1;
+    A << -1, -1,
+         +0, +1;
+    b << +n,
+         +0;
+        
+    DO_TRANSFORMATION_AND_APPLY;
+    
+    /* ----------------
+    *    ANCORA 0    
+    * ---------------- */
+    anch = 2;
+    A << +0, +1,
+         +1, +0;
+    b << +0,
+         +0;
+    
+        
+    DO_TRANSFORMATION_AND_APPLY;
+    
+#undef DO_TRANSFORMATION_AND_APPLY
+#undef PAIR
+
+      return opp_fln;
+    }
   
   static std::vector<matrixi> _initTable0()
   {
@@ -447,6 +433,22 @@ protected:
     
     return table;
   }
+
+  static std::vector<matrixi> _initTable3()
+  {
+    // the table2 at index n store the minimesh of a cell with order n.
+    std::vector<matrixi> table;
+    
+    table.reserve(MAX_CELLS_ORDER+1);
+    table.push_back(Tetrahedron::_getOppFLN(1)); // no order 0,plz
+    for (int i = 1; i <= MAX_CELLS_ORDER; ++i)
+    {
+      table.push_back(Tetrahedron::_getOppFLN(i));
+    }
+    
+    return table;
+  }
+
   
 public:  
   static const matrixi borders_local_vertices; // faces
@@ -455,12 +457,12 @@ public:
   static const std::vector<matrixi> table0; // order / edges local nodes
   static const std::vector<matrixi> table1; // order / borders local nodes
   static const std::vector<matrixi> table2; // order / minimeshs
+  static const std::vector<matrixi> table3; // order / oppFLN (opposite face local numbers)
   
 protected:
   unsigned char _order;
-  vectori       _nodes;
   HalfT         _halfs[n_borders];
-  
+  vectori       _nodes;
  
 };
 
@@ -479,5 +481,7 @@ const std::vector<matrixi> Tetrahedron<_Traits>::table1 = Tetrahedron::_initTabl
 template<class _Traits>
 const std::vector<matrixi> Tetrahedron<_Traits>::table2 = Tetrahedron::_initTable2();
 
+template<class _Traits>
+const std::vector<matrixi> Tetrahedron<_Traits>::table3 = Tetrahedron::_initTable3();
 
 #endif

@@ -86,9 +86,9 @@ void iMesh<_Traits>::buildAdjacency4face()
       thisC = tab_it->second[0];
       thisith =  tab_it->second[1];
       thistag = this->getCell(thisC)->getTag();
-      HalfT temp(thisC, thisith, 0, thistag);
+      HalfT temp(thisC, thisith, -1, thistag);
       int mHE_universal_iD = addHalf(temp);
-      this->getCell(thisC)->getHalf(thisith)->setCompleteId(mHE_universal_iD, -1);
+      this->getCell(thisC)->getHalf(thisith)->setCompleteId(mHE_universal_iD, -1, -1);
       table.erase(tab_it);
     }
   }
@@ -165,9 +165,9 @@ void iMesh<_Traits>::buildAdjacency4volume()
       thisC = tab_it->second[0];
       thisith =  tab_it->second[1];
       thistag = this->getCell(thisC)->getTag();
-      HalfT temp(thisC, thisith, 0, thistag);
+      HalfT temp(thisC, thisith, -1, thistag);
       int mHE_universal_iD = addHalf(temp);
-      this->getCell(thisC)->getHalf(thisith)->setCompleteId(mHE_universal_iD, -1, 0);
+      this->getCell(thisC)->getHalf(thisith)->setCompleteId(mHE_universal_iD, -1, -1);
       table.erase(tab_it);
     }
 
@@ -194,11 +194,11 @@ void iMesh<_Traits>::buildAdjacency4volume()
   //{
     //this->getNode(k)->printSelfVtk(Fout);
     //Fout << " " << this->getNode(k)->getTag() << std::endl;
-	//}
+  //}
 
   //CellT *cell;
   //Fout << std::endl;
-  //Fout << getElementNameMsh(CellT::getMshTag(order)) << std::endl;
+  //Fout << getElementNameMsh(CellT::getTagMsh(order)) << std::endl;
   //for (int i = 0; i < this->getNumCells(); i++)
   //{
     //cell = this->getCell(i);

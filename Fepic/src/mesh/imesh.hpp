@@ -43,6 +43,7 @@ public:
 
   typedef typename _Traits::CellT  CellT;
   typedef typename _Traits::PointT PointT;
+  typedef typename _Traits::MeshT MeshT;
 
   typedef typename _Traits::HalfT  HalfT;
 
@@ -64,10 +65,7 @@ public:
   typedef Eigen::Matrix<double, _Traits::spacedim, 1> VecT;
 
 
-  iMesh()
-  {
-    _order = 1;
-  };
+  iMesh() : _order(1) {};
 
   iMesh(iMesh const&) = delete;
   ~iMesh() = default;
@@ -76,9 +74,9 @@ public:
   * IO members
   * ------------------------------------------------------------*/
 
-  void setFamilyFiles()
+  void setFamilyFiles(bool set_family=true)
   {
-    _is_family=true;
+    _is_family=set_family;
   }
 
   /* Em todas as funções de leitura de arquivo, DEVE ser chamado
@@ -149,7 +147,7 @@ public:
   * @param[in] dead_mh bool indicando se as Mhalf (dead) incluem na pesquisa.
   * @note o critério de existência é se os nós são ciclicamente iguais aos da Mhalf.
   */
-  bool theseVerticesFormAHalf(vectori const& vtx, int &half_id, bool dead_mh = false)
+  bool theseVerticesFormAHalf(vectori const& vtx, int &half_id, bool dead_mh = false) const
   {
     // OTIMIZAR
 
@@ -158,7 +156,7 @@ public:
     // IMPLEMENTAR ITERADOR
     for(int i=0; i<nummhalf; ++i)
     {
-      bool b = this->getHalf(i)->hasTheseVertices(vtx, *this);
+      bool b = this->getHalf(i)->hasTheseVertices(vtx, *static_cast<const MeshT*>(this));
 
       if(b && (dead_mh || (!this->getHalf(i)->disabled())) )
       {
@@ -335,7 +333,6 @@ public:
     vectori vtx;
     double sum=0.;
 
-    std::cout << _halfL.size() << std::endl;
 
     for (; it!= _halfL.end(); ++it)
       sum += it->HalfT::getLenght(*this);

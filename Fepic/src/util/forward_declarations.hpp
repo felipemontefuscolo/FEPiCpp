@@ -46,9 +46,8 @@ template<class _Traits> class Point;
 template<class _Traits> class HalfEdge;
 template<class _Traits> class HalfFace;
 
-// Halfs
-template<class _Traits> class HalfEdgeLab;
-template<class _Traits> class HalfFaceLab;
+// Label
+class _Labelable;
 
 
 template<class ElmType, class _Traits> class _MetaCellOf;

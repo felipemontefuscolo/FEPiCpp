@@ -27,7 +27,7 @@ class _Labelable
 {
 public:
   enum {tag_size = 256,
-        flags_size = 256};
+       flags_size = 256};
 
   enum Masks {
     mk_disabled=1,
@@ -40,7 +40,7 @@ protected:
     FEPIC_CHECK((tag>=0)&&(tag<tag_size), "tag number must be less than "+std::string(itoa(tag_size))+" and greater than 0", std::out_of_range);
     FEPIC_CHECK((flags>=0)&&(flags<flags_size), "wrong flags", std::out_of_range);
   }
-  
+
   _Labelable() : _tag(0), _flags(0) {};
 
 public:
@@ -54,7 +54,7 @@ public:
     FEPIC_CHECK((tag>=0)&&(tag<tag_size), "tag number must be less or equal "+std::string(itoa(tag_size)), std::out_of_range);
     _tag = tag;
   }
-  
+
   bool disabled() const
   {
     return _flags & mk_disabled;
@@ -64,7 +64,7 @@ public:
   {
     _flags = disable_this ? (_flags | mk_disabled) : (_flags & (~mk_disabled));
   }
-  
+
   bool marked() const
   {
     return _flags & mk_marked;
@@ -79,30 +79,31 @@ public:
   {
     return ((_flags & ( 1 << flag_no))!=0) ? 1 : 0;
   }
-  
+
   int getFlags() const
   {
     return _flags;
   }
-    
+
   void setFlag(int flag_no, bool set=true)
   {
     _flags = set ? (_flags | (1<<flag_no)) : (_flags & (~(1<<flag_no)));
   }
-  
+
   void setFlags(int flags)
   {
     _flags = flags;
   }
-  
+
 protected:
   unsigned char _tag; // 0 a 256
   unsigned char _flags; // 256 flags ...
-  
+
 };
 
 
-
+static const int DISABLED = _Labelable::mk_disabled;
+static const int MARKED   = _Labelable::mk_marked;
 
 
 

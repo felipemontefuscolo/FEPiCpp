@@ -85,6 +85,68 @@ public:
     return true;
   }
   
+
+  
+  /* ---- Edge ----*/
+  template<class Cell_T>
+  static int getTagMsh(int order, typename std::enable_if<std::is_same<Simplex<1>,  typename Cell_T::PolytopeT>::value || 
+                                                          std::is_same<Hypercube<1>,typename Cell_T::PolytopeT>::value ||
+                                                          std::is_same<Polytope<1>, typename Cell_T::PolytopeT>::value >::type* = NULL)
+  {
+    /* poderia fazer meta programção aqui, mas acho complicação desnecessária */
+    switch (order)
+    {
+      case 1: return MSH_LIN_2;
+      case 2: return MSH_LIN_3;
+      case 3: return MSH_LIN_4;
+      case 4: return MSH_LIN_5;
+      case 5: return MSH_LIN_6;
+      default:
+      {
+        std::cout << "edge order not supported yet" << std::endl;
+        throw;
+      }
+    }
+  }
+
+
+  // triangle
+  template<class Cell_T>
+  static int getTagMsh(int order, typename std::enable_if<std::is_same<Simplex<2>, typename Cell_T::PolytopeT>::value>::type* = NULL)
+  {
+    switch (order)
+    {
+      case 1: return MSH_TRI_3;
+      case 2: return MSH_TRI_6;
+      case 3: return MSH_TRI_10;
+      case 4: return MSH_TRI_15;
+      case 5: return MSH_TRI_21;
+      default:
+      {
+        std::cout << "Triangle order not supported." << std::endl;
+        throw;
+      }
+    }
+  }
+
+  // tetrahedron
+  template<class Cell_T>
+  static int getTagMsh(int order, typename std::enable_if<std::is_same<Simplex<3>, typename Cell_T::PolytopeT>::value>::type* = NULL)
+  {
+    switch (order)
+    {
+      case 1: return MSH_TET_4;
+      case 2: return MSH_TET_10;
+      case 3: return MSH_TET_20;
+      case 4: return MSH_TET_35;
+      case 5: return MSH_TET_56;
+      default:
+      {
+        std::cout << "invalid tetrahedron order." << std::endl;
+        throw;
+      }
+    }
+  }
     
 protected:
 
@@ -213,11 +275,11 @@ void _MeshIoMsh<_Traits>::readFileMsh(const char* filename)
         {
           if (CellT::dim==1)
           {
-            if (CellT::getMshTag(order) != type_aux)
+            if (_MeshIoMsh::getTagMsh<CellT>(order) != type_aux)
             {
               std::cout << "Invalid edge! file has: " << getElementNameMsh(type_aux) << std::endl;
               std::cout << "But Mesh is configured to support: "
-                                      << getElementNameMsh(CellT::getMshTag(order)) << std::endl;
+                                      << getElementNameMsh(_MeshIoMsh::getTagMsh<CellT>(order)) << std::endl;
               throw;
             }
             for (int i=0; i<Cell.getNumNodes(); ++i)
@@ -240,11 +302,11 @@ void _MeshIoMsh<_Traits>::readFileMsh(const char* filename)
         {
           if (CellT::dim==2)
           {
-            if (CellT::getMshTag(order) != type_aux)
+            if (_MeshIoMsh::getTagMsh<CellT>(order) != type_aux)
             {
               std::cout << "Invalid face! file has: " << getElementNameMsh(type_aux) << std::endl;
               std::cout << "But Mesh is configured to support: "
-                                      << getElementNameMsh(CellT::getMshTag(order)) << std::endl;
+                                      << getElementNameMsh(_MeshIoMsh::getTagMsh<CellT>(order)) << std::endl;
               throw;
             }
             for (int i=0; i<Cell.getNumNodes(); ++i)
@@ -267,11 +329,11 @@ void _MeshIoMsh<_Traits>::readFileMsh(const char* filename)
         {
           if (CellT::dim==3)
           {
-            if (CellT::getMshTag(order) != type_aux)
+            if (_MeshIoMsh::getTagMsh<CellT>(order) != type_aux)
             {
               std::cout << "Invalid volume! file has: " << getElementNameMsh(type_aux) << std::endl;
               std::cout << "But Mesh is configured to support: "
-                                      << getElementNameMsh(CellT::getMshTag(order)) << std::endl;
+                                      << getElementNameMsh(_MeshIoMsh::getTagMsh<CellT>(order)) << std::endl;
               throw;
             }
             for (int i=0; i<Cell.getNumNodes(); ++i)
@@ -299,7 +361,7 @@ void _MeshIoMsh<_Traits>::readFileMsh(const char* filename)
 
   if (num_cells == 0)
     std::cout << "WARNING: mesh file don't have any "
-              << getElementNameMsh(CellT::getMshTag(order)) << std::endl;
+              << getElementNameMsh(_MeshIoMsh::getTagMsh<CellT>(order)) << std::endl;
 
   /* até aqui, apenas foi lido a conectividade
    */

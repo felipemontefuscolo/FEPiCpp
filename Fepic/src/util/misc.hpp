@@ -68,12 +68,6 @@ void copy_from(In_it a_begin, Out_it c_begin, Out_it c_end)
 }
 
 
-
-
-
-
-
-
 /** Verifica se dois vetores são (anti)ciclicamente iguais.
  *  TESTAR, POIS FIZ MUDANÇAS
  */
@@ -135,29 +129,6 @@ void printMatrix(T const& mat, std::ostream &o, int N, int M)
 }
 
 
-
-/* procura uma palavra e deixa/retorna o indicador de leitura nesta posição */
-inline
-size_t search_word(std::ifstream &File, const char* word) {
-  std::string s;
-  std::string word_s = std::string(word);
-
-    do
-  {
-    s="";
-    File >> s;
-    if (File.peek()==EOF)
-    {
-      return static_cast<size_t>(-1);
-    }
-  } while(s!=word_s);
-
-  return size_t(File.tellg());
-
-}
-
-
-
 /** Retorna o n-ésimo bit da constante c passada.
  */
 template<class T>
@@ -187,6 +158,26 @@ inline void unset_bit(T & c, unsigned bitoffset)
 
 
 // files
+
+/* procura uma palavra e deixa/retorna o indicador de leitura nesta posição */
+inline
+size_t search_word(std::ifstream &File, const char* word) {
+  std::string s;
+  std::string word_s = std::string(word);
+
+    do
+  {
+    s="";
+    File >> s;
+    if (File.peek()==EOF)
+    {
+      return static_cast<size_t>(-1);
+    }
+  } while(s!=word_s);
+
+  return size_t(File.tellg());
+
+}
 
 /**
  * C++ version 0.4 std::string style "itoa":

@@ -28,6 +28,7 @@ protected:
   
   _iMeshNameHandler() : _is_family(false) {}
   
+public:  
   /** @param a file name (without extension) or a path in the form <tt>foo/bar/</tt>
    *  @example if <tt>foo</tt> and <tt>bar</tt> are two directories:
    *           -foo/file  (ok)
@@ -70,7 +71,9 @@ protected:
     }
     
   }
+
   
+protected:  
   /// TODO
   void printNames()
   {

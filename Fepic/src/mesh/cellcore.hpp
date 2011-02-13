@@ -28,7 +28,7 @@ class _CellCore
 #if !defined(THIS) && !defined(CONST_THIS)
   #define THIS static_cast<CellT*>(this)
   #define CONST_THIS static_cast<const CellT*>(this)
-#endif  
+#endif
 
 public:
   typedef typename _Traits::CellT  CellT;
@@ -38,9 +38,9 @@ public:
 protected:
   _CellCore() {};
   _CellCore(_CellCore const&) {};
-  
+
 public:
-  
+
   int getOrder() const
   {
     return CONST_THIS->_order;
@@ -62,7 +62,7 @@ public:
   }
 
   int getNodeIdx(int ith) const
-  {   
+  {
 #ifdef FEPIC_DEBUG_ON
     return CONST_THIS->_nodes.at(ith);
 #else
@@ -70,30 +70,48 @@ public:
 #endif
   }
 
+  vectori getVertices() const
+  {
+    if (CONST_THIS->_order==1)
+      return CONST_THIS->_nodes;
+  
+    vectori vtxs(CellT::n_vertices);
+    std::copy(CONST_THIS->_nodes.begin(), // from
+              CONST_THIS->_nodes.begin()+CellT::n_vertices,
+              vtxs.begin());              // to
+    return vtxs;
+  }
+
+  vectori getNodes() const
+  {
+    return CONST_THIS->_nodes;
+  }
+
   vectori getBorderVertices(int ith) const
   {
-    //static matrixi faces_vtx(_MetaCellOf<CellT, _Traits>::get_faces_vtx());
+    FEPIC_CHECK(ith < CellT::n_borders, "invalid index", std::out_of_range);
     int vsize = CellT::borders_local_vertices[ith].size();
     vectori vtx(vsize);
-    
+
     for (int i = 0; i < vsize; ++i)
       vtx[i] = CONST_THIS->_nodes[CellT::borders_local_vertices[ith][i]];
-      
+
     return vtx;
   }
 
   vectori getBorderNodes(int ith) const
   {
+    FEPIC_CHECK(ith < CellT::n_borders, "invalid index", std::out_of_range);
     matrixi const& borders_local_nodes = CellT::getBordersLocalNodes(CONST_THIS->getOrder());
     int tam(borders_local_nodes[ith].size());
     vectori nodes(tam);
-    
+
     for (int i = 0; i < tam; ++i)
       nodes[i] =  CONST_THIS->_nodes[ borders_local_nodes[ith][i] ];
-      
+
     return nodes;
   }
-  
+
   void setNode(int ith, int nodeid)
   {
 #ifdef FEPIC_DEBUG_ON
@@ -101,7 +119,31 @@ public:
 #else
     THIS->_nodes[ith] = nodeid;
 #endif
-  }  
+  }
+
+  bool isBoundary(vectori & boundaries) const
+  {
+    boundaries.clear();
+    for (int ith = 0; ith < CellT::n_borders; ++ith)
+    {
+      if (CONST_THIS->_halfs[ith].isBoundary())
+      {
+        boundaries.push_back(ith);
+      }
+    }
+    return boundaries.empty() ? false : true;
+  }
+
+  bool isBoundary() const
+  {
+    const HalfT* it = CONST_THIS->_halfs;
+    for (; it != CONST_THIS->_halfs + CellT::n_borders; ++it)
+    {
+      if (it->isBoundary())
+      return true;
+    }
+    return false;
+  }
 
   HalfT* getHalf(int ith)
   {
@@ -135,8 +177,8 @@ public:
   }
 
 #undef THIS
-#undef CONST_THIS  
-  
+#undef CONST_THIS
+
 };
 
 

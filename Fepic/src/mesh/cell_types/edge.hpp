@@ -141,11 +141,8 @@ public:
   */ 
   void printSelfVtk(std::ostream &o, int order) const
   {
-  
-
           
   }
-  
   
   /** Imprime esta Edge no formato State
   */ 
@@ -154,27 +151,6 @@ public:
     o << getNodeIdx(0);
     for (int i = 0; i < order+1; ++i)
       o << " " << getNodeIdx(i);
-  }
-  
-  /** Retorna a tag de uma Edge no formato Msh.
-  *  @param order a ordem da Edge.
-  */  
-  static int getMshTag(int order)
-  {
-    /* poderia fazer meta programção aqui, mas acho complicação desnecessária */
-    switch (order)
-    {
-      case 1: return MSH_LIN_2;
-      case 2: return MSH_LIN_3;
-      case 3: return MSH_LIN_4;
-      case 4: return MSH_LIN_5;
-      case 5: return MSH_LIN_6;
-      default:
-      {
-        std::cout << "edge order not supported yet" << std::endl;
-        throw;
-      }
-    }
   }
 
 protected:  

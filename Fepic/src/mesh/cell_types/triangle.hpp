@@ -63,7 +63,7 @@ public:
     FEPIC_CHECK(nodes.size()==numNodes<Simplex<2>>(order), "", std::invalid_argument);
   }  
   
-  Triangle() : _nodes({0,0,0}), _order(1) {};
+  Triangle() : _nodes({-1,-1,-1}), _order(1) {};
   Triangle(Triangle const&) = default;
   ~Triangle() = default;
 
@@ -76,40 +76,12 @@ public:
     _order = order;
   }
   
-  /** Retorna a tag do formato Msh correspondente a um triângulo de ordem <em>order</em>.
-  */ 
-  static int getMshTag(int order)
-  {
-    switch (order)
-    {
-      case 1: return MSH_TRI_3;
-      case 2: return MSH_TRI_6;
-      case 3: return MSH_TRI_10;
-      case 4: return MSH_TRI_15;
-      case 5: return MSH_TRI_21;
-      default:
-      {
-        std::cout << "Triangle order not supported." << std::endl;
-        throw;
-      }
-    }
-  }
-  
-
-  
-  /** TRABALHO: apenas linear
-  * retorna a tag do formato Vtk correspondente a este elemento.
-  */ 
-  static int getCellTypeVtk()
-  {
-    return 5; // Vtk_TRIANGLE(=5)
-  }
-  
   /** NOT FO USERS
   * @param n ordem
   */ 
   static vectori getOppELN(int n)
   {
+    FEPIC_CHECK(n>0, "", std::invalid_argument);
     vectori opp_eln(n+1);
     
     opp_eln[0]=1;
@@ -264,9 +236,8 @@ public:
 
 protected:
   unsigned char _order;
-  vectori       _nodes;
   HalfT         _halfs[n_borders];
-   
+  vectori       _nodes;
   
 };
 

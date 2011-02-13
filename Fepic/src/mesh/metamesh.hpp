@@ -41,12 +41,12 @@ public:
   {
     mesh.buildAdjacency4face();
   }
-    
+
   static void remodelCellsNodes(Mesh & mesh, int order)
   {
     mesh.remodelCellsNodes4face(order);
   }
-  
+
 };
 
 template<class Mesh>
@@ -57,20 +57,20 @@ public:
   {
     mesh.buildAdjacency4volume();
   }
-    
+
   static void remodelCellsNodes(Mesh & mesh, int order)
   {
     mesh.remodelCellsNodes4volume(order);
   }
-  
+
 };
 
 
 
 /*
-	==================================================================
-	================== _MeshReadMarkedElementsMsh =====================
-	==================================================================
+  ==================================================================
+  ================== _MeshReadMarkedElementsMsh =====================
+  ==================================================================
 */
 
 template<class Mesh, int CellDim>

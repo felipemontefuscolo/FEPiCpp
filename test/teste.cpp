@@ -35,6 +35,7 @@ int main(int argc, char *argv[]) {
   if(DIM==3)
   {
     malha.readFileMsh("malha/monotet.msh");
+    //malha.readFileFsf("malha/monotet.fsf");
     //malha.readFileMsh("malha/tetbig.msh");
   }
   else
@@ -47,14 +48,12 @@ int main(int argc, char *argv[]) {
   
   //malha.setOrder(2);
   
-  malha.writeVtk();
-  malha.writeFsf();
+  //malha.writeVtk();
+  malha.writeFsf("malha/monotet-2.fsf");
   
-  cout << sizeof(MyCell) << endl;
-  cout << sizeof(_Labelable) << endl;
-  cout << sizeof(MyT::HalfT) << endl;
-
-  cout << "-----------" << endl;
+  vector<double> pressure{1.1,3.,1,4,1,4};
+  
+  printData(pressure, pressure.size(), "pressure.dat");
   
   //malha.writeFileState();
   

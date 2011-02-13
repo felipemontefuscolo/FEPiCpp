@@ -30,10 +30,10 @@ public:
   typedef typename _Traits::MeshT MeshT;
   typedef typename _Traits::CellT CellT;
 
-  enum {cell_id_limit=134217727};
-  enum {position_limit=6};
-  enum {anchor_limit=3};
-  
+  enum {cell_id_limit=INT_MAX};
+  enum {position_limit=INT8_MAX};
+  enum {anchor_limit=INT8_MAX};
+
   friend class _HalfCore<_Traits>;
 
   template<class... LabelArgs>
@@ -42,62 +42,34 @@ public:
                                                          _incid_cell(incid_cell),
                                                          _position(position),
                                                          _anchor(anchor) {}
-  
+
   HalfFace(HalfFace const&) = default;
   HalfFace() : _Labelable(), _incid_cell(-1), _position(-1), _anchor(-1) {}
   ~HalfFace() = default;
-  
+
   /** Imprime em um stream a composição do iD, i.e, imprime \n
   *  getIncidCell() << " " << getPosition() << " " << getAnchor()
   *  @param o o stream onde se vai escrever.
-  */ 
+  */
   void printSelf(std::ostream& o) const
   {
     o << this->getIncidCell() << " " << this->getPosition() << " " << this->getAnchor();
   }
-  
+
   /** @return uma string com o nome Half-Face.
-  */ 
+  */
   static std::string getName()
   {
     return std::string("Half-Face");
   }
-  
-  /** Faz com que cada nó desta HalfFaceLab aponte para ela.
-  *  @param mesh a malha na qual a HalfFaceLab está contida.
-  */ 
-  void broadcastHalf2Nodes(MeshT& mesh) const
-  {
-    vectori v (mesh.getCell( this->getIncidCell() )->getBorderNodes( this->getPosition()));
-    
-    for (int i = 0; i < v.size(); i++)
-    {
-      mesh.getNode(v[i])->setHalf(*this);
-    }
-  }
-  
-  /** Atribui o rótulo desta _MetaHalfLabOf a seus nós.
-  * @param force quando true indica atribuição incondicional, quando false,
-  * a atribuição é feita somente se cada nó tem tag=0;
-  */ 
-  void broadcastTag2Nodes(MeshT& mesh, bool force=false) const
-  {
-    vectori v (mesh.getCell( this->getIncidCell() )->getBorderNodes( this->getPosition(),mesh ));
-    
-    if (force)
-      for (int i = 0; i < v.size(); ++i)
-        mesh.getNode(v[i])->setTag(this->getTag());
-    else
-      for (int i = 0; i < v.size(); i++)
-        if (mesh.getNode(v[i])->getTag() == 0)
-          mesh.getNode(v[i])->setTag(this->getTag());
-  } 
+
+
 
 protected:
   int8_t  _position;
   int8_t  _anchor;
   int     _incid_cell;
-};      
+};
 
 
 

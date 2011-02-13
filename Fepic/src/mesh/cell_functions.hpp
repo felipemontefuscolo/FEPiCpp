@@ -32,7 +32,7 @@ template<> inline int numNodes<Simplex<1>>(int order) {
 
 template<> inline int numNodes<Simplex<2>>(int order) {
   return (order+1)*(order+2)/2; }
-  
+
 template<> inline int numNodes<Simplex<3>>(int order) {
   return (order+1)*(order+2)*(order+3)/6; }
 
