@@ -127,25 +127,29 @@ TYPED_TEST(TriangleTest, Methods) {
 
   typedef typename TypeParam::CellT CellT;
   
+  Eigen::VectorXi v1(3),v2(6),v3(10),vm(3);
+  v1 << 1,2,3;
+  v2 << 1,2,3,4,5,6;
+  v3 << 1,2,3,4,5,6,7,8,9,10;
+  vm << -1,-1,-1;
+  
   CellT tri1;
-  CellT tri2(vectori({1,2,3}),1);
-  CellT tri3(vectori({1,2,3,4,5,6}),2,'a',DISABLED);
-  CellT tri4(vectori({1,2,3,4,5,6,7,8,9,10}),3,111, DISABLED | MARKED);
+  CellT tri2(v1, 1);
+  CellT tri3(v2, 2,'a',DISABLED);
+  CellT tri4(v3, 3,111, DISABLED | MARKED);
 
 #ifdef FEPIC_DEBUG_ON
-  ASSERT_ANY_THROW(CellT(vectori({1,2,3}),2));     // incorrect order
-  ASSERT_ANY_THROW(CellT(vectori({1,2,3,5,6}),2)); // incorrect order
-  ASSERT_ANY_THROW(CellT(vectori({}),1));          // incorrect order
-  ASSERT_ANY_THROW(CellT(vectori({1,2,3}),1,666)); // tag out of range
+  ASSERT_ANY_THROW(CellT(v1, 2));     // incorrect order
+  ASSERT_ANY_THROW(CellT(v1, 1,666)); // tag out of range
 #endif  
   
   // nodes and vertices
-  EXPECT_TRUE( tri1.getVertices() == vectori({-1,-1,-1}) );
-  EXPECT_TRUE( tri2.getVertices() == vectori({1,2,3}) );
-  EXPECT_TRUE( tri3.getNodes()    == vectori({1,2,3,4,5,6}) );
-  EXPECT_TRUE( tri3.getVertices() == vectori({1,2,3}) );
-  EXPECT_TRUE( tri4.getVertices() == vectori({1,2,3}) );
-  EXPECT_TRUE( tri4.getNodes()    == vectori({1,2,3,4,5,6,7,8,9,10}) );
+  EXPECT_TRUE( tri1.getVertices() == vm );
+  EXPECT_TRUE( tri2.getVertices() == v1 );
+  EXPECT_TRUE( tri3.getNodes()    == v2 );
+  EXPECT_TRUE( tri3.getVertices() == v1 );
+  EXPECT_TRUE( tri4.getVertices() == v1 );
+  EXPECT_TRUE( tri4.getNodes()    == v3 );
   
   // labels
   EXPECT_EQ  ( 'a', tri3.getTag() );
@@ -154,17 +158,17 @@ TYPED_TEST(TriangleTest, Methods) {
   EXPECT_TRUE( tri4.disabled() && tri4.marked() );
   
   // borders nodes and vertices
-  EXPECT_TRUE( tri4.getBorderVertices(0) == vectori({1,2}) );
-  EXPECT_TRUE( tri4.getBorderVertices(1) == vectori({2,3}) );
-  EXPECT_TRUE( tri4.getBorderVertices(2) == vectori({3,1}) );
-  EXPECT_TRUE( tri4.getBorderNodes(0) == vectori({1,2,4,5}) );
-  EXPECT_TRUE( tri4.getBorderNodes(1) == vectori({2,3,6,7}) );
-  EXPECT_TRUE( tri4.getBorderNodes(2) == vectori({3,1,8,9}) );
+  EXPECT_TRUE( tri4.getBorderVertices(0) == Eigen::Vector2i(1,2) );
+  EXPECT_TRUE( tri4.getBorderVertices(1) == Eigen::Vector2i(2,3) );
+  EXPECT_TRUE( tri4.getBorderVertices(2) == Eigen::Vector2i(3,1) );
+  EXPECT_TRUE( tri4.getBorderNodes(0) == Eigen::Vector4i(1,2,4,5) );
+  EXPECT_TRUE( tri4.getBorderNodes(1) == Eigen::Vector4i(2,3,6,7) );
+  EXPECT_TRUE( tri4.getBorderNodes(2) == Eigen::Vector4i(3,1,8,9) );
   
   // neighbor getOppELN
-  EXPECT_TRUE( CellT::getOppELN(1) == vectori({1,0}) );
-  EXPECT_TRUE( CellT::getOppELN(2) == vectori({1,2,0}) );
-  EXPECT_TRUE( CellT::getOppELN(3) == vectori({1,3,2,0}) );
+  EXPECT_TRUE( CellT::getOppELN(1) == Eigen::Vector2i(1,0) );
+  EXPECT_TRUE( CellT::getOppELN(2) == Eigen::Vector3i(1,2,0) );
+  EXPECT_TRUE( CellT::getOppELN(3) == Eigen::Vector4i(1,3,2,0) );
   
 }
 
@@ -191,25 +195,29 @@ TYPED_TEST(TetrahedronTest, Methods) {
 
   typedef typename TypeParam::CellT CellT;
   
+  Eigen::VectorXi v1(4),v2(10),v3(20),vm(4);
+  v1 << 1,2,3,4;
+  v2 << 1,2,3,4,5,6,7,8,9,10;
+  v3 << 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20;
+  vm << -1,-1,-1,-1;
+  
   CellT tet1;
-  CellT tet2(vectori({1,2,3,4}),1);
-  CellT tet3(vectori({1,2,3,4,5,6,7,8,9,10}),2,'a',DISABLED);
-  CellT tet4(vectori({1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20}),3,111, DISABLED | MARKED);
+  CellT tet2(v1 ,1);
+  CellT tet3(v2, 2,'a',DISABLED);
+  CellT tet4(v3, 3,111, DISABLED | MARKED);
 
 #ifdef FEPIC_DEBUG_ON
-  ASSERT_ANY_THROW(CellT(vectori({1,2,3,4}),2));   // incorrect order
-  ASSERT_ANY_THROW(CellT(vectori({1,2,3,5,6}),2)); // incorrect order
-  ASSERT_ANY_THROW(CellT(vectori({}),1));          // incorrect order
-  ASSERT_ANY_THROW(CellT(vectori({1,2,3,4}),1,666)); // tag out of range
+  ASSERT_ANY_THROW(CellT(v1, 2));   // incorrect order
+  ASSERT_ANY_THROW(CellT(v1, 1,666)); // tag out of range
 #endif  
   
   // nodes and vertices
-  EXPECT_TRUE( tet1.getVertices() == vectori({-1,-1,-1,-1}) );
-  EXPECT_TRUE( tet2.getVertices() == vectori({1,2,3,4}) );
-  EXPECT_TRUE( tet3.getNodes()    == vectori({1,2,3,4,5,6,7,8,9,10}) );
-  EXPECT_TRUE( tet3.getVertices() == vectori({1,2,3,4}) );
-  EXPECT_TRUE( tet4.getVertices() == vectori({1,2,3,4}) );
-  EXPECT_TRUE( tet4.getNodes()    == vectori({1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20}) );
+  EXPECT_TRUE( tet1.getVertices() == vm );
+  EXPECT_TRUE( tet2.getVertices() == v1 );
+  EXPECT_TRUE( tet3.getNodes()    == v2 );
+  EXPECT_TRUE( tet3.getVertices() == v1 );
+  EXPECT_TRUE( tet4.getVertices() == v1 );
+  EXPECT_TRUE( tet4.getNodes()    == v3 );
   
   // labels
   EXPECT_EQ  ( 'a', tet3.getTag() );
@@ -218,33 +226,43 @@ TYPED_TEST(TetrahedronTest, Methods) {
   EXPECT_TRUE( tet4.disabled() && tet4.marked() );
   
   // borders nodes and vertices
-  EXPECT_TRUE( tet4.getBorderVertices(0) == vectori({2,1,3}) );
-  EXPECT_TRUE( tet4.getBorderVertices(1) == vectori({1,2,4}) );
-  EXPECT_TRUE( tet4.getBorderVertices(2) == vectori({4,3,1}) );
-  EXPECT_TRUE( tet4.getBorderVertices(3) == vectori({3,4,2}) );
-  EXPECT_TRUE( tet4.getBorderNodes(0) == vectori({2,1,3,6,5,10,9,8,7,17}) );
-  EXPECT_TRUE( tet4.getBorderNodes(1) == vectori({1,2,4,5,6,16,15,11,12,18}) );
-  EXPECT_TRUE( tet4.getBorderNodes(2) == vectori({4,3,1,13,14,9,10,12,11,19}) );
-  EXPECT_TRUE( tet4.getBorderNodes(3) == vectori({3,4,2,14,13,15,16,7,8,20}) );
+  Eigen::VectorXi v10(10);
+  EXPECT_TRUE( tet4.getBorderVertices(0) == Eigen::Vector3i(2,1,3) );
+  EXPECT_TRUE( tet4.getBorderVertices(1) == Eigen::Vector3i(1,2,4) );
+  EXPECT_TRUE( tet4.getBorderVertices(2) == Eigen::Vector3i(4,3,1) );
+  EXPECT_TRUE( tet4.getBorderVertices(3) == Eigen::Vector3i(3,4,2) );
+  
+  v10 << 2,1,3,6,5,10,9,8,7,17;
+  EXPECT_TRUE( tet4.getBorderNodes(0) == v10 );
+  v10 << 1,2,4,5,6,16,15,11,12,18;
+  EXPECT_TRUE( tet4.getBorderNodes(1) == v10 );
+  v10 << 4,3,1,13,14,9,10,12,11,19;
+  EXPECT_TRUE( tet4.getBorderNodes(2) == v10 );
+  v10 << 3,4,2,14,13,15,16,7,8,20;
+  EXPECT_TRUE( tet4.getBorderNodes(3) == v10 );
   
   
   // neighbor getOppELN
-  EXPECT_TRUE( CellT::getOppELN(1) == vectori({1,0}) );
-  EXPECT_TRUE( CellT::getOppELN(2) == vectori({1,2,0}) );
-  EXPECT_TRUE( CellT::getOppELN(3) == vectori({1,3,2,0}) );
+  EXPECT_TRUE( CellT::getOppELN(1) == Eigen::Vector2i(1,0) );
+  EXPECT_TRUE( CellT::getOppELN(2) == Eigen::Vector3i(1,2,0) );
+  EXPECT_TRUE( CellT::getOppELN(3) == Eigen::Vector4i(1,3,2,0) );
   
   // neighbor getOppFLN
-  matrixi order1{{2,1,0},  // anchor 0
-                 {1,0,2},  // anchor 1
-                 {0,2,1}}; // anchor 2 
+  Eigen::Matrix3i order1;
+  order1 <<  2,1,0,  // anchor 0
+             1,0,2,  // anchor 1
+             0,2,1; // anchor 2 
                  
-  matrixi order2{{2,1,0,4,3,5},  // anchor 0
-                 {1,0,2,3,5,4},  // anchor 1
-                 {0,2,1,5,4,3}}; // anchor 2
+  Eigen::MatrixXi order2(3,6);
   
-  matrixi order3{{2,1,0,6,5,4,3,8,7,9},  // anchor 0
-                 {1,0,2,4,3,8,7,6,5,9},  // anchor 1
-                 {0,2,1,8,7,6,5,4,3,9}}; // anchor 2
+  order2 << 2,1,0,4,3,5,  // anchor 0
+            1,0,2,3,5,4,  // anchor 1
+            0,2,1,5,4,3; // anchor 2
+  
+  Eigen::MatrixXi order3(3,10); 
+  order3 << 2,1,0,6,5,4,3,8,7,9,  // anchor 0
+            1,0,2,4,3,8,7,6,5,9,  // anchor 1
+            0,2,1,8,7,6,5,4,3,9; // anchor 2
   
   
   EXPECT_TRUE( CellT::getOppFLN(1) == order1 );

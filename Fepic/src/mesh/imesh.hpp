@@ -147,7 +147,7 @@ public:
   * @param[in] dead_mh bool indicando se as Mhalf (dead) incluem na pesquisa.
   * @note o critério de existência é se os nós são ciclicamente iguais aos da Mhalf.
   */
-  bool theseVerticesFormAHalf(vectori const& vtx, int &half_id, bool dead_mh = false) const
+  bool theseVerticesFormAHalf(Eigen::VectorXi const& vtx, int &half_id, bool dead_mh = false) const
   {
     // OTIMIZAR
 
@@ -330,7 +330,7 @@ public:
   double getPerimeter()
   {
     auto it = _halfL.begin();
-    vectori vtx;
+    Eigen::VectorXi vtx;
     double sum=0.;
 
 
@@ -388,14 +388,6 @@ public:
   {
     return _halfL.end();
   }
-
-
-  // propriedades da célula da malha e outros atributos auxiliares
-  //matrixi edges_local_nodes; // face, volume
-  //matrixi borders_local_nodes; // volume
-  vectori opp_eln; // opposite edges_local_nodes
-  matrixi opp_fln; // opposite borders_local_nodes
-                          // ex: borders_local_nodes[f][opp_fln[i]] := é o que a célula oposta enxerga
 
   // entities
   CellList      _cellL;

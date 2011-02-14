@@ -32,9 +32,6 @@
 
 //namespace Fepic {
   
-  typedef std::vector<std::vector<int> > matrixi;
-
-  typedef std::vector<int> vectori;
   typedef std::deque<int>  dequei;
 
   /* vetores para representar os espaços R² e R³ são os do Eigen*/
@@ -52,6 +49,18 @@ namespace Fepic {
   }
 
 }
+
+template<bool Bool, typename CaseTrue, typename CaseFalse>
+struct IfThenElse;
+
+template<typename CaseTrue, typename CaseFalse>
+struct IfThenElse<true, CaseTrue, CaseFalse> {
+  typedef CaseTrue type;
+};
+template<typename CaseTrue, typename CaseFalse>
+struct IfThenElse<false, CaseTrue, CaseFalse> {
+  typedef CaseFalse type;
+};
 
 
 /** função parecida com a copy do STL. \n
@@ -71,10 +80,10 @@ void copy_from(In_it a_begin, Out_it c_begin, Out_it c_end)
 /** Verifica se dois vetores são (anti)ciclicamente iguais.
  *  TESTAR, POIS FIZ MUDANÇAS
  */
-template<class T>
-bool arrayIsCyclicallyEqual(std::vector<T> const& v1, std::vector<T> const& v2)
+template<class Vec>
+bool arrayIsCyclicallyEqual(Vec const& v1, Vec const& v2)
 {
-  std::vector<T> vaux(v2);
+  Vec vaux(v2);
   int vsize = v2.size();
   auto vaux_begin = vaux.begin(), vaux_end = vaux.end();
 

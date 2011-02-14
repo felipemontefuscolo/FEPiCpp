@@ -94,7 +94,7 @@ public:
   /** Retorna um vetor com os índices dos vértices que esta HalfFace contém.
   *  @param mesh a malha na qual a HalfFace está contida.
   */
-  vectori getVertices(MeshT const& mesh) const
+  Eigen::VectorXi getVertices(MeshT const& mesh) const
   {
     return mesh.getCell(this->getIncidCell()) // CELL->
 
@@ -105,7 +105,7 @@ public:
   /** Retorna um vetor com os índices dos nós que esta HalfFace contém.
   *  @param mesh a malha na qual a HalfFace está contida.
   */
-  vectori getNodes(MeshT const& mesh) const
+  Eigen::VectorXi getNodes(MeshT const& mesh) const
   {
       return  mesh.getCell(this->getIncidCell()) // CELL->
 
@@ -120,12 +120,12 @@ public:
   *  @return true se os nós formam a HalfFace e false caso contrário.
   *  @note Os nós podem estar em qualquer orientação cíclica da original.
   */
-  bool hasTheseVertices(vectori const& v, MeshT const& mesh) const
+  bool hasTheseVertices(Eigen::VectorXi const& v, MeshT const& mesh) const
   {
     FEPIC_CHECK(v.size()==CellT::n_vertices_per_border, "", std::invalid_argument);
     const CellT * const cell = mesh.getCell(CONST_THIS->getIncidCell());
 
-    const vectori vtx (cell->getBorderVertices(CONST_THIS->getPosition()));
+    const Eigen::VectorXi vtx (cell->getBorderVertices(CONST_THIS->getPosition()));
 
     return arrayIsCyclicallyEqual(v, vtx);
   }
@@ -135,7 +135,7 @@ public:
   */
   void broadcastHalf2Nodes(MeshT & mesh) const
   {
-    const vectori v (mesh.getCell( CONST_THIS->getIncidCell() )->getBorderNodes( CONST_THIS->getPosition()));
+    const Eigen::VectorXi v (mesh.getCell( CONST_THIS->getIncidCell() )->getBorderNodes( CONST_THIS->getPosition()));
 
     for (int i = 0; i < v.size(); ++i)
       mesh.getNode(v[i])->setHalf(*CONST_THIS);
@@ -148,7 +148,7 @@ public:
   */
   void broadcastTag2Nodes(MeshT & mesh, bool force=false) const
   {
-    const vectori v (mesh.getCell( this->getIncidCell() )->getBorderNodes( this->getPosition(), mesh));
+    const Eigen::VectorXi v (mesh.getCell( this->getIncidCell() )->getBorderNodes( this->getPosition(), mesh));
 
     if (force)
       for (int i = 0; i < v.size(); ++i)

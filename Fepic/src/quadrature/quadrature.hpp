@@ -461,7 +461,7 @@ public:
   *  @param t a função
   *  @param a os argumentos da função
   *
-  *  @note a função deve recever os argumentos tal que \n
+  *  @note a função deve receber os argumentos tal que \n
   *        f = f(L, [a]) \n
   *        onde L é um vetor 2d e a são os eventuais argumentos que a função pode tomar
   */

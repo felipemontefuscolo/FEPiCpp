@@ -51,62 +51,7 @@ protected:
   _Poly2d() {};
 
 public:
-  /** Retorna se os vertices passados formam uma aresta do polígono.
-  * @param[in] vertices um vetor com exatamente 2 vertices.
-  * @param[out] ith o índice local da aresta que os pontos formam.
-  * @return true se e somente se forma uma aresta.
-  * @warning a ordem dos nós É importante.
-  */
-  bool isAnEdge(vectori const& vertices, int &ith) const
-  {
-    FEPIC_CHECK(vertices.size()==2, "", std::invalid_argument);
 
-    vectori vtx(2);
-
-    for (int i = 0; i != CellT::n_borders; ++i)
-    {
-      vtx[0] = CONST_THIS->_nodes[i];
-      vtx[1] = CONST_THIS->_nodes[(i+1)%CellT::n_borders];
-
-      if (vtx == vertices)
-      {
-        ith = i;
-        return true;
-      }
-    }
-    return false;
-  }
-
-  /** Retorna se os vertices passados formam uma aresta do polígono.
-  * @param[in] vertices um vetor com exatamente 2 vertices.
-  * @param[out] ith o índice local da aresta que os pontos formam.
-  * @return true se e somente se forma uma aresta.
-  * @warning a ordem dos nós NÃO é importante.
-  */
-  bool isAnParallelEdge(vectori const& vertices, int &ith) const
-  {
-    if (this->isAnEdge(vertices, ith))
-      return true;
-
-    std::swap(vertices[0], vertices[1]);
-    if (this->isAnEdge(vertices, ith))
-    {
-      std::swap(vertices[0], vertices[1]);
-      return true;
-    }
-    std::swap(vertices[0], vertices[1]);
-    return false;
-  }
-
-  /** Imprime este polígono no formato State (seus nós).
-  * @param o a stream onde se vai imprimir, e.g., std::cout.
-  */
-  void printSelfState(std::ostream &o) const
-  {
-    o << this->getNodeIdx(0);
-    for (int i = 1; i < CONST_THIS->_nodes.size(); ++i)
-      o << " " << this->getNodeIdx(i);
-  }
 
 #undef THIS
 #undef CONST_THIS

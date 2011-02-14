@@ -121,17 +121,17 @@ public:
   typename std::enable_if<std::is_same<Simplex<2>, typename Cell_T::PolytopeT>::value>::type* = NULL)
   {
     FEPIC_CHECK( (order==1) || (order==cell.getOrder()), "invalid order", std::invalid_argument);
-    matrixi const& minimesh = Cell_T::getMinimesh(order);
+    auto const& minimesh = Cell_T::getMinimesh(order);
 
-    o <<"3 "<<  cell.getNodeIdx(minimesh[0][0]) << " " <<
-                cell.getNodeIdx(minimesh[0][1]) << " " <<
-                cell.getNodeIdx(minimesh[0][2]);
-    for (int i = 1; i < minimesh.size(); ++i)
+    o <<"3 "<<  cell.getNodeIdx(minimesh(0,0)) << " " <<
+                cell.getNodeIdx(minimesh(0,1)) << " " <<
+                cell.getNodeIdx(minimesh(0,2));
+    for (int i = 1; i < minimesh.rows(); ++i)
     {
       o << std::endl;
-      o <<"3 "<<  cell.getNodeIdx(minimesh[i][0]) << " " <<
-                  cell.getNodeIdx(minimesh[i][1]) << " " <<
-                  cell.getNodeIdx(minimesh[i][2]);
+      o <<"3 "<<  cell.getNodeIdx(minimesh(i,0)) << " " <<
+                  cell.getNodeIdx(minimesh(i,1)) << " " <<
+                  cell.getNodeIdx(minimesh(i,2));
     }
   }
 
@@ -142,19 +142,19 @@ public:
   typename std::enable_if<std::is_same<Simplex<3>, typename Cell_T::PolytopeT>::value>::type* = NULL)
   {
     FEPIC_CHECK( (order==1) || (order==cell.getOrder()), "invalid order", std::invalid_argument);
-    matrixi const& minimesh = Cell_T::getMinimesh(order);
+    auto const& minimesh = Cell_T::getMinimesh(order);
 
-    o <<"4 "<< cell.getNodeIdx(minimesh[0][0]) << " "
-            << cell.getNodeIdx(minimesh[0][1]) << " "
-            << cell.getNodeIdx(minimesh[0][2]) << " "
-            << cell.getNodeIdx(minimesh[0][3]);
-    for (int i = 1; i < minimesh.size(); ++i)
+    o <<"4 "<< cell.getNodeIdx(minimesh(0,0)) << " "
+            << cell.getNodeIdx(minimesh(0,1)) << " "
+            << cell.getNodeIdx(minimesh(0,2)) << " "
+            << cell.getNodeIdx(minimesh(0,3));
+    for (int i = 1; i < minimesh.rows(); ++i)
     {
       o << std::endl;
-      o <<"4 "<< cell.getNodeIdx(minimesh[i][0]) << " "
-              << cell.getNodeIdx(minimesh[i][1]) << " "
-              << cell.getNodeIdx(minimesh[i][2]) << " "
-              << cell.getNodeIdx(minimesh[i][3]);
+      o <<"4 "<< cell.getNodeIdx(minimesh(i,0)) << " "
+              << cell.getNodeIdx(minimesh(i,1)) << " "
+              << cell.getNodeIdx(minimesh(i,2)) << " "
+              << cell.getNodeIdx(minimesh(i,3));
     }
 
   }

@@ -4,7 +4,7 @@
 # lembre-se que a opção "-pg" deve ser colocado na hora de linkar e compilar
 
 CXX	    = g++-4.5
-#CFLAGS	= -Wall -Winline -g -DEIGEN_NO_DEBUG
+#CFLAGS	= -Wall -Winline -g -DEIGEN_NO_DEBUG -O3 -msse2
 CFLAGS	= -std=c++0x -Wall -g
 LD	    = $(CXX)
 LDFLAGS	=
@@ -12,7 +12,7 @@ RM	    = rm
 INCPATH = -I $(EIGEN_DIR) -I$(FEPIC_DIR)
 #LIBS	= -Wl,-rpath,$(EFEM_DIR)/Fepic/mesh -L$(EFEM_DIR)/Fepic/mesh -lmesh
 
-EXE	    = teste.exe
+EXE	  = teste.exe
 SRCS	= teste.cpp
 
 # pega SRCS e substitui .c por .o

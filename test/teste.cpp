@@ -32,11 +32,12 @@ int main(int argc, char *argv[]) {
     //malha.readFileMsh(name.data()); 
   //}
 
+
   if(DIM==3)
   {
-    malha.readFileMsh("malha/monotet.msh");
+    //malha.readFileMsh("malha/monotet.msh");
     //malha.readFileFsf("malha/monotet.fsf");
-    //malha.readFileMsh("malha/tetbig.msh");
+    malha.readFileMsh("malha/tetbig.msh"); // 6.85 e 1.20
   }
   else
   {
@@ -48,29 +49,11 @@ int main(int argc, char *argv[]) {
   
   //malha.setOrder(2);
   
-  //malha.writeVtk();
-  malha.writeFsf("malha/monotet-2.fsf");
+  malha.writeVtk();
+  //malha.writeFsf("malha/monotet-2.fsf");
   
-  vector<double> pressure{1.1,3.,1,4,1,4};
-  
-  printData(pressure, pressure.size(), "pressure.dat");
-  
-  //malha.writeFileState();
-  
-  //auto v = MyCell::getOppFLN(malha.getOrder());
-  
-  //auto A = malha.getCell(0)->getBorderNodes(0, malha);
-  //auto B = malha.getCell(1)->getBorderNodes(1, malha);
-  
-  //auto temp(B);
-  //for (int i = 0; i < B.size(); ++i)
-  //{
-      //B[i] = temp[v[0][i]];
-  //}
-  
-  
-  //printArray(A, cout, A.size()); cout << endl;
-  //printArray(B, cout, B.size()); cout << endl;
+  //cout << MyCell::getMinimesh(1) << endl;
+
   
   return 0;
 }

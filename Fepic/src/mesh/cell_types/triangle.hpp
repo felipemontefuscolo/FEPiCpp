@@ -50,20 +50,20 @@ public:
          n_vertices_per_border=2};
   
   template<class... LabeableArgs>
-  Triangle(vectori const& nodes, int order, LabeableArgs... args) :
+  Triangle(Eigen::VectorXi const& nodes, int order, LabeableArgs... args) :
                           _Labelable(args...), _nodes(nodes), _order(order)
   {
     FEPIC_CHECK(nodes.size()==numNodes<Simplex<2>>(order), "", std::invalid_argument);
   }
   
   template<class... LabeableArgs>
-  Triangle(vectori && nodes, int order, LabeableArgs... args) :
+  Triangle(Eigen::VectorXi && nodes, int order, LabeableArgs... args) :
                       _Labelable(args...), _nodes(nodes), _order(order)
   {
     FEPIC_CHECK(nodes.size()==numNodes<Simplex<2>>(order), "", std::invalid_argument);
   }  
   
-  Triangle() : _nodes({-1,-1,-1}), _order(1) {};
+  Triangle() : _nodes(Eigen::Vector3i(-1,-1,-1)), _order(1) {};
   Triangle(Triangle const&) = default;
   ~Triangle() = default;
 
@@ -79,10 +79,10 @@ public:
   /** NOT FO USERS
   * @param n ordem
   */ 
-  static vectori getOppELN(int n)
+  static Eigen::VectorXi getOppELN(int n)
   {
     FEPIC_CHECK(n>0, "", std::invalid_argument);
-    vectori opp_eln(n+1);
+    Eigen::VectorXi opp_eln(n+1);
     
     opp_eln[0]=1;
     opp_eln[n]=0;
@@ -116,13 +116,13 @@ public:
     return genTriParametricPts(n);
   }
 
-  static matrixi const& getBordersLocalNodes(int order)
+  static Eigen::Matrix3Xi const& getBordersLocalNodes(int order)
   {
     FEPIC_CHECK(order<=MAX_CELLS_ORDER,  "order not supported yet", std::out_of_range);
     return Triangle::table1[order];
   }
 
-  static matrixi const& getMinimesh(int order)
+  static Eigen::MatrixX3i const& getMinimesh(int order)
   {
     FEPIC_CHECK(order<=MAX_CELLS_ORDER, "order not supported yet", std::out_of_range);
     return Triangle::table2[order];
@@ -130,38 +130,40 @@ public:
 
 protected:
 
-  static matrixi _getBordersLocalNodes(int order)
+  static Eigen::Matrix3Xi _getBordersLocalNodes(int order)
   {
     const int E = order - 1;
     
-    matrixi en(3, vectori(order + 1));
+    Eigen::Matrix3Xi en(3, order+1);
     
     for (int i = 0; i < 3; i++)
     {
-      en[i][0] = i;
-      en[i][1] = (i+1)%3;
+      en(i,0) = i;
+      en(i,1) = (i+1)%3;
       
       for (int j = 0; j < E; ++j)
-        en[i][j+2] = 3+i*E + j;
+        en(i,j+2) = 3+i*E + j;
     }
             
     return en;    
   }
 
-  static matrixi _getMinimesh(int order)
+  static Eigen::MatrixX3i _getMinimesh(int order)
   {
     /* encontrar todas as mini-células que tenham o padrão:
     * - (a,b), (a+1,b), (a,b+1)
     * - (a,b), (a,b+1), (a-1,b+1)
     */
-    matrixi minimesh; // mini-malha, inicialmente vazia
-    int n2, n3; // id do segundo e terceiro nó na mini-malha
-    int a,b; // coordenada inteira
-    std::vector<Eigen::Vector2i> coords_list = genTriParametricPtsINT(order);
-    auto clbegin = coords_list.begin(), clend = coords_list.end();
-    decltype(clbegin) clit2, clit3; // iteradores
-                                
+    Eigen::MatrixX3i minimesh(order*order, 3);
     
+    int n2, n3; // id do segundo e terceiro nó na mini-malha
+    int a,b;    // coordenada inteira (a,b)
+    std::vector<Eigen::Vector2i> coords_list = genTriParametricPtsINT(order);
+    std::vector<Eigen::Vector2i>::iterator clbegin = coords_list.begin();
+    std::vector<Eigen::Vector2i>::iterator clend  = coords_list.end();
+    std::vector<Eigen::Vector2i>::iterator clit2, clit3;
+                                
+    int counter(0);
     for (int i = 0; i < static_cast<int>(coords_list.size()); ++i)
     {
       a = coords_list[i](0);
@@ -176,7 +178,7 @@ protected:
         n2 = distance(clbegin, clit2);
         n3 = distance(clbegin, clit3);
         
-        minimesh.push_back(vectori{i,n2,n3});
+        minimesh.row(counter++) = Eigen::Vector3i(i,n2,n3);
       }
       
       /* Segundo padrão: (a,b), (a,b+1), (a-1,b+1) */
@@ -188,7 +190,7 @@ protected:
         n2 = distance(clbegin, clit2);
         n3 = distance(clbegin, clit3);
         
-        minimesh.push_back(vectori{i,n2,n3});
+        minimesh.row(counter++) = Eigen::Vector3i(i,n2,n3);
       }
       
     } // end for
@@ -196,12 +198,12 @@ protected:
     return minimesh;
   } // end getMinimesh 
 
-  static std::vector<matrixi> _initTable1()
+  static std::vector<Eigen::Matrix3Xi> _initTable1()
   {
     // the table1 at index n store the local nodes of borders of a cell
     // with order n.
     // WARNING: must be constructed after _initTable0 be called
-    std::vector<matrixi> table;
+    std::vector<Eigen::Matrix3Xi> table;
     
     table.reserve(MAX_CELLS_ORDER+1);
     table.push_back(Triangle::_getBordersLocalNodes(1)); // no order 0,plz
@@ -213,10 +215,10 @@ protected:
     return table;    
   }
 
-  static std::vector<matrixi> _initTable2()
+  static std::vector<Eigen::MatrixX3i> _initTable2()
   {
     // the table2 at index n store the minimesh of a cell with order n.
-    std::vector<matrixi> table;
+    std::vector<Eigen::MatrixX3i> table;
     
     table.reserve(MAX_CELLS_ORDER+1);
     table.push_back(Triangle::_getMinimesh(1)); // no order 0,plz
@@ -229,26 +231,26 @@ protected:
   }
   
 public:  
-  static const matrixi borders_local_vertices; // edges
+  static const Eigen::Matrix32i borders_local_vertices; // edges
 
-  static const std::vector<matrixi> table1; // order / borders local nodes
-  static const std::vector<matrixi> table2; // order / minimeshs
+  static const std::vector<Eigen::Matrix3Xi> table1; // order / borders local nodes
+  static const std::vector<Eigen::MatrixX3i> table2; // order / minimeshs
 
 protected:
-  unsigned char _order;
-  HalfT         _halfs[n_borders];
-  vectori       _nodes;
+  unsigned char   _order;
+  HalfT           _halfs[n_borders];
+  Eigen::VectorXi _nodes;
   
 };
 
 template<class _Traits>
-const matrixi Triangle<_Traits>::borders_local_vertices = { {0,1}, {1,2}, {2,0} };
+const Eigen::Matrix32i Triangle<_Traits>::borders_local_vertices = ((Eigen::Matrix32i()<< 0,1,  1,2,  2,0).finished());
 
 template<class _Traits>
-const std::vector<matrixi> Triangle<_Traits>::table1 = Triangle::_initTable1();
+const std::vector<Eigen::Matrix3Xi> Triangle<_Traits>::table1 = Triangle::_initTable1();
 
 template<class _Traits>
-const std::vector<matrixi> Triangle<_Traits>::table2 = Triangle::_initTable2();
+const std::vector<Eigen::MatrixX3i> Triangle<_Traits>::table2 = Triangle::_initTable2();
 
 
 

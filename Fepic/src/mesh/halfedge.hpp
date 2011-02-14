@@ -64,7 +64,7 @@ public:
   */
   double getLenght(MeshT& mesh) const
   {
-    vectori nodes(this->getNodes(mesh));
+    Eigen::VectorXi nodes(this->getNodes(mesh));
     double sum=0;
     for (int i = 0; i < nodes.size()-1; i++)
       sum += mesh.getNode(nodes[i])->getDistance(*mesh.getNode(nodes[i+1]));

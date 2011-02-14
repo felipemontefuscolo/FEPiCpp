@@ -414,8 +414,8 @@ void _MeshIoMsh<_Traits>::readFileMsh(const char* filename)
       case 1: // caso aresta
         if (CellT::dim-1==1)
         {
-          vectori nodes(numNodes<CellDerivedPolytopeT>(order));
-          vectori vtx(2);
+          Eigen::VectorXi nodes(numNodes<CellDerivedPolytopeT>(order));
+          Eigen::VectorXi vtx(2);
           int half_id;
           for (int i=0; i<nodes.size(); ++i)
           {
@@ -424,7 +424,7 @@ void _MeshIoMsh<_Traits>::readFileMsh(const char* filename)
             if (THIS->getNode(nodes[i])->getTag() == 0)
               THIS->getNode(nodes[i])->setTag(label_aux);
           }
-          copy( nodes.begin(), nodes.begin()+2, vtx.begin() );
+          std::copy( nodes.begin(), nodes.begin()+2, vtx.begin() );
           if( THIS->theseVerticesFormAHalf(vtx, half_id) )
             THIS->getHalf(half_id)->setTag(label_aux);
         }
@@ -444,8 +444,8 @@ void _MeshIoMsh<_Traits>::readFileMsh(const char* filename)
       case 2: // caso face
         if (CellT::dim - 1 == 2)
         {
-          vectori nodes(numNodes<CellDerivedPolytopeT>(order));
-          vectori vtx(CellT::n_vertices_per_border);
+          Eigen::VectorXi nodes(numNodes<CellDerivedPolytopeT>(order));
+          Eigen::VectorXi vtx(CellT::n_vertices_per_border);
           int half_id=0;
           for (int i=0; i<nodes.size(); ++i)
           {
@@ -454,7 +454,7 @@ void _MeshIoMsh<_Traits>::readFileMsh(const char* filename)
             if (THIS->getNode(nodes[i])->getTag() == 0)
               THIS->getNode(nodes[i])->setTag(label_aux);
           }
-          copy( nodes.begin(), nodes.begin()+CellT::n_vertices_per_border, vtx.begin() );
+          std::copy( nodes.begin(), nodes.begin()+CellT::n_vertices_per_border, vtx.begin() );
           if( THIS->theseVerticesFormAHalf(vtx, half_id) )
             THIS->getHalf(half_id)->setTag(label_aux); //std::cout << (++TESTE) << std::endl;
         }

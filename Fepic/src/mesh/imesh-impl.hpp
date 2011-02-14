@@ -36,11 +36,24 @@ template<class _Traits>
 void iMesh<_Traits>::buildAdjacency4face()
 {
 
+  struct LessComp {
+    bool operator() (Eigen::VectorXi const& u, Eigen::VectorXi const& v) const{
+      unsigned char i(0);
+      do {
+        if (u[i]==v[i]) continue;
+        else
+          return u[i]<v[i] ? true : false;
+      } while(++i!=u.size());
+      return false;
+    }
+  };
+
   int n_borders = CellT::n_borders;
-  vectori edge_vtx(2);
-  vectori cell_ith(2);
-  std::map<vectori, vectori> table; // Key: (n0, n1) ... atributos (elemento, ith)
-  std::map<vectori, vectori>::iterator tab_it, tab_it2;
+  Eigen::Vector2i edge_vtx;
+  Eigen::Vector2i cell_ith;
+  std::map<Eigen::VectorXi, Eigen::Vector2i, LessComp> table; // Key: (n0, n1) ... atributos (elemento, ith)
+  typename
+  std::map<Eigen::VectorXi, Eigen::Vector2i, LessComp>::iterator tab_it, tab_it2;
   CellIterator cell = iMesh::_cellL.begin();
   int otherC, otherith, thisC, thisith;
   int thistag;
@@ -57,7 +70,7 @@ void iMesh<_Traits>::buildAdjacency4face()
         edge_vtx = cell->getBorderVertices(ith);
         cell_ith[0] = k;
         cell_ith[1] = ith;
-        table.insert(std::pair<vectori, vectori>(edge_vtx, cell_ith));
+        table.insert(std::pair<Eigen::VectorXi, Eigen::VectorXi>(edge_vtx, cell_ith));
       }
     }
     ++k;
@@ -66,7 +79,7 @@ void iMesh<_Traits>::buildAdjacency4face()
   while (!table.empty())
   {
     tab_it = --table.end();
-    reverse_copy(tab_it->first.begin(), tab_it->first.end(), edge_vtx.begin());
+    std::reverse_copy(tab_it->first.begin(), tab_it->first.end(), edge_vtx.begin());
     tab_it2 = table.find(edge_vtx);
     if (tab_it2 != table.end()) // se econtrou uma edge em comum
     {
@@ -101,20 +114,49 @@ void iMesh<_Traits>::buildAdjacency4face()
 template<class _Traits>
 void iMesh<_Traits>::buildAdjacency4volume()
 {
-
+  /* só precisa 3 vértices mesmo para hexaedro, pq uma face é determinada 
+   * por 3 pontos.
+   * */
   const int n_vertices_per_border = CellT::n_vertices_per_border;
   const int n_borders = CellT::n_borders;
   const int n_anch    = CellT::dim==3 ? n_vertices_per_border : 1;
 
-  typedef std::pair<vectori, vectori> PairT; // < (vértices da face) , (elemento, ith) >
-  typedef std::map<vectori, vectori>  MapT;
+  
+  typedef Eigen::Matrix<int, CellT::n_vertices_per_border, 1> VecType;
 
-  vectori face_vtx(n_vertices_per_border);
-  vectori cell_ith(2);
+  struct LessComp {
+    bool operator() (VecType const& u, VecType const& v) const{
+      unsigned char i(0);
+      do {
+        if (u[i]==v[i]) continue;
+        else
+          return u[i]<v[i] ? true : false;
+      } while(++i != VecType::SizeAtCompileTime);
+      return false;
+    }
+  };
+
+  
+  const bool NeedsToAlign = (sizeof(VecType)%16)==0;
+  
+  typedef Eigen::aligned_allocator<std::pair<const VecType, Eigen::Vector2i> > AlignedAlloc;
+  
+  typedef std::allocator<std::pair<const VecType, Eigen::Vector2i> > DefaultAlloc;
+  
+
+  typedef std::pair<VecType, Eigen::Vector2i> PairT; // < (vértices da face) , (elemento, ith) >
+  
+  typedef std::map<VecType, Eigen::Vector2i, LessComp, 
+                  typename IfThenElse<NeedsToAlign, AlignedAlloc, DefaultAlloc>::type >  MapT;
+                   
+  typedef typename MapT::iterator MapTiterator;
+
+  VecType         face_vtx;
+  Eigen::Vector2i cell_ith;
   MapT            table; // < (nós da face) , (elemento, ith) >
-  MapT::iterator  tab_it, tab_it2;
+  MapTiterator    tab_it, tab_it2;
   CellIterator    cell = this->_cellL.begin();
-  int            otherC, otherith, thisC, thisith;
+  int             otherC, otherith, thisC, thisith;
   int             thistag;
   int             a;
 
@@ -138,7 +180,7 @@ void iMesh<_Traits>::buildAdjacency4volume()
   while (!table.empty())
   {
     tab_it = table.begin();
-    reverse_copy(tab_it->first.begin(), tab_it->first.end(), face_vtx.begin());
+    std::reverse_copy(tab_it->first.begin(), tab_it->first.end(), face_vtx.begin());
     found = false;
     for (a = 0; a != n_anch; ++a) // ancora
     {
@@ -158,7 +200,7 @@ void iMesh<_Traits>::buildAdjacency4volume()
         found = true;
         break;
       }
-      rotate(face_vtx.begin(), face_vtx.begin()+1, face_vtx.end());
+      std::rotate(face_vtx.begin(), face_vtx.begin()+1, face_vtx.end());
     }
     if(!found)
     {

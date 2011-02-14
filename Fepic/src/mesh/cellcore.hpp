@@ -32,7 +32,7 @@ class _CellCore
 
 public:
   typedef typename _Traits::CellT  CellT;
-  typedef typename _Traits::HalfT HalfT;
+  typedef typename _Traits::HalfT  HalfT;
   typedef typename _Traits::MeshT  MeshT;
 
 protected:
@@ -63,76 +63,56 @@ public:
 
   int getNodeIdx(int ith) const
   {
-#ifdef FEPIC_DEBUG_ON
-    return CONST_THIS->_nodes.at(ith);
-#else
     return CONST_THIS->_nodes[ith];
-#endif
   }
 
-  vectori getVertices() const
+  Eigen::VectorXi getVertices() const
   {
     if (CONST_THIS->_order==1)
       return CONST_THIS->_nodes;
   
-    vectori vtxs(CellT::n_vertices);
+    Eigen::VectorXi vtxs(CellT::n_vertices);
     std::copy(CONST_THIS->_nodes.begin(), // from
               CONST_THIS->_nodes.begin()+CellT::n_vertices,
               vtxs.begin());              // to
     return vtxs;
   }
 
-  vectori getNodes() const
+  Eigen::VectorXi getNodes() const
   {
     return CONST_THIS->_nodes;
   }
 
-  vectori getBorderVertices(int ith) const
+  Eigen::VectorXi getBorderVertices(int ith) const
   {
     FEPIC_CHECK(ith < CellT::n_borders, "invalid index", std::out_of_range);
-    int vsize = CellT::borders_local_vertices[ith].size();
-    vectori vtx(vsize);
+    int vsize = CellT::borders_local_vertices.cols();
+    Eigen::VectorXi vtx(vsize);
 
     for (int i = 0; i < vsize; ++i)
-      vtx[i] = CONST_THIS->_nodes[CellT::borders_local_vertices[ith][i]];
+      vtx[i] = CONST_THIS->_nodes[CellT::borders_local_vertices(ith,i)];
 
     return vtx;
   }
 
-  vectori getBorderNodes(int ith) const
+  Eigen::VectorXi getBorderNodes(int ith) const
   {
     FEPIC_CHECK(ith < CellT::n_borders, "invalid index", std::out_of_range);
-    matrixi const& borders_local_nodes = CellT::getBordersLocalNodes(CONST_THIS->getOrder());
-    int tam(borders_local_nodes[ith].size());
-    vectori nodes(tam);
+    auto const& borders_local_nodes = CellT::getBordersLocalNodes(CONST_THIS->getOrder());
+    int tam(borders_local_nodes.cols());
+    Eigen::VectorXi nodes(tam);
 
     for (int i = 0; i < tam; ++i)
-      nodes[i] =  CONST_THIS->_nodes[ borders_local_nodes[ith][i] ];
+      nodes[i] =  CONST_THIS->_nodes[ borders_local_nodes(ith,i) ];
 
     return nodes;
   }
 
   void setNode(int ith, int nodeid)
   {
-#ifdef FEPIC_DEBUG_ON
-    THIS->_nodes.at(ith) = nodeid;
-#else
     THIS->_nodes[ith] = nodeid;
-#endif
   }
 
-  bool isBoundary(vectori & boundaries) const
-  {
-    boundaries.clear();
-    for (int ith = 0; ith < CellT::n_borders; ++ith)
-    {
-      if (CONST_THIS->_halfs[ith].isBoundary())
-      {
-        boundaries.push_back(ith);
-      }
-    }
-    return boundaries.empty() ? false : true;
-  }
 
   bool isBoundary() const
   {
@@ -159,10 +139,10 @@ public:
 
   void broadcastHalf2Nodes(MeshT & mesh) const
   {
-    matrixi const& borders_local_nodes(CellT::getBordersLocalNodes(CONST_THIS->getOrder()));
+    auto const& borders_local_nodes(CellT::getBordersLocalNodes(CONST_THIS->getOrder()));
     for (int f = 0; f < CellT::n_borders; ++f) // loop  nas faces
-      for (int i = 0, tam=borders_local_nodes[0].size(); i < tam; ++i)
-        mesh.getNode(CONST_THIS->_nodes[borders_local_nodes[f][i]])->setHalf(CONST_THIS->_halfs[f]);
+      for (int i = 0, tam=borders_local_nodes.cols(); i < tam; ++i)
+        mesh.getNode(CONST_THIS->_nodes[borders_local_nodes(f,i)])->setHalf(CONST_THIS->_halfs[f]);
   }
 
   void broadcastTag2Nodes(MeshT & mesh, bool force=false) const

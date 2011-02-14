@@ -53,20 +53,20 @@ public:
          n_vertices_per_border=1};
 
   template<class... LabeableArgs>
-  Edge(vectori const& nodes, int order, LabeableArgs... args) :
+  Edge(Eigen::VectorXi const& nodes, int order, LabeableArgs... args) :
                           _Labelable(args...), _nodes(nodes), _order(order)
   {
     FEPIC_CHECK(nodes.size()==numNodes<Polytope<1>>(order), "", std::invalid_argument);
   }
   
   template<class... LabeableArgs>
-  Edge(vectori && nodes, int order, LabeableArgs... args) :
+  Edge(Eigen::VectorXi && nodes, int order, LabeableArgs... args) :
                       _Labelable(args...), _nodes(nodes), _order(order)
   {
     FEPIC_CHECK(nodes.size()==numNodes<Polytope<1>>(order), "", std::invalid_argument);
   }  
   
-  Edge() : _nodes({0,0}), _order(1) {};
+  Edge() : _nodes(Eigen::Vector2i(-1,-1)), _order(1) {};
   Edge(Edge const&) = default;
   ~Edge() = default;
 
@@ -113,7 +113,7 @@ public:
   *  @param nodes os vetor com os dois nós nos quais se vai verificar o alinhamento.
   *  @return 1 se a edge é paralela, -1 se a edge é anti-paralela, e 0 se não é paralela.
   */
-  int isAligned (vectori const& nodes) const
+  int isAligned (Eigen::VectorXi const& nodes) const
   {
     if ((_nodes[1] == nodes[1]) && (_nodes[0] == nodes[0]) )
       return 1;
@@ -153,9 +153,9 @@ public:
       o << " " << getNodeIdx(i);
   }
 
-protected:  
-  unsigned char _order;
-  vectori       _nodes;
+protected:   
+  unsigned char   _order;
+  Eigen::VectorXi _nodes;
 };
 
 
