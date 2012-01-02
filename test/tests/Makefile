@@ -12,37 +12,28 @@
 # project, except GTEST_HEADERS, which you can use in your own targets
 # but shouldn't modify.
 
+include $(FEPIC_DIR)/conf/variables
+
 # Where to find user code.
 USER_DIR = .
 
-CXX = g++-4.5
+CXX = g++
 
 # Flags passed to the preprocessor.
-CPPFLAGS += -I$(GTEST_DIR)/include -I$(FEPIC_DIR) -I$(EIGEN_DIR)
+CPPFLAGS += -I$(GTEST_DIR)/include $(FEP_INCLUDE)
 
 # Flags passed to the C++ compiler.
-CXXFLAGS += -std=c++0x -g -Wall -Wextra
+CXXFLAGS += -g -Wall -Wextra
 
-# All tests produced by this Makefile.  Remember to add new tests you
-# created to the list.
-TESTS = misc_test labelable_test halfxxxx_test tritet_test mesh_test
-
-EXECS = ./misc_test && ./labelable_test && ./halfxxxx_test && ./tritet_test && ./mesh_test
+LDFLAGS	= -L${FEP_LIBS_DIR} -lfepic
+LDFLAGS+= -fopenmp -lpthread -L$(METIS_LD) -lmetis
 
 # All Google Test headers.  Usually you shouldn't change this
 # definition.
 GTEST_HEADERS = $(GTEST_DIR)/include/gtest/*.h \
                 $(GTEST_DIR)/include/gtest/internal/*.h
 
-# House-keeping build targets.
-
-all : $(TESTS)
-
-run : $(TESTS)
-	$(EXECS)
-
-clean :
-	rm -f $(TESTS) gtest.a gtest_main.a *.o
+GTEST_INCLUDE = -I$(GTEST_DIR)/include
 
 # Builds gtest.a and gtest_main.a.
 
@@ -68,46 +59,32 @@ gtest.a : gtest-all.o
 gtest_main.a : gtest-all.o gtest_main.o
 	$(AR) $(ARFLAGS) $@ $^
 
-# Builds a sample test.  A test should link with either gtest.a or
-# gtest_main.a, depending on whether it defines its own main()
-# function.
+
+# House-keeping build targets.
+
+CPPSOURCES = $(wildcard *.cpp)
+
+all: gtest.a gtest_main.a $(CPPSOURCES:.cpp=.exe)
+
+%.o: %.cpp $(GTEST_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< $(LDFLAGS) -o $@
+	
+%.exe: %.o gtest.a gtest_main.a
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $^ -o $@ $(LDFLAGS) gtest.a gtest_main.a
+	rm $<
+	
+clean:
+	$(FEP_RM) *.o *.exe *~ gtest.a gtest_main.a
+	
+remade:
+	$(MAKE) clean
+	$(MAKE)
+
+-include $(CPPSOURCES:.cpp=.d)
+
+%.d: %.cpp
+	$(FEP_CXX) $< -MM -MT '$*.o $*.d ' -MD $(CXXFLAGS) $(GTEST_INCLUDE)
 
 
-misc_test.o : $(USER_DIR)/misc_test.cpp $(GTEST_HEADERS)
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/misc_test.cpp
 
-misc_test : misc_test.o gtest_main.a
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
-
-# ==========================================================================
-
-labelable_test.o : $(USER_DIR)/labelable_test.cpp $(GTEST_HEADERS)
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/labelable_test.cpp
-
-labelable_test : labelable_test.o gtest_main.a
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
-
-# ==========================================================================
-
-halfxxxx_test.o : $(USER_DIR)/halfxxxx_test.cpp $(GTEST_HEADERS)
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/halfxxxx_test.cpp
-
-halfxxxx_test : halfxxxx_test.o gtest_main.a
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
-
-# ==========================================================================
-
-tritet_test.o : $(USER_DIR)/tritet_test.cpp $(GTEST_HEADERS)
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/tritet_test.cpp
-
-tritet_test : tritet_test.o gtest_main.a
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
-
-# ==========================================================================
-
-mesh_test.o : $(USER_DIR)/mesh_test.cpp $(GTEST_HEADERS)
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/mesh_test.cpp
-
-mesh_test : mesh_test.o gtest_main.a
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
 

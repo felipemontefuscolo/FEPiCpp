@@ -22,27 +22,65 @@
 #ifndef FEPIC_CHECK_HPP
 #define FEPIC_CHECK_HPP
 
+#include <stdexcept>
+#include <string>
+#include "misc.hpp"
+#include "macros.hpp"
+
 template<class Exception>
 void assertion_failed(std::string const& expr, std::string const& msg);
 
 
 // see boost
 #ifdef FEPIC_DEBUG_ON
-  #define FEPIC_CHECK(ok, msg, except) if(!(ok)) assertion_failed<except>(#ok, msg)
+  #define FEPIC_CHECK(ok, mesg, except) if(!(ok)) \
+                                         assertion_failed<except>(#ok, mesg, __LINE__, __FILE__, __PRETTY_FUNCTION__)
+                                                 
 #else
   #define FEPIC_CHECK(ok,msg, except) ((void)0)
 #endif
 
-#define FEPIC_ASSERT(ok, msg, except) if(!(ok)) assertion_failed<except>(#ok, msg)
+#define FEPIC_ASSERT(ok, mesg, except) if(!(ok)) \
+                                          assertion_failed<except>(#ok, mesg, __LINE__, __FILE__, __PRETTY_FUNCTION__)
+
 
 template<class Exception>
-void assertion_failed(std::string const& expr, std::string const& msg)
+void assertion_failed(std::string const& expr, std::string const& msg, int Line, const char* File, const char* PrettyFunction)
 {
-  std::string what_arg ="\nERROR: "__FILE__":"+std::string(itoa(__LINE__))+": "+msg+"\n"
-                          "ERROR: "__FILE__":"+std::string(itoa(__LINE__))+": assertion '"+expr+"' failed\n"
-                          "ERROR: "__FILE__": in '"+std::string(__PRETTY_FUNCTION__)+"' \n";
+  std::string what_arg ="\nERROR: "+std::string(File)+":"+std::string(itoa(Line))+": "+msg+"\n"
+                          "ERROR: "+std::string(File)+":"+std::string(itoa(Line))+": assertion '"+expr+"' failed\n"
+                          "ERROR: "+std::string(File)+": in '"+std::string(PrettyFunction)+"' \n";
   throw Exception(what_arg);
 }
 
 
+// STATIC ASSERTIONS
+
+template<bool> struct CompileTimeAssert;
+template<> struct CompileTimeAssert
+<true> { };
+#define FEP_STATIC_ASSERT(e) \
+	(CompileTimeAssert <(e) != 0>())
+
+template<bool> struct MUST_BE_A_RANDOM_ACCESS_ITERATOR;
+template<> struct MUST_BE_A_RANDOM_ACCESS_ITERATOR
+<true> { };
+#define FEP_STATIC_ASSERT_ITERATOR(e) \
+	(MUST_BE_A_RANDOM_ACCESS_ITERATOR <(e) != 0>())
+
+
+
+template<int> struct CompileTimeError;
+template<> struct CompileTimeError<true> {};
+
+#define FEP_STATIC_CHECK(expr, msg) \
+    { CompileTimeError<((expr) != 0)> ERROR_##msg; (void)ERROR_##msg; } 
+
+
+
+
+
+
+
 #endif
+

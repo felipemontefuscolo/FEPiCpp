@@ -22,17 +22,8 @@
 #ifndef FEPIC_MISC_HPP
 #define FEPIC_MISC_HPP
 
-/* requirements
- * <vector>
- * <deque>
- * <string>
- * <fstream>
- * 
- */ 
-
-//namespace Fepic {
-  
-  typedef std::deque<int>  dequei;
+#include <cstdio>
+#include <string>
 
   /* vetores para representar os espaços R² e R³ são os do Eigen*/
 
@@ -42,11 +33,11 @@ namespace Fepic {
     return a;
   }
 
-  template <class T, class ... O>
-  const T& max ( const T& a, const O& ... b ) {
-    auto& c(max(b...));
-    return (c<a)?a:c;
-  }
+  //template <class T, class ... O>
+  //const T& max ( const T& a, const O& ... b ) {
+    //auto& c(max(b...));
+    //return (c<a)?a:c;
+  //}
 
 }
 
@@ -63,6 +54,14 @@ struct IfThenElse<false, CaseTrue, CaseFalse> {
 };
 
 
+template<bool, typename T = void> 
+struct EnableIf {};
+
+template<typename T>
+struct EnableIf<true, T> {
+  typedef T type;
+};
+
 /** função parecida com a copy do STL. \n
  * copia o conteúdo de uma sequência `a' para outra `c' no intervalo [c_begin, c_end).
  * @param a_begin iterador na posição inicial da sequência `a'
@@ -77,66 +76,98 @@ void copy_from(In_it a_begin, Out_it c_begin, Out_it c_end)
 }
 
 
-/** Verifica se dois vetores são (anti)ciclicamente iguais.
- *  TESTAR, POIS FIZ MUDANÇAS
- */
-template<class Vec>
-bool arrayIsCyclicallyEqual(Vec const& v1, Vec const& v2)
+
+/** Checks if two vectors are cyclically equal.
+ * @param beg1 iterator to beginning of first vector.
+ * @param end1 iterator to end of fisrt vector.
+ * @param beg2 iterator to beginning of second vector.
+ * @param end2 iterator to end of second vector.
+ * @return a <EM>bool</EM>: if the vectors are C. eq. or not.
+ * @note each vector must contain unique elements, i.e., elements cannot repeat.
+ * @note vectors must have at least one element.
+ */ 
+template<class Iterator1, class Iterator2>
+bool arrayIsCyclicallyEqual(Iterator1 beg1, Iterator1 end1, Iterator2 beg2, Iterator2 end2)
 {
-  Vec vaux(v2);
-  int vsize = v2.size();
-  auto vaux_begin = vaux.begin(), vaux_end = vaux.end();
-
-  for (int i = 0; i < vsize; ++i)
+  Iterator1 beg1_i = beg1;
+  Iterator2 beg2_i = beg2;
+  
+  while (beg2 != end2)
   {
-    if (v1 == vaux)
-    {
-      return true;
-    }
-    std::rotate(vaux_begin, vaux_begin+1, vaux_end);
+    if (*beg2 == *beg1)
+      break;
+    ++beg2;  
   }
-
-  std::reverse(vaux_begin, vaux_end);
-  if(vaux == v1) return true;
-
-  for (int i = 1; i < vsize; ++i)
+  if (beg2==end2) return false;
+  
+  Iterator2 mid = beg2;
+  
+  // cyclic verification
+  while (++beg1 != end1)
   {
-    std::rotate(vaux_begin, vaux_begin+1, vaux_end);
-    if (v1 == vaux)
-    {
-      return true;
-    }
+    if (++beg2 == end2)
+      beg2 = beg2_i;
+    if (*beg1 != *beg2)
+      break;
   }
+  if (beg1 == end1) return true;
+  
+  // anti-cyclic verification
+  beg1 = beg1_i;
+  beg2 = mid;
+  while (++beg1 != end1)
+  {
+    if (beg2 == beg2_i)
+      beg2 = end2 - 1;
+    else
+      --beg2;
+    if (*beg1 != *beg2)
+      return false;
+  }
+  return true;
+}
 
+
+/** Checks if tow vectors have the same elements.
+ * @param beg1 iterator to beginning of first vector.
+ * @param end1 iterator to end of fisrt vector.
+ * @param beg2 iterator to beginning of second vector.
+ * @param end2 iterator to end of second vector.
+ * @return a <EM>bool</EM>: if the vectors have the same elements.
+ * @note each vector must contain unique elements, i.e., elements cannot repeat.
+ * @note vectors must have at least one element and they must have the same size.
+ */ 
+template<class Iterator1, class Iterator2>
+bool sameElements(Iterator1 beg1, Iterator1 end1, Iterator2 beg2, Iterator2 end2)
+{
+  Iterator2 beg2_ini = beg2;
+  for (; beg1 != end1; ++beg1)
+  {
+    for (; ; )
+    {
+      if (*beg1 == *beg2)
+        break;
+      ++beg2;
+      if (beg2 == end2)
+        return false;
+    }
+    beg2 = beg2_ini;
+  }
+  return true;
+};
+
+/** @brief Checks if a range [first, last) has the value.
+ */
+template<typename Iterator, typename Type>
+bool checkValue(Iterator first, Iterator last, Type val)
+{
+  while(first != last)
+  {
+    if (*first++ == val)
+      return true;
+  }
   return false;
 }
-
-
-template<class T>
-inline
-void printArray(T const& v, std::ostream &o, int N)
-{
-  o << v[0];
-  for (int i=1; i<N; ++i)
-  {
-    o << " " << v[i];
-  }
-}
-
-template<class T>
-inline
-void printMatrix(T const& mat, std::ostream &o, int N, int M)
-{
-  for (int i = 0; i < N; i++)
-  {
-    for (int j = 0; j < M; j++)
-    {
-      o << mat[i][j] << " ";
-    }
-    o << std::endl;
-  }
-}
-
 
 /** Retorna o n-ésimo bit da constante c passada.
  */
@@ -166,27 +197,15 @@ inline void unset_bit(T & c, unsigned bitoffset)
 }
 
 
-// files
+/** @brief Searches the stream for a key-word and return the position after
+ *  the key-word. If the key-word was not found, return ULONG_MAX.
+ *  @param word the key-word.
+ *  @param word_size size of the key-word.
+ *  @param fp the stream.
+ *  @note a key-word is a word that is at the beginning of a line.
+ */ 
+long int find_keyword(const char* word, int word_size, FILE *fp);
 
-/* procura uma palavra e deixa/retorna o indicador de leitura nesta posição */
-inline
-size_t search_word(std::ifstream &File, const char* word) {
-  std::string s;
-  std::string word_s = std::string(word);
-
-    do
-  {
-    s="";
-    File >> s;
-    if (File.peek()==EOF)
-    {
-      return static_cast<size_t>(-1);
-    }
-  } while(s!=word_s);
-
-  return size_t(File.tellg());
-
-}
 
 /**
  * C++ version 0.4 std::string style "itoa":
@@ -196,127 +215,27 @@ size_t search_word(std::ifstream &File, const char* word) {
  * 
  * modified: Felipe Montefuscolo
  */
-std::string itoa(int value)
-{
+std::string itoa(int value);
 
-	std::string buf;
-
-	enum { kMaxDigits = 35, base=10 };
-	buf.reserve( kMaxDigits ); // Pre-allocate enough space.
-
-	int quotient = value;
-
-	// Translating number to string with base:
-	do {
-		buf += "0123456789"[ std::abs( quotient % base ) ];
-		quotient /= base;
-	} while ( quotient );
-
-	// Append the negative sign
-	if ( value < 0) buf += '-';
-
-	std::reverse( buf.begin(), buf.end() );
-	return buf;
-}
-
-std::string itoafill0(int value, int fill)
-{
-	std::string buf;
-
-	enum { kMaxDigits = 35, base=10 };
-	buf.reserve( kMaxDigits ); // Pre-allocate enough space.
-
-  fill = fill < kMaxDigits ? fill : kMaxDigits;
-
-	int quotient = value;
-
-	// Translating number to string with base:
-	do {
-		buf += "0123456789"[ std::abs( quotient % base ) ];
-		quotient /= base;
-	} while ( quotient );
-  
-  int i(fill - buf.size());
-  
-  while(i>0)
-  {
-    buf += '0';
-    i=fill - buf.size();
-  }
-  
-  std::reverse( buf.begin(), buf.end() );
-  return buf;
-}
+std::string itoafill0(int value, int fill);
 
 // remove espaços finais de strings
-inline
-std::string stripTrailingSpaces(std::string name)
-{
-  if (name.empty())
-    return name;
-  while( *(name.end()-1) == ' ')
-    name.erase(name.end()-1);
-  return name;
-}
+std::string stripTrailingSpaces(std::string name);
 
 /** @example <tt>user/file.dat</tt> returns <tt>user/</tt>
  *  @note aassumes that is a valid file name.
  */ 
-inline
-std::string getRelativePath(std::string const& name)
-{
-  size_t bar = name.rfind("/");
-  
-  if (bar==std::string::npos)
-    return "./";
-  else
-    return name.substr(0,bar+1);
-}
+std::string getRelativePath(std::string const& name);
 
 /** @example <tt>user/file.dat</tt> returns <tt>.dat</tt>
  *  @note assumes that is a valid file name.
  */ 
-inline
-std::string getExtension(std::string const& name)
-{
-  int size = name.size();
-  if (size==0)
-    return name;
-  
-  size_t dot = name.rfind(".");
-  size_t bar = name.rfind("/");
-  if (dot==std::string::npos)
-    return "";
-  else if ((bar==dot-1) || (name[dot-1]=='.') || (dot==0) || 
-           ((bar!=std::string::npos) && (bar>dot)) || (dot==name.size()-1) )
-    return "";
-  else 
-    return name.substr(dot);
-}
+std::string getExtension(std::string const& name);
 
 /** @example <tt>user/file.dat</tt> returns <tt>file</tt>
  *  @note assumes that is a valid file name.
  */ 
-inline
-std::string getBaseName(std::string name)
-{
-  size_t bar = name.rfind("/");
-  int npath;
-  
-  if (bar==std::string::npos)
-    npath=0;
-  else
-    npath = name.substr(0,bar+1).size();
-
-  int nexte = getExtension(name).size();
-  
-  for (int i = 0; i < nexte; ++i)
-    name.erase(name.end()-1);
-  for (int i = 0; i < npath; ++i)
-    name.erase(name.begin());
-  
-  return name;
-}
+std::string getBaseName(std::string name);
 
 
 #endif

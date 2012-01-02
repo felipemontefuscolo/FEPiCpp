@@ -34,7 +34,7 @@
 #include <algorithm>
 #include <string>
 #include <fstream>
-#include <Fepic/src/util/misc.hpp>
+#include <Fepic/Mesh>
 
 using ::testing::TestWithParam;
 using ::testing::Values;
@@ -141,6 +141,7 @@ TEST(getRelativePathTest, UsualCases) {
   EXPECT_EQ("../", getRelativePath("../foo.dat"));
   EXPECT_EQ("./../", getRelativePath("./../foo.dat"));
   EXPECT_EQ("../bar/", getRelativePath("../bar/foo.dat"));
+  EXPECT_EQ("../bar/jow/moe/", getRelativePath("../bar/jow/moe/foo.dat"));
 }
 
 TEST(getBaseNameTest, UsualCases) {
@@ -193,5 +194,100 @@ TEST(itoafill0Test, UsualCases) {
   EXPECT_EQ("0909090", itoafill0(909090,7));
   EXPECT_EQ("909090", itoafill0(909090,3));
 }
+
+
+
+// array test
+
+TEST(arrayIsCyclicallyEqualTest, ExpectTrueTest) {
+  
+  std::vector<int> U, V;
+  int size_max = 4;
+  U.reserve(size_max); V.reserve(size_max);
+  
+  for (int size = 1; size <= size_max; ++size)
+  {
+    U.resize(size); V.resize(size);
+    for (int i = 0; i < size; ++i)
+    {
+      U.at(i) = i+1;
+      V.at(i) = U.at(i);
+    }
+    
+    // cyclically
+    for (int k = 0; k < size; ++k)
+    {
+      EXPECT_EQ(true, arrayIsCyclicallyEqual(U.begin(),U.end(),V.begin(),V.end()));
+      std::rotate(V.begin(), V.begin()+1, V.end());
+    }
+    
+    std::reverse(V.begin(), V.end());
+    
+    // anti-cyclically
+    for (int k = 0; k < size; ++k)
+    {
+      EXPECT_EQ(true, arrayIsCyclicallyEqual(U.begin(),U.end(),V.begin(),V.end()));
+      std::rotate(V.begin(), V.begin()+1, V.end());
+    }
+      
+  }
+  
+}
+
+TEST(arrayIsCyclicallyEqualTest, ExpectFalseTest) {
+  
+  std::vector<int> U, V;
+  int size_max = 4;
+  U.reserve(size_max); V.reserve(size_max);
+  
+  for (int size = 1; size <= size_max; ++size)
+  {
+    U.resize(size); V.resize(size);
+    for (int i = 0; i < size; ++i)
+    {
+      U.at(i) = i+1;
+      V.at(i) = U.at(i);
+    }
+    V.at(0) += 1;
+    
+    // cyclically
+    for (int k = 0; k < size; ++k)
+    {
+      EXPECT_EQ(0, arrayIsCyclicallyEqual(U.begin(),U.end(),V.begin(),V.end()));
+      std::rotate(V.begin(), V.begin()+1, V.end());
+    }
+    
+    std::reverse(V.begin(), V.end());
+    
+    // anti-cyclically
+    for (int k = 0; k < size; ++k)
+    {
+      EXPECT_EQ(0, arrayIsCyclicallyEqual(U.begin(),U.end(),V.begin(),V.end()));
+      std::rotate(V.begin(), V.begin()+1, V.end());
+    }
+      
+  }
+  
+}
+
+
+TEST(sameElementsTest, OutputTest) {
+  
+  int U[] = {1,2,3,4,5}, V[] = {1,2,3,4,5};
+  int size = sizeof(U)/sizeof(int);
+  
+  do {
+    EXPECT_TRUE(sameElements(U,U+size,V,V+size));
+  } while ( std::next_permutation (V,V+size) );  
+  
+  V[0] = 99;
+  
+  do {
+    EXPECT_FALSE(sameElements(U,U+size,V,V+size));
+  } while ( std::next_permutation (V,V+size) );  
+  
+}
+
+
 
 

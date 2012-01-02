@@ -22,139 +22,343 @@
 #ifndef FEPIC_CELLCORE_HPP
 #define FEPIC_CELLCORE_HPP
 
-template<class _Traits>
-class _CellCore
+#include "labelable.hpp"
+#include "colored.hpp"
+#include "enums.hpp"
+#include "../util/assert.hpp"
+#include "../util/forward_declarations.hpp"
+#include "../util/typedefs.hpp"
+
+class Cell : public _Labelable, public _Colored
+{
+public:
+  
+  typedef Cell* (*CreatorMemFunPtr)();
+
+  template<class CT>
+  static Cell* create()
+  {
+    return new CT;
+  }
+
+  static Cell* create(ECellType fep_tag);
+  
+  virtual void copy(Cell const&) = 0;
+  virtual EMshTag getMshTag() const = 0;
+  virtual int  getCornerId(int corner) const = 0;
+  virtual void getCornerNodesId(int f, int *corner_nds) const = 0;
+  virtual void getCornerVerticesId(int f, int *vtcs) const = 0;
+  virtual int  getEdgeNodeId(int eC, int nCe) const = 0;
+  virtual int  getFacetId(int facet) const = 0;
+  virtual void getFacetNodesId(int f, int * facet_nds) const = 0;
+  virtual void getFacetVerticesId(int f, int * vtcs) const = 0;
+  virtual void getFacetCornersId(int f, int * corns) const = 0;
+  virtual int  getIncidCell(int facet) const = 0;
+  virtual char getIncidCellAnch(int facet) const = 0;
+  virtual char getIncidCellPos(int facet) const = 0;
+  virtual int  getNodeId(int const ith) const = 0;
+  virtual void getNodesId(int * begin) const = 0;
+  virtual void getVerticesId(int * begin) const = 0;
+  virtual void getFacetsId(int * begin) const = 0;
+  virtual void getCornersId(int * begin) const = 0;
+  virtual int  isCorner(int const* vtcs) const = 0;
+  virtual bool inBoundary() const = 0;
+  virtual int  isFacet(int const* vtcs) const = 0;
+  virtual int  numFacets() const = 0;
+  virtual int  numNodes() const = 0;
+  virtual int  numVerticesPerFacet() const = 0;
+  virtual void resetFacetsId() = 0;
+  virtual void resetCornersId() = 0;
+  virtual void resetIncidCells() = 0;
+  virtual void setCornerId(int corner, int cornerid) = 0;
+  virtual void setFacetId(int facet, int facetid) = 0;
+  virtual void setIncidCell(int facet, int icellid) = 0;
+  virtual void setIncidCellAnch(int facet, char anch) = 0;
+  virtual void setIncidCellPos(int facet, char pos) = 0;
+  virtual void setNode(int const ith, int const nodeid) = 0;
+  
+  virtual ~Cell() {}
+  
+protected:
+  
+};
+
+
+
+template<typename CellT>
+class _CellCore  : public Cell
 {
 #if !defined(THIS) && !defined(CONST_THIS)
   #define THIS static_cast<CellT*>(this)
   #define CONST_THIS static_cast<const CellT*>(this)
 #endif
 
-public:
-  typedef typename _Traits::CellT  CellT;
-  typedef typename _Traits::HalfT  HalfT;
-  typedef typename _Traits::MeshT  MeshT;
-
 protected:
-  _CellCore() {};
-  _CellCore(_CellCore const&) {};
+  _CellCore()
+  {
+    
+    for (int i = 0; i < CellT::n_nodes; ++i)
+      THIS->_nodes[i] = 0;
+    
+    for (int i = 0; i < CellT::n_facets; ++i)
+    {
+      THIS->_icells[i] = 0;
+      THIS->_icells_pos[i] = 0;
+    }
+
+    if (CellT::dim != 1)
+      for (int i = 0; i < CellT::n_facets; ++i)
+        THIS->_facets[i] = 0;
+
+    if (CellT::dim==3)
+    {
+      for (int i = 0; i < CellT::n_facets; ++i)
+        THIS->_icells_anchors[i] = 0;
+    
+      for (int i = 0; i < CellT::n_corners; ++i)
+        THIS->_corners[i] = 0;
+    }
+    
+  };
+  //_CellCore(_CellCore const&) {};
 
 public:
 
-  int getOrder() const
+  void copy(Cell const& c)
   {
-    return CONST_THIS->_order;
+    (*THIS) = *static_cast<const CellT*>(&c);
   }
 
-  int getNumNodes() const
+  EMshTag getMshTag() const
   {
-    return CONST_THIS->_nodes.size();
+    return CellT::msh_tag;
   }
 
-  int getNumBorders() const
+  int getCornerId(int corner) const
   {
-    return CellT::n_borders;
+    return CONST_THIS->_corners[corner];
   }
 
-  int getNumVertices() const
+  /** Get nodes of a corner
+   * @param[in] f the corner local id.
+   * @param[out] corner_nds where to put the nodes.
+   * @note the vector corner_nds must have enough space allocated (num nodes per corner).
+   */ 
+  void getCornerNodesId(int f, int *corner_nds) const;
+
+  /** Get vertices of a corner
+   * @param[in] f the corner local id.
+   * @param[out] vtcs where to put the vertices.
+   * @note the vector vtcs must have enough space allocated (num vertices per corner).
+   */ 
+  void getCornerVerticesId(int f, int *corner_vtcs) const;
+
+  /** Returns the dimension of the entity where a node lives.
+   * @param local_id local id of the node.
+   * @return dimension of the entity where node lives.
+   */ 
+  static int getDimFromNodeLives(int local_id)
   {
-    return CellT::n_vertices;
+    if (local_id < CellT::n_vertices)
+      return 0;
+    else if (local_id < CellT::n_vertices + CellT::n_corners)
+      return 1;
+    else if (local_id < CellT::n_vertices + CellT::n_corners + CellT::n_facets)
+      return 2;
+    else
+      return 3;
+  }
+  
+  template<int celldim>
+  int getEdgeNodeId_Template(int eC, int nCe, typename EnableIf<(celldim==1)>::type* = NULL) const
+  {
+    return CONST_THIS->_nodes[nCe];
+    ++eC; // avoid compiler warnings
+  }
+  template<int celldim>
+  int getEdgeNodeId_Template(int eC, int nCe, typename EnableIf<(celldim==2)>::type* = NULL) const
+  {
+    return CONST_THIS->_nodes[CellT::table_fC_x_nC[eC][nCe]];
+  }
+  template<int celldim>
+  int getEdgeNodeId_Template(int eC, int nCe, typename EnableIf<(celldim==3)>::type* = NULL) const
+  {
+    return CONST_THIS->_nodes[CellT::table_bC_x_nC[eC][nCe]];
+  }
+  
+  /** @brief Returns the id of a node of an edge.
+   *  @param eC which edge of the cell.
+   *  @param nCe which node of the edge.
+   */ 
+  int getEdgeNodeId(int eC, int nCe) const
+  {
+    return CONST_THIS->getEdgeNodeId_Template<CellT::dim>(eC, nCe);
+  }
+  
+  int getFacetId(int facet) const
+  {
+    return CONST_THIS->_facets[facet];
   }
 
-  int getNodeIdx(int ith) const
+  /** Get nodes of a facet
+   * @param[in] f the facet local id.
+   * @param[out] facet_nds where to put the nodes.
+   * @note the vector facet_nds must have enough space allocated (num nodes per facet).
+   */ 
+  void getFacetNodesId(int f, int * facet_nds) const;
+  
+  /** Get vertices of a facet
+   * @param[in] f the facet local id.
+   * @param[out] vtcs where to put the vertices.
+   * @note the vector vtcs must have enough space allocated (num vertices per facet).
+   */ 
+  void getFacetVerticesId(int f, int * facet_vtcs) const;
+
+  void getFacetCornersId(int f, int * corns) const;
+
+  int getIncidCell(int facet) const
+  {
+    return CONST_THIS->_icells[facet];
+  }
+  
+  char getIncidCellAnch(int facet) const
+  {
+    if (CellT::dim==3)
+      return CONST_THIS->_icells_anchors[facet];
+    else
+      return -1;
+  }
+  
+  char getIncidCellPos(int facet) const
+  {
+    return CONST_THIS->_icells_pos[facet];
+  }
+  
+  int getNodeId(int const ith) const
   {
     return CONST_THIS->_nodes[ith];
   }
-
-  Eigen::VectorXi getVertices() const
-  {
-    if (CONST_THIS->_order==1)
-      return CONST_THIS->_nodes;
   
-    Eigen::VectorXi vtxs(CellT::n_vertices);
-    std::copy(CONST_THIS->_nodes.begin(), // from
-              CONST_THIS->_nodes.begin()+CellT::n_vertices,
-              vtxs.begin());              // to
-    return vtxs;
-  }
-
-  Eigen::VectorXi getNodes() const
+  void getNodesId(int * begin) const
   {
-    return CONST_THIS->_nodes;
+    std::copy(CONST_THIS->_nodes, // from
+              CONST_THIS->_nodes+CellT::n_nodes,
+              begin);              // to
   }
-
-  Eigen::VectorXi getBorderVertices(int ith) const
+  
+  void getVerticesId(int * begin) const
   {
-    FEPIC_CHECK(ith < CellT::n_borders, "invalid index", std::out_of_range);
-    int vsize = CellT::borders_local_vertices.cols();
-    Eigen::VectorXi vtx(vsize);
-
-    for (int i = 0; i < vsize; ++i)
-      vtx[i] = CONST_THIS->_nodes[CellT::borders_local_vertices(ith,i)];
-
-    return vtx;
+    std::copy(CONST_THIS->_nodes, // from
+              CONST_THIS->_nodes+CellT::n_vertices,
+              begin);              // to
   }
 
-  Eigen::VectorXi getBorderNodes(int ith) const
+  void getFacetsId(int * begin) const
   {
-    FEPIC_CHECK(ith < CellT::n_borders, "invalid index", std::out_of_range);
-    auto const& borders_local_nodes = CellT::getBordersLocalNodes(CONST_THIS->getOrder());
-    int tam(borders_local_nodes.cols());
-    Eigen::VectorXi nodes(tam);
+    if (CellT::dim < 2) return;
+    std::copy(CONST_THIS->_facets, // from
+              CONST_THIS->_facets+CellT::n_facets,
+              begin);              // to
+  }
+  
+  void getCornersId(int * begin) const
+  {
+    if (CellT::dim < 3) return;
+    std::copy(CONST_THIS->_corners, // from
+              CONST_THIS->_corners+CellT::n_corners,
+              begin);              // to
+  }  
 
-    for (int i = 0; i < tam; ++i)
-      nodes[i] =  CONST_THIS->_nodes[ borders_local_nodes(ith,i) ];
+  /** Check if the vertices form a corner of this cell, if so returns corner's id.
+   * @param vtcs vector with the ids of the vertices.
+   * @return the id of the corner. If vertices do not form a corner, then function returns -1.
+   * @note vertices form a corner when they are cyclically equal to the corner's vertices.
+   */ 
+  int isCorner(int const* vtcs) const;
 
-    return nodes;
+  bool inBoundary() const;
+
+  /** Check if the vertices form a facet of this cell, if so returns facet's id.
+   * @param vtcs vector with the ids of the vertices.
+   * @return the id of the facet. If vertices do not form a facet, then function returns -1.
+   * @note vertices form a facet when they are cyclically equal to the facet's vertices.
+   */ 
+  int isFacet(int const* vtcs) const;
+
+  int numFacets() const
+  {
+    return CellT::n_facets;
   }
 
-  void setNode(int ith, int nodeid)
+  int numNodes() const
+  {
+    return CellT::n_nodes;
+  }
+
+  int numVerticesPerFacet() const
+  {
+    return CellT::n_vertices_per_facet;
+  }
+ 
+  void resetFacetsId()
+  {
+    if (CellT::dim > 1)
+      for (int i = 0; i < CellT::n_facets; ++i)
+      {
+        THIS->_facets[i] = -1;
+      }
+  }
+ 
+  void resetCornersId()
+  {
+    for (int i = 0; i < CellT::n_corners; ++i)
+    {
+      THIS->_corners[i] = -1;
+    }
+  }
+
+  void resetIncidCells()
+  {
+    for (int i = 0; i < CellT::n_facets; ++i)
+    {
+      THIS->_icells[i] = -1;
+    }
+  }
+
+  void setCornerId(int corner, int cornerid)
+  {
+    if (CellT::dim > 2)
+      THIS->_corners[corner] = cornerid;
+  }
+
+  void setFacetId(int facet, int facetid)
+  {
+    if (CellT::dim > 1)
+      THIS->_facets[facet] = facetid;
+  }
+
+  void setIncidCell(int facet, int icellid)
+  {
+    THIS->_icells[facet] = icellid;
+  }
+
+  void setIncidCellAnch(int facet, char anch)
+  {
+    if (CellT::dim == 3)
+      THIS->_icells_anchors[facet] = anch;
+  }
+  
+  void setIncidCellPos(int facet, char pos)
+  {
+    THIS->_icells_pos[facet] = pos;
+  }
+
+  void setNode(int const ith, int const nodeid)
   {
     THIS->_nodes[ith] = nodeid;
   }
 
-
-  bool isBoundary() const
-  {
-    const HalfT* it = CONST_THIS->_halfs;
-    for (; it != CONST_THIS->_halfs + CellT::n_borders; ++it)
-    {
-      if (it->isBoundary())
-      return true;
-    }
-    return false;
-  }
-
-  HalfT* getHalf(int ith)
-  {
-    FEPIC_CHECK(ith<CellT::n_borders, "invalid index", std::out_of_range);
-    return &THIS->_halfs[ith];
-  }
-
-  const HalfT* getHalf(int ith) const
-  {
-    FEPIC_CHECK(ith<CellT::n_borders, "invalid index", std::out_of_range);
-    return &CONST_THIS->_halfs[ith];
-  }
-
-  void broadcastHalf2Nodes(MeshT & mesh) const
-  {
-    auto const& borders_local_nodes(CellT::getBordersLocalNodes(CONST_THIS->getOrder()));
-    for (int f = 0; f < CellT::n_borders; ++f) // loop  nas faces
-      for (int i = 0, tam=borders_local_nodes.cols(); i < tam; ++i)
-        mesh.getNode(CONST_THIS->_nodes[borders_local_nodes(f,i)])->setHalf(CONST_THIS->_halfs[f]);
-  }
-
-  void broadcastTag2Nodes(MeshT & mesh, bool force=false) const
-  {
-    if (force)
-      for (int i = 0; i < this->node.size(); ++i)
-        mesh.getNode(THIS->_nodes[i])->setTag(this->getTag());
-    else
-      for (int i = 0; i < this->node.size(); ++i)
-        if (mesh.getNode(THIS->_nodes[i])->getTag() == 0)
-          mesh.getNode(THIS->_nodes[i])->setTag(this->getTag());
-  }
+  virtual ~_CellCore() {};
 
 #undef THIS
 #undef CONST_THIS
@@ -163,4 +367,9 @@ public:
 
 
 
+
 #endif
+
+
+
+

@@ -22,14 +22,72 @@
 #ifndef FEPIC_MACROS_HPP
 #define FEPIC_MACROS_HPP
 
-/* user config */
-#define FEPIC_DEBUG_ON
+#include "conf/macros.hpp"
 
-#define MAX_CELLS_ORDER 10
+/* utils */
+#define CALL_MEMBER_FN(object,ptrToMember)  ((object).*(ptrToMember)) 
 
-#define FEPIC_FILE_FILL 5
 
-#define FEPIC_COUT std::cout
-#define FEPIC_ENDL std::endl
+
+
+/* @brief this macro create a class that checks whether a class has
+ * a specific member function.
+ * usage:
+ *      "mem_fun_name"   = name os member function
+ *      "mem_fun_return" = which type this mem fun return
+ *      "... "           = arguments of mem fun
+ * macro will create a class called "TypeHas_mem_fun_name"
+ * 
+ * @example:
+ * suppose the following mem fun:
+ *    int sum(double x, double y)
+ * 
+ * So the macro takes the form:
+ * 
+ *     FEP_BUILD_MEM_FUN_CHECKER(sum, double, double);
+ * 
+ * then it will create a class named "TypeHas_sum".
+ * 
+ * To check if a class Foo has this mem function, you should do
+ * 
+ *      TypeHas_sum<Foo>::value
+ * 
+ * reference: http://stackoverflow.com/questions/257288/is-it-possible-to-write-a-c-template-to-check-for-a-functions-existence
+ */ 
+#define FEP_BUILD_MEM_FUN_CHECKER(suffix, mem_fun_name, mem_fun_return, qualif, ...)    \
+  template <class Type>                                                 \
+  class TypeHas_##suffix                                                \
+  {                                                                     \
+      template <typename T, T> struct TypeCheck;                        \
+                                                                        \
+      typedef char Yes;                                                 \
+      typedef long No;                                                  \
+                                                                        \
+      template <typename T> struct Aux                                  \
+      {                                                                 \
+          typedef mem_fun_return (T::*fptr)(__VA_ARGS__) qualif;        \
+      };                                                                \
+                                                                        \
+      template <typename T> static Yes check(TypeCheck< typename Aux<T>::fptr,  \
+                                             &T::mem_fun_name >*);              \
+      template <typename T> static No  check(...);                              \
+                                                                                \
+  public:                                                                       \
+      static bool const value = (sizeof(check<Type>(0)) == sizeof(Yes));        \
+  }
+
+/* about FEP_BUILD_MEM_FUN_CHECKER:
+ * 
+ * struct TypeCheck:This type won't compile if the second template parameter isn't of type T,
+ *        so I can put a function pointer type in the first parameter and the function
+ *        itself in the second thus checking that the function has a specific signature.
+ * struct AuxA helper struct to hold the declaration of the function pointer.
+ *        Change it if the function signature changes.
+ */ 
+
+
 
 #endif
+
+
+

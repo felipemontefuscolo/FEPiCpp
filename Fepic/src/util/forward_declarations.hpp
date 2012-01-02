@@ -23,59 +23,32 @@
 #define FEPIC_FORWARD_DECLARATIONS_HPP
 
 
-
-class _Labelable;
-
-// volume
-template<class _Traits> class _Poly3d;
-template<class _Traits> class Tetrahedron;
-template<class _Traits> class Hexahedron;
-
-// surface
-template<class _Traits> class _Poly2d;
-template<class _Traits> class Triangle;
-template<class _Traits> class Quadrangle;
-
-// line
-template<class _Traits> class Edge;
-
-//Point
-template<class _Traits> class Point;
-
-// Halfs
-template<class _Traits> class HalfEdge;
-template<class _Traits> class HalfFace;
-
-// Label
-class _Labelable;
-
-
-template<class ElmType, class _Traits> class _MetaCellOf;
-
-template<typename Dim, class _Traits> class _MetaHalfOf;
-
-template<typename Dim, class _Traits> class _MetaHalfLabOf;
-
-
 template<int dim> class Polytope;
-
 template<int dim> class Simplex;
-
 template<int dim> class Hypercube;
+class UndefinedCell;
 
+class _Labelable;
 
+class Point;
+template<int sdim> class PointX;
 
-/* mesh */
-class _iMeshNameHandler;
-template<class _Traits> class _MeshIoMsh;
-template<class _Traits> class _MeshIoVtk;
-template<class _Traits> class iMesh;
-
-/* Cell Functions */
-
-template<class CellType> int numNodes(int order);
-template<class CellType> int numBubbles(int order);
-
+class Cell;
+template<class Derived> class _CellCore;
+template<int N> class Edge;
+class Triangle3;
+class Triangle6;
+class Quadrangle4;
+class Quadrangle8;
+class Quadrangle9;
+class Tetrahedron4;
+class Tetrahedron10;
+class Hexahedron8;
+class Hexahedron20;
+class Hexahedron27;
+class Facet;
+class Corner;
+class Mesh;
 
 #endif
 

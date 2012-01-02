@@ -64,10 +64,10 @@ int main(int argc, char *argv[]) {
 		//cout << Phi({1./3,1./3}, i) << endl;		
 	//}
 	
-	vector<VectorXd> func(Phi.getNumDof(), VectorXd(malha.getNumNodes()));
+	vector<VectorXd> func(Phi.getNumDof(), VectorXd(malha.numValidNodes()));
 
     double sum = 0;
-	for (uint i = 0; i < malha.getNumNodes(); i++)
+	for (unsigned i = 0; i < malha.numValidNodes(); i++)
 	{
 		ppt = malha.getNode(i);
 		
@@ -86,7 +86,7 @@ int main(int argc, char *argv[]) {
     
     //cout << sum/func[0].size() << endl;
 	
-	//for (uint i = 0; i < malha.getNumNodes(); i++)
+	//for (unsigned i = 0; i < malha.numValidNodes(); i++)
 	//{
 		//ppt = malha.getNode(i);
 		
@@ -104,7 +104,7 @@ int main(int argc, char *argv[]) {
 		stringstream ss;
 		ss << "func" << std::setfill('0') << std::setw(5) << k;
 		//cout << ss.str().data() << endl;
-		malha.addScalarVtk(ss.str().data(), func[k], func[k].size());
+		malha.addNodeScalarVtk(ss.str().data(), func[k], func[k].size());
 		ss.str(std::string());
         
 	}	
@@ -114,8 +114,8 @@ int main(int argc, char *argv[]) {
 	//int IAJSHDKJAD[]={0,0,0};
 	//vector<int> a(3);
 	//int BBB[] = {1,1}
-	//uint nodes[] = {21,5,13};
-	//uint halfID;
+	//unsigned nodes[] = {21,5,13};
+	//unsigned halfID;
 	//cout << iMesh<MyT>::theseVerticesFormAHalfl(nodes, halfID) << endl;
 	
 	//cell = malha.getCell(0);

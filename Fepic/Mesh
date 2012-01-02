@@ -22,60 +22,11 @@
 #ifndef FEPIC_MESH_NE
 #define FEPIC_MESH_NE
 
-// C++
-//#include <algorithm>
-//#include <cmath>
-#include <deque>
-#include <fstream>
-#include <iomanip>
-#include <iostream>
-#include <list>
-#include <map>
-#include <sstream>
-#include <string>
-#include <vector>
-#include <stdexcept>
-#include <climits>
-
-// C
-#include <sys/stat.h>
-
-
-#include "Fepic/src/custom_eigen/custom_eigen.hpp"
-
-#include "Fepic/src/util/macros.hpp"
-
-#include "Fepic/src/util/forward_declarations.hpp"
-#include "Fepic/src/mesh/io/msh_tags.hpp"
-#include "Fepic/src/util/misc.hpp"
-#include "Fepic/src/util/assert.hpp"
-#include "Fepic/src/mesh/io/iofunctions.hpp"
-#include "Fepic/src/shapefunctions/parametric_pts.hpp"
-#include "Fepic/src/shapefunctions/shapefunctions.hpp"
-#include "Fepic/src/mesh/metamesh.hpp"
-
-
-#include "Fepic/src/mesh/entities.hpp"
-#include "Fepic/src/mesh/labelable.hpp"
-#include "Fepic/src/mesh/cellcore.hpp"
-#include "Fepic/src/mesh/cell_functions.hpp"
-#include "Fepic/src/mesh/halfcore.hpp"
-#include "Fepic/src/mesh/halfedge.hpp"
-#include "Fepic/src/mesh/halfface.hpp"
-#include "Fepic/src/mesh/point.hpp"
-#include "Fepic/src/mesh/cell_types/edge.hpp"
-#include "Fepic/src/mesh/poly2d.hpp"
-#include "Fepic/src/mesh/poly3d.hpp"
-#include "Fepic/src/mesh/cell_types/triangle.hpp"
-#include "Fepic/src/mesh/cell_types/tetrahedron.hpp"
-#include "Fepic/src/mesh/cell_types/quadrangle.hpp"
-#include "Fepic/src/mesh/cell_types/hexahedron.hpp"
-#include "Fepic/src/mesh/io/imeshnamehandler.hpp"
+#include "Fepic/src/mesh/cell_tools.hpp"
+#include "Fepic/src/mesh/mesh.hpp"
+#include "Fepic/src/mesh/mesh_tools.hpp"
 #include "Fepic/src/mesh/io/meshiomsh.hpp"
 #include "Fepic/src/mesh/io/meshiovtk.hpp"
-#include "Fepic/src/mesh/io/meshiofsf.hpp"
-#include "Fepic/src/mesh/imesh.hpp"
-#include "Fepic/src/mesh/imesh-impl.hpp"
 
 #endif
 

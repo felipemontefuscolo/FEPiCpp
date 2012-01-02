@@ -1,0 +1,36 @@
+elem type: Linear tetrahedron
+space dim: 3
+# nodes:   27000
+# cells:   146334
+# facets:  297714
+# corners: 178379
+# cell colors:  31
+# node colors:  11
+
+Cell list: 
+  -allocated:      146334
+  -used:           146334 (100%)
+  -# reservations: 0
+Node list: 
+  -allocated:      27000
+  -used:           27000 (100%)
+  -# reservations: 0
+Facet list: 
+  -allocated:      297714
+  -used:           297714 (100%)
+  -# reservations: 1
+Corner list: 
+  -allocated:      178379
+  -used:           178379 (100%)
+  -# reservations: 1
+===============================
+elapsed    1.396s in : buildCellsAdjacency()
+elapsed    0.029s in : buildNodesAdjacency()
+elapsed    1.534s in : setColorAllCells()
+elapsed    0.428s in : setColorAllNodes()
+elapsed    0.143s in : buildCorners_Template()
+elapsed    0.178s in : readFileMsh(): read connectivity
+elapsed    0.250s in : readFileMsh(): search for boundary elements
+elapsed    0.091s in : vertexStar() all mesh
+elapsed    0.119s in : vertexStarWithoutColor() all mesh
+OpenMp

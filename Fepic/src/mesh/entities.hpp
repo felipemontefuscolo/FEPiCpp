@@ -23,160 +23,40 @@
 #define FEPIC_ENTITIES_HPP
 
 
-
-
 template<int dim>
 class Polytope { public:
   typedef Polytope<dim-1> Derived;
-  static std::string name()
-  {
-    return "Polytope"+std::string(itoa(dim));
-  }
+
 };
 
 template<int dim>
 class Simplex { public:
   typedef Simplex<dim-1> Derived;
-  static std::string name()
-  {
-    return "Simplex"+std::string(itoa(dim));
-  }
+
 };
 
 template<int dim>
 class Hypercube { public:
   typedef Hypercube<dim-1> Derived;
-  static std::string name()
-  {
-    return "Hypercube"+std::string(itoa(dim));
-  }
+
 };
 
+class UndefinedCell
+{ public:
+  enum { dim=-1,
+         n_vertices=0,
+         n_nodes=0,
+         n_facets=0,
+         n_corners=0,
+         n_vertices_per_facet=0};
 
-
-/*--------------------------------------------------------------------*/
-
-template<> class _MetaCellOf<void, void> {}; // for a sweet syntax highlight
-
-
-#define FEPIC_CELLOF(obj, type) template<class _Traits>                  \
-                                class _MetaCellOf<obj, _Traits> {public: \
-                                typedef type<_Traits> Type;}
-
-FEPIC_CELLOF(Simplex<1>, Edge);
-FEPIC_CELLOF(Simplex<2>, Triangle);
-FEPIC_CELLOF(Simplex<3>, Tetrahedron);
-FEPIC_CELLOF(Hypercube<1>, Edge);
-FEPIC_CELLOF(Hypercube<2>, Quadrangle);
-FEPIC_CELLOF(Hypercube<3>, Hexahedron);
-FEPIC_CELLOF(Polytope<1>, Edge);
-
-#undef FEPIC_CELLOF
-
-class UndefElement {
-public:
-  static int getTagMsh()
-  {
-    return MSH_UNDEFINED_ELEM;
-  }
+  int _icells_pos[0];
+  int _nodes[0];     
+  int _facets[0];    
+  int _icells[0];    
+  int _icells_anchors[0];
+  int _corners[0];         
 };
-
-
-//------------------------------------
-
-template<> class _MetaHalfOf<void, void> {}; // for a sweet syntax highlight
-
-#define FEPIC_HALFOF(obj, type) template<class _Traits>                    \
-                                class _MetaHalfOf<obj, _Traits> { public:  \
-                                typedef type<_Traits> Type; }
-
-FEPIC_HALFOF(Polytope<2>, HalfEdge);
-FEPIC_HALFOF(Polytope<3>, HalfFace);
-FEPIC_HALFOF(Simplex<2>, HalfEdge);
-FEPIC_HALFOF(Simplex<3>, HalfFace);
-FEPIC_HALFOF(Hypercube<2>, HalfEdge);
-FEPIC_HALFOF(Hypercube<3>, HalfFace);
-
-#undef FEPIC_HALFOF
-
-
-
-/** @class DefaultTraits
- *
- * Default definitions of a _Traits.
- *
- * Users can do their own _Traits.
- *
- * In custom _Traits must be defined:
- * - CellT      := type of grid cell
- * - EdgeT
- * - PointT
- * - HalfT
- * - HalfT
- * - MeshT
- * - spacedim   := dimension of the space
- *
- *
- */
-template<int _spacedim, class CellType = Simplex<_spacedim> >
-class DefaultTraits {
-public:
-
-  DefaultTraits(DefaultTraits const&) = delete; // dont copy me
-  ~DefaultTraits() = delete;
-
-  typedef DefaultTraits _Traits;
-
-  typedef typename _MetaCellOf<CellType, _Traits>::Type CellT;
-
-  typedef typename _MetaHalfOf<CellType, _Traits>::Type HalfT;
-
-  typedef Point<_Traits>  PointT;
-
-  typedef iMesh<_Traits>  MeshT;
-
-  enum {spacedim = _spacedim};
-
-  //static const int spacedim = _spacedim;
-};
-
-
-/** versão estática.\n
- *  Faz um mapeamento de pontos na célula unitário para a célula real
- *  @param list_pts uma lista com pontos no triângulo unitário nos quais se deseja fazer o mapeamento
- *  @param intp_pts a lista de pontos de interpolação da célula; ex, para interpolação linear, passar os vértices
- *  @param Phi funções de interpolação que correspondem aos pontos de interpolação
- *  @return uma lista com as coordenadas dos pontos passados em list_pts na célula real
- *  @warning as funções Phi DEVEM corresponder aos pontos de interpolação
- */
-template<class _Traits, class ShapeFun,
-         int   sdim = _Traits::spacedim,
-         int   cdim = _Traits::CellT::Dim,
-         class VecT = Eigen::Matrix<double, sdim, 1>,   // vetor no espaço da célula real
-         class VecU = Eigen::Matrix<double, cdim, 1> >  // vetor na espaço da célula unitária
-std::vector<VecT> map2RealCell(std::vector<VecU> const& list_pts,
-                               std::vector<VecT> const& intp_pts,
-                               ShapeFun          const& Phi)
-{
-  int tam = list_pts.size();
-  std::vector<VecT> ret(tam, VecT::Zero());
-
-  for (int i = 0; i < tam; ++i)
-    for (int k = 0, size=intp_pts.size(); k < size; ++k)
-      ret[i] += Phi(list_pts[i], k)*intp_pts[k];
-
-  return ret;
-}
-
-
-
-
-
-
-
-
-
-
 
 #endif
 

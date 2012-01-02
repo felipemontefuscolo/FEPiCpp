@@ -1,15 +1,15 @@
 TODO
 ----
 
-  * trocar ordem da malha alterando a ordem de cada célula individualmente. Para isso
-  
-    + em cada célula, se order(CELLviz) == order(THIS):
-    
-      - reaproveita os nós do bordo.
-      
-    + se não:
-    
-      - cria novos nós.
-      
-  * unificar os algoritmos buildAdjacency
+* alterar a função FEPIC_CHECK ... colocar algo to tipo
+	
+		FEPIC_CHECK( bool, "erro: actual  x = %d  but expected x = %d", x, expected );
 
+
+* fazer iterator para células, nós, etc ... que percores célula validas e coloridas.
+
+
+
+* iteradores:
+
+	cellBegin(Tag(3), Color(5))

@@ -3,17 +3,16 @@
 # ----------------------------------------------#
 # lembre-se que a opção "-pg" deve ser colocado na hora de linkar e compilar
 
-CXX	    = g++-4.5
+CXX	    = g++
 #CFLAGS	= -Wall -Winline -g -DEIGEN_NO_DEBUG -O3 -msse2
-CFLAGS	= -std=c++0x -Wall -g
+CFLAGS	= -Wall -Wextra -g
 LD	    = $(CXX)
-LDFLAGS	=
+LDFLAGS	= -L$(FEPIC_DIR)/Fepic/libs -lfepic -fopenmp
 RM	    = rm
-INCPATH = -I $(EIGEN_DIR) -I$(FEPIC_DIR)
-#LIBS	= -Wl,-rpath,$(EFEM_DIR)/Fepic/mesh -L$(EFEM_DIR)/Fepic/mesh -lmesh
+INCPATH = -I$(EIGEN_DIR) -I$(FEPIC_DIR)
 
-EXE	  = teste.exe
-SRCS	= teste.cpp
+EXE	  = test.exe
+SRCS	= test.cpp
 
 # pega SRCS e substitui .c por .o
 OBJS	= ${SRCS:.cpp=.o}
@@ -28,7 +27,7 @@ $(OBJS) :
 
 # colocar -pg aqui também
 $(EXE) : $(OBJS)
-	$(LD) $(CFLAGS) -o $@ $(OBJS)
+	$(LD) $(CFLAGS) -o $@ $(OBJS) -static $(LDFLAGS)
 
 clean :
 	-$(RM) -f *.o

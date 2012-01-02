@@ -17,7 +17,7 @@ using namespace std;
 //using namespace Eigen;
 
 const int DIM=2;
-typedef uint uint;
+typedef unsigned unsigned;
 typedef Default_Traits<DIM, Simplex<DIM> > MyT;
 typedef iMesh<MyT> MyMesh;
 
@@ -35,23 +35,23 @@ int main(int argc, char *argv[]) {
 	
 	malha.writeVtk();
 	
-	vector<double> value(malha.getNumNodes());
+	vector<double> value(malha.numValidNodes());
 	vector<double>::iterator vit = value.begin();
 	
-	uint counter=0;
+	unsigned counter=0;
 	for (; vit != value.end() ; ++vit)
 	{
 		*vit = counter++;
 	}
 	
-	malha.addScalarVtk("value", value);
+	malha.addNodeScalarVtk("value", value);
 	counter=0;
 	vit = value.begin();
 	for (; vit != value.end() ; ++vit)
 	{
 		*vit = malha.getNode(counter++)->getCoord(0);
 	}	
-	malha.addScalarVtk("other", value);
+	malha.addNodeScalarVtk("other", value);
 	
     PetscFinalize();
     

@@ -31,14 +31,18 @@
 #include <gtest/gtest.h>
 
 #include <Fepic/Mesh>
+#include <cstdlib>
 
 /* necessary inheritance: can not instantiate _Labelable because it has
  * protected constructor */
 class tLabelable : public _Labelable
 {
 public:
-  template<class... Args>
-  tLabelable(Args... args) : _Labelable(args...) {}
+  tLabelable(int tag, int flags=0) : _Labelable(tag, flags)
+  {
+  }
+
+  tLabelable() : _Labelable(0, 0) {}
 };
 
 class LabelableTest : public testing::Test {
@@ -57,80 +61,80 @@ TEST(LabelableTest, ConstructorErrors) {
 #endif
 
 
-TEST(LabelableTest, Constructors) {
+TEST(LabelableTest, Constructors) { // also copy assignment
 
-  tLabelable L[] = {tLabelable(),
-                    tLabelable(0),
-                    tLabelable(100,DISABLED),
-                    tLabelable(123,MARKED),
-                    tLabelable(255,DISABLED | MARKED) };
+  srand(123);
 
-  EXPECT_EQ(0, L[0].marked());
-  EXPECT_EQ(0, L[0].disabled());
-  EXPECT_EQ(0, L[0].getTag());
+  tLabelable L[9];
+                    
+  int tags[8], idx;
+  
+  // create
+  for (int b0 = 0; b0 < 2; ++b0)
+    for (int b1 = 0; b1 < 2; ++b1)
+      for (int b2 = 0; b2 < 2; ++b2)
+      {
+        idx = 4*b0 + 2*b1 + b2;
+        tags[idx] = rand()%255;
+        L[idx] = tLabelable(tags[idx], b0*DISABLED | b1*MARKED | b2*VISITED);
+      }
 
-  EXPECT_EQ(0, L[1].marked());
-  EXPECT_EQ(0, L[1].disabled());
-  EXPECT_EQ(0, L[1].getTag());
+  //check
+  for (int b0 = 0; b0 < 2; ++b0)
+    for (int b1 = 0; b1 < 2; ++b1)
+      for (int b2 = 0; b2 < 2; ++b2)
+      {
+        idx = 4*b0 + 2*b1 + b2;
+        EXPECT_EQ(tags[idx], L[idx].getTag());
+        EXPECT_EQ(b0, L[idx].disabled());
+        EXPECT_EQ(b1, L[idx].marked());
+        EXPECT_EQ(b2, L[idx].visited());
+      }
 
-  EXPECT_EQ(0, L[2].marked());
-  EXPECT_EQ(1, L[2].disabled());
-  EXPECT_EQ(100, L[2].getTag());
-
-  EXPECT_EQ(1, L[3].marked());
-  EXPECT_EQ(0, L[3].disabled());
-  EXPECT_EQ(123, L[3].getTag());
-
-  EXPECT_EQ(1, L[4].marked());
-  EXPECT_EQ(1, L[4].disabled());
-  EXPECT_EQ(255, L[4].getTag());
+  // check deafult constructor
+  EXPECT_EQ(0, L[8].getTag());
+  EXPECT_EQ(0, L[8].marked());
+  EXPECT_EQ(0, L[8].disabled());
+  EXPECT_EQ(0, L[8].visited());
 
 }
 
 
 TEST(LabelableTest, SetUps) {
 
+  srand(123);
+
   tLabelable L[8];
-  L[0].marked(0); L[0].disabled(0); L[0].setTag(0);
-  L[1].marked(0); L[1].disabled(0); L[1].setTag(1);
-  L[2].marked(0); L[2].disabled(1); L[2].setTag(0);
-  L[3].marked(0); L[3].disabled(1); L[3].setTag(255);
-  L[4].marked(1); L[4].disabled(0); L[4].setTag(0);
-  L[5].marked(1); L[5].disabled(0); L[5].setTag(255);
-  L[6].marked(1); L[6].disabled(1); L[6].setTag(0);
-  L[7].marked(1); L[7].disabled(1); L[7].setTag(255);
+                    
+  int tags[8], idx;
 
-  EXPECT_EQ(0, L[0].marked());
-  EXPECT_EQ(0, L[0].disabled());
-  EXPECT_EQ(0, L[0].getTag());
+  // setups
+  for (int b0 = 0; b0 < 2; ++b0)
+    for (int b1 = 0; b1 < 2; ++b1)
+      for (int b2 = 0; b2 < 2; ++b2)
+      {
+        idx = 4*b0 + 2*b1 + b2;
+        tags[idx] = rand()%255;
+        L[idx].setTag(tags[idx]);
+        L[idx].disabled(b0);
+        L[idx].marked(b1);
+        L[idx].visited(b2);
+      }
 
-  EXPECT_EQ(0, L[1].marked());
-  EXPECT_EQ(0, L[1].disabled());
-  EXPECT_EQ(1, L[1].getTag());
 
-  EXPECT_EQ(0,   L[2].marked());
-  EXPECT_EQ(1,   L[2].disabled());
-  EXPECT_EQ(0,   L[2].getTag());
+  //check
+  for (int b0 = 0; b0 < 2; ++b0)
+    for (int b1 = 0; b1 < 2; ++b1)
+      for (int b2 = 0; b2 < 2; ++b2)
+      {
+        idx = 4*b0 + 2*b1 + b2;
+        EXPECT_EQ(tags[idx], L[idx].getTag());
+        EXPECT_EQ(b0, L[idx].disabled());
+        EXPECT_EQ(b1, L[idx].marked());
+        EXPECT_EQ(b2, L[idx].visited());
+      }
 
-  EXPECT_EQ(0,   L[3].marked());
-  EXPECT_EQ(1,   L[3].disabled());
-  EXPECT_EQ(255, L[3].getTag());
 
-  EXPECT_EQ(1, L[4].marked());
-  EXPECT_EQ(0, L[4].disabled());
-  EXPECT_EQ(0, L[4].getTag());
-
-  EXPECT_EQ(1, L[5].marked());
-  EXPECT_EQ(0, L[5].disabled());
-  EXPECT_EQ(255, L[5].getTag());
-
-  EXPECT_EQ(1, L[6].marked());
-  EXPECT_EQ(1, L[6].disabled());
-  EXPECT_EQ(0, L[6].getTag());
-
-  EXPECT_EQ(1,   L[7].marked());
-  EXPECT_EQ(1,   L[7].disabled());
-  EXPECT_EQ(255, L[7].getTag());
 
 }
 

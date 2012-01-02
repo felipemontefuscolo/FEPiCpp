@@ -1,0 +1,197 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 0.8.5 ] */
+
+/* [wxMaxima: input   start ] */
+/*  QUAD Q2   */
+Na : x*y*(x + xi)*(y + yi)/4$
+Nb : (1 - x*x)*(1 - y*y)$
+Nc : (1 - x*x)*(y*y + y*yi)/2$
+Nd : (1 - y*y)*(x*x + x*xi)/2$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+factor(ratsimp(diff(Na,x)));
+factor(ratsimp(diff(Nb,x)));
+factor(ratsimp(diff(Nc,x)));
+factor(ratsimp(diff(Nd,x)));
+
+factor(ratsimp(diff(Na,y)));
+factor(ratsimp(diff(Nb,y)));
+factor(ratsimp(diff(Nc,y)));
+factor(ratsimp(diff(Nd,y)));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+/* QUAD Q2 ser */
+Na : (1 + x*xi)*(1 + y*yi)*(x*xi + y*yi - 1)/4$
+Nb : (1 - x*x)*(1 + y*yi)/2$
+Nc : (1 - y*y)*(1 + x*xi)/2$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+factor(ratsimp(diff(Na,x)));
+factor(ratsimp(diff(Nb,x)));
+factor(ratsimp(diff(Nc,x)));
+
+factor(ratsimp(diff(Na,y)));
+factor(ratsimp(diff(Nb,y)));
+factor(ratsimp(diff(Nc,y)));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+/*  TETRA P2 */
+L  : 1 - x - y - z $
+N0 : L*(2*L-1)$
+N1 : x*(2*x-1)$
+N2 : y*(2*y-1)$
+N3 : z*(2*z-1)$
+N4 : 4.*x*L$
+N5 : 4.*x*y$
+N6 : 4.*y*L$
+N7 : 4.*L*z$
+N8 : 4.*y*z$
+N9 : 4.*x*z$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+factor(ratsimp(diff(N0,x)));
+factor(ratsimp(diff(N1,x)));
+factor(ratsimp(diff(N2,x)));
+factor(ratsimp(diff(N3,x)));
+factor(ratsimp(diff(N4,x)));
+factor(ratsimp(diff(N5,x)));
+factor(ratsimp(diff(N6,x)));
+factor(ratsimp(diff(N7,x)));
+factor(ratsimp(diff(N8,x)));
+factor(ratsimp(diff(N9,x)));
+
+factor(ratsimp(diff(N0,y)));
+factor(ratsimp(diff(N1,y)));
+factor(ratsimp(diff(N2,y)));
+factor(ratsimp(diff(N3,y)));
+factor(ratsimp(diff(N4,y)));
+factor(ratsimp(diff(N5,y)));
+factor(ratsimp(diff(N6,y)));
+factor(ratsimp(diff(N7,y)));
+factor(ratsimp(diff(N8,y)));
+factor(ratsimp(diff(N9,y)));
+
+factor(ratsimp(diff(N0,z)));
+factor(ratsimp(diff(N1,z)));
+factor(ratsimp(diff(N2,z)));
+factor(ratsimp(diff(N3,z)));
+factor(ratsimp(diff(N4,z)));
+factor(ratsimp(diff(N5,z)));
+factor(ratsimp(diff(N6,z)));
+factor(ratsimp(diff(N7,z)));
+factor(ratsimp(diff(N8,z)));
+factor(ratsimp(diff(N9,z)));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+factor(ratsimp(diff((1-x^2)*(1-y^2)*(1-z^2),x)));
+factor(ratsimp(diff((1-x^2)*(1-y^2)*(1-z^2),y)));
+factor(ratsimp(diff((1-x^2)*(1-y^2)*(1-z^2),z)));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+/* HEX P1 */
+N0: (1. - x)*(1. - y)*(1. - z)/8$
+N1: (1. + x)*(1. - y)*(1. - z)/8$
+N2: (1. + x)*(1. + y)*(1. - z)/8$
+N3: (1. - x)*(1. + y)*(1. - z)/8$
+N4: (1. - x)*(1. - y)*(1. + z)/8$
+N5: (1. + x)*(1. - y)*(1. + z)/8$
+N6: (1. + x)*(1. + y)*(1. + z)/8$
+N7: (1. - x)*(1. + y)*(1. + z)/8$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+factor(ratsimp(diff(N0,x)));
+factor(ratsimp(diff(N0,y)));
+factor(ratsimp(diff(N0,z)));
+
+factor(ratsimp(diff(N1,x)));
+factor(ratsimp(diff(N1,y)));
+factor(ratsimp(diff(N1,z)));
+
+factor(ratsimp(diff(N2,x)));
+factor(ratsimp(diff(N2,y)));
+factor(ratsimp(diff(N2,z)));
+
+factor(ratsimp(diff(N3,x)));
+factor(ratsimp(diff(N3,y)));
+factor(ratsimp(diff(N3,z)));
+
+factor(ratsimp(diff(N4,x)));
+factor(ratsimp(diff(N4,y)));
+factor(ratsimp(diff(N4,z)));
+
+factor(ratsimp(diff(N5,x)));
+factor(ratsimp(diff(N5,y)));
+factor(ratsimp(diff(N5,z)));
+
+factor(ratsimp(diff(N6,x)));
+factor(ratsimp(diff(N6,y)));
+factor(ratsimp(diff(N6,z)));
+
+factor(ratsimp(diff(N7,x)));
+factor(ratsimp(diff(N7,y)));
+factor(ratsimp(diff(N7,z)));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+/*   Q2ser HEX  */
+N0_7  : (1 + x*xi)*(1 + y*yi)*(1 + z*zi)*(x*xi + y*yi + z*zi - 2)/8$
+Na    : (1 - x*x)*(1 + y*yi)*(1 + z*zi)/4$
+Nb    : (1 - y*y)*(1 + x*xi)*(1 + z*zi)/4$
+Nc    : (1 - z*z)*(1 + y*yi)*(1 + x*xi)/4$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+(factor(diff(N0_7,x)));
+(factor(diff(N0_7,y)));
+(factor(diff(N0_7,z)));
+
+((diff(Na,x)));
+((diff(Na,y)));
+((diff(Na,z)));
+
+((diff(Nb,x)));
+((diff(Nb,y)));
+((diff(Nb,z)));
+
+((diff(Nc,x)));
+((diff(Nc,y)));
+((diff(Nc,z)));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+/* TRI P2 */
+L : 1-x-y$
+N0 : L*(2*L-1)$
+N1 : x*(2*x-1)$
+N2 : y*(2*y-1)$
+N3 : 4*x*L$
+N4 : 4*x*y$
+N5 : 4*y*L$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+factor(ratsimp(diff(N0,x)));
+factor(ratsimp(diff(N1,x)));
+factor(ratsimp(diff(N2,x)));
+factor(ratsimp(diff(N3,x)));
+factor(ratsimp(diff(N4,x)));
+factor(ratsimp(diff(N5,x)));
+
+factor(ratsimp(diff(N0,y)));
+factor(ratsimp(diff(N1,y)));
+factor(ratsimp(diff(N2,y)));
+factor(ratsimp(diff(N3,y)));
+factor(ratsimp(diff(N4,y)));
+factor(ratsimp(diff(N5,y)));
+/* [wxMaxima: input   end   ] */
+
+/* Maxima can't load/batch files which end with a comment! */
+"Created with wxMaxima"$

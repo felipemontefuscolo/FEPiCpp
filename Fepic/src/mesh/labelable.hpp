@@ -22,6 +22,7 @@
 #ifndef FEPIC_LABELABLE_HPP
 #define FEPIC_LABELABLE_HPP
 
+#include "../util/assert.hpp"
 
 class _Labelable
 {
@@ -30,8 +31,9 @@ public:
        flags_size = 256};
 
   enum Masks {
-    mk_disabled=1,
-    mk_marked=2
+    mk_disabled = (1<<0),
+    mk_marked   = (1<<1),
+    mk_visited  = (1<<2)
   };
 
 protected:
@@ -44,6 +46,7 @@ protected:
   _Labelable() : _tag(0), _flags(0) {};
 
 public:
+  
   int getTag() const
   {
     return _tag;
@@ -51,7 +54,7 @@ public:
 
   void setTag(int tag)
   {
-    FEPIC_CHECK((tag>=0)&&(tag<tag_size), "tag number must be less or equal "+std::string(itoa(tag_size)), std::out_of_range);
+    FEPIC_CHECK(unsigned(tag)<tag_size, "tag number must be less or equal "+std::string(itoa(tag_size)), std::out_of_range);
     _tag = tag;
   }
 
@@ -70,14 +73,24 @@ public:
     return _flags & mk_marked;
   }
 
-  bool marked(bool mark_this)
+  void marked(bool mark_this)
   {
     _flags = mark_this ? (_flags | mk_marked) : (_flags & (~mark_this));
   }
 
+  bool visited() const
+  {
+    return _flags & mk_visited;
+  }
+
+  void visited(bool visit)
+  {
+    _flags = visit ? (_flags | mk_visited) : (_flags & (~mk_visited));
+  }
+
   bool getFlag(unsigned flag_no) const
   {
-    return ((_flags & ( 1 << flag_no))!=0) ? 1 : 0;
+    return static_cast<bool>(_flags & ( 1 << flag_no));
   }
 
   int getFlags() const
@@ -95,15 +108,25 @@ public:
     _flags = flags;
   }
 
+  //inline void printFlags() const
+  //{
+    //for (unsigned i=0; i<sizeof(_flags)*8; ++i)
+    //{
+      //std::cout << static_cast<bool>(_flags & (1<<i));
+    //}
+    //std::cout << std::endl;
+  //}
+  
 protected:
   unsigned char _tag; // 0 a 256
-  unsigned char _flags; // 256 flags ...
+  unsigned char _flags; // 8 flags ...
 
 };
 
 
 static const int DISABLED = _Labelable::mk_disabled;
 static const int MARKED   = _Labelable::mk_marked;
+static const int VISITED  = _Labelable::mk_visited;
 
 
 

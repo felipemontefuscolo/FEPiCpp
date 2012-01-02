@@ -25,22 +25,15 @@
 #define EIGEN_DEFAULT_TO_ROW_MAJOR
 #define EIGEN_MATRIXBASE_PLUGIN "Fepic/src/custom_eigen/addons.hpp"
 
-#ifndef FEPIC_DEBUG_ON
+//#ifndef FEPIC_DEBUG_ON
   #define EIGEN_NO_DEBUG
-#endif
+//#endif
 
-//#include <Eigen/Core>
-#include <Eigen/StdVector>
-#include <Eigen/StdList>
+#include <Eigen/Core>
 
-namespace Eigen {
-  
-  typedef Matrix<int, 3, 2> Matrix32i;
-  typedef Matrix<int, 4, 3> Matrix43i;
-  typedef Matrix<int, 6, 2> Matrix62i;
-  typedef Matrix<int, 6, Eigen::Dynamic> Matrix6Xi;
-  typedef Matrix<int, Eigen::Dynamic, 6> MatrixX6i;
-  
-};
+//#include <Eigen/LU>
+//#include <Eigen/StdVector>
+//#include <Eigen/StdList>
+
 
 #endif

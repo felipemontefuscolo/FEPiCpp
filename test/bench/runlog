@@ -1,0 +1,24 @@
+elem type: Linear tetrahedron
+space dim: 3
+# nodes:   27000
+# cells:   146334
+# facets:  297714
+# bfacets: 178379
+
+Cell list: 
+  -allocated:      153650
+  -used:           146334 (95%)
+  -# reservations: 1
+Node list: 
+  -allocated:      28350
+  -used:           27000 (95%)
+  -# reservations: 1
+Facet list: 
+  -allocated:      312599
+  -used:           297714 (95%)
+  -# reservations: 1
+Bfacet list: 
+  -allocated:      187297
+  -used:           178379 (95%)
+  -# reservations: 1
+elapsed : 1.05

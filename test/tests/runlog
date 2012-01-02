@@ -1,6 +1,6 @@
-./ut_misc && ./ut_labelable && ./ut_halfxxxx
+./misc_test && ./labelable_test && ./sorted_vec_test && ./mesh_test && ./shape_test && ./quadr_test
 Running main() from gtest_main.cc
-[==========] Running 149 tests from 7 test cases.
+[==========] Running 152 tests from 9 test cases.
 [----------] Global test environment set-up.
 [----------] 1 test from getRelativePathTest
 [ RUN      ] getRelativePathTest.UsualCases
@@ -26,6 +26,18 @@ Running main() from gtest_main.cc
 [ RUN      ] itoafill0Test.UsualCases
 [       OK ] itoafill0Test.UsualCases (0 ms)
 [----------] 1 test from itoafill0Test (0 ms total)
+
+[----------] 2 tests from arrayIsCyclicallyEqualTest
+[ RUN      ] arrayIsCyclicallyEqualTest.ExpectTrueTest
+[       OK ] arrayIsCyclicallyEqualTest.ExpectTrueTest (0 ms)
+[ RUN      ] arrayIsCyclicallyEqualTest.ExpectFalseTest
+[       OK ] arrayIsCyclicallyEqualTest.ExpectFalseTest (0 ms)
+[----------] 2 tests from arrayIsCyclicallyEqualTest (1 ms total)
+
+[----------] 1 test from sameElementsTest
+[ RUN      ] sameElementsTest.OutputTest
+[       OK ] sameElementsTest.OutputTest (0 ms)
+[----------] 1 test from sameElementsTest (0 ms total)
 
 [----------] 72 tests from Misc/getExtension1Test
 [ RUN      ] Misc/getExtension1Test.FilesWithExtension/0
@@ -202,7 +214,7 @@ Running main() from gtest_main.cc
 [ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/12
 [       OK ] Misc/getExtension2Test.FilesWithoutExtension/12 (0 ms)
 [ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/13
-[       OK ] Misc/getExtension2Test.FilesWithoutExtension/13 (0 ms)
+[       OK ] Misc/getExtension2Test.FilesWithoutExtension/13 (1 ms)
 [ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/14
 [       OK ] Misc/getExtension2Test.FilesWithoutExtension/14 (0 ms)
 [ RUN      ] Misc/getExtension2Test.FilesWithoutExtension/15
@@ -322,53 +334,474 @@ Running main() from gtest_main.cc
 [----------] 72 tests from Misc/getExtension2Test (2 ms total)
 
 [----------] Global test environment tear-down
-[==========] 149 tests from 7 test cases ran. (4 ms total)
-[  PASSED  ] 149 tests.
+[==========] 152 tests from 9 test cases ran. (4 ms total)
+[  PASSED  ] 152 tests.
 Running main() from gtest_main.cc
 [==========] Running 3 tests from 1 test case.
 [----------] Global test environment set-up.
 [----------] 3 tests from LabelableTest
 [ RUN      ] LabelableTest.ConstructorErrors
-[       OK ] LabelableTest.ConstructorErrors (0 ms)
+[       OK ] LabelableTest.ConstructorErrors (1 ms)
 [ RUN      ] LabelableTest.Constructors
 [       OK ] LabelableTest.Constructors (0 ms)
 [ RUN      ] LabelableTest.SetUps
 [       OK ] LabelableTest.SetUps (0 ms)
-[----------] 3 tests from LabelableTest (0 ms total)
+[----------] 3 tests from LabelableTest (1 ms total)
 
 [----------] Global test environment tear-down
 [==========] 3 tests from 1 test case ran. (1 ms total)
 [  PASSED  ] 3 tests.
 Running main() from gtest_main.cc
-[==========] Running 9 tests from 3 test cases.
+[==========] Running 10 tests from 2 test cases.
 [----------] Global test environment set-up.
-[----------] 3 tests from HalfCoreTest/0, where TypeParam = DefaultTraits<2, Simplex<2> >
-[ RUN      ] HalfCoreTest/0.Constructors
-[       OK ] HalfCoreTest/0.Constructors (0 ms)
-[ RUN      ] HalfCoreTest/0.ConstructorErrors
-[       OK ] HalfCoreTest/0.ConstructorErrors (0 ms)
-[ RUN      ] HalfCoreTest/0.Sets
-[       OK ] HalfCoreTest/0.Sets (0 ms)
-[----------] 3 tests from HalfCoreTest/0 (1 ms total)
+[----------] 5 tests from SortedVecTest/0, where TypeParam = std::vector<int, std::allocator<int> >
+[ RUN      ] SortedVecTest/0.InsertOp
+[       OK ] SortedVecTest/0.InsertOp (0 ms)
+[ RUN      ] SortedVecTest/0.BackOp
+[       OK ] SortedVecTest/0.BackOp (0 ms)
+[ RUN      ] SortedVecTest/0.PopBackOp
+[       OK ] SortedVecTest/0.PopBackOp (0 ms)
+[ RUN      ] SortedVecTest/0.PopClosestToOp
+[       OK ] SortedVecTest/0.PopClosestToOp (0 ms)
+[ RUN      ] SortedVecTest/0.CountIfLessOp
+[       OK ] SortedVecTest/0.CountIfLessOp (0 ms)
+[----------] 5 tests from SortedVecTest/0 (0 ms total)
 
-[----------] 3 tests from HalfCoreTest/1, where TypeParam = DefaultTraits<3, Simplex<2> >
-[ RUN      ] HalfCoreTest/1.Constructors
-[       OK ] HalfCoreTest/1.Constructors (0 ms)
-[ RUN      ] HalfCoreTest/1.ConstructorErrors
-[       OK ] HalfCoreTest/1.ConstructorErrors (0 ms)
-[ RUN      ] HalfCoreTest/1.Sets
-[       OK ] HalfCoreTest/1.Sets (0 ms)
-[----------] 3 tests from HalfCoreTest/1 (0 ms total)
-
-[----------] 3 tests from HalfCoreTest/2, where TypeParam = DefaultTraits<3, Simplex<3> >
-[ RUN      ] HalfCoreTest/2.Constructors
-[       OK ] HalfCoreTest/2.Constructors (0 ms)
-[ RUN      ] HalfCoreTest/2.ConstructorErrors
-[       OK ] HalfCoreTest/2.ConstructorErrors (0 ms)
-[ RUN      ] HalfCoreTest/2.Sets
-[       OK ] HalfCoreTest/2.Sets (0 ms)
-[----------] 3 tests from HalfCoreTest/2 (0 ms total)
+[----------] 5 tests from SortedVecTest/1, where TypeParam = std::deque<int, std::allocator<int> >
+[ RUN      ] SortedVecTest/1.InsertOp
+[       OK ] SortedVecTest/1.InsertOp (0 ms)
+[ RUN      ] SortedVecTest/1.BackOp
+[       OK ] SortedVecTest/1.BackOp (0 ms)
+[ RUN      ] SortedVecTest/1.PopBackOp
+[       OK ] SortedVecTest/1.PopBackOp (0 ms)
+[ RUN      ] SortedVecTest/1.PopClosestToOp
+[       OK ] SortedVecTest/1.PopClosestToOp (0 ms)
+[ RUN      ] SortedVecTest/1.CountIfLessOp
+[       OK ] SortedVecTest/1.CountIfLessOp (0 ms)
+[----------] 5 tests from SortedVecTest/1 (0 ms total)
 
 [----------] Global test environment tear-down
-[==========] 9 tests from 3 test cases ran. (1 ms total)
-[  PASSED  ] 9 tests.
+[==========] 10 tests from 2 test cases ran. (1 ms total)
+[  PASSED  ] 10 tests.
+Running main() from gtest_main.cc
+[==========] Running 96 tests from 15 test cases.
+[----------] Global test environment set-up.
+[----------] 1 test from Edge2ReadVtkTest
+[ RUN      ] Edge2ReadVtkTest.ReadVtk
+[       OK ] Edge2ReadVtkTest.ReadVtk (0 ms)
+[----------] 1 test from Edge2ReadVtkTest (0 ms total)
+
+[----------] 1 test from EdgeRead3VtkTest
+[ RUN      ] EdgeRead3VtkTest.ReadVtk
+[       OK ] EdgeRead3VtkTest.ReadVtk (1 ms)
+[----------] 1 test from EdgeRead3VtkTest (1 ms total)
+
+[----------] 1 test from Tet4ConnectedVtcsTest
+[ RUN      ] Tet4ConnectedVtcsTest.ConnectedVtcs
+[       OK ] Tet4ConnectedVtcsTest.ConnectedVtcs (0 ms)
+[----------] 1 test from Tet4ConnectedVtcsTest (0 ms total)
+
+[----------] 12 tests from VertexStar/Tri3VertexStarTest
+[ RUN      ] VertexStar/Tri3VertexStarTest.vertexStarTest/0
+[       OK ] VertexStar/Tri3VertexStarTest.vertexStarTest/0 (1 ms)
+[ RUN      ] VertexStar/Tri3VertexStarTest.vertexStarTest/1
+[       OK ] VertexStar/Tri3VertexStarTest.vertexStarTest/1 (1 ms)
+[ RUN      ] VertexStar/Tri3VertexStarTest.vertexStarTest/2
+[       OK ] VertexStar/Tri3VertexStarTest.vertexStarTest/2 (1 ms)
+[ RUN      ] VertexStar/Tri3VertexStarTest.vertexStarTest/3
+[       OK ] VertexStar/Tri3VertexStarTest.vertexStarTest/3 (0 ms)
+[ RUN      ] VertexStar/Tri3VertexStarTest.vertexStarTest/4
+[       OK ] VertexStar/Tri3VertexStarTest.vertexStarTest/4 (1 ms)
+[ RUN      ] VertexStar/Tri3VertexStarTest.vertexStarTest/5
+[       OK ] VertexStar/Tri3VertexStarTest.vertexStarTest/5 (1 ms)
+[ RUN      ] VertexStar/Tri3VertexStarTest.vertexStarTest/6
+[       OK ] VertexStar/Tri3VertexStarTest.vertexStarTest/6 (1 ms)
+[ RUN      ] VertexStar/Tri3VertexStarTest.vertexStarTest/7
+[       OK ] VertexStar/Tri3VertexStarTest.vertexStarTest/7 (0 ms)
+[ RUN      ] VertexStar/Tri3VertexStarTest.vertexStarTest/8
+[       OK ] VertexStar/Tri3VertexStarTest.vertexStarTest/8 (1 ms)
+[ RUN      ] VertexStar/Tri3VertexStarTest.vertexStarTest/9
+[       OK ] VertexStar/Tri3VertexStarTest.vertexStarTest/9 (1 ms)
+[ RUN      ] VertexStar/Tri3VertexStarTest.vertexStarTest/10
+[       OK ] VertexStar/Tri3VertexStarTest.vertexStarTest/10 (2 ms)
+[ RUN      ] VertexStar/Tri3VertexStarTest.vertexStarTest/11
+[       OK ] VertexStar/Tri3VertexStarTest.vertexStarTest/11 (1 ms)
+[----------] 12 tests from VertexStar/Tri3VertexStarTest (11 ms total)
+
+[----------] 4 tests from NodeStar/Tri6NodeStarTest
+[ RUN      ] NodeStar/Tri6NodeStarTest.nodeStarTest/0
+[       OK ] NodeStar/Tri6NodeStarTest.nodeStarTest/0 (1 ms)
+[ RUN      ] NodeStar/Tri6NodeStarTest.nodeStarTest/1
+[       OK ] NodeStar/Tri6NodeStarTest.nodeStarTest/1 (1 ms)
+[ RUN      ] NodeStar/Tri6NodeStarTest.nodeStarTest/2
+[       OK ] NodeStar/Tri6NodeStarTest.nodeStarTest/2 (0 ms)
+[ RUN      ] NodeStar/Tri6NodeStarTest.nodeStarTest/3
+[       OK ] NodeStar/Tri6NodeStarTest.nodeStarTest/3 (1 ms)
+[----------] 4 tests from NodeStar/Tri6NodeStarTest (3 ms total)
+
+[----------] 16 tests from VertexStar/Quad4VertexStarTest
+[ RUN      ] VertexStar/Quad4VertexStarTest.vertexStarTest/0
+[       OK ] VertexStar/Quad4VertexStarTest.vertexStarTest/0 (0 ms)
+[ RUN      ] VertexStar/Quad4VertexStarTest.vertexStarTest/1
+[       OK ] VertexStar/Quad4VertexStarTest.vertexStarTest/1 (1 ms)
+[ RUN      ] VertexStar/Quad4VertexStarTest.vertexStarTest/2
+[       OK ] VertexStar/Quad4VertexStarTest.vertexStarTest/2 (1 ms)
+[ RUN      ] VertexStar/Quad4VertexStarTest.vertexStarTest/3
+[       OK ] VertexStar/Quad4VertexStarTest.vertexStarTest/3 (0 ms)
+[ RUN      ] VertexStar/Quad4VertexStarTest.vertexStarTest/4
+[       OK ] VertexStar/Quad4VertexStarTest.vertexStarTest/4 (1 ms)
+[ RUN      ] VertexStar/Quad4VertexStarTest.vertexStarTest/5
+[       OK ] VertexStar/Quad4VertexStarTest.vertexStarTest/5 (0 ms)
+[ RUN      ] VertexStar/Quad4VertexStarTest.vertexStarTest/6
+[       OK ] VertexStar/Quad4VertexStarTest.vertexStarTest/6 (1 ms)
+[ RUN      ] VertexStar/Quad4VertexStarTest.vertexStarTest/7
+[       OK ] VertexStar/Quad4VertexStarTest.vertexStarTest/7 (0 ms)
+[ RUN      ] VertexStar/Quad4VertexStarTest.vertexStarTest/8
+[       OK ] VertexStar/Quad4VertexStarTest.vertexStarTest/8 (1 ms)
+[ RUN      ] VertexStar/Quad4VertexStarTest.vertexStarTest/9
+[       OK ] VertexStar/Quad4VertexStarTest.vertexStarTest/9 (0 ms)
+[ RUN      ] VertexStar/Quad4VertexStarTest.vertexStarTest/10
+[       OK ] VertexStar/Quad4VertexStarTest.vertexStarTest/10 (1 ms)
+[ RUN      ] VertexStar/Quad4VertexStarTest.vertexStarTest/11
+[       OK ] VertexStar/Quad4VertexStarTest.vertexStarTest/11 (1 ms)
+[ RUN      ] VertexStar/Quad4VertexStarTest.vertexStarTest/12
+[       OK ] VertexStar/Quad4VertexStarTest.vertexStarTest/12 (0 ms)
+[ RUN      ] VertexStar/Quad4VertexStarTest.vertexStarTest/13
+[       OK ] VertexStar/Quad4VertexStarTest.vertexStarTest/13 (1 ms)
+[ RUN      ] VertexStar/Quad4VertexStarTest.vertexStarTest/14
+[       OK ] VertexStar/Quad4VertexStarTest.vertexStarTest/14 (0 ms)
+[ RUN      ] VertexStar/Quad4VertexStarTest.vertexStarTest/15
+[       OK ] VertexStar/Quad4VertexStarTest.vertexStarTest/15 (1 ms)
+[----------] 16 tests from VertexStar/Quad4VertexStarTest (9 ms total)
+
+[----------] 4 tests from NodeStar/Quad8NodeStarTest
+[ RUN      ] NodeStar/Quad8NodeStarTest.nodeStarTest/0
+[       OK ] NodeStar/Quad8NodeStarTest.nodeStarTest/0 (0 ms)
+[ RUN      ] NodeStar/Quad8NodeStarTest.nodeStarTest/1
+[       OK ] NodeStar/Quad8NodeStarTest.nodeStarTest/1 (1 ms)
+[ RUN      ] NodeStar/Quad8NodeStarTest.nodeStarTest/2
+[       OK ] NodeStar/Quad8NodeStarTest.nodeStarTest/2 (1 ms)
+[ RUN      ] NodeStar/Quad8NodeStarTest.nodeStarTest/3
+[       OK ] NodeStar/Quad8NodeStarTest.nodeStarTest/3 (0 ms)
+[----------] 4 tests from NodeStar/Quad8NodeStarTest (2 ms total)
+
+[----------] 5 tests from NodeStar/Quad9NodeStarTest
+[ RUN      ] NodeStar/Quad9NodeStarTest.nodeStarTest/0
+[       OK ] NodeStar/Quad9NodeStarTest.nodeStarTest/0 (1 ms)
+[ RUN      ] NodeStar/Quad9NodeStarTest.nodeStarTest/1
+[       OK ] NodeStar/Quad9NodeStarTest.nodeStarTest/1 (1 ms)
+[ RUN      ] NodeStar/Quad9NodeStarTest.nodeStarTest/2
+[       OK ] NodeStar/Quad9NodeStarTest.nodeStarTest/2 (0 ms)
+[ RUN      ] NodeStar/Quad9NodeStarTest.nodeStarTest/3
+[       OK ] NodeStar/Quad9NodeStarTest.nodeStarTest/3 (1 ms)
+[ RUN      ] NodeStar/Quad9NodeStarTest.nodeStarTest/4
+[       OK ] NodeStar/Quad9NodeStarTest.nodeStarTest/4 (1 ms)
+[----------] 5 tests from NodeStar/Quad9NodeStarTest (4 ms total)
+
+[----------] 9 tests from VertexStar/Tet4VertexStarTest
+[ RUN      ] VertexStar/Tet4VertexStarTest.vertexStarTest/0
+[       OK ] VertexStar/Tet4VertexStarTest.vertexStarTest/0 (0 ms)
+[ RUN      ] VertexStar/Tet4VertexStarTest.vertexStarTest/1
+[       OK ] VertexStar/Tet4VertexStarTest.vertexStarTest/1 (1 ms)
+[ RUN      ] VertexStar/Tet4VertexStarTest.vertexStarTest/2
+[       OK ] VertexStar/Tet4VertexStarTest.vertexStarTest/2 (1 ms)
+[ RUN      ] VertexStar/Tet4VertexStarTest.vertexStarTest/3
+[       OK ] VertexStar/Tet4VertexStarTest.vertexStarTest/3 (0 ms)
+[ RUN      ] VertexStar/Tet4VertexStarTest.vertexStarTest/4
+[       OK ] VertexStar/Tet4VertexStarTest.vertexStarTest/4 (1 ms)
+[ RUN      ] VertexStar/Tet4VertexStarTest.vertexStarTest/5
+[       OK ] VertexStar/Tet4VertexStarTest.vertexStarTest/5 (0 ms)
+[ RUN      ] VertexStar/Tet4VertexStarTest.vertexStarTest/6
+[       OK ] VertexStar/Tet4VertexStarTest.vertexStarTest/6 (1 ms)
+[ RUN      ] VertexStar/Tet4VertexStarTest.vertexStarTest/7
+[       OK ] VertexStar/Tet4VertexStarTest.vertexStarTest/7 (1 ms)
+[ RUN      ] VertexStar/Tet4VertexStarTest.vertexStarTest/8
+[       OK ] VertexStar/Tet4VertexStarTest.vertexStarTest/8 (0 ms)
+[----------] 9 tests from VertexStar/Tet4VertexStarTest (5 ms total)
+
+[----------] 3 tests from NodeStar/Tet10NodeStarTest
+[ RUN      ] NodeStar/Tet10NodeStarTest.nodeStarTest/0
+[       OK ] NodeStar/Tet10NodeStarTest.nodeStarTest/0 (1 ms)
+[ RUN      ] NodeStar/Tet10NodeStarTest.nodeStarTest/1
+[       OK ] NodeStar/Tet10NodeStarTest.nodeStarTest/1 (1 ms)
+[ RUN      ] NodeStar/Tet10NodeStarTest.nodeStarTest/2
+[       OK ] NodeStar/Tet10NodeStarTest.nodeStarTest/2 (0 ms)
+[----------] 3 tests from NodeStar/Tet10NodeStarTest (2 ms total)
+
+[----------] 3 tests from VertexStar/Hex8VertexStarTest
+[ RUN      ] VertexStar/Hex8VertexStarTest.vertexStarTest/0
+[       OK ] VertexStar/Hex8VertexStarTest.vertexStarTest/0 (1 ms)
+[ RUN      ] VertexStar/Hex8VertexStarTest.vertexStarTest/1
+[       OK ] VertexStar/Hex8VertexStarTest.vertexStarTest/1 (1 ms)
+[ RUN      ] VertexStar/Hex8VertexStarTest.vertexStarTest/2
+[       OK ] VertexStar/Hex8VertexStarTest.vertexStarTest/2 (1 ms)
+[----------] 3 tests from VertexStar/Hex8VertexStarTest (3 ms total)
+
+[----------] 3 tests from NodeStar/Hex20NodeStarTest
+[ RUN      ] NodeStar/Hex20NodeStarTest.nodeStarTest/0
+[       OK ] NodeStar/Hex20NodeStarTest.nodeStarTest/0 (0 ms)
+[ RUN      ] NodeStar/Hex20NodeStarTest.nodeStarTest/1
+[       OK ] NodeStar/Hex20NodeStarTest.nodeStarTest/1 (1 ms)
+[ RUN      ] NodeStar/Hex20NodeStarTest.nodeStarTest/2
+[       OK ] NodeStar/Hex20NodeStarTest.nodeStarTest/2 (1 ms)
+[----------] 3 tests from NodeStar/Hex20NodeStarTest (2 ms total)
+
+[----------] 5 tests from NodeStar/Hex27NodeStarTest
+[ RUN      ] NodeStar/Hex27NodeStarTest.nodeStarTest/0
+[       OK ] NodeStar/Hex27NodeStarTest.nodeStarTest/0 (1 ms)
+[ RUN      ] NodeStar/Hex27NodeStarTest.nodeStarTest/1
+[       OK ] NodeStar/Hex27NodeStarTest.nodeStarTest/1 (2 ms)
+[ RUN      ] NodeStar/Hex27NodeStarTest.nodeStarTest/2
+[       OK ] NodeStar/Hex27NodeStarTest.nodeStarTest/2 (1 ms)
+[ RUN      ] NodeStar/Hex27NodeStarTest.nodeStarTest/3
+[       OK ] NodeStar/Hex27NodeStarTest.nodeStarTest/3 (1 ms)
+[ RUN      ] NodeStar/Hex27NodeStarTest.nodeStarTest/4
+[       OK ] NodeStar/Hex27NodeStarTest.nodeStarTest/4 (1 ms)
+[----------] 5 tests from NodeStar/Hex27NodeStarTest (6 ms total)
+
+[----------] 26 tests from EdgeStar/Tet4EdgeStarTest
+[ RUN      ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/0
+[       OK ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/0 (0 ms)
+[ RUN      ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/1
+[       OK ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/1 (1 ms)
+[ RUN      ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/2
+[       OK ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/2 (0 ms)
+[ RUN      ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/3
+[       OK ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/3 (0 ms)
+[ RUN      ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/4
+[       OK ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/4 (1 ms)
+[ RUN      ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/5
+[       OK ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/5 (0 ms)
+[ RUN      ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/6
+[       OK ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/6 (1 ms)
+[ RUN      ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/7
+[       OK ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/7 (0 ms)
+[ RUN      ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/8
+[       OK ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/8 (0 ms)
+[ RUN      ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/9
+[       OK ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/9 (1 ms)
+[ RUN      ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/10
+[       OK ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/10 (0 ms)
+[ RUN      ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/11
+[       OK ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/11 (0 ms)
+[ RUN      ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/12
+[       OK ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/12 (1 ms)
+[ RUN      ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/13
+[       OK ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/13 (0 ms)
+[ RUN      ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/14
+[       OK ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/14 (0 ms)
+[ RUN      ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/15
+[       OK ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/15 (1 ms)
+[ RUN      ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/16
+[       OK ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/16 (0 ms)
+[ RUN      ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/17
+[       OK ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/17 (1 ms)
+[ RUN      ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/18
+[       OK ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/18 (0 ms)
+[ RUN      ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/19
+[       OK ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/19 (0 ms)
+[ RUN      ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/20
+[       OK ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/20 (1 ms)
+[ RUN      ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/21
+[       OK ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/21 (0 ms)
+[ RUN      ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/22
+[       OK ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/22 (0 ms)
+[ RUN      ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/23
+[       OK ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/23 (1 ms)
+[ RUN      ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/24
+[       OK ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/24 (0 ms)
+[ RUN      ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/25
+[       OK ] EdgeStar/Tet4EdgeStarTest.vertexStarTest/25 (0 ms)
+[----------] 26 tests from EdgeStar/Tet4EdgeStarTest (9 ms total)
+
+[----------] 3 tests from ConnectedNodes/Tet10ConnectedNodesTest
+[ RUN      ] ConnectedNodes/Tet10ConnectedNodesTest.ConnectedNodesTest/0
+[       OK ] ConnectedNodes/Tet10ConnectedNodesTest.ConnectedNodesTest/0 (1 ms)
+[ RUN      ] ConnectedNodes/Tet10ConnectedNodesTest.ConnectedNodesTest/1
+[       OK ] ConnectedNodes/Tet10ConnectedNodesTest.ConnectedNodesTest/1 (0 ms)
+[ RUN      ] ConnectedNodes/Tet10ConnectedNodesTest.ConnectedNodesTest/2
+[       OK ] ConnectedNodes/Tet10ConnectedNodesTest.ConnectedNodesTest/2 (1 ms)
+[----------] 3 tests from ConnectedNodes/Tet10ConnectedNodesTest (2 ms total)
+
+[----------] Global test environment tear-down
+[==========] 96 tests from 15 test cases ran. (59 ms total)
+[  PASSED  ] 96 tests.
+Running main() from gtest_main.cc
+[==========] Running 62 tests from 1 test case.
+[----------] Global test environment set-up.
+[----------] 62 tests from PartUnityCheck/ShapeTest
+[ RUN      ] PartUnityCheck/ShapeTest.GradPrecisionTest/0
+[       OK ] PartUnityCheck/ShapeTest.GradPrecisionTest/0 (1 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.GradPrecisionTest/1
+[       OK ] PartUnityCheck/ShapeTest.GradPrecisionTest/1 (0 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.GradPrecisionTest/2
+[       OK ] PartUnityCheck/ShapeTest.GradPrecisionTest/2 (0 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.GradPrecisionTest/3
+[       OK ] PartUnityCheck/ShapeTest.GradPrecisionTest/3 (14 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.GradPrecisionTest/4
+[       OK ] PartUnityCheck/ShapeTest.GradPrecisionTest/4 (14 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.GradPrecisionTest/5
+[       OK ] PartUnityCheck/ShapeTest.GradPrecisionTest/5 (16 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.GradPrecisionTest/6
+[       OK ] PartUnityCheck/ShapeTest.GradPrecisionTest/6 (15 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.GradPrecisionTest/7
+[       OK ] PartUnityCheck/ShapeTest.GradPrecisionTest/7 (16 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.GradPrecisionTest/8
+[       OK ] PartUnityCheck/ShapeTest.GradPrecisionTest/8 (14 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.GradPrecisionTest/9
+[       OK ] PartUnityCheck/ShapeTest.GradPrecisionTest/9 (14 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.GradPrecisionTest/10
+[       OK ] PartUnityCheck/ShapeTest.GradPrecisionTest/10 (13 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.GradPrecisionTest/11
+[       OK ] PartUnityCheck/ShapeTest.GradPrecisionTest/11 (15 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.GradPrecisionTest/12
+[       OK ] PartUnityCheck/ShapeTest.GradPrecisionTest/12 (19 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.GradPrecisionTest/13
+[       OK ] PartUnityCheck/ShapeTest.GradPrecisionTest/13 (16 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.GradPrecisionTest/14
+[       OK ] PartUnityCheck/ShapeTest.GradPrecisionTest/14 (14 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.GradPrecisionTest/15
+[       OK ] PartUnityCheck/ShapeTest.GradPrecisionTest/15 (18 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.GradPrecisionTest/16
+[       OK ] PartUnityCheck/ShapeTest.GradPrecisionTest/16 (13 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.GradPrecisionTest/17
+[       OK ] PartUnityCheck/ShapeTest.GradPrecisionTest/17 (112 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.GradPrecisionTest/18
+[       OK ] PartUnityCheck/ShapeTest.GradPrecisionTest/18 (113 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.GradPrecisionTest/19
+[       OK ] PartUnityCheck/ShapeTest.GradPrecisionTest/19 (117 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.GradPrecisionTest/20
+[       OK ] PartUnityCheck/ShapeTest.GradPrecisionTest/20 (115 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.GradPrecisionTest/21
+[       OK ] PartUnityCheck/ShapeTest.GradPrecisionTest/21 (119 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.GradPrecisionTest/22
+[       OK ] PartUnityCheck/ShapeTest.GradPrecisionTest/22 (113 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.GradPrecisionTest/23
+[       OK ] PartUnityCheck/ShapeTest.GradPrecisionTest/23 (112 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.GradPrecisionTest/24
+[       OK ] PartUnityCheck/ShapeTest.GradPrecisionTest/24 (335 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.GradPrecisionTest/25
+[       OK ] PartUnityCheck/ShapeTest.GradPrecisionTest/25 (351 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.GradPrecisionTest/26
+[       OK ] PartUnityCheck/ShapeTest.GradPrecisionTest/26 (431 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.GradPrecisionTest/27
+[       OK ] PartUnityCheck/ShapeTest.GradPrecisionTest/27 (359 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.GradPrecisionTest/28
+[       OK ] PartUnityCheck/ShapeTest.GradPrecisionTest/28 (336 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.GradPrecisionTest/29
+[       OK ] PartUnityCheck/ShapeTest.GradPrecisionTest/29 (395 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.GradPrecisionTest/30
+[       OK ] PartUnityCheck/ShapeTest.GradPrecisionTest/30 (327 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/0
+[       OK ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/0 (0 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/1
+[       OK ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/1 (0 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/2
+[       OK ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/2 (0 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/3
+[       OK ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/3 (13 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/4
+[       OK ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/4 (14 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/5
+[       OK ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/5 (13 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/6
+[       OK ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/6 (13 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/7
+[       OK ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/7 (14 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/8
+[       OK ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/8 (13 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/9
+[       OK ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/9 (13 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/10
+[       OK ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/10 (13 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/11
+[       OK ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/11 (13 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/12
+[       OK ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/12 (13 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/13
+[       OK ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/13 (12 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/14
+[       OK ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/14 (13 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/15
+[       OK ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/15 (13 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/16
+[       OK ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/16 (13 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/17
+[       OK ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/17 (108 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/18
+[       OK ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/18 (108 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/19
+[       OK ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/19 (109 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/20
+[       OK ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/20 (108 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/21
+[       OK ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/21 (108 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/22
+[       OK ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/22 (108 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/23
+[       OK ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/23 (109 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/24
+[       OK ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/24 (324 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/25
+[       OK ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/25 (323 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/26
+[       OK ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/26 (327 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/27
+[       OK ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/27 (323 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/28
+[       OK ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/28 (323 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/29
+[       OK ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/29 (324 ms)
+[ RUN      ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/30
+[       OK ] PartUnityCheck/ShapeTest.PartitionOfUnityTest/30 (324 ms)
+[----------] 62 tests from PartUnityCheck/ShapeTest (6756 ms total)
+
+[----------] Global test environment tear-down
+[==========] 62 tests from 1 test case ran. (6756 ms total)
+[  PASSED  ] 62 tests.
+Running main() from gtest_main.cc
+[==========] Running 6 tests from 1 test case.
+[----------] Global test environment set-up.
+[----------] 6 tests from QuadratureTest
+[ RUN      ] QuadratureTest.WeightTest
+[       OK ] QuadratureTest.WeightTest (0 ms)
+[ RUN      ] QuadratureTest.EdgeIntegrationTest
+-  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -
+>> Edge precison test: 
+>> max absolute error: 2.220446049250313e-16
+>> in function with order: 2
+-  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -
+[       OK ] QuadratureTest.EdgeIntegrationTest (0 ms)
+[ RUN      ] QuadratureTest.TriIntegrationTest
+-  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -
+>> Triangle precison test: 
+>> max absolute error: 2.775557561562891e-17
+>> in function with order: 5
+-  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -
+[       OK ] QuadratureTest.TriIntegrationTest (0 ms)
+[ RUN      ] QuadratureTest.QuadIntegrationTest
+-  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -
+>> Quadrangle precison test: 
+>> max absolute error: 2.775557561562891e-16
+>> in function with order: 2
+-  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -
+[       OK ] QuadratureTest.QuadIntegrationTest (0 ms)
+[ RUN      ] QuadratureTest.TetIntegrationTest
+-  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -
+>> Tetrahedron precison test: 
+>> max absolute error: 1.387778780781446e-17
+>> in function with order: 2
+-  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -
+[       OK ] QuadratureTest.TetIntegrationTest (0 ms)
+[ RUN      ] QuadratureTest.HexIntegrationTest
+-  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -
+>> Hexahedron precison test: 
+>> max absolute error: 3.33066907387547e-16
+>> in function with order: 2
+-  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -
+[       OK ] QuadratureTest.HexIntegrationTest (0 ms)
+[----------] 6 tests from QuadratureTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 6 tests from 1 test case ran. (0 ms total)
+[  PASSED  ] 6 tests.

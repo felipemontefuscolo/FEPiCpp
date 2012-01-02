@@ -24,5 +24,25 @@
 inline Scalar* begin()  { return &this->operator()(0); }
 inline Scalar const* begin() const { return &this->operator()(0); }
 
-inline Scalar* end()  { return begin()+size(); }
-inline Scalar const* end() const  { return begin()+size(); }
+inline Scalar* end()  { return this->begin()+this->size(); }
+inline Scalar const* end() const  { return this->begin()+this->size(); }
+
+inline void push_back(Scalar const& v)
+{
+  const unsigned old_size = this->size();
+  this->conservativeResize(old_size+1);
+  this->operator()(old_size) = v;
+}
+
+inline void pop_back()
+{
+  this->conservativeResize(this->size()-1);
+}
+
+inline Scalar& back() const {return this->operator()(this->size()-1);}
+inline Scalar& front() const {return this->operator()(0);}
+
+inline void reserve() const {/* nothing */};
+
+inline bool empty() const {return this->size()==0;}
+

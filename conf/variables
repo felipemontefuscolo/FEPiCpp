@@ -1,0 +1,21 @@
+FEP_CXX = g++
+
+# You can also check if an environment variable has been set and initialise it to something if it has not. ie.
+METIS_DIR ?= $(FEPIC_DIR)/contrib/metis
+METIS_LD  ?= $(FEPIC_DIR)/contrib/metis
+EIGEN_DIR ?= $(FEPIC_DIR)/contrib/eigen
+LOKI_DIR  ?= $(FEPIC_DIR)/contrib/Loki
+OMPTL_DIR ?= $(FEPIC_DIR)/contrib/omptl
+BOOST_DIR ?= $(FEPIC_DIR)/contrib/boost
+
+FEP_INCLUDE = -I$(FEPIC_DIR) -I$(EIGEN_DIR) -I$(METIS_DIR)/include -I$(LOKI_DIR) -I$(OMPTL_DIR) -I$(BOOST_DIR)
+
+FEP_LIBS_DIR = $(FEPIC_DIR)/Fepic/libs
+
+FEP_LDFLAGS = -fopenmp -L$(METIS_LD) -lmetis
+FEP_CXXFLAGS  = -g -Wall -Wextra $(FEP_INCLUDE)
+#FEP_CXXFLAGS = -O3 -march=native -msse2  $(FEP_INCLUDE) -fopenmp
+FEP_CXXFLAGS += $(FEP_LDFLAGS)
+
+FEP_RM = rm -f
+

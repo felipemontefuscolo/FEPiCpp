@@ -30,81 +30,19 @@
   ==================================================================
 */
 
-template<class Mesh, int CellDim>
-class _MeshMethods;
+template<int CellDim>
+struct _Meta_Edge;
 
-template<class Mesh>
-class _MeshMethods<Mesh, 2>
-{
-public:
-  static void buildAdjacency(Mesh & mesh)
-  {
-    mesh.buildAdjacency4face();
-  }
-
-  static void remodelCellsNodes(Mesh & mesh, int order)
-  {
-    mesh.remodelCellsNodes4face(order);
-  }
-
+template<> struct _Meta_Edge<1> {
+  typedef Cell type;
 };
 
-template<class Mesh>
-class _MeshMethods<Mesh, 3>
-{
-public:
-  static void buildAdjacency(Mesh & mesh)
-  {
-    mesh.buildAdjacency4volume();
-  }
-
-  static void remodelCellsNodes(Mesh & mesh, int order)
-  {
-    mesh.remodelCellsNodes4volume(order);
-  }
-
+template<> struct _Meta_Edge<2> {
+  typedef Facet type;
 };
 
-
-
-/*
-  ==================================================================
-  ================== _MeshReadMarkedElementsMsh =====================
-  ==================================================================
-*/
-
-template<class Mesh, int CellDim>
-class _MeshReadMarkedElementsMsh;
-
-template<class Mesh>
-class _MeshReadMarkedElementsMsh<Mesh, 1>
-{
-public:
-  static void buildAdjacency(std::ifstream &File)
-  {
-    Mesh::readMarkedElementsMsh4edge(File);
-  }
-};
-
-template<class Mesh>
-class _MeshReadMarkedElementsMsh<Mesh, 2>
-{
-public:
-  static void buildAdjacency(std::ifstream &File)
-  {
-    Mesh::readMarkedElementsMsh4face(File);
-  }
-};
-
-
-template<class Mesh>
-class _MeshReadMarkedElementsMsh<Mesh, 3>
-{
-public:
-  static void buildAdjacency(std::ifstream &File)
-  {
-    Mesh::readMarkedElementsMsh4volume(File);
-  }
+template<> struct _Meta_Edge<3> {
+  typedef Corner type;
 };
 
 

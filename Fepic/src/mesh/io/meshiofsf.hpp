@@ -36,7 +36,7 @@ class _MeshIoFsf
 public:  
   typedef typename _Traits::CellT   CellT;
   typedef typename _Traits::MeshT   MeshT;
-  typedef typename _Traits::HalfT  HalfT;
+  typedef typename _Traits::FacetT  FacetT;
   typedef typename _Traits::PointT  PointT;
   typedef typename CellT::PolytopeT CellPolytopeT;
   typedef typename CellPolytopeT::Derived CellDerivedPolytopeT;
@@ -53,8 +53,8 @@ public:
   void addScalarFsf(const char* nome_var, T& scalar, int num_pts);
   template<class T>
   void addVectorFsf(const char* nome_var, T& arrayos, int dim, int num_pts);
-  void addPointTagFsf(const char* nome_var); // para debug
-  void addPointHalfFsf(const char* nome_var);  // para debug     
+  void pushPointTagFsf(const char* nome_var); // para debug
+  void pushPointFacetFsf(const char* nome_var);  // para debug     
 
 
 
@@ -70,7 +70,7 @@ public:
       {
         o << std::left << std::setw(space) << p.getCoord(0) << " 0.0 0.0 "
                               << p.getTag() << " " << p.getFlags() << " "
-                              << p.getHalf()->getIncidCell() << " " << p.getHalf()->getPosition() << " " << p.getHalf()->getAnchor();
+                              << p.getFacet()->getIncidCell() << " " << p.getFacet()->getPosition() << " " << p.getFacet()->getAnchor();
         break;
       }
       case 2:
@@ -78,7 +78,7 @@ public:
         o << std::left << std::setw(space) << p.getCoord(0)
                        << std::setw(space) << p.getCoord(1) << " 0.0 "
                        << p.getTag() << " " << p.getFlags() << " "
-                       << p.getHalf()->getIncidCell() << " " << p.getHalf()->getPosition() << " " << p.getHalf()->getAnchor();
+                       << p.getFacet()->getIncidCell() << " " << p.getFacet()->getPosition() << " " << p.getFacet()->getAnchor();
         break;
       }
       case 3:
@@ -87,7 +87,7 @@ public:
                        << std::setw(space) << p.getCoord(1)
                        << std::setw(space) << p.getCoord(2) << " "
                        << p.getTag() << " " << p.getFlags() << " "
-                       << p.getHalf()->getIncidCell() << " " << p.getHalf()->getPosition() << " " << p.getHalf()->getAnchor();
+                       << p.getFacet()->getIncidCell() << " " << p.getFacet()->getPosition() << " " << p.getFacet()->getAnchor();
         break;
       }
       default:
@@ -102,18 +102,18 @@ public:
   /// Tetrahedron Cell printer
   template<class Cell_T>
   static void printCellFsf(Cell_T const& cell, std::ostream &o,
-  typename std::enable_if<std::is_same<Simplex<1>,  typename Cell_T::PolytopeT>::value ||
-                          std::is_same<Hypercube<1>,typename Cell_T::PolytopeT>::value ||
-                          std::is_same<Polytope<1>, typename Cell_T::PolytopeT>::value >::type* = NULL)
+  typename EnableIf<std::tr1::is_same<Simplex<1>,  typename Cell_T::PolytopeT>::value ||
+                          std::tr1::is_same<Hypercube<1>,typename Cell_T::PolytopeT>::value ||
+                          std::tr1::is_same<Polytope<1>, typename Cell_T::PolytopeT>::value >::type* = NULL)
   {
     /* print:
      * 
      * _nodes | _order | _tag | _flags
      *  */
     
-    for (int i = 0; i < cell.getNumNodes(); i++)
+    for (int i = 0; i < cell.numNodes(); i++)
     {   
-      o << cell.getNodeIdx(i) << " ";
+      o << cell.getNodeId(i) << " ";
     }
     
     o << cell.getOrder() << " " << cell.getTag() << " " << cell.getFlags();
@@ -122,29 +122,29 @@ public:
   /// Tetrahedron Cell printer
   template<class Cell_T>
   static void printCellFsf(Cell_T const& cell, std::ostream &o,
-  typename std::enable_if<std::is_same<Simplex<2>, typename Cell_T::PolytopeT>::value ||
-                          std::is_same<Simplex<3>, typename Cell_T::PolytopeT>::value >::type* = NULL)
+  typename EnableIf<std::tr1::is_same<Simplex<2>, typename Cell_T::PolytopeT>::value ||
+                          std::tr1::is_same<Simplex<3>, typename Cell_T::PolytopeT>::value >::type* = NULL)
   {
     /* print:
      * 
-     * _nodes | _order | _tag | _flags | half1<c, ith, anc> | h2<> | ...
+     * _nodes | _order | _tag | _flags | facet1<c, ith, anc> | h2<> | ...
      *  */
     
-    for (int i = 0; i < cell.getNumNodes(); i++)
+    for (int i = 0; i < cell.numNodes(); i++)
     {   
-      o << cell.getNodeIdx(i) << " ";
+      o << cell.getNodeId(i) << " ";
     }
     
     o << cell.getTag() << " " << cell.getFlags();
     
-    for (int i = 0; i < cell.n_borders; i++)
+    for (int i = 0; i < cell.n_facets; i++)
     {   
-      auto h = cell.getHalf(i);
+      auto h = cell.getFacet(i);
       o<<" "<< h->getIncidCell() <<" "<< h->getPosition() <<" "<< h->getAnchor();
     }
   }
  
-  static void printHalfsFsf(HalfT const& hl, std::ostream &o)
+  static void printFacetsFsf(FacetT const& hl, std::ostream &o)
   {
     o << hl.getIncidCell() << " " << hl.getPosition() << " " << hl.getAnchor() << " " << hl.getTag() << " " << hl.getFlags();
   }
@@ -204,7 +204,7 @@ void _MeshIoFsf<_Traits>::readFileFsf(const char* filename)
     THIS->_pointL[i].setCoord(coord);
     THIS->_pointL[i].setTag(tag);
     THIS->_pointL[i].setFlags(flags);
-    THIS->_pointL[i].getHalf()->setCompleteId(incid_cell, position, anchor);
+    THIS->_pointL[i].getFacet()->setCompleteId(incid_cell, position, anchor);
   }
   File >> s;
   FEPIC_ASSERT(s == std::string("END_POINTS"), "can not find the key END_CELLS", std::invalid_argument);
@@ -222,7 +222,7 @@ void _MeshIoFsf<_Traits>::readFileFsf(const char* filename)
   THIS->_cellL.resize(n_cells);
   
   int n_nodes_per_cell = ::numNodes<CellPolytopeT>(order);
-  int n_borders = CellT::n_borders;
+  int n_facets = CellT::n_facets;
   incid_cell=0;
   position=0;
   anchor=0;
@@ -239,12 +239,12 @@ void _MeshIoFsf<_Traits>::readFileFsf(const char* filename)
     THIS->_cellL[i].setTag(tag);
     THIS->_cellL[i].setFlags(flags);
     
-    for (int b = 0; b < n_borders; ++b)
+    for (int b = 0; b < n_facets; ++b)
     {
       File >> incid_cell >> position >> anchor;
-      THIS->_cellL[i].getHalf(b)->setIncidCell(incid_cell);
-      THIS->_cellL[i].getHalf(b)->setPosition(position);
-      THIS->_cellL[i].getHalf(b)->setAnchor(anchor);
+      THIS->_cellL[i].getFacet(b)->setIncidCell(incid_cell);
+      THIS->_cellL[i].getFacet(b)->setPosition(position);
+      THIS->_cellL[i].getFacet(b)->setAnchor(anchor);
     }
     
   }
@@ -259,20 +259,20 @@ void _MeshIoFsf<_Traits>::readFileFsf(const char* filename)
    * */
   pos = search_word(File, "HALFLS");
   FEPIC_ASSERT(pos != static_cast<size_t>(-1), "invalid file format: can not find HALFLS", std::invalid_argument);
-  int n_halfs;
-  File >> n_halfs;
+  int n_facets;
+  File >> n_facets;
   
-  THIS->_halfL.resize(n_halfs);
+  THIS->_facetL.resize(n_facets);
   
   num=0;
-  for (int i = 0; i < n_halfs; i++)
+  for (int i = 0; i < n_facets; i++)
   {
     File >> incid_cell >> position >> anchor >> tag >> flags;
-    THIS->_halfL[i].setIncidCell(incid_cell);
-    THIS->_halfL[i].setPosition(position);
-    THIS->_halfL[i].setAnchor(anchor);
-    THIS->_halfL[i].setTag(tag);
-    THIS->_halfL[i].setFlags(flags);
+    THIS->_facetL[i].setIncidCell(incid_cell);
+    THIS->_facetL[i].setPosition(position);
+    THIS->_facetL[i].setAnchor(anchor);
+    THIS->_facetL[i].setTag(tag);
+    THIS->_facetL[i].setFlags(flags);
   }
   File >> s;
   FEPIC_ASSERT(s == std::string("END_HALFLS"), "can not find the key END_CELLS", std::invalid_argument);
@@ -292,8 +292,8 @@ void _MeshIoFsf<_Traits>::writeFsf(std::string const& outname = "")
   * são impressas.
   */
   int order  = THIS->getOrder();
-  int ncells = THIS->getNumCellsTotal();
-  int nhalfs= THIS->getNumHalfTotal();
+  int ncells = THIS->numValidCells();
+  int nfacets= THIS->numFacetsTotal();
 
   THIS->_add_scalar_fsf_n_calls=0;
 
@@ -307,7 +307,7 @@ void _MeshIoFsf<_Traits>::writeFsf(std::string const& outname = "")
        << "CELLTYPE " << CellT::PolytopeT::name() << "\n"
        << "MESHORDER " << THIS->getOrder() << "\n\n"
        
-       << "# x | y | z | tag | flags | [half(incident cell, position, anchor) \n"
+       << "# x | y | z | tag | flags | [facet(incident cell, position, anchor) \n"
        << "POINTS " << THIS->_pointL.size() << "\n";
 
   /* imprimindo pontos */
@@ -320,7 +320,7 @@ void _MeshIoFsf<_Traits>::writeFsf(std::string const& outname = "")
   Fout << "END_POINTS\n\n";
 
   /* imprimindo células */
-  Fout << "\n# nodes | tag | flags | [half1(incident cell, position, anchor) | half2(...) | ...]\n";
+  Fout << "\n# nodes | tag | flags | [facet1(incident cell, position, anchor) | facet2(...) | ...]\n";
   Fout << "CELLS " << ncells << "\n";
   auto cit = THIS->_cellL.begin();
   for (auto cellend=THIS->_cellL.end(); cit != cellend ; ++cit)
@@ -331,10 +331,10 @@ void _MeshIoFsf<_Traits>::writeFsf(std::string const& outname = "")
   Fout << "END_CELLS\n\n";
 
   Fout << "#incident cell | position | anchor | tag | flags\n";
-  Fout << "HALFLS " << nhalfs << "\n";
-  for (auto hit = THIS->_halfL.begin(); hit != THIS->_halfL.end(); ++hit)
+  Fout << "HALFLS " << nfacets << "\n";
+  for (auto hit = THIS->_facetL.begin(); hit != THIS->_facetL.end(); ++hit)
   {
-    _MeshIoFsf::printHalfsFsf(*hit, Fout);
+    _MeshIoFsf::printFacetsFsf(*hit, Fout);
     Fout << std::endl;
   }
   Fout << "END_HALFLS\n\n";
