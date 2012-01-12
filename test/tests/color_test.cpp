@@ -61,15 +61,15 @@ public:
   Mesh *mesh;
 };
 
-const TupleT ct_in_out[] = {//TupleT(TRIANGLE3,     "meshes/cortri3.msh" , "meshes/out/cortri3.vtk" ),
-                            //TupleT(TRIANGLE6,     "meshes/cortri6.msh" , "meshes/out/cortri6.vtk" ),
-                            //TupleT(QUADRANGLE4,   "meshes/corqua4.msh" , "meshes/out/corqua4.vtk" ),
-                            //TupleT(QUADRANGLE8,   "meshes/corqua8.msh" , "meshes/out/corqua8.vtk" ),
-                            //TupleT(QUADRANGLE9,   "meshes/corqua9.msh" , "meshes/out/corqua9.vtk" ),
-                            //TupleT(TETRAHEDRON4,  "meshes/cortet4.msh" , "meshes/out/cortet4.vtk" ),
-                            //TupleT(TETRAHEDRON10, "meshes/cortet10.msh", "meshes/out/cortet10.vtk"),
-                            //TupleT(HEXAHEDRON8,   "meshes/corhex8.msh" , "meshes/out/corhex8.vtk" ),
-                            //TupleT(HEXAHEDRON20,  "meshes/corhex20.msh", "meshes/out/corhex20.vtk"),
+const TupleT ct_in_out[] = {TupleT(TRIANGLE3,     "meshes/cortri3.msh" , "meshes/out/cortri3.vtk" ),
+                            TupleT(TRIANGLE6,     "meshes/cortri6.msh" , "meshes/out/cortri6.vtk" ),
+                            TupleT(QUADRANGLE4,   "meshes/corqua4.msh" , "meshes/out/corqua4.vtk" ),
+                            TupleT(QUADRANGLE8,   "meshes/corqua8.msh" , "meshes/out/corqua8.vtk" ),
+                            TupleT(QUADRANGLE9,   "meshes/corqua9.msh" , "meshes/out/corqua9.vtk" ),
+                            TupleT(TETRAHEDRON4,  "meshes/cortet4.msh" , "meshes/out/cortet4.vtk" ),
+                            TupleT(TETRAHEDRON10, "meshes/cortet10.msh", "meshes/out/cortet10.vtk"),
+                            TupleT(HEXAHEDRON8,   "meshes/corhex8.msh" , "meshes/out/corhex8.vtk" ),
+                            TupleT(HEXAHEDRON20,  "meshes/corhex20.msh", "meshes/out/corhex20.vtk"),
                             TupleT(HEXAHEDRON27,  "meshes/corhex27.msh", "meshes/out/corhex27.vtk")};
                             
 
