@@ -43,6 +43,6 @@
 #define FEPIC_MAX_N_NODES_P_CELL 32
 #define FEPIC_MAX_ICELLS 64
 
-#define FEPIC_COLOR_INTEGER_TYPE __uint128_t
+//#define FEPIC_   _INTEGER_TYPE __uint128_t
 
 #endif

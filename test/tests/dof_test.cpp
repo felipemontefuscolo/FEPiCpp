@@ -57,8 +57,8 @@ TEST(RemoveCellTest, Tri3Test)
   MeshTools::removeCell(mesh->getCell(0), mesh);
   MeshTools::removeCell(mesh->getCell(2), mesh);
   
-  cell_iterator cell = mesh->cellBegin();
-  cell_iterator cell_end = mesh->cellEnd();
+  //cell_iterator cell = mesh->cellBegin();
+  //cell_iterator cell_end = mesh->cellEnd();
   
  
   vtk_printer.attachMesh(mesh);
@@ -87,12 +87,12 @@ TEST(AssignsDofsTest, Tri3Test)
   //                         ndpv,  ndpr,  ndpf,  ndpc
   DofH.addVariable("altura",    1,     0,     0,     0); // 12
   DofH.addVariable("vetor",     2,     0,     0,     0); // 24
-  DofH.addVariable("foo",       0,     1,     0,     0); //  0
+  DofH.addVariable("foo",       0,     1,     0,     0); // 12
   DofH.addVariable("bar",       0,     0,     1,     0); // 25
   DofH.addVariable("moo",       0,     0,     0,     1); // 14
   
   
-  EXPECT_EQ(75, DofH.numDofs());
+  EXPECT_EQ(87, DofH.numDofs());
   
   DofH.SetUp();
   
@@ -104,11 +104,11 @@ TEST(AssignsDofsTest, Tri3Test)
   //11x3 + 22 + 12
   EXPECT_EQ(11, DofH.getVariable(0).numDofs());
   EXPECT_EQ(22, DofH.getVariable(1).numDofs());
-  EXPECT_EQ( 0, DofH.getVariable(2).numDofs());
+  EXPECT_EQ(12, DofH.getVariable(2).numDofs());
   EXPECT_EQ(22, DofH.getVariable(3).numDofs());
   EXPECT_EQ(12, DofH.getVariable(4).numDofs());
 
-  EXPECT_EQ(67, DofH.numDofs());
+  EXPECT_EQ(79, DofH.numDofs());
   
   
   // .getVariable(0)
@@ -168,12 +168,12 @@ TEST(AssignsDofsTest, Tri6Test)
   //                         ndpv,  ndpr,  ndpf,  ndpc
   DofH.addVariable("numero",    1,     0,     0,     0); // 12
   DofH.addVariable("vetor",     2,     0,     0,     0); // 24
-  DofH.addVariable("foo",       0,     1,     0,     0); //  0
+  DofH.addVariable("foo",       0,     1,     0,     0); // 12
   DofH.addVariable("bar",       0,     0,     1,     0); // 25
   DofH.addVariable("moo",       0,     0,     0,     1); // 14
   
   
-  EXPECT_EQ(75, DofH.numDofs());
+  EXPECT_EQ(87, DofH.numDofs());
   
   DofH.SetUp();
   
@@ -182,14 +182,14 @@ TEST(AssignsDofsTest, Tri6Test)
   
   DofH.SetUp();
   
-  //11x3 + 22 + 12
+  //11x3 + 22 + 12 + 12
   EXPECT_EQ(11, DofH.getVariable(0).numDofs());
   EXPECT_EQ(22, DofH.getVariable(1).numDofs());
-  EXPECT_EQ( 0, DofH.getVariable(2).numDofs());
+  EXPECT_EQ(12, DofH.getVariable(2).numDofs());
   EXPECT_EQ(22, DofH.getVariable(3).numDofs());
   EXPECT_EQ(12, DofH.getVariable(4).numDofs());
 
-  EXPECT_EQ(67, DofH.numDofs());
+  EXPECT_EQ(79, DofH.numDofs());
   
   
   // .getVariable(0)

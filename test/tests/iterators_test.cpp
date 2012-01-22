@@ -96,71 +96,7 @@ TEST_P(IteratorTest, PointIteratorsTest)
       mesh->getNode(i)->setTag(0); // reseting
     }
   }
-  
-  // ====================== traversing the mesh (color) =========================
-  
-  for (int k = 0; k < mesh->numNodeColors(); ++k)
-  {
-    point_color_iterator cpoint = mesh->pointBegin(EColor(k));
-    point_color_iterator cpoint_end = mesh->pointEnd(EColor(k));
-    for (;cpoint !=  cpoint_end; ++cpoint)
-    {
-      cpoint->setTag(cpoint->getTag()+1);
-    }
-  }
-  // check
-  for (int i = 0; i < mesh->numNodes(); ++i)
-  {
-    EXPECT_EQ( 1, mesh->getNode(i)->getTag());
-    mesh->getNode(i)->setTag(0); // reseting
-  }
-  
-  // ====================== parallel ======================================
-  for (int tid = 0, nthreads = 10; tid < nthreads; ++tid)
-  {
-    for (int k = 0; k < mesh->numNodeColors(); ++k)
-    {
-      point_color_iterator cpoint = mesh->pointBegin(EColor(k),tid,nthreads);
-      point_color_iterator cpoint_end = mesh->pointEnd(EColor(k),tid,nthreads);
-      for (;cpoint !=  cpoint_end; ++cpoint)
-      {
-        cpoint->setTag(cpoint->getTag()+1);
-      }
-    }
-  }
-  // check
-  for (int i = 0; i < mesh->numNodes(); ++i)
-  {
-    EXPECT_EQ( 1, mesh->getNode(i)->getTag());
-    mesh->getNode(i)->setTag(0); // reseting
-  }
-  
-  // ====================== parallel ======================================
-  #pragma omp parallel
-  {
-    int tid = omp_get_thread_num();
-    int nthreads = omp_get_num_threads();
-    
-    for (int k = 0; k < mesh->numNodeColors(); ++k)
-    {
-      point_color_iterator cpoint = mesh->pointBegin(EColor(k),tid,nthreads);
-      point_color_iterator cpoint_end = mesh->pointEnd(EColor(k),tid,nthreads);
-      for (;cpoint !=  cpoint_end; ++cpoint)
-      {
-        cpoint->setTag(cpoint->getTag()+1);
-      }
-      #pragma omp barrier
-    }
-    
-  }
-  // check
-  for (int i = 0; i < mesh->numNodes(); ++i)
-  {
-    EXPECT_EQ( 1, mesh->getNode(i)->getTag());
-    mesh->getNode(i)->setTag(0); // reseting
-  }
-  
-  
+
 }
 
 
@@ -189,69 +125,7 @@ TEST_P(IteratorTest, CellIteratorsTest)
     }
   }
   
-  // ====================== traversing the mesh (color) =========================
-  
-  for (int k = 0; k < mesh->numCellColors(); ++k)
-  {
-    cell_color_iterator ccell = mesh->cellBegin(EColor(k));
-    cell_color_iterator ccell_end = mesh->cellEnd(EColor(k));
-    for (;ccell !=  ccell_end; ++ccell)
-    {
-      ccell->setTag(ccell->getTag()+1);
-    }
-  }
-  // check
-  for (int i = 0; i < mesh->numCells(); ++i)
-  {
-    EXPECT_EQ( 1, mesh->getCell(i)->getTag());
-    mesh->getCell(i)->setTag(0); // reseting
-  }
-  
-  // ====================== parallel ======================================
-  for (int tid = 0, nthreads = 10; tid < nthreads; ++tid)
-  {
-    for (int k = 0; k < mesh->numCellColors(); ++k)
-    {
-      cell_color_iterator ccell = mesh->cellBegin(EColor(k),tid,nthreads);
-      cell_color_iterator ccell_end = mesh->cellEnd(EColor(k),tid,nthreads);
-      for (;ccell !=  ccell_end; ++ccell)
-      {
-        ccell->setTag(ccell->getTag()+1);
-      }
-    }
-  }
-  // check
-  for (int i = 0; i < mesh->numCells(); ++i)
-  {
-    EXPECT_EQ( 1, mesh->getCell(i)->getTag());
-    mesh->getCell(i)->setTag(0); // reseting
-  }
-  
-  // ====================== parallel ======================================
-  #pragma omp parallel
-  {
-    int tid = omp_get_thread_num();
-    int nthreads = omp_get_num_threads();
-    
-    for (int k = 0; k < mesh->numCellColors(); ++k)
-    {
-      cell_color_iterator ccell = mesh->cellBegin(EColor(k),tid,nthreads);
-      cell_color_iterator ccell_end = mesh->cellEnd(EColor(k),tid,nthreads);
-      for (;ccell !=  ccell_end; ++ccell)
-      {
-        ccell->setTag(ccell->getTag()+1);
-      }
-      #pragma omp barrier
-    }
-    
-  }
-  // check
-  for (int i = 0; i < mesh->numCells(); ++i)
-  {
-    EXPECT_EQ( 1, mesh->getCell(i)->getTag());
-    mesh->getCell(i)->setTag(0); // reseting
-  }
-  
+ 
   
 }
 
@@ -280,68 +154,6 @@ TEST_P(IteratorTest, FacetIteratorsTest)
     }
   }
   
-  // ====================== traversing the mesh (color) =========================
-  
-  for (int k = 0; k < mesh->numFacetColors(); ++k)
-  {
-    facet_color_iterator cfacet = mesh->facetBegin(EColor(k));
-    facet_color_iterator cfacet_end = mesh->facetEnd(EColor(k));
-    for (;cfacet !=  cfacet_end; ++cfacet)
-    {
-      cfacet->setTag(cfacet->getTag()+1);
-    }
-  }
-  // check
-  for (int i = 0; i < mesh->numFacets(); ++i)
-  {
-    EXPECT_EQ( 1, mesh->getFacet(i)->getTag());
-    mesh->getFacet(i)->setTag(0); // reseting
-  }
-  
-  // ====================== parallel ======================================
-  for (int tid = 0, nthreads = 10; tid < nthreads; ++tid)
-  {
-    for (int k = 0; k < mesh->numFacetColors(); ++k)
-    {
-      facet_color_iterator cfacet = mesh->facetBegin(EColor(k),tid,nthreads);
-      facet_color_iterator cfacet_end = mesh->facetEnd(EColor(k),tid,nthreads);
-      for (;cfacet !=  cfacet_end; ++cfacet)
-      {
-        cfacet->setTag(cfacet->getTag()+1);
-      }
-    }
-  }
-  // check
-  for (int i = 0; i < mesh->numFacets(); ++i)
-  {
-    EXPECT_EQ( 1, mesh->getFacet(i)->getTag());
-    mesh->getFacet(i)->setTag(0); // reseting
-  }
-  
-  // ====================== parallel ======================================
-  #pragma omp parallel
-  {
-    int tid = omp_get_thread_num();
-    int nthreads = omp_get_num_threads();
-    
-    for (int k = 0; k < mesh->numFacetColors(); ++k)
-    {
-      facet_color_iterator cfacet = mesh->facetBegin(EColor(k),tid,nthreads);
-      facet_color_iterator cfacet_end = mesh->facetEnd(EColor(k),tid,nthreads);
-      for (;cfacet !=  cfacet_end; ++cfacet)
-      {
-        cfacet->setTag(cfacet->getTag()+1);
-      }
-      #pragma omp barrier
-    }
-    
-  }
-  // check
-  for (int i = 0; i < mesh->numFacets(); ++i)
-  {
-    EXPECT_EQ( 1, mesh->getFacet(i)->getTag());
-    mesh->getFacet(i)->setTag(0); // reseting
-  }
   
   
 }
@@ -371,68 +183,6 @@ TEST_P(IteratorTest, CornerIteratorsTest)
     }
   }
   
-  // ====================== traversing the mesh (color) =========================
-  
-  for (int k = 0; k < mesh->numCornerColors(); ++k)
-  {
-    corner_color_iterator ccorner = mesh->cornerBegin(EColor(k));
-    corner_color_iterator ccorner_end = mesh->cornerEnd(EColor(k));
-    for (;ccorner !=  ccorner_end; ++ccorner)
-    {
-      ccorner->setTag(ccorner->getTag()+1);
-    }
-  }
-  // check
-  for (int i = 0; i < mesh->numCorners(); ++i)
-  {
-    EXPECT_EQ( 1, mesh->getCorner(i)->getTag());
-    mesh->getCorner(i)->setTag(0); // reseting
-  }
-  
-  // ====================== parallel ======================================
-  for (int tid = 0, nthreads = 10; tid < nthreads; ++tid)
-  {
-    for (int k = 0; k < mesh->numCornerColors(); ++k)
-    {
-      corner_color_iterator ccorner = mesh->cornerBegin(EColor(k),tid,nthreads);
-      corner_color_iterator ccorner_end = mesh->cornerEnd(EColor(k),tid,nthreads);
-      for (;ccorner !=  ccorner_end; ++ccorner)
-      {
-        ccorner->setTag(ccorner->getTag()+1);
-      }
-    }
-  }
-  // check
-  for (int i = 0; i < mesh->numCorners(); ++i)
-  {
-    EXPECT_EQ( 1, mesh->getCorner(i)->getTag());
-    mesh->getCorner(i)->setTag(0); // reseting
-  }
-  
-  // ====================== parallel ======================================
-  #pragma omp parallel
-  {
-    int tid = omp_get_thread_num();
-    int nthreads = omp_get_num_threads();
-    
-    for (int k = 0; k < mesh->numCornerColors(); ++k)
-    {
-      corner_color_iterator ccorner = mesh->cornerBegin(EColor(k),tid,nthreads);
-      corner_color_iterator ccorner_end = mesh->cornerEnd(EColor(k),tid,nthreads);
-      for (;ccorner !=  ccorner_end; ++ccorner)
-      {
-        ccorner->setTag(ccorner->getTag()+1);
-      }
-      #pragma omp barrier
-    }
-    
-  }
-  // check
-  for (int i = 0; i < mesh->numCorners(); ++i)
-  {
-    EXPECT_EQ( 1, mesh->getCorner(i)->getTag());
-    mesh->getCorner(i)->setTag(0); // reseting
-  }
   
   
 }

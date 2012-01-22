@@ -3,7 +3,7 @@ Flat profile:
 Each sample counts as 0.01 seconds.
   %   cumulative   self              self     total           
  time   seconds   seconds    calls  ms/call  ms/call  name    
-  9.20      0.75     0.75                             int* SMesh<Tetrahedron4, 3>::vertexStar_WithoutColor<3>(int, int, int*, int*, EnableIf<(3)==(3), void>::type*) const
+  9.20      0.75     0.75                             int* SMesh<Tetrahedron4, 3>::vertexStar_Without<3>(int, int, int*, int*, EnableIf<(3)==(3), void>::type*) const
   7.85      1.39     0.64                             int* std::__find<int*, int>(int*, int*, int const&, std::random_access_iterator_tag)
   7.61      2.01     0.62                             int const* std::__lc_rai<std::random_access_iterator_tag, std::random_access_iterator_tag>::__newlast1<int const*, int const*>(int const*, int const*, int const*, int const*)
   7.30      2.61     0.60                             bool std::lexicographical_compare<int const*, int const*>(int const*, int const*, int const*, int const*)
@@ -13,7 +13,7 @@ Each sample counts as 0.01 seconds.
   2.58      3.82     0.21 33100731     0.00     0.00  SMesh<Tetrahedron4, 3>::getCell(int)
   2.58      4.03     0.21                             bool std::tr1::operator< <int, 3ul>(std::tr1::array<int, 3ul> const&, std::tr1::array<int, 3ul> const&)
   2.45      4.23     0.20                             bool std::__lexicographical_compare_aux<int const*, int const*>(int const*, int const*, int const*, int const*)
-  2.33      4.42     0.19                             SMesh<Tetrahedron4, 3>::setColorCell(Cell*, int const*, int const*)
+  2.33      4.42     0.19                             SMesh<Tetrahedron4, 3>::setCell(Cell*, int const*, int const*)
   1.90      4.58     0.16 68769882     0.00     0.00  std::_Iter_base<int const*, false>::_S_base(int const*)
   1.84      4.73     0.15                             std::tr1::array<int, 3ul>::begin() const
   1.60      4.86     0.13                             _CellCore<Tetrahedron4>::getIncidCellPos(int) const
@@ -21,7 +21,7 @@ Each sample counts as 0.01 seconds.
   1.53      5.11     0.13                             _CellCore<Tetrahedron4>::getIncidCell(int) const
   1.47      5.23     0.12                             global constructors keyed to Mesh::Mesh(int, ECellType)
   1.35      5.34     0.11                             std::less<int>::operator()(int const&, int const&) const
-  1.29      5.45     0.11                             _Colored::getColor() const
+  1.29      5.45     0.11                             _ed::get() const
   1.23      5.55     0.10 33214182     0.00     0.00  std::vector<Tetrahedron4, std::allocator<Tetrahedron4> >::operator[](unsigned long)
   1.10      5.64     0.09                             std::tr1::array<int, 3ul>::end() const
   0.98      5.72     0.08 11591634     0.00     0.00  SMesh<Tetrahedron4, 3>::getCell(int) const
@@ -93,9 +93,9 @@ Each sample counts as 0.01 seconds.
   0.12      7.73     0.01                             ImplicitElement::ImplicitElement(int, int, int, int, int)
   0.12      7.74     0.01                             Cell::~Cell()
   0.12      7.75     0.01                             Facet::Facet()
-  0.12      7.76     0.01                             SMesh<Tetrahedron4, 3>::setColorAllCells()
+  0.12      7.76     0.01                             SMesh<Tetrahedron4, 3>::setAllCells()
   0.12      7.77     0.01                             void SMesh<Tetrahedron4, 3>::buildCorners_Template<3>(EnableIf<(3)==(3), void>::type*)
-  0.12      7.78     0.01                             _Colored::setColor(char)
+  0.12      7.78     0.01                             _ed::set(char)
   0.12      7.79     0.01                             __gnu_cxx::new_allocator<__gnu_cxx::__normal_iterator<std::pair<std::tr1::array<int, 3ul>, std::tr1::array<int, 2ul> >*, std::vector<std::pair<std::tr1::array<int, 3ul>, std::tr1::array<int, 2ul> >, std::allocator<std::pair<std::tr1::array<int, 3ul>, std::tr1::array<int, 2ul> > > > > >::destroy(__gnu_cxx::__normal_iterator<std::pair<std::tr1::array<int, 3ul>, std::tr1::array<int, 2ul> >*, std::vector<std::pair<std::tr1::array<int, 3ul>, std::tr1::array<int, 2ul> >, std::allocator<std::pair<std::tr1::array<int, 3ul>, std::tr1::array<int, 2ul> > > > >*)
   0.12      7.80     0.01                             __gnu_cxx::new_allocator<std::_Rb_tree_node<int> >::allocate(unsigned long, void const*)
   0.12      7.81     0.01                             __gnu_cxx::__normal_iterator<PointX<3>*, std::vector<PointX<3>, std::allocator<PointX<3> > > >::__normal_iterator(PointX<3>* const&)
@@ -151,7 +151,7 @@ Each sample counts as 0.01 seconds.
   0.00      8.15     0.00   376247     0.00     0.00  void std::_Destroy<int*, int>(int*, int*, std::allocator<int>&)
   0.00      8.15     0.00   374984     0.00     0.00  int* std::__copy_move_a<false, int const*, int*>(int const*, int const*, int*)
   0.00      8.15     0.00   356758     0.00     0.00  SMesh<Tetrahedron4, 3>::edgeStar(int, int, int*, int*) const
-  0.00      8.15     0.00   354562     0.00     0.00  SMesh<Tetrahedron4, 3>::vertexStarWithoutColor(int, int, int*, int*) const
+  0.00      8.15     0.00   354562     0.00     0.00  SMesh<Tetrahedron4, 3>::vertexStarWithout(int, int, int*, int*) const
   0.00      8.15     0.00   292678     0.00     0.00  std::_Vector_base<int, std::allocator<int> >::_Vector_impl::~_Vector_impl()
   0.00      8.15     0.00   292678     0.00     0.00  std::_Vector_base<int, std::allocator<int> >::_M_deallocate(int*, unsigned long)
   0.00      8.15     0.00   292678     0.00     0.00  std::_Vector_base<int, std::allocator<int> >::~_Vector_base()
@@ -378,7 +378,7 @@ index % time    self  children    called     name
                 0.28    0.15 62646444/63454411     std::_Niter_base<int const*>::iterator_type std::__niter_base<int const*>(int const*) [7]
 -----------------------------------------------
                                                  <spontaneous>
-[2]     10.7    0.75    0.12                 int* SMesh<Tetrahedron4, 3>::vertexStar_WithoutColor<3>(int, int, int*, int*, EnableIf<(3)==(3), void>::type*) const [2]
+[2]     10.7    0.75    0.12                 int* SMesh<Tetrahedron4, 3>::vertexStar_Without<3>(int, int, int*, int*, EnableIf<(3)==(3), void>::type*) const [2]
                 0.05    0.08 6667362/11591634     SMesh<Tetrahedron4, 3>::getCell(int) const [10]
 -----------------------------------------------
                                                  <spontaneous>
@@ -388,18 +388,18 @@ index % time    self  children    called     name
 [4]      7.6    0.62    0.00                 int const* std::__lc_rai<std::random_access_iterator_tag, std::random_access_iterator_tag>::__newlast1<int const*, int const*>(int const*, int const*, int const*, int const*) [4]
 -----------------------------------------------
                                                  <spontaneous>
-[5]      7.5    0.19    0.42                 SMesh<Tetrahedron4, 3>::setColorCell(Cell*, int const*, int const*) [5]
+[5]      7.5    0.19    0.42                 SMesh<Tetrahedron4, 3>::setCell(Cell*, int const*, int const*) [5]
                 0.17    0.26 26669616/33100731     SMesh<Tetrahedron4, 3>::getCell(int) [6]
 -----------------------------------------------
                 0.00    0.00    2282/33100731     SMesh<Tetrahedron4, 3>::getCornerIdFromVertices(int const*) [176]
                 0.00    0.00   50990/33100731     SMesh<Tetrahedron4, 3>::getFacetIdFromVertices(int const*) [171]
                 0.00    0.00  146334/33100731     test(std::tr1::shared_ptr<Mesh>&) [83]
-                0.00    0.00  292668/33100731     SMesh<Tetrahedron4, 3>::setColorAllCells() [82]
+                0.00    0.00  292668/33100731     SMesh<Tetrahedron4, 3>::setAllCells() [82]
                 0.00    0.00  292668/33100731     MeshIoMsh::readFileMsh(char const*, Mesh*) [19]
                 0.00    0.01  585336/33100731     SMesh<Tetrahedron4, 3>::buildNodesAdjacency() [43]
                 0.01    0.02 2048676/33100731     void SMesh<Tetrahedron4, 3>::buildCorners_Template<3>(EnableIf<(3)==(3), void>::type*) [42]
                 0.02    0.03 3012161/33100731     global constructors keyed to Mesh::Mesh(int, ECellType) [12]
-                0.17    0.26 26669616/33100731     SMesh<Tetrahedron4, 3>::setColorCell(Cell*, int const*, int const*) [5]
+                0.17    0.26 26669616/33100731     SMesh<Tetrahedron4, 3>::setCell(Cell*, int const*, int const*) [5]
 [6]      6.5    0.21    0.32 33100731         SMesh<Tetrahedron4, 3>::getCell(int) [6]
                 0.22    0.00 33185210/45808756     std::vector<Tetrahedron4, std::allocator<Tetrahedron4> >::size() const [9]
                 0.10    0.00 33214182/33214182     std::vector<Tetrahedron4, std::allocator<Tetrahedron4> >::operator[](unsigned long) [23]
@@ -424,7 +424,7 @@ index % time    self  children    called     name
 -----------------------------------------------
                 0.01    0.02 1786284/11591634     int* SMesh<Tetrahedron4, 3>::edgeStar_Template<3>(int, int, int*, int*, EnableIf<(3)==(3), void>::type*) const [24]
                 0.02    0.04 3137988/11591634     int* SMesh<Tetrahedron4, 3>::vertexStar_Template<3>(int, int, int*, int*, EnableIf<(3)==(3), void>::type*) const [18]
-                0.05    0.08 6667362/11591634     int* SMesh<Tetrahedron4, 3>::vertexStar_WithoutColor<3>(int, int, int*, int*, EnableIf<(3)==(3), void>::type*) const [2]
+                0.05    0.08 6667362/11591634     int* SMesh<Tetrahedron4, 3>::vertexStar_Without<3>(int, int, int*, int*, EnableIf<(3)==(3), void>::type*) const [2]
 [10]     2.6    0.08    0.13 11591634         SMesh<Tetrahedron4, 3>::getCell(int) const [10]
                 0.08    0.00 12623524/45808756     std::vector<Tetrahedron4, std::allocator<Tetrahedron4> >::size() const [9]
                 0.05    0.00 12738798/12738798     std::vector<Tetrahedron4, std::allocator<Tetrahedron4> >::operator[](unsigned long) const [35]
@@ -438,7 +438,7 @@ index % time    self  children    called     name
                 0.00    0.03   74850/74850       _CellCore<Tetrahedron4>::getNodesId(int*) const [50]
                 0.00    0.00  221146/1538152     _Labelable::disabled() const [81]
                 0.00    0.00    8830/4487148     SMesh<Tetrahedron4, 3>::getNode(int) [26]
-                0.00    0.00  327562/354562      SMesh<Tetrahedron4, 3>::vertexStarWithoutColor(int, int, int*, int*) const [221]
+                0.00    0.00  327562/354562      SMesh<Tetrahedron4, 3>::vertexStarWithout(int, int, int*, int*) const [221]
 -----------------------------------------------
                                                  <spontaneous>
 [13]     2.5    0.20    0.00                 bool std::__lexicographical_compare_aux<int const*, int const*>(int const*, int const*, int const*, int const*) [13]
@@ -483,7 +483,7 @@ index % time    self  children    called     name
 [21]     1.3    0.11    0.00                 std::less<int>::operator()(int const&, int const&) const [21]
 -----------------------------------------------
                                                  <spontaneous>
-[22]     1.3    0.11    0.00                 _Colored::getColor() const [22]
+[22]     1.3    0.11    0.00                 _ed::get() const [22]
 -----------------------------------------------
                 0.10    0.00 33214182/33214182     SMesh<Tetrahedron4, 3>::getCell(int) [6]
 [23]     1.2    0.10    0.00 33214182         std::vector<Tetrahedron4, std::allocator<Tetrahedron4> >::operator[](unsigned long) [23]
@@ -499,7 +499,7 @@ index % time    self  children    called     name
                 0.00    0.00    8830/4487148     global constructors keyed to Mesh::Mesh(int, ECellType) [12]
                 0.00    0.00   20184/4487148     SMesh<Tetrahedron4, 3>::getFacetIdFromVertices(int const*) [171]
                 0.00    0.00   54000/4487148     test(std::tr1::shared_ptr<Mesh>&) [83]
-                0.00    0.01  713518/4487148     SMesh<Tetrahedron4, 3>::setColorAllPoints() [89]
+                0.00    0.01  713518/4487148     SMesh<Tetrahedron4, 3>::setAllPoints() [89]
                 0.01    0.02 1170672/4487148     SMesh<Tetrahedron4, 3>::buildNodesAdjacency() [43]
                 0.02    0.03 2519248/4487148     MeshIoMsh::readFileMsh(char const*, Mesh*) [19]
 [26]     1.1    0.03    0.06 4487148         SMesh<Tetrahedron4, 3>::getNode(int) [26]
@@ -725,13 +725,13 @@ index % time    self  children    called     name
 -----------------------------------------------
                 0.00    0.00  146334/1538152     test(std::tr1::shared_ptr<Mesh>&) [83]
                 0.00    0.00  221146/1538152     global constructors keyed to Mesh::Mesh(int, ECellType) [12]
-                0.00    0.00  292668/1538152     SMesh<Tetrahedron4, 3>::setColorAllCells() [82]
+                0.00    0.00  292668/1538152     SMesh<Tetrahedron4, 3>::setAllCells() [82]
                 0.00    0.00  292668/1538152     void SMesh<Tetrahedron4, 3>::buildCorners_Template<3>(EnableIf<(3)==(3), void>::type*) [42]
                 0.01    0.00  585336/1538152     SMesh<Tetrahedron4, 3>::buildNodesAdjacency() [43]
 [81]     0.2    0.02    0.00 1538152         _Labelable::disabled() const [81]
 -----------------------------------------------
                                                  <spontaneous>
-[82]     0.2    0.01    0.01                 SMesh<Tetrahedron4, 3>::setColorAllCells() [82]
+[82]     0.2    0.01    0.01                 SMesh<Tetrahedron4, 3>::setAllCells() [82]
                 0.00    0.00  292668/33100731     SMesh<Tetrahedron4, 3>::getCell(int) [6]
                 0.00    0.00  292668/1538152     _Labelable::disabled() const [81]
                 0.00    0.00       2/10          SMesh<Tetrahedron4, 3>::numCellsTotal() const [189]
@@ -752,7 +752,7 @@ index % time    self  children    called     name
                 0.00    0.00   54000/74880       PointX<3>::getIncidCell() const [231]
                 0.00    0.00   54000/74880       PointX<3>::getPosition() const [230]
                 0.00    0.00   27000/47880       SMesh<Tetrahedron4, 3>::vertexStar(int, int, int*, int*) const [234]
-                0.00    0.00   27000/354562      SMesh<Tetrahedron4, 3>::vertexStarWithoutColor(int, int, int*, int*) const [221]
+                0.00    0.00   27000/354562      SMesh<Tetrahedron4, 3>::vertexStarWithout(int, int, int*, int*) const [221]
                 0.00    0.00       3/17          Timer::restart() [261]
                 0.00    0.00       1/2           SMesh<Tetrahedron4, 3>::SMesh() [310]
                 0.00    0.00       1/2           MeshIoMsh::MeshIoMsh() [311]
@@ -781,7 +781,7 @@ index % time    self  children    called     name
                 0.00    0.00  132944/276958      std::vector<Facet, std::allocator<Facet> >::size() const [143]
 -----------------------------------------------
                                                  <spontaneous>
-[89]     0.2    0.00    0.01                 SMesh<Tetrahedron4, 3>::setColorAllPoints() [89]
+[89]     0.2    0.00    0.01                 SMesh<Tetrahedron4, 3>::setAllPoints() [89]
                 0.00    0.01  713518/4487148     SMesh<Tetrahedron4, 3>::getNode(int) [26]
                 0.00    0.00       2/2           SMesh<Tetrahedron4, 3>::numNodesTotal() const [198]
                 0.00    0.00       2/10          SMesh<Tetrahedron4, 3>::numCellsTotal() const [189]
@@ -882,7 +882,7 @@ index % time    self  children    called     name
 [112]    0.1    0.01    0.00                 Facet::Facet() [112]
 -----------------------------------------------
                                                  <spontaneous>
-[113]    0.1    0.01    0.00                 _Colored::setColor(char) [113]
+[113]    0.1    0.01    0.00                 _ed::set(char) [113]
 -----------------------------------------------
                                                  <spontaneous>
 [114]    0.1    0.01    0.00                 __gnu_cxx::new_allocator<__gnu_cxx::__normal_iterator<std::pair<std::tr1::array<int, 3ul>, std::tr1::array<int, 2ul> >*, std::vector<std::pair<std::tr1::array<int, 3ul>, std::tr1::array<int, 2ul> >, std::allocator<std::pair<std::tr1::array<int, 3ul>, std::tr1::array<int, 2ul> > > > > >::destroy(__gnu_cxx::__normal_iterator<std::pair<std::tr1::array<int, 3ul>, std::tr1::array<int, 2ul> >*, std::vector<std::pair<std::tr1::array<int, 3ul>, std::tr1::array<int, 2ul> >, std::allocator<std::pair<std::tr1::array<int, 3ul>, std::tr1::array<int, 2ul> > > > >*) [114]
@@ -1193,8 +1193,8 @@ index % time    self  children    called     name
 -----------------------------------------------
                 0.00    0.00       2/10          SMesh<Tetrahedron4, 3>::buildCellsAdjacency() [195]
                 0.00    0.00       2/10          SMesh<Tetrahedron4, 3>::buildNodesAdjacency() [43]
-                0.00    0.00       2/10          SMesh<Tetrahedron4, 3>::setColorAllCells() [82]
-                0.00    0.00       2/10          SMesh<Tetrahedron4, 3>::setColorAllPoints() [89]
+                0.00    0.00       2/10          SMesh<Tetrahedron4, 3>::setAllCells() [82]
+                0.00    0.00       2/10          SMesh<Tetrahedron4, 3>::setAllPoints() [89]
                 0.00    0.00       2/10          void SMesh<Tetrahedron4, 3>::buildCorners_Template<3>(EnableIf<(3)==(3), void>::type*) [42]
 [189]    0.0    0.00    0.00      10         SMesh<Tetrahedron4, 3>::numCellsTotal() const [189]
                 0.00    0.00      10/45808756     std::vector<Tetrahedron4, std::allocator<Tetrahedron4> >::size() const [9]
@@ -1243,7 +1243,7 @@ index % time    self  children    called     name
 [197]    0.0    0.00    0.00                 int* std::fill_n<int*, unsigned long, int>(int*, unsigned long, int const&) [197]
                 0.00    0.00       2/1358022     std::_Niter_base<int*>::iterator_type std::__niter_base<int*>(int*) [84]
 -----------------------------------------------
-                0.00    0.00       2/2           SMesh<Tetrahedron4, 3>::setColorAllPoints() [89]
+                0.00    0.00       2/2           SMesh<Tetrahedron4, 3>::setAllPoints() [89]
 [198]    0.0    0.00    0.00       2         SMesh<Tetrahedron4, 3>::numNodesTotal() const [198]
                 0.00    0.00       2/4486907     std::vector<PointX<3>, std::allocator<PointX<3> > >::size() const [44]
 -----------------------------------------------
@@ -1284,7 +1284,7 @@ index % time    self  children    called     name
                 0.00    0.00 1206791/1206791     std::allocator<int>::~allocator() [211]
 [210]    0.0    0.00    0.00 1206791         __gnu_cxx::new_allocator<int>::~new_allocator() [210]
 -----------------------------------------------
-                0.00    0.00       2/1199289     SMesh<Tetrahedron4, 3>::setColorAllCells() [82]
+                0.00    0.00       2/1199289     SMesh<Tetrahedron4, 3>::setAllCells() [82]
                 0.00    0.00  167702/1199289     std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_M_create_node(int const&) [4343]
                 0.00    0.00  292678/1199289     std::_Vector_base<int, std::allocator<int> >::_Vector_impl::~_Vector_impl() [222]
                 0.00    0.00  738907/1199289     std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_M_destroy_node(std::_Rb_tree_node<int>*) [4346]
@@ -1313,7 +1313,7 @@ index % time    self  children    called     name
                 0.00    0.00       2/658969      SMesh<Tetrahedron4, 3>::numNodes() const [199]
                 0.00    0.00       4/658969      SMesh<Tetrahedron4, 3>::numCells() const [194]
                 0.00    0.00   73625/658969      std::vector<int, std::allocator<int> >::resize(unsigned long, int) [4326]
-                0.00    0.00  292668/658969      SMesh<Tetrahedron4, 3>::setColorAllCells() [82]
+                0.00    0.00  292668/658969      SMesh<Tetrahedron4, 3>::setAllCells() [82]
                 0.00    0.00  292668/658969      std::vector<int, std::allocator<int> >::vector(std::vector<int, std::allocator<int> > const&) [95]
 [215]    0.0    0.00    0.00  658969         std::vector<int, std::allocator<int> >::size() const [215]
 -----------------------------------------------
@@ -1339,7 +1339,7 @@ index % time    self  children    called     name
 -----------------------------------------------
                 0.00    0.00   27000/354562      test(std::tr1::shared_ptr<Mesh>&) [83]
                 0.00    0.00  327562/354562      global constructors keyed to Mesh::Mesh(int, ECellType) [12]
-[221]    0.0    0.00    0.00  354562         SMesh<Tetrahedron4, 3>::vertexStarWithoutColor(int, int, int*, int*) const [221]
+[221]    0.0    0.00    0.00  354562         SMesh<Tetrahedron4, 3>::vertexStarWithout(int, int, int*, int*) const [221]
 -----------------------------------------------
                 0.00    0.00  292678/292678      std::_Vector_base<int, std::allocator<int> >::~_Vector_base() [224]
 [222]    0.0    0.00    0.00  292678         std::_Vector_base<int, std::allocator<int> >::_Vector_impl::~_Vector_impl() [222]
@@ -1354,7 +1354,7 @@ index % time    self  children    called     name
                 0.00    0.00  292678/292678      std::_Vector_base<int, std::allocator<int> >::_M_deallocate(int*, unsigned long) [223]
                 0.00    0.00  292678/292678      std::_Vector_base<int, std::allocator<int> >::_Vector_impl::~_Vector_impl() [222]
 -----------------------------------------------
-                0.00    0.00       2/292678      SMesh<Tetrahedron4, 3>::setColorAllCells() [82]
+                0.00    0.00       2/292678      SMesh<Tetrahedron4, 3>::setAllCells() [82]
                 0.00    0.00       8/292678      Mesh::~Mesh() [309]
                 0.00    0.00  292668/292678      void std::_Destroy<std::vector<int, std::allocator<int> > >(std::vector<int, std::allocator<int> >*) [4936]
 [225]    0.0    0.00    0.00  292678         std::vector<int, std::allocator<int> >::~vector() [225]
@@ -2105,8 +2105,8 @@ Index by function name
  [111] Cell::~Cell()         [246] std::_List_base<__FepTimer::Item, std::allocator<__FepTimer::Item> >::_M_get_Node_allocator() const [304] void std::tr1::__enable_shared_from_this_helper<(__gnu_cxx::_Lock_policy)2>(std::tr1::__shared_count<(__gnu_cxx::_Lock_policy)2> const&, ...)
  [309] Mesh::~Mesh()          [71] std::_Rb_tree_iterator<int>::operator==(std::_Rb_tree_iterator<int> const&) const [87] std::tr1::array<int, 3ul>::end()
  [112] Facet::Facet()        [240] std::_List_const_iterator<__FepTimer::Item>::operator!=(std::_List_const_iterator<__FepTimer::Item> const&) const [128] std::tr1::array<int, 3ul>::data()
-   [5] SMesh<Tetrahedron4, 3>::setColorCell(Cell*, int const*, int const*) [269] std::_List_const_iterator<__FepTimer::Item>::operator->() const [129] bool std::tr1::operator==<int, 3ul>(std::tr1::array<int, 3ul> const&, std::tr1::array<int, 3ul> const&)
-  [82] SMesh<Tetrahedron4, 3>::setColorAllCells() [93] std::tr1::_Sp_deleter<Mesh>::operator()(Mesh*) const [11] bool std::tr1::operator< <int, 3ul>(std::tr1::array<int, 3ul> const&, std::tr1::array<int, 3ul> const&)
+   [5] SMesh<Tetrahedron4, 3>::setCell(Cell*, int const*, int const*) [269] std::_List_const_iterator<__FepTimer::Item>::operator->() const [129] bool std::tr1::operator==<int, 3ul>(std::tr1::array<int, 3ul> const&, std::tr1::array<int, 3ul> const&)
+  [82] SMesh<Tetrahedron4, 3>::setAllCells() [93] std::tr1::_Sp_deleter<Mesh>::operator()(Mesh*) const [11] bool std::tr1::operator< <int, 3ul>(std::tr1::array<int, 3ul> const&, std::tr1::array<int, 3ul> const&)
   [42] void SMesh<Tetrahedron4, 3>::buildCorners_Template<3>(EnableIf<(3)==(3), void>::type*) [365] std::tr1::__shared_ptr<Mesh, (__gnu_cxx::_Lock_policy)2>::get() const [180] std::list<__FepTimer::Item, std::allocator<__FepTimer::Item> >::_M_create_node(__FepTimer::Item const&)
    [6] SMesh<Tetrahedron4, 3>::getCell(int) [228] std::tr1::__shared_ptr<Mesh, (__gnu_cxx::_Lock_policy)2>::operator->() const [251] std::list<__FepTimer::Item, std::allocator<__FepTimer::Item> >::end()
   [26] SMesh<Tetrahedron4, 3>::getNode(int) [25] std::tr1::array<int, 3ul>::end() const [181] std::list<__FepTimer::Item, std::allocator<__FepTimer::Item> >::_M_insert(std::_List_iterator<__FepTimer::Item>, __FepTimer::Item const&)
@@ -2120,7 +2120,7 @@ Index by function name
  [272] Timer::Timer()        [143] std::vector<Facet, std::allocator<Facet> >::size() const [148] std::vector<Tetrahedron4, std::allocator<Tetrahedron4> >::~vector()
  [273] Timer::~Timer()        [98] std::vector<Corner, std::allocator<Corner> >::size() const [23] std::vector<Tetrahedron4, std::allocator<Tetrahedron4> >::operator[](unsigned long)
   [67] pair_eq<std::pair<std::tr1::array<int, 3ul>, std::tr1::array<int, 2ul> > >::operator()(std::tr1::array<int, 3ul> const&, std::pair<std::tr1::array<int, 3ul>, std::tr1::array<int, 2ul> > const&) [44] std::vector<PointX<3>, std::allocator<PointX<3> > >::size() const [131] std::vector<Facet, std::allocator<Facet> >::_M_fill_insert(__gnu_cxx::__normal_iterator<Facet*, std::vector<Facet, std::allocator<Facet> > >, unsigned long, Facet const&)
- [113] _Colored::setColor(char) [99] std::vector<int, std::allocator<int> >::end() const [132] std::vector<Facet, std::allocator<Facet> >::at(unsigned long)
+ [113] _ed::set(char) [99] std::vector<int, std::allocator<int> >::end() const [132] std::vector<Facet, std::allocator<Facet> >::at(unsigned long)
   [19] MeshIoMsh::readFileMsh(char const*, Mesh*) [215] std::vector<int, std::allocator<int> >::size() const [88] std::vector<Facet, std::allocator<Facet> >::resize(unsigned long, Facet)
  [311] MeshIoMsh::MeshIoMsh() [64] std::vector<int, std::allocator<int> >::begin() const [354] std::vector<Facet, std::allocator<Facet> >::vector()
  [312] MeshIoMsh::~MeshIoMsh() [72] std::_Identity<int>::operator()(int const&) const [355] std::vector<Facet, std::allocator<Facet> >::~vector()
@@ -2182,8 +2182,8 @@ Index by function name
  [326] SMesh<Tetrahedron4, 3>::nodesPerCorner() const [352] std::_Vector_base<PointX<3>, std::allocator<PointX<3> > >::~_Vector_base() [232] void std::_Destroy<PointX<3> >(PointX<3>*)
   [24] int* SMesh<Tetrahedron4, 3>::edgeStar_Template<3>(int, int, int*, int*, EnableIf<(3)==(3), void>::type*) const [73] std::_Vector_base<int, std::allocator<int> >::_Vector_impl::_Vector_impl(std::allocator<int> const&) [102] void std::_Destroy<Tetrahedron4*>(Tetrahedron4*, Tetrahedron4*)
   [18] int* SMesh<Tetrahedron4, 3>::vertexStar_Template<3>(int, int, int*, int*, EnableIf<(3)==(3), void>::type*) const [222] std::_Vector_base<int, std::allocator<int> >::_Vector_impl::~_Vector_impl() [103] void std::_Destroy<Tetrahedron4*, Tetrahedron4>(Tetrahedron4*, Tetrahedron4*, std::allocator<Tetrahedron4>&)
- [221] SMesh<Tetrahedron4, 3>::vertexStarWithoutColor(int, int, int*, int*) const [223] std::_Vector_base<int, std::allocator<int> >::_M_deallocate(int*, unsigned long) [288] void std::_Destroy<Facet*>(Facet*, Facet*)
-   [2] int* SMesh<Tetrahedron4, 3>::vertexStar_WithoutColor<3>(int, int, int*, int*, EnableIf<(3)==(3), void>::type*) const [214] std::_Vector_base<int, std::allocator<int> >::_M_get_Tp_allocator() [289] void std::_Destroy<Facet*, Facet>(Facet*, Facet*, std::allocator<Facet>&)
+ [221] SMesh<Tetrahedron4, 3>::vertexStarWithout(int, int, int*, int*) const [223] std::_Vector_base<int, std::allocator<int> >::_M_deallocate(int*, unsigned long) [288] void std::_Destroy<Facet*>(Facet*, Facet*)
+   [2] int* SMesh<Tetrahedron4, 3>::vertexStar_Without<3>(int, int, int*, int*, EnableIf<(3)==(3), void>::type*) const [214] std::_Vector_base<int, std::allocator<int> >::_M_get_Tp_allocator() [289] void std::_Destroy<Facet*, Facet>(Facet*, Facet*, std::allocator<Facet>&)
  [327] SMesh<Tetrahedron4, 3>::cellDim() const [224] std::_Vector_base<int, std::allocator<int> >::~_Vector_base() [290] void std::_Destroy<Corner*>(Corner*, Corner*)
   [10] SMesh<Tetrahedron4, 3>::getCell(int) const [250] std::_List_iterator<__FepTimer::Item>::_List_iterator(std::_List_node_base*) [291] void std::_Destroy<Corner*, Corner>(Corner*, Corner*, std::allocator<Corner>&)
  [297] SMesh<Tetrahedron4, 3>::cellType() const [242] std::_List_const_iterator<__FepTimer::Item>::_List_const_iterator(std::_List_node_base const*) [305] void std::_Destroy<PointX<3>*>(PointX<3>*, PointX<3>*)
@@ -2196,4 +2196,4 @@ Index by function name
  [364] Timer::printMethod() const [367] std::tr1::shared_ptr<Mesh>::shared_ptr() [265] std::iterator_traits<std::_List_const_iterator<__FepTimer::Item> >::difference_type std::distance<std::_List_const_iterator<__FepTimer::Item> >(std::_List_const_iterator<__FepTimer::Item>, std::_List_const_iterator<__FepTimer::Item>)
  [230] PointX<3>::getPosition() const [146] std::tr1::shared_ptr<Mesh>::~shared_ptr() [40] void std::__advance<__gnu_cxx::__normal_iterator<std::pair<std::tr1::array<int, 3ul>, std::tr1::array<int, 2ul> > const*, std::vector<std::pair<std::tr1::array<int, 3ul>, std::tr1::array<int, 2ul> >, std::allocator<std::pair<std::tr1::array<int, 3ul>, std::tr1::array<int, 2ul> > > > >, long>(__gnu_cxx::__normal_iterator<std::pair<std::tr1::array<int, 3ul>, std::tr1::array<int, 2ul> > const*, std::vector<std::pair<std::tr1::array<int, 3ul>, std::tr1::array<int, 2ul> >, std::allocator<std::pair<std::tr1::array<int, 3ul>, std::tr1::array<int, 2ul> > > > >&, long, std::random_access_iterator_tag)
  [231] PointX<3>::getIncidCell() const [368] std::tr1::shared_ptr<Mesh>::operator=(std::tr1::shared_ptr<Mesh> const&) [80] void std::iter_swap<__gnu_cxx::__normal_iterator<std::pair<std::tr1::array<int, 3ul>, std::tr1::array<int, 2ul> >*, std::vector<std::pair<std::tr1::array<int, 3ul>, std::tr1::array<int, 2ul> >, std::allocator<std::pair<std::tr1::array<int, 3ul>, std::tr1::array<int, 2ul> > > > >, __gnu_cxx::__normal_iterator<std::pair<std::tr1::array<int, 3ul>, std::tr1::array<int, 2ul> >*, std::vector<std::pair<std::tr1::array<int, 3ul>, std::tr1::array<int, 2ul> >, std::allocator<std::pair<std::tr1::array<int, 3ul>, std::tr1::array<int, 2ul> > > > > >(__gnu_cxx::__normal_iterator<std::pair<std::tr1::array<int, 3ul>, std::tr1::array<int, 2ul> >*, std::vector<std::pair<std::tr1::array<int, 3ul>, std::tr1::array<int, 2ul> >, std::allocator<std::pair<std::tr1::array<int, 3ul>, std::tr1::array<int, 2ul> > > > >, __gnu_cxx::__normal_iterator<std::pair<std::tr1::array<int, 3ul>, std::tr1::array<int, 2ul> >*, std::vector<std::pair<std::tr1::array<int, 3ul>, std::tr1::array<int, 2ul> >, std::allocator<std::pair<std::tr1::array<int, 3ul>, std::tr1::array<int, 2ul> > > > >)
-  [22] _Colored::getColor() const [292] std::tr1::_Mutex_base<(__gnu_cxx::_Lock_policy)2>::_Mutex_base() [53] operator new(unsigned long, void*)
+  [22] _ed::get() const [292] std::tr1::_Mutex_base<(__gnu_cxx::_Lock_policy)2>::_Mutex_base() [53] operator new(unsigned long, void*)

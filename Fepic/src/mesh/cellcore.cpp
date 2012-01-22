@@ -83,7 +83,7 @@ void _CellCore<CellT>::getFacetCornersId(int f, int * corns) const
 {
   FEPIC_CHECK(f < CellT::n_facets, "invalid index", std::out_of_range);
   
-  if (CellT::dim == 3)
+  if (CellT::dim > 1)
     // note: n_corners_per_facet = CellT::n_vertices_per_facet
     for (int i = 0; i < CellT::n_vertices_per_facet; ++i)
     {

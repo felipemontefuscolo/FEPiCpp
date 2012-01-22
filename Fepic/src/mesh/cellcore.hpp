@@ -23,13 +23,13 @@
 #define FEPIC_CELLCORE_HPP
 
 #include "labelable.hpp"
-#include "colored.hpp"
+
 #include "enums.hpp"
 #include "../util/assert.hpp"
 #include "../util/forward_declarations.hpp"
 #include "../util/typedefs.hpp"
 
-class Cell : public _Labelable, public _Colored
+class Cell : public _Labelable
 {
 public:
   
@@ -98,25 +98,28 @@ protected:
   {
     
     for (int i = 0; i < CellT::n_nodes; ++i)
-      THIS->_nodes[i] = 0;
+      THIS->_nodes[i] = -1;
     
     for (int i = 0; i < CellT::n_facets; ++i)
     {
-      THIS->_icells[i] = 0;
-      THIS->_icells_pos[i] = 0;
+      THIS->_icells[i] = -1;
+      THIS->_icells_pos[i] = -1;
     }
 
     if (CellT::dim != 1)
+    {
       for (int i = 0; i < CellT::n_facets; ++i)
-        THIS->_facets[i] = 0;
+        THIS->_facets[i] = -1;
+        
+      for (int i = 0; i < CellT::n_corners; ++i)
+        THIS->_corners[i] = -1;
+    }
 
     if (CellT::dim==3)
     {
       for (int i = 0; i < CellT::n_facets; ++i)
-        THIS->_icells_anchors[i] = 0;
+        THIS->_icells_anchors[i] = -1;
     
-      for (int i = 0; i < CellT::n_corners; ++i)
-        THIS->_corners[i] = 0;
     }
     
   };
@@ -263,7 +266,7 @@ public:
   
   void getCornersId(int * begin) const
   {
-    if (CellT::dim < 3) return;
+    if (CellT::dim < 2) return;
     std::copy(CONST_THIS->_corners, // from
               CONST_THIS->_corners+CellT::n_corners,
               begin);              // to
@@ -327,7 +330,7 @@ public:
 
   void setCornerId(int corner, int cornerid)
   {
-    if (CellT::dim > 2)
+    if (CellT::dim > 1)
       THIS->_corners[corner] = cornerid;
   }
 

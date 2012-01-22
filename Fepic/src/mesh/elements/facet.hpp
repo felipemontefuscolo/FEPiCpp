@@ -23,7 +23,6 @@
 #define FEPIC_FACET_HPP
 
 #include "implicit.hpp"
-#include "../colored.hpp"
 #include "../labelable.hpp"
 
 class Facet : public ImplicitElement

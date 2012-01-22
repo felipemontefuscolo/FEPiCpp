@@ -54,12 +54,10 @@ protected:
   int _facets[4];     // facets id
   int _icells[4];     // incident cells id
   int _nodes[4];      // nodes id
+  int _corners[4];
 
   /* não utilizados */
   int _icells_anchors[0];
-  int _corners[0];
-
-
 
 public:
   
@@ -107,10 +105,10 @@ protected:
   int _facets[4];     // facets id
   int _icells[4];     // incident cells id
   int _nodes[8];      // nodes id
+  int _corners[4];
 
   /* não utilizados */
   int _icells_anchors[0];
-  int _corners[0];
   
 public:
   
@@ -158,10 +156,10 @@ protected:
   int _facets[4];     // facets id
   int _icells[4];     // incident cells id
   int _nodes[9];      // nodes id
+  int _corners[4];
 
   /* não utilizados */
   int _icells_anchors[0];
-  int _corners[0];
   
 public:
   

@@ -47,31 +47,33 @@ enum EMshTag {
 enum ECellType
 {
   UNDEFINED_CELLT  = 0x0,
-  EDGE2            = 0x1,
-  EDGE3            = 0x2,
-  TRIANGLE3        = 0x4,
-  TRIANGLE6        = 0x8,
-  QUADRANGLE4      = 0x10,
-  QUADRANGLE8      = 0x20,
-  QUADRANGLE9      = 0x40,
-  TETRAHEDRON4     = 0x80,
-  TETRAHEDRON10    = 0x100,
-  HEXAHEDRON8      = 0x200,
-  HEXAHEDRON20     = 0x400,
-  HEXAHEDRON27     = 0x800,
-  N_CELL_TYPES     = 12    // must be equal to the number of valid cells
+  POINT1           = 0x1,
+  EDGE2            = 0x2,
+  EDGE3            = 0x4,
+  TRIANGLE3        = 0x8,
+  TRIANGLE6        = 0x10,
+  QUADRANGLE4      = 0x20,
+  QUADRANGLE8      = 0x40,
+  QUADRANGLE9      = 0x80,
+  TETRAHEDRON4     = 0x100,
+  TETRAHEDRON10    = 0x200,
+  HEXAHEDRON8      = 0x400,
+  HEXAHEDRON20     = 0x800,
+  HEXAHEDRON27     = 0x1000,
+  N_CELL_TYPES     = 13    // must be equal to the number of valid cells
 
 };
 
 enum ECellClass
 {
   UNDEFINED_CELLC  = 0x0,
-  EDGE             = 0x1,
-  TRIANGLE         = 0x2,
-  QUADRANGLE       = 0x4,
-  TETRAHEDRON      = 0x8,
-  HEXAHEDRON       = 0x10,
-  N_CELL_CLASSES   = 5
+  POINT            = 0x1,
+  EDGE             = 0x2,
+  TRIANGLE         = 0x4,
+  QUADRANGLE       = 0x8,
+  TETRAHEDRON      = 0x10,
+  HEXAHEDRON       = 0x20,
+  N_CELL_CLASSES   = 6
   
 };
 
@@ -85,10 +87,6 @@ enum ECellFamily
 };
 
 
-enum EColor
-{
-  UNDEFINED_COLOR  = 0x0
-};
 
 enum ETag
 {

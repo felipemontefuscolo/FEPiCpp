@@ -32,7 +32,7 @@
 
 
 
-Mesh::Mesh(int sd, ECellType fept)
+Mesh::Mesh(int /*sd*/, ECellType fept)
 {
   //_spacedim = sd; // BROKEN
   _cell_fep_tag = fept;
@@ -78,6 +78,10 @@ unsigned Mesh::estimateNumCorners(unsigned nc_, ECellType type)
 
   switch (cc)
   {
+    case TRIANGLE:
+      return _ROUND_2_INT_(0.5*nc);
+    case QUADRANGLE:
+      return _ROUND_2_INT_(nc);
     case TETRAHEDRON:
       return _ROUND_2_INT_((7.*nc+9.*pow(6.,1./3)*pow(nc,2./3)+3*pow(6.,2./3)*pow(nc,1./3))/6.);
     case HEXAHEDRON:
@@ -100,11 +104,6 @@ template<class CT, int SD> Cell*   SMesh<CT,SD>::decCell(Cell* a)         { retu
 template<class CT, int SD> Point*  SMesh<CT,SD>::decPoint(Point* a)       { return static_cast<Point*>( &(*--(PointIteratorT(&_pointL, static_cast<PointT*>(a)))) );}
 template<class CT, int SD> Facet*  SMesh<CT,SD>::decFacet(Facet* a)       { return static_cast<Facet*>( &(*--(FacetIteratorT(&_facetL, static_cast<FacetT*>(a)))) );}
 template<class CT, int SD> Corner* SMesh<CT,SD>::decCorner(Corner* a)     { return static_cast<Corner*>( &(*--(CornerIteratorT(&_cornerL, static_cast<CornerT*>(a)))) );}
-// -------------------------------------------- colors ------------------------
-template<class CT, int SD> Cell*   SMesh<CT,SD>::incColorCell(Cell* a)    { return static_cast<Cell*>( &(*++(CellColorIteratorT(&_cellL, static_cast<CellT*>(a)))) );}
-template<class CT, int SD> Point*  SMesh<CT,SD>::incColorPoint(Point* a)  { return static_cast<Point*>( &(*++(PointColorIteratorT(&_pointL, static_cast<PointT*>(a)))) );}
-template<class CT, int SD> Facet*  SMesh<CT,SD>::incColorFacet(Facet* a)  { return static_cast<Facet*>( &(*++(FacetColorIteratorT(&_facetL, static_cast<FacetT*>(a)))) );}
-template<class CT, int SD> Corner* SMesh<CT,SD>::incColorCorner(Corner* a){ return static_cast<Corner*>( &(*++(CornerColorIteratorT(&_cornerL, static_cast<CornerT*>(a)))) );}
 
 // =====================================================================================
 // =====================================================================================
@@ -131,27 +130,6 @@ template<class CT,int SD> facet_iterator  SMesh<CT,SD>::facetBegin (int tid, int
 template<class CT,int SD> facet_iterator  SMesh<CT,SD>::facetEnd   (int tid, int nthreads) { return facet_iterator (this, &(*_facetL.end   (tid,nthreads)));};
 template<class CT,int SD> corner_iterator SMesh<CT,SD>::cornerBegin(int tid, int nthreads) { return corner_iterator(this, &(*_cornerL.begin(tid,nthreads)));};
 template<class CT,int SD> corner_iterator SMesh<CT,SD>::cornerEnd  (int tid, int nthreads) { return corner_iterator(this, &(*_cornerL.end  (tid,nthreads)));};
-
-template<class CT,int SD> cell_color_iterator   SMesh<CT,SD>::cellBegin  (EColor k) { return cell_color_iterator  (this, &(*_cellL.begin  (k)));};
-template<class CT,int SD> cell_color_iterator   SMesh<CT,SD>::cellEnd    (EColor k) { return cell_color_iterator  (this, &(*_cellL.end    (k)));};
-template<class CT,int SD> point_color_iterator  SMesh<CT,SD>::pointBegin (EColor k) { return point_color_iterator (this, &(*_pointL.begin (k)));};
-template<class CT,int SD> point_color_iterator  SMesh<CT,SD>::pointEnd   (EColor k) { return point_color_iterator (this, &(*_pointL.end   (k)));};
-template<class CT,int SD> facet_color_iterator  SMesh<CT,SD>::facetBegin (EColor k) { return facet_color_iterator (this, &(*_facetL.begin (k)));};
-template<class CT,int SD> facet_color_iterator  SMesh<CT,SD>::facetEnd   (EColor k) { return facet_color_iterator (this, &(*_facetL.end   (k)));};
-template<class CT,int SD> corner_color_iterator SMesh<CT,SD>::cornerBegin(EColor k) { return corner_color_iterator(this, &(*_cornerL.begin(k)));};
-template<class CT,int SD> corner_color_iterator SMesh<CT,SD>::cornerEnd  (EColor k) { return corner_color_iterator(this, &(*_cornerL.end  (k)));};
-
-template<class CT,int SD> cell_color_iterator   SMesh<CT,SD>::cellBegin  (EColor k, int tid, int nthreads) { return cell_color_iterator  (this, &(*_cellL.begin  (k,tid,nthreads)));};
-template<class CT,int SD> cell_color_iterator   SMesh<CT,SD>::cellEnd    (EColor k, int tid, int nthreads) { return cell_color_iterator  (this, &(*_cellL.end    (k,tid,nthreads)));};
-template<class CT,int SD> point_color_iterator  SMesh<CT,SD>::pointBegin (EColor k, int tid, int nthreads) { return point_color_iterator (this, &(*_pointL.begin (k,tid,nthreads)));};
-template<class CT,int SD> point_color_iterator  SMesh<CT,SD>::pointEnd   (EColor k, int tid, int nthreads) { return point_color_iterator (this, &(*_pointL.end   (k,tid,nthreads)));};
-template<class CT,int SD> facet_color_iterator  SMesh<CT,SD>::facetBegin (EColor k, int tid, int nthreads) { return facet_color_iterator (this, &(*_facetL.begin (k,tid,nthreads)));};
-template<class CT,int SD> facet_color_iterator  SMesh<CT,SD>::facetEnd   (EColor k, int tid, int nthreads) { return facet_color_iterator (this, &(*_facetL.end   (k,tid,nthreads)));};
-template<class CT,int SD> corner_color_iterator SMesh<CT,SD>::cornerBegin(EColor k, int tid, int nthreads) { return corner_color_iterator(this, &(*_cornerL.begin(k,tid,nthreads)));};
-template<class CT,int SD> corner_color_iterator SMesh<CT,SD>::cornerEnd  (EColor k, int tid, int nthreads) { return corner_color_iterator(this, &(*_cornerL.end  (k,tid,nthreads)));};
-
-
-
 
 
 // =====================================================================================
@@ -274,8 +252,6 @@ void SMesh<CT,SD>::printInfo() const
   printf("# cells:   %d\n",      numCells()                  );
   printf("# facets:  %d\n",      numFacets()                 );
   printf("# corners: %d\n",      numCorners()                );
-  printf("# cell colors:  %d\n", numCellColors()             );
-  printf("# node colors:  %d\n", numNodeColors()             );
 }
 
 template<class CT, int SD>
@@ -376,82 +352,6 @@ int* SMesh<CT,SD>::vertexStar_Template(int C, int vC, int *iCs, int *viCs, typen
   FEPIC_CHECK(unsigned(vC)<CT::n_vertices && C>=0, "invalid C or vC", std::invalid_argument);
 
   CT const*cell = this->MeshT::getCell(C);
-  int f, D, vD, g, anc, vf, vg;
-  int* iCs_end  = iCs;
-  int* viCs_end = viCs;
-  Uint_color_t visited_colors(0), one(1), color;
-  //cell->CT::visited(true);
-
-  *iCs_end++ = C;
-  *viCs_end++ = vC;
-
-  visited_colors |= one << cell->CT::getColor();
-
-  for (;;)
-  {
-    // put the 3 neighbors in the stack
-    for (int fv = 0; fv < 3; ++fv) // each vertice has three faces for both tetrahedron and hexahedron
-    {
-      // (C, f, vf, k) <===> (D, g, vg, h)
-
-      f = CT::table_vC_x_fC[vC][fv];
-      D = cell->CT::getIncidCell(f);
-      //if (D<0 || this->MeshT::getCell(D)->CT::visited())
-
-      if (D<0)
-        continue;
-
-      // if already in the stack
-      if ((color = one << MeshT::getCell(D)->CT::getColor()) & visited_colors)
-        continue;
-
-      visited_colors |= color;
-
-      g = cell->CT::getIncidCellPos(f);
-      anc = cell->CT::getIncidCellAnch(f);
-
-      vf = CT::table_vC_x_fC[vC][fv+3];
-      vg = (CT::n_facets+1 - vf - anc)%CT::n_vertices_per_facet;
-      vD  = CT::table_fC_x_vC[g][vg];
-
-      *iCs_end++ = D;
-      *viCs_end++ = vD;
-
-      //this->MeshT::getCell(D)->CT::visited(true);
-
-    }
-    if (++iCs != iCs_end)
-    {
-      cell = MeshT::getCell(*iCs);
-      vC = *++viCs;
-    }
-    else
-      break;
-  }
-
-  //for (;iCs_beg != iCs_end; ++iCs_beg)
-    //this->MeshT::getCell(*iCs_beg)->CellT::visited(false);
-
-  return iCs_end;
-}
-
-// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-template<class CT, int SD>
-template<int celldim>
-int* SMesh<CT,SD>::vertexStar_WithoutColor(int C, int vC, int *iCs, int *viCs,
-                                           typename EnableIf<(celldim<3)>::type*) const
-{
-  return vertexStar_Template<CT::dim>(C,vC,iCs,viCs);
-}
-
-template<class CT, int SD>
-template<int celldim>
-int* SMesh<CT,SD>::vertexStar_WithoutColor(int C, int vC, int *iCs, int *viCs,
-                                           typename EnableIf<(celldim==3)>::type*) const
-{
-  FEPIC_CHECK(unsigned(vC)<CT::n_vertices && C>=0, "invalid C or vC", std::invalid_argument);
-
-  CT const*cell = this->MeshT::getCell(C);
   int f, D, vD, g, anc, vf, vg, gv;
   int const* iCs_beg = iCs;
   int* iCs_end  = iCs;
@@ -530,9 +430,6 @@ int* SMesh<CT,SD>::vertexStar_WithoutColor(int C, int vC, int *iCs, int *viCs,
     else
       break;
   }
-
-  //for (;iCs_beg != iCs_end; ++iCs_beg)
-    //this->MeshT::getCell(*iCs_beg)->CellT::visited(false);
 
   return iCs_end;
 }
@@ -840,26 +737,11 @@ void SMesh<CT,SD>::buildAdjacency()
   this->buildNodesAdjacency();
   this->timer.elapsed("buildNodesAdjacency()");
 
-  this->timer.restart();
-  this->setColorAllCells();
-  this->timer.elapsed("setColorAllCells()");
-  
-  this->timer.restart();
-  this->setColorAllPoints();
-  this->timer.elapsed("setColorAllPoints()");
-
-  this->timer.restart();
-  this->setColorAllFacets();
-  this->timer.elapsed("setColorAllFacets()");
-  
   // only for 3D
   this->timer.restart();
   this->buildCorners_Template<CellT::dim>();
   this->timer.elapsed("buildCorners_Template()");
   
-  this->timer.restart();
-  this->setColorAllCorners();
-  this->timer.elapsed("setColorAllCorners()");  
 }
 
 /// @note constroi as facets também
@@ -1116,12 +998,62 @@ void SMesh<CT,SD>::buildCellsAdjacency()
 }
 
 
-// para dim = 1 e 2
 template<class CT, int SD>
 template<int celldim>
-void SMesh<CT,SD>::buildCorners_Template(typename EnableIf<(celldim<3)>::type*)
+void SMesh<CT,SD>::buildCorners_Template(typename EnableIf<(celldim==1)>::type*)
 {
   // nada
+}
+
+// assume that the vertices already have incident cells.
+template<class CT, int SD>
+template<int celldim>
+void SMesh<CT,SD>::buildCorners_Template(typename EnableIf<(celldim==2)>::type*)
+{
+  int const num_nodes = this->MeshT::numNodesTotal();
+  _cornerL.clear();
+  
+  #pragma omp parallel for
+  for (unsigned c = 0; c<_cellL.total_size(); ++c)
+    _cellL[c].CT::resetCornersId();
+  
+  //#pragma omp parallel default(none)
+  {
+    PointT * point;
+    //std::tr1::shared_ptr<CornerT> corner(new CornerT); // Corner
+    CornerT corner;
+    int corner_id;
+    int iCs[FEPIC_MAX_ICELLS], viCs[FEPIC_MAX_ICELLS]; // MAX_ICELLS
+    int const* iCs_it, *viCs_it;
+    int const* iCs_end;
+    int C, vC;
+    
+    //#pragma omp for
+    for (int i = 0; i < num_nodes; ++i)
+    {
+      point = this->MeshT::getNode(i);
+      if (point->disabled() || (!this->MeshT::isVertex(point)))
+        continue;
+      
+      C = point->PointT::getIncidCell();
+      vC= point->PointT::getPosition();
+      
+      iCs_end = this->MeshT::vertexStar(C, vC, iCs, viCs);
+      
+      // create a edge
+      corner.setIncidCell(C);
+      corner.setPosition(vC);
+      corner.setAnchor(0);
+      corner_id = this->MeshT::pushCorner(&corner);
+      
+      for (iCs_it = iCs, viCs_it = viCs; iCs_it != iCs_end; ++iCs_it, ++viCs_it)
+        this->MeshT::getCell(*iCs_it)->CT::setCornerId(*viCs_it, corner_id);
+      
+    }
+    
+    
+  }
+  
 }
 
 template<class CT, int SD>
@@ -1143,12 +1075,7 @@ void SMesh<CT,SD>::buildCorners_Template(typename EnableIf<(celldim==3)>::type*)
   for (unsigned c = 0; c<_cellL.total_size(); ++c)
     _cellL[c].CT::resetCornersId();
 
-  //#pragma omp parallel for
-  //for (CellIteratorT cit = _cellL.begin(); cit < _cellL.end(); ++cit)
-  //  cit->CT::resetCornersId();
-
-
-  // think a way to parallelize this ...
+  // TODO: think a way to parallelize this ...
   {
 
     CT const* cell;
@@ -1322,352 +1249,6 @@ int SMesh<CT,SD>::getCornerIdFromVertices(int const* vtcs)
   return -1;
 }
 
-
-/** @brief [DEVELOPER] Assign to the cell the minimal color that is not in the neighborhood.
- *  @param cell pointer to the cell.
- *  @param neibs_beg begin of a vector with the neighbors of the cell.
- *  @param neibs_end end of the vector.
- *  @note Faster version. Update _n_cell_colors attribute of the mesh.
- *  @note if neibs includes the cell itself, then the cell must have color -1.
- */
-template<class CT, int SD>
-void SMesh<CT,SD>::setColorCell(Cell* cell_, int const* neibs_beg, int const* neibs_end)
-{
-  CT * cell = static_cast<CT*>(cell_);
-
-  // all colors in compact form
-  Uint_color_t all_colors(0);
-  Uint_color_t const one(1);
-  char color;
-
-  // compacting colors ...
-  for (int const*it = neibs_beg; it != neibs_end; ++it)
-    if ((color = MeshT::getCell(*it)->CT::getColor()) >= 0)
-      all_colors |=  one << color ;
-
-
-  char new_color;
-  for (Uint_color_t c = 1; ; c<<=1)
-  {
-    FEPIC_CHECK(c, "infinite loop", std::runtime_error);
-    // if not found in the range
-    if ( c & all_colors )
-      continue;
-
-    cell->CT::setColor( new_color = static_cast<char>( log2_i128(c) )  );
-    break;
-  }
-
-
-  //if (new_color >= _n_cell_colors)
-  //{
-  //  _n_cell_colors = new_color;
-  //}
-}
-
-/** @brief choose a color that is not in the neighborhood and assigns to the cell.
- *  @param id cell (id) to assign a color.
- *  @warning only for colored meshes.
- */
-template<class CT, int SD>
-void SMesh<CT,SD>::setColorCell(int id)
-{
-  int neibs[FEPIC_MAX_ICELLS*4/(CT::dim==3 ? 1 : 2)];
-  int vops [FEPIC_MAX_ICELLS];
-
-  CT *cell = this->MeshT::getCell(id);
-  cell->CT::setColor(-1);
-
-  int *mid = neibs;
-
-  // contém informações redundantes
-  for (int i = 0; i < CT::n_vertices; ++i)
-    mid = this->MeshT::vertexStar(id,i,mid,vops);
-
-  this->MeshT::setColorCell(cell,neibs,mid);
-}
-
-/** @brief check if a cell has invalid color.
- *  @param color the color of the cell.
- *  @param neibs_beg begining of a range that contain the cell's neighbors.
- *  @param neibs_end end of the range.
- *  @note all neighbors must be colored!
- *  @return if cell's color is illegal.
- */
-template<class CT, int SD>
-bool SMesh<CT,SD>::checkInvalidColorCell(Cell * cell_, int const* neibs_beg, int const* neibs_end) const
-{
-  CT * cell = static_cast<CT*>(cell_);
-  char const this_color = cell->CT::getColor();
-
-  if (this_color < 0)
-    return true;
-
-  // all colors in compact form
-  Uint_color_t all_colors(0);
-  Uint_color_t const one(1);
-
-  // compacting colors ...
-  for (int const*it = neibs_beg; it != neibs_end; ++it)
-    if ((*it) >= 0)
-      all_colors |= ( one << (this->MeshT::getCell(*it)->CT::getColor()) );
-
-  return (one << this_color) & all_colors ;
-}
-
-/** @brief cells coloring.
- */
-template<class CT, int SD>
-void SMesh<CT,SD>::setColorAllCells()
-{
-  /*****************************************************
-   *                 Coloring Cells
-   *****************************************************/
-
-
-  const int n_cells = this->numCellsTotal();
-
-  // tab_neibs = table with neighbors of each cell
-  std::vector<std::vector<int> > tab_neibs(n_cells, std::vector<int>(FEPIC_MAX_ICELLS*4/(CT::dim==3 ? 1 : 2)));
-
-  // building tab_neibs
-  #pragma omp parallel shared(tab_neibs) default(none)
-  {
-    CT * cell;
-    int *mid;
-    int vops[FEPIC_MAX_ICELLS];
-
-    #pragma omp for
-    for (int c = 0; c < n_cells; ++c)
-    {
-      cell = this->MeshT::getCell(c);
-      if (cell->CT::disabled())
-        continue;
-
-      mid = tab_neibs[c].data();
-      for (int i = 0; i < CT::n_vertices; ++i)
-        mid = vertexStarWithoutColor(c,i,mid,vops);
-
-      tab_neibs[c].resize(mid - tab_neibs[c].data());
-
-      cell->CT::setColor(-1);
-    }
-  }
-
-
-  CT * cell;
-  // consume ~ 28% cpu
-  for (int c = 0; c < n_cells; ++c)
-  {
-    cell = this->getCell(c);
-    if (cell->disabled())
-      continue;
-
-    this->MeshT::setColorCell(cell, tab_neibs[c].data(), tab_neibs[c].data() + tab_neibs[c].size());
-  }
-  
-  _cellL.linkColors();
-  
-  //// DO NOT ERASE ME ... I'M GOOD FOR TESTING.
-  //Cell * cell;
-
-  //for (int c = 0; c < this->numCellsTotal(); ++c)
-  //{
-
-    //cell = this->getCell(c);
-    //if (cell->disabled())
-      //continue;
-
-    //this->setColorCell(c);
-  //}
-
-
-}
-
-/** @brief cells coloring.
- *  @warning must be called after setColorAllCells()
- */
-template<class CT, int SD>
-void SMesh<CT,SD>::setColorAllPoints()
-{
-
-  /*****************************************************
-   *                 Coloring Nodes
-   *****************************************************/
-
-
-  const int n_nodes_total = this->numNodesTotal();
-  //const int n_cells = this->numCellsTotal();
-  //const int n_c_colors = this->numCellColors();
-
-
-  // tab_neibs = table with neighbors of each node
-  std::vector<std::set<int> > tab_neibs(n_nodes_total);
-
-  #pragma omp parallel for
-  for (int i = 0; i < n_nodes_total; ++i)
-    MeshT::getNode(i)->PointT::setColor(-1);
-
-  //for (int k = 0; k < n_c_colors; ++k)
-  //{
-  //  #pragma omp parallel shared(tab_neibs) firstprivate(k) default(none)
-  //  {
-  //    CT const* cell;
-  //    int cnodes[CT::n_nodes];
-  //
-  //    #pragma omp for nowait
-  //    for (int c = 0; c < n_cells; ++c)
-  //    {
-  //      if ((cell = MeshT::getCell(c))->CT::getColor() != k)
-  //        continue;
-  //      if (cell->CT::disabled())
-  //        continue;
-  //
-  //      cell->CT::getNodesId(cnodes);
-  //
-  //      for (int i = 0; i < CT::n_nodes; ++i)
-  //        for (int j = 0; j < CT::n_nodes; ++j)
-  //          tab_neibs[cnodes[i]].insert(cnodes[j]);
-  //    }
-  //  }
-  //}
-
-  #pragma omp parallel
-  {
-    const int tid      = omp_get_thread_num();
-    const int nthreads = omp_get_num_threads();
-    const int n_cell_colors = MeshT::numCellColors();
-    int cnodes[CT::n_nodes];
-    
-    for (int k = 0; k < n_cell_colors; ++k)
-    {
-      // TODO: try to use const iterator. :error: no match for ‘operator!=’ in ‘cell != cell_end’
-      CellColorIteratorT cell_end = _cellL.end  (EColor(k), tid, nthreads);
-      CellColorIteratorT cell     = _cellL.begin(EColor(k), tid, nthreads);
-      
-      for (; cell != cell_end; ++cell)
-      {
-        cell->CT::getNodesId(cnodes);
-        
-        for (int i = 0; i < CT::n_nodes; ++i)
-          for (int j = 0; j < CT::n_nodes; ++j)
-            tab_neibs[cnodes[i]].insert(cnodes[j]);
-      }
-      #pragma omp barrier
-    }
-  } // end parallel
-
-  #pragma omp parallel for shared(tab_neibs)
-  for (int i = 0; i < n_nodes_total; ++i)
-    tab_neibs[i].erase(i);
-
-
-  //// the NodeList iterator must be "random access" for the algorithms that follows
-  //// otherwise, the algorithms must be reimplemented.
-  //typedef typename PointIteratorT::iterator_category _category;
-  //FEP_STATIC_ASSERT_ITERATOR((std::tr1::is_same<_category,std::random_access_iterator_tag>::value));
-
-
-  std::vector<std::set<int> >::iterator it;
-  std::set<int>::iterator at;
-  int kk = 0;
-  PointT * point;
-  int max_color(-1);
-  
-  for (it = tab_neibs.begin(); it!=tab_neibs.end(); ++it, ++kk)
-  {
-    point = MeshT::getNode(kk);
-    if (point->disabled())
-      continue;
-
-    Uint_color_t all_colors(0);
-    Uint_color_t const one(1);
-    char color;
-    
-    for (at = (*it).begin(); at != (*it).end(); ++at)
-      if ((color = MeshT::getNode(*at)->PointT::getColor()) >= 0)
-        all_colors |= one << color;
-    
-    // find a suitable color
-    for (Uint_color_t c = 1;; c<<=1)
-    {
-      if ( c & all_colors )
-        continue;
-      point->PointT::setColor(color=log2_i128(c));
-      if (max_color < color)
-        max_color = color;
-      break;
-    }
-    
-  }
-//  _n_node_colors = max_color+1;
-
-  _pointL.linkColors();
-
-}
-
-
-/** @brief facets coloring.
- *  @warning must be called after setColorAllCells()
- */
-template<class CT, int SD>
-void SMesh<CT,SD>::setColorAllFacets()
-{
-
-  /*****************************************************
-   *                 Coloring Facets
-   *****************************************************/
-
-  const int n_facets_total = this->numFacetsTotal();
-
-  #pragma omp parallel
-  {
-    FacetT * a;
-    CellT const* ic;
-    #pragma omp for
-    for (int i=0; i<n_facets_total; ++i)
-    {
-      a = MeshT::getFacet(i);
-      if (a->FacetT::disabled())
-        continue;
-      ic = MeshT::getCell(a->FacetT::getIncidCell());
-      a->FacetT::setColor(ic->CT::getColor());
-    };
-  }
-
-  _facetL.linkColors();
-}
-
-/** @brief corners coloring.
- *  @warning must be called after setColorAllCells()
- */
-template<class CT, int SD>
-void SMesh<CT,SD>::setColorAllCorners()
-{
-
-  /*****************************************************
-   *                 Coloring Facets
-   *****************************************************/
-
-  const int n_corners_total = this->numCornersTotal();
-
-  #pragma omp parallel
-  {
-    CornerT * a;
-    CellT const* ic;
-    #pragma omp for
-    for (int i=0; i<n_corners_total; ++i)
-    {
-      a = MeshT::getCorner(i);
-      if (a->CornerT::disabled())
-        continue;
-      ic = MeshT::getCell(a->CornerT::getIncidCell());
-      a->CornerT::setColor(ic->CT::getColor());
-    };
-  }
-
-  _cornerL.linkColors();
-}
 
 template<class CT, int SD>
 bool SMesh<CT,SD>::inSingleCell(Point const* p) const

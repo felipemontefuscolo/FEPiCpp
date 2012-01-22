@@ -71,7 +71,7 @@ all: gtest.a gtest_main.a $(CPPSOURCES:.cpp=.exe)
 	
 %.exe: %.o gtest.a gtest_main.a
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $^ -o $@ $(LDFLAGS) gtest.a gtest_main.a
-	rm $<
+#	rm $<
 	
 clean:
 	$(FEP_RM) *.o *.exe *~ gtest.a gtest_main.a

@@ -23,7 +23,6 @@
 #define FEPIC_CORNER_HPP
 
 #include "implicit.hpp"
-#include "../colored.hpp"
 #include "../labelable.hpp"
 
 class Corner : public ImplicitElement

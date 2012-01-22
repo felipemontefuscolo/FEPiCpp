@@ -56,10 +56,10 @@ protected:
   int  _nodes[3];      // nodes id
   int  _facets[3];     // facets id
   int  _icells[3];     // incident cells id
+  int  _corners[3];
 
   /* não utilizados */
   int _icells_anchors[0];
-  int _corners[0];
 
 public:
   
@@ -108,10 +108,11 @@ protected:
   int  _facets[3];     // facets id
   int  _icells[3];     // incident cells id
   int  _nodes[6];      // nodes id
+  int  _corners[3];
 
   /* não utilizados */
   int _icells_anchors[0];
-  int _corners[0];
+  
 
 public:
 

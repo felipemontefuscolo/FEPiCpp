@@ -9,6 +9,7 @@ namespace _FepicTagsInitializers
   {
     std::tr1::array<int, N_CELL_TYPES> tab;
 
+    tab[log2_i32(POINT1       ) ] = 2;
     tab[log2_i32(EDGE2        ) ] = 2;
     tab[log2_i32(EDGE3        ) ] = 3;
     tab[log2_i32(TRIANGLE3    ) ] = 3;
@@ -29,6 +30,7 @@ namespace _FepicTagsInitializers
   {
     std::tr1::array<int, N_CELL_TYPES> tab;
 
+    tab[log2_i32(POINT1       ) ] = 1;
     tab[log2_i32(EDGE2        ) ] = 1;
     tab[log2_i32(EDGE3        ) ] = 2;
     tab[log2_i32(TRIANGLE3    ) ] = 1;
@@ -49,6 +51,7 @@ namespace _FepicTagsInitializers
   {
     std::tr1::array<int, N_CELL_TYPES> tab;
 
+    tab[log2_i32(POINT1       ) ] = 0;
     tab[log2_i32(EDGE2        ) ] = 1;
     tab[log2_i32(EDGE3        ) ] = 1;
     tab[log2_i32(TRIANGLE3    ) ] = 2;
@@ -69,6 +72,7 @@ namespace _FepicTagsInitializers
   {
     std::tr1::array<const char*, N_CELL_TYPES> tab;
 
+    tab[log2_i32(POINT1       ) ] = "Point";
     tab[log2_i32(EDGE2        ) ] = "Linear edge";
     tab[log2_i32(EDGE3        ) ] = "Quadratic edge";
     tab[log2_i32(TRIANGLE3    ) ] = "Linear triangle";
@@ -89,6 +93,7 @@ namespace _FepicTagsInitializers
   {
     std::tr1::array<ECellType, MSH_MAX_INDEX+1> tab;
 
+    tab[MSH_PNT   ] = POINT1;
     tab[MSH_LIN_2 ] = EDGE2;
     tab[MSH_TRI_3 ] = TRIANGLE3;
     tab[MSH_QUA_4 ] = QUADRANGLE4;
@@ -109,6 +114,7 @@ namespace _FepicTagsInitializers
   {
     std::tr1::array<EMshTag, N_CELL_TYPES> tab;
 
+    tab[log2_i32(POINT1       ) ] = MSH_PNT;
     tab[log2_i32(EDGE2        ) ] = MSH_LIN_2 ;
     tab[log2_i32(EDGE3        ) ] = MSH_TRI_3 ;
     tab[log2_i32(TRIANGLE3    ) ] = MSH_QUA_4 ;
@@ -129,6 +135,7 @@ namespace _FepicTagsInitializers
   {
     std::tr1::array<ECellClass, N_CELL_TYPES> tab;
 
+    tab[log2_i32(POINT1       ) ] = POINT ;
     tab[log2_i32(EDGE2        ) ] = EDGE ;
     tab[log2_i32(EDGE3        ) ] = EDGE ;
     tab[log2_i32(TRIANGLE3    ) ] = TRIANGLE;
@@ -149,6 +156,7 @@ namespace _FepicTagsInitializers
   {
     std::tr1::array<ECellFamily, N_CELL_TYPES> tab;
 
+    tab[log2_i32(POINT1       ) ] = static_cast<ECellFamily>(SIMPLEX | HCUBE);
     tab[log2_i32(EDGE2        ) ] = static_cast<ECellFamily>(SIMPLEX | HCUBE);
     tab[log2_i32(EDGE3        ) ] = static_cast<ECellFamily>(SIMPLEX | HCUBE);
     tab[log2_i32(TRIANGLE3    ) ] = SIMPLEX;
@@ -169,6 +177,7 @@ namespace _FepicTagsInitializers
   {
     std::tr1::array<ECellFamily, N_CELL_CLASSES> tab;
 
+    tab[log2_i32(POINT      ) ] = static_cast<ECellFamily>(SIMPLEX | HCUBE);
     tab[log2_i32(EDGE       ) ] = static_cast<ECellFamily>(SIMPLEX | HCUBE);
     tab[log2_i32(TRIANGLE   ) ] = SIMPLEX;
     tab[log2_i32(QUADRANGLE ) ] = HCUBE;
@@ -182,8 +191,9 @@ namespace _FepicTagsInitializers
   {
     std::tr1::array<ECellType, N_CELL_TYPES> tab;
 
-    tab[log2_i32(EDGE2        ) ] = UNDEFINED_CELLT;
-    tab[log2_i32(EDGE3        ) ] = UNDEFINED_CELLT;
+    tab[log2_i32(POINT1       ) ] = UNDEFINED_CELLT;
+    tab[log2_i32(EDGE2        ) ] = POINT1;
+    tab[log2_i32(EDGE3        ) ] = POINT1;
     tab[log2_i32(TRIANGLE3    ) ] = EDGE2;
     tab[log2_i32(TRIANGLE6    ) ] = EDGE3;
     tab[log2_i32(QUADRANGLE4  ) ] = EDGE2;

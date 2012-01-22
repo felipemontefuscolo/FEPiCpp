@@ -72,45 +72,4 @@ private:
 
 
 
-
-
-// VirtualEntity = Cell, Facet, Corner or Point
-template<class VirtualEntity>
-class _MeshColorIterator
-{
-  template<class,int> friend class SMesh;
-  friend class Mesh;
-  
-  typedef _MeshColorIterator Self;
-public:
-  
-  //typedef typename long                            difference_type;
-  typedef  VirtualEntity              value_type;
-  typedef  VirtualEntity*             pointer;
-  typedef  VirtualEntity&             reference;
-  typedef  std::forward_iterator_tag  iterator_category;  
-  
-  explicit
-  _MeshColorIterator(Mesh * mesh, pointer elem) : _elem_ptr(elem), _mesh_ptr(mesh) {};
-  
-  _MeshColorIterator() : _elem_ptr(NULL), _mesh_ptr(NULL) {};
-  
-  reference operator*() const {return *_elem_ptr;}
-  pointer   operator->() const {return &(*_elem_ptr);}
-  Self&     operator++();
-  Self      operator++(int);
-
-  bool
-  operator==(const Self& x) const
-  { return _elem_ptr == x._elem_ptr; }
-
-  bool
-  operator!=(const Self& x) const
-  { return _elem_ptr != x._elem_ptr; }
-  
-private:
-  VirtualEntity * _elem_ptr;
-  Mesh * _mesh_ptr;
-};
-
 #endif

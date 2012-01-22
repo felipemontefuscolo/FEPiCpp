@@ -41,16 +41,6 @@ void test(std::tr1::shared_ptr<Mesh> & mesh)
   }
   mesh->timer.elapsed("vertexStar() all mesh");
   
-  mesh->timer.restart();
-  for (int i = 0; i < n_nodes; ++i)
-  {
-    Point * p = mesh->getNode(i);
-    int C = p->getIncidCell();
-    int vC= p->getPosition();
-    mesh->vertexStarWithoutColor(C, vC, iCs1, viCs1);
-  }  
-  mesh->timer.elapsed("vertexStarWithoutColor() all mesh");
-
   
 }
 

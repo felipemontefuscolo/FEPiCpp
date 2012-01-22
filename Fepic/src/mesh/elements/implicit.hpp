@@ -24,7 +24,7 @@
 
 #include "../labelable.hpp"
 
-class ImplicitElement : public _Labelable, public _Colored
+class ImplicitElement : public _Labelable
 {
 public:  
 

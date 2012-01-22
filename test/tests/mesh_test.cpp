@@ -968,70 +968,6 @@ TEST(PointIteratorsTest, TetIteratorsTest)
     }
   }
   
-  // ====================== traversing the mesh (color) =========================
-  
-  for (int k = 0; k < mesh->numNodeColors(); ++k)
-  {
-    point_color_iterator cpoint = mesh->pointBegin(EColor(k));
-    point_color_iterator cpoint_end = mesh->pointEnd(EColor(k));
-    for (;cpoint !=  cpoint_end; ++cpoint)
-    {
-      cpoint->setTag(cpoint->getTag()+1);
-    }
-  }
-  // check
-  for (int i = 0; i < mesh->numNodes(); ++i)
-  {
-    EXPECT_EQ( 1, mesh->getNode(i)->getTag());
-    mesh->getNode(i)->setTag(0); // reseting
-  }
-  
-  // ====================== parallel ======================================
-  for (int tid = 0, nthreads = 10; tid < nthreads; ++tid)
-  {
-    for (int k = 0; k < mesh->numNodeColors(); ++k)
-    {
-      point_color_iterator cpoint = mesh->pointBegin(EColor(k),tid,nthreads);
-      point_color_iterator cpoint_end = mesh->pointEnd(EColor(k),tid,nthreads);
-      for (;cpoint !=  cpoint_end; ++cpoint)
-      {
-        cpoint->setTag(cpoint->getTag()+1);
-      }
-    }
-  }
-  // check
-  for (int i = 0; i < mesh->numNodes(); ++i)
-  {
-    EXPECT_EQ( 1, mesh->getNode(i)->getTag());
-    mesh->getNode(i)->setTag(0); // reseting
-  }
-  
-  // ====================== parallel ======================================
-  #pragma omp parallel
-  {
-    int tid = omp_get_thread_num();
-    int nthreads = omp_get_num_threads();
-    
-    for (int k = 0; k < mesh->numNodeColors(); ++k)
-    {
-      point_color_iterator cpoint = mesh->pointBegin(EColor(k),tid,nthreads);
-      point_color_iterator cpoint_end = mesh->pointEnd(EColor(k),tid,nthreads);
-      for (;cpoint !=  cpoint_end; ++cpoint)
-      {
-        cpoint->setTag(cpoint->getTag()+1);
-      }
-      #pragma omp barrier
-    }
-    
-  }
-  // check
-  for (int i = 0; i < mesh->numNodes(); ++i)
-  {
-    EXPECT_EQ( 1, mesh->getNode(i)->getTag());
-    mesh->getNode(i)->setTag(0); // reseting
-  }
-  
-  
   
 };
 
@@ -1211,7 +1147,7 @@ TEST(SingleCellTestTet4, SingleSimpMesh)
 }
 
 
-
+// PROVAVELMENTE ESTA MALHA É INVÁLIDA
 TEST(SingleCellTestTet4, SingleSingMesh)
 {
 

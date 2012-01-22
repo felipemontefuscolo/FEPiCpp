@@ -37,10 +37,6 @@ typedef _MeshIterator<Point>  point_iterator;
 typedef _MeshIterator<Facet>  facet_iterator;
 typedef _MeshIterator<Corner> corner_iterator;
 
-typedef _MeshColorIterator<Cell>   cell_color_iterator;
-typedef _MeshColorIterator<Point>  point_color_iterator;
-typedef _MeshColorIterator<Facet>  facet_color_iterator;
-typedef _MeshColorIterator<Corner> corner_color_iterator;
 
 class Mesh
 {
@@ -49,7 +45,6 @@ protected:
 
   // iterators
   template<class> friend class _MeshIterator;
-  template<class> friend class _MeshColorIterator;
   friend class MeshIoMsh;
   
   virtual Cell*   incCell(Cell*) = 0;
@@ -61,11 +56,6 @@ protected:
   virtual Point*  decPoint(Point*) = 0;
   virtual Facet*  decFacet(Facet*) = 0;
   virtual Corner* decCorner(Corner*) = 0;
-  
-  virtual Cell*   incColorCell(Cell*) = 0;
-  virtual Point*  incColorPoint(Point*) = 0;
-  virtual Facet*  incColorFacet(Facet*) = 0;
-  virtual Corner* incColorCorner(Corner*) = 0;
   
   
 public:
@@ -87,24 +77,6 @@ public:
   virtual facet_iterator  facetEnd(int tid, int nthreads) = 0;
   virtual corner_iterator cornerBegin(int tid, int nthreads) = 0;
   virtual corner_iterator cornerEnd(int tid, int nthreads) = 0;
-
-  virtual cell_color_iterator   cellBegin(EColor) = 0;
-  virtual cell_color_iterator   cellEnd(EColor) = 0;
-  virtual point_color_iterator  pointBegin(EColor) = 0;
-  virtual point_color_iterator  pointEnd(EColor) = 0;
-  virtual facet_color_iterator  facetBegin(EColor) = 0;
-  virtual facet_color_iterator  facetEnd(EColor) = 0;
-  virtual corner_color_iterator cornerBegin(EColor) = 0;
-  virtual corner_color_iterator cornerEnd(EColor) = 0;
-
-  virtual cell_color_iterator   cellBegin(EColor, int tid, int nthreads) = 0;
-  virtual cell_color_iterator   cellEnd(EColor, int tid, int nthreads) = 0;
-  virtual point_color_iterator  pointBegin(EColor, int tid, int nthreads) = 0;
-  virtual point_color_iterator  pointEnd(EColor, int tid, int nthreads) = 0;
-  virtual facet_color_iterator  facetBegin(EColor, int tid, int nthreads) = 0;
-  virtual facet_color_iterator  facetEnd(EColor, int tid, int nthreads) = 0;
-  virtual corner_color_iterator cornerBegin(EColor, int tid, int nthreads) = 0;
-  virtual corner_color_iterator cornerEnd(EColor, int tid, int nthreads) = 0;
 
   typedef Mesh* (*CreatorMemFunPtr)();
   
@@ -213,7 +185,6 @@ public:
   virtual int* edgeStar(int C, int eC, int *iCs, int *eiCs) const = 0;
   virtual int* edgeStar(Facet  const*, int *iCs, int *eiCs) const = 0;
   virtual int* edgeStar(Corner const*, int *iCs, int *eiCs) const = 0;
-  virtual int* vertexStarWithoutColor(int C, int vC, int *iCs, int *viCs) const = 0;
   virtual int* vertexStar(int C, int vC, int *iCs, int *viCs) const = 0;
   virtual int* vertexStar(Point const* point, int *iCs, int *viCs) const = 0;
   virtual int* nodeStar(int C, int nC, int *iCs, int *niCs) const = 0;
@@ -231,14 +202,6 @@ public:
   };
   virtual void buildAdjacency() = 0;
   virtual void buildNodesAdjacency() = 0;
-
-  virtual bool checkInvalidColorCell(Cell * cell, int const* neibs_beg, int const* neibs_end) const = 0;
-  virtual void setColorCell(int id) = 0;
-  virtual void setColorCell(Cell* cell, int const* neibs_beg, int const* neibs_end) = 0;
-  virtual void setColorAllCells() = 0;
-  virtual void setColorAllPoints() = 0;
-  virtual void setColorAllFacets() = 0;
-  virtual void setColorAllCorners() = 0;
 
   virtual bool inBoundary(Point const* p) const = 0;
   virtual bool inBoundary(Facet const* p) const = 0;
@@ -286,11 +249,6 @@ public:
    *  @param factor the size
    */ 
   virtual void setGrowFactor(float factor) = 0;
-
-  virtual int numCellColors() const = 0;
-  virtual int numNodeColors() const = 0;
-  virtual int numFacetColors() const = 0;
-  virtual int numCornerColors() const = 0;
 
   virtual ~Mesh() {};
 
@@ -353,16 +311,6 @@ public:
   typedef typename FacetList ::const_iterator FacetConstIteratorT;
   typedef typename CornerList::const_iterator CornerConstIteratorT;  
   
-  typedef typename CellList  ::color_iterator CellColorIteratorT;
-  typedef typename PointList ::color_iterator PointColorIteratorT;
-  typedef typename FacetList ::color_iterator FacetColorIteratorT;
-  typedef typename CornerList::color_iterator CornerColorIteratorT;
-  
-  typedef typename CellList  ::color_const_iterator CellColorConstIteratorT;
-  typedef typename PointList ::color_const_iterator PointColorConstIteratorT;
-  typedef typename FacetList ::color_const_iterator FacetColorConstIteratorT;
-  typedef typename CornerList::color_const_iterator CornerColorConstIteratorT;
-  
 
   explicit SMesh() : Mesh(-1, CellT::fep_tag)
   {
@@ -383,10 +331,6 @@ protected:
   Facet*  decFacet(Facet*);
   Corner* decCorner(Corner*);
   
-  Cell*   incColorCell(Cell*);
-  Point*  incColorPoint(Point*);
-  Facet*  incColorFacet(Facet*);
-  Corner* incColorCorner(Corner*);  
 
 public:
 
@@ -407,24 +351,6 @@ public:
   facet_iterator  facetEnd(int tid, int nthreads);
   corner_iterator cornerBegin(int tid, int nthreads);
   corner_iterator cornerEnd(int tid, int nthreads);
-
-  cell_color_iterator   cellBegin(EColor);
-  cell_color_iterator   cellEnd(EColor);
-  point_color_iterator  pointBegin(EColor);
-  point_color_iterator  pointEnd(EColor);
-  facet_color_iterator  facetBegin(EColor);
-  facet_color_iterator  facetEnd(EColor);
-  corner_color_iterator cornerBegin(EColor);
-  corner_color_iterator cornerEnd(EColor);
-
-  cell_color_iterator   cellBegin(EColor, int tid, int nthreads);
-  cell_color_iterator   cellEnd(EColor, int tid, int nthreads);
-  point_color_iterator  pointBegin(EColor, int tid, int nthreads);
-  point_color_iterator  pointEnd(EColor, int tid, int nthreads);
-  facet_color_iterator  facetBegin(EColor, int tid, int nthreads);
-  facet_color_iterator  facetEnd(EColor, int tid, int nthreads);
-  corner_color_iterator cornerBegin(EColor, int tid, int nthreads);
-  corner_color_iterator cornerEnd(EColor, int tid, int nthreads);
 
   // --------------------------------------------------- VERTEX STAR ---------------------------------------------------
 
@@ -487,41 +413,6 @@ public:
                                                         iCs, viCs);
   }
 
-  // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-  /** INTERNAL USE ONLY\n
-   *  Returns all incident cells of a vertex.
-   *  @param[in] C an incident cell of a vertex to start the search (initial cell).
-   *  @param[in] vC vertex's local id in the initial cell.
-   *  @param[out] iCs vector to put the incident cells.
-   *  @param[out] viCs vertex's local ids in the incident cells.
-   *  @return a pointer to the element following the end of the sequence iCs.
-   *  @note the vectors iCs and viCs must have enough space to store the data.
-   *  @note slower version, but dont need to coloring the mesh. Used in mesh
-   * */
-  template<int celldim>
-  int* vertexStar_WithoutColor(int C, int vC, int *iCs, int *viCs, typename EnableIf<(celldim==3)>::type* = NULL) const;
-  
-  /** INTERNAL USE ONLY\n
-   *  For 1d and 2d, vertexStar_WithoutColor = vertexStar_Template because
-   *  it dont use colors to compute neigbors.
-   */
-  template<int celldim>
-  int* vertexStar_WithoutColor(int C, int vC, int *iCs, int *viCs, typename EnableIf<(celldim <3)>::type* = NULL) const;
-
-  /** Returns all incident cells of a vertex.
-   *  @param[in] C an incident cell of a vertex to start the search (initial cell).
-   *  @param[in] vC vertex's local id in the initial cell.
-   *  @param[out] iCs vector to put the incident cells.
-   *  @param[out] vCs vertex's local ids in the initial cells.
-   *  @return a pointer to the element following the end of the sequence iCs.
-   *  @note the vectors iCs and viCs must have enough space to store the data.
-   *  @note does not support high order nodes, only vertices.
-   */
-  int* vertexStarWithoutColor(int C, int vC, int *iCs, int *viCs) const
-  {
-    return this->MeshT::vertexStar_WithoutColor<CellT::dim>(C, vC, iCs, viCs);
-  }
-  // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
   /** Returns all incident cells of a node.
    *  @param[in] C an incident cell of a node to start the search (initial cell).
@@ -649,11 +540,12 @@ public:
 
   void buildCellsAdjacency();
 
-  // para dim = 1 e 2
   template<int celldim>
-  void buildCorners_Template(typename EnableIf<(celldim<3)>::type* = NULL);
+  void buildCorners_Template(typename EnableIf<(celldim==1)>::type* = NULL);
 
-  // para dim = 3
+  template<int celldim>
+  void buildCorners_Template(typename EnableIf<(celldim==2)>::type* = NULL);
+
   template<int celldim>
   void buildCorners_Template(typename EnableIf<(celldim==3)>::type* = NULL);
 
@@ -662,16 +554,6 @@ public:
   /// Constrói as informações topológicas da malha
   void buildAdjacency();
 
-
-  // --------------------------------------------------- COLORING -------------------------------------------------------
-
-  bool checkInvalidColorCell(Cell * cell, int const* neibs_beg, int const* neibs_end) const;
-  void setColorCell(int id);
-  void setColorCell(Cell* cell, int const* neibs_beg, int const* neibs_end);
-  void setColorAllCells();
-  void setColorAllPoints();
-  void setColorAllFacets();
-  void setColorAllCorners();
 
   // ----------------------------------------------------------------------------------------------------------------------
 
@@ -698,23 +580,6 @@ public:
     _pointL.setGrowFactor(factor);
     _facetL.setGrowFactor(factor);
     _cornerL.setGrowFactor(factor);
-  }
-
-  int numCellColors() const
-  {
-    return _cellL.numColors();
-  }
-  int numNodeColors() const
-  {
-    return _pointL.numColors();
-  }
-  int numFacetColors() const
-  {
-    return _facetL.maxColor()+1;
-  }
-  int numCornerColors() const
-  {
-    return _cornerL.maxColor()+1;
   }
 
   int getCellContigId(int id) const

@@ -275,7 +275,7 @@ void MeshIoMsh::readFileMsh(const char* filename, Mesh * mesh)
 
   this->timer.elapsed("readFileMsh(): search for boundary elements");
 
-  if (mesh->cellDim()==3)
+  if (mesh->cellDim()>1)
   {
     const int n_corners_per_facet = mesh->numCornersPerFacet();
     int facet_facets[n_corners_per_facet];

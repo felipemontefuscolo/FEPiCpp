@@ -23,7 +23,7 @@
 #define FEPIC_POINT_HPP
 
 
-class Point : public _Labelable, public _Colored
+class Point : public _Labelable
 {
 public:
 
