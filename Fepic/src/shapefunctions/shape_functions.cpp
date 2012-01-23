@@ -6,6 +6,9 @@ EShapeType ShapeFunction::defaultEShapeType(ECellType ct)
 {
   switch (ct)
   {
+  case POINT1:
+    return P0;
+    break;
   case EDGE2:
     return P1;
     break;
@@ -57,6 +60,10 @@ ShapeFunction* ShapeFunction::create(ECellType ct, EShapeType sf)
   if (sf & (P0 | Q0))
     return new Shape_CONST;
 
+  if (ct & POINT1)
+  {
+    return new Shape_CONST;
+  }
   if (ct & (EDGE2 | EDGE3))
   {
     if (sf & (P1 | Q1 | Pm1))

@@ -225,7 +225,7 @@ void MeshIoMsh::readFileMsh(const char* filename, Mesh * mesh)
 
     elm_dim = dimForMshTag(EMshTag(type_tag));
 
-    if (elm_dim == 0)
+    if ((elm_dim == 0) && (cell_dim!=2))
     {
       fscanf(file_ptr, "%d", &id_aux);
     }
@@ -254,9 +254,14 @@ void MeshIoMsh::readFileMsh(const char* filename, Mesh * mesh)
       //std::copy( bnodes, bnodes + n_vertices_per_corner, bvtcs );
       corner_id = mesh->getCornerIdFromVertices(bnodes);
       if (corner_id < 0)
-        printf("mesh .msh file: warning: invalid corner detected\n");
+      {
+        if (mesh->isVertex(mesh->getNode(bnodes[0])) ) // if is vertex
+          printf("mesh .msh file: warning: invalid corner detected\n");
+      }
       else
+      {
         mesh->getCorner(corner_id)->setTag(physical); //std::cout << (++TESTE) << std::endl;
+      }
     }
     else
     {

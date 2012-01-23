@@ -104,7 +104,7 @@ public:
   ~Quadrature_() {}
 
 protected:
-  Real _points[MaxNumQPoints][Dim];
+  Real _points[MaxNumQPoints][Dim!=0?Dim:0];
   Real _weights[MaxNumQPoints];
 
 };
@@ -118,6 +118,7 @@ protected:
 //typedef Quadrature_<TETRAHEDRON4, 3, 46 > Quadrature_TETRAHEDRON;
 //typedef Quadrature_<HEXAHEDRON8,  3, 125> Quadrature_HEXAHEDRON;
 
+#define Quadrature_POINT       Quadrature_<POINT1,       0, 1  , 10>
 #define Quadrature_EDGE        Quadrature_<EDGE2,        1, 5  , 9 >
 #define Quadrature_TRIANGLE    Quadrature_<TRIANGLE3,    2, 25 , 10>
 #define Quadrature_QUADRANGLE  Quadrature_<QUADRANGLE4,  2, 25 , 9 >

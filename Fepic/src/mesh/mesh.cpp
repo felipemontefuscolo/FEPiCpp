@@ -1234,6 +1234,13 @@ int SMesh<CT,SD>::getCornerIdFromVertices(int const* vtcs)
   int trash[FEPIC_MAX_ICELLS], iCs[FEPIC_MAX_ICELLS]; // MAX_ICELLS
   int bfC;
 
+  if (CT::dim==2) // corner is a point
+  {
+    if (!this->MeshT::isVertex(pt))
+      return -1;
+    return this->MeshT::getCell(pt->PointT::getIncidCell())->CT::getCornerId(pt->PointT::getPosition());
+  }
+
   // células incidentes ao primeiro vértice da corner
   int* iCs_end = this->MeshT::vertexStar(pt->PointT::getIncidCell(), pt->PointT::getPosition(), iCs, trash);
 

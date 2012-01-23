@@ -8,6 +8,9 @@
 Quadrature* Quadrature::create(ECellClass cc)
 {
   
+  if (cc & POINT)
+    return new Quadrature_POINT;
+  
   if (cc & EDGE)
     return new Quadrature_EDGE;
   
@@ -132,6 +135,16 @@ void _getQuadrPtsHypercube(int n, int dim, Real *points, Real *weights, int &n_p
  
  
  
+
+template<>
+void Quadrature_POINT::setOrder(int n)
+{
+  this->_order = n;
+  _points[0][0] = 0;
+  _weights[0] = 1.0L;
+  _n_points = 1;
+}
+
  
 template<> 
 void Quadrature_EDGE::setOrder(int n)
