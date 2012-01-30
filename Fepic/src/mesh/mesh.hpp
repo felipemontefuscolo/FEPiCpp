@@ -828,7 +828,52 @@ public:
 
   bool inBoundary(Point const* p) const
   {
-    return this->MeshT::getCell(static_cast<PointT const*>(p)->PointT::getIncidCell())->CellT::inBoundary();
+    //return this->MeshT::getCell(static_cast<PointT const*>(p)->PointT::getIncidCell())->CellT::inBoundary();
+    CellT const* icell = this->MeshT::getCell(static_cast<PointT const*>(p)->PointT::getIncidCell());
+    if (!icell->inBoundary())
+      return false;
+
+    const int m = static_cast<PointT const*>(p)->PointT::getPosition();
+    if (CellT::dim==1)
+    {
+      if (m>1)
+        return false;
+      else
+        return true;
+    }
+    if (this->MeshT::isVertex(p))
+    {
+      if (icell->CellT::getIncidCell(CellT::table_vC_x_fC[m][0]) < 0) return true;
+      if (icell->CellT::getIncidCell(CellT::table_vC_x_fC[m][1]) < 0) return true;
+      if (CellT::dim>2)
+        if (icell->CellT::getIncidCell(CellT::table_vC_x_fC[m][2]) < 0) return true;
+      return false;
+    }
+    else
+    {
+      const int q = m - CellT::n_vertices;
+      if (CellT::dim==2)
+      {
+        if (q>=CellT::n_facets)
+          return false;
+        return icell->CellT::getIncidCell(q)<0;
+      }
+      else
+      {
+        const int r = q - CellT::n_corners;
+        const int s = r - CellT::n_facets;
+        
+        if (s>=0) return false;
+        
+        if (r>=0) return icell->CellT::getIncidCell(r)<0;
+        
+        if (icell->CellT::getIncidCell(CellT::table_bC_x_fC[q][0]) < 0) return true;
+        if (icell->CellT::getIncidCell(CellT::table_bC_x_fC[q][1]) < 0) return true;
+        return false;
+      }
+    }
+    
+    
   }
   bool inBoundary(Facet const* f) const
   {
