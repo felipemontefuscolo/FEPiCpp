@@ -832,7 +832,11 @@ public:
   }
   bool inBoundary(Facet const* f) const
   {
-    return this->MeshT::getCell(static_cast<FacetT const*>(f)->FacetT::getIncidCell())->CellT::inBoundary();
+    CellT const* icell = this->MeshT::getCell(static_cast<FacetT const*>(f)->FacetT::getIncidCell());
+    if (icell->CellT::getIncidCell(static_cast<FacetT const*>(f)->FacetT::getPosition()) < 0)
+      return true;
+    else
+      return false;
   }
   bool inBoundary(Corner const* f) const
   {
