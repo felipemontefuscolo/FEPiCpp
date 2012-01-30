@@ -885,7 +885,21 @@ public:
   }
   bool inBoundary(Corner const* f) const
   {
-    return this->MeshT::getCell(static_cast<CornerT const*>(f)->CornerT::getIncidCell())->CellT::inBoundary();
+    CellT const* icell = this->MeshT::getCell(static_cast<CornerT const*>(f)->CornerT::getIncidCell());
+    if (!icell->CellT::inBoundary())
+      return false;
+    if (CellT::dim==2)
+    {
+      PointT const* point = this->MeshT::getNode( icell->CellT::getNodeId(  static_cast<CornerT const*>(f)->CornerT::getPosition() ) );
+      return this->MeshT::inBoundary(point);
+    }
+    else
+    {
+      int const m = static_cast<CornerT const*>(f)->CornerT::getPosition();
+      if (icell->CellT::getIncidCell(CellT::table_bC_x_fC[m][0]) < 0) return true;
+      if (icell->CellT::getIncidCell(CellT::table_bC_x_fC[m][1]) < 0) return true;
+      return false;
+    }
   }
 
   /** Adiciona uma célula e retorna seu id.
