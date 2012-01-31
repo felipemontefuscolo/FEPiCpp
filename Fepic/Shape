@@ -23,6 +23,7 @@
 #define FEPIC_SHAPE_NE
 
 #include "Fepic/src/shapefunctions/shape_functions.hpp"
+#include "Fepic/src/shapefunctions/parametric_pts.hpp"
 
 #endif
 

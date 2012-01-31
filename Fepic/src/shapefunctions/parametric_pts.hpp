@@ -22,6 +22,7 @@
 #ifndef FEPIC_PARAMETRIC_PTS_HPP
 #define FEPIC_PARAMETRIC_PTS_HPP
 
+#include "../custom_eigen/custom_eigen.hpp"
 
 /* protótipos */
 std::vector<double> genLineParametricPts(int n);
