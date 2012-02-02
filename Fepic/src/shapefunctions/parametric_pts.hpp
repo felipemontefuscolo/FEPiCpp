@@ -25,13 +25,13 @@
 #include "../custom_eigen/custom_eigen.hpp"
 
 /* protótipos */
-std::vector<double> genLineParametricPts(int n);
+inline std::vector<double> genLineParametricPts(int n);
 
-std::vector<Eigen::Vector2d> genTriParametricPts(int n);
-std::vector<Eigen::Vector2i> genTriParametricPtsINT(int n, int a=0, int b=-1);
+inline std::vector<Eigen::Vector2d> genTriParametricPts(int n);
+inline std::vector<Eigen::Vector2i> genTriParametricPtsINT(int n, int a=0, int b=-1);
 
-std::vector<Eigen::Vector3d> genTetParametricPts(int n);
-std::vector<Eigen::Vector3i> genTetParametricPtsINT(int n, int a=0, int b=-1);
+inline std::vector<Eigen::Vector3d> genTetParametricPts(int n);
+inline std::vector<Eigen::Vector3i> genTetParametricPtsINT(int n, int a=0, int b=-1);
 
 
 

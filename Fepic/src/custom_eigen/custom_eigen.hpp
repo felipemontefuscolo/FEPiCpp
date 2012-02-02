@@ -25,9 +25,9 @@
 #define EIGEN_DEFAULT_TO_ROW_MAJOR
 #define EIGEN_MATRIXBASE_PLUGIN "Fepic/src/custom_eigen/addons.hpp"
 
-//#ifndef FEPIC_DEBUG_ON
+#ifndef FEPIC_DEBUG_ON
   #define EIGEN_NO_DEBUG
-//#endif
+#endif
 
 #include <Eigen/Core>
 
