@@ -23,17 +23,25 @@
 #include "var_dof.hpp"
 #include "../util/assert.hpp"
 
-void VarDofs::setType(ShapeFunction * sf, int dim)
+void VarDofs::setType(ShapeFunction * sf, int dim, int ntags, int const*tags)
 {
-  setType(sf->numDofsAssociatedToVertice()*dim, sf->numDofsAssociatedToCorner()*dim, sf->numDofsAssociatedToFacet()*dim, sf->numDofsAssociatedToCell()*dim);
+  setType(sf->numDofsAssociatedToVertice()*dim, sf->numDofsAssociatedToCorner()*dim, sf->numDofsAssociatedToFacet()*dim, sf->numDofsAssociatedToCell()*dim,ntags,tags);
 }
 
-void VarDofs::setType(int ndpv, int ndpr, int ndpf, int ndpc)
+void VarDofs::setType(int ndpv, int ndpr, int ndpf, int ndpc, int ntags, int const*tags)
 {
   _n_dof_within_vertice = ndpv;
   _n_dof_within_corner = ndpr;
   _n_dof_within_facet = ndpf;
   _n_dof_within_cell = ndpc;
+
+  if (ntags>0)
+  {
+    FEPIC_CHECK(tags!=NULL, "tags NULL pointer", std::runtime_error);
+    _considered_tags.resize(ntags);
+  }
+  for (int i = 0; i < ntags; ++i)
+    _considered_tags[i] = tags[i];  
 }
 
 int VarDofs::totalSize() const
@@ -73,125 +81,118 @@ void VarDofs::setUp()
   unsigned const n_facets_total = _mesh_ptr->numFacetsTotal();
   unsigned const n_cells_total = _mesh_ptr->numCellsTotal();
 
-  unsigned const n_vertices = _mesh_ptr->numVertices();
-  unsigned const n_corners = _mesh_ptr->numCorners();
-  unsigned const n_facets  = _mesh_ptr->numFacets();
+  //unsigned const n_vertices = _mesh_ptr->numVertices();
+  //unsigned const n_corners = _mesh_ptr->numCorners();
+  //unsigned const n_facets  = _mesh_ptr->numFacets();
   //unsigned const n_cells  = _mesh_ptr->numCells();
 
   int* vertices_beg;
   int* corners_beg;
   int* facets_beg;
   int* cells_beg;
+  
+  int tag;
+  bool is_considered;
 
   getDivisions(vertices_beg, corners_beg, facets_beg, cells_beg);
 
   Mesh * mesh = _mesh_ptr;
 
-  // assigns the degrees of freedom to each entity.
+  unsigned dof_counter = _initial_dof_id;
 
   // vertices dof
-  #pragma omp parallel sections
+  if (_n_dof_within_vertice > 0)
   {
-    #pragma omp section
+    new (&_vertices_dofs) Container(vertices_beg, n_nodes_total, _n_dof_within_vertice);
+
+    Point const*p;
+    for (unsigned i = 0; i < n_nodes_total; ++i)
     {
-      unsigned dof_counter = _initial_dof_id;
-      if (_n_dof_within_vertice > 0)
-      {
-        new (&_vertices_dofs) Container(vertices_beg, n_nodes_total, _n_dof_within_vertice);
-
-        Point const*p;
-        for (unsigned i = 0; i < n_nodes_total; ++i)
-        {
-          p = mesh->getNode(i);
-          if (p->disabled() || !(mesh->isVertex(p)))
-            continue;
-          for (unsigned j = 0; j < _vertices_dofs.cols(); ++j)
-            _vertices_dofs(i,j) = dof_counter++;
-        }
-      }
+      p = mesh->getNode(i);
+      tag = p->getTag();
+      
+      // check for tag
+      is_considered = _considered_tags.empty() ? true : checkValue(_considered_tags.begin(), _considered_tags.end(), tag);
+      
+      if (!(mesh->isVertex(p)) || !is_considered || p->disabled() )
+        continue;
+      for (unsigned j = 0; j < _vertices_dofs.cols(); ++j)
+        _vertices_dofs(i,j) = dof_counter++;
     }
-
-    // corners dof
-    #pragma omp section
-    {
-      unsigned dof_counter = n_vertices*_n_dof_within_vertice + _initial_dof_id;
-      if (_n_dof_within_corner > 0)
-      {
-        new (&_corners_dofs) Container(corners_beg, n_corners_total, _n_dof_within_corner);
-
-        Corner const*p;
-        for (unsigned i = 0; i < n_corners_total; ++i)
-        {
-          p = mesh->getCorner(i);
-          if (p->disabled())
-            continue;
-          for (unsigned j = 0; j < _corners_dofs.cols(); ++j)
-            _corners_dofs(i,j) = dof_counter++;
-        }
-      }
-    }
-
-    // facets dof
-    #pragma omp section
-    {
-      unsigned dof_counter = n_vertices*_n_dof_within_vertice + n_corners*_n_dof_within_corner + _initial_dof_id;
-      if (_n_dof_within_facet > 0)
-      {
-        new (&_facets_dofs) Container(facets_beg, n_facets_total, _n_dof_within_facet);
-
-        Facet const*p;
-        for (unsigned i = 0; i < n_facets_total; ++i)
-        {
-          p = mesh->getFacet(i);
-          if (p->disabled())
-            continue;
-          for (unsigned j = 0; j < _facets_dofs.cols(); ++j)
-            _facets_dofs(i,j) = dof_counter++;
-        }
-      }
-
-    }
-
-    // cells dof
-    #pragma omp section
-    {
-      unsigned dof_counter = n_vertices*_n_dof_within_vertice +
-                             n_corners*_n_dof_within_corner +
-                             n_facets*_n_dof_within_facet +
-                             _initial_dof_id;
-      if (_n_dof_within_cell > 0)
-      {
-        new (&_cells_dofs) Container(cells_beg, n_cells_total, _n_dof_within_cell);
-
-        Cell const*p;
-        for (unsigned i = 0; i < n_cells_total; ++i)
-        {
-          p = mesh->getCell(i);
-          if (p->disabled())
-            continue;
-          for (unsigned j = 0; j < _cells_dofs.cols(); ++j)
-            _cells_dofs(i,j) = dof_counter++;
-        }
-      }
-
-    }
-
   }
+
+  // corners dof
+  if (_n_dof_within_corner > 0)
+  {
+    new (&_corners_dofs) Container(corners_beg, n_corners_total, _n_dof_within_corner);
+
+    Corner const*p;
+    for (unsigned i = 0; i < n_corners_total; ++i)
+    {
+      p = mesh->getCorner(i);
+      tag = p->getTag();
+      
+      // check for tag
+      is_considered = _considered_tags.empty() ? true : checkValue(_considered_tags.begin(), _considered_tags.end(), tag);
+      
+      if (!is_considered || p->disabled())
+        continue;
+      for (unsigned j = 0; j < _corners_dofs.cols(); ++j)
+        _corners_dofs(i,j) = dof_counter++;
+    }
+  }
+
+  // facets dof
+  if (_n_dof_within_facet > 0)
+  {
+    new (&_facets_dofs) Container(facets_beg, n_facets_total, _n_dof_within_facet);
+
+    Facet const*p;
+    for (unsigned i = 0; i < n_facets_total; ++i)
+    {
+      p = mesh->getFacet(i);
+      tag = p->getTag();
+      
+      // check for tag
+      is_considered = _considered_tags.empty() ? true : checkValue(_considered_tags.begin(), _considered_tags.end(), tag);
+      
+      if (!is_considered || p->disabled())
+        continue;
+      for (unsigned j = 0; j < _facets_dofs.cols(); ++j)
+        _facets_dofs(i,j) = dof_counter++;
+    }
+  }
+
+
+  // cells dof
+  if (_n_dof_within_cell > 0)
+  {
+    new (&_cells_dofs) Container(cells_beg, n_cells_total, _n_dof_within_cell);
+
+    Cell const*p;
+    for (unsigned i = 0; i < n_cells_total; ++i)
+    {
+      p = mesh->getCell(i);
+      tag = p->getTag();
+      
+      // check for tag
+      is_considered = _considered_tags.empty() ? true : checkValue(_considered_tags.begin(), _considered_tags.end(), tag);
+      
+      if (!is_considered || p->disabled())
+        continue;
+      for (unsigned j = 0; j < _cells_dofs.cols(); ++j)
+        _cells_dofs(i,j) = dof_counter++;
+    }
+  }
+
+  _n_dofs = dof_counter - _initial_dof_id;
 
 }
 
 
 int VarDofs::numDofs() const
 {
-  unsigned const n_vertices = _mesh_ptr->numVertices();
-  unsigned const n_corners = _mesh_ptr->numCorners();
-  unsigned const n_facets  = _mesh_ptr->numFacets();
-  unsigned const n_cells  = _mesh_ptr->numCells();
-
-  return n_vertices*_n_dof_within_vertice +
-         n_corners*_n_dof_within_corner +
-         n_facets*_n_dof_within_facet +
-         n_cells*_n_dof_within_cell;
+  return _n_dofs;
 }
 
 

@@ -41,7 +41,7 @@
 
 /* limiters */
 #define FEPIC_MAX_N_NODES_P_CELL 32
-#define FEPIC_MAX_ICELLS 64
+#define FEPIC_MAX_ICELLS 128
 
 //#define FEPIC_   _INTEGER_TYPE __uint128_t
 

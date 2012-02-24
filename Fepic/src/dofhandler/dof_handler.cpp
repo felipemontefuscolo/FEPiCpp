@@ -42,18 +42,22 @@ extern "C" {
 };
 #endif
 
-void DofHandler::addVariable(const char* var_name, ShapeFunction *sf, int dim)
+void DofHandler::addVariable(const char* var_name, ShapeFunction *sf, int dim, int ntags, int const* tags)
 {
-  addVariable(var_name, sf->numDofsAssociatedToVertice()*dim, sf->numDofsAssociatedToCorner()*dim, sf->numDofsAssociatedToFacet()*dim, sf->numDofsAssociatedToCell()*dim);
+  addVariable(var_name, sf->numDofsAssociatedToVertice()*dim,
+                        sf->numDofsAssociatedToCorner()*dim,
+                        sf->numDofsAssociatedToFacet()*dim,
+                        sf->numDofsAssociatedToCell()*dim,
+                        ntags, tags);
 }
 
 
-void DofHandler::addVariable(const char* var_name, int ndpv, int ndpr, int ndpf, int ndpc)
+void DofHandler::addVariable(const char* var_name, int ndpv, int ndpr, int ndpf, int ndpc, int ntags, int const* tags)
 {
   FEPIC_CHECK(_mesh_ptr!=NULL, "mesh is NULL", std::invalid_argument);
   FEPIC_CHECK(_mesh_ptr->numNodesTotal()>0, "did you forget to setup the mesh?", std::invalid_argument);
   
-  _vars.push_back(VarDofs(var_name,_mesh_ptr,ndpv,ndpr,ndpf,ndpc));
+  _vars.push_back(VarDofs(var_name,_mesh_ptr,ndpv,ndpr,ndpf,ndpc, 0,NULL, ntags,tags));
 }
 
 void DofHandler::SetUp()

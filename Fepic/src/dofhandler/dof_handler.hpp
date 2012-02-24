@@ -39,8 +39,8 @@ public:
   DofHandler(Mesh* mesh=NULL, float gf=0.07) : _mesh_ptr(mesh), _grow_factor(gf) {}
   
   void setMesh(Mesh * mesh) {_mesh_ptr=mesh;};
-  void addVariable(const char* var_name, ShapeFunction *sf, int dim=1);
-  void addVariable(const char* var_name, int ndpv, int ndpr, int ndpf, int ndpc);
+  void addVariable(const char* var_name, ShapeFunction *sf, int dim=1, int ntags=0, int const* tags=NULL);
+  void addVariable(const char* var_name, int ndpv, int ndpr, int ndpf, int ndpc, int ntags=0, int const* tags=NULL);
   VarDofs const& getVariable(int i) const {return _vars[i];}
   VarDofs & getVariable(int i) {return _vars[i];}
   

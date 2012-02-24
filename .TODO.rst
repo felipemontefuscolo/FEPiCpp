@@ -23,3 +23,7 @@ TODO
 * fazer test case para inBoundary();
 
 
+
+*fazer test case para dof_handler com seletor de tags em 3d
+
+

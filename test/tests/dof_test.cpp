@@ -91,10 +91,10 @@ TEST(AssignsDofsTest, Tri3Test)
   DofH.addVariable("bar",       0,     0,     1,     0); // 25
   DofH.addVariable("moo",       0,     0,     0,     1); // 14
   
+  DofH.SetUp();
   
   EXPECT_EQ(87, DofH.numDofs());
   
-  DofH.SetUp();
   
   MeshTools::removeCell(mesh->getCell(2), mesh);
   MeshTools::removeCell(mesh->getCell(3), mesh);
@@ -104,11 +104,11 @@ TEST(AssignsDofsTest, Tri3Test)
   //11x3 + 22 + 12
   EXPECT_EQ(11, DofH.getVariable(0).numDofs());
   EXPECT_EQ(22, DofH.getVariable(1).numDofs());
-  EXPECT_EQ(12, DofH.getVariable(2).numDofs());
+  EXPECT_EQ(11, DofH.getVariable(2).numDofs());
   EXPECT_EQ(22, DofH.getVariable(3).numDofs());
   EXPECT_EQ(12, DofH.getVariable(4).numDofs());
 
-  EXPECT_EQ(79, DofH.numDofs());
+  EXPECT_EQ(78, DofH.numDofs());
   
   
   // .getVariable(0)
@@ -172,10 +172,9 @@ TEST(AssignsDofsTest, Tri6Test)
   DofH.addVariable("bar",       0,     0,     1,     0); // 25
   DofH.addVariable("moo",       0,     0,     0,     1); // 14
   
+  DofH.SetUp();
   
   EXPECT_EQ(87, DofH.numDofs());
-  
-  DofH.SetUp();
   
   MeshTools::removeCell(mesh->getCell(2), mesh);
   MeshTools::removeCell(mesh->getCell(3), mesh);
@@ -185,11 +184,11 @@ TEST(AssignsDofsTest, Tri6Test)
   //11x3 + 22 + 12 + 12
   EXPECT_EQ(11, DofH.getVariable(0).numDofs());
   EXPECT_EQ(22, DofH.getVariable(1).numDofs());
-  EXPECT_EQ(12, DofH.getVariable(2).numDofs());
+  EXPECT_EQ(11, DofH.getVariable(2).numDofs());
   EXPECT_EQ(22, DofH.getVariable(3).numDofs());
   EXPECT_EQ(12, DofH.getVariable(4).numDofs());
 
-  EXPECT_EQ(79, DofH.numDofs());
+  EXPECT_EQ(78, DofH.numDofs());
   
   
   // .getVariable(0)
@@ -495,16 +494,166 @@ TEST(BubbleTet4Test, Tet4Test)
 }
 
 
+/*
+ * 
+ * 
+ *  TAGS TEST
+ * 
+ * 
+ */ 
+
+
+
+TEST(TagsDofsTest, Tri3Test)
+{
+  MeshIoMsh msh_reader;
+  MeshIoVtk vtk_printer;
+  Mesh *mesh = NULL;  
+
+  ECellType cell_t     = TRIANGLE3;
+  const char* mesh_in  = "meshes/simptri3.msh";  
+  //const char* mesh_out = "meshes/out/dof_tri3.vtk";
+
+  mesh = Mesh::create(cell_t);
+  msh_reader.readFileMsh(mesh_in, mesh);
+  
+  int ntags=1;
+  int tags=1;
+  
+  DofHandler DofH(mesh);
+  //                         ndpv,  ndpr,  ndpf,  ndpc
+  DofH.addVariable("altura",    1,     0,     0,     0, ntags, &tags); // 4
+  DofH.addVariable("vetor",     2,     0,     0,     0, ntags, &tags); // 8
+  DofH.addVariable("foo",       0,     1,     0,     0, ntags, &tags); // 4
+  DofH.addVariable("bar",       0,     0,     1,     0, ntags, &tags); // 4
+  DofH.addVariable("moo",       0,     0,     0,     1, ntags, &tags); // 0
+  
+  
+  DofH.SetUp();
+  
+  EXPECT_EQ(20, DofH.numDofs());
+  
+  
+  MeshTools::removeCell(mesh->getCell(2), mesh);
+  MeshTools::removeCell(mesh->getCell(3), mesh);
+  
+  DofH.SetUp();
+  
+  // 15
+  EXPECT_EQ( 3, DofH.getVariable(0).numDofs());
+  EXPECT_EQ( 6, DofH.getVariable(1).numDofs());
+  EXPECT_EQ( 3, DofH.getVariable(2).numDofs());
+  EXPECT_EQ( 3, DofH.getVariable(3).numDofs());
+  EXPECT_EQ( 0, DofH.getVariable(4).numDofs());
+
+  EXPECT_EQ(15, DofH.numDofs());
+  
+  
+  // .getVariable(0)
+  int *dat = DofH.data();
+
+  int counter = 0;
+  for (int i = 0; i < DofH.totalSize(); ++i)
+  {
+    if ((*dat) >= 0)
+      EXPECT_EQ(counter++, (*dat));
+      
+    //std::cout << (*dat++) << std::endl;
+  }
+  
+  
+  delete mesh;
+}
 
 
 
 
+TEST(TagsDofsTest, Tet10Test)
+{
+  MeshIoMsh msh_reader;
+  MeshIoVtk vtk_printer;
+  Mesh *mesh = NULL;  
 
+  ECellType cell_t     = TETRAHEDRON10;
+  const char* mesh_in  = "meshes/simptet10.msh";  
+  const char* mesh_out = "meshes/out/dof_tet10.vtk";
 
+  mesh = Mesh::create(cell_t);
+  msh_reader.readFileMsh(mesh_in, mesh);
 
+  
+  int ntags=1;
+  int tags=1;
+  
+  DofHandler DofH(mesh);
+  //                         ndpv,  ndpr,  ndpf,  ndpc
+  DofH.addVariable("numero",    1,     0,     0,     0, ntags, &tags); //  9
+  DofH.addVariable("foo",       0,     1,     0,     0, ntags, &tags); // 26
+  DofH.addVariable("bar",       0,     0,     1,     0, ntags, &tags); // 30
+  DofH.addVariable("moo",       0,     0,     0,     2, ntags, &tags); // 24
 
-
-
+  DofH.SetUp();
+  
+  EXPECT_EQ( 9, DofH.getVariable(0).numDofs());
+  EXPECT_EQ(26, DofH.getVariable(1).numDofs());
+  EXPECT_EQ(30, DofH.getVariable(2).numDofs());
+  EXPECT_EQ(24, DofH.getVariable(3).numDofs());
+  
+  EXPECT_EQ(89, DofH.numDofs());
+  
+  //DofH.SetUp();
+  //
+  MeshTools::removeCell(mesh->getCell(2), mesh);
+  MeshTools::removeCell(mesh->getCell(3), mesh);
+  //
+  DofH.SetUp();
+  //
+  
+  EXPECT_EQ( 9, DofH.getVariable(0).numDofs());
+  EXPECT_EQ(26, DofH.getVariable(1).numDofs());
+  EXPECT_EQ(28, DofH.getVariable(2).numDofs());
+  EXPECT_EQ(20, DofH.getVariable(3).numDofs());
+  ////
+  EXPECT_EQ(83, DofH.numDofs());
+  //
+  //
+  //// .getVariable(0)
+  //int *dat = DofH.data();
+  //
+  //int counter = 0;
+  //for (int i = 0; i < DofH.totalSize(); ++i)
+  //{
+  //  if ((*dat) >= 0)
+  //    EXPECT_EQ(counter++, (*dat));
+  //    
+  //}
+  //
+  vtk_printer.attachMesh(mesh);
+  vtk_printer.writeVtk(mesh_out);
+  //
+  std::vector<int> dados(DofH.numDofs());
+  
+  point_iterator pt = mesh->pointBegin();
+  point_iterator pt_end = mesh->pointEnd();
+  
+  // for variable "0" ("numero")
+  for (; pt != pt_end; ++pt)
+  {
+    if (!mesh->isVertex(&*pt))
+      continue;
+      
+    int dof(0); // "numero"
+    DofH.getVariable(0).getVertexDofs(&dof, &*pt);
+    dados[dof] = mesh->getNodeContigId(mesh->getPointId(&*pt));
+    //dados[dof] = 0;
+  }
+  
+  MyGetDataVtkTri6Test get_data(dados.data(), mesh, &DofH);
+  
+  vtk_printer.addNodeIntVtk(DofH.getVariable(0).getName(), get_data);
+  
+  delete mesh;
+}
 
 
 

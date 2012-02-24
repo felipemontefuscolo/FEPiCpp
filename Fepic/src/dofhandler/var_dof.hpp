@@ -46,8 +46,8 @@ class VarDofs
   void setMesh(Mesh *m) {_mesh_ptr = m;}
   void setInitialDofId(int fid) {_initial_dof_id = fid;}
   void setInitialDofAddress(int* a) {_initial_dof_address = a;}
-  void setType(ShapeFunction * sf, int dim=1);
-  void setType(int ndpv, int ndpr, int ndpf, int ndpc);
+  void setType(ShapeFunction * sf, int dim=1, int ntags=0, int const*tags=NULL);
+  void setType(int ndpv, int ndpr, int ndpf, int ndpc, int ntags=0, int const*tags=NULL);
   void getDivisions(int*& vertices_beg, int*& corners_beg, int*& facets_beg, int*& cells_beg) const;
 
   void setUp();
@@ -55,16 +55,25 @@ class VarDofs
 
 public:
 
-  VarDofs(const char* name, Mesh * m=NULL, int ndpv=0, int ndpr=0, int ndpf=0, int ndpc=0, int fdi=0, int* a=NULL)
+  VarDofs(const char* name, Mesh * m=NULL, int ndpv=0, int ndpr=0, int ndpf=0, int ndpc=0, int fdi=0, int* a=NULL, int ntags=0, int const*tags=NULL)
     : _name(name), _mesh_ptr(m), _vertices_dofs(NULL,0,0), _corners_dofs(NULL,0,0), _facets_dofs(NULL,0,0), _cells_dofs(NULL,0,0)
   {
     _n_dof_within_vertice = ndpv; // interior
     _n_dof_within_corner = ndpr;  // interior
     _n_dof_within_facet = ndpf;   // interior
     _n_dof_within_cell = ndpc;    // interior
+    _n_dofs = 0;
     _initial_dof_id = fdi;
     _initial_dof_address = a;
 
+    if (ntags>0)
+    {
+      FEPIC_CHECK(tags!=NULL, "tags NULL pointer", std::runtime_error);
+      _considered_tags.resize(ntags);
+    }
+    for (int i = 0; i < ntags; ++i)
+      _considered_tags[i] = tags[i];
+    
   }
 
   // users
@@ -118,15 +127,18 @@ protected:
   int         _n_dof_within_corner;
   int         _n_dof_within_facet;
   int         _n_dof_within_cell;
+  int         _n_dofs;
   int         _initial_dof_id;
   int*        _initial_dof_address;
   float       _grow_factor;
+  
+  std::vector<int> _considered_tags; /* if _considered_tags.size()==0, then all tags are considered. */
 
   Container _vertices_dofs;  // 0
   Container _corners_dofs;   // 1
   Container _facets_dofs;    // 2
   Container _cells_dofs;     // 3
-
+  
 
 };
 

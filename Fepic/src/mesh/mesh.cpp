@@ -1323,13 +1323,19 @@ bool SMesh<CT,SD>::inSingleCell(Point const* p) const
 template<class CT, int SD>
 bool SMesh<CT,SD>::inSingleCell(Corner const* r) const
 {
-  if (CT::dim < 3)
+  if (CT::dim < 2)
     return false;
   
   int iC  = static_cast<CornerT const*>(r)->getIncidCell();
   int eiC = static_cast<CornerT const*>(r)->getPosition();  
-  
+
   CT const* cell = MeshT::getCell(iC);
+
+  if (CT::dim==2)
+  {
+    Point const* p = this->getNode(cell->getNodeId(eiC));
+    return this->inSingleCell(p);
+  }
 
   int counter = 0;
   for (int fe = 0; fe < 2; ++fe) // for each incident facet

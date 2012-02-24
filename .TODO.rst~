@@ -18,3 +18,8 @@ TODO
 
 
 
+
+* necessário arrumar inBoundary(Corner*);
+* fazer test case para inBoundary();
+
+
