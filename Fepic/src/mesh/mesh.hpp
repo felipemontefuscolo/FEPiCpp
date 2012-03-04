@@ -190,6 +190,7 @@ public:
   virtual int* nodeStar(int C, int nC, int *iCs, int *niCs) const = 0;
   virtual int* nodeStar(Point const* point, int *iCs, int *niCs) const = 0;
   virtual int* connectedVtcs(Point const* p, int *iVs) const = 0;
+  virtual int* connectedVtcs(Point const* p, int *iVs, int *iCs, int *viCs) const = 0;
   virtual int* connectedNodes(Point const* p, int *iVs) const = 0;
   
   void qBuildAdjacency(bool b)
@@ -443,6 +444,16 @@ public:
    *  @return a pointer to the element following the end of the sequence iVs.
    */ 
   int* connectedVtcs(Point const* p, int *iVs) const;
+
+  /** @brief Returns all vertices that are connected to a vertex, as well the incident cells.
+   *  @param[in] p a pointer to the vertex.
+   *  @param[out] iVs vector with the connected vertices.
+   *  @param[out] iCs vector with the incident cells.
+   *  @param[out] viCs vector with the p local-ids in each cell.
+   *  @return a pointer to the element following the end of the sequence iVs.
+   *  @note iVs[k] = getCell(iCd[k])->getNodeId(viCs[k]);
+   */
+  int* connectedVtcs(Point const* p, int *iVs, int *iCs, int *viCs) const;
 
   /** @brief Returns all nodes that are connected to a node.
    *  @param[in] p a pointer to the node.

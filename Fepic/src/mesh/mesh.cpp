@@ -568,6 +568,41 @@ int* SMesh<CT,SD>::connectedVtcs(Point const* p, int *iVs) const
 }
 
 
+/** @brief Returns all vertices that are connected to a vertex, as well the incident cells.
+ *  @param[in] p a pointer to the vertex.
+ *  @param[out] iVs vector with the connected vertices.
+ *  @param[out] iCs vector with the incident cells.
+ *  @param[out] viCs vector with the p local-ids in each cell.
+ *  @return a pointer to the element following the end of the sequence iVs.
+ *  @note iVs[k] = getCell(iCd[k])->getNodeId(viCs[k]);
+ */
+template<class CT, int SD>
+int* SMesh<CT,SD>::connectedVtcs(Point const* p, int *iVs, int *iCs, int *viCs) const
+{
+  CellT const* cell;
+  int id;
+  int const* iVs_beg = iVs;
+  //int iCs[FEPIC_MAX_ICELLS];
+  //int viCs[FEPIC_MAX_ICELLS];
+
+  const int n = static_cast<int>(this->MeshT::vertexStar(p, iCs, viCs) - iCs);
+
+  for (int ic = 0; ic < n; ++ic)
+  {
+    cell = this->MeshT::getCell(iCs[ic]);
+    for (int j = 0; j < CellT::n_vertices; ++j)
+      if (j != viCs[ic])
+      {
+        id = cell->CellT::getNodeId(j);
+        if (!checkValue(iVs_beg, static_cast<int const*>(iVs), id))
+          *iVs++ = id;
+      }
+  }
+  return iVs;
+}
+
+
+
 /** @brief Returns all nodes that are connected to a node.
  *  @param[in] p a pointer to the node.
  *  @param[out] iNs vector with the connected nodes.
