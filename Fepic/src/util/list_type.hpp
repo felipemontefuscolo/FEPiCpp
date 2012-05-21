@@ -216,7 +216,7 @@ public:
   void resize(size_type s)
   {
     if (s > _data.size())
-      _impl_reserve(_data, (size_type)s*(1. + _grow_factor));
+      _impl_reserve(_data, static_cast<size_type>( s*(1. + _grow_factor) ) );
     _data.resize(s);
     _update_member_beg();
   }

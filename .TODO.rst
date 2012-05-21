@@ -27,3 +27,6 @@ TODO
 *fazer test case para dof_handler com seletor de tags em 3d
 
 
+*ideia: criar a possibilidade de extrair uma malha de outra a partir de tags.
+
+

@@ -192,6 +192,8 @@ public:
   virtual int* connectedVtcs(Point const* p, int *iVs) const = 0;
   virtual int* connectedVtcs(Point const* p, int *iVs, int *iCs, int *viCs) const = 0;
   virtual int* connectedNodes(Point const* p, int *iVs) const = 0;
+  virtual int* incidentFacets(Point const* p, int *iFs, int *viFs) const = 0;
+  virtual int* incidentFacets(int nodeid, int *iFs, int *viFs) const = 0;
   
   void qBuildAdjacency(bool b)
   {
@@ -462,6 +464,69 @@ public:
    */ 
   int* connectedNodes(Point const* p, int *iNs) const;
 
+  /** INTERNAL USE ONLY\n
+   *  @brief Returns all incident facets to a vertex.
+   *  @param[in] p a pointer to the vertex.
+   *  @param[out] iFs vector to put the incident facets.
+   *  @param[out] viFs vertex's local ids in the incident facets.
+   *  @return a pointer to the element following the end of the sequence iFs.
+   *  @note the vectors iCs and viCs must have enough space to store the data.
+   *  @note does not support high order nodes, only vertices.
+   */
+  template<int celldim>
+  int* incidentFacets_Template(Point const* p, int *iFs, int *viFs, typename EnableIf<(celldim==1)>::type* = NULL) const;
+
+  /** INTERNAL USE ONLY\n
+   *  @brief Returns all incident facets to a vertex.
+   *  @param[in] p a pointer to the vertex.
+   *  @param[out] iFs vector to put the incident facets.
+   *  @param[out] viFs vertex's local ids in the incident facets.
+   *  @return a pointer to the element following the end of the sequence iFs.
+   *  @note the vectors iCs and viCs must have enough space to store the data.
+   *  @note does not support high order nodes, only vertices.
+   */
+  template<int celldim>
+  int* incidentFacets_Template(Point const* p, int *iFs, int *viFs, typename EnableIf<(celldim==2)>::type* = NULL) const;
+  
+  /** INTERNAL USE ONLY\n
+   *  @brief Returns all incident facets to a vertex.
+   *  @param[in] p a pointer to the vertex.
+   *  @param[out] iFs vector to put the incident facets.
+   *  @param[out] viFs vertex's local ids in the incident facets.
+   *  @return a pointer to the element following the end of the sequence iFs.
+   *  @note the vectors iCs and viCs must have enough space to store the data.
+   *  @note does not support high order nodes, only vertices.
+   */
+  template<int celldim>
+  int* incidentFacets_Template(Point const* p, int *iFs, int *viFs, typename EnableIf<(celldim==3)>::type* = NULL) const;
+
+  /** @brief Returns all incident facets to a vertex.
+   *  @param[in] p a pointer to the vertex.
+   *  @param[out] iFs vector to put the incident facets.
+   *  @param[out] viFs vertex's local ids in the incident facets.
+   *  @return a pointer to the element following the end of the sequence iFs.
+   *  @note the vectors iCs and viCs must have enough space to store the data.
+   *  @note does not support high order nodes, only vertices.
+   */
+  int* incidentFacets(Point const* p, int *iFs, int *viFs) const
+  {
+    FEPIC_CHECK(this->MeshT::isVertex(p), "invalid C or vC", std::invalid_argument);
+    return this->MeshT::incidentFacets_Template<CellT::dim>(p, iFs, viFs);
+  }
+
+  /** @brief Returns all incident facets to a node.
+   *  @param[in] nodeid id oh the node.
+   *  @param[out] iFs vector to put the incident facets.
+   *  @param[out] viFs vertex's local ids in the incident facets.
+   *  @return a pointer to the element following the end of the sequence iFs.
+   *  @note the vectors iCs and viCs must have enough space to store the data.
+   *  @note does not support high order nodes, only vertices.
+   */
+  int* incidentFacets(int nodeid, int *iFs, int *viFs) const
+  {
+    FEPIC_CHECK(this->MeshT::isVertex(this->MeshT::getNode(nodeid)), "invalid C or vC", std::invalid_argument);
+    return this->MeshT::incidentFacets_Template<CellT::dim>(this->MeshT::getNode(nodeid), iFs, viFs);
+  }
 
   // ---------------------------------------------------- EDGE STAR ---------------------------------------------------
 

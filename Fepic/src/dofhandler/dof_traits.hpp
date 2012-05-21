@@ -58,7 +58,7 @@ struct _DofTraits<Shape>                                \
 
 
 // not account DOFs for twice
-// n contabilize os graus de liberdade duas vezes
+// nao contabiliza os graus de liberdade duas vezes
 //                        Shape            , ndpv, ndpr, ndpf, ndpc, nv, nr, nf, di)
 /* 1*/FEP_FORM_DOF_TRAITS(Shape_CONST      ,    0,    0,    0,    1,  0,  0,  0,  0);
 /* 2*/FEP_FORM_DOF_TRAITS(Shape_EDGE_P1    ,    1,    0,    0,    0,  2,  0,  1,  1);
