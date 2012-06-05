@@ -342,6 +342,8 @@ int* SMesh<CT,SD>::vertexStar_Template(int C, int vC, int *iCs, int *viCs, typen
     //printf("DEBUG     %d, %d de %d, %d\n",D, vD, C, vC);
   }
 
+  *iCs = -1;
+  *viCs = -1;
   return iCs;
 }
 
@@ -431,6 +433,8 @@ int* SMesh<CT,SD>::vertexStar_Template(int C, int vC, int *iCs, int *viCs, typen
       break;
   }
 
+  *iCs_end=-1;
+  *viCs_end=-1;
   return iCs_end;
 }
 
@@ -564,6 +568,8 @@ int* SMesh<CT,SD>::connectedVtcs(Point const* p, int *iVs) const
           *iVs++ = id;
       }
   }
+  
+  *iVs = -1;
   return iVs;
 }
 
@@ -598,6 +604,8 @@ int* SMesh<CT,SD>::connectedVtcs(Point const* p, int *iVs, int *iCs, int *viCs) 
           *iVs++ = id;
       }
   }
+  
+  *iVs = -1;
   return iVs;
 }
 
@@ -630,8 +638,105 @@ int* SMesh<CT,SD>::connectedNodes(Point const* p, int *iNs) const
           *iNs++ = id;
       }
   }
+  
+  *iNs = -1;
   return iNs;
 }
+
+// ----------------------------------------------------- INCID FACETS -----------------------------------------------
+
+// TODO: implementar versão para 1d
+template<class CT, int SD>
+template<int celldim>
+int* SMesh<CT,SD>::incidentFacets_Template(Point const* p, int *iFs, int *viFs, typename EnableIf<(celldim==1)>::type* ) const
+{
+  // do nothing
+  // annoying compiler
+  p++; iFs++; viFs++;
+  printf("not implemented yet\n");
+  throw;
+  return iFs;
+}
+
+template<class CT, int SD>
+template<int celldim>
+int* SMesh<CT,SD>::incidentFacets_Template(Point const* p, int *iFs, int *viFs, typename EnableIf<(celldim==2)>::type* ) const
+{
+  //FEPIC_CHECK(unsigned(vC)<CT::n_vertices && C>=0, "invalid C or vC", std::invalid_argument);
+  //vertexStar_Template(int C, int vC, int *iFs, int *viFs
+
+  CT const* cell;
+  int C = static_cast<PointT const*>(p)->getIncidCell();
+  int vC= static_cast<PointT const*>(p)->getPosition();
+  int g, D=C, vD=vC, q=0;
+  int fnodes[32];
+  int const nodeid = this->MeshT::getPointId(p);
+
+  if (!this->MeshT::isVertex(p))
+  {
+    cell = this->MeshT::getCell(D);
+    g = (CT::n_facets + vD -q)%CT::n_facets;
+    *iFs++ = cell->CT::getFacetId(g);
+    this->MeshT::getFacetNodesId(cell->CT::getFacetId(g),fnodes);
+    if (nodeid == fnodes[0])
+      *viFs++ = 0;
+    else if (nodeid == fnodes[1])
+      *viFs++ = 1;
+    else
+    {
+      FEPIC_CHECK(false, "implementation error, please contact any developer", std::runtime_error);
+    }    
+  }
+  else
+  {
+    for (;;)
+    {
+      cell = this->MeshT::getCell(D);
+      g = (CT::n_facets + vD -q)%CT::n_facets;
+      D = cell->CT::getIncidCell(g);
+      *iFs++ = cell->CT::getFacetId(g);
+      this->MeshT::getFacetNodesId(cell->CT::getFacetId(g),fnodes);
+      if (nodeid == fnodes[0])
+        *viFs++ = 0;
+      else if (nodeid == fnodes[1])
+        *viFs++ = 1;
+      else
+      {
+        FEPIC_CHECK(false, "implementation error, please contact any developer", std::runtime_error);
+      }
+      if (D<0)
+      {
+        if(q) break;
+        D = C;
+        vD = vC;
+        q = 1;
+        continue;
+      }
+      if (D==C)
+        break;
+      g = cell->CT::getIncidCellPos(g);
+      vD = (g + 1 - q) % CT::n_facets;
+      //printf("DEBUG     %d, %d de %d, %d\n",D, vD, C, vC);
+    }
+  }
+  *iFs = -1;
+  *viFs = -1;
+  return iFs;
+}
+
+
+template<class CT, int SD>
+template<int celldim>
+int* SMesh<CT,SD>::incidentFacets_Template(Point const* p, int *iFs, int *viFs, typename EnableIf<(celldim==3)>::type* ) const
+{
+  // do nothing
+  // annoying compiler
+  p++; iFs++; viFs++;
+  printf("not implemented yet\n");
+  throw;
+  return iFs;
+}
+
 
 // ---------------------------------------------------- EDGE STAR ---------------------------------------------------
 
@@ -686,6 +791,8 @@ int* SMesh<CT,SD>::edgeStar_Template(int C, int eC, int *iCs, int *eiCs, typenam
 
   }
 
+  *iCs = -1;
+  *eiCs = -1;
   return iCs;
 }
 
@@ -705,6 +812,8 @@ int* SMesh<CT,SD>::edgeStar_Template(int C, int eC, int *iCs, int *eiCs, typenam
     *eiCs++ = this->MeshT::getCell(C)->CT::getIncidCellPos(eC);
   }
 
+  *iCs = -1;
+  *eiCs = -1;
   return iCs;
 }
 

@@ -1250,7 +1250,56 @@ TEST(SingleCellTestTet10, SingleSingMesh)
 
 
 
+TEST(IncidentFacetsTestTri6, IncidentFacets)
+{
 
+  MeshIoMsh msh_reader;
+  Mesh *mesh;  
+
+  ECellType cell_t     = TRIANGLE6;
+  const char* mesh_in  = "meshes/simptri6.msh";
+  
+  mesh = Mesh::create(cell_t);
+  msh_reader.readFileMsh(mesh_in, mesh);
+  
+  int iFs[32], viFs[32];
+  int *iFs_end;
+  int fnodes[32];
+  
+  // num incident facets
+  int const nif[] = {3,3,3,3,4,0,0,4,0,0,4,0,0,4,0,0,5,6,5,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+
+  for (int i = 0; i < 37; ++i)
+  {
+    if (!mesh->isVertex(mesh->getNode(i)))
+      continue;
+    iFs_end = mesh->incidentFacets(mesh->getNode(i), iFs, viFs);
+    
+    EXPECT_EQ(nif[i], iFs_end - iFs) << "at node i = " << i << std::endl;
+    
+    for (int *it = iFs; it != iFs_end; ++it)
+    {
+      EXPECT_TRUE(*it>=0 && *it < 25) << "at node i = " << i << std::endl;
+     
+      for (int *at = iFs; at != iFs_end ; ++at)
+      {
+        if (at != it)
+          EXPECT_TRUE(*at != *it) << "at node i = " << i << std::endl;
+      }
+      
+      mesh->getFacetNodesId(*it,fnodes);
+      
+      EXPECT_TRUE(fnodes[viFs[it-iFs]] == i) << "at node i = " << i << std::endl;
+    }
+  }
+
+  
+
+  delete mesh;  
+  
+}
+             
+  
 
 
 

@@ -99,7 +99,7 @@ void DofHandler::SetUp()
 int DofHandler::numDofs() const
 {
   int total = 0;
-  for (unsigned i = 0; i < _vars.size(); ++i)
+  for (unsigned i = 0; i < _vars.size(); ++i) 
   {
     total += _vars[i].numDofs();
   }
