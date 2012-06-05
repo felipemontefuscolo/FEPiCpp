@@ -29,7 +29,7 @@
 
 #define FEP_HAS_OMPTL 1
 #define FEP_HAS_METIS 0
-#define FEP_HAS_BOOST 1
+#define FEP_HAS_BOOST 0
 
 #define FEPIC_DEBUG_ON
 
