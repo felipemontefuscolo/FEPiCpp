@@ -26,7 +26,8 @@ CPPFLAGS += -I$(GTEST_DIR)/include $(FEP_INCLUDE)
 CXXFLAGS += -g -Wall -Wextra
 
 LDFLAGS	= -L${FEP_LIBS_DIR} -lfepic
-LDFLAGS+= -fopenmp -lpthread -L$(METIS_LD) -lmetis
+LDFLAGS+= -fopenmp -lpthread 
+#                            -L$(METIS_LD) -lmetis
 
 # All Google Test headers.  Usually you shouldn't change this
 # definition.

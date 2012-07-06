@@ -6,11 +6,11 @@ METIS_LD  ?= $(FEPIC_DIR)/contrib/metis
 EIGEN_DIR ?= $(FEPIC_DIR)/contrib/eigen
 LOKI_DIR  ?= $(FEPIC_DIR)/contrib/Loki
 OMPTL_DIR ?= $(FEPIC_DIR)/contrib/omptl
-#BOOST_DIR ?= $(FEPIC_DIR)/contrib/boost
+BOOST_DIR ?= $(FEPIC_DIR)/contrib/boost
 
 FEP_INCLUDE = -I$(FEPIC_DIR) -I$(EIGEN_DIR) -I$(METIS_DIR)/include -I$(LOKI_DIR) -I$(OMPTL_DIR) -I$(BOOST_DIR)
 
-FEP_LIBS_DIR = $(FEPIC_DIR)/Fepic/libs
+FEP_LIBS_DIR = $(FEPIC_DIR)/Fepic/slibs
 
 FEP_LDFLAGS = -fopenmp -L$(METIS_LD) -lmetis
 FEP_CXXFLAGS  = -g -Wall -Wextra $(FEP_INCLUDE)

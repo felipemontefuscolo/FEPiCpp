@@ -27,7 +27,7 @@
 #  define FEP_HAS_OPENMP 1
 #endif
 
-#define FEP_HAS_OMPTL 1
+#define FEP_HAS_OMPTL 0
 #define FEP_HAS_METIS 0
 #define FEP_HAS_BOOST 0
 

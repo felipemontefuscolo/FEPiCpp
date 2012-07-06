@@ -13,7 +13,8 @@
 #if (FEP_HAS_OMPTL)
   #include <omptl/omptl_algorithm>
 #else
-  using namespace omptl = std;
+  //using namespace omptl = std;
+  namespace omptl = std;
 #endif
 #ifdef __GLIBCXX__
 #  include <tr1/array>

@@ -1,6 +1,6 @@
 include $(FEPIC_DIR)/conf/variables
 
-SUBDIRS = custom_eigen mesh mypetsc quadrature shapefunctions util dofhandler
+SUBDIRS = custom_eigen mesh mypetsc mesh_tools quadrature shapefunctions util dofhandler
 
 .PHONY: subdirs $(SUBDIRS)
 
