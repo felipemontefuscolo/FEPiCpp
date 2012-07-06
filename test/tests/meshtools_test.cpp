@@ -120,6 +120,9 @@ void checkConsistencyTri(Mesh *mesh)
   
 }
 
+
+
+
 TEST(searchConvexPointTest, Tri3Test)
 {
   MeshIoMsh msh_reader;
@@ -250,7 +253,7 @@ TEST(CreatePathTest, Tri3Test)
                 << "\t slices= "<<slices[3*c+0]<<" "<<slices[3*c+1]<<" "<<slices[3*c+2]<<"\n"
                 << "\t pos= " << pos << " " << " f=" << f << " my=" << myid << " oid=" << oc_id << endl;
       
-      
+    
           
     }
     
@@ -280,7 +283,7 @@ class SomeFunc2
   }
   static double Y()
   {
-    return 0.5;
+    return 0.48;
   }
 };
 
@@ -350,6 +353,31 @@ TEST(CreatePathTest2, Tri3Test)
   
   delete mesh;
 }
+
+TEST(cutConvexPartTest, Tri3Test)
+{
+  MeshIoMsh msh_reader;
+  MeshIoVtk vtk_printer;
+  Mesh *mesh = NULL;  
+
+  ECellType cell_t      = TRIANGLE3;
+  const char* mesh_in  = "meshes/uni_tri.msh";
+  //const char* mesh_out = "meshes/uni_tri.vtk";
+  
+  mesh = Mesh::create(cell_t);
+  msh_reader.readFileMsh(mesh_in, mesh);
+  
+  Real x0[] = {SomeFunc2::Y(), SomeFunc2::Y()};
+  
+  Cell *c0 = mesh->getCell(246);
+  
+  MeshToolsTri::cutConvexPart(x0, c0, SomeFunc2(), mesh);
+
+  
+  delete mesh;
+}
+
+
 
 
 
