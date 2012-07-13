@@ -3,11 +3,14 @@
 # ----------------------------------------------#
 # lembre-se que a opção "-pg" deve ser colocado na hora de linkar e compilar
 
+include $(FEPIC_DIR)/conf/variables
+
 CXX	    = g++
 #CFLAGS	= -Wall -Winline -g -DEIGEN_NO_DEBUG -O3 -msse2
 CFLAGS	= -Wall -Wextra -g
 LD	    = $(CXX)
-LDFLAGS	= -L$(FEPIC_DIR)/Fepic/libs -lfepic -fopenmp
+LDFLAGS	= -L${FEP_LIBS_DIR} -lfepic -fopenmp
+#LDFLAGS	=
 RM	    = rm
 INCPATH = -I$(EIGEN_DIR) -I$(FEPIC_DIR)
 
@@ -27,7 +30,7 @@ $(OBJS) :
 
 # colocar -pg aqui também
 $(EXE) : $(OBJS)
-	$(LD) $(CFLAGS) -o $@ $(OBJS) -static $(LDFLAGS)
+	$(LD) $(CFLAGS) -o $@ $(OBJS) $(LDFLAGS)
 
 clean :
 	-$(RM) -f *.o

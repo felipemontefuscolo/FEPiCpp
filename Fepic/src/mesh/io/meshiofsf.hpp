@@ -244,7 +244,7 @@ void _MeshIoFsf<_Traits>::readFileFsf(const char* filename)
       File >> incid_cell >> position >> anchor;
       THIS->_cellL[i].getFacet(b)->setIncidCell(incid_cell);
       THIS->_cellL[i].getFacet(b)->setPosition(position);
-      THIS->_cellL[i].getFacet(b)->setAnchor(anchor);
+      //THIS->_cellL[i].getFacet(b)->setAnchor(anchor);
     }
     
   }
@@ -270,7 +270,7 @@ void _MeshIoFsf<_Traits>::readFileFsf(const char* filename)
     File >> incid_cell >> position >> anchor >> tag >> flags;
     THIS->_facetL[i].setIncidCell(incid_cell);
     THIS->_facetL[i].setPosition(position);
-    THIS->_facetL[i].setAnchor(anchor);
+    //THIS->_facetL[i].setAnchor(anchor);
     THIS->_facetL[i].setTag(tag);
     THIS->_facetL[i].setFlags(flags);
   }

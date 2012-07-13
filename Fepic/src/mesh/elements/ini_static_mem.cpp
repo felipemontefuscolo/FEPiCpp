@@ -1,4 +1,4 @@
-#include "../cellcore.hpp"
+#include "cellcore.hpp"
 #include "elements.hpp"
 
 /*       NOTATION

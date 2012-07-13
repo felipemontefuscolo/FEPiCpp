@@ -22,21 +22,31 @@
 #ifndef FEPIC_FACET_HPP
 #define FEPIC_FACET_HPP
 
-#include "implicit.hpp"
+#include "cell_element.hpp"
 #include "../labelable.hpp"
 
-class Facet : public ImplicitElement
+class Facet : public CellElement
 {
 public:
   Facet(int ic,
         int pos,
-        int anch,
         int tag,
-        int flags) : ImplicitElement(ic,pos,anch,tag,flags)
+        int flags,
+        int bid=-1) : CellElement(ic,pos,tag,flags), _bound_comp_id(bid)
   {}
   
-  Facet() : ImplicitElement() {}
+  void setBoundaryComponentId(int id)
+  {
+    _bound_comp_id=id;
+  }
+  int getBoundaryComponentId() const
+  {
+    return _bound_comp_id;
+  }
   
+  Facet() : CellElement(), _bound_comp_id(-1) {}
+private:
+  int _bound_comp_id;
 };
 
 #endif

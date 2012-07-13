@@ -2,6 +2,112 @@
 #include <cstdio>
 #include "../../util/assert.hpp"
 
+
+
+ECellType MeshIoMsh::identifiesMshMeshType(const char* filename, int &space_dim) const
+{
+  /*
+   * O que é feito:
+   *
+   * 1) primeiramente lê-se apenas as células (conectividade clássica);
+   * 2) depois são construídos as facet-edges e(ou) facet-faces, lendo-se
+   *    os elementos de dimensões menores.
+   *
+   * */
+
+  FILE * file_ptr = fopen(filename, "r");
+
+  FEPIC_ASSERT(file_ptr, "can not find mesh file", std::invalid_argument);
+
+  double  coord[3];
+  int     type_tag;
+  char    buffer[256];
+
+  long    nodes_file_pos;  // $Nodes
+  long    elems_file_pos;  // $Elements
+
+  // nós
+  nodes_file_pos = find_keyword("$Nodes", 6, file_ptr);
+  //nodes_file_pos++;  // only to avoid gcc warning: variable ‘nodes_file_pos’ set but not used [-Wunused-but-set-variable]
+
+  FEPIC_ASSERT(nodes_file_pos>0, "invalid file format", std::invalid_argument);
+
+  space_dim = 1;
+
+  int num_pts(0);
+  int node_number(0);
+  fscanf(file_ptr, "%d", &num_pts);
+
+  fgets(buffer, sizeof(buffer), file_ptr); // escapa do \n
+  for (int i=0; i< num_pts; ++i)
+  {
+    fgets(buffer, sizeof(buffer), file_ptr);
+    sscanf(buffer, "%d %lf %lf %lf", &node_number, &coord[0], &coord[1], &coord[2]);
+    FEPIC_ASSERT(node_number==i+1, "wrong file format", std::invalid_argument);
+    if (coord[1] != 0)
+      space_dim = 2;
+    if (coord[2] != 0)
+    {
+      space_dim = 3;
+      break;
+    }
+  }
+
+  // contagem de elementos e alocação
+  elems_file_pos = find_keyword("$Elements", 9, file_ptr);
+
+  FEPIC_ASSERT(elems_file_pos>0, "invalid file format", std::invalid_argument);
+
+//  int num_cells=0;
+  int num_elms;
+
+  fscanf(file_ptr, "%d", &num_elms);
+
+  /* ---------------------------------------
+   * Detectando a ordem da malha, verificando sequencia dos elementos,
+   * e contando o número de células.
+   * --------------------------------------- */
+//  bool wrong_file_err=true;
+  int  elem_number, elm_dim, num_tags, physical;
+  int current_elm_dim = 0;
+  ECellType current_elm_type = UNDEFINED_CELLT;
+  fgets(buffer, sizeof(buffer), file_ptr); // escapa do \n
+  for (int k=0; k < num_elms; ++k)
+  {
+
+    fscanf(file_ptr, "%d %d %d %d", &elem_number, &type_tag, &num_tags, &physical);
+
+    //// sincronização
+    FEPIC_ASSERT(elem_number==k+1, "invalid file format", std::invalid_argument);
+
+    for (int j=1; j<num_tags; ++j)
+    {
+      fscanf(file_ptr, "%s", buffer);
+    }
+
+    elm_dim = dimForMshTag(EMshTag(type_tag));
+
+    if(elm_dim > current_elm_dim)
+    {
+      current_elm_type = mshTag2ctype(EMshTag(type_tag));
+      current_elm_dim = elm_dim;
+      if (elm_dim==3)
+        break;
+    }
+  
+    fgets(buffer, sizeof(buffer), file_ptr);
+
+  }
+
+  fclose(file_ptr);
+  
+  return current_elm_type;
+
+}
+
+
+
+
 /* A malha deve estar alocada.
  * */
 void MeshIoMsh::readFileMsh(const char* filename, Mesh * mesh)
@@ -239,8 +345,15 @@ void MeshIoMsh::readFileMsh(const char* filename, Mesh * mesh)
           mesh->getNode(nodes[i])->setTag(physical);
       }
       //std::copy( nodes, nodes + n_vertices_per_facet, vtcs );
-      facet_id = mesh->getFacetIdFromVertices(nodes);
-      mesh->getFacet(facet_id)->setTag(physical); //std::cout << (++TESTE) << std::endl;
+      if (mesh->getFacetIdFromVertices(nodes, facet_id))
+        mesh->getFacet(abs(facet_id))->setTag(physical); //std::cout << (++TESTE) << std::endl;
+      else
+      {
+        printf("WARNING: INVALID FACET IN INPUT MESH! vtcs: ");
+        for (int zz = 0; zz < n_nodes_per_facet; ++zz)
+          printf("%d ", nodes[zz]);
+        printf("\n");
+      }
     }
     else if (elm_dim == cell_dim-2) // corners
     {
@@ -252,16 +365,10 @@ void MeshIoMsh::readFileMsh(const char* filename, Mesh * mesh)
           mesh->getNode(bnodes[i])->setTag(physical);
       }
       //std::copy( bnodes, bnodes + n_vertices_per_corner, bvtcs );
-      corner_id = mesh->getCornerIdFromVertices(bnodes);
-      if (corner_id < 0)
-      {
-        if (mesh->isVertex(mesh->getNode(bnodes[0])) ) // if is vertex
-          printf("mesh .msh file: warning: invalid corner detected\n");
-      }
-      else
-      {
-        mesh->getCorner(corner_id)->setTag(physical); //std::cout << (++TESTE) << std::endl;
-      }
+      if (mesh->getCornerIdFromVertices(bnodes, corner_id))
+        mesh->getCorner(abs(corner_id))->setTag(physical); //std::cout << (++TESTE) << std::endl;
+      else if (mesh->isVertex(mesh->getNode(bnodes[0])) ) // if is vertex
+          printf("WARNING: INVALID CORNER IN INPUT MESH!\n");
     }
     else
     {
@@ -280,7 +387,7 @@ void MeshIoMsh::readFileMsh(const char* filename, Mesh * mesh)
 
   this->timer.elapsed("readFileMsh(): search for boundary elements");
 
-  if (mesh->cellDim()>1)
+  if (mesh->cellDim()>2)
   {
     const int n_corners_per_facet = mesh->numCornersPerFacet();
     int facet_facets[n_corners_per_facet];
@@ -312,3 +419,7 @@ void MeshIoMsh::readFileMsh(const char* filename, Mesh * mesh)
 
   mesh->timer.addItems(this->timer);
 }
+
+
+
+

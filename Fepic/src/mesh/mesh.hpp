@@ -25,7 +25,7 @@
 #include <vector>
 #include "../util/macros.hpp"
 #include "../util/timer.hpp"
-#include "cellcore.hpp"
+#include "elements/cellcore.hpp"
 #include "elements/elements.hpp"
 #include "../util/list_type.hpp"
 #include "mesh_iterators.hpp"
@@ -46,18 +46,18 @@ protected:
   // iterators
   template<class> friend class _MeshIterator;
   friend class MeshIoMsh;
-  
+
   virtual Cell*   incCell(Cell*) = 0;
   virtual Point*  incPoint(Point*) = 0;
   virtual Facet*  incFacet(Facet*) = 0;
   virtual Corner* incCorner(Corner*) = 0;
-  
+
   virtual Cell*   decCell(Cell*) = 0;
   virtual Point*  decPoint(Point*) = 0;
   virtual Facet*  decFacet(Facet*) = 0;
   virtual Corner* decCorner(Corner*) = 0;
-  
-  
+
+
 public:
 
   virtual cell_iterator   cellBegin() = 0;
@@ -79,7 +79,7 @@ public:
   virtual corner_iterator cornerEnd(int tid, int nthreads) = 0;
 
   typedef Mesh* (*CreatorMemFunPtr)();
-  
+
   template<class CT, int SD>
   static Mesh* create()
   {
@@ -88,10 +88,10 @@ public:
 
   static Mesh* create(ECellType type, int spacedim = -1);
 
-  
+
 
   virtual int cellDim() const = 0;
-  virtual int spaceDim() const = 0;  
+  virtual int spaceDim() const = 0;
   virtual ECellType cellType() const = 0;
   virtual EMshTag cellMshTag() const = 0;
 
@@ -103,44 +103,44 @@ public:
   virtual int nodesPerCell() const = 0;
   virtual int nodesPerFacet() const = 0;
   virtual int nodesPerCorner() const = 0;
-  
+
   virtual int verticesPerCell() const = 0;
   virtual int verticesPerFacet() const = 0;
   virtual int verticesPerCorner() const = 0;
-  
+
   virtual void printInfo() const = 0;
   virtual void printStatistics() const = 0;
 
   virtual Cell* getCell(int nth) = 0;
-  virtual Facet* getFacet(int nth) = 0;  
+  virtual Facet* getFacet(int nth) = 0;
   virtual Corner* getCorner(int nth) = 0;
   virtual Point* getNode(int nth) = 0;
-  
-  virtual const Cell* getCell(int nth) const = 0;  
-  virtual const Facet* getFacet(int nth) const = 0;  
-  virtual const Corner* getCorner(int nth) const = 0;     
-  virtual const Point* getNode(int nth) const = 0;  
-  
+
+  virtual const Cell* getCell(int nth) const = 0;
+  virtual const Facet* getFacet(int nth) const = 0;
+  virtual const Corner* getCorner(int nth) const = 0;
+  virtual const Point* getNode(int nth) const = 0;
+
   virtual void disablePoint(int id) = 0;
   virtual void disableCorner(int id) = 0;
   virtual void disableFacet(int id) = 0;
   virtual void disableCell(int id) = 0;
-  
+
   virtual int getCellId(Cell const*) const = 0;
   virtual int getPointId(Point const*) const = 0;
   virtual int getFacetId(Facet const*) const = 0;
   virtual int getCornerId(Corner const*) const = 0;
-  
+
   virtual void getCellNodesId(Cell const* cell, int* result) const = 0;
   virtual void getCellVerticesId(Cell const* cell, int* result) const = 0;
   virtual void getCellFacetsId(Cell const* cell, int* result) const = 0;
   virtual void getCellCornersId(Cell const* cell, int* result) const = 0;
   virtual void getFacetNodesId(Facet const* facet, int* result) const = 0;
   virtual void getCornerNodesId(Corner const* corner, int* result) const = 0;
-  
-  virtual void getCellNodesId(int id, int *result) const = 0;    
-  virtual void getFacetNodesId(int id, int *result) const = 0;  
-  virtual void getCornerNodesId(int id, int *result) const = 0;   
+
+  virtual void getCellNodesId(int id, int *result) const = 0;
+  virtual void getFacetNodesId(int id, int *result) const = 0;
+  virtual void getCornerNodesId(int id, int *result) const = 0;
 
   virtual int getCellContigId(int id) const = 0;
   virtual int getFacetContigId(int id) const = 0;
@@ -150,11 +150,11 @@ public:
   virtual void getFacetsContigId(int* first, int const* last, int* result)const = 0;
   virtual void getCornersContigId(int* first, int const* last, int* result) const = 0;
   virtual void getNodesContigId(int* first, int const* last, int* result) const = 0;
-  
+
   virtual void getCellNodesContigId(Cell const* cell, int* result) const = 0;
   virtual void getFacetNodesContigId(Facet const* facet, int* result) const = 0;
   virtual void getCornerNodesContigId(Corner const* corner, int* result) const = 0;
-  
+
   /** Retorna na matriz X as coordenadas dos nós passados em map.
   *  As colunas de X correspondem a dimensão enquanto as linhas
   *  correspondem aos graus de liberdade.
@@ -173,15 +173,15 @@ public:
         *X++ = *c++;
     }
   }
-  
+
   // TODO: linear only ...
   virtual void getCenterCoord(Cell const* cell, Real* x) const = 0;
   virtual void getCenterCoord(Facet const* facet, Real* x) const = 0;
   virtual void getCenterCoord(Corner const* corner, Real* x) const = 0;
-  
-  virtual int getFacetIdFromVertices(int const* vtcs) =0;
-  virtual int getCornerIdFromVertices(int const* vtcs) =0;  
-  
+
+  virtual bool getFacetIdFromVertices(int const* vtcs, int &fid) =0;
+  virtual bool getCornerIdFromVertices(int const* vtcs, int &fid) =0;
+
   virtual int* edgeStar(int C, int eC, int *iCs, int *eiCs) const = 0;
   virtual int* edgeStar(Facet  const*, int *iCs, int *eiCs) const = 0;
   virtual int* edgeStar(Corner const*, int *iCs, int *eiCs) const = 0;
@@ -194,7 +194,10 @@ public:
   virtual int* connectedNodes(Point const* p, int *iVs) const = 0;
   virtual int* incidentFacets(Point const* p, int *iFs, int *viFs) const = 0;
   virtual int* incidentFacets(int nodeid, int *iFs, int *viFs) const = 0;
-  
+  virtual Facet* nextBoundaryFacet(Facet const*f) const = 0;
+  virtual void pushIncidCell2Point(int iC, int pos) = 0;
+
+
   void qBuildAdjacency(bool b)
   {
     _build_adjacency = b;
@@ -206,6 +209,14 @@ public:
   virtual void buildAdjacency() = 0;
   virtual void buildNodesAdjacency() = 0;
 
+  virtual void setUpConnectedComponentsId() = 0;
+  virtual int  numConnectedComponents() const = 0;
+  virtual void setUpBoundaryComponentsId() = 0;
+  virtual int  numBoundaryComponents() const = 0;
+  
+  virtual void getConnectedComponentsPicks(int *comps, int *cells) const = 0;
+  virtual void getBoundaryComponentsPicks(int *comps, int *facets) const = 0;
+
   virtual bool inBoundary(Point const* p) const = 0;
   virtual bool inBoundary(Facet const* p) const = 0;
   virtual bool inBoundary(Corner const* p) const = 0;
@@ -214,6 +225,17 @@ public:
   virtual int pushPoint(Point const* P) = 0;
   virtual int pushFacet(Facet const* h) = 0;
   virtual int pushCorner(Corner const* b) = 0;
+
+  virtual Cell*   pushCell() = 0;
+  virtual Point*  pushPoint() = 0;
+  virtual Facet*  pushFacet() = 0;
+  virtual Corner* pushCorner() = 0;
+
+  virtual Cell*   createCell() const = 0;
+  virtual Point*  createPoint() const = 0;
+  virtual Facet*  createFacet() const = 0;
+  virtual Corner* createCorner() const = 0;
+
   virtual int numCells() const = 0;
   virtual int numCellsTotal() const = 0;
   virtual int numNodes() const = 0;
@@ -223,7 +245,7 @@ public:
   virtual int numFacetsTotal() const = 0;
   virtual int numCorners() const = 0;
   virtual int numCornersTotal() const = 0;
-  
+
   virtual int numNodesPerCell() const = 0;
   virtual int numNodesPerFacet() const = 0;
   virtual int numNodesPerCorner() const = 0;
@@ -231,11 +253,11 @@ public:
   virtual int numVerticesPerCell() const = 0;
   virtual int numVerticesPerFacet() const = 0;
   virtual int numVerticesPerCorner() const = 0;
-  
+
   virtual int numFacetsPerCell() const = 0;
   virtual int numCornersPerCell()  const = 0;
   virtual int numCornersPerFacet() const = 0;
-  
+
   virtual void resizePointL(unsigned size) = 0;
   virtual void resizeCellL(unsigned size) = 0;
   virtual void resizeFacetL(unsigned size) = 0;
@@ -247,10 +269,10 @@ public:
 
   static unsigned estimateNumFacets(unsigned nc, ECellType t);
   static unsigned estimateNumCorners(unsigned nc, ECellType t);
-  
+
   /** @brief estimate of how the containers will grow.
    *  @param factor the size
-   */ 
+   */
   virtual void setGrowFactor(float factor) = 0;
 
   virtual ~Mesh() {};
@@ -269,12 +291,12 @@ public:
 
 /* ====================================================
 
-          ____  __  __ _____ ____  _   _ 
+          ____  __  __ _____ ____  _   _
          / ___||  \/  | ____/ ___|| | | |
          \___ \| |\/| |  _| \___ \| |_| |
           ___) | |  | | |___ ___) |  _  |
          |____/|_|  |_|_____|____/|_| |_|
-         
+
 
 
 */ // =================================================
@@ -298,22 +320,22 @@ public:
   //typedef std::vector<PointT>   PointList;
   //typedef std::vector<Facet>    FacetList;
   //typedef std::vector<Corner>   CornerList;
-  
+
   typedef SeqList<CellT, std::vector<CellT>, SetVector<int> >     CellList;
   typedef SeqList<PointT, std::vector<PointT>, SetVector<int> >   PointList;
   typedef SeqList<FacetT, std::vector<FacetT>, SetVector<int> >   FacetList;
   typedef SeqList<CornerT, std::vector<CornerT>, SetVector<int> > CornerList;
-  
+
   typedef typename CellList  ::iterator CellIteratorT;
   typedef typename PointList ::iterator PointIteratorT;
   typedef typename FacetList ::iterator FacetIteratorT;
   typedef typename CornerList::iterator CornerIteratorT;
-  
+
   typedef typename CellList  ::const_iterator CellConstIteratorT;
   typedef typename PointList ::const_iterator PointConstIteratorT;
   typedef typename FacetList ::const_iterator FacetConstIteratorT;
-  typedef typename CornerList::const_iterator CornerConstIteratorT;  
-  
+  typedef typename CornerList::const_iterator CornerConstIteratorT;
+
 
   explicit SMesh() : Mesh(-1, CellT::fep_tag)
   {
@@ -323,17 +345,17 @@ public:
 
 protected:
   SMesh(SMesh const&) : Mesh() {};
-  
+
   Cell*   incCell(Cell*);
   Point*  incPoint(Point*);
   Facet*  incFacet(Facet*);
   Corner* incCorner(Corner*);
-  
+
   Cell*   decCell(Cell*);
   Point*  decPoint(Point*);
   Facet*  decFacet(Facet*);
   Corner* decCorner(Corner*);
-  
+
 
 public:
 
@@ -426,7 +448,7 @@ public:
    *  @note the vectors iCs and niCs must have enough space to store the data.
    *  @note this function assumes that each edge, face or volume has only one
    *        node in its interior, i.e., cells of third order are not supported.
-   */  
+   */
   int* nodeStar(int C, int nC, int *iCs, int *niCs) const;
 
   /** Returns all incident cells of a node.
@@ -437,14 +459,14 @@ public:
    *  @note the vectors iCs and niCs must have enough space to store the data.
    *  @note this function assumes that each edge, face or volume has only one
    *        node in its interior, i.e., cells of third order are not supported.
-   */  
+   */
   int* nodeStar(Point const* p, int *iCs, int *niCs) const;
 
   /** @brief Returns all vertices that are connected to a vertex.
    *  @param[in] p a pointer to the vertex.
    *  @param[out] iVs vector with the connected vertices.
    *  @return a pointer to the element following the end of the sequence iVs.
-   */ 
+   */
   int* connectedVtcs(Point const* p, int *iVs) const;
 
   /** @brief Returns all vertices that are connected to a vertex, as well the incident cells.
@@ -461,7 +483,7 @@ public:
    *  @param[in] p a pointer to the node.
    *  @param[out] iNs vector with the connected nodes.
    *  @return a pointer to the element following the end of the sequence iNs.
-   */ 
+   */
   int* connectedNodes(Point const* p, int *iNs) const;
 
   /** INTERNAL USE ONLY\n
@@ -487,7 +509,7 @@ public:
    */
   template<int celldim>
   int* incidentFacets_Template(Point const* p, int *iFs, int *viFs, typename EnableIf<(celldim==2)>::type* = NULL) const;
-  
+
   /** INTERNAL USE ONLY\n
    *  @brief Returns all incident facets to a vertex.
    *  @param[in] p a pointer to the vertex.
@@ -528,9 +550,31 @@ public:
     return this->MeshT::incidentFacets_Template<CellT::dim>(this->MeshT::getNode(nodeid), iFs, viFs);
   }
 
+  template<int celldim>
+  Facet* nextBoundaryFacet_template(Facet const*f, typename EnableIf<(celldim==1)>::type* = NULL) const;
+
+  template<int celldim>
+  Facet* nextBoundaryFacet_template(Facet const*f, typename EnableIf<(celldim==2)>::type* = NULL) const;
+  
+  template<int celldim>
+  Facet* nextBoundaryFacet_template(Facet const*f, typename EnableIf<(celldim==3)>::type* = NULL) const;
+  
+  /** given a boundary facet, return the next boundary facet.
+   */ 
+  Facet* nextBoundaryFacet(Facet const*f) const
+  {
+    return this->MeshT::nextBoundaryFacet_template<CellT::dim>(f);
+  }
+
+  /** set iC as the incident cell to the point (iC,pos) if, and only if,
+   *  the point doesnt have an incident cell with same connected component
+   *  of the iC.
+   */ 
+  void pushIncidCell2Point(int iC, int pos);
+
   // ---------------------------------------------------- EDGE STAR ---------------------------------------------------
 
-  /** INTERNA USE ONLY\n 
+  /** INTERNA USE ONLY\n
    * Returns all incidents cells of a edge.
    * @param[in] C an incident cell of a edge to start the search (initial cell).
    * @param[in] eC edge's local id in the initial cell.
@@ -541,7 +585,7 @@ public:
   template<int celldim>
   int* edgeStar_Template(int C, int eC, int *iCs, int *eiCs, typename EnableIf<(celldim==3)>::type* = NULL) const;
 
-  /** INTERNA USE ONLY\n 
+  /** INTERNA USE ONLY\n
    * Returns all incidents cells of a edge.
    * @param[in] C an incident cell of a edge to start the search (initial cell).
    * @param[in] eC edge's local id in the initial cell.
@@ -630,6 +674,48 @@ public:
   /// Constrói as informações topológicas da malha
   void buildAdjacency();
 
+  /** NOT FOR USERS
+   * auxiliary function 
+   * set the connected component id to which c_ini belongs.
+   * @warning visited() flags are used.
+   */ 
+  void _setConnectedComponentsId(Cell * c_ini, int cc_id);
+  void _setBoundaryComponentsId(Facet * f_ini, int bc_id);
+
+  void setUpConnectedComponentsId();
+  int numConnectedComponents() const
+  {
+    return _connected_compL.size();
+  }
+  
+  void setUpBoundaryComponentsId();
+  int numBoundaryComponents() const
+  {
+    return _boundary_compL.size();
+  }
+
+  void getConnectedComponentsPicks(int *comps, int *cells) const
+  {
+    int k = 0;
+    for (std::map<int,int>::const_iterator it = _connected_compL.begin(); it != _connected_compL.end(); ++it)
+    {
+      comps[k] = (*it).first;
+      cells[k] = (*it).second;
+      ++k;
+    }
+    
+  }
+  void getBoundaryComponentsPicks(int *comps, int *facets) const
+  {
+    int k = 0;
+    for (std::map<int,int>::const_iterator it = _boundary_compL.begin(); it != _boundary_compL.end(); ++it)
+    {
+      comps[k] = (*it).first;
+      facets[k] = (*it).second;
+      ++k;
+    }
+    
+  }
 
   // ----------------------------------------------------------------------------------------------------------------------
 
@@ -649,7 +735,7 @@ public:
 
   /** @brief estimate of how the containers will grow.
    *  @param factor the size
-   */ 
+   */
   void setGrowFactor(float factor)
   {
     _cellL.setGrowFactor(factor);
@@ -669,28 +755,28 @@ public:
   int getCornerContigId(int id) const
   {
     return _cornerL.contiguousId(id);
-  }  
+  }
   int getNodeContigId(int id) const
   {
     return _pointL.contiguousId(id);
-  }  
- 
+  }
+
   void getCellsContigId(int* first, int const* last, int* result) const
   {
     _cellL.contiguousIds(first, last, result);
-  }  
+  }
   void getFacetsContigId(int* first, int const* last, int* result)const
   {
     _facetL.contiguousIds(first, last, result);
-  }      
+  }
   void getCornersContigId(int* first, int const* last, int* result) const
   {
     _cornerL.contiguousIds(first, last, result);
-  }  
+  }
   void getNodesContigId(int* first, int const* last, int* result) const
   {
     _pointL.contiguousIds(first, last, result);
-  }  
+  }
 
   int cellDim() const
   {
@@ -847,32 +933,32 @@ public:
   void getCellCornersId(Cell const* cell, int *result) const
   {
     static_cast<CellT const*>(cell)->CellT::getCornersId(result);
-  }    
+  }
   void getFacetNodesId(Facet const* facet, int *result) const
   {
     int icell = static_cast<FacetT const*>(facet)->FacetT::getIncidCell();
     int pos   = static_cast<FacetT const*>(facet)->FacetT::getPosition();
     this->MeshT::getCell(icell)->CellT::getFacetNodesId(pos, result);
-  }  
+  }
   void getCornerNodesId(Corner const* corner, int *result) const
   {
     int icell = static_cast<CornerT const*>(corner)->CornerT::getIncidCell();
     int pos   = static_cast<CornerT const*>(corner)->CornerT::getPosition();
     this->MeshT::getCell(icell)->CellT::getCornerNodesId(pos, result);
-  } 
-  
+  }
+
   void getCellNodesId(int id, int *result) const
   {
     this->getCellNodesId(this->MeshT::getCell(id), result);
-  }   
+  }
   void getFacetNodesId(int id, int *result) const
   {
     this->MeshT::getFacetNodesId(this->MeshT::getFacet(id), result);
-  }  
+  }
   void getCornerNodesId(int id, int *result) const
   {
     this->MeshT::getCornerNodesId(this->MeshT::getCorner(id), result);
-  } 
+  }
 
   void getCellNodesContigId(Cell const* cell, int* result) const
   {
@@ -938,18 +1024,18 @@ public:
       {
         const int r = q - CellT::n_corners;
         const int s = r - CellT::n_facets;
-        
+
         if (s>=0) return false;
-        
+
         if (r>=0) return icell->CellT::getIncidCell(r)<0;
-        
+
         if (icell->CellT::getIncidCell(CellT::table_bC_x_fC[q][0]) < 0) return true;
         if (icell->CellT::getIncidCell(CellT::table_bC_x_fC[q][1]) < 0) return true;
         return false;
       }
     }
-    
-    
+
+
   }
   bool inBoundary(Facet const* f) const
   {
@@ -998,6 +1084,24 @@ public:
   */
   int pushCorner(Corner const* h);
 
+  /// adds an element in the mesh and returns a pointer to it.
+  Cell*   pushCell();
+  /// adds a point in the mesh and returns a pointer to it.
+  Point*  pushPoint();
+  /// adds a facet in the mesh and returns a pointer to it.
+  Facet*  pushFacet();
+  /// adds a corner in the mesh and returns a pointer to it.
+  Corner* pushCorner();
+         
+  /// create a cell (but not put in the mesh)
+  Cell*   createCell() const;
+  /// create a point (but not put in the mesh)
+  Point*  createPoint() const;
+  /// create a facet (but not put in the mesh)
+  Facet*  createFacet() const;
+  /// create a corner (but not put in the mesh)
+  Corner* createCorner() const;
+          
   /** Retorna o número células
   *  @note não conta com o/a(s) marcado/a(s) como killed.
   */
@@ -1114,18 +1218,20 @@ public:
   void reserveCornerL(unsigned size);
 
   /** Check if the vertices form a facet of this mesh, if so returns facet's id.
-  * @param vtcs the vertices.
-  * @return the id of the facet. If vertices do not form a facet, then function returns -1.
-  * @note vertices form a facet when they are cyclically equal to the facet's vertices.
-  */
-  int getFacetIdFromVertices(int const* vtcs);
+   * @param[in] vtcs vector with the ids of the vertices.
+   * @param[out] fid id of the facet that has those vertices. If the vertices form a facet
+   *  in a anticyclically manner, then the negative of the facet's id is returned.
+   * @return true if a facet were found, false otherwise.
+   */ 
+  bool getFacetIdFromVertices(int const* vtcs, int &fid);
 
   /** Check if the vertices form a corner of this mesh, if so returns corner's id.
-  * @param vtcs the vertices.
-  * @return the id of the corner. If vertices do not form a corner, then function returns -1.
-  * @note vertices form a corner when they are cyclically equal to the corner's vertices.
-  */
-  int getCornerIdFromVertices(int const* vtcs);
+   * @param[in] vtcs vector with the ids of the vertices.
+   * @param[out] fid id of the corner that has those vertices. If the vertices form a corner
+   *  in a anticyclically manner, then the negative of the corner's id is returned.
+   * @return true if a corner were found, false otherwise.
+   */ 
+  bool  getCornerIdFromVertices(int const* vtcs, int &rid);
 
 private:
 
@@ -1135,6 +1241,8 @@ private:
   FacetList     _facetL;
   CornerList    _cornerL;
 
+  std::map<int, int>  _connected_compL; // connected component vs initial cell id
+  std::map<int, int>  _boundary_compL;  // boundary component vs initialfacet id
 };
 
 

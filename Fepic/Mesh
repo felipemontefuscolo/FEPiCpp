@@ -22,7 +22,7 @@
 #ifndef FEPIC_MESH_NE
 #define FEPIC_MESH_NE
 
-#include "Fepic/src/mesh/cell_tools.hpp"
+#include "Fepic/src/custom_eigen/custom_eigen.hpp"
 #include "Fepic/src/mesh/mesh.hpp"
 #include "Fepic/src/mesh_tools/mesh_tools.hpp"
 #include "Fepic/src/mesh/io/meshiomsh.hpp"

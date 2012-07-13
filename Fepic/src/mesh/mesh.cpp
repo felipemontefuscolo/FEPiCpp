@@ -147,7 +147,7 @@ int SMesh<CT,SD>::numVertices() const
   {
     int num_vtcs_local = 0;
     PointT const* p;
-    
+
     #pragma omp for
     for (int i=0; i<num_nodes_total; ++i)
     {
@@ -157,7 +157,7 @@ int SMesh<CT,SD>::numVertices() const
       if (MeshT::isVertex(p))
         ++num_vtcs_local;
     }
-    
+
     #pragma omp critical
     num_vtcs += num_vtcs_local;
   }
@@ -199,6 +199,70 @@ int SMesh<CT,SD>::pushCorner(Corner const* B)
 {
   return _cornerL.insert(*static_cast<CornerT const*>(B));
 }
+
+/** Adiciona uma célula e retorna seu id.
+*/
+template<class CT, int SD>
+Cell* SMesh<CT,SD>::pushCell()
+{
+  return this->MeshT::getCell(_cellL.insert(CT()));
+}
+
+/** Adiciona um ponto e retorna seu id.
+*/
+template<class CT, int SD>
+Point* SMesh<CT,SD>::pushPoint()
+{
+  return this->MeshT::getNode(_pointL.insert(PointT()));
+}
+
+/** Adiciona uma facet
+*  @param h A facet-xxxx a ser adicionada.
+*  @return A posição da facet-xxxx na lista
+*/
+template<class CT, int SD>
+Facet* SMesh<CT,SD>::pushFacet()
+{
+  return this->MeshT::getFacet(_facetL.insert(FacetT()));
+}
+
+/** Adiciona uma corner-xxxx
+*  @param h A corner-xxxx a ser adicionada.
+*  @return A posição da corner-xxxx na lista
+*/
+template<class CT, int SD>
+Corner* SMesh<CT,SD>::pushCorner()
+{
+  return this->MeshT::getCorner(_cornerL.insert(CornerT()));
+}
+
+
+
+template<class CT, int SD>
+Cell* SMesh<CT,SD>::createCell() const
+{
+  return new CT;
+}
+
+template<class CT, int SD>
+Point* SMesh<CT,SD>::createPoint() const
+{
+  return new PointT;
+}
+
+template<class CT, int SD>
+Facet* SMesh<CT,SD>::createFacet() const
+{
+  return new FacetT;
+}
+
+template<class CT, int SD>
+Corner* SMesh<CT,SD>::createCorner() const
+{
+  return new CornerT;
+}
+
+
 
 
 template<class CT, int SD>
@@ -569,7 +633,7 @@ int* SMesh<CT,SD>::connectedVtcs(Point const* p, int *iVs) const
           *iVs++ = id;
       }
   }
-  
+
   *iVs = -1;
   return iVs;
 }
@@ -605,7 +669,7 @@ int* SMesh<CT,SD>::connectedVtcs(Point const* p, int *iVs, int *iCs, int *viCs) 
           *iVs++ = id;
       }
   }
-  
+
   *iVs = -1;
   return iVs;
 }
@@ -639,7 +703,7 @@ int* SMesh<CT,SD>::connectedNodes(Point const* p, int *iNs) const
           *iNs++ = id;
       }
   }
-  
+
   *iNs = -1;
   return iNs;
 }
@@ -686,7 +750,7 @@ int* SMesh<CT,SD>::incidentFacets_Template(Point const* p, int *iFs, int *viFs, 
     else
     {
       FEPIC_CHECK(false, "implementation error, please contact any developer", std::runtime_error);
-    }    
+    }
   }
   else
   {
@@ -845,7 +909,7 @@ int* SMesh<CT,SD>::faceStar_Template(int C, int fC, int *iCs, int *fiCs, typenam
   {
     ++iCs;
     *fiCs++ = cell->CT::getIncidCellPos(fC);
-  }  
+  }
   return iCs;
 }
 
@@ -867,6 +931,70 @@ int* SMesh<CT,SD>::faceStar_Template(int C, int fC, int *iCs, int *fiCs, typenam
   return iCs;
 }
 
+
+  // ------------------------------------------------- NEXT BOUNDARY FACET --------------------------------------------
+template<class CT, int SD>
+template<int celldim>
+Facet* SMesh<CT,SD>::nextBoundaryFacet_template(Facet const*, typename EnableIf<(celldim==1)>::type*) const
+{
+  return NULL;
+}
+
+template<class CT, int SD>
+template<int celldim>
+Facet* SMesh<CT,SD>::nextBoundaryFacet_template(Facet const* fct, typename EnableIf<(celldim==2)>::type*) const
+{
+  int const nvpc = CellT::n_vertices;
+  int iC = fct->getIncidCell();
+  int iC_pos = fct->getPosition();
+  int neighbor = this->MeshT::getCell(iC)->CT::getIncidCell((iC_pos+1)%nvpc);
+  
+  FEPIC_CHECK(this->MeshT::getCell(iC)->CT::getIncidCell(iC_pos) < 0, "nextBoundaryFacet: must be a boundary facet", std::invalid_argument);
+  
+  while (neighbor >= 0)
+  {
+    iC_pos = this->MeshT::getCell(iC)->CT::getIncidCellPos((iC_pos+1)%nvpc);
+    iC = neighbor;
+    neighbor = this->MeshT::getCell(iC)->CT::getIncidCell((iC_pos+1)%nvpc);
+  }
+  return const_cast<Facet*>( this->MeshT::getFacet(this->MeshT::getCell(iC)->CT::getFacetId((iC_pos+1)%nvpc)) );
+}
+
+template<class CT, int SD>
+template<int celldim>
+Facet* SMesh<CT,SD>::nextBoundaryFacet_template(Facet const*, typename EnableIf<(celldim==3)>::type*) const
+{
+  printf("nextBoundaryFacet not implemented for 3d cell yet.\n");
+  throw;
+  return NULL;
+}
+
+
+
+template<class CT, int SD>
+void SMesh<CT,SD>::pushIncidCell2Point(int iC, int pos)
+{
+  FEPIC_CHECK((unsigned)iC<this->numCellsTotal(),"invalid index iC", std::invalid_argument);
+  
+  CellT* icell = this->MeshT::getCell(iC);
+  PointT* p = this->MeshT::getNode(icell->CT::getNodeId(pos));
+  int const iC_CCid = icell->CT::getConnectedComponentId();
+  
+  const int n_icells = p->singularity()+1;
+  
+  int oic, opos;
+  
+  for (int i = 0; i < n_icells; ++i)
+  {
+    p->PointT::getIthIncidCell(i,oic,opos);
+    if (this->MeshT::getCell(oic)->CT::getConnectedComponentId() == iC_CCid)
+      return;
+  }
+  //else
+  p->PointT::pushIncidCell(iC, pos);
+  
+}
+
 // --------------------------------------------------- ADJACENCY -------------------------------------------------------
 
 
@@ -879,6 +1007,11 @@ void SMesh<CT,SD>::buildAdjacency()
   this->timer.elapsed("buildCellsAdjacency()");
 
   this->timer.restart();
+  this->setUpConnectedComponentsId();
+  this->setUpBoundaryComponentsId();
+  this->timer.elapsed("setUpConnected/BoundaryComponentsId()");
+
+  this->timer.restart();
   this->buildNodesAdjacency();
   this->timer.elapsed("buildNodesAdjacency()");
 
@@ -886,7 +1019,7 @@ void SMesh<CT,SD>::buildAdjacency()
   this->timer.restart();
   this->buildCorners_Template<CellT::dim>();
   this->timer.elapsed("buildCorners_Template()");
-  
+
 }
 
 /// @note constroi as facets também
@@ -915,6 +1048,7 @@ void SMesh<CT,SD>::buildCellsAdjacency()
 
   _facetL.clear();
 
+  // constroi uma tabela com as células e seus vizinhos
   #pragma omp parallel private(cell_ith,facet_vtcs) shared(table) default(none)
   {
     CT const *cell;
@@ -940,7 +1074,9 @@ void SMesh<CT,SD>::buildCellsAdjacency()
         //table[n_facets*ii + j] = std::make_pair(facet_vtcs, cell_ith);
         table[t].first  = facet_vtcs;
         table[t].second = cell_ith;
+
       }
+
     }
 
   }
@@ -948,7 +1084,7 @@ void SMesh<CT,SD>::buildCellsAdjacency()
   omptl::sort(table.begin(), table.end(), pair_less<PairT>());
 
   //// the CellList iterator must be "random access" for the algorithms that follows
-  //// otherwise, the algorithms must be reimplementeds.
+  //// otherwise, the algorithms must be reimplemented.
   //typedef typename CellIteratorT::iterator_category _category;
   //FEP_STATIC_ASSERT_ITERATOR((std::tr1::is_same<_category,std::random_access_iterator_tag>::value));
 
@@ -957,7 +1093,8 @@ void SMesh<CT,SD>::buildCellsAdjacency()
   for (int i=0; i<n_cells_total; ++i)
   {
     _cellL[i].resetIncidCells();
-    _cellL[i].resetFacetsId();
+    if (CT::dim>1)
+      _cellL[i].resetFacetsId();
   }
 
   //// reseting cells neighbors
@@ -1045,6 +1182,7 @@ void SMesh<CT,SD>::buildCellsAdjacency()
   // OBS: this version is a litte faster
   //
 
+
   // build adjacency and create facets
   #pragma omp parallel private(facet_vtcs) shared(table) default(none)
   {
@@ -1076,7 +1214,6 @@ void SMesh<CT,SD>::buildCellsAdjacency()
           thisC = kit->second[0];
           thisith =  kit->second[1];
 
-
           this->MeshT::getCell(thisC)->CT::setIncidCell(thisith, otherC);
           this->MeshT::getCell(thisC)->CT::setIncidCellPos(thisith, otherith);
 
@@ -1094,19 +1231,20 @@ void SMesh<CT,SD>::buildCellsAdjacency()
         }
         std::rotate(facet_vtcs.begin(), facet_vtcs.begin()+1, facet_vtcs.end());
       }
-      if(!found && CT::dim > 1) // border facet
+      if (!found)
       {
-
         thisC = kit->second[0];
         thisith =  kit->second[1];
-
-        // create a facet
-        facet->FacetT::setIncidCell(thisC);
-        facet->FacetT::setPosition(thisith);
-        facet->FacetT::setAnchor(-1);
-        #pragma omp critical
-        facet_id = this->MeshT::pushFacet(facet.get());
-        this->MeshT::getCell(thisC)->CT::setFacetId(thisith, facet_id);
+        if( CT::dim > 1) // border facet
+        {
+          // create a facet
+          facet->FacetT::setIncidCell(thisC);
+          facet->FacetT::setPosition(thisith);
+          //facet->FacetT::setAnchor(-1);
+          #pragma omp critical
+          facet_id = this->MeshT::pushFacet(facet.get());
+          this->MeshT::getCell(thisC)->CT::setFacetId(thisith, facet_id);
+        }
       }
 
     }
@@ -1114,31 +1252,35 @@ void SMesh<CT,SD>::buildCellsAdjacency()
   } // end parallel
 
   // assigns facets to cells that remained
-  #pragma omp parallel
+  if (CT::dim > 1)
   {
-    CT * cell;
-    CT const* icell;
-    int oth;
-    int facet_id;
-    #pragma omp for
-    for (int i=0; i<n_cells_total; ++i)
+    #pragma omp parallel
     {
-      cell = MeshT::getCell(i);
-      if (cell->disabled())
-        continue;
-      for (int j = 0; j < CT::n_facets; ++j)
+      CT * cell;
+      CT const* icell;
+      int oth;
+      int facet_id;
+      #pragma omp for
+      for (int i=0; i<n_cells_total; ++i)
       {
-        if (cell->CT::getFacetId(j) < 0)
+        cell = MeshT::getCell(i);
+        if (cell->disabled())
+          continue;
+        for (int j = 0; j < CT::n_facets; ++j)
         {
-          icell = MeshT::getCell(cell->CT::getIncidCell(j));
-          oth = cell->CT::getIncidCellPos(j);
-          facet_id = icell->CT::getFacetId(oth);
-          cell->CT::setFacetId(j, facet_id);
+          if (cell->CT::getFacetId(j) < 0)
+          {
+            icell = MeshT::getCell(cell->CT::getIncidCell(j));
+            oth = cell->CT::getIncidCellPos(j);
+            facet_id = icell->CT::getFacetId(oth);
+            cell->CT::setFacetId(j, facet_id);
+          }
         }
       }
+  
     }
-    
   }
+
 
 }
 
@@ -1157,11 +1299,11 @@ void SMesh<CT,SD>::buildCorners_Template(typename EnableIf<(celldim==2)>::type*)
 {
   int const num_nodes = this->MeshT::numNodesTotal();
   _cornerL.clear();
-  
+
   #pragma omp parallel for
   for (unsigned c = 0; c<_cellL.total_size(); ++c)
     _cellL[c].CT::resetCornersId();
-  
+
   //#pragma omp parallel default(none)
   {
     PointT * point;
@@ -1172,33 +1314,33 @@ void SMesh<CT,SD>::buildCorners_Template(typename EnableIf<(celldim==2)>::type*)
     int const* iCs_it, *viCs_it;
     int const* iCs_end;
     int C, vC;
-    
+
     //#pragma omp for
     for (int i = 0; i < num_nodes; ++i)
     {
       point = this->MeshT::getNode(i);
       if (point->disabled() || (!this->MeshT::isVertex(point)))
         continue;
-      
+
       C = point->PointT::getIncidCell();
       vC= point->PointT::getPosition();
-      
+
       iCs_end = this->MeshT::vertexStar(C, vC, iCs, viCs);
-      
+
       // create a edge
       corner.setIncidCell(C);
       corner.setPosition(vC);
-      corner.setAnchor(0);
+      //corner.setAnchor(0);
       corner_id = this->MeshT::pushCorner(&corner);
-      
+
       for (iCs_it = iCs, viCs_it = viCs; iCs_it != iCs_end; ++iCs_it, ++viCs_it)
         this->MeshT::getCell(*iCs_it)->CT::setCornerId(*viCs_it, corner_id);
-      
+
     }
-    
-    
+
+
   }
-  
+
 }
 
 template<class CT, int SD>
@@ -1250,7 +1392,7 @@ void SMesh<CT,SD>::buildCorners_Template(typename EnableIf<(celldim==3)>::type*)
         // create a edge
         corner->CornerT::setIncidCell(C);
         corner->CornerT::setPosition(eC);
-        corner->CornerT::setAnchor(0);
+        //corner->CornerT::setAnchor(0);
         corner_id = this->MeshT::pushCorner(corner);
 
         for (iCs_it = iCs, eiCs_it = eiCs; iCs_it != iCs_end; ++iCs_it)
@@ -1277,6 +1419,14 @@ void SMesh<CT,SD>::buildNodesAdjacency()
 {
   int const num_cells    = this->numCellsTotal();
   int const nodes_p_cell = CT::n_nodes;
+  int const num_nodes    = this->numNodesTotal();
+
+  #pragma omp parallel for
+  for (int i=0; i<num_nodes; ++i)
+  {
+    _pointL[i].setIncidCell(-1);
+    _pointL[i].setPosition(-1);
+  }
 
   //#pragma omp parallel default(none)
   {
@@ -1328,6 +1478,127 @@ void SMesh<CT,SD>::buildNodesAdjacency()
 
 }
 
+template<class CT, int SD>
+void SMesh<CT,SD>::_setConnectedComponentsId(Cell * c_ini, int cc_id)
+{
+  FEPIC_ASSERT((unsigned)this->getCellId(c_ini) < this->numCellsTotal(), " invalid pointer",std::invalid_argument );
+
+  std::list<int> cells2setup;
+  //std::list<int>::iterator current_id;
+  CellT *oc, *current;
+
+  cells2setup.push_back(this->getCellId(c_ini));
+  
+  while (!cells2setup.empty())
+  {
+    current = this->MeshT::getCell(cells2setup.front());
+    
+    for (int i = 0; i < CT::n_facets; ++i)
+    {
+      if (current->CT::getIncidCell(i) < 0)
+        continue;
+      oc = this->MeshT::getCell(current->CT::getIncidCell(i));
+      if (!oc->CT::visited())
+      {
+        cells2setup.push_back(this->getCellId(oc));
+      }
+    }
+    
+    current->CT::setConnectedComponentId(cc_id);
+    current->CT::visited(true);
+    cells2setup.pop_front();
+  }
+  
+  const int n_cells_total = _cellL.size();
+  
+  //clear flags
+  #pragma omp parallel for
+  for (int i = 0; i < n_cells_total; ++i)
+  {
+    this->MeshT::getCell(i)->CT::visited(false);
+  }  
+  
+}
+
+template<class CT, int SD>
+void SMesh<CT,SD>::setUpConnectedComponentsId()
+{
+  const int n_cells_total = _cellL.size();
+  
+  //clear conn comp ids
+  #pragma omp parallel for
+  for (int i = 0; i < n_cells_total; ++i)
+  {
+    this->MeshT::getCell(i)->CT::setConnectedComponentId(-1);
+  }
+  
+  // start from 1
+  int id = 1;
+  
+  CellT *cell;
+  for (int i = 0; i < n_cells_total; ++i)
+  {
+    cell = this->MeshT::getCell(i);
+    if (cell->CT::disabled())
+      continue;
+    if ( cell->CT::getConnectedComponentId() >= 0)
+      continue;
+    this->MeshT::_setConnectedComponentsId(cell,id);
+     _connected_compL.insert(std::pair<int,int>(id, i));
+    ++id;
+  }
+  
+}
+
+template<class CT, int SD>
+void SMesh<CT,SD>::_setBoundaryComponentsId(Facet * f_ini, int bc_id)
+{
+  FEPIC_ASSERT(((unsigned)this->getFacetId(f_ini) < this->numFacetsTotal()) && !f_ini->disabled(), " invalid pointer",std::invalid_argument );
+
+  if (CellT::dim==1 || CellT::dim==3)
+  {
+    printf("warning: setBoundaryComponentsId not implemented for 1d and 3d cells.\n");
+    return;
+  }
+
+  FacetT* fit = nextBoundaryFacet(f_ini);
+  f_ini->setBoundaryComponentId(bc_id);
+  while (fit != f_ini )
+  {
+    fit->setBoundaryComponentId(bc_id);
+    fit = nextBoundaryFacet(fit);
+  }
+  
+}
+
+
+template<class CT, int SD>
+void SMesh<CT,SD>::setUpBoundaryComponentsId()
+{
+  int const n_facets_total = this->MeshT::numFacetsTotal();
+    //clear conn comp ids
+  #pragma omp parallel for
+  for (int i = 0; i < n_facets_total; ++i)
+  {
+    this->MeshT::getFacet(i)->FacetT::setBoundaryComponentId(-1);
+  }
+  
+  // start from 1
+  int id = 1;
+  
+  FacetT *facet;
+  for (int i = 0; i < n_facets_total; ++i)
+  {
+    facet = this->MeshT::getFacet(i);
+    if (!this->inBoundary(facet) || facet->FacetT::getBoundaryComponentId() >= 0 || facet->FacetT::disabled())
+      continue;
+    this->MeshT::_setBoundaryComponentsId(facet,id);
+     _boundary_compL.insert(std::pair<int,int>(id, i));
+    ++id;
+  }  
+  
+  
+}
 
 
 /** Check if the vertices form a facet of this mesh, if so returns facet's id.
@@ -1336,7 +1607,7 @@ void SMesh<CT,SD>::buildNodesAdjacency()
 * @note vertices form a facet when they are cyclically equal to the facet's vertices.
 */
 template<class CT, int SD>
-int SMesh<CT,SD>::getFacetIdFromVertices(int const* vtcs)
+bool SMesh<CT,SD>::getFacetIdFromVertices(int const* vtcs, int &fid)
 {
   /* ideia: pega todas as células incidentes ao primeiro vértice
    * de vtcs, e procura pela facet em cada célula
@@ -1346,6 +1617,7 @@ int SMesh<CT,SD>::getFacetIdFromVertices(int const* vtcs)
   CellT  const*      cell;
   int trash[FEPIC_MAX_ICELLS], iCs[FEPIC_MAX_ICELLS]; // MAX_ICELLS
   int fC;
+  bool found;
 
   // células incidentes ao primeiro vértice da facet
   int* iCs_end = this->MeshT::vertexStar(pt->PointT::getIncidCell(), pt->PointT::getPosition(), iCs, trash);
@@ -1353,13 +1625,15 @@ int SMesh<CT,SD>::getFacetIdFromVertices(int const* vtcs)
   for(int* iC = iCs; iC!=iCs_end; ++iC)
   {
     cell = this->MeshT::getCell(*iC);
-    fC = cell->CellT::isFacet(vtcs);
+    found = cell->CellT::isFacet(vtcs, fC);
 
-    if (fC<0) continue;
+    if (!found) continue;
 
-    return cell->CellT::getFacetId(fC);
+    if (fC<0) fid = -cell->CellT::getFacetId(fC);
+    else      fid = +cell->CellT::getFacetId(fC);
+    return true;
   }
-  return -1;
+  return false;
 }
 
 /** Check if the vertices form a corner of this mesh, if so returns corner's id.
@@ -1368,7 +1642,7 @@ int SMesh<CT,SD>::getFacetIdFromVertices(int const* vtcs)
 * @note vertices form a corner when they are cyclically equal to the corner's vertices.
 */
 template<class CT, int SD>
-int SMesh<CT,SD>::getCornerIdFromVertices(int const* vtcs)
+bool SMesh<CT,SD>::getCornerIdFromVertices(int const* vtcs, int &rid)
 {
   /* ideia: pega todas as células incidentes ao primeiro vértice
    * de vtcs, e procura pela corner em cada célula
@@ -1378,12 +1652,14 @@ int SMesh<CT,SD>::getCornerIdFromVertices(int const* vtcs)
   CellT  const*      cell;
   int trash[FEPIC_MAX_ICELLS], iCs[FEPIC_MAX_ICELLS]; // MAX_ICELLS
   int bfC;
+  bool found;
 
   if (CT::dim==2) // corner is a point
   {
     if (!this->MeshT::isVertex(pt))
       return -1;
-    return this->MeshT::getCell(pt->PointT::getIncidCell())->CT::getCornerId(pt->PointT::getPosition());
+    rid = this->MeshT::getCell(pt->PointT::getIncidCell())->CT::getCornerId(pt->PointT::getPosition());
+    return true;
   }
 
   // células incidentes ao primeiro vértice da corner
@@ -1392,13 +1668,15 @@ int SMesh<CT,SD>::getCornerIdFromVertices(int const* vtcs)
   for(int* iC = iCs; iC!=iCs_end; ++iC)
   {
     cell = this->MeshT::getCell(*iC);
-    bfC = cell->CellT::isCorner(vtcs);
+    found = cell->CellT::isCorner(vtcs, bfC);
 
-    if (bfC<0) continue;
+    if (!found) continue;
 
-    return cell->CellT::getCornerId(bfC);
+    if (bfC<0) rid = -cell->CellT::getCornerId(bfC);
+    else       rid = +cell->CellT::getCornerId(bfC);
+    return true;
   }
-  return -1;
+  return false;
 }
 
 
@@ -1407,9 +1685,9 @@ bool SMesh<CT,SD>::inSingleCell(Point const* p) const
 {
   int iC  = static_cast<PointT const*>(p)->getIncidCell();
   int viC = static_cast<PointT const*>(p)->getPosition();
-  
+
   CT const* cell = MeshT::getCell(iC);
-  
+
   if (viC<CellT::n_vertices) // is a vertex
   {
     int counter = 0;
@@ -1428,10 +1706,10 @@ bool SMesh<CT,SD>::inSingleCell(Point const* p) const
   if (viC<CellT::n_vertices + CellT::n_corners) // is an edge vertex
   {
     if (CT::dim == 1) return true;
-    
+
     if (CT::dim == 2)
       return cell->getIncidCell(viC - CT::n_vertices) < 0;
-    
+
     if (CT::dim == 3)
     {
       int counter = 0;
@@ -1447,13 +1725,13 @@ bool SMesh<CT,SD>::inSingleCell(Point const* p) const
       else
         return false;
     }
-    
+
   }
   else
   if (viC<CellT::n_vertices + CellT::n_corners + CellT::n_facets) // is an face vertex
   {
     if (CT::dim < 3) return true;
-    
+
     int f = viC - CT::n_vertices - CT::n_corners;
     return cell->getIncidCell(f) < 0;
   }
@@ -1461,7 +1739,7 @@ bool SMesh<CT,SD>::inSingleCell(Point const* p) const
   {
     return true;
   }
-  
+
 }
 
 // only dim = 3
@@ -1470,9 +1748,9 @@ bool SMesh<CT,SD>::inSingleCell(Corner const* r) const
 {
   if (CT::dim < 2)
     return false;
-  
+
   int iC  = static_cast<CornerT const*>(r)->getIncidCell();
-  int eiC = static_cast<CornerT const*>(r)->getPosition();  
+  int eiC = static_cast<CornerT const*>(r)->getPosition();
 
   CT const* cell = MeshT::getCell(iC);
 
@@ -1492,20 +1770,20 @@ bool SMesh<CT,SD>::inSingleCell(Corner const* r) const
   if (counter == 2)
     return true;
   else
-    return false;  
-  
+    return false;
+
 }
 template<class CT, int SD>
 bool SMesh<CT,SD>::inSingleCell(Facet const* fa) const
 {
   int iC  = static_cast<FacetT const*>(fa)->getIncidCell();
-  int fiC = static_cast<FacetT const*>(fa)->getPosition();  
-  
+  int fiC = static_cast<FacetT const*>(fa)->getPosition();
+
   if (MeshT::getCell(iC)->CT::getIncidCell(fiC)<0)
     return true;
   else
     return false;
-  
+
 }
 
 // LINEAR CASE ONLY
@@ -1514,14 +1792,14 @@ void SMesh<CT,SD>::getCenterCoord(Cell const* cell, Real* Xc) const
 {
   int i;
   for (i=0; i<SD; ++i) Xc[i]=0;
-  
+
   for (i = 0; i < CT::n_vertices; ++i)
     for (int j = 0; j < SD; ++j)
       Xc[j] += MeshT::getNode(static_cast<CT const*>(cell)->getNodeId(i))->getCoord(j);
-  
+
   for (i=0; i<SD; ++i)
     Xc[i] /= CT::n_vertices;
-  
+
 }
 template<class CT, int SD>
 void SMesh<CT,SD>::getCenterCoord(Facet const* facet, Real* Xc) const
@@ -1529,16 +1807,16 @@ void SMesh<CT,SD>::getCenterCoord(Facet const* facet, Real* Xc) const
   int ids[CT::n_nodes_per_facet];
   int i;
   for (i=0; i<SD; ++i) Xc[i]=0;
-  
+
   MeshT::getFacetNodesId(facet,ids);
-  
+
   for (int i = 0; i < CT::n_vertices_per_facet; ++i)
     for (int j = 0; j < SD; ++j)
       Xc[j] += MeshT::getNode( ids[i] )->getCoord(j);
 
   for (i=0; i<SD; ++i)
     Xc[i] /= CT::n_vertices_per_facet;
-  
+
 }
 template<class CT, int SD>
 void SMesh<CT,SD>::getCenterCoord(Corner const* corner, Real* Xc) const
@@ -1546,16 +1824,16 @@ void SMesh<CT,SD>::getCenterCoord(Corner const* corner, Real* Xc) const
   int ids[CT::n_nodes_per_corner];
   int i;
   for (i=0; i<SD; ++i) Xc[i]=0;
-  
+
   MeshT::getCornerNodesId(corner,ids);
-  
+
   for (int i = 0; i < CT::n_vertices_per_corner; ++i)
     for (int j = 0; j < SD; ++j)
       Xc[j] += MeshT::getNode( ids[i] )->getCoord(j);
 
   for (i=0; i<SD; ++i)
     Xc[i] /= CT::n_vertices_per_corner + (CT::dim==1?1:0);
-  
+
 }
 
 

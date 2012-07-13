@@ -6,6 +6,9 @@ TODO
 		FEPIC_CHECK( bool, "erro: actual  x = %d  but expected x = %d", x, expected );
 
 
+* arrumar buildCellsAdjacency() para malhas de edges (ajustar que são os vizinhos),
+tratando nós singulares.
+
 
 
 
@@ -28,5 +31,9 @@ TODO
 
 
 *ideia: criar a possibilidade de extrair uma malha de outra a partir de tags.
+
+
+* estender os algoritmos implementados para tri3 (singularidade, etc.) para os outros
+elementos, e criar testes de unidade.
 
 

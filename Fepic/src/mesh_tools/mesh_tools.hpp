@@ -42,7 +42,6 @@ public:
    */ 
   static void removeCell(Cell * cell, Mesh *mesh);
   
-  
 };
 
 /// specific for triangular meshes
@@ -85,9 +84,10 @@ public:
     Cell*  ce = &__sometri;
     Facet fa;
     int new_cells[3];
+  
     
-    //for (int cth = 0; cth < (int)cells_id.size(); ++cth)
-    for (int cth = 0; cth<1; ++cth)
+    for (int cth = 0; cth < (int)cells_id.size(); ++cth)
+    //for (int cth = 0; cth<1; ++cth)
     {
       c0 = mesh->getCell(cells_id[cth]);
       if (!c0)
@@ -120,7 +120,8 @@ public:
       new_cells[2] = mesh->pushCell(ce);
 
       // para cada lado que é cortado
-      for (int kk=0; kk<2; ++kk)
+      for (int kk=0; kk<0; ++kk)
+      //for (int kk=0; kk<2; ++kk)
       {
         int f = (I+kk+1)%3;
         int f_nds[2];
@@ -131,79 +132,79 @@ public:
         Real Fa = F(xa);
         Real Fb = F(xb);
         
-      if (mid_nodes[6*cth + 2*f] < 0) // não foi construído nessa f
-      {
-        //cria os vértices
-        pt.setCoord(xmid);
-        pt.setTag(c0->getTag());
-        mid_nodes[6*cth + 2*f + 0] = mesh->pushPoint(&pt);
-        mid_nodes[6*cth + 2*f + 1] = mesh->pushPoint(&pt);
-        
-        // TODO: melhorar procura
-        int oth = c0->getIncidCell(f);
-        if (oth>=0)
+        if (mid_nodes[6*cth + 2*f] < 0) // não foi construído nessa f
         {
-          std::vector<int>::iterator itl = find(cells_id.begin(), cells_id.end(), oth);
-          oth = std::distance(cells_id.begin(),itl);
-          int oth_f = c0->getIncidCellPos(f);
-          mid_nodes[6*oth + 2*oth_f + 0] = mid_nodes[6*cth + 2*f + 0];
-          mid_nodes[6*oth + 2*oth_f + 1] = mid_nodes[6*cth + 2*f + 1];
-        }
-        
-        mesh->getNode(mid_nodes[6*cth + 2*f + 0])->setIncidCell(new_cells[kk+1]);
-        mesh->getNode(mid_nodes[6*cth + 2*f + 1])->setIncidCell(new_cells[(kk+2)%3]);
-        mesh->getNode(mid_nodes[6*cth + 2*f + 0])->setPosition(new_cells[(kk+2)%3]);
-        mesh->getNode(mid_nodes[6*cth + 2*f + 1])->setPosition(new_cells[1]);
-        
-        int new_efacets[2]; // externo
-        fa.setTag(c0->getTag());
-        fa.setIncidCell(new_cells[kk+1]);
-        fa.setPosition(kk+1);
-        new_efacets[0] = mesh->pushFacet(&fa); 
-        fa.setIncidCell(new_cells[(kk+2)%3]);
-        fa.setPosition(1);
-        new_efacets[1] = mesh->pushFacet(&fa); 
-        
-        mesh->getCell(new_cells[kk+1])->setFacetId(kk+1,new_efacets[0]); 
-        mesh->getCell(new_cells[(kk+2)%3])->setFacetId(1,new_efacets[1]); 
-        
-        mesh->disableFacet(c0->getFacetId(f));
-      }
-      else
-      {
-        for (int bingo = 0; bingo<2; ++bingo)
-        {
-          Cell *some_cell = mesh->getCell(mesh->getNode(mid_nodes[6*cth + 2*f + bingo])->getIncidCell());
+          //cria os vértices
+          pt.setCoord(xmid);
+          pt.setTag(c0->getTag());
+          mid_nodes[6*cth + 2*f + 0] = mesh->pushPoint(&pt);
+          mid_nodes[6*cth + 2*f + 1] = mesh->pushPoint(&pt);
           
-          // se some_cell tem o no k, então ele está na face do sem tracejado.
-          int fth_node = c0->getNodeId(f);
-          for (int pos = 0; pos<3; ++pos)
+          // TODO: melhorar procura
+          int oth = c0->getIncidCell(f);
+          if (oth>=0)
           {
-            if (some_cell->getNodeId(pos) == fth_node)
-            {
-              mesh->getCell(new_cells[kk+1])->setIncidCell(kk+1, mesh->getCellId(some_cell));
-              mesh->getCell(new_cells[kk+1])->setIncidCellPos(kk+1, (pos+2)%3);
-              mesh->getCell(new_cells[kk+1])->setFacetId(kk+1, some_cell->getFacetId((pos+2)%3));
-              some_cell->setIncidCell((pos+2)%3, new_cells[kk+1]);
-              some_cell->setIncidCellPos((pos+2)%3, kk+1);
-              break;
-            }
+            std::vector<int>::iterator itl = find(cells_id.begin(), cells_id.end(), oth);
+            oth = std::distance(cells_id.begin(),itl);
+            int oth_f = c0->getIncidCellPos(f);
+            mid_nodes[6*oth + 2*oth_f + 0] = mid_nodes[6*cth + 2*f + 0];
+            mid_nodes[6*oth + 2*oth_f + 1] = mid_nodes[6*cth + 2*f + 1];
           }
-          for (int pos = 0; pos<3; ++pos)
+          
+          mesh->getNode(mid_nodes[6*cth + 2*f + 0])->setIncidCell(new_cells[kk+1]);
+          mesh->getNode(mid_nodes[6*cth + 2*f + 1])->setIncidCell(new_cells[(kk+2)%3]);
+          mesh->getNode(mid_nodes[6*cth + 2*f + 0])->setPosition(new_cells[(kk+2)%3]);
+          mesh->getNode(mid_nodes[6*cth + 2*f + 1])->setPosition(new_cells[1]);
+          
+          int new_efacets[2]; // externo
+          fa.setTag(c0->getTag());
+          fa.setIncidCell(new_cells[kk+1]);
+          fa.setPosition(kk+1);
+          new_efacets[0] = mesh->pushFacet(&fa); 
+          fa.setIncidCell(new_cells[(kk+2)%3]);
+          fa.setPosition(1);
+          new_efacets[1] = mesh->pushFacet(&fa); 
+          
+          mesh->getCell(new_cells[kk+1])->setFacetId(kk+1,new_efacets[0]); 
+          mesh->getCell(new_cells[(kk+2)%3])->setFacetId(1,new_efacets[1]); 
+          
+          mesh->disableFacet(c0->getFacetId(f));
+        }
+        else
+        {
+          for (int bingo = 0; bingo<2; ++bingo)
           {
-            if (some_cell->getNodeId(pos) == (fth_node+1)%3)
+            Cell *some_cell = mesh->getCell(mesh->getNode(mid_nodes[6*cth + 2*f + bingo])->getIncidCell());
+            
+            // se some_cell tem o no k, então ele está na face do sem tracejado.
+            int fth_node = c0->getNodeId(f);
+            for (int pos = 0; pos<3; ++pos)
             {
-              mesh->getCell(new_cells[(kk+2)%3])->setIncidCell(1, mesh->getCellId(some_cell));
-              mesh->getCell(new_cells[(kk+2)%3])->setIncidCellPos(1, pos);
-              mesh->getCell(new_cells[(kk+2)%3])->setFacetId(1, some_cell->getFacetId(pos));
-              some_cell->setIncidCell(pos, new_cells[(kk+2)%3]);
-              some_cell->setIncidCellPos(pos, 1);
-              break;
+              if (some_cell->getNodeId(pos) == fth_node)
+              {
+                mesh->getCell(new_cells[kk+1])->setIncidCell(kk+1, mesh->getCellId(some_cell));
+                mesh->getCell(new_cells[kk+1])->setIncidCellPos(kk+1, (pos+2)%3);
+                mesh->getCell(new_cells[kk+1])->setFacetId(kk+1, some_cell->getFacetId((pos+2)%3));
+                some_cell->setIncidCell((pos+2)%3, new_cells[kk+1]);
+                some_cell->setIncidCellPos((pos+2)%3, kk+1);
+                break;
+              }
+            }
+            for (int pos = 0; pos<3; ++pos)
+            {
+              if (some_cell->getNodeId(pos) == (fth_node+1)%3)
+              {
+                mesh->getCell(new_cells[(kk+2)%3])->setIncidCell(1, mesh->getCellId(some_cell));
+                mesh->getCell(new_cells[(kk+2)%3])->setIncidCellPos(1, pos);
+                mesh->getCell(new_cells[(kk+2)%3])->setFacetId(1, some_cell->getFacetId(pos));
+                some_cell->setIncidCell(pos, new_cells[(kk+2)%3]);
+                some_cell->setIncidCellPos(pos, 1);
+                break;
+              }
             }
           }
         }
-      }
-      
+        
       } // end kk (cada lado cortado)
       
       // crias as arestas interiores
@@ -259,10 +260,14 @@ public:
       mesh->getNode(c0->getNodeId(K))->setIncidCell(new_cells[2]);
       mesh->getNode(c0->getNodeId(K))->setPosition(2);
       
-      mesh->disableCell(cells_id[cth]);
+      //mesh->disableCell(cells_id[cth]);
       
     } // for celula
     
+    for (int cth = 0; cth < (int)cells_id.size(); ++cth)
+    {
+      mesh->disableCell(cells_id[cth]);
+    }
     
   }
   

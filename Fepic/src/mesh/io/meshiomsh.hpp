@@ -32,6 +32,7 @@ public:
   
   
   void readFileMsh(const char* filename, Mesh * mesh);
+  ECellType identifiesMshMeshType(const char* filename, int &space_dim) const;
   
   Timer timer;
 };

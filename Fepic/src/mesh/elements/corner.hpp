@@ -22,20 +22,19 @@
 #ifndef FEPIC_CORNER_HPP
 #define FEPIC_CORNER_HPP
 
-#include "implicit.hpp"
+#include "cell_element.hpp"
 #include "../labelable.hpp"
 
-class Corner : public ImplicitElement
+class Corner : public CellElement
 {
 public:
   Corner(int ic,
          int pos,
-         int anch,
          int tag,
-         int flags) : ImplicitElement(ic,pos,anch,tag,flags)
+         int flags) : CellElement(ic,pos,tag,flags)
   {}
   
-  Corner() : ImplicitElement() {}
+  Corner() : CellElement() {}
   
 };
 
