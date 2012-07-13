@@ -1002,6 +1002,7 @@ void SMesh<CT,SD>::pushIncidCell2Point(int iC, int pos)
 template<class CT, int SD>
 void SMesh<CT,SD>::buildAdjacency()
 {
+  
   this->timer.restart();
   this->buildCellsAdjacency();
   this->timer.elapsed("buildCellsAdjacency()");
@@ -1297,49 +1298,49 @@ template<class CT, int SD>
 template<int celldim>
 void SMesh<CT,SD>::buildCorners_Template(typename EnableIf<(celldim==2)>::type*)
 {
-  int const num_nodes = this->MeshT::numNodesTotal();
+  //int const num_nodes = this->MeshT::numNodesTotal();
   _cornerL.clear();
 
-  #pragma omp parallel for
-  for (unsigned c = 0; c<_cellL.total_size(); ++c)
-    _cellL[c].CT::resetCornersId();
-
-  //#pragma omp parallel default(none)
-  {
-    PointT * point;
-    //std::tr1::shared_ptr<CornerT> corner(new CornerT); // Corner
-    CornerT corner;
-    int corner_id;
-    int iCs[FEPIC_MAX_ICELLS], viCs[FEPIC_MAX_ICELLS]; // MAX_ICELLS
-    int const* iCs_it, *viCs_it;
-    int const* iCs_end;
-    int C, vC;
-
-    //#pragma omp for
-    for (int i = 0; i < num_nodes; ++i)
-    {
-      point = this->MeshT::getNode(i);
-      if (point->disabled() || (!this->MeshT::isVertex(point)))
-        continue;
-
-      C = point->PointT::getIncidCell();
-      vC= point->PointT::getPosition();
-
-      iCs_end = this->MeshT::vertexStar(C, vC, iCs, viCs);
-
-      // create a edge
-      corner.setIncidCell(C);
-      corner.setPosition(vC);
-      //corner.setAnchor(0);
-      corner_id = this->MeshT::pushCorner(&corner);
-
-      for (iCs_it = iCs, viCs_it = viCs; iCs_it != iCs_end; ++iCs_it, ++viCs_it)
-        this->MeshT::getCell(*iCs_it)->CT::setCornerId(*viCs_it, corner_id);
-
-    }
-
-
-  }
+  //#pragma omp parallel for
+  //for (unsigned c = 0; c<_cellL.total_size(); ++c)
+  //  _cellL[c].CT::resetCornersId();
+  //
+  ////#pragma omp parallel default(none)
+  //{
+  //  PointT * point;
+  //  //std::tr1::shared_ptr<CornerT> corner(new CornerT); // Corner
+  //  CornerT corner;
+  //  int corner_id;
+  //  int iCs[FEPIC_MAX_ICELLS], viCs[FEPIC_MAX_ICELLS]; // MAX_ICELLS
+  //  int const* iCs_it, *viCs_it;
+  //  int const* iCs_end;
+  //  int C, vC;
+  //
+  //  //#pragma omp for
+  //  for (int i = 0; i < num_nodes; ++i)
+  //  {
+  //    point = this->MeshT::getNode(i);
+  //    if (point->disabled() || (!this->MeshT::isVertex(point)))
+  //      continue;
+  //
+  //    C = point->PointT::getIncidCell();
+  //    vC= point->PointT::getPosition();
+  //
+  //    iCs_end = this->MeshT::vertexStar(C, vC, iCs, viCs);
+  //
+  //    // create a edge
+  //    corner.setIncidCell(C);
+  //    corner.setPosition(vC);
+  //    //corner.setAnchor(0);
+  //    corner_id = this->MeshT::pushCorner(&corner);
+  //
+  //    for (iCs_it = iCs, viCs_it = viCs; iCs_it != iCs_end; ++iCs_it, ++viCs_it)
+  //      this->MeshT::getCell(*iCs_it)->CT::setCornerId(*viCs_it, corner_id);
+  //
+  //  }
+  //
+  //
+  //}
 
 }
 

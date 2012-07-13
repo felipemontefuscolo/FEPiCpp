@@ -345,14 +345,17 @@ void MeshIoMsh::readFileMsh(const char* filename, Mesh * mesh)
           mesh->getNode(nodes[i])->setTag(physical);
       }
       //std::copy( nodes, nodes + n_vertices_per_facet, vtcs );
-      if (mesh->getFacetIdFromVertices(nodes, facet_id))
-        mesh->getFacet(abs(facet_id))->setTag(physical); //std::cout << (++TESTE) << std::endl;
-      else
+      if (cell_dim > 1)
       {
-        printf("WARNING: INVALID FACET IN INPUT MESH! vtcs: ");
-        for (int zz = 0; zz < n_nodes_per_facet; ++zz)
-          printf("%d ", nodes[zz]);
-        printf("\n");
+        if (mesh->getFacetIdFromVertices(nodes, facet_id))
+          mesh->getFacet(abs(facet_id))->setTag(physical); //std::cout << (++TESTE) << std::endl;
+        else
+        {
+          printf("WARNING: INVALID FACET IN INPUT MESH! vtcs: ");
+          for (int zz = 0; zz < n_nodes_per_facet; ++zz)
+            printf("%d ", nodes[zz]);
+          printf("\n");
+        }
       }
     }
     else if (elm_dim == cell_dim-2) // corners
@@ -365,10 +368,13 @@ void MeshIoMsh::readFileMsh(const char* filename, Mesh * mesh)
           mesh->getNode(bnodes[i])->setTag(physical);
       }
       //std::copy( bnodes, bnodes + n_vertices_per_corner, bvtcs );
-      if (mesh->getCornerIdFromVertices(bnodes, corner_id))
-        mesh->getCorner(abs(corner_id))->setTag(physical); //std::cout << (++TESTE) << std::endl;
-      else if (mesh->isVertex(mesh->getNode(bnodes[0])) ) // if is vertex
-          printf("WARNING: INVALID CORNER IN INPUT MESH!\n");
+      if (cell_dim>2)
+      {
+        if (mesh->getCornerIdFromVertices(bnodes, corner_id))
+          mesh->getCorner(abs(corner_id))->setTag(physical); //std::cout << (++TESTE) << std::endl;
+        else if (mesh->isVertex(mesh->getNode(bnodes[0])) ) // if is vertex
+            printf("WARNING: INVALID CORNER IN INPUT MESH!\n");
+      }
     }
     else
     {
