@@ -195,7 +195,7 @@ public:
   virtual int* incidentFacets(Point const* p, int *iFs, int *viFs) const = 0;
   virtual int* incidentFacets(int nodeid, int *iFs, int *viFs) const = 0;
   virtual Facet* nextBoundaryFacet(Facet const*f) const = 0;
-  virtual void pushIncidCell2Point(int iC, int pos) = 0;
+  virtual void pushIncidCell2Point(Point *pt, int iC, int pos) = 0;
 
 
   virtual void qBuildAdjacency(bool b)
@@ -566,11 +566,10 @@ public:
     return this->MeshT::nextBoundaryFacet_template<CellT::dim>(f);
   }
 
-  /** set iC as the incident cell to the point (iC,pos) if, and only if,
-   *  the point doesnt have an incident cell with same connected component
-   *  of the iC.
+  /** set iC as the incident cell to the point pt = (iC,pos). If a cell has the same
+   *  connected component of the iC, then it is replaced.
    */ 
-  void pushIncidCell2Point(int iC, int pos);
+  void pushIncidCell2Point(Point *pt, int iC, int pos);
 
   // ---------------------------------------------------- EDGE STAR ---------------------------------------------------
 

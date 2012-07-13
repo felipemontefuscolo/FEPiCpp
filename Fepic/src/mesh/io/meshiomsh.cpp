@@ -371,7 +371,9 @@ void MeshIoMsh::readFileMsh(const char* filename, Mesh * mesh)
       if (cell_dim>2)
       {
         if (mesh->getCornerIdFromVertices(bnodes, corner_id))
+        {
           mesh->getCorner(abs(corner_id))->setTag(physical); //std::cout << (++TESTE) << std::endl;
+        }
         else if (mesh->isVertex(mesh->getNode(bnodes[0])) ) // if is vertex
             printf("WARNING: INVALID CORNER IN INPUT MESH!\n");
       }

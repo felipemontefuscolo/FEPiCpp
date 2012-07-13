@@ -36,6 +36,7 @@
 #include <tr1/array>
 #include <tr1/tuple>
 #include <algorithm>
+#include <tr1/memory>
 
 
 TEST(identifiesMshMeshTypeTest, IOTest)
@@ -1381,12 +1382,9 @@ TEST(Tri3SetBoundaryComponentIdTest, WithSingularVertexTest)
     
   }
   
-  mesh->getNode(0)->replacesIncidCell(1,1,1);
 
   delete mesh;
 }
-
-
 
 
 
@@ -1405,20 +1403,82 @@ TEST(PushIncidCell2Point, WithSingularVertexTest)
   //vtk_printer.attachMesh(mesh);
   //vtk_printer.writeVtk("meshes/out/simpedge2.vtk");
 
-  Point* p = mesh->getNode(5);
+  Point* p = mesh->getNode(0);
 
   EXPECT_EQ(0, p->singularity());
   
   EXPECT_EQ(-1, p->getIncidCell());
 
+  // initial setting
+  p->setIncidCell(4);
+  p->setPosition(0);
+  EXPECT_EQ(4, p->getIncidCell());
+  EXPECT_EQ(0, p->getPosition());
+  
+  mesh->getCell(4)->setConnectedComponentId(1);
+  mesh->getCell(3)->setConnectedComponentId(1);
+  mesh->getCell(9)->setConnectedComponentId(2);
+  mesh->getCell(10)->setConnectedComponentId(2);
+  mesh->getCell(12)->setConnectedComponentId(3);
 
+  mesh->pushIncidCell2Point(p, 4,0);
+  mesh->pushIncidCell2Point(p, 3,0);
+  mesh->pushIncidCell2Point(p, 9,0);
+  mesh->pushIncidCell2Point(p, 10,0);
+  
+  p->replacesIncidCell(12,3,1); // do nothing
+
+  EXPECT_EQ(1, p->singularity());
+  
+  p->replacesIncidCell(3,-1,-1);
+
+  EXPECT_EQ(0, p->singularity());
+
+  mesh->pushIncidCell2Point(p,10,0);
+  
+  EXPECT_EQ(0, p->singularity());
+  
+  mesh->pushIncidCell2Point(p,3,0);
+  
+  EXPECT_EQ(1, p->singularity());
+  
   delete mesh;
 }
 
 
 
+TEST(Tri3NodeSingularityTest, WithSingularVertexTest)
+{
+  MeshIoMsh msh_reader;
+  MeshIoVtk vtk_printer;
+  //std::tr1::shared_ptr< SMesh<Triangle3,3> > mesh;
+  Mesh* mesh;
+  int dim = 2;
 
+  //mesh.reset( (SMesh<Triangle3,3>*)Mesh::create(TRIANGLE3,dim) );
+  mesh =Mesh::create(TRIANGLE3,dim) ;
+  
+  //mesh->qBuildAdjacency(true);
+  
+  //msh_reader.readFileMsh("meshes/singular_tri3a.msh", mesh.get());
+  msh_reader.readFileMsh("meshes/singular_tri3a.msh", mesh);
+  //vtk_printer.attachMesh(mesh);
+  //vtk_printer.writeVtk("meshes/out/simpedge2.vtk");
 
+  bool is_sing[] = {1,0,0,0,0,1,0,0,0,0,0,0,1,1,0,0,0};
+
+  for (int i = 0; i < static_cast<int>( sizeof(is_sing)/sizeof(bool) ); ++i)
+  {
+    EXPECT_TRUE(mesh->getNode(i)->isSingular()==is_sing[i]) << std::cout << "i= " << i << std::endl;
+  }
+  
+  
+  
+  EXPECT_TRUE(true);
+
+  delete mesh;
+  
+}
 
 
 

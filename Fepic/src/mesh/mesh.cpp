@@ -379,32 +379,41 @@ int* SMesh<CT,SD>::vertexStar_Template(int C, int vC, int *iCs, int *viCs, typen
 {
   FEPIC_CHECK(unsigned(vC)<CT::n_vertices && C>=0, "invalid C or vC", std::invalid_argument);
 
-  CT const* cell;
-  int g, D=C, vD=vC, q=0;
+  PointT const* pt = this->MeshT::getNode(this->MeshT::getCell(C)->CT::getNodeId(vC));
+  int const n_connected_comps = pt->PointT::singularity()+1;
 
-  *iCs++  = C;
-  *viCs++ = vC;
-
-  for (;;)
+  for (int cc = 0; cc < n_connected_comps; ++cc)
   {
-    cell = this->MeshT::getCell(D);
-    g = (CT::n_facets + vD -q)%CT::n_facets;
-    D = cell->CT::getIncidCell(g);
-    if (D<0)
+    pt->getIthIncidCell(cc,C,vC);
+    
+    CT const* cell;
+    int g, D=C, vD=vC, q=0;
+
+    *iCs++  = C;
+    *viCs++ = vC;
+
+    for (;;)
     {
-      if(q) break;
-      D = C;
-      vD = vC;
-      q = 1;
-      continue;
+      cell = this->MeshT::getCell(D);
+      g = (CT::n_facets + vD -q)%CT::n_facets;
+      D = cell->CT::getIncidCell(g);
+      if (D<0)
+      {
+        if(q) break;
+        D = C;
+        vD = vC;
+        q = 1;
+        continue;
+      }
+      if (D==C)
+        break;
+      g = cell->CT::getIncidCellPos(g);
+      vD = (g + 1 - q) % CT::n_facets;
+      *iCs++  = D;
+      *viCs++ = vD;
+      //printf("DEBUG     %d, %d de %d, %d\n",D, vD, C, vC);
     }
-    if (D==C)
-      break;
-    g = cell->CT::getIncidCellPos(g);
-    vD = (g + 1 - q) % CT::n_facets;
-    *iCs++  = D;
-    *viCs++ = vD;
-    //printf("DEBUG     %d, %d de %d, %d\n",D, vD, C, vC);
+    
   }
 
   *iCs = -1;
@@ -972,13 +981,18 @@ Facet* SMesh<CT,SD>::nextBoundaryFacet_template(Facet const*, typename EnableIf<
 
 
 template<class CT, int SD>
-void SMesh<CT,SD>::pushIncidCell2Point(int iC, int pos)
+void SMesh<CT,SD>::pushIncidCell2Point(Point *pt, int iC, int pos)
 {
   FEPIC_CHECK((unsigned)iC<this->numCellsTotal(),"invalid index iC", std::invalid_argument);
   
   CellT* icell = this->MeshT::getCell(iC);
   PointT* p = this->MeshT::getNode(icell->CT::getNodeId(pos));
+  
+  FEPIC_CHECK(p == pt, "incompatible argument:pt must match the (iC,pos)", std::invalid_argument);
+  
   int const iC_CCid = icell->CT::getConnectedComponentId();
+  
+  FEPIC_CHECK(iC_CCid>=0, "input iC has no connected component id", std::invalid_argument);
   
   const int n_icells = p->singularity()+1;
   
@@ -986,9 +1000,16 @@ void SMesh<CT,SD>::pushIncidCell2Point(int iC, int pos)
   
   for (int i = 0; i < n_icells; ++i)
   {
-    p->PointT::getIthIncidCell(i,oic,opos);
+    p->getIthIncidCell(i,oic,opos);
+    if (oic<0)
+    {
+      printf("i=%d iC_CCid=%d n_icells=%d \n",i,iC_CCid, n_icells);
+    }
     if (this->MeshT::getCell(oic)->CT::getConnectedComponentId() == iC_CCid)
+    {
+      p->replacesIncidCell(oic, iC, pos);
       return;
+    }
   }
   //else
   p->PointT::pushIncidCell(iC, pos);
@@ -1421,6 +1442,7 @@ void SMesh<CT,SD>::buildNodesAdjacency()
   int const num_cells    = this->numCellsTotal();
   int const nodes_p_cell = CT::n_nodes;
   int const num_nodes    = this->numNodesTotal();
+  int const nnpf         = this->numNodesPerFacet();
 
   #pragma omp parallel for
   for (int i=0; i<num_nodes; ++i)
@@ -1442,19 +1464,18 @@ void SMesh<CT,SD>::buildNodesAdjacency()
       if (cell->CT::disabled())
         continue;
 
-      if(!cell->CT::inBoundary())
-        for (int n = 0; n < nodes_p_cell; ++n)
+      for (int n = 0; n < nodes_p_cell; ++n)
+      {
+        point = this->MeshT::getNode(cell->CT::getNodeId(n));
+        //#pragma omp critical
         {
-          point = this->MeshT::getNode(cell->CT::getNodeId(n));
-          //#pragma omp critical
-          {
           point->PointT::setIncidCell(C);
           point->PointT::setPosition(n);
-          }
         }
+      }
     }
 
-
+    int fnodes[nnpf];
     // then the cells that is in boundary
     //#pragma omp for
     for (int C = 0; C < num_cells; ++C)
@@ -1463,16 +1484,22 @@ void SMesh<CT,SD>::buildNodesAdjacency()
       if (cell->CT::disabled())
         continue;
 
-      if(cell->CT::inBoundary())
-        for (int n = 0; n < nodes_p_cell; ++n)
+      for (int j = 0; j < CT::n_facets; ++j)
+      {
+        cell->getFacetNodesId(j,fnodes);
+        for (int n = 0; n < nnpf; ++n)
         {
-          point = this->MeshT::getNode(cell->CT::getNodeId(n));
+          point = this->MeshT::getNode(fnodes[n]);
           //#pragma omp critical
           {
-          point->PointT::setIncidCell(C);
-          point->PointT::setPosition(n);
+            //point->PointT::setIncidCell(C);
+            //point->PointT::setPosition(n);
+            //this->pushIncidCell2Point(point,C,j);
+            this->pushIncidCell2Point(point,C,CT::table_fC_x_nC[j][n]);
           }
         }
+      }
+
     }
 
   } // end parallel
@@ -1558,7 +1585,7 @@ void SMesh<CT,SD>::_setBoundaryComponentsId(Facet * f_ini, int bc_id)
 
   if (CellT::dim==1 || CellT::dim==3)
   {
-    printf("warning: setBoundaryComponentsId not implemented for 1d and 3d cells.\n");
+    //printf("warning: setBoundaryComponentsId not implemented for 1d and 3d cells.\n");
     return;
   }
 
@@ -1630,7 +1657,7 @@ bool SMesh<CT,SD>::getFacetIdFromVertices(int const* vtcs, int &fid)
 
     if (!found) continue;
 
-    if (fC<0) fid = -cell->CellT::getFacetId(fC);
+    if (fC<0) fid = -cell->CellT::getFacetId(abs(fC));
     else      fid = +cell->CellT::getFacetId(fC);
     return true;
   }
@@ -1666,6 +1693,8 @@ bool SMesh<CT,SD>::getCornerIdFromVertices(int const* vtcs, int &rid)
   // células incidentes ao primeiro vértice da corner
   int* iCs_end = this->MeshT::vertexStar(pt->PointT::getIncidCell(), pt->PointT::getPosition(), iCs, trash);
 
+  FEPIC_CHECK(iCs_end-iCs<=FEPIC_MAX_ICELLS,"INCREASE FEPIC_MAX_ICELLS ", std::runtime_error);
+
   for(int* iC = iCs; iC!=iCs_end; ++iC)
   {
     cell = this->MeshT::getCell(*iC);
@@ -1673,7 +1702,7 @@ bool SMesh<CT,SD>::getCornerIdFromVertices(int const* vtcs, int &rid)
 
     if (!found) continue;
 
-    if (bfC<0) rid = -cell->CellT::getCornerId(bfC);
+    if (bfC<0) rid = -cell->CellT::getCornerId(abs(bfC));
     else       rid = +cell->CellT::getCornerId(bfC);
     return true;
   }

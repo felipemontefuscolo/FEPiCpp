@@ -58,7 +58,7 @@ public:
   }
   
 
-private:
+protected:
   // manter nessa ordem mesmo, para evitar padding
   char  _icell_pos;   // facet lid of incident cell
   int   _icell;

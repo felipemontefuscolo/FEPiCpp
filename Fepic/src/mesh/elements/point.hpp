@@ -49,8 +49,10 @@ public:
   virtual Real const* getCoord() const = 0;
   virtual void pushIncidCell(int cid, int pos) = 0;
   virtual int singularity() const = 0;
+  virtual bool isSingular() const = 0;
   virtual void replacesIncidCell(int cid, int cid_subs, int cid_subs_pos) = 0;
   virtual void getIthIncidCell(int ith, int &ic, int &pos) const = 0;
+  
 
   virtual ~Point(){};
 };
@@ -160,6 +162,11 @@ public:
     return _extra_icells.size();
   }
 
+  bool isSingular() const
+  {
+    return !_extra_icells.empty();
+  }
+
   class _RemoveCriteria { public:
     _RemoveCriteria(int id) : _id_to_compare(id) {};
     bool operator() (std::pair<int,char> const& p) {return p.first==_id_to_compare;};
@@ -219,8 +226,8 @@ public:
     //FEPIC_CHECK((unsigned)ith <= _extra_icells.size(), "invalid index", std::invalid_argument);
     if (ith == 0)
     {
-      ic = getIncidCell();
-      pos = getPosition();
+      ic = this->getIncidCell();
+      pos = this->getPosition();
       return;
     }
     else
@@ -237,9 +244,11 @@ public:
           return;
         }
       }
-      FEPIC_CHECK((unsigned)ith <= _extra_icells.size(), "invalid index", std::invalid_argument);
+      printf("ERROR: getIthIncidCell: invalid index\n");
+      throw;
     }
   }
+
 
   /** Destrutor.
   */
