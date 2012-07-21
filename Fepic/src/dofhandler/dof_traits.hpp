@@ -57,6 +57,7 @@ struct _DofTraits<Shape>                                \
 }
 
 
+
 // not account DOFs for twice
 // nao contabiliza os graus de liberdade duas vezes
 //                        Shape            , ndpv, ndpr, ndpf, ndpc, nv, nr, nf, di)
@@ -73,7 +74,7 @@ struct _DofTraits<Shape>                                \
 /*11*/FEP_FORM_DOF_TRAITS(Shape_QUAD_Q2    ,    1,    0,    1,    1,  4,  4,  4,  2);
 /*12*/FEP_FORM_DOF_TRAITS(Shape_QUAD_BUBBLE,    0,    0,    0,    1,  4,  4,  4,  2);
 /*13*/FEP_FORM_DOF_TRAITS(Shape_QUAD_Q1ph  ,    1,    0,    0,    1,  4,  4,  4,  2);
-/*14*/FEP_FORM_DOF_TRAITS(Shape_QUAD_Pm1   ,    0,    0,    0,    4,  4,  4,  4,  2);
+/*14*/FEP_FORM_DOF_TRAITS(Shape_QUAD_Pm1   ,    0,    0,    0,    3,  4,  4,  4,  2);
 /*15*/FEP_FORM_DOF_TRAITS(Shape_QUAD_Q2ser ,    1,    0,    1,    0,  4,  4,  4,  2);
 /*16*/FEP_FORM_DOF_TRAITS(Shape_TET_P1     ,    1,    0,    0,    0,  4,  6,  4,  3);
 /*17*/FEP_FORM_DOF_TRAITS(Shape_TET_P2     ,    1,    1,    0,    0,  4,  6,  4,  3);

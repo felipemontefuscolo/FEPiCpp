@@ -5,6 +5,7 @@
 #include "../util/misc2.hpp"
 #include "../util/sorted_vec.hpp"
 #include <map>
+#include <deque>
 #include <cmath>
 #if (FEP_HAS_OPENMP)
   #include <omp.h>
@@ -380,7 +381,7 @@ int* SMesh<CT,SD>::vertexStar_Template(int C, int vC, int *iCs, int *viCs, typen
   FEPIC_CHECK(unsigned(vC)<CT::n_vertices && C>=0, "invalid C or vC", std::invalid_argument);
 
   PointT const* pt = this->MeshT::getNode(this->MeshT::getCell(C)->CT::getNodeId(vC));
-  int const n_connected_comps = pt->PointT::singularity()+1;
+  int const n_connected_comps = pt->PointT::numIncidCells();
 
   for (int cc = 0; cc < n_connected_comps; ++cc)
   {
@@ -994,7 +995,7 @@ void SMesh<CT,SD>::pushIncidCell2Point(Point *pt, int iC, int pos)
   
   FEPIC_CHECK(iC_CCid>=0, "input iC has no connected component id", std::invalid_argument);
   
-  const int n_icells = p->singularity()+1;
+  const int n_icells = p->numIncidCells();
   
   int oic, opos;
   
@@ -1447,8 +1448,9 @@ void SMesh<CT,SD>::buildNodesAdjacency()
   #pragma omp parallel for
   for (int i=0; i<num_nodes; ++i)
   {
-    _pointL[i].setIncidCell(-1);
-    _pointL[i].setPosition(-1);
+    //_pointL[i].setIncidCell(-1);
+    //_pointL[i].setPosition(-1);
+    _pointL[i].clearIncidences();
   }
 
   //#pragma omp parallel default(none)
@@ -1511,14 +1513,18 @@ void SMesh<CT,SD>::_setConnectedComponentsId(Cell * c_ini, int cc_id)
 {
   FEPIC_ASSERT((unsigned)this->getCellId(c_ini) < this->numCellsTotal(), " invalid pointer",std::invalid_argument );
 
-  std::list<int> cells2setup;
+  std::deque<int> cells2setup; // TODO: usar deque<> talvez seja melhor
+  int const n_cells_total = this->numCellsTotal();
   //std::list<int>::iterator current_id;
   CellT *oc, *current;
 
   cells2setup.push_back(this->getCellId(c_ini));
+  this->MeshT::getCell(cells2setup.front())->CT::visited(true);
   
   while (!cells2setup.empty())
   {
+    FEPIC_ASSERT((int)cells2setup.size()<=n_cells_total, "Infinite loop at _setConnectedComponentsId", std::runtime_error);
+    
     current = this->MeshT::getCell(cells2setup.front());
     
     for (int i = 0; i < CT::n_facets; ++i)
@@ -1529,15 +1535,16 @@ void SMesh<CT,SD>::_setConnectedComponentsId(Cell * c_ini, int cc_id)
       if (!oc->CT::visited())
       {
         cells2setup.push_back(this->getCellId(oc));
+        oc->CT::visited(true);
       }
     }
     
     current->CT::setConnectedComponentId(cc_id);
-    current->CT::visited(true);
     cells2setup.pop_front();
+
   }
   
-  const int n_cells_total = _cellL.size();
+  //const int n_cells_total = _cellL.size();
   
   //clear flags
   #pragma omp parallel for
@@ -1552,6 +1559,7 @@ template<class CT, int SD>
 void SMesh<CT,SD>::setUpConnectedComponentsId()
 {
   const int n_cells_total = _cellL.size();
+  _connected_compL.clear();
   
   //clear conn comp ids
   #pragma omp parallel for
@@ -1575,7 +1583,6 @@ void SMesh<CT,SD>::setUpConnectedComponentsId()
      _connected_compL.insert(std::pair<int,int>(id, i));
     ++id;
   }
-  
 }
 
 template<class CT, int SD>
@@ -1595,6 +1602,7 @@ void SMesh<CT,SD>::_setBoundaryComponentsId(Facet * f_ini, int bc_id)
   {
     fit->setBoundaryComponentId(bc_id);
     fit = nextBoundaryFacet(fit);
+    //printf("this->getFacetId(fit) = %d    this->getFacetId(f_ini) = %d \n", (int)this->getFacetId(fit), (int)this->getFacetId(f_ini));
   }
   
 }
@@ -1604,13 +1612,13 @@ template<class CT, int SD>
 void SMesh<CT,SD>::setUpBoundaryComponentsId()
 {
   int const n_facets_total = this->MeshT::numFacetsTotal();
+  _boundary_compL.clear();
     //clear conn comp ids
   #pragma omp parallel for
   for (int i = 0; i < n_facets_total; ++i)
   {
     this->MeshT::getFacet(i)->FacetT::setBoundaryComponentId(-1);
   }
-  
   // start from 1
   int id = 1;
   

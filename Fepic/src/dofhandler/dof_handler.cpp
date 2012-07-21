@@ -42,12 +42,12 @@ extern "C" {
 };
 #endif
 
-void DofHandler::addVariable(const char* var_name, ShapeFunction *sf, int dim, int ntags, int const* tags)
+void DofHandler::addVariable(const char* var_name, ShapeFunction *sf, int ncomps, int ntags, int const* tags)
 {
-  addVariable(var_name, sf->numDofsAssociatedToVertice()*dim,
-                        sf->numDofsAssociatedToCorner()*dim,
-                        sf->numDofsAssociatedToFacet()*dim,
-                        sf->numDofsAssociatedToCell()*dim,
+  addVariable(var_name, sf->numDofsAssociatedToVertice()*ncomps,
+                        sf->numDofsAssociatedToCorner()*ncomps,
+                        sf->numDofsAssociatedToFacet()*ncomps,
+                        sf->numDofsAssociatedToCell()*ncomps,
                         ntags, tags);
 }
 

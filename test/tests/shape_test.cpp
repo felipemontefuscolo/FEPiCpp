@@ -79,17 +79,21 @@ Real diff_(F const& f, Real const*x, int c, int Dim)
 }
 
 
-class ShapeTest : public testing::TestWithParam< CSN_t > { // vertex id
+class ShapeTest : public testing::TestWithParam< CSN_t >
+{ // vertex id
 public:
 
   virtual void SetUp() {
+
+    MeshIoMsh msh_reader; 
     
-    ECellType   cell_t  = std::tr1::get<0>(GetParam());
+    ECellType   cell_t = std::tr1::get<0>(GetParam());
     EShapeType shape_t = std::tr1::get<1>(GetParam());
     const char* m_name = std::tr1::get<2>(GetParam());
     
     mesh = Mesh::create(cell_t);
     //msh_reader.readFileMsh("meshes/simptri3.msh", mesh);
+    
     msh_reader.readFileMsh(m_name, mesh);
 
     phi = ShapeFunction::create(cell_t, shape_t);
@@ -102,7 +106,6 @@ public:
     delete phi;
   }
 
-  MeshIoMsh msh_reader;
   //MeshIoVtk vtk_printer;
   Mesh *mesh;
   ShapeFunction *phi;
@@ -142,18 +145,21 @@ CSN_t csn_table[] = {CSN_t(EDGE2,        P0    , "meshes/uni_edge.msh"),  //  0
                      CSN_t(HEXAHEDRON8,  BUBBLE, "meshes/uni_hex.msh")};  // 30
 
 
-TEST_P(ShapeTest, GradPrecisionTest) {
+TEST_P(ShapeTest, GradPrecisionTest)
+{
 
   Real const* x;
   int  ith = 1;
   int  component = 0;
   
   int sdim = mesh->spaceDim();
-    
+  
+  int const n_nodes = mesh->numNodes();
+  
   // Shape function placeholder
   std::tr1::function<Real (Real const*)> Func;
   
-  for (int i = 0; i < mesh->numNodes(); ++i)
+  for (int i = 0; i < n_nodes; ++i)
   {
     x = mesh->getNode(i)->getCoord();
     
@@ -180,15 +186,16 @@ TEST_P(ShapeTest, GradPrecisionTest) {
 
  
 
-TEST_P(ShapeTest, PartitionOfUnityTest) {
+TEST_P(ShapeTest, PartitionOfUnityTest)
+{
 
   Real const* x;
   Real acc;
   int  ith = 1;
+  int const n_nodes = mesh->numNodes();
   
-    
   if (phi->partUnity())
-    for (int i = 0; i < mesh->numNodes(); ++i)
+    for (int i = 0; i < n_nodes; ++i)
     {
       x = mesh->getNode(i)->getCoord();
       
@@ -235,10 +242,12 @@ TEST(OutroTeste, HaHaHaHa)
       z = aux2;
   }
   
-  std::cout << "CONNECTED NODES: " << q << std::endl;
-  std::cout << "VERTEX STAR:     " << z << std::endl;
+  //std::cout << "CONNECTED NODES: " << q << std::endl;
+  //std::cout << "VERTEX STAR:     " << z << std::endl;
 
   delete mesh;
+  
+  EXPECT_TRUE(true);
 }
 
 

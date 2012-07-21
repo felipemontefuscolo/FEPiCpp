@@ -37,7 +37,7 @@ public:
   };
 
 protected:
-  _Labelable(int tag, int flags=0) : _tag(tag), _flags(flags)
+  explicit _Labelable(int tag, int flags=0) : _tag(tag), _flags(flags)
   {
     FEPIC_CHECK((tag>=0)&&(tag<tag_size), "tag number must be less than "+std::string(itoa(tag_size))+" and greater than 0", std::out_of_range);
     FEPIC_CHECK((flags>=0)&&(flags<flags_size), "wrong flags", std::out_of_range);

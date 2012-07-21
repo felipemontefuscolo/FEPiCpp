@@ -8,32 +8,56 @@ using namespace std;
 void printMesh(Mesh *mesh);
 
 
-//int main(int argc, char *argv[])
+class IteratorTest
+{
+public:
+
+  virtual ~IteratorTest() {delete mesh;}
+  
+  virtual void SetUp() {
+    
+    //Mesh *mesh;
+    
+    ECellType cell_t     = TRIANGLE3;
+    const char* mesh_in  = "tests/meshes/iter_tri3.msh";
+    
+    //mesh = Mesh::create(cell_t);
+    mesh = new SMesh<Triangle3,2>;
+
+    mesh->numNodes();
+    //
+    mesh->qBuildAdjacency(false);
+    //
+    Mesh const*const mesh2 = mesh;
+    Mesh *const mesh3 = mesh;
+    cout << "a) mesh==mesh2 : " << (mesh==mesh2) << "; " << mesh2 << " " << mesh<< endl;
+    msh_reader.readFileMsh(mesh_in, mesh3);
+    cout << "b) mesh==mesh2 : " << (mesh==mesh2) << "; " << mesh2 << " " << mesh<< endl;
+    //
+    mesh->numNodes();
+
+  };
+
+  virtual void TearDown()
+  {
+    delete mesh;
+  }
+
+protected:
+  MeshIoMsh msh_reader;
+  //  //MeshIoVtk vtk_printer;
+  Mesh *mesh;
+  
+};
+
+
+
 int main()
 {
 
-  MeshIoMsh msh_reader;
-  MeshIoVtk vtk_printer;
-  SMesh<Triangle3,3> *mesh;
-  int dim = 3;
-
-  mesh = (SMesh<Triangle3,3>*)Mesh::create(TRIANGLE3,dim);
+  IteratorTest t;
   
-  mesh->qBuildAdjacency(true);
-  
-  msh_reader.readFileMsh("tests/meshes/singular_tri3a.msh", mesh);
-  //vtk_printer.attachMesh(mesh);
-  //vtk_printer.writeVtk("meshes/out/simpedge2.vtk");
-
-  
-  delete mesh;
-  
-  
-  
-  
-  
-  
-  
+  t.SetUp();
   
   
   

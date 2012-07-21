@@ -27,15 +27,35 @@
 class CellElement : public _Labelable
 {
 public:  
+  
+  CellElement(int tag, int flags) :  _Labelable(tag,flags) {}
+  CellElement() : _Labelable() {}
 
-  CellElement(int ic=-1,
-               int pos=-1,
-               int tag=0,
-               int flags=0) : _Labelable(tag,flags),
-                              _icell_pos(pos),
-                              _icell(ic)
-                              {}
+  virtual int getIncidCell() const = 0;
+  virtual int getPosition() const = 0;
+  virtual void setIncidCell(int icell_id) = 0;
+  virtual void setPosition(int pos) = 0;
 
+  ~CellElement() {}
+
+};
+
+
+
+// Facets and corners have this
+class _NodeLessElement : public CellElement
+{
+public:  
+  explicit _NodeLessElement(int ic=-1,
+                               int pos=-1,
+                               int tag=0,
+                               int flags=0) : CellElement(tag,flags),
+                                              _icell_pos(pos),
+                                              _icell(ic)
+                                              {}
+  
+  // --- inherited from CellElement --- ///
+  
   int getIncidCell() const
   {
     return _icell;
@@ -57,6 +77,11 @@ public:
     _icell_pos = pos;
   }
   
+  // --------------------------------------- //
+  
+  
+  
+  ~_NodeLessElement() {}
 
 protected:
   // manter nessa ordem mesmo, para evitar padding
@@ -64,6 +89,5 @@ protected:
   int   _icell;
   
 };
-
 
 #endif

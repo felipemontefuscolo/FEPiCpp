@@ -36,7 +36,7 @@ void MeshTools::removeCell(Cell * cell, Mesh *mesh)
     }
 
   // killing corners
-  if (cell_dim > 1)
+  if (cell_dim > 2)
     for (int i = 0; i < n_corners_per_cell; ++i)
     {
       id = cell->getCornerId(i);
@@ -76,7 +76,7 @@ void MeshTools::removeCell(Cell * cell, Mesh *mesh)
       }
 
     //corners
-    if (cell_dim > 1)
+    if (cell_dim > 2)
       for (int j = 0; j < n_corners_per_cell; ++j)
       {
         cr = mesh->getCorner(neib->getCornerId(j));

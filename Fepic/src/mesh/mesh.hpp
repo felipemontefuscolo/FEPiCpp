@@ -675,7 +675,7 @@ public:
 
   /** NOT FOR USERS
    * auxiliary function 
-   * set the connected component id to which c_ini belongs.
+   * set the connected component id starting from c_ini with id cc_id.
    * @warning visited() flags are used.
    */ 
   void _setConnectedComponentsId(Cell * c_ini, int cc_id);

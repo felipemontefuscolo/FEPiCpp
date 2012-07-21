@@ -150,8 +150,11 @@ void MeshIoMsh::readFileMsh(const char* filename, Mesh * mesh)
 
   //mesh->_pointL_original_size = num_pts;
   mesh->resizePointL(num_pts);
-
-
+  
+  //mesh->printInfo();
+  //std::cout << "DEBUGGGGGGGGGGGGGGGGGGG:  "<<mesh << std::endl;
+  //printf("DEBUGGGGGGGGGGGGGGGGGGGGGGGGGGG num_pts=%d; numNodesTotal()=%d; numNodes()=%d\n",num_pts,mesh->numNodesTotal(), mesh->numNodes());
+  
   fgets(buffer, sizeof(buffer), file_ptr); // escapa do \n
   for (int i=0; i< num_pts; ++i)
   {
@@ -163,6 +166,7 @@ void MeshIoMsh::readFileMsh(const char* filename, Mesh * mesh)
   // os pontos não estão completas: falta atribuir os labels
 
   // contagem de elementos e alocação
+  
   elems_file_pos = find_keyword("$Elements", 9, file_ptr);
 
   FEPIC_ASSERT(elems_file_pos>0, "invalid file format", std::invalid_argument);
@@ -182,7 +186,7 @@ void MeshIoMsh::readFileMsh(const char* filename, Mesh * mesh)
   for (int k = 0; k < num_elms; ++k)
   {
     fscanf(file_ptr, "%d %d", &elem_number, &type_tag);
-
+  
     // check sequence
     if (elem_number != k+1)
     {
@@ -202,6 +206,7 @@ void MeshIoMsh::readFileMsh(const char* filename, Mesh * mesh)
       wrong_file_err=true;
       break;
     }
+    
   }
   FEPIC_ASSERT(!wrong_file_err, "Wrong file format. Make sure you created the mesh with correct file format. ", std::invalid_argument);
 
@@ -272,22 +277,21 @@ void MeshIoMsh::readFileMsh(const char* filename, Mesh * mesh)
     {
       fgets(buffer, sizeof(buffer), file_ptr);
     }
+  }// end for k
 
-  }
 
   this->timer.elapsed("readFileMsh(): read connectivity");
   // até aqui, apenas foi lido a conectividade
   //
 
   /* constroi as facets e Corners */
-    if (mesh->qBuildAdjacency())
-      mesh->buildAdjacency();
-    else
-    {
-      fclose(file_ptr);
-      return;
-    }
-
+  if (mesh->qBuildAdjacency())
+    mesh->buildAdjacency();
+  else
+  {
+    fclose(file_ptr);
+    return;
+  }
 
   /*
   ___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|__

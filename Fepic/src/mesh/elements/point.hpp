@@ -48,11 +48,17 @@ public:
   virtual Real getCoord(int const i) const = 0;
   virtual Real const* getCoord() const = 0;
   virtual void pushIncidCell(int cid, int pos) = 0;
-  virtual int singularity() const = 0;
+  virtual int  numIncidCells() const = 0;
   virtual bool isSingular() const = 0;
   virtual void replacesIncidCell(int cid, int cid_subs, int cid_subs_pos) = 0;
   virtual void getIthIncidCell(int ith, int &ic, int &pos) const = 0;
+  virtual void clearIncidences() = 0;
   
+  // inherited from CellElement
+  virtual int getIncidCell() const = 0;
+  virtual int getPosition() const = 0;
+  virtual void setIncidCell(int icell_id) = 0;
+  virtual void setPosition(int pos) = 0;
 
   virtual ~Point(){};
 };
@@ -72,7 +78,7 @@ public:
   *  @param coord um vetor com Dim elementos que armazena a coordenada.
   *  @param label seu rótulo.
   */
-  PointX(double const*const coord)
+  PointX(double const* coord)
   {
     for (int i = 0; i < spacedim; ++i)
       _coord[i] = coord[i];
@@ -139,32 +145,23 @@ public:
   {
     FEPIC_CHECK(cid>=0 && pos >=0, "Point::pushIncidCell: invalid argument", std::invalid_argument);
     
-    if (cid == getIncidCell())
-      return;
+    std::list<std::pair<int,char> >::iterator it = std::find_if(_icells.begin(), _icells.end(), _RemoveCriteria(cid));
     
-    if (_extra_icells.empty())
-    {
-      _extra_icells.push_back(std::pair<int,char>(cid,(char)pos));
-      return;
-    }
-    
-    std::list<std::pair<int,char> >::iterator it = std::find_if(_extra_icells.begin(), _extra_icells.end(), _RemoveCriteria(cid));
-    
-    if (it == _extra_icells.end())
-      _extra_icells.push_back(std::pair<int,char>(cid,(char)pos));
+    if (it == _icells.end())
+      _icells.push_back(std::pair<int,char>(cid,static_cast<char>(pos)));
     
   }
 
   /** @return number of connected component incident to this node minus one.
    */
-  int singularity() const
+  int numIncidCells() const
   {
-    return _extra_icells.size();
+    return _icells.size();
   }
 
   bool isSingular() const
   {
-    return !_extra_icells.empty();
+    return !((_icells.end()==(++_icells.begin())) || _icells.empty());
   }
 
   class _RemoveCriteria { public:
@@ -186,72 +183,76 @@ public:
    */ 
   void replacesIncidCell(int cid, int cid_subs, int cid_subs_pos)
   {
-    if (cid == this->getIncidCell())
-    {
-      if (cid_subs < 0) // remove
-      {
-        if (_extra_icells.empty())
-        {
-          this->setIncidCell(cid_subs);
-          this->setPosition(cid_subs_pos);
-        }
-        else
-        {
-          this->setIncidCell(_extra_icells.front().first);
-          this->setPosition(_extra_icells.front().second);
-          _extra_icells.pop_front();
-        }
-      }
-      else
-      {
-        this->setIncidCell(cid_subs);
-        this->setPosition(cid_subs_pos);
-      }
-    }
+    if (cid_subs < 0)
+      _icells.remove_if(_RemoveCriteria(cid));
     else
     {
-      if (cid_subs < 0)
-        _extra_icells.remove_if(_RemoveCriteria(cid));
-      else
-      {
-        std::replace_if(_extra_icells.begin(), _extra_icells.end(), _RemoveCriteria(cid), std::pair<int,char>(cid_subs,cid_subs_pos));
-      }
+      std::replace_if(_icells.begin(), _icells.end(), _RemoveCriteria(cid), std::pair<int,char>(cid_subs,cid_subs_pos));
     }
-    
   } // end replacesIncidCell()
 
 
   void getIthIncidCell(int ith, int &ic, int &pos) const
   {
-    //FEPIC_CHECK((unsigned)ith <= _extra_icells.size(), "invalid index", std::invalid_argument);
-    if (ith == 0)
+    //FEPIC_CHECK((unsigned)ith <= _icells.size(), "invalid index", std::invalid_argument);
+    
+    std::list<std::pair<int,char> >::const_iterator it = _icells.begin();
+    std::list<std::pair<int,char> >::const_iterator et = _icells.end();
+    
+    for (int k=0; k<ith; ++k)
     {
-      ic = this->getIncidCell();
-      pos = this->getPosition();
-      return;
-    }
-    else
-    {
-      std::list<std::pair<int,char> >::const_iterator it = _extra_icells.begin();
-      std::list<std::pair<int,char> >::const_iterator et = _extra_icells.end();
-      int k = 1;
-      for (; it != et; ++it)
+      ++it;
+      if (it==et)
       {
-        if (k==ith)
-        {
-          ic = (*it).first;
-          pos = (*it).second;
-          return;
-        }
+        printf("ERROR: getIthIncidCell: invalid index\n");
+        printf("ith = %d  _icells.size()=%d\n", ith, (int)_icells.size());
+        throw;          
       }
-      printf("ERROR: getIthIncidCell: invalid index\n");
-      throw;
     }
+    ic = (*it).first;
+    pos = (*it).second;
+    
   }
 
+  void clearIncidences()
+  {
+    _icells.clear();
+  }
 
-  /** Destrutor.
-  */
+  // --- inherited from CellElement ----- //
+  
+  virtual int getIncidCell() const
+  {
+    if (_icells.empty())
+      return -1;
+    else
+      return _icells.front().first;
+  }
+  virtual int getPosition() const
+  {
+    if (_icells.empty())
+      return -1;
+    else
+      return _icells.front().second;
+  }
+  virtual void setIncidCell(int icell_id)
+  {
+    if (_icells.empty())
+      _icells.push_back(std::pair<int,char>(icell_id,static_cast<char>(-1)));
+    else
+      _icells.front().first = icell_id;
+  }
+  virtual void setPosition(int pos)
+  {
+    if (_icells.empty())
+      _icells.push_back(std::pair<int,char>(-1,static_cast<char>(pos)));
+    else
+      _icells.front().second = pos;
+  }
+
+  // --- inherited from CellElement ----- //
+
+  /// Destrutor.
   ~PointX() {}
 
 protected:
@@ -259,7 +260,7 @@ protected:
 
   // warning: main icell not included!
     //                 iC  poiC
-  std::list<std::pair<int,char> > _extra_icells; // for singular nodes
+  std::list<std::pair<int,char> > _icells; // for singular nodes
 };
 
 

@@ -39,7 +39,25 @@ public:
   DofHandler(Mesh* mesh=NULL, float gf=0.07) : _mesh_ptr(mesh), _grow_factor(gf) {}
   
   void setMesh(Mesh * mesh) {_mesh_ptr=mesh;};
-  void addVariable(const char* var_name, ShapeFunction *sf, int dim=1, int ntags=0, int const* tags=NULL);
+  
+  /* Add a variable
+   * @param var_name name of the variable
+   * @param sf pointer to a ShapeFunction object. This object contains info about dofs.
+   * @param ncomps number of components of the variable.
+   * @param ntags number of different mesh elements tags which will be considered. 
+   * @param tags only mesh elements with these tags will be considered.
+   */ 
+  void addVariable(const char* var_name, ShapeFunction *sf, int ncomps=1, int ntags=0, int const* tags=NULL);
+  
+  /*  Add a variable.
+   * @param var_name name of the variable
+   * @param ndpv number of dofs per vertice
+   * @param ndpr number of dofs per corner (ignored for 1D and 2D cells)
+   * @param ndpf number of dofs per facet (ignored for 1D cells)
+   * @param ndpc number of dofs per cell
+   * @param ntags number of different mesh elements tags which will be considered. 
+   * @param tags only mesh elements with these tags will be considered.
+   */ 
   void addVariable(const char* var_name, int ndpv, int ndpr, int ndpf, int ndpc, int ntags=0, int const* tags=NULL);
   VarDofs const& getVariable(int i) const {return _vars[i];}
   VarDofs & getVariable(int i) {return _vars[i];}

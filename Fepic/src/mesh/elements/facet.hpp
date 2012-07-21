@@ -25,14 +25,14 @@
 #include "cell_element.hpp"
 #include "../labelable.hpp"
 
-class Facet : public CellElement
+class Facet : public _NodeLessElement
 {
 public:
   Facet(int ic,
         int pos,
         int tag,
         int flags,
-        int bid=-1) : CellElement(ic,pos,tag,flags), _bound_comp_id(bid)
+        int bid=-1) : _NodeLessElement(ic,pos,tag,flags), _bound_comp_id(bid)
   {}
   
   void setBoundaryComponentId(int id)
@@ -44,7 +44,7 @@ public:
     return _bound_comp_id;
   }
   
-  Facet() : CellElement(), _bound_comp_id(-1) {}
+  Facet() : _NodeLessElement(), _bound_comp_id(-1) {}
 private:
   int _bound_comp_id;
 };

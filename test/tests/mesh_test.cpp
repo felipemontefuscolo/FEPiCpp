@@ -39,7 +39,7 @@
 #include <tr1/memory>
 
 
-TEST(identifiesMshMeshTypeTest, IOTest)
+TEST(IOTest, identifiesMshMeshTypeTest)
 {
   MeshIoMsh msh_reader;
   int sd;
@@ -99,7 +99,7 @@ TEST(identifiesMshMeshTypeTest, IOTest)
 
 }
 
-TEST(Edge2ReadVtkTest, ReadVtk)
+TEST(ReadVtktest, WithEdge2)
 {
   MeshIoMsh msh_reader;
   MeshIoVtk vtk_printer;
@@ -130,8 +130,7 @@ TEST(Edge2ReadVtkTest, ReadVtk)
   delete mesh;
 }
 
-
-TEST(Edge3ReadVtkTest, ReadVtk)
+TEST(ReadVtkTest, withEdge3)
 {
   MeshIoMsh msh_reader;
   MeshIoVtk vtk_printer;
@@ -146,7 +145,8 @@ TEST(Edge3ReadVtkTest, ReadVtk)
   delete mesh;
 }
 
-TEST(Tri3VertexStarTest, vertexStarTest) {
+TEST(VertexStarTest, WithTri3)
+{
 
   MeshIoMsh msh_reader;
   MeshIoVtk vtk_printer;
@@ -191,53 +191,8 @@ TEST(Tri3VertexStarTest, vertexStarTest) {
   delete mesh;
 }
 
-
-TEST(Tri6NodeStarTest, nodeStarTest)
+TEST(VertexStarTest, WithQuad4)
 {
-  MeshIoMsh msh_reader;
-  MeshIoVtk vtk_printer;
-  Mesh *mesh;
-  int iCs[64], viCs[64];
-  int n, id;
-  Point *p;
-
-  mesh = Mesh::create(TRIANGLE6);
-  msh_reader.readFileMsh("meshes/simptri6.msh", mesh);
-  vtk_printer.attachMesh(mesh);
-  vtk_printer.writeVtk("meshes/out/simptri6.vtk");
-
-  for (int k = 0; k < 24; ++k)
-  {
-    if (!(k==2 || k == 5 || k ==23 || k == 16))
-      continue;
-    id = k;
-
-    p = mesh->getNode(id);
-
-    n = (int)(mesh->nodeStar(p, iCs, viCs)-iCs);
-
-    // node star
-    int s[24][6];
-    s[ 2][0]=0; s[2][1]=1;
-    s[ 5][0]=7;
-    s[23][0]=2; s[23][1]=9;
-    s[16][0]=6; s[16][1]=7; s[16][2]=9; s[16][3]=8; s[16][4]=10;
-
-    int q[24];
-    q[ 2] = 2;
-    q[ 5] = 1;
-    q[23] = 2;
-    q[16] = 5;
-
-    EXPECT_EQ(q[id], n);
-    EXPECT_TRUE(sameElements(iCs,iCs+n,s[id],s[id]+n));
-
-  }
-
-  delete mesh;
-}
-
-TEST(Quad4VertexStarTest, vertexStarTest) {
 
   MeshIoMsh msh_reader;
   MeshIoVtk vtk_printer;
@@ -288,100 +243,8 @@ TEST(Quad4VertexStarTest, vertexStarTest) {
   delete mesh;
 }
 
-
-TEST(Quad8NodeStarTest, nodeStarTest)
+TEST(VertexStarTest, WithTet4)
 {
-  MeshIoMsh msh_reader;
-  MeshIoVtk vtk_printer;
-  Mesh *mesh;
-  int iCs[64], viCs[64];
-  int n, id;
-  Point *p;
-
-  mesh = Mesh::create(QUADRANGLE8);
-  msh_reader.readFileMsh("meshes/simpquad8.msh", mesh);
-  vtk_printer.attachMesh(mesh);
-  vtk_printer.writeVtk("meshes/out/simpquad8.vtk");
-  //
-  int Quad8NodesId[] = {3, 6, 29, 24};
-  int *it = Quad8NodesId;
-
-  for (; it != Quad8NodesId+sizeof(Quad8NodesId)/sizeof(int); ++it)
-  {
-    id = *it;
-    //
-    p = mesh->getNode(id);
-    //
-    n = (int)(mesh->nodeStar(p, iCs, viCs)-iCs);
-
-    // node star
-    int s[30][4];
-    s[ 3][0]=6;
-    s[24][0]=0; s[24][1]=1; s[24][2]=3; s[24][3]=4;
-    s[29][0]=0; s[29][1]=3;
-    s[ 6][0]=8;
-
-    int q[30];
-    q[ 3] = 1;
-    q[24] = 4;
-    q[29] = 2;
-    q[ 6] = 1;
-
-    EXPECT_EQ(q[id], n);
-    EXPECT_TRUE(sameElements(iCs,iCs+n,s[id],s[id]+n));
-  }
-
-  delete mesh;
-}
-
-TEST(Quad9NodeStarTest, nodeStarTest)
-{
-  MeshIoMsh msh_reader;
-  MeshIoVtk vtk_printer;
-  Mesh *mesh;
-  int iCs[64], viCs[64];
-  int n, id;
-  Point *p;
-
-  mesh = Mesh::create(QUADRANGLE9);
-  msh_reader.readFileMsh("meshes/simpquad9.msh", mesh);
-  vtk_printer.attachMesh(mesh);
-  vtk_printer.writeVtk("meshes/out/simpquad9.vtk");
-
-  int Quad9NodesId[] = {0, 27, 4, 8, 30};
-  int *it = Quad9NodesId;
-
-  for (; it != Quad9NodesId+sizeof(Quad9NodesId)/sizeof(int); ++it)
-  {
-    id = *it;
-
-    p = mesh->getNode(id);
-
-    n = (int)(mesh->nodeStar(p, iCs, viCs)-iCs);
-
-    // node star
-    int s[31][4];
-    s[ 0][0]=8;
-    s[27][0]=4; s[27][1]=5; s[27][2]=7; s[27][3]=8;
-    s[ 4][0]=8; s[ 4][1]=5;
-    s[ 8][0]=2;
-    s[30][0]=0;
-
-    int q[31];
-    q[ 0] = 1;
-    q[27] = 4;
-    q[ 4] = 2;
-    q[ 8] = 1;
-    q[30] = 1;
-
-    EXPECT_EQ(q[id], n);
-    EXPECT_TRUE(sameElements(iCs,iCs+n,s[id],s[id]+n));
-  }
-  delete mesh;
-}
-
-
-TEST(Tet4VertexStarTest, vertexStarTest) {
 
   MeshIoMsh msh_reader;
   MeshIoVtk vtk_printer;
@@ -426,212 +289,11 @@ TEST(Tet4VertexStarTest, vertexStarTest) {
   delete mesh;
 }
 
-
-
-//int Tri3NodesId[] = {0,1,2,3,4,5,6,7,8,9,10,11};
-
-TEST(Tet10NodeStarTest, nodeStarTest)
-{
-  MeshIoMsh msh_reader;
-  MeshIoVtk vtk_printer;
-  Mesh *mesh;
-  int iCs[64], viCs[64];
-  int n, id;
-  Point *p;
-
-  mesh = Mesh::create(TETRAHEDRON10);
-  msh_reader.readFileMsh("meshes/simptet10.msh", mesh);
-  vtk_printer.attachMesh(mesh);
-  vtk_printer.writeVtk("meshes/out/simptet10.vtk");
-
-  int Tet10NodesId[] = {22,26,30};
-
-  for (int *it = Tet10NodesId; it != Tet10NodesId+sizeof(Tet10NodesId)/sizeof(int); ++it)
-  {
-
-    id = *it;
-
-    p = mesh->getNode(id);
-
-    n = (int)(mesh->nodeStar(p, iCs, viCs)-iCs);
-
-    // node star
-    int s[31][11];
-    s[22][0]=5; s[22][1]=1;
-    for (int i = 0; i < 12; ++i)
-    {
-      s[26][i] = i;
-    }
-    s[30][0]=1;s[30][1]=2;s[30][2]=3;s[30][3]=7;s[30][4]=8;
-
-    int q[31];
-    q[22] = 2;
-    q[26] = 12;
-    q[30] = 5;
-
-    EXPECT_EQ(q[id], n);
-    EXPECT_TRUE(sameElements(iCs,iCs+n,s[id],s[id]+n));
-  }
-
-  delete mesh;
-}
-
-
-TEST(Hex8VertexStarTest, vertexStarTest) {
-
-  MeshIoMsh msh_reader;
-  MeshIoVtk vtk_printer;
-  Mesh *mesh;
-  int iCs[64], viCs[64];
-  int n, id;
-  Point *p;
-
-  mesh = Mesh::create(HEXAHEDRON8);
-  mesh->qBuildAdjacency(true);
-  msh_reader.readFileMsh("meshes/simphex8.msh", mesh);
-  vtk_printer.attachMesh(mesh);
-  vtk_printer.writeVtk("meshes/out/simphex8.vtk");
-
-  int Hex8VerticesId[] = {0,25,26};
-
-  for (int *it=Hex8VerticesId; it!=Hex8VerticesId+sizeof(Hex8VerticesId)/sizeof(int);++it)
-  {
-    id = *it;
-
-    p = mesh->getNode(id);
-
-    n = (int)(mesh->vertexStar(p, iCs, viCs)-iCs);
-
-    // vertex star
-    int s[27][8];
-    s[0][0] = 1;
-    s[25][0] = 0;
-    s[25][1] = 2;
-    s[25][2] = 4;
-    s[25][3] = 6;
-    s[26][0] = 0;
-    s[26][1] = 2;
-    s[26][2] = 4;
-    s[26][3] = 6;
-    s[26][4] = 1;
-    s[26][5] = 3;
-    s[26][6] = 5;
-    s[26][7] = 7;
-
-    int q[27] = {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,8};
-
-    EXPECT_EQ(q[id], n);
-    EXPECT_TRUE(sameElements(iCs,iCs+n,s[id],s[id]+n));
-  }
-
-  delete mesh;
-}
-
-
-
-TEST(Hex20NodeStarTest, nodeStarTest)
-{
-
-  MeshIoMsh msh_reader;
-  MeshIoVtk vtk_printer;
-  Mesh *mesh;
-  int iCs[64], viCs[64];
-  int n, id;
-  Point *p;
-
-  mesh = Mesh::create(HEXAHEDRON20);
-  msh_reader.readFileMsh("meshes/simphex20.msh", mesh);
-  vtk_printer.attachMesh(mesh);
-  vtk_printer.writeVtk("meshes/out/simphex20.vtk");
-
-  int Hex20NodesId[] = {74,79,58};
-
-  for (int *it=Hex20NodesId; it!= Hex20NodesId+sizeof(Hex20NodesId)/sizeof(int);++it)
-  {
-    id = *it;
-
-    p = mesh->getNode(id);
-
-    n = (int)(mesh->nodeStar(p, iCs, viCs)-iCs);
-
-    // node star
-    int s[80][8];
-    s[79][0]=2; s[79][1]=3; s[79][2]=6; s[79][3]=7;
-    for (int i = 0; i < 8; ++i)
-    {
-      s[74][i] = i;
-    }
-    s[58][0]=6;s[58][1]=7;
-
-    int q[80];
-    q[79] = 4;
-    q[74] = 8;
-    q[58] = 2;
-
-    EXPECT_EQ(q[id], n);
-    EXPECT_TRUE(sameElements(iCs,iCs+n,s[id],s[id]+n));
-  }
-  delete mesh;
-}
-
-
-
-TEST(Hex27NodeStarTest, nodeStarTest)
-{
-
-  MeshIoMsh msh_reader;
-  MeshIoVtk vtk_printer;
-  Mesh *mesh;
-  int iCs[64], viCs[64];
-  int n, id;
-  Point *p;
-
-  mesh = Mesh::create(HEXAHEDRON27);
-  msh_reader.readFileMsh("meshes/simphex27.msh", mesh);
-  vtk_printer.attachMesh(mesh);
-  vtk_printer.writeVtk("meshes/out/simphex27.vtk");
-
-  int Hex27NodesId[] = {98,101,112,105,68};
-
-  for (int *it=Hex27NodesId; it!= Hex27NodesId+sizeof(Hex27NodesId)/sizeof(int);++it)
-  {
-    id = *it;
-
-    p = mesh->getNode(id);
-
-    n = (int)(mesh->nodeStar(p, iCs, viCs)-iCs);
-
-    // node star
-    int s[113][8];
-    s[112][0]=2; s[112][1]=3;
-    for (int i = 0; i < 8; ++i)
-    {
-      s[98][i] = i;
-    }
-    for (int i = 0; i < 4; ++i)
-    {
-      s[101][i] = i;
-    }
-    s[105][0]=0;
-    s[68][0]=6; s[68][1]=7;
-
-
-    int q[113];
-    q[112] = 2;
-    q[98] = 8;
-    q[101] = 4;
-    q[105] = 1;
-    q[68] = 2;
-
-    EXPECT_EQ(q[id], n);
-    EXPECT_TRUE(sameElements(iCs,iCs+n,s[id],s[id]+n));
-  }
-  delete mesh;
-}
-
 std::tr1::array<int, 2> _retArray(int i, int j) {std::tr1::array<int, 2> v;v[0]=i;v[1]=j; return v;}
 
-TEST(Tet4EdgeStarTest, vertexStarTest) {
+TEST(VertexStarTest, WithTet4Case2)
+{
+
 
   MeshIoMsh msh_reader;
   MeshIoVtk vtk_printer;
@@ -700,64 +362,338 @@ TEST(Tet4EdgeStarTest, vertexStarTest) {
   delete mesh;
 }
 
-
-
-
-
-TEST(Tet4ConnectedVtcsTest, ConnectedVtcs)
+TEST(VertexStarTest, WithHex8)
 {
+
   MeshIoMsh msh_reader;
+  MeshIoVtk vtk_printer;
   Mesh *mesh;
-  int iNs[256];
+  int iCs[64], viCs[64];
   int n, id;
   Point *p;
 
-  mesh = Mesh::create(TETRAHEDRON4);
-  msh_reader.readFileMsh("meshes/simptet4.msh", mesh);
+  mesh = Mesh::create(HEXAHEDRON8);
+  mesh->qBuildAdjacency(true);
+  msh_reader.readFileMsh("meshes/simphex8.msh", mesh);
+  vtk_printer.attachMesh(mesh);
+  vtk_printer.writeVtk("meshes/out/simphex8.vtk");
 
-  id = 8;
+  int Hex8VerticesId[] = {0,25,26};
 
-  p = mesh->getNode(id);
-
-  n = (int)(mesh->connectedVtcs(p, iNs)-iNs);
-
-  // connected nodes
-  int s[9][8];
-
-  s[8][ 0]=0;
-  s[8][ 1]=1;
-  s[8][ 2]=2;
-  s[8][ 3]=3;
-  s[8][ 4]=4;
-  s[8][ 5]=5;
-  s[8][ 6]=6;
-  s[8][ 7]=7;
-
-  int q[9];
-  q[8] = 8;
-
-  if (!sameElements(iNs,iNs+n,s[id],s[id]+n))
+  for (int *it=Hex8VerticesId; it!=Hex8VerticesId+sizeof(Hex8VerticesId)/sizeof(int);++it)
   {
-    //std::sort(iNs,iNs+n);
-    //std::sort(s[id], s[id]+n);
-    //printf("  actual:");
-    //for (int i = 0; i < n; ++i)
-      //printf("%d ", iNs[i]);
-    //printf("\nexpected:");
-    //for (int i = 0; i < n; ++i)
-      //printf("%d ", s[id][i]);
-    //printf("\n");
-  }
+    id = *it;
 
-  EXPECT_EQ(q[id], n);
-  EXPECT_TRUE(sameElements(iNs,iNs+n,s[id],s[id]+n));
+    p = mesh->getNode(id);
+
+    n = (int)(mesh->vertexStar(p, iCs, viCs)-iCs);
+
+    // vertex star
+    int s[27][8];
+    s[0][0] = 1;
+    s[25][0] = 0;
+    s[25][1] = 2;
+    s[25][2] = 4;
+    s[25][3] = 6;
+    s[26][0] = 0;
+    s[26][1] = 2;
+    s[26][2] = 4;
+    s[26][3] = 6;
+    s[26][4] = 1;
+    s[26][5] = 3;
+    s[26][6] = 5;
+    s[26][7] = 7;
+
+    int q[27] = {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,8};
+
+    EXPECT_EQ(q[id], n);
+    EXPECT_TRUE(sameElements(iCs,iCs+n,s[id],s[id]+n));
+  }
 
   delete mesh;
 }
 
+TEST(NodeStarTest, WithTri6)
+{
+  MeshIoMsh msh_reader;
+  MeshIoVtk vtk_printer;
+  Mesh *mesh;
+  int iCs[64], viCs[64];
+  int n, id;
+  Point *p;
+
+  mesh = Mesh::create(TRIANGLE6);
+  msh_reader.readFileMsh("meshes/simptri6.msh", mesh);
+  vtk_printer.attachMesh(mesh);
+  vtk_printer.writeVtk("meshes/out/simptri6.vtk");
+
+  for (int k = 0; k < 24; ++k)
+  {
+    if (!(k==2 || k == 5 || k ==23 || k == 16))
+      continue;
+    id = k;
+
+    p = mesh->getNode(id);
+
+    n = (int)(mesh->nodeStar(p, iCs, viCs)-iCs);
+
+    // node star
+    int s[24][6];
+    s[ 2][0]=0; s[2][1]=1;
+    s[ 5][0]=7;
+    s[23][0]=2; s[23][1]=9;
+    s[16][0]=6; s[16][1]=7; s[16][2]=9; s[16][3]=8; s[16][4]=10;
+
+    int q[24];
+    q[ 2] = 2;
+    q[ 5] = 1;
+    q[23] = 2;
+    q[16] = 5;
+
+    EXPECT_EQ(q[id], n);
+    EXPECT_TRUE(sameElements(iCs,iCs+n,s[id],s[id]+n));
+
+  }
+
+  delete mesh;
+}
+
+TEST(NodeStarTest, WithQuad8)
+{
+  MeshIoMsh msh_reader;
+  MeshIoVtk vtk_printer;
+  Mesh *mesh;
+  int iCs[64], viCs[64];
+  int n, id;
+  Point *p;
+
+  mesh = Mesh::create(QUADRANGLE8);
+  msh_reader.readFileMsh("meshes/simpquad8.msh", mesh);
+  vtk_printer.attachMesh(mesh);
+  vtk_printer.writeVtk("meshes/out/simpquad8.vtk");
+  //
+  int Quad8NodesId[] = {3, 6, 29, 24};
+  int *it = Quad8NodesId;
+
+  for (; it != Quad8NodesId+sizeof(Quad8NodesId)/sizeof(int); ++it)
+  {
+    id = *it;
+    //
+    p = mesh->getNode(id);
+    //
+    n = (int)(mesh->nodeStar(p, iCs, viCs)-iCs);
+
+    // node star
+    int s[30][4];
+    s[ 3][0]=6;
+    s[24][0]=0; s[24][1]=1; s[24][2]=3; s[24][3]=4;
+    s[29][0]=0; s[29][1]=3;
+    s[ 6][0]=8;
+
+    int q[30];
+    q[ 3] = 1;
+    q[24] = 4;
+    q[29] = 2;
+    q[ 6] = 1;
+
+    EXPECT_EQ(q[id], n);
+    EXPECT_TRUE(sameElements(iCs,iCs+n,s[id],s[id]+n));
+  }
+
+  delete mesh;
+}
+
+TEST(NodeStarTest, WithQuad9)
+{
+  MeshIoMsh msh_reader;
+  MeshIoVtk vtk_printer;
+  Mesh *mesh;
+  int iCs[64], viCs[64];
+  int n, id;
+  Point *p;
+
+  mesh = Mesh::create(QUADRANGLE9);
+  msh_reader.readFileMsh("meshes/simpquad9.msh", mesh);
+  vtk_printer.attachMesh(mesh);
+  vtk_printer.writeVtk("meshes/out/simpquad9.vtk");
+
+  int Quad9NodesId[] = {0, 27, 4, 8, 30};
+  int *it = Quad9NodesId;
+
+  for (; it != Quad9NodesId+sizeof(Quad9NodesId)/sizeof(int); ++it)
+  {
+    id = *it;
+
+    p = mesh->getNode(id);
+
+    n = (int)(mesh->nodeStar(p, iCs, viCs)-iCs);
+
+    // node star
+    int s[31][4];
+    s[ 0][0]=8;
+    s[27][0]=4; s[27][1]=5; s[27][2]=7; s[27][3]=8;
+    s[ 4][0]=8; s[ 4][1]=5;
+    s[ 8][0]=2;
+    s[30][0]=0;
+
+    int q[31];
+    q[ 0] = 1;
+    q[27] = 4;
+    q[ 4] = 2;
+    q[ 8] = 1;
+    q[30] = 1;
+
+    EXPECT_EQ(q[id], n);
+    EXPECT_TRUE(sameElements(iCs,iCs+n,s[id],s[id]+n));
+  }
+  delete mesh;
+}
+
+TEST(NodeStarTest, WithTet10)
+{
+  MeshIoMsh msh_reader;
+  MeshIoVtk vtk_printer;
+  Mesh *mesh;
+  int iCs[64], viCs[64];
+  int n, id;
+  Point *p;
+
+  mesh = Mesh::create(TETRAHEDRON10);
+  msh_reader.readFileMsh("meshes/simptet10.msh", mesh);
+  vtk_printer.attachMesh(mesh);
+  vtk_printer.writeVtk("meshes/out/simptet10.vtk");
+
+  int Tet10NodesId[] = {22,26,30};
+
+  for (int *it = Tet10NodesId; it != Tet10NodesId+sizeof(Tet10NodesId)/sizeof(int); ++it)
+  {
+
+    id = *it;
+
+    p = mesh->getNode(id);
+
+    n = (int)(mesh->nodeStar(p, iCs, viCs)-iCs);
+
+    // node star
+    int s[31][11];
+    s[22][0]=5; s[22][1]=1;
+    for (int i = 0; i < 12; ++i)
+    {
+      s[26][i] = i;
+    }
+    s[30][0]=1;s[30][1]=2;s[30][2]=3;s[30][3]=7;s[30][4]=8;
+
+    int q[31];
+    q[22] = 2;
+    q[26] = 12;
+    q[30] = 5;
+
+    EXPECT_EQ(q[id], n);
+    EXPECT_TRUE(sameElements(iCs,iCs+n,s[id],s[id]+n));
+  }
+
+  delete mesh;
+}
+
+TEST(NodeStarTest, WithHex20)
+{
+
+  MeshIoMsh msh_reader;
+  MeshIoVtk vtk_printer;
+  Mesh *mesh;
+  int iCs[64], viCs[64];
+  int n, id;
+  Point *p;
+
+  mesh = Mesh::create(HEXAHEDRON20);
+  msh_reader.readFileMsh("meshes/simphex20.msh", mesh);
+  vtk_printer.attachMesh(mesh);
+  vtk_printer.writeVtk("meshes/out/simphex20.vtk");
+
+  int Hex20NodesId[] = {74,79,58};
+
+  for (int *it=Hex20NodesId; it!= Hex20NodesId+sizeof(Hex20NodesId)/sizeof(int);++it)
+  {
+    id = *it;
+
+    p = mesh->getNode(id);
+
+    n = (int)(mesh->nodeStar(p, iCs, viCs)-iCs);
+
+    // node star
+    int s[80][8];
+    s[79][0]=2; s[79][1]=3; s[79][2]=6; s[79][3]=7;
+    for (int i = 0; i < 8; ++i)
+    {
+      s[74][i] = i;
+    }
+    s[58][0]=6;s[58][1]=7;
+
+    int q[80];
+    q[79] = 4;
+    q[74] = 8;
+    q[58] = 2;
+
+    EXPECT_EQ(q[id], n);
+    EXPECT_TRUE(sameElements(iCs,iCs+n,s[id],s[id]+n));
+  }
+  delete mesh;
+}
+
+TEST(NodeStarTest, WithHex27)
+{
+
+  MeshIoMsh msh_reader;
+  MeshIoVtk vtk_printer;
+  Mesh *mesh;
+  int iCs[64], viCs[64];
+  int n, id;
+  Point *p;
+
+  mesh = Mesh::create(HEXAHEDRON27);
+  msh_reader.readFileMsh("meshes/simphex27.msh", mesh);
+  vtk_printer.attachMesh(mesh);
+  vtk_printer.writeVtk("meshes/out/simphex27.vtk");
+
+  int Hex27NodesId[] = {98,101,112,105,68};
+
+  for (int *it=Hex27NodesId; it!= Hex27NodesId+sizeof(Hex27NodesId)/sizeof(int);++it)
+  {
+    id = *it;
+
+    p = mesh->getNode(id);
+
+    n = (int)(mesh->nodeStar(p, iCs, viCs)-iCs);
+
+    // node star
+    int s[113][8];
+    s[112][0]=2; s[112][1]=3;
+    for (int i = 0; i < 8; ++i)
+    {
+      s[98][i] = i;
+    }
+    for (int i = 0; i < 4; ++i)
+    {
+      s[101][i] = i;
+    }
+    s[105][0]=0;
+    s[68][0]=6; s[68][1]=7;
 
 
-TEST(Tet10ConnectedNodesTest, ConnectedNodesTest)
+    int q[113];
+    q[112] = 2;
+    q[98] = 8;
+    q[101] = 4;
+    q[105] = 1;
+    q[68] = 2;
+
+    EXPECT_EQ(q[id], n);
+    EXPECT_TRUE(sameElements(iCs,iCs+n,s[id],s[id]+n));
+  }
+  delete mesh;
+}
+
+TEST(ConnectedNodesTest, WithTet10)
 {
   MeshIoMsh msh_reader;
   Mesh *mesh;
@@ -850,9 +786,59 @@ TEST(Tet10ConnectedNodesTest, ConnectedNodesTest)
   delete mesh;
 }
 
+TEST(ConnectedVtcs, WithTet4)
+{
+  MeshIoMsh msh_reader;
+  Mesh *mesh;
+  int iNs[256];
+  int n, id;
+  Point *p;
+
+  mesh = Mesh::create(TETRAHEDRON4);
+  msh_reader.readFileMsh("meshes/simptet4.msh", mesh);
+
+  id = 8;
+
+  p = mesh->getNode(id);
+
+  n = (int)(mesh->connectedVtcs(p, iNs)-iNs);
+
+  // connected nodes
+  int s[9][8];
+
+  s[8][ 0]=0;
+  s[8][ 1]=1;
+  s[8][ 2]=2;
+  s[8][ 3]=3;
+  s[8][ 4]=4;
+  s[8][ 5]=5;
+  s[8][ 6]=6;
+  s[8][ 7]=7;
+
+  int q[9];
+  q[8] = 8;
+
+  if (!sameElements(iNs,iNs+n,s[id],s[id]+n))
+  {
+    //std::sort(iNs,iNs+n);
+    //std::sort(s[id], s[id]+n);
+    //printf("  actual:");
+    //for (int i = 0; i < n; ++i)
+      //printf("%d ", iNs[i]);
+    //printf("\nexpected:");
+    //for (int i = 0; i < n; ++i)
+      //printf("%d ", s[id][i]);
+    //printf("\n");
+  }
+
+  EXPECT_EQ(q[id], n);
+  EXPECT_TRUE(sameElements(iNs,iNs+n,s[id],s[id]+n));
+
+  delete mesh;
+}
 
 // iterators
-TEST(PointIteratorsTest, TetIteratorsTest)
+TEST(TetIteratorsTest, PointIteratorsTest)
 {
   MeshIoMsh msh_reader;
   Mesh *mesh;
@@ -880,13 +866,10 @@ TEST(PointIteratorsTest, TetIteratorsTest)
     }
   }
 
-
+  delete mesh;
 };
 
-
-
-
-TEST(SingleCellTestTri3, SingleSimpMesh)
+TEST(SingleCell, WithTri3Case1)
 {
 
   MeshIoMsh msh_reader;
@@ -920,8 +903,7 @@ TEST(SingleCellTestTri3, SingleSimpMesh)
 
 }
 
-
-TEST(SingleCellTestTri3, SingleSingMesh)
+TEST(SingleCell, WithTri3Case2)
 {
 
   MeshIoMsh msh_reader;
@@ -950,7 +932,7 @@ TEST(SingleCellTestTri3, SingleSingMesh)
 
 }
 
-TEST(SingleCellTestTri6, SingleSimpMesh)
+TEST(SingleCell, WithTri6Case1)
 {
 
   MeshIoMsh msh_reader;
@@ -975,8 +957,7 @@ TEST(SingleCellTestTri6, SingleSimpMesh)
 
 }
 
-
-TEST(SingleCellTestTri6, SingleSingMesh)
+TEST(SingleCell, WithTri6Case2)
 {
 
   MeshIoMsh msh_reader;
@@ -1005,9 +986,7 @@ TEST(SingleCellTestTri6, SingleSingMesh)
 
 }
 
-
-
-TEST(SingleCellTestTet4, SingleSimpMesh)
+TEST(SingleCell, WithTet4Case1)
 {
 
   MeshIoMsh msh_reader;
@@ -1055,9 +1034,7 @@ TEST(SingleCellTestTet4, SingleSimpMesh)
   delete mesh;
 }
 
-
-// PROVAVELMENTE ESTA MALHA É INVÁLIDA
-TEST(SingleCellTestTet4, SingleSingMesh)
+TEST(SingleCell, WithTet4Case2)
 {
 
   MeshIoMsh msh_reader;
@@ -1104,11 +1081,7 @@ TEST(SingleCellTestTet4, SingleSingMesh)
   delete mesh;
 }
 
-
-
-
-
-TEST(SingleCellTestTet10, SingleSingMesh)
+TEST(SingleCell, WithTet10)
 {
 
   MeshIoMsh msh_reader;
@@ -1162,9 +1135,7 @@ TEST(SingleCellTestTet10, SingleSingMesh)
   delete mesh;
 }
 
-
-
-TEST(IncidentFacetsTestTri6, IncidentFacets)
+TEST(IncidentFacets, WithTri6)
 {
 
   MeshIoMsh msh_reader;
@@ -1213,9 +1184,7 @@ TEST(IncidentFacetsTestTri6, IncidentFacets)
 
 }
 
-
-
-TEST(Tri3AuxSetConnectedComponentIdTest, WithSingularVertexTest)
+TEST(AuxSetConnectedComponentIdTest, WithTri3)
 {
   MeshIoMsh msh_reader;
   MeshIoVtk vtk_printer;
@@ -1254,8 +1223,7 @@ TEST(Tri3AuxSetConnectedComponentIdTest, WithSingularVertexTest)
   delete mesh;
 }
 
-
-TEST(Tri3SetConnectedComponentIdTest, WithSingularVertexTest)
+TEST(SetConnectedComponentIdTest, WithTri3)
 {
   MeshIoMsh msh_reader;
   MeshIoVtk vtk_printer;
@@ -1299,7 +1267,7 @@ TEST(Tri3SetConnectedComponentIdTest, WithSingularVertexTest)
   delete mesh;
 }
 
-TEST(Tri3NextBoundaryFacetTest, WithSingularVertexTest)
+TEST(NextBoundaryFacetTest, WithTri3)
 {
   MeshIoMsh msh_reader;
   MeshIoVtk vtk_printer;
@@ -1347,8 +1315,7 @@ TEST(Tri3NextBoundaryFacetTest, WithSingularVertexTest)
   delete mesh;
 }
 
-
-TEST(Tri3SetBoundaryComponentIdTest, WithSingularVertexTest)
+TEST(SetBoundaryComponentIdTest, WithTri3)
 {
   MeshIoMsh msh_reader;
   MeshIoVtk vtk_printer;
@@ -1386,9 +1353,7 @@ TEST(Tri3SetBoundaryComponentIdTest, WithSingularVertexTest)
   delete mesh;
 }
 
-
-
-TEST(PushIncidCell2Point, WithSingularVertexTest)
+TEST(PushIncidCell2Point, WithSingularVertex)
 {
   MeshIoMsh msh_reader;
   MeshIoVtk vtk_printer;
@@ -1405,7 +1370,7 @@ TEST(PushIncidCell2Point, WithSingularVertexTest)
 
   Point* p = mesh->getNode(0);
 
-  EXPECT_EQ(0, p->singularity());
+  EXPECT_EQ(0, p->numIncidCells());
   
   EXPECT_EQ(-1, p->getIncidCell());
 
@@ -1428,26 +1393,24 @@ TEST(PushIncidCell2Point, WithSingularVertexTest)
   
   p->replacesIncidCell(12,3,1); // do nothing
 
-  EXPECT_EQ(1, p->singularity());
+  EXPECT_EQ(2, p->numIncidCells());
   
   p->replacesIncidCell(3,-1,-1);
 
-  EXPECT_EQ(0, p->singularity());
+  EXPECT_EQ(1, p->numIncidCells());
 
   mesh->pushIncidCell2Point(p,10,0);
   
-  EXPECT_EQ(0, p->singularity());
+  EXPECT_EQ(1, p->numIncidCells());
   
   mesh->pushIncidCell2Point(p,3,0);
   
-  EXPECT_EQ(1, p->singularity());
+  EXPECT_EQ(2, p->numIncidCells());
   
   delete mesh;
 }
 
-
-
-TEST(Tri3NodeSingularityTest, WithSingularVertexTest)
+TEST(NodeSingularityTest, WithTri3)
 {
   MeshIoMsh msh_reader;
   MeshIoVtk vtk_printer;

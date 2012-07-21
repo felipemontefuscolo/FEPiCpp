@@ -91,9 +91,9 @@ std::string itoafill0(int value, int fill)
 // remove espaços finais de strings
 std::string stripTrailingSpaces(std::string name)
 {
-  if (name.empty())
-    return name;
-  while( *(name.end()-1) == ' ')
+  //if (name.empty())
+  //  return name;
+  while(!name.empty() && *(name.end()-1) == ' ')
     name.erase(name.end()-1);
   return name;
 }
@@ -124,7 +124,7 @@ std::string getExtension(std::string const& name)
   size_t bar = name.rfind("/");
   if (dot==std::string::npos)
     return "";
-  else if ((bar==dot-1) || (name[dot-1]=='.') || (dot==0) || 
+  else if ((bar==dot-1) || (dot==0) || (name.at(dot-1)=='.')  || 
            ((bar!=std::string::npos) && (bar>dot)) || (dot==name.size()-1) )
     return "";
   else 

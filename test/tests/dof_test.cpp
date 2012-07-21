@@ -41,36 +41,34 @@ using std::tr1::shared_ptr;
 using std::vector;
 using namespace Eigen;
 
-TEST(RemoveCellTest, Tri3Test)
-{
-  MeshIoMsh msh_reader;
-  MeshIoVtk vtk_printer;
-  Mesh *mesh = NULL;  
-
-  ECellType cell_t     = TRIANGLE3;
-  const char* mesh_in  = "meshes/sing_tri3.msh";
-  const char* mesh_out = "meshes/out/mod_tri3-03.vtk";
-  
-  mesh = Mesh::create(cell_t);
-  msh_reader.readFileMsh(mesh_in, mesh);
-  
-  MeshTools::removeCell(mesh->getCell(0), mesh);
-  MeshTools::removeCell(mesh->getCell(2), mesh);
-  
-  //cell_iterator cell = mesh->cellBegin();
-  //cell_iterator cell_end = mesh->cellEnd();
-  
- 
-  vtk_printer.attachMesh(mesh);
-  vtk_printer.writeVtk(mesh_out);
-  vtk_printer.printPointIcellVtk();
-  vtk_printer.printPointPositionVtk();
-  
-  delete mesh;
-}
-
-
-TEST(AssignsDofsTest, Tri3Test)
+//TEST(RemoveCellTest, WithTri3)
+//{
+//  MeshIoMsh msh_reader;
+//  MeshIoVtk vtk_printer;
+//  Mesh *mesh = NULL;  
+//
+//  ECellType cell_t     = TRIANGLE3;
+//  const char* mesh_in  = "meshes/sing_tri3.msh";
+//  const char* mesh_out = "meshes/out/mod_tri3-03.vtk";
+//  
+//  mesh = Mesh::create(cell_t);
+//  msh_reader.readFileMsh(mesh_in, mesh);
+//  
+//  MeshTools::removeCell(mesh->getCell(0), mesh);
+//  MeshTools::removeCell(mesh->getCell(2), mesh);
+//  
+//  //cell_iterator cell = mesh->cellBegin();
+//  //cell_iterator cell_end = mesh->cellEnd();
+// 
+//  vtk_printer.attachMesh(mesh);
+//  vtk_printer.writeVtk(mesh_out);
+//  vtk_printer.printPointIcellVtk();
+//  vtk_printer.printPointPositionVtk();
+//  
+//  delete mesh;
+//}
+//
+TEST(AssignsDofsTest, WithTri3)
 {
   MeshIoMsh msh_reader;
   MeshIoVtk vtk_printer;
@@ -87,13 +85,13 @@ TEST(AssignsDofsTest, Tri3Test)
   //                         ndpv,  ndpr,  ndpf,  ndpc
   DofH.addVariable("altura",    1,     0,     0,     0); // 12
   DofH.addVariable("vetor",     2,     0,     0,     0); // 24
-  DofH.addVariable("foo",       0,     1,     0,     0); // 12
+  DofH.addVariable("foo",       0,     1,     0,     0); // 0
   DofH.addVariable("bar",       0,     0,     1,     0); // 25
   DofH.addVariable("moo",       0,     0,     0,     1); // 14
   
   DofH.SetUp();
   
-  EXPECT_EQ(87, DofH.numDofs());
+  EXPECT_EQ(75, DofH.numDofs());
   
   
   MeshTools::removeCell(mesh->getCell(2), mesh);
@@ -104,11 +102,11 @@ TEST(AssignsDofsTest, Tri3Test)
   //11x3 + 22 + 12
   EXPECT_EQ(11, DofH.getVariable(0).numDofs());
   EXPECT_EQ(22, DofH.getVariable(1).numDofs());
-  EXPECT_EQ(11, DofH.getVariable(2).numDofs());
+  EXPECT_EQ( 0, DofH.getVariable(2).numDofs());
   EXPECT_EQ(22, DofH.getVariable(3).numDofs());
   EXPECT_EQ(12, DofH.getVariable(4).numDofs());
 
-  EXPECT_EQ(78, DofH.numDofs());
+  EXPECT_EQ(67, DofH.numDofs());
   
   
   // .getVariable(0)
@@ -151,7 +149,7 @@ public:
   // int  * data_i; from MyGetDataVtk
 };
 
-TEST(AssignsDofsTest, Tri6Test)
+TEST(AssignsDofsTest, WithTri6)
 {
   MeshIoMsh msh_reader;
   MeshIoVtk vtk_printer;
@@ -168,13 +166,13 @@ TEST(AssignsDofsTest, Tri6Test)
   //                         ndpv,  ndpr,  ndpf,  ndpc
   DofH.addVariable("numero",    1,     0,     0,     0); // 12
   DofH.addVariable("vetor",     2,     0,     0,     0); // 24
-  DofH.addVariable("foo",       0,     1,     0,     0); // 12
+  DofH.addVariable("foo",       0,     1,     0,     0); //  0
   DofH.addVariable("bar",       0,     0,     1,     0); // 25
   DofH.addVariable("moo",       0,     0,     0,     1); // 14
   
   DofH.SetUp();
   
-  EXPECT_EQ(87, DofH.numDofs());
+  EXPECT_EQ(75, DofH.numDofs());
   
   MeshTools::removeCell(mesh->getCell(2), mesh);
   MeshTools::removeCell(mesh->getCell(3), mesh);
@@ -184,11 +182,11 @@ TEST(AssignsDofsTest, Tri6Test)
   //11x3 + 22 + 12 + 12
   EXPECT_EQ(11, DofH.getVariable(0).numDofs());
   EXPECT_EQ(22, DofH.getVariable(1).numDofs());
-  EXPECT_EQ(11, DofH.getVariable(2).numDofs());
+  EXPECT_EQ( 0, DofH.getVariable(2).numDofs());
   EXPECT_EQ(22, DofH.getVariable(3).numDofs());
   EXPECT_EQ(12, DofH.getVariable(4).numDofs());
 
-  EXPECT_EQ(78, DofH.numDofs());
+  EXPECT_EQ(67, DofH.numDofs());
   
   
   // .getVariable(0)
@@ -229,11 +227,7 @@ TEST(AssignsDofsTest, Tri6Test)
   delete mesh;
 }
 
-
-
-
-
-TEST(AssignsDofsTest, Tet10Test)
+TEST(AssignsDofsTest, WithTet10)
 {
   MeshIoMsh msh_reader;
   MeshIoVtk vtk_printer;
@@ -316,8 +310,7 @@ TEST(AssignsDofsTest, Tet10Test)
   delete mesh;
 }
 
-
-TEST(BubbleTri3Test, Tri3Test)
+TEST(BubbleTri3Test, WithTri3)
 {
   MeshIoMsh msh_reader;
   MeshIoVtk vtk_printer;
@@ -360,7 +353,7 @@ TEST(BubbleTri3Test, Tri3Test)
   //MeshTools::removeCell(mesh->getCell(13), mesh);
   
   DofH.SetUp();
-  std::cout << "num dofs = " << DofH.numDofs() << std::endl;
+  //std::cout << "num dofs = " << DofH.numDofs() << std::endl;
   
   
   //EXPECT_EQ(12, DofH.getVariable(0).numDofs());
@@ -404,9 +397,7 @@ TEST(BubbleTri3Test, Tri3Test)
   delete mesh;
 }
 
-
-
-TEST(BubbleTet4Test, Tet4Test)
+TEST(BubbleTet4Test, WithTet4)
 {
   MeshIoMsh msh_reader;
   MeshIoVtk vtk_printer;
@@ -449,7 +440,7 @@ TEST(BubbleTet4Test, Tet4Test)
   //MeshTools::removeCell(mesh->getCell(13), mesh);
   
   DofH.SetUp();
-  std::cout << "num dofs = " << DofH.numDofs() << std::endl;
+  //std::cout << "num dofs = " << DofH.numDofs() << std::endl;
   
   
   //EXPECT_EQ(12, DofH.getVariable(0).numDofs());
@@ -494,17 +485,18 @@ TEST(BubbleTet4Test, Tet4Test)
 }
 
 
-/*
- * 
- * 
- *  TAGS TEST
- * 
- * 
- */ 
+
+//
+//
+//
+// TAGS TEST
+//
+//
+// 
 
 
 
-TEST(TagsDofsTest, Tri3Test)
+TEST(TagsDofsTest, WithTri3)
 {
   MeshIoMsh msh_reader;
   MeshIoVtk vtk_printer;
@@ -524,14 +516,14 @@ TEST(TagsDofsTest, Tri3Test)
   //                         ndpv,  ndpr,  ndpf,  ndpc
   DofH.addVariable("altura",    1,     0,     0,     0, ntags, &tags); // 4
   DofH.addVariable("vetor",     2,     0,     0,     0, ntags, &tags); // 8
-  DofH.addVariable("foo",       0,     1,     0,     0, ntags, &tags); // 4
+  DofH.addVariable("foo",       0,     1,     0,     0, ntags, &tags); // 0
   DofH.addVariable("bar",       0,     0,     1,     0, ntags, &tags); // 4
   DofH.addVariable("moo",       0,     0,     0,     1, ntags, &tags); // 0
   
   
   DofH.SetUp();
   
-  EXPECT_EQ(20, DofH.numDofs());
+  EXPECT_EQ(16, DofH.numDofs());
   
   
   MeshTools::removeCell(mesh->getCell(2), mesh);
@@ -542,11 +534,11 @@ TEST(TagsDofsTest, Tri3Test)
   // 15
   EXPECT_EQ( 3, DofH.getVariable(0).numDofs());
   EXPECT_EQ( 6, DofH.getVariable(1).numDofs());
-  EXPECT_EQ( 3, DofH.getVariable(2).numDofs());
+  EXPECT_EQ( 0, DofH.getVariable(2).numDofs());
   EXPECT_EQ( 3, DofH.getVariable(3).numDofs());
   EXPECT_EQ( 0, DofH.getVariable(4).numDofs());
 
-  EXPECT_EQ(15, DofH.numDofs());
+  EXPECT_EQ(12, DofH.numDofs());
   
   
   // .getVariable(0)
@@ -565,10 +557,7 @@ TEST(TagsDofsTest, Tri3Test)
   delete mesh;
 }
 
-
-
-
-TEST(TagsDofsTest, Tet10Test)
+TEST(TagsDofsTest, WithTet10)
 {
   MeshIoMsh msh_reader;
   MeshIoVtk vtk_printer;
@@ -582,8 +571,8 @@ TEST(TagsDofsTest, Tet10Test)
   msh_reader.readFileMsh(mesh_in, mesh);
 
   
-  int ntags=1;
-  int tags=1;
+  int ntags=0;
+  int tags=0;
   
   DofHandler DofH(mesh);
   //                         ndpv,  ndpr,  ndpf,  ndpc

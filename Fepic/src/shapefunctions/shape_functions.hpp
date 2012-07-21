@@ -323,7 +323,6 @@ protected:
 };
 
 
-
 class Shape_TRI_P1ph : public ShapeFunction, public _DofTraits<Shape_TRI_P1ph>
 {
 public:

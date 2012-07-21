@@ -35,19 +35,27 @@
 
 typedef std::tr1::tuple<ECellType, const char*> TupleT;
 
+using std::cout;
+using std::endl;
 
 class IteratorTest : public testing::TestWithParam<TupleT> { // vertex id
-public:
+protected:
 
+  //virtual ~IteratorTest() {delete mesh;}
+  
   virtual void SetUp() {
+    
+    MeshIoMsh msh_reader; // TEM QUE SER AQUI ... ESTRANHO¹²³
+    
+    //Mesh *mesh;
     
     ECellType cell_t     = std::tr1::get<0>(GetParam());
     const char* mesh_in  = std::tr1::get<1>(GetParam());
     
     mesh = Mesh::create(cell_t);
-    
+    //mesh = new SMesh<Triangle3,2>;
+    mesh->qBuildAdjacency(false);
     msh_reader.readFileMsh(mesh_in, mesh);
-    
 
   };
 
@@ -56,27 +64,30 @@ public:
     delete mesh;
   }
 
-  MeshIoMsh msh_reader;
-  MeshIoVtk vtk_printer;
+  //MeshIoMsh msh_reader;  // MT ESTRANHO, NAO PODE SER AQUI ... ME PARECE BUG DO GTEST.
+  //MeshIoVtk vtk_printer;
   Mesh *mesh;
+  
 };
 
-const TupleT ct_in_out[] = {TupleT(TRIANGLE3,     "meshes/iter_tri3.msh" ),
-                            TupleT(TRIANGLE6,     "meshes/iter_tri6.msh" ),
-                            TupleT(QUADRANGLE4,   "meshes/iter_qua4.msh" ),
-                            TupleT(QUADRANGLE8,   "meshes/iter_qua8.msh" ),
-                            TupleT(QUADRANGLE9,   "meshes/iter_qua9.msh" ),
-                            TupleT(TETRAHEDRON4,  "meshes/iter_tet4.msh" ),
-                            TupleT(TETRAHEDRON10, "meshes/iter_tet10.msh"),
-                            TupleT(HEXAHEDRON8,   "meshes/iter_hex8.msh" ),
-                            TupleT(HEXAHEDRON20,  "meshes/iter_hex20.msh"),
-                            TupleT(HEXAHEDRON27,  "meshes/iter_hex27.msh")};
+//const TupleT meshes_t[] = {TupleT(TRIANGLE3,     "meshes/iter_tri3.msh" )};
+const TupleT meshes_t[] = {TupleT(TRIANGLE3,     "meshes/iter_tri3.msh" ),
+                           TupleT(TRIANGLE6,     "meshes/iter_tri6.msh" ),
+                           TupleT(QUADRANGLE4,   "meshes/iter_qua4.msh" ),
+                           TupleT(QUADRANGLE8,   "meshes/iter_qua8.msh" ),
+                           TupleT(QUADRANGLE9,   "meshes/iter_qua9.msh" ),
+                           TupleT(TETRAHEDRON4,  "meshes/iter_tet4.msh" ),
+                           TupleT(TETRAHEDRON10, "meshes/iter_tet10.msh"),
+                           TupleT(HEXAHEDRON8,   "meshes/iter_hex8.msh" ),
+                           TupleT(HEXAHEDRON20,  "meshes/iter_hex20.msh"),
+                           TupleT(HEXAHEDRON27,  "meshes/iter_hex27.msh")};
 
 
 TEST_P(IteratorTest, PointIteratorsTest)
 {
+  int const n_nodes = mesh->numNodes();
   
-  for (int i = 0; i < mesh->numNodes(); ++i)
+  for (int i = 0; i < n_nodes; ++i)
   {
     mesh->getNode(i)->setTag(0);
   }
@@ -90,13 +101,14 @@ TEST_P(IteratorTest, PointIteratorsTest)
     for (; point != point_end; ++point)
       point->setTag(point->getTag()+1);
     // check
-    for (int i = 0; i < mesh->numNodes(); ++i)
+    for (int i = 0; i < n_nodes; ++i)
     {
       EXPECT_EQ( 1, mesh->getNode(i)->getTag());
       mesh->getNode(i)->setTag(0); // reseting
     }
   }
 
+  //EXPECT_EQ(1,1);
 }
 
 
@@ -188,7 +200,7 @@ TEST_P(IteratorTest, CornerIteratorsTest)
 }
 
 
-INSTANTIATE_TEST_CASE_P(IteratorTestCase, IteratorTest, ::testing::ValuesIn(ct_in_out));
+INSTANTIATE_TEST_CASE_P(IteratorTestCase, IteratorTest, ::testing::ValuesIn(meshes_t));
 
 
 
