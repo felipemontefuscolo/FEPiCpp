@@ -54,12 +54,12 @@ void checkConsistencyTri(Mesh *mesh)
   cell_iterator cell_end = mesh->cellEnd();
   
   int const nfpc = mesh->numFacetsPerCell();
-//  int const nnpc = mesh->numNodesPerCell();
+  //  int const nnpc = mesh->numNodesPerCell();
   int const nnpf = mesh->numNodesPerFacet();
   
   int f_nds[nnpf];
   
-//  Point *p;
+  //  Point *p;
   Facet *f;
   Cell  *c;
   

@@ -1370,7 +1370,7 @@ TEST(PushIncidCell2Point, WithSingularVertex)
 
   Point* p = mesh->getNode(0);
 
-  EXPECT_EQ(0, p->numIncidCells());
+  EXPECT_EQ(0, p->numConnectedComps());
   
   EXPECT_EQ(-1, p->getIncidCell());
 
@@ -1393,19 +1393,19 @@ TEST(PushIncidCell2Point, WithSingularVertex)
   
   p->replacesIncidCell(12,3,1); // do nothing
 
-  EXPECT_EQ(2, p->numIncidCells());
+  EXPECT_EQ(2, p->numConnectedComps());
   
   p->replacesIncidCell(3,-1,-1);
 
-  EXPECT_EQ(1, p->numIncidCells());
+  EXPECT_EQ(1, p->numConnectedComps());
 
   mesh->pushIncidCell2Point(p,10,0);
   
-  EXPECT_EQ(1, p->numIncidCells());
+  EXPECT_EQ(1, p->numConnectedComps());
   
   mesh->pushIncidCell2Point(p,3,0);
   
-  EXPECT_EQ(2, p->numIncidCells());
+  EXPECT_EQ(2, p->numConnectedComps());
   
   delete mesh;
 }

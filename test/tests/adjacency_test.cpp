@@ -40,6 +40,8 @@ public:
 
   virtual void SetUp() {
     
+    MeshIoMsh msh_reader;
+    
     ECellType cell_t     = std::tr1::get<0>(GetParam());
     const char* mesh_in  = std::tr1::get<1>(GetParam());
     
@@ -55,8 +57,9 @@ public:
     delete mesh;
   }
 
-  MeshIoMsh msh_reader;
-  //MeshIoVtk vtk_printer;
+  // FIXME: MUITO estranho, se eu declarar o msh_reader aqui, o programa da segmentation fault!!!!!!!
+  //MeshIoMsh msh_reader;
+
   Mesh *mesh;
 };
 
