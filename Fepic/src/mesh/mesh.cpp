@@ -381,7 +381,7 @@ int* SMesh<CT,SD>::vertexStar_Template(int C, int vC, int *iCs, int *viCs, typen
   FEPIC_CHECK(unsigned(vC)<CT::n_vertices && C>=0, "invalid C or vC", std::invalid_argument);
 
   PointT const* pt = this->MeshT::getNode(this->MeshT::getCell(C)->CT::getNodeId(vC));
-  int const n_connected_comps = pt->PointT::numIncidCells();
+  int const n_connected_comps = pt->PointT::numConnectedComps();
 
   for (int cc = 0; cc < n_connected_comps; ++cc)
   {
@@ -995,7 +995,7 @@ void SMesh<CT,SD>::pushIncidCell2Point(Point *pt, int iC, int pos)
   
   FEPIC_CHECK(iC_CCid>=0, "input iC has no connected component id", std::invalid_argument);
   
-  const int n_icells = p->numIncidCells();
+  const int n_icells = p->numConnectedComps();
   
   int oic, opos;
   

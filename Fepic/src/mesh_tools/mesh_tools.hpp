@@ -34,6 +34,18 @@ class Cell;
 class MeshTools
 {
 public:
+  
+  //enum Errors {
+  //  Inv
+  //  
+  //};
+  
+  friend class Mesh;
+  
+  /** Checks mesh consistency.
+   *  
+   */ 
+  static int checkConsistency(Mesh *mesh);
 
   /** Safely removes a cell
    *  @param cell the cell that will be removed.

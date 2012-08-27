@@ -47,10 +47,10 @@ public:
   virtual void getCoord(Real *coord) const = 0;
   virtual Real getCoord(int const i) const = 0;
   virtual Real const* getCoord() const = 0;
-  virtual void pushIncidCell(int cid, int pos) = 0;
-  virtual int  numIncidCells() const = 0;
+  virtual void pushIncidCell(int cid, char pos) = 0;
+  virtual int  numConnectedComps() const = 0;
   virtual bool isSingular() const = 0;
-  virtual void replacesIncidCell(int cid, int cid_subs, int cid_subs_pos) = 0;
+  virtual void replacesIncidCell(int cid, int cid_subs, char cid_subs_pos) = 0;
   virtual void getIthIncidCell(int ith, int &ic, int &pos) const = 0;
   virtual void clearIncidences() = 0;
   
@@ -78,7 +78,7 @@ public:
   *  @param coord um vetor com Dim elementos que armazena a coordenada.
   *  @param label seu rótulo.
   */
-  PointX(double const* coord)
+  explicit PointX(double const* coord, int ic=-1, char pos=-1) : _icell(ic), _icell_pos(pos)
   {
     for (int i = 0; i < spacedim; ++i)
       _coord[i] = coord[i];
@@ -86,7 +86,7 @@ public:
 
   /** Construtor.
   */
-  PointX() {}
+  PointX()  : _icell(-1), _icell_pos(-1) {}
   // construtor de cópia não necessário, pois não há nenhum ponteiro.
 
   /** @return a dimensão do espaço.
@@ -141,27 +141,46 @@ public:
     //return sqrt( (_coord - pp->_coord).dot(_coord - pp->_coord) );
   //}
 
-  void pushIncidCell(int cid, int pos)
+  /** add a singular cell if it does not yet exist.
+   *  @param cid cell id.
+   *  @param pos position of this node on the cell cid.
+   */ 
+  void pushIncidCell(int cid, char pos)
   {
     FEPIC_CHECK(cid>=0 && pos >=0, "Point::pushIncidCell: invalid argument", std::invalid_argument);
     
-    std::list<std::pair<int,char> >::iterator it = std::find_if(_icells.begin(), _icells.end(), _RemoveCriteria(cid));
-    
-    if (it == _icells.end())
-      _icells.push_back(std::pair<int,char>(cid,static_cast<char>(pos)));
+    if (cid==this->_icell) // nothing to do
+      return;
+    else
+    if (this->_icell<0)
+    {
+      this->_icell = cid;
+      this->_icell_pos = pos;
+      return;
+    }
+    else
+    {
+      std::list<std::pair<int,char> >::iterator it = std::find_if(_incidences.begin(), _incidences.end(), _RemoveCriteria(cid));
+        
+      if (it == _incidences.end())
+        _incidences.push_back(std::make_pair(cid,pos));
+    }
     
   }
 
-  /** @return number of connected component incident to this node minus one.
+  /** @return number of connected component incident to this node.
    */
-  int numIncidCells() const
+  int numConnectedComps() const
   {
-    return _icells.size();
+    return _incidences.size()+(_icell>=0);
   }
 
   bool isSingular() const
   {
-    return !((_icells.end()==(++_icells.begin())) || _icells.empty());
+    if (this->_icell < 0)
+      return _incidences.size() > 1;
+    else
+      return !_incidences.empty();
   }
 
   class _RemoveCriteria { public:
@@ -176,28 +195,59 @@ public:
   //  bool operator() (std::pair<int,char> const& p, std::pair<int,char> const& a) {return p.first<a.first};
   //};
 
-  /** replaces (or removes) a incident cell id (singular or not).
+  /** consistently replaces (or removes) a incident cell id (singular or not).
    * @param cid id of the incident cell of this node that will be replaced/removed.
    * @param cid_subs id of an incident cell that will replace the cid. if cid_subs<0,
    * then cid is just removed.
    */ 
-  void replacesIncidCell(int cid, int cid_subs, int cid_subs_pos)
+  void replacesIncidCell(int cid, int cid_subs, char cid_subs_pos)
   {
-    if (cid_subs < 0)
-      _icells.remove_if(_RemoveCriteria(cid));
+    if (this->_icell == cid)
+    {
+      if (cid_subs < 0) // remove
+      {
+        if (_incidences.empty())
+        {
+          this->_icell = -1;
+          return;
+        }
+        else
+        {
+          this->_icell     = _incidences.front().first;
+          this->_icell_pos = _incidences.front().second;
+          _incidences.pop_front();
+          return;
+        }
+      }
+      else // replaces
+      {
+        this->_icell = cid_subs;
+        this->_icell_pos = cid_subs_pos;
+        return;
+      }
+    }
     else
     {
-      std::replace_if(_icells.begin(), _icells.end(), _RemoveCriteria(cid), std::pair<int,char>(cid_subs,cid_subs_pos));
+      std::replace_if(_incidences.begin(), _incidences.end(), _RemoveCriteria(cid), std::make_pair(cid_subs,cid_subs_pos));
     }
+    
   } // end replacesIncidCell()
 
 
   void getIthIncidCell(int ith, int &ic, int &pos) const
   {
-    //FEPIC_CHECK((unsigned)ith <= _icells.size(), "invalid index", std::invalid_argument);
+    //FEPIC_CHECK((unsigned)ith <= _incidences.size(), "invalid index", std::invalid_argument);
     
-    std::list<std::pair<int,char> >::const_iterator it = _icells.begin();
-    std::list<std::pair<int,char> >::const_iterator et = _icells.end();
+    if (ith == 0)
+    {
+      ic = _icell;
+      return;
+    }
+    
+    --ith;
+    
+    std::list<std::pair<int,char> >::const_iterator it = _incidences.begin();
+    std::list<std::pair<int,char> >::const_iterator et = _incidences.end();
     
     for (int k=0; k<ith; ++k)
     {
@@ -205,7 +255,7 @@ public:
       if (it==et)
       {
         printf("ERROR: getIthIncidCell: invalid index\n");
-        printf("ith = %d  _icells.size()=%d\n", ith, (int)_icells.size());
+        printf("ith = %d  _incidences.size()=%d\n", ith, (int)_incidences.size());
         throw;          
       }
     }
@@ -216,41 +266,32 @@ public:
 
   void clearIncidences()
   {
-    _icells.clear();
+    this->_incidences.clear();
+    this->_icell = -1;
   }
 
   // --- inherited from CellElement ----- //
   
   virtual int getIncidCell() const
   {
-    if (_icells.empty())
-      return -1;
-    else
-      return _icells.front().first;
+    return _icell;
   }
   virtual int getPosition() const
   {
-    if (_icells.empty())
-      return -1;
-    else
-      return _icells.front().second;
+    return _icell_pos;
   }
   virtual void setIncidCell(int icell_id)
   {
-    if (_icells.empty())
-      _icells.push_back(std::pair<int,char>(icell_id,static_cast<char>(-1)));
-    else
-      _icells.front().first = icell_id;
+    _icell = icell_id;
   }
   virtual void setPosition(int pos)
   {
-    if (_icells.empty())
-      _icells.push_back(std::pair<int,char>(-1,static_cast<char>(pos)));
-    else
-      _icells.front().second = pos;
+    _icell_pos = pos;
   }
 
   // --- inherited from CellElement ----- //
+
+
 
   /// Destrutor.
   ~PointX() {}
@@ -258,9 +299,14 @@ public:
 protected:
   Real _coord[sdim];
 
-  // warning: main icell not included!
-    //                 iC  poiC
-  std::list<std::pair<int,char> > _icells; // for singular nodes
+  int   _icell;
+  char  _icell_pos;   // facet lid of incident cell
+  char  _padd[3]; // supondo sizeof(int)=4 e sizeof(char)=1
+
+  // main icell not included .. this list is for singular nodes only
+  // the reason for this is to save memory.
+  //                  iC  poiC
+  std::list<std::pair<int,char> > _incidences; // for singular nodes
 };
 
 

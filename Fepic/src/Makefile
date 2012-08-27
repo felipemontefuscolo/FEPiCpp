@@ -22,7 +22,7 @@ build: subdirs
 
 ok_msg: build
 	@echo
-	@echo compiled successfully
+	@echo successfully compiled
 	@echo
 	
 	

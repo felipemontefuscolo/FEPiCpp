@@ -1,7 +1,86 @@
 #include "mesh_tools.hpp"
-#include "../mesh/mesh.hpp"
+#include "Fepic/src/mesh/mesh.hpp"
 #include <vector>
 //#include <type_traits>
+
+
+//int MeshTools::checkConsistency(Mesh *mesh)
+//{
+//  cell_iterator cell = mesh->cellBegin();
+//  cell_iterator cell_end = mesh->cellEnd();
+//  
+//  int const nfpc = mesh->numFacetsPerCell();
+//  //  int const nnpc = mesh->numNodesPerCell();
+//  int const nnpf = mesh->numNodesPerFacet();
+//  int const dim  = mesh->spaceDim();
+//  
+//  int f_nds[nnpf];
+//  
+//  //  Point *p;
+//  Facet *f;
+//  Cell  *c;
+//  
+//  for (; cell != cell_end; ++cell)
+//  {
+//    int myid = mesh->getCellId(&*cell);
+//    for (int i = 0; i < nfpc; ++i)
+//    {
+//      if (cell->getIncidCell(i) >= 0)
+//      {
+//        // checks whether the neighbor cell contains this cell.
+//        c = mesh->getCell(cell->getIncidCell(i));
+//        int pos = cell->getIncidCellPos(i);
+//        if (myid != c->getIncidCell(pos))
+//          return -1;
+//        
+//        // checks facets
+//        if (!(static_cast<unsigned>(cell->getFacetId(i)) < mesh->numFacetsTotal()))
+//          return -2;
+//        f = mesh->getFacet(cell->getFacetId(i));
+//        int icf = f->getIncidCell();
+//        if (!(icf==myid || icf==cell->getIncidCell(i)))
+//          return -3;
+//        if (icf==myid)
+//          EXPECT_TRUE(f->getPosition() == i);
+//        else
+//        {
+//          EXPECT_TRUE(f->getPosition() == pos);
+//        }
+//      }
+//      else // bordo
+//      {
+//        // verifica a face
+//        f = mesh->getFacet(cell->getFacetId(i));
+//        int icf = f->getIncidCell();
+//        // só pode ser o myid, pq do outro lado não tem ngm
+//        EXPECT_TRUE(icf==myid);
+//        
+//        // verifica se os nós da face estão no contorno
+//        mesh->getFacetNodesId(f, f_nds);
+//        for (int j = 0; j < nnpf; ++j)
+//        {
+//          EXPECT_TRUE(mesh->inBoundary(mesh->getNode(f_nds[j])));
+//        }
+//        
+//      }
+//    }
+//    
+//  }
+//  
+//  for (point_iterator point = mesh->pointBegin(); point != mesh->pointEnd(); ++point)
+//  {
+//    int myid = mesh->getPointId(&*point);
+//    int ic = point->getIncidCell();
+//    int pos = point->getPosition();
+//    Cell *c = mesh->getCell(ic);
+//    
+//    EXPECT_TRUE(c->getNodeId(pos) == myid);
+//    
+//  }
+//  
+//  
+//}
+//
 
 // da pra melhorar
 void MeshTools::removeCell(Cell * cell, Mesh *mesh)
