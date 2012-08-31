@@ -980,7 +980,9 @@ Facet* SMesh<CT,SD>::nextBoundaryFacet_template(Facet const*, typename EnableIf<
 }
 
 
-
+/** set iC as the incident cell to the point pt = (iC,pos). If an incident cell has the same
+  *  connected component of the iC, then it is replaced.
+  */ 
 template<class CT, int SD>
 void SMesh<CT,SD>::pushIncidCell2Point(Point *pt, int iC, int pos)
 {
@@ -1489,6 +1491,8 @@ void SMesh<CT,SD>::buildNodesAdjacency()
       for (int j = 0; j < CT::n_facets; ++j)
       {
         cell->getFacetNodesId(j,fnodes);
+        if (cell->CellT::getIncidCell(j) >= 0)
+          continue;
         for (int n = 0; n < nnpf; ++n)
         {
           point = this->MeshT::getNode(fnodes[n]);
@@ -1503,8 +1507,9 @@ void SMesh<CT,SD>::buildNodesAdjacency()
       }
 
     }
-
+    
   } // end parallel
+
 
 }
 

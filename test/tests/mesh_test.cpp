@@ -1432,18 +1432,52 @@ TEST(NodeSingularityTest, WithTri3)
 
   for (int i = 0; i < static_cast<int>( sizeof(is_sing)/sizeof(bool) ); ++i)
   {
-    EXPECT_TRUE(mesh->getNode(i)->isSingular()==is_sing[i]) << std::cout << "i= " << i << std::endl;
+    EXPECT_TRUE(mesh->getNode(i)->isSingular()==is_sing[i])  << "i= " << i << std::endl;
   }
   
   
-  
-  EXPECT_TRUE(true);
-
   delete mesh;
   
 }
 
+TEST(InBoundaryTest, WithTri3)
+{
+  MeshIoMsh msh_reader;
+  Mesh* mesh;
+  int dim = 2;
 
+  mesh =Mesh::create(TRIANGLE3,dim) ;
+  
+  msh_reader.readFileMsh("meshes/moderate_tri3.msh", mesh);
+
+  int const n_nodes = mesh->numNodesTotal();
+  Point *p;
+  
+  for (int i = 0; i < n_nodes; ++i)
+  {
+    p = mesh->getNode(i);
+    EXPECT_TRUE(p->getIncidCell() >= 0);
+  }
+  
+
+  int const in_boundary_nds[]  = {1,7,8,9,0,6,5,4,2,21,20,19,18,17,16,3,15,14,13,12,11,10};
+  int const interior_nds[]     = {41,47,26,33,32,35,23,44,25,28,37,38,22,43,31,30,39,45,27,36,24,42,34,29,40,46};
+
+  for (int i = 0; (unsigned)i < sizeof(in_boundary_nds)/sizeof(int); ++i)
+  {
+    p = mesh->getNode(in_boundary_nds[i]);
+    EXPECT_TRUE(mesh->inBoundary(p)) << "node " << in_boundary_nds[i] << "; ic "<< p->getIncidCell() << std::endl;
+  }
+  
+  for (int i = 0; (unsigned)i < sizeof(interior_nds)/sizeof(int); ++i)
+  {
+    p = mesh->getNode(interior_nds[i]);
+    EXPECT_FALSE(mesh->inBoundary(p)) << "node " << interior_nds[i] << "; ic "<< p->getIncidCell() << std::endl;
+  }
+
+  delete mesh;
+  
+}
 
 
 

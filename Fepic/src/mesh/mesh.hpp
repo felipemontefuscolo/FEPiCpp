@@ -566,9 +566,7 @@ public:
     return this->MeshT::nextBoundaryFacet_template<CellT::dim>(f);
   }
 
-  /** set iC as the incident cell to the point pt = (iC,pos). If a cell has the same
-   *  connected component of the iC, then it is replaced.
-   */ 
+
   void pushIncidCell2Point(Point *pt, int iC, int pos);
 
   // ---------------------------------------------------- EDGE STAR ---------------------------------------------------
