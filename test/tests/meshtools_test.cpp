@@ -73,17 +73,17 @@ void checkConsistencyTri(Mesh *mesh)
         // verifica o vizinho
         c = mesh->getCell(cell->getIncidCell(i));
         int pos = cell->getIncidCellPos(i);
-        EXPECT_EQ(myid, c->getIncidCell(pos));
+        EXPECT_EQ(myid, c->getIncidCell(pos))  << "myid=" << myid<<"; c->getIncidCell(pos)="<<c->getIncidCell(pos)<<"; i="<<i<<"; pos="<<pos;
         
         // verifica a face
         f = mesh->getFacet(cell->getFacetId(i));
         int icf = f->getIncidCell();
         EXPECT_TRUE(icf==myid || icf==cell->getIncidCell(i));
         if (icf==myid)
-          EXPECT_TRUE(f->getPosition() == i);
+          EXPECT_TRUE(f->getPosition() == i) << "myid=" << myid<<"; f->getPosition()="<<f->getPosition()<<"; i="<<i<<"\n";
         else
         {
-          EXPECT_TRUE(f->getPosition() == pos);
+          EXPECT_TRUE(f->getPosition() == pos) << "myid=" << myid<<"; f->getPosition()="<<f->getPosition()<<"; pos="<<pos<<"; i="<<i<<"\n";
         }
       }
       else // bordo
@@ -120,264 +120,293 @@ void checkConsistencyTri(Mesh *mesh)
   
 }
 
-
-
-
-TEST(searchConvexPointTest, Tri3Test)
+TEST(FlipTest, WithTri3)
 {
+  
   MeshIoMsh msh_reader;
   MeshIoVtk vtk_printer;
   Mesh *mesh = NULL;  
 
   ECellType cell_t      = TRIANGLE3;
-  const char* mesh_in  = "meshes/uni_tri.msh";
-  //const char* mesh_out = "meshes/uni_tri.vtk";
+  const char* mesh_in  = "meshes/circle_tri3.msh";
+  const char* mesh_out = "meshes/out/circle.vtk";
   
   mesh = Mesh::create(cell_t);
   msh_reader.readFileMsh(mesh_in, mesh);
-  
-  //                       cell     x        y
-  typedef std::tr1::tuple<int, double, double> location;
-  
-  location loc[] = {location( 66, 0.08, 0.55),
-                    location( 28, 0.97, 0.01),
-                    location( 27, 0.01, 0.98),
-                    location(375, 0.04, 0.01),
-                    location(376, 0.01, 0.03),
-                    location( 80, 0.30, 0.54),
-                    location( -1, 0.50, 0.53),
-                    location( -1, 0.00, 1.00000001),
-                    location( -1, 1.00000001, 0.0),
-                    location( 28, 1.00, 0.00)};
-  
-  std::pair<bool, Cell *> bc;
-  double X[2];
-  int cid;
-  
-  /* initialize random seed: */
-  srand ( 180387 );  
-  
-  
-  for (int jj=0; jj<10; ++jj)
-  {
-    for (uint i = 0; i < sizeof(loc)/sizeof(location); ++i)
-    //for (uint i = 0; i < 1; ++i)
-    {
-      //cout << get<0>(loc[i]) << " " << get<1>(loc[i]) << " " << get<2>(loc[i]) << endl;
-      X[0] = get<1>(loc[i]);
-      X[1] = get<2>(loc[i]);
-      bc = MeshToolsTri::searchConvexPoint(X, mesh->getCell(rand()%mesh->numCells()), mesh);
-      if (bc.first)
-        cid = mesh->getCellId(bc.second);
-      else
-        cid = -1;
-      
-      EXPECT_EQ(get<0>(loc[i]), cid);
-    }
-  }
+  vtk_printer.isFamily(true);
+  vtk_printer.attachMesh(mesh);
   
   checkConsistencyTri(mesh);
   
-  delete mesh;
-}
-
-class SomeFunc
-{public:
-  Real operator() (Real const*x) const
-  {
-    return x[1] - SomeFunc::Y();
-  }
-  static double Y()
-  {
-    return 0.03;
-  }
-};
-
-
-TEST(CreatePathTest, Tri3Test)
-{
-  MeshIoMsh msh_reader;
-  MeshIoVtk vtk_printer;
-  Mesh *mesh = NULL;  
-
-  ECellType cell_t      = TRIANGLE3;
-  const char* mesh_in  = "meshes/uni_tri.msh";
-  //const char* mesh_out = "meshes/uni_tri.vtk";
+  vtk_printer.writeVtk("meshes/out/circle1.vtk");
   
-  mesh = Mesh::create(cell_t);
-  msh_reader.readFileMsh(mesh_in, mesh);
-  
-  Real x0[] = {0.015, 0.005};
-  
-  std::vector<int> cells_id;
-  std::vector<Real> slices;
-  
-  Cell *c0 = mesh->getCell(313);
-  
-  MeshToolsTri::createPath(x0, c0, SomeFunc(), cells_id, slices,  mesh);
-  
-  EXPECT_EQ(38u, cells_id.size());
-  EXPECT_EQ(114u, slices.size());
-
-  EXPECT_EQ(28, cells_id.back());
-  
-  
-  // conferi os vizinhos
-  for (int c = 0; c < (int)cells_id.size(); ++c)
-  {
-    c0 = mesh->getCell(cells_id[c]);
-    int myid = mesh->getCellId(c0);
-    
-    int f_free = -1;
-    for (int i = 0; i < 3; ++i) {if (slices[3*c + i]<0) {f_free = i; break;}}
-    
-    EXPECT_TRUE(f_free>=0) << cout<<" SLICE: "<<slices[3*c]<<" "<<slices[3*c + 1]<<" "<<slices[3*c + 2]<<std::endl ;
-    
-    for (int kk = 0; kk < 2; ++kk) // sides
-    {
-      int f = (f_free+kk+1)%3;
-      
-      int oc_id = c0->getIncidCell(f);
-      if (oc_id < 0)
-        break;
-      int pos = c0->getIncidCellPos(f);
-      
-      std::vector<int>::iterator it = find(cells_id.begin(), cells_id.end(), oc_id);
-      EXPECT_FALSE(it == cells_id.end()) << cout << "ID: " << oc_id << ", MY: " << myid;
-      
-      EXPECT_EQ(myid, mesh->getCell(oc_id)->getIncidCell(pos));
-      
-      int octh = std::distance(cells_id.begin(),it);
-      EXPECT_DOUBLE_EQ(1.0, slices[3*octh+pos]+slices[3*c+f])
-        << cout << "\n\tOslices= "<<slices[3*octh+0]<<" "<<slices[3*octh+1]<<" "<<slices[3*octh+2]<<"\n"
-                << "\t slices= "<<slices[3*c+0]<<" "<<slices[3*c+1]<<" "<<slices[3*c+2]<<"\n"
-                << "\t pos= " << pos << " " << " f=" << f << " my=" << myid << " oid=" << oc_id << endl;
-      
-    
-          
-    }
-    
-  }
-  
-  
-  //for (int i = 0; i < slices.size(); ++i)
-  //{
-  //  std::cout << slices[i] << std::endl;
-  //}
-  
+  MeshTools::flipTri(mesh->getCell( 3), 2, mesh);
+  MeshTools::flipTri(mesh->getCell( 6), 0, mesh);
+  MeshTools::flipTri(mesh->getCell(13), 1, mesh);
   
   checkConsistencyTri(mesh);
   
-  delete mesh;
-}
-
-
-
-
-
-class SomeFunc2
-{public:
-  Real operator() (Real const*x) const
-  {
-    return x[1] - SomeFunc2::Y();
-  }
-  static double Y()
-  {
-    return 0.48;
-  }
-};
-
-
-
-TEST(CreatePathTest2, Tri3Test)
-{
-  MeshIoMsh msh_reader;
-  MeshIoVtk vtk_printer;
-  Mesh *mesh = NULL;  
-
-  ECellType cell_t      = TRIANGLE3;
-  const char* mesh_in  = "meshes/uni_tri.msh";
-  //const char* mesh_out = "meshes/uni_tri.vtk";
+  vtk_printer.writeVtk("meshes/out/circle2.vtk");
   
-  mesh = Mesh::create(cell_t);
-  msh_reader.readFileMsh(mesh_in, mesh);
-  
-  Real x0[] = {SomeFunc2::Y(), SomeFunc2::Y()};
-  
-  std::vector<int> cells_id;
-  std::vector<Real> slices;
-  
-  Cell *c0 = mesh->getCell(246);
-  
-  MeshToolsTri::createPath(x0, c0, SomeFunc2(), cells_id, slices,  mesh);
-
-
-
-
-  
-  // conferi os vizinhos
-  for (int c = 0; c < (int)cells_id.size(); ++c)
-  {
-    c0 = mesh->getCell(cells_id[c]);
-    int myid = mesh->getCellId(c0);
-    
-    int f_free = -1;
-    for (int i = 0; i < 3; ++i) {if (slices[3*c + i]<0) {f_free = i; break;}}
-    
-    EXPECT_TRUE(f_free>=0) << cout<<" SLICE: "<<slices[3*c]<<" "<<slices[3*c + 1]<<" "<<slices[3*c + 2]<<std::endl ;
-    
-    for (int kk = 0; kk < 2; ++kk) // sides
-    {
-      int f = (f_free+kk+1)%3;
-      
-      int oc_id = c0->getIncidCell(f);
-      if (oc_id < 0)
-        break;
-      int pos = c0->getIncidCellPos(f);
-      
-      std::vector<int>::iterator it = find(cells_id.begin(), cells_id.end(), oc_id);
-      EXPECT_FALSE(it == cells_id.end()) << cout << "ID: " << oc_id << ", MY: " << myid;
-      
-      EXPECT_EQ(myid, mesh->getCell(oc_id)->getIncidCell(pos));
-      
-      int octh = std::distance(cells_id.begin(),it);
-      EXPECT_DOUBLE_EQ(1.0, slices[3*octh+pos]+slices[3*c+f])
-        << cout << "\n\tOslices= "<<slices[3*octh+0]<<" "<<slices[3*octh+1]<<" "<<slices[3*octh+2]<<"\n"
-                << "\t slices= "<<slices[3*c+0]<<" "<<slices[3*c+1]<<" "<<slices[3*c+2]<<"\n"
-                << "\t pos= " << pos << " " << " f=" << f << " my=" << myid << " oid=" << oc_id << endl;
-
-    }
-    
-  }
-  
+  Cell *c = mesh->getCell(3);
+  printf("DEBUG %d %d %d\n", c->getNodeId(0), c->getNodeId(1), c->getNodeId(2));
   
   delete mesh;
+  
+  EXPECT_TRUE(true);
 }
 
-TEST(cutConvexPartTest, Tri3Test)
-{
-  MeshIoMsh msh_reader;
-  MeshIoVtk vtk_printer;
-  Mesh *mesh = NULL;  
-
-  ECellType cell_t      = TRIANGLE3;
-  const char* mesh_in  = "meshes/uni_tri.msh";
-  //const char* mesh_out = "meshes/uni_tri.vtk";
-  
-  mesh = Mesh::create(cell_t);
-  msh_reader.readFileMsh(mesh_in, mesh);
-  
-  Real x0[] = {SomeFunc2::Y(), SomeFunc2::Y()};
-  
-  Cell *c0 = mesh->getCell(246);
-  
-  MeshToolsTri::cutConvexPart(x0, c0, SomeFunc2(), mesh);
-
-  
-  delete mesh;
-}
-
-
+//
+//TEST(searchConvexPointTest, Tri3Test)
+//{
+//  MeshIoMsh msh_reader;
+//  MeshIoVtk vtk_printer;
+//  Mesh *mesh = NULL;  
+//
+//  ECellType cell_t      = TRIANGLE3;
+//  const char* mesh_in  = "meshes/uni_tri.msh";
+//  //const char* mesh_out = "meshes/uni_tri.vtk";
+//  
+//  mesh = Mesh::create(cell_t);
+//  msh_reader.readFileMsh(mesh_in, mesh);
+//  
+//  //                       cell     x        y
+//  typedef std::tr1::tuple<int, double, double> location;
+//  
+//  location loc[] = {location( 66, 0.08, 0.55),
+//                    location( 28, 0.97, 0.01),
+//                    location( 27, 0.01, 0.98),
+//                    location(375, 0.04, 0.01),
+//                    location(376, 0.01, 0.03),
+//                    location( 80, 0.30, 0.54),
+//                    location( -1, 0.50, 0.53),
+//                    location( -1, 0.00, 1.00000001),
+//                    location( -1, 1.00000001, 0.0),
+//                    location( 28, 1.00, 0.00)};
+//  
+//  std::pair<bool, Cell *> bc;
+//  double X[2];
+//  int cid;
+//  
+//  /* initialize random seed: */
+//  srand ( 180387 );  
+//  
+//  
+//  for (int jj=0; jj<10; ++jj)
+//  {
+//    for (uint i = 0; i < sizeof(loc)/sizeof(location); ++i)
+//    //for (uint i = 0; i < 1; ++i)
+//    {
+//      //cout << get<0>(loc[i]) << " " << get<1>(loc[i]) << " " << get<2>(loc[i]) << endl;
+//      X[0] = get<1>(loc[i]);
+//      X[1] = get<2>(loc[i]);
+//      bc = MeshToolsTri::searchConvexPoint(X, mesh->getCell(rand()%mesh->numCells()), mesh);
+//      if (bc.first)
+//        cid = mesh->getCellId(bc.second);
+//      else
+//        cid = -1;
+//      
+//      EXPECT_EQ(get<0>(loc[i]), cid);
+//    }
+//  }
+//  
+//  checkConsistencyTri(mesh);
+//  
+//  delete mesh;
+//}
+//
+//class SomeFunc
+//{public:
+//  Real operator() (Real const*x) const
+//  {
+//    return x[1] - SomeFunc::Y();
+//  }
+//  static double Y()
+//  {
+//    return 0.03;
+//  }
+//};
+//
+//
+//TEST(CreatePathTest, Tri3Test)
+//{
+//  MeshIoMsh msh_reader;
+//  MeshIoVtk vtk_printer;
+//  Mesh *mesh = NULL;  
+//
+//  ECellType cell_t      = TRIANGLE3;
+//  const char* mesh_in  = "meshes/uni_tri.msh";
+//  //const char* mesh_out = "meshes/uni_tri.vtk";
+//  
+//  mesh = Mesh::create(cell_t);
+//  msh_reader.readFileMsh(mesh_in, mesh);
+//  
+//  Real x0[] = {0.015, 0.005};
+//  
+//  std::vector<int> cells_id;
+//  std::vector<Real> slices;
+//  
+//  Cell *c0 = mesh->getCell(313);
+//  
+//  MeshToolsTri::createPath(x0, c0, SomeFunc(), cells_id, slices,  mesh);
+//  
+//  EXPECT_EQ(38u, cells_id.size());
+//  EXPECT_EQ(114u, slices.size());
+//
+//  EXPECT_EQ(28, cells_id.back());
+//  
+//  
+//  // conferi os vizinhos
+//  for (int c = 0; c < (int)cells_id.size(); ++c)
+//  {
+//    c0 = mesh->getCell(cells_id[c]);
+//    int myid = mesh->getCellId(c0);
+//    
+//    int f_free = -1;
+//    for (int i = 0; i < 3; ++i) {if (slices[3*c + i]<0) {f_free = i; break;}}
+//    
+//    EXPECT_TRUE(f_free>=0) << cout<<" SLICE: "<<slices[3*c]<<" "<<slices[3*c + 1]<<" "<<slices[3*c + 2]<<std::endl ;
+//    
+//    for (int kk = 0; kk < 2; ++kk) // sides
+//    {
+//      int f = (f_free+kk+1)%3;
+//      
+//      int oc_id = c0->getIncidCell(f);
+//      if (oc_id < 0)
+//        break;
+//      int pos = c0->getIncidCellPos(f);
+//      
+//      std::vector<int>::iterator it = find(cells_id.begin(), cells_id.end(), oc_id);
+//      EXPECT_FALSE(it == cells_id.end()) << cout << "ID: " << oc_id << ", MY: " << myid;
+//      
+//      EXPECT_EQ(myid, mesh->getCell(oc_id)->getIncidCell(pos));
+//      
+//      int octh = std::distance(cells_id.begin(),it);
+//      EXPECT_DOUBLE_EQ(1.0, slices[3*octh+pos]+slices[3*c+f])
+//        << cout << "\n\tOslices= "<<slices[3*octh+0]<<" "<<slices[3*octh+1]<<" "<<slices[3*octh+2]<<"\n"
+//                << "\t slices= "<<slices[3*c+0]<<" "<<slices[3*c+1]<<" "<<slices[3*c+2]<<"\n"
+//                << "\t pos= " << pos << " " << " f=" << f << " my=" << myid << " oid=" << oc_id << endl;
+//      
+//    
+//          
+//    }
+//    
+//  }
+//  
+//  
+//  //for (int i = 0; i < slices.size(); ++i)
+//  //{
+//  //  std::cout << slices[i] << std::endl;
+//  //}
+//  
+//  
+//  checkConsistencyTri(mesh);
+//  
+//  delete mesh;
+//}
+//
+//class SomeFunc2
+//{public:
+//  Real operator() (Real const*x) const
+//  {
+//    return x[1] - SomeFunc2::Y();
+//  }
+//  static double Y()
+//  {
+//    return 0.48;
+//  }
+//};
+//
+//
+//TEST(CreatePathTest2, Tri3Test)
+//{
+//  MeshIoMsh msh_reader;
+//  MeshIoVtk vtk_printer;
+//  Mesh *mesh = NULL;  
+//
+//  ECellType cell_t      = TRIANGLE3;
+//  const char* mesh_in  = "meshes/uni_tri.msh";
+//  //const char* mesh_out = "meshes/uni_tri.vtk";
+//  
+//  mesh = Mesh::create(cell_t);
+//  msh_reader.readFileMsh(mesh_in, mesh);
+//  
+//  Real x0[] = {SomeFunc2::Y(), SomeFunc2::Y()};
+//  
+//  std::vector<int> cells_id;
+//  std::vector<Real> slices;
+//  
+//  Cell *c0 = mesh->getCell(246);
+//  
+//  MeshToolsTri::createPath(x0, c0, SomeFunc2(), cells_id, slices,  mesh);
+//
+//
+//
+//
+//  
+//  // conferi os vizinhos
+//  for (int c = 0; c < (int)cells_id.size(); ++c)
+//  {
+//    c0 = mesh->getCell(cells_id[c]);
+//    int myid = mesh->getCellId(c0);
+//    
+//    int f_free = -1;
+//    for (int i = 0; i < 3; ++i) {if (slices[3*c + i]<0) {f_free = i; break;}}
+//    
+//    EXPECT_TRUE(f_free>=0) << cout<<" SLICE: "<<slices[3*c]<<" "<<slices[3*c + 1]<<" "<<slices[3*c + 2]<<std::endl ;
+//    
+//    for (int kk = 0; kk < 2; ++kk) // sides
+//    {
+//      int f = (f_free+kk+1)%3;
+//      
+//      int oc_id = c0->getIncidCell(f);
+//      if (oc_id < 0)
+//        break;
+//      int pos = c0->getIncidCellPos(f);
+//      
+//      std::vector<int>::iterator it = find(cells_id.begin(), cells_id.end(), oc_id);
+//      EXPECT_FALSE(it == cells_id.end()) << cout << "ID: " << oc_id << ", MY: " << myid;
+//      
+//      EXPECT_EQ(myid, mesh->getCell(oc_id)->getIncidCell(pos));
+//      
+//      int octh = std::distance(cells_id.begin(),it);
+//      EXPECT_DOUBLE_EQ(1.0, slices[3*octh+pos]+slices[3*c+f])
+//        << cout << "\n\tOslices= "<<slices[3*octh+0]<<" "<<slices[3*octh+1]<<" "<<slices[3*octh+2]<<"\n"
+//                << "\t slices= "<<slices[3*c+0]<<" "<<slices[3*c+1]<<" "<<slices[3*c+2]<<"\n"
+//                << "\t pos= " << pos << " " << " f=" << f << " my=" << myid << " oid=" << oc_id << endl;
+//
+//    }
+//    
+//  }
+//  
+//  
+//  delete mesh;
+//}
+//
+//TEST(cutConvexPartTest, Tri3Test)
+//{
+//  MeshIoMsh msh_reader;
+//  MeshIoVtk vtk_printer;
+//  Mesh *mesh = NULL;  
+//
+//  ECellType cell_t      = TRIANGLE3;
+//  const char* mesh_in  = "meshes/uni_tri.msh";
+//  //const char* mesh_out = "meshes/uni_tri.vtk";
+//  
+//  mesh = Mesh::create(cell_t);
+//  msh_reader.readFileMsh(mesh_in, mesh);
+//  
+//  Real x0[] = {SomeFunc2::Y(), SomeFunc2::Y()};
+//  
+//  Cell *c0 = mesh->getCell(246);
+//  
+//  MeshToolsTri::cutConvexPart(x0, c0, SomeFunc2(), mesh);
+//
+//  
+//  delete mesh;
+//}
+//
+//
 
 
 

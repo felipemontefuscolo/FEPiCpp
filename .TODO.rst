@@ -12,12 +12,12 @@ tratando nós singulares.
 
 
 
-*trocar ordem da malha alterando a ordem de cada célula individualmente. Para isso
+* trocar ordem da malha alterando a ordem de cada célula individualmente. Para isso
   -em cada célula, se order(CELLviz) == order(THIS):
     --reaproveita os nós do bordo.
   -se não:
     --cria novos nós.
-*unificar os algoritmos buildAdjacency
+* unificar os algoritmos buildAdjacency
 
 
 
@@ -27,13 +27,13 @@ tratando nós singulares.
 
 
 
-*fazer test case para dof_handler com seletor de tags em 3d
+* fazer test case para dof_handler com seletor de tags em 3d
 
 
-*ideia: criar a possibilidade de extrair uma malha de outra a partir de tags.
+* ideia: criar a possibilidade de extrair uma malha de outra a partir de tags.
 
 
 * estender os algoritmos implementados para tri3 (singularidade, etc.) para os outros
 elementos, e criar testes de unidade.
 
-
+* estender os tests cases no arquivo mesh_test para outros elementos (tri6, quad4, quad8, tet4, etc.)

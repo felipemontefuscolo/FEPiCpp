@@ -54,6 +54,14 @@ public:
    */ 
   static void removeCell(Cell * cell, Mesh *mesh);
   
+  /** flips Tri3 only TODO
+   *  @param cell the cell that will be removed.
+   *  @param fid local facet's id that will be flipped.
+   *  @param mesh mesh context.
+   *  @return true if an error occurred, false otherwise.
+   */ 
+  static bool flipTri(Cell * cell, int fid, Mesh *mesh);  
+  
 };
 
 /// specific for triangular meshes
@@ -61,13 +69,6 @@ class MeshToolsTri
 {
 public:
 
-  /** flips Tri3 only TODO
-   *  @param cell the cell that will be removed.
-   *  @param fid local facet's id that will be flipped.
-   *  @param mesh mesh context.
-   *  @return true if an error occurred, false otherwise.
-   */ 
-  static bool flip(Cell * cell, int fid, Mesh *mesh);
 
   /** Tri3 only
    *  slice a convex part of the mesh with an isocontour of a 
