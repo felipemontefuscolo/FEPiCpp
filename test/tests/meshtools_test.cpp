@@ -149,7 +149,6 @@ TEST(FlipTest, WithTri3)
   vtk_printer.writeVtk("meshes/out/circle2.vtk");
   
   Cell *c = mesh->getCell(3);
-  printf("DEBUG %d %d %d\n", c->getNodeId(0), c->getNodeId(1), c->getNodeId(2));
   
   delete mesh;
   

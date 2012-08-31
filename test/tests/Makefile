@@ -87,6 +87,6 @@ remade:
 	$(FEP_CXX) $< -MM -MT '$*.o $*.d ' -MD $(CXXFLAGS) $(GTEST_INCLUDE)
 
 run:
-	for i in `ls *.exe`; do ./${i}; done
+	for i in `ls *.exe`; do ./$${i}; done
 
 
