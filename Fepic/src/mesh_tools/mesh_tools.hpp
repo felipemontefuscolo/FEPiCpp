@@ -35,32 +35,23 @@ class MeshTools
 {
 public:
   
-  //enum Errors {
-  //  Inv
-  //  
-  //};
-  
   friend class Mesh;
   
-  /** Checks mesh consistency.
-   *  
-   */ 
   static int checkConsistency(Mesh *mesh);
 
-  /** Safely removes a cell
-   *  @param cell the cell that will be removed.
-   *  @param mesh mesh context.
-   *  @return nothing.
-   */ 
   static void removeCell(Cell * cell, Mesh *mesh);
   
-  /** flips Tri3 only TODO
-   *  @param cell the cell that will be removed.
-   *  @param fid local facet's id that will be flipped.
-   *  @param mesh mesh context.
-   *  @return true if an error occurred, false otherwise.
-   */ 
-  static bool flipTri(Cell * cell, int fid, Mesh *mesh);  
+  static bool flipTri(Cell * cell, int fid, Mesh *mesh);
+  static bool flipTri(Facet* edge, Mesh* mesh)
+  {
+    return flipTri(mesh->getCell(edge->getIncidCell()), edge->getPosition(), mesh);
+  }
+
+  static bool isDelaunayEdge2d(Cell const* cell, const int fid, Mesh const* mesh);
+  static bool isDelaunayEdge2d(Facet const* edge, Mesh const* mesh)
+  {
+    return isDelaunayEdge2d(mesh->getCell(edge->getIncidCell()), edge->getPosition(),mesh);
+  }
   
 };
 

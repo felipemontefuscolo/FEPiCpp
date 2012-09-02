@@ -83,7 +83,11 @@
 //
 */
 
-// da pra melhorar
+/** Safely removes a cell
+ *  @param cell the cell that will be removed.
+ *  @param mesh mesh context.
+ *  @return nothing.
+ */ 
 void MeshTools::removeCell(Cell * cell, Mesh *mesh)
 {
   const int cell_dim = mesh->cellDim();
@@ -182,6 +186,7 @@ void MeshTools::removeCell(Cell * cell, Mesh *mesh)
  *  @param afid local facet's id that will be flipped.
  *  @param mesh mesh context.
  *  @return true if an error occurred, false otherwise.
+ *  @note linear triangle only
  */ 
 bool MeshTools::flipTri(Cell * acell, int afid, Mesh *mesh)
 {
@@ -190,13 +195,13 @@ bool MeshTools::flipTri(Cell * acell, int afid, Mesh *mesh)
                                            |
            j                  j            |        k                             
            ^                  ^            |        ^                  ^          
-          /|\                / \           |       /|\                / \         
+          /|\         new    / \           |       /|\                / \         
          / | \        afid  /   \          |      / | \              /   \        
         /  |  \            /  A  \         |     /  |  \            /     \       
        /   |   \          /       \        |    /   |   \          /       \      
       <    | A  > i    k <---------> i     | i <  B |    >      i <---------> k   
        \   |   /          \       /        |    \   |   /          \       /      
-        \  |  /            \     /         |     \  |  /            \  B  /       
+        \  |  /            \     /         |     \  |  /            \  B  / new   
          \ | /              \   /          |      \ | /              \   /  bfid 
           \|/                \ /           |       \|/                \ /         
            v                  v            |        v                  v          
@@ -208,78 +213,143 @@ bool MeshTools::flipTri(Cell * acell, int afid, Mesh *mesh)
   int const bfid = acell->getIncidCellPos(afid);
   int const acid = mesh->getCellId(acell);
   
+  //int const afid_plus0 = (afid+0)%3;
+  int const afid_plus1 = (afid+1)%3;
+  int const afid_plus2 = (afid+2)%3;
+  //int const bfid_plus0 = (bfid+0)%3;
+  int const bfid_plus1 = (bfid+1)%3;
+  int const bfid_plus2 = (bfid+2)%3;
+  
   FEPIC_CHECK(bcid >= 0 && bfid>=0, "invalid mesh or argument", std::runtime_error);
   
   Cell *bcell = mesh->getCell(bcid);
 
-
   /* changing the incidences of the facets */
   Facet *f;
-  f = mesh->getFacet(acell->getFacetId((afid+1)%3)); // inferior-direita
+  f = mesh->getFacet(acell->getFacetId(afid_plus1)); // inferior-direita
   f->setIncidCell(bcid);
   f->setPosition(bfid);
   
-  f = mesh->getFacet(bcell->getFacetId((bfid+1)%3)); // superior-esquerda
+  f = mesh->getFacet(bcell->getFacetId(bfid_plus1)); // superior-esquerda
   f->setIncidCell(acid);
   f->setPosition(afid);
   
   f = mesh->getFacet(acell->getFacetId(afid)); // meio
   f->setIncidCell(acid);
-  f->setPosition((afid+1)%3);
+  f->setPosition(afid_plus1);
   // as outras faces são preservadas
   
-  /* changing the incidences of the nodes */
+  /* changing the incidences of the nodes only when is necessary */
+  // BE careful with the contour, see function inBoundary(Point const* point)
   Point *p;
   p = mesh->getNode(acell->getNodeId(afid)); // j de a
-  p->setIncidCell(acid);
-  p->setPosition(afid);
-  
+  if (p->getIncidCell() == bcid)
+  {
+    p->setIncidCell(acid);
+    p->setPosition(afid);
+  }
   p = mesh->getNode(bcell->getNodeId(bfid)); // j de b
-  p->setIncidCell(bcid);
-  p->setPosition(bfid);
+  if (p->getIncidCell() == acid)
+  {
+    p->setIncidCell(bcid);
+    p->setPosition(bfid);
+  }
   
   /* changing the incidences of the cells */
   Cell *c;
   // superior-esquerda
-  acell->setIncidCell(afid, bcell->getIncidCell((bfid+1)%3));
-  acell->setIncidCellPos(afid, bcell->getIncidCellPos((bfid+1)%3));
-  c = mesh->getCell(acell->getIncidCell(afid));
-  c->setIncidCell(acell->getIncidCellPos(afid), acid);
-  c->setIncidCellPos(acell->getIncidCellPos(afid),afid);
+  acell->setIncidCell(afid, bcell->getIncidCell(bfid_plus1));
+  acell->setIncidCellPos(afid, bcell->getIncidCellPos(bfid_plus1));
+  if (acell->getIncidCell(afid) >= 0)
+  {
+    c = mesh->getCell(acell->getIncidCell(afid));
+    c->setIncidCell(acell->getIncidCellPos(afid), acid);
+    c->setIncidCellPos(acell->getIncidCellPos(afid),afid);
+  }
   // inferior-direita
-  bcell->setIncidCell(bfid, acell->getIncidCell((afid+1)%3));
-  bcell->setIncidCellPos(bfid, acell->getIncidCellPos((afid+1)%3));
-  c = mesh->getCell(bcell->getIncidCell(bfid));
-  c->setIncidCell(bcell->getIncidCellPos(bfid), bcid);
-  c->setIncidCellPos(bcell->getIncidCellPos(bfid),bfid);
-  // meio
-  acell->setIncidCell((afid+1)%3, bcid);
-  acell->setIncidCellPos((afid+1)%3, (bfid+1)%3);
-  bcell->setIncidCell((bfid+1)%3, acid);
-  bcell->setIncidCellPos((bfid+1)%3, (afid+1)%3);  
+  bcell->setIncidCell(bfid, acell->getIncidCell(afid_plus1));
+  bcell->setIncidCellPos(bfid, acell->getIncidCellPos(afid_plus1));
+  if (bcell->getIncidCell(bfid) >= 0)
+  {
+    c = mesh->getCell(bcell->getIncidCell(bfid));
+    c->setIncidCell(bcell->getIncidCellPos(bfid), bcid);
+    c->setIncidCellPos(bcell->getIncidCellPos(bfid),bfid);
+  }
+  // meio (tem que ser depois mesmo)
+  acell->setIncidCell(afid_plus1, bcid);
+  acell->setIncidCellPos(afid_plus1, bfid_plus1);
+  bcell->setIncidCell(bfid_plus1, acid);
+  bcell->setIncidCellPos(bfid_plus1, afid_plus1);  
   
   int f_ie, f_id, f_se, f_sd, f_m;   // i=inferior; s=superior; e=esquerda; d=direita
   
-  f_ie = bcell->getFacetId((bfid+2)%3);
-  f_id = acell->getFacetId((afid+1)%3);
-  f_se = bcell->getFacetId((bfid+1)%3);
-  f_sd = acell->getFacetId((afid+2)%3);
+  f_ie = bcell->getFacetId(bfid_plus2);
+  f_id = acell->getFacetId(afid_plus1);
+  f_se = bcell->getFacetId(bfid_plus1);
+  f_sd = acell->getFacetId(afid_plus2);
   f_m  = acell->getFacetId(afid);
   
-  acell->setFacetId((afid+0)%3, f_se);
-  acell->setFacetId((afid+1)%3, f_m );
-  acell->setFacetId((afid+2)%3, f_sd);
+  acell->setFacetId(afid      , f_se);
+  acell->setFacetId(afid_plus1, f_m );
+  acell->setFacetId(afid_plus2, f_sd);
   
-  bcell->setFacetId((bfid+0)%3, f_id);
-  bcell->setFacetId((bfid+1)%3, f_m );
-  bcell->setFacetId((bfid+2)%3, f_ie);
+  bcell->setFacetId(bfid      , f_id);
+  bcell->setFacetId(bfid_plus1, f_m );
+  bcell->setFacetId(bfid_plus2, f_ie);
   
-  acell->setNode((afid+1)%3, bcell->getNodeId((bfid+2)%3));
-  bcell->setNode((bfid+1)%3, acell->getNodeId((afid+2)%3));
+  acell->setNode(afid_plus1, bcell->getNodeId(bfid_plus2));
+  bcell->setNode(bfid_plus1, acell->getNodeId(afid_plus2));
 
+  return false;
 }
 
+/** Checks if an edge is a Delaunay edge.
+ *  @param cell edge's incident cell
+ *  @param fid edge's position in the cell.
+ *  @param mesh mesh context.
+ *  @return true if the edge is Delaunay, false otherwise.
+ */ 
+bool MeshTools::isDelaunayEdge2d(Cell const* cell, int const fid, Mesh const* mesh)
+{
+  int const ocid = cell->getIncidCell(fid);
+  if (ocid<0)
+    return true;
 
+  int const ofid = cell->getIncidCellPos(fid);
+  Cell const *ocell = mesh->getCell(ocid);
+
+  Point const *a = mesh->getNode(cell->getNodeId(0));
+  Point const *b = mesh->getNode(cell->getNodeId(1));
+  Point const *c = mesh->getNode(cell->getNodeId(2));
+  Point const *d = mesh->getNode(ocell->getNodeId((ofid+2)%3));
+ 
+  Real const ax = a->getCoord(0), ay = a->getCoord(1), aq = ax*ax + ay*ay;
+  Real const bx = b->getCoord(0), by = b->getCoord(1), bq = bx*bx + by*by;
+  Real const cx = c->getCoord(0), cy = c->getCoord(1), cq = cx*cx + cy*cy;
+  Real const dx = d->getCoord(0), dy = d->getCoord(1), dq = dx*dx + dy*dy;
+  /*
+     criteria:
+     true if
+         | 1 ax ay ax^2 + ay^2 |
+     det | 1 bx by bx^2 + by^2 | < 0
+         | 1 cx cy cx^2 + cy^2 |
+         | 1 dx dy dx^2 + dy^2 |
+      
+         | A  B  C |
+     det | D  E  F | = A*(E*I - F*H) - B*(D*I - F*G) + C*(D*H - E*G)
+         | G  H  I |
+  */
+  Real const A = bx-ax, B = by-ay, C = bq-aq;
+  Real const D = cx-ax, E = cy-ay, F = cq-aq;
+  Real const G = dx-ax, H = dy-ay, I = dq-aq;
+  
+  Real const det = A*(E*I - F*H) - B*(D*I - F*G) + C*(D*H - E*G);
+
+  if (det<0)
+    return false;
+  else
+    return true;
+}
 
 std::pair<bool, Cell *> MeshToolsTri::searchConvexPoint(Real const* x, Cell const* c0, Mesh const* mesh)
 {

@@ -98,7 +98,9 @@ void checkConsistencyTri(Mesh *mesh)
         mesh->getFacetNodesId(f, f_nds);
         for (int j = 0; j < nnpf; ++j)
         {
-          EXPECT_TRUE(mesh->inBoundary(mesh->getNode(f_nds[j])));
+          EXPECT_TRUE(mesh->inBoundary(mesh->getNode(f_nds[j])))
+            << "node="<<f_nds[j]<<"; icell="<<mesh->getNode(f_nds[j])->getIncidCell()
+            << "; pos="<< mesh->getNode(f_nds[j])->getPosition();
         }
         
       }
@@ -133,12 +135,14 @@ TEST(FlipTest, WithTri3)
   
   mesh = Mesh::create(cell_t);
   msh_reader.readFileMsh(mesh_in, mesh);
-  vtk_printer.isFamily(true);
+  
   vtk_printer.attachMesh(mesh);
+  vtk_printer.isFamily(true);
+  vtk_printer.setOutputFileName(mesh_out);
   
   checkConsistencyTri(mesh);
   
-  vtk_printer.writeVtk("meshes/out/circle1.vtk");
+  vtk_printer.writeVtk();
   
   MeshTools::flipTri(mesh->getCell( 3), 2, mesh);
   MeshTools::flipTri(mesh->getCell( 6), 0, mesh);
@@ -146,14 +150,112 @@ TEST(FlipTest, WithTri3)
   
   checkConsistencyTri(mesh);
   
-  vtk_printer.writeVtk("meshes/out/circle2.vtk");
-  
-  Cell *c = mesh->getCell(3);
+  vtk_printer.writeVtk();
   
   delete mesh;
   
   EXPECT_TRUE(true);
 }
+
+TEST(isDelaunayEdge2dTest, WithTri3)
+{
+  MeshIoMsh msh_reader;
+  MeshIoVtk vtk_printer;
+  Mesh *mesh = NULL;  
+
+  ECellType cell_t      = TRIANGLE3;
+  const char* mesh_in  = "meshes/simptri3.msh";
+  //const char* mesh_out = "meshes/out/circle.vtk";
+  
+  mesh = Mesh::create(cell_t);
+  msh_reader.readFileMsh(mesh_in, mesh);
+
+  Facet *f;
+  int const n_facets_total = mesh->numFacetsTotal();
+  
+  for (int i = 0; i < n_facets_total; ++i)
+  {
+    f = mesh->getFacet(i);
+    EXPECT_TRUE(MeshTools::isDelaunayEdge2d(f, mesh));
+  }
+
+  Real coord[2] = {0.45, 0.18};
+  Real coord_old[2];
+  
+  mesh->getNode(8)->getCoord(coord_old);
+  mesh->getNode(8)->setCoord(coord);
+  
+  EXPECT_FALSE(MeshTools::isDelaunayEdge2d(mesh->getCell(9), 1, mesh));
+  EXPECT_FALSE(MeshTools::isDelaunayEdge2d(mesh->getCell(2), 1, mesh));
+  
+  delete mesh;
+  
+  EXPECT_TRUE(true);
+}
+
+TEST(DelaunayMovingPointsTest, WithTri3)
+{
+  MeshIoMsh msh_reader;
+  MeshIoVtk vtk_printer;
+  Mesh *mesh = NULL;  
+
+  ECellType cell_t      = TRIANGLE3;
+  const char* mesh_in  = "meshes/circle_tri3.msh";
+  const char* mesh_out = "meshes/out/circle.vtk";
+  
+  mesh = Mesh::create(cell_t);
+  msh_reader.readFileMsh(mesh_in, mesh);
+
+  vtk_printer.attachMesh(mesh);
+  vtk_printer.isFamily(true);
+  vtk_printer.setOutputFileName(mesh_out);
+  
+  checkConsistencyTri(mesh);
+  
+  Facet *f;
+  Point *p;
+  int const n_facets_total = mesh->numFacetsTotal();
+  int const n_nodes_total  = mesh->numNodesTotal();
+  double const dt = 0.1;
+  
+  // time loop
+  for (double t=0; t<5; t+=dt)
+  {
+    printf ("TIMESTEP = %d, icell(1)=%d; ", int(t/dt), mesh->getNode(1)->getIncidCell());
+    vtk_printer.writeVtk();
+    checkConsistencyTri(mesh);
+    printf("imprimiu\n");
+    
+    // move points
+    for (int i = 0; i < n_nodes_total; ++i)
+    {
+      double X[2];
+      p = mesh->getNode(i);
+      p->getCoord(X);
+      double a = 1. - sqrt(X[0]*X[0] + X[1]*X[1]);
+      double Xnew[2] = {X[0] + dt*a*(-X[1]), X[1] + dt*a*X[0]};
+      p->setCoord(Xnew);
+    }
+    
+    // Delaunay
+    for (int i = 0; i < n_facets_total; ++i)
+    {
+      f = mesh->getFacet(i);
+      if (!MeshTools::isDelaunayEdge2d(f, mesh))
+      {
+        MeshTools::flipTri(f, mesh);
+      }
+    }
+    
+  }
+  vtk_printer.writeVtk();
+
+  delete mesh;
+  
+  EXPECT_TRUE(true);  
+  
+}
+
 
 //
 //TEST(searchConvexPointTest, Tri3Test)
