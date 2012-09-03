@@ -42,9 +42,9 @@ public:
   static void removeCell(Cell * cell, Mesh *mesh);
   
   static bool flipTri(Cell * cell, int fid, Mesh *mesh, bool move_edge_nds = true);
-  static bool flipTri(Facet* edge, Mesh* mesh)
+  static bool flipTri(Facet* edge, Mesh* mesh, bool move_edge_nds = true)
   {
-    return flipTri(mesh->getCell(edge->getIncidCell()), edge->getPosition(), mesh);
+    return flipTri(mesh->getCell(edge->getIncidCell()), edge->getPosition(), mesh, move_edge_nds);
   }
 
   static bool isDelaunayEdge2d(Cell const* cell, const int fid, Mesh const* mesh);

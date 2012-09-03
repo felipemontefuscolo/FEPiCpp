@@ -157,6 +157,41 @@ TEST(FlipTest, WithTri3)
   EXPECT_TRUE(true);
 }
 
+TEST(FlipTest, WithTri6)
+{
+  
+  MeshIoMsh msh_reader;
+  MeshIoVtk vtk_printer;
+  Mesh *mesh = NULL;  
+
+  ECellType cell_t      = TRIANGLE6;
+  const char* mesh_in  = "meshes/circle_tri6.msh";
+  //const char* mesh_out = "meshes/circle_tri6.vtk";
+  
+  mesh = Mesh::create(cell_t);
+  msh_reader.readFileMsh(mesh_in, mesh);
+  
+  vtk_printer.attachMesh(mesh);
+  //vtk_printer.isFamily(true);
+  //vtk_printer.setOutputFileName(mesh_out);
+  
+  checkConsistencyTri(mesh);
+  
+  //vtk_printer.writeVtk();
+  //
+  MeshTools::flipTri(mesh->getCell( 3), 2, mesh);
+  MeshTools::flipTri(mesh->getCell( 6), 0, mesh);
+  MeshTools::flipTri(mesh->getCell(13), 1, mesh);
+  //
+  checkConsistencyTri(mesh);
+  
+  //vtk_printer.writeVtk();
+  
+  delete mesh;
+  
+  EXPECT_TRUE(true);
+}
+
 TEST(isDelaunayEdge2dTest, WithTri3)
 {
   MeshIoMsh msh_reader;
@@ -254,6 +289,66 @@ TEST(FlippingMovingPointsTest, WithTri3)
   
 }
 
+TEST(FlippingMovingPointsTest, WithTri6)
+{
+  MeshIoMsh msh_reader;
+  MeshIoVtk vtk_printer;
+  Mesh *mesh = NULL;  
+
+  ECellType cell_t      = TRIANGLE6;
+  const char* mesh_in  = "meshes/circle_tri6.msh";
+  const char* mesh_out = "meshes/out/circle.vtk";
+  
+  mesh = Mesh::create(cell_t);
+  msh_reader.readFileMsh(mesh_in, mesh);
+
+  vtk_printer.attachMesh(mesh);
+  vtk_printer.isFamily(true);
+  vtk_printer.setOutputFileName(mesh_out);
+  
+  checkConsistencyTri(mesh);
+  
+  Facet *f;
+  Point *p;
+  int const n_facets_total = mesh->numFacetsTotal();
+  int const n_nodes_total  = mesh->numNodesTotal();
+  double const dt = 0.1;
+  
+  // time loop
+  for (double t=0; t<10; t+=dt)
+  {
+    vtk_printer.writeVtk();
+    checkConsistencyTri(mesh);
+    
+    // move points
+    for (int i = 0; i < n_nodes_total; ++i)
+    {
+      double X[2];
+      p = mesh->getNode(i);
+      p->getCoord(X);
+      double a = 1. - sqrt(X[0]*X[0] + X[1]*X[1]);
+      double Xnew[2] = {X[0] + dt*a*(-X[1]), X[1] + dt*a*X[0]};
+      p->setCoord(Xnew);
+    }
+    
+    // Delaunay
+    for (int i = 0; i < n_facets_total; ++i)
+    {
+      f = mesh->getFacet(i);
+      if (!MeshTools::isDelaunayEdge2d(f, mesh))
+      {
+        MeshTools::flipTri(f, mesh, true);
+      }
+    }
+    
+  }
+  //vtk_printer.writeVtk();
+
+  delete mesh;
+  
+  EXPECT_TRUE(true);  
+  
+}
 
 //
 //TEST(searchConvexPointTest, Tri3Test)

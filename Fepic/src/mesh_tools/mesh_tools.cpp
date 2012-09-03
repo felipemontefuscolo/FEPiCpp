@@ -181,13 +181,12 @@ void MeshTools::removeCell(Cell * cell, Mesh *mesh)
 }
 
 
-/** flips Tri3 only TODO
+/** edge flipping for Tri3 and Tri6 cells.
  *  @param acell the cell that will be removed.
  *  @param afid local facet's id that will be flipped.
  *  @param mesh mesh context.
  *  @param move_edge_nds true to move high order nodes, false otherwise.
  *  @return true if an error occurred, false otherwise.
- *  @note linear triangle only
  */ 
 bool MeshTools::flipTri(Cell * acell, int afid, Mesh *mesh, bool move_edge_nds)
 {
@@ -307,15 +306,14 @@ bool MeshTools::flipTri(Cell * acell, int afid, Mesh *mesh, bool move_edge_nds)
     bcell->setNodeId(bfid_plus1+3, f_m );
     //bcell->setNodeId(bfid_plus2+3, f_ie);
     
-    //mesh->getNode(f_ie)->setIncidence(bcid, bfid_plus2+3);
-    mesh->getNode(f_id)->setIncidence(acid, afid_plus1+3);
-    mesh->getNode(f_se)->setIncidence(bcid, bfid_plus2+3);
-    //mesh->getNode(f_sd)->setIncidence(bcid, bfid_plus2+3);
-    mesh->getNode(f_m )->setIncidence(bcid, bfid_plus2+3);
+    mesh->getNode(f_id)->setIncidence(bcid, bfid+3);       // inferior-direita
+    mesh->getNode(f_se)->setIncidence(acid, afid+3);       // superior-esquerda
+    mesh->getNode(f_m )->setIncidence(acid, afid_plus1+3); // meio
     
     if (move_edge_nds)
     {
-      Real pleft[2], pright[2];
+      int const sdim = mesh->spaceDim();
+      Real pleft[3], pright[3];
       
       mesh->getNode(acell->getNodeId(afid_plus2))->getCoord(pright); // right node
       mesh->getNode(bcell->getNodeId(bfid_plus2))->getCoord(pleft);  // left node
@@ -323,8 +321,10 @@ bool MeshTools::flipTri(Cell * acell, int afid, Mesh *mesh, bool move_edge_nds)
       // compute the center of the new edge
       pleft[0] = 0.5*(pleft[0]+pright[0]);
       pleft[1] = 0.5*(pleft[1]+pright[1]);
+      if (sdim==3)
+        pleft[2] = 0.5*(pleft[2]+pright[2]);
       
-      p = mesh->getNode(acell->getNodeId(afid+3)); // mid node
+      p = mesh->getNode(acell->getNodeId(afid_plus1+3)); // mid node
       p->setCoord(pleft);
     }
     
@@ -338,6 +338,7 @@ bool MeshTools::flipTri(Cell * acell, int afid, Mesh *mesh, bool move_edge_nds)
  *  @param fid edge's position in the cell.
  *  @param mesh mesh context.
  *  @return true if the edge is Delaunay, false otherwise.
+ *  @note for two-dimensinal space only.
  */ 
 bool MeshTools::isDelaunayEdge2d(Cell const* cell, int const fid, Mesh const* mesh)
 {
