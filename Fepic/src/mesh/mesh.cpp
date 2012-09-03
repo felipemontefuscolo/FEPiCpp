@@ -1438,6 +1438,7 @@ void SMesh<CT,SD>::buildCorners_Template(typename EnableIf<(celldim==3)>::type*)
 }
 
 /** atribui a cada nó, uma célula e sua posição
+ *  @warning buildCellsAdjacency() must be called before this function.
  */
 template<class CT, int SD>
 void SMesh<CT,SD>::buildNodesAdjacency()
@@ -1459,25 +1460,25 @@ void SMesh<CT,SD>::buildNodesAdjacency()
   {
     CT const* cell;
     PointT * point;
-
-    // first the cells that is not in boundary
-    //#pragma omp for
-    for (int C = 0; C < num_cells; ++C)
-    {
-      cell = this->MeshT::getCell(C);
-      if (cell->CT::disabled())
-        continue;
-
-      for (int n = 0; n < nodes_p_cell; ++n)
-      {
-        point = this->MeshT::getNode(cell->CT::getNodeId(n));
-        //#pragma omp critical
-        {
-          point->PointT::setIncidCell(C);
-          point->PointT::setPosition(n);
-        }
-      }
-    }
+    //
+    //// first the cells that is not in boundary
+    ////#pragma omp for
+    //for (int C = 0; C < num_cells; ++C)
+    //{
+    //  cell = this->MeshT::getCell(C);
+    //  if (cell->CT::disabled())
+    //    continue;
+    //
+    //  for (int n = 0; n < nodes_p_cell; ++n)
+    //  {
+    //    point = this->MeshT::getNode(cell->CT::getNodeId(n));
+    //    //#pragma omp critical
+    //    {
+    //      point->PointT::setIncidCell(C);
+    //      point->PointT::setPosition(n);
+    //    }
+    //  }
+    //}
 
     int fnodes[nnpf];
     // then the cells that is in boundary
@@ -1490,22 +1491,35 @@ void SMesh<CT,SD>::buildNodesAdjacency()
 
       for (int j = 0; j < CT::n_facets; ++j)
       {
-        cell->getFacetNodesId(j,fnodes);
-        if (cell->CellT::getIncidCell(j) >= 0)
-          continue;
+        cell->CellT::getFacetNodesId(j,fnodes);
+        //if (cell->CellT::getIncidCell(j) >= 0)
+        //  continue;
         for (int n = 0; n < nnpf; ++n)
         {
           point = this->MeshT::getNode(fnodes[n]);
-          //#pragma omp critical
-          {
-            //point->PointT::setIncidCell(C);
-            //point->PointT::setPosition(n);
-            //this->pushIncidCell2Point(point,C,j);
-            this->pushIncidCell2Point(point,C,CT::table_fC_x_nC[j][n]);
-          }
+          this->MeshT::pushIncidCell2Point(point,C,CT::table_fC_x_nC[j][n]);
+          if (cell->CellT::getIncidCell(j) < 0)
+            point->PointT::setAsBoundary(true);
+          //if (cell->CellT::getIncidCell(j) < 0)
+          //{
+          //  this->MeshT::pushIncidCell2Point(point,C,CT::table_fC_x_nC[j][n]);
+          //  point->PointT::setAsBoundary(true);
+          //}
+          //else // if the point is not in boundary, it cant be singular, so
+          //{
+          //  point->PointT::setIncidCell(C);
+          //  point->PointT::setPosition(CT::table_fC_x_nC[j][n]);
+          //}
         }
       }
-
+      
+      // interior node, if exists
+      if ((CT::dim==2 && CT::has_face_nodes) || (CT::dim==3 && CT::has_volume_nodes) || (CT::dim==1 && CT::has_edge_nodes))
+      {
+        point = this->MeshT::getNode(cell->CT::getNodeId(nodes_p_cell-1));
+        point->PointT::setIncidCell(C);
+        point->PointT::setPosition(nodes_p_cell-1);
+      }
     }
     
   } // end parallel
@@ -1901,8 +1915,8 @@ template class SMesh<Quadrangle4,2>;
 template class SMesh<Quadrangle8,2>;
 template class SMesh<Quadrangle9,2>;
 
-template class SMesh<Edge2,1>;
-template class SMesh<Edge3,1>;
+//template class SMesh<Edge2,1>;
+//template class SMesh<Edge3,1>; // em 1d, nó bolha é inútil ... utilizar DofHandler para dofs interior
 
 
 

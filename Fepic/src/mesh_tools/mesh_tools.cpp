@@ -240,7 +240,6 @@ bool MeshTools::flipTri(Cell * acell, int afid, Mesh *mesh)
   // as outras faces são preservadas
   
   /* changing the incidences of the nodes only when is necessary */
-  // BE careful with the contour, see function inBoundary(Point const* point)
   Point *p;
   p = mesh->getNode(acell->getNodeId(afid)); // j de a
   if (p->getIncidCell() == bcid)

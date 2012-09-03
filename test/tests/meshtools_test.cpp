@@ -219,12 +219,12 @@ TEST(DelaunayMovingPointsTest, WithTri3)
   double const dt = 0.1;
   
   // time loop
-  for (double t=0; t<5; t+=dt)
+  for (double t=0; t<10; t+=dt)
   {
-    printf ("TIMESTEP = %d, icell(1)=%d; ", int(t/dt), mesh->getNode(1)->getIncidCell());
+    //printf ("TIMESTEP = %d, icell(1)=%d; ", int(t/dt), mesh->getNode(1)->getIncidCell());
     vtk_printer.writeVtk();
     checkConsistencyTri(mesh);
-    printf("imprimiu\n");
+    //printf("imprimiu\n");
     
     // move points
     for (int i = 0; i < n_nodes_total; ++i)

@@ -53,6 +53,8 @@ public:
   virtual void replacesIncidCell(int cid, int cid_subs, char cid_subs_pos) = 0;
   virtual void getIthIncidCell(int ith, int &ic, int &pos) const = 0;
   virtual void clearIncidences() = 0;
+  virtual bool inBoundary() const = 0;
+  virtual void setAsBoundary(bool ib) = 0;
   
   // inherited from CellElement
   virtual int getIncidCell() const = 0;
@@ -78,7 +80,7 @@ public:
   *  @param coord um vetor com Dim elementos que armazena a coordenada.
   *  @param label seu rótulo.
   */
-  explicit PointX(double const* coord, int ic=-1, char pos=-1) : _icell(ic), _icell_pos(pos)
+  explicit PointX(double const* coord, int ic=-1, char pos=-1, char stat=0) : _icell(ic), _icell_pos(pos), _status(stat)
   {
     for (int i = 0; i < spacedim; ++i)
       _coord[i] = coord[i];
@@ -86,7 +88,7 @@ public:
 
   /** Construtor.
   */
-  PointX()  : _icell(-1), _icell_pos(-1) {}
+  PointX()  : _icell(-1), _icell_pos(-1), _status(0) {}
   // construtor de cópia não necessário, pois não há nenhum ponteiro.
 
   /** @return a dimensão do espaço.
@@ -268,7 +270,20 @@ public:
   {
     this->_incidences.clear();
     this->_icell = -1;
+    this->setAsBoundary(false);
   }
+
+  /// @return true if this point is a boundary point, false otherwise.
+  bool inBoundary() const
+  {
+    return _status & mk_inboundary;
+  }
+
+  /// @param ib set ib=true(false) to (un)set this point as boundary point.
+  void setAsBoundary(bool ib)
+  {
+    _status = ib ? (_status | mk_inboundary) : (_status & (~mk_inboundary));
+  }  
 
   // --- inherited from CellElement ----- //
   
@@ -301,12 +316,17 @@ protected:
 
   int   _icell;
   char  _icell_pos;   // facet lid of incident cell
-  char  _padd[3]; // supondo sizeof(int)=4 e sizeof(char)=1
+  char  _status;      // See it as an array of flags. See enum Masks.
+  char  _padd[2];     // wasted space due to memory alignment.  supposing sizeof(int)=4 and sizeof(char)=1.
 
   // main icell not included .. this list is for singular nodes only
   // the reason for this is to save memory.
   //                  iC  poiC
   std::list<std::pair<int,char> > _incidences; // for singular nodes
+  
+  enum Masks {
+    mk_inboundary = (1<<0),
+  };
 };
 
 
