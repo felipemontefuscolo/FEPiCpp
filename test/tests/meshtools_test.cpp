@@ -192,7 +192,7 @@ TEST(FlipTest, WithTri6)
   EXPECT_TRUE(true);
 }
 
-TEST(isDelaunayEdge2dTest, WithTri3)
+TEST(inCircle2dTest, WithTri3)
 {
   MeshIoMsh msh_reader;
   MeshIoVtk vtk_printer;
@@ -211,7 +211,7 @@ TEST(isDelaunayEdge2dTest, WithTri3)
   for (int i = 0; i < n_facets_total; ++i)
   {
     f = mesh->getFacet(i);
-    EXPECT_TRUE(MeshTools::isDelaunayEdge2d(f, mesh));
+    EXPECT_TRUE(MeshTools::inCircle2d(f, mesh));
   }
 
   Real coord[2] = {0.45, 0.18};
@@ -220,8 +220,8 @@ TEST(isDelaunayEdge2dTest, WithTri3)
   mesh->getNode(8)->getCoord(coord_old);
   mesh->getNode(8)->setCoord(coord);
   
-  EXPECT_FALSE(MeshTools::isDelaunayEdge2d(mesh->getCell(9), 1, mesh));
-  EXPECT_FALSE(MeshTools::isDelaunayEdge2d(mesh->getCell(2), 1, mesh));
+  EXPECT_FALSE(MeshTools::inCircle2d(mesh->getCell(9), 1, mesh));
+  EXPECT_FALSE(MeshTools::inCircle2d(mesh->getCell(2), 1, mesh));
   
   delete mesh;
   
@@ -274,7 +274,7 @@ TEST(FlippingMovingPointsTest, WithTri3)
     for (int i = 0; i < n_facets_total; ++i)
     {
       f = mesh->getFacet(i);
-      if (!MeshTools::isDelaunayEdge2d(f, mesh))
+      if (!MeshTools::inCircle2d(f, mesh))
       {
         MeshTools::flipTri(f, mesh);
       }
@@ -317,7 +317,7 @@ TEST(FlippingMovingPointsTest, WithTri6)
   // time loop
   for (double t=0; t<10; t+=dt)
   {
-    vtk_printer.writeVtk();
+    //vtk_printer.writeVtk();
     checkConsistencyTri(mesh);
     
     // move points
@@ -335,7 +335,7 @@ TEST(FlippingMovingPointsTest, WithTri6)
     for (int i = 0; i < n_facets_total; ++i)
     {
       f = mesh->getFacet(i);
-      if (!MeshTools::isDelaunayEdge2d(f, mesh))
+      if (!MeshTools::inCircle2d(f, mesh))
       {
         MeshTools::flipTri(f, mesh, true);
       }

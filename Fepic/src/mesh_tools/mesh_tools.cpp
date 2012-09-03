@@ -340,7 +340,7 @@ bool MeshTools::flipTri(Cell * acell, int afid, Mesh *mesh, bool move_edge_nds)
  *  @return true if the edge is Delaunay, false otherwise.
  *  @note for two-dimensinal space only.
  */ 
-bool MeshTools::isDelaunayEdge2d(Cell const* cell, int const fid, Mesh const* mesh)
+bool MeshTools::inCircle2d(Cell const* cell, int const fid, Mesh const* mesh)
 {
   int const ocid = cell->getIncidCell(fid);
   if (ocid<0)

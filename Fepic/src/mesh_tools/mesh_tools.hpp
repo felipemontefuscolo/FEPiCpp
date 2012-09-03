@@ -47,10 +47,10 @@ public:
     return flipTri(mesh->getCell(edge->getIncidCell()), edge->getPosition(), mesh, move_edge_nds);
   }
 
-  static bool isDelaunayEdge2d(Cell const* cell, const int fid, Mesh const* mesh);
-  static bool isDelaunayEdge2d(Facet const* edge, Mesh const* mesh)
+  static bool inCircle2d(Cell const* cell, const int fid, Mesh const* mesh);
+  static bool inCircle2d(Facet const* edge, Mesh const* mesh)
   {
-    return isDelaunayEdge2d(mesh->getCell(edge->getIncidCell()), edge->getPosition(),mesh);
+    return inCircle2d(mesh->getCell(edge->getIncidCell()), edge->getPosition(),mesh);
   }
   
 };
