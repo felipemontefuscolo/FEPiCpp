@@ -41,7 +41,7 @@ public:
 
   static void removeCell(Cell * cell, Mesh *mesh);
   
-  static bool flipTri(Cell * cell, int fid, Mesh *mesh);
+  static bool flipTri(Cell * cell, int fid, Mesh *mesh, bool move_edge_nds = true);
   static bool flipTri(Facet* edge, Mesh* mesh)
   {
     return flipTri(mesh->getCell(edge->getIncidCell()), edge->getPosition(), mesh);
@@ -233,9 +233,9 @@ public:
       mesh->getCell(new_cells[0])->setIncidCellPos(0, 0);
       mesh->getCell(new_cells[0])->setIncidCell(2, c0->getIncidCell(I));
       mesh->getCell(new_cells[0])->setIncidCellPos(2, c0->getIncidCellPos(I));
-      mesh->getCell(new_cells[0])->setNode(0, c0->getNodeId(J));
-      mesh->getCell(new_cells[0])->setNode(1, mid_nodes[6*cth + 2*K + 1]);
-      mesh->getCell(new_cells[0])->setNode(2, c0->getNodeId(I));
+      mesh->getCell(new_cells[0])->setNodeId(0, c0->getNodeId(J));
+      mesh->getCell(new_cells[0])->setNodeId(1, mid_nodes[6*cth + 2*K + 1]);
+      mesh->getCell(new_cells[0])->setNodeId(2, c0->getNodeId(I));
       mesh->getCell(new_cells[0])->setFacetId(0, new_ifacets[2]);
       mesh->getCell(new_cells[0])->setFacetId(2, c0->getFacetId(I));
       
@@ -243,17 +243,17 @@ public:
       mesh->getCell(new_cells[1])->setIncidCellPos(0, 0);
       mesh->getCell(new_cells[1])->setIncidCell(2, -1);
       mesh->getCell(new_cells[1])->setIncidCellPos(2, -1);
-      mesh->getCell(new_cells[1])->setNode(0, mid_nodes[6*cth + 2*K + 1]);
-      mesh->getCell(new_cells[1])->setNode(1, c0->getNodeId(J));
-      mesh->getCell(new_cells[1])->setNode(2, mid_nodes[6*cth + 2*J + 0]);
+      mesh->getCell(new_cells[1])->setNodeId(0, mid_nodes[6*cth + 2*K + 1]);
+      mesh->getCell(new_cells[1])->setNodeId(1, c0->getNodeId(J));
+      mesh->getCell(new_cells[1])->setNodeId(2, mid_nodes[6*cth + 2*J + 0]);
       mesh->getCell(new_cells[1])->setFacetId(0, new_ifacets[2]);
       mesh->getCell(new_cells[1])->setFacetId(2, -1);
       
       mesh->getCell(new_cells[2])->setIncidCell(0, -1);
       mesh->getCell(new_cells[2])->setIncidCellPos(0, -1);
-      mesh->getCell(new_cells[2])->setNode(0, mid_nodes[6*cth + 2*K + 0]);
-      mesh->getCell(new_cells[2])->setNode(1, mid_nodes[6*cth + 2*J + 1]);
-      mesh->getCell(new_cells[2])->setNode(2, c0->getNodeId(K));
+      mesh->getCell(new_cells[2])->setNodeId(0, mid_nodes[6*cth + 2*K + 0]);
+      mesh->getCell(new_cells[2])->setNodeId(1, mid_nodes[6*cth + 2*J + 1]);
+      mesh->getCell(new_cells[2])->setNodeId(2, c0->getNodeId(K));
       mesh->getCell(new_cells[2])->setFacetId(0, new_ifacets[2]);
       //mesh->getCell(new_cells[2])->setFacetId(2, -1);
       

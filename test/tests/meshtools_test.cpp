@@ -193,7 +193,7 @@ TEST(isDelaunayEdge2dTest, WithTri3)
   EXPECT_TRUE(true);
 }
 
-TEST(DelaunayMovingPointsTest, WithTri3)
+TEST(FlippingMovingPointsTest, WithTri3)
 {
   MeshIoMsh msh_reader;
   MeshIoVtk vtk_printer;
@@ -221,10 +221,8 @@ TEST(DelaunayMovingPointsTest, WithTri3)
   // time loop
   for (double t=0; t<10; t+=dt)
   {
-    //printf ("TIMESTEP = %d, icell(1)=%d; ", int(t/dt), mesh->getNode(1)->getIncidCell());
-    vtk_printer.writeVtk();
+    //vtk_printer.writeVtk();
     checkConsistencyTri(mesh);
-    //printf("imprimiu\n");
     
     // move points
     for (int i = 0; i < n_nodes_total; ++i)
@@ -248,7 +246,7 @@ TEST(DelaunayMovingPointsTest, WithTri3)
     }
     
   }
-  vtk_printer.writeVtk();
+  //vtk_printer.writeVtk();
 
   delete mesh;
   

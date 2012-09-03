@@ -77,7 +77,8 @@ public:
   virtual void setIncidCell(int facet, int icellid) = 0;
   virtual void setIncidCellAnch(int facet, char anch) = 0;
   virtual void setIncidCellPos(int facet, char pos) = 0;
-  virtual void setNode(int const ith, int const nodeid) = 0;
+  virtual void setIncidence(int facet, int icellid, char pos, char anch=0) = 0;
+  virtual void setNodeId(int const ith, int const nodeid) = 0;
   
   virtual ~Cell() {}
   
@@ -372,7 +373,20 @@ public:
     THIS->_icells_pos[facet] = pos;
   }
 
-  void setNode(int const ith, int const nodeid)
+  /** is same to:
+   *  setIncidCell(facet, icellid);
+   *  setIncidCellPos(facet, pos);
+   *  setIncidCellAnch(facet, anch);
+   */ 
+  void setIncidence(int facet, int icellid, char pos, char anch=0)
+  {
+    THIS->_icells[facet] = icellid;
+    THIS->_icells_pos[facet] = pos;
+    if (CellT::dim == 3)
+      THIS->_icells_anchors[facet] = anch;
+  }
+
+  void setNodeId(int const ith, int const nodeid)
   {
     THIS->_nodes[ith] = nodeid;
   }

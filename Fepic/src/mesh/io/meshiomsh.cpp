@@ -268,7 +268,7 @@ void MeshIoMsh::readFileMsh(const char* filename, Mesh * mesh)
       for (int i=0; i< nodes_per_cell; ++i)
       {
         fscanf(file_ptr, "%d", &id_aux);
-        cell->setNode(i, id_aux-1);
+        cell->setNodeId(i, id_aux-1);
       }
       cell->setTag(physical);
       //mesh->pushCell(cell);

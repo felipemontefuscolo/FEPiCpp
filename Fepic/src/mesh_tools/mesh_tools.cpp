@@ -185,10 +185,11 @@ void MeshTools::removeCell(Cell * cell, Mesh *mesh)
  *  @param acell the cell that will be removed.
  *  @param afid local facet's id that will be flipped.
  *  @param mesh mesh context.
+ *  @param move_edge_nds true to move high order nodes, false otherwise.
  *  @return true if an error occurred, false otherwise.
  *  @note linear triangle only
  */ 
-bool MeshTools::flipTri(Cell * acell, int afid, Mesh *mesh)
+bool MeshTools::flipTri(Cell * acell, int afid, Mesh *mesh, bool move_edge_nds)
 {
   /*   
       A-reference                          | B-reference    
@@ -227,77 +228,107 @@ bool MeshTools::flipTri(Cell * acell, int afid, Mesh *mesh)
   /* changing the incidences of the facets */
   Facet *f;
   f = mesh->getFacet(acell->getFacetId(afid_plus1)); // inferior-direita
-  f->setIncidCell(bcid);
-  f->setPosition(bfid);
+  f->setIncidence(bcid,bfid);
   
   f = mesh->getFacet(bcell->getFacetId(bfid_plus1)); // superior-esquerda
-  f->setIncidCell(acid);
-  f->setPosition(afid);
+  f->setIncidence(acid, afid);
   
   f = mesh->getFacet(acell->getFacetId(afid)); // meio
-  f->setIncidCell(acid);
-  f->setPosition(afid_plus1);
+  f->setIncidence(acid,afid_plus1);
   // as outras faces são preservadas
   
   /* changing the incidences of the nodes only when is necessary */
   Point *p;
   p = mesh->getNode(acell->getNodeId(afid)); // j de a
   if (p->getIncidCell() == bcid)
-  {
-    p->setIncidCell(acid);
-    p->setPosition(afid);
-  }
+    p->setIncidence(acid, afid);
+
   p = mesh->getNode(bcell->getNodeId(bfid)); // j de b
   if (p->getIncidCell() == acid)
-  {
-    p->setIncidCell(bcid);
-    p->setPosition(bfid);
-  }
+    p->setIncidence(bcid, bfid);
   
   /* changing the incidences of the cells */
   Cell *c;
   // superior-esquerda
-  acell->setIncidCell(afid, bcell->getIncidCell(bfid_plus1));
-  acell->setIncidCellPos(afid, bcell->getIncidCellPos(bfid_plus1));
+  acell->setIncidence(afid, bcell->getIncidCell(bfid_plus1), bcell->getIncidCellPos(bfid_plus1));
   if (acell->getIncidCell(afid) >= 0)
   {
     c = mesh->getCell(acell->getIncidCell(afid));
-    c->setIncidCell(acell->getIncidCellPos(afid), acid);
-    c->setIncidCellPos(acell->getIncidCellPos(afid),afid);
+    c->setIncidence(acell->getIncidCellPos(afid), acid, afid);
   }
   // inferior-direita
-  bcell->setIncidCell(bfid, acell->getIncidCell(afid_plus1));
-  bcell->setIncidCellPos(bfid, acell->getIncidCellPos(afid_plus1));
+  bcell->setIncidence(bfid, acell->getIncidCell(afid_plus1), acell->getIncidCellPos(afid_plus1));
   if (bcell->getIncidCell(bfid) >= 0)
   {
     c = mesh->getCell(bcell->getIncidCell(bfid));
-    c->setIncidCell(bcell->getIncidCellPos(bfid), bcid);
-    c->setIncidCellPos(bcell->getIncidCellPos(bfid),bfid);
+    c->setIncidence(bcell->getIncidCellPos(bfid), bcid, bfid);
   }
   // meio (tem que ser depois mesmo)
-  acell->setIncidCell(afid_plus1, bcid);
-  acell->setIncidCellPos(afid_plus1, bfid_plus1);
-  bcell->setIncidCell(bfid_plus1, acid);
-  bcell->setIncidCellPos(bfid_plus1, afid_plus1);  
+  acell->setIncidence(afid_plus1, bcid, bfid_plus1);
+  bcell->setIncidence(bfid_plus1, acid, afid_plus1);
   
-  int f_ie, f_id, f_se, f_sd, f_m;   // i=inferior; s=superior; e=esquerda; d=direita
+  //int f_ie, f_id, f_se, f_sd, f_m;   // i=inferior; s=superior; e=esquerda; d=direita
+  int f_id, f_se, f_m;   // i=inferior; s=superior; e=esquerda; d=direita
   
-  f_ie = bcell->getFacetId(bfid_plus2);
+  
+  //f_ie = bcell->getFacetId(bfid_plus2);
   f_id = acell->getFacetId(afid_plus1);
   f_se = bcell->getFacetId(bfid_plus1);
-  f_sd = acell->getFacetId(afid_plus2);
+  //f_sd = acell->getFacetId(afid_plus2);
   f_m  = acell->getFacetId(afid);
   
   acell->setFacetId(afid      , f_se);
   acell->setFacetId(afid_plus1, f_m );
-  acell->setFacetId(afid_plus2, f_sd);
+  //acell->setFacetId(afid_plus2, f_sd // isnt necessary
   
   bcell->setFacetId(bfid      , f_id);
   bcell->setFacetId(bfid_plus1, f_m );
-  bcell->setFacetId(bfid_plus2, f_ie);
+  //bcell->setFacetId(bfid_plus2, f_ie); // isnt necessary
   
-  acell->setNode(afid_plus1, bcell->getNodeId(bfid_plus2));
-  bcell->setNode(bfid_plus1, acell->getNodeId(afid_plus2));
+  acell->setNodeId(afid_plus1, bcell->getNodeId(bfid_plus2));
+  bcell->setNodeId(bfid_plus1, acell->getNodeId(afid_plus2));
+
+
+  // for high-order-cells
+  if (mesh->numNodesPerCell() > mesh->numVerticesPerCell())
+  {
+    // high-order nodes id ... i=inferior; s=superior; e=esquerda; d=direita
+    //f_ie = bcell->getNodeId(bfid_plus2+3);
+    f_id = acell->getNodeId(afid_plus1+3);
+    f_se = bcell->getNodeId(bfid_plus1+3);
+    //f_sd = acell->getNodeId(afid_plus2+3);
+    f_m  = acell->getNodeId(afid+3);
+    
+    acell->setNodeId(afid      +3, f_se);
+    acell->setNodeId(afid_plus1+3, f_m );
+    //acell->setNodeId(afid_plus2+3, f_sd);
+    
+    bcell->setNodeId(bfid      +3, f_id);
+    bcell->setNodeId(bfid_plus1+3, f_m );
+    //bcell->setNodeId(bfid_plus2+3, f_ie);
+    
+    //mesh->getNode(f_ie)->setIncidence(bcid, bfid_plus2+3);
+    mesh->getNode(f_id)->setIncidence(acid, afid_plus1+3);
+    mesh->getNode(f_se)->setIncidence(bcid, bfid_plus2+3);
+    //mesh->getNode(f_sd)->setIncidence(bcid, bfid_plus2+3);
+    mesh->getNode(f_m )->setIncidence(bcid, bfid_plus2+3);
+    
+    if (move_edge_nds)
+    {
+      Real pleft[2], pright[2];
+      
+      mesh->getNode(acell->getNodeId(afid_plus2))->getCoord(pright); // right node
+      mesh->getNode(bcell->getNodeId(bfid_plus2))->getCoord(pleft);  // left node
+      
+      // compute the center of the new edge
+      pleft[0] = 0.5*(pleft[0]+pright[0]);
+      pleft[1] = 0.5*(pleft[1]+pright[1]);
+      
+      p = mesh->getNode(acell->getNodeId(afid+3)); // mid node
+      p->setCoord(pleft);
+    }
+    
+  }
 
   return false;
 }

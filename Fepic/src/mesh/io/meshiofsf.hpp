@@ -233,7 +233,7 @@ void _MeshIoFsf<_Traits>::readFileFsf(const char* filename)
     for (int n = 0; n < n_nodes_per_cell; ++n)
     {
       File >> nodeid; // node
-      THIS->_cellL[i].setNode(n, nodeid);
+      THIS->_cellL[i].setNodeId(n, nodeid);
     }
     File >> tag >> flags;
     THIS->_cellL[i].setTag(tag);

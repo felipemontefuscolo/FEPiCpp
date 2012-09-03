@@ -61,6 +61,7 @@ public:
   virtual int getPosition() const = 0;
   virtual void setIncidCell(int icell_id) = 0;
   virtual void setPosition(int pos) = 0;
+  virtual void setIncidence(int icell_id, int pos) = 0;
 
   virtual ~Point(){};
 };
@@ -285,7 +286,7 @@ public:
     _status = ib ? (_status | mk_inboundary) : (_status & (~mk_inboundary));
   }  
 
-  // --- inherited from CellElement ----- //
+  // --- inherited from CellElement ------------------------------------------------- //
   
   virtual int getIncidCell() const
   {
@@ -303,8 +304,14 @@ public:
   {
     _icell_pos = pos;
   }
+  /// is the same as doing setIncidCell(icell_id); setPosition(pos);
+  virtual void setIncidence(int icell_id, int pos)
+  {
+    _icell = icell_id;
+    _icell_pos = pos;
+  }
 
-  // --- inherited from CellElement ----- //
+  // ----------------------------------------------- inherited from CellElement ----- //
 
 
 

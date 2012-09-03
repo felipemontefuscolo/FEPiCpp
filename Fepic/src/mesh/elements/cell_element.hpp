@@ -35,6 +35,7 @@ public:
   virtual int getPosition() const = 0;
   virtual void setIncidCell(int icell_id) = 0;
   virtual void setPosition(int pos) = 0;
+  virtual void setIncidence(int icell_id, int pos) = 0;
 
   ~CellElement() {}
 
@@ -77,6 +78,12 @@ public:
     _icell_pos = pos;
   }
   
+  /// is the same as doing setIncidCell(icell_id); setPosition(pos);
+  void setIncidence(int icell_id, int pos)
+  {
+    _icell = icell_id;
+    _icell_pos = pos;
+  }
   // --------------------------------------- //
   
   
