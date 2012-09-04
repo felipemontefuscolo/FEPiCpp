@@ -109,7 +109,7 @@ TEST(ReadVtktest, WithEdge2)
   mesh = Mesh::create(EDGE2,dim);
   msh_reader.readFileMsh("meshes/simpedge2.msh", mesh);
   vtk_printer.attachMesh(mesh);
-  vtk_printer.writeVtk("meshes/out/simpedge2.vtk");
+  vtk_printer.writeVtk("meshes/outtest/simpedge2.vtk");
 
   int icells[][2] = {{1,7},{2,0},{3,1},{4,2},{5,3},{6,4},{7,5},{0,6}};
   int ans[2];
@@ -140,7 +140,7 @@ TEST(ReadVtkTest, withEdge3)
   mesh = Mesh::create(EDGE3,dim);
   msh_reader.readFileMsh("meshes/simpedge3.msh", mesh);
   vtk_printer.attachMesh(mesh);
-  vtk_printer.writeVtk("meshes/out/simpedge3.vtk");
+  vtk_printer.writeVtk("meshes/outtest/simpedge3.vtk");
 
   delete mesh;
 }
@@ -158,7 +158,7 @@ TEST(VertexStarTest, WithTri3)
   mesh = Mesh::create(TRIANGLE3);
   msh_reader.readFileMsh("meshes/simptri3.msh", mesh);
   vtk_printer.attachMesh(mesh);
-  //vtk_printer.writeVtk("meshes/out/simptri3.vtk");
+  //vtk_printer.writeVtk("meshes/outtest/simptri3.vtk");
 
   for (int k = 0; k < 12; ++k)
   {
@@ -204,7 +204,7 @@ TEST(VertexStarTest, WithQuad4)
   mesh = Mesh::create(QUADRANGLE4);
   msh_reader.readFileMsh("meshes/simpquad4.msh", mesh);
   vtk_printer.attachMesh(mesh);
-  vtk_printer.writeVtk("meshes/out/simpquad4.vtk");
+  vtk_printer.writeVtk("meshes/outtest/simpquad4.vtk");
 
   for (int k = 0; k < 16; ++k)
   {
@@ -257,7 +257,7 @@ TEST(VertexStarTest, WithTet4)
   mesh->qBuildAdjacency(true);
   msh_reader.readFileMsh("meshes/simptet4.msh", mesh);
   vtk_printer.attachMesh(mesh);
-  vtk_printer.writeVtk("meshes/out/simptet4.vtk");
+  vtk_printer.writeVtk("meshes/outtest/simptet4.vtk");
 
   int Tet4VerticesId[] = {0,1,2,3,4,5,6,7,8};
 
@@ -376,7 +376,7 @@ TEST(VertexStarTest, WithHex8)
   mesh->qBuildAdjacency(true);
   msh_reader.readFileMsh("meshes/simphex8.msh", mesh);
   vtk_printer.attachMesh(mesh);
-  vtk_printer.writeVtk("meshes/out/simphex8.vtk");
+  vtk_printer.writeVtk("meshes/outtest/simphex8.vtk");
 
   int Hex8VerticesId[] = {0,25,26};
 
@@ -425,7 +425,7 @@ TEST(NodeStarTest, WithTri6)
   mesh = Mesh::create(TRIANGLE6);
   msh_reader.readFileMsh("meshes/simptri6.msh", mesh);
   vtk_printer.attachMesh(mesh);
-  vtk_printer.writeVtk("meshes/out/simptri6.vtk");
+  vtk_printer.writeVtk("meshes/outtest/simptri6.vtk");
 
   for (int k = 0; k < 24; ++k)
   {
@@ -470,7 +470,7 @@ TEST(NodeStarTest, WithQuad8)
   mesh = Mesh::create(QUADRANGLE8);
   msh_reader.readFileMsh("meshes/simpquad8.msh", mesh);
   vtk_printer.attachMesh(mesh);
-  vtk_printer.writeVtk("meshes/out/simpquad8.vtk");
+  vtk_printer.writeVtk("meshes/outtest/simpquad8.vtk");
   //
   int Quad8NodesId[] = {3, 6, 29, 24};
   int *it = Quad8NodesId;
@@ -515,7 +515,7 @@ TEST(NodeStarTest, WithQuad9)
   mesh = Mesh::create(QUADRANGLE9);
   msh_reader.readFileMsh("meshes/simpquad9.msh", mesh);
   vtk_printer.attachMesh(mesh);
-  vtk_printer.writeVtk("meshes/out/simpquad9.vtk");
+  vtk_printer.writeVtk("meshes/outtest/simpquad9.vtk");
 
   int Quad9NodesId[] = {0, 27, 4, 8, 30};
   int *it = Quad9NodesId;
@@ -561,7 +561,7 @@ TEST(NodeStarTest, WithTet10)
   mesh = Mesh::create(TETRAHEDRON10);
   msh_reader.readFileMsh("meshes/simptet10.msh", mesh);
   vtk_printer.attachMesh(mesh);
-  vtk_printer.writeVtk("meshes/out/simptet10.vtk");
+  vtk_printer.writeVtk("meshes/outtest/simptet10.vtk");
 
   int Tet10NodesId[] = {22,26,30};
 
@@ -608,7 +608,7 @@ TEST(NodeStarTest, WithHex20)
   mesh = Mesh::create(HEXAHEDRON20);
   msh_reader.readFileMsh("meshes/simphex20.msh", mesh);
   vtk_printer.attachMesh(mesh);
-  vtk_printer.writeVtk("meshes/out/simphex20.vtk");
+  vtk_printer.writeVtk("meshes/outtest/simphex20.vtk");
 
   int Hex20NodesId[] = {74,79,58};
 
@@ -653,7 +653,7 @@ TEST(NodeStarTest, WithHex27)
   mesh = Mesh::create(HEXAHEDRON27);
   msh_reader.readFileMsh("meshes/simphex27.msh", mesh);
   vtk_printer.attachMesh(mesh);
-  vtk_printer.writeVtk("meshes/out/simphex27.vtk");
+  vtk_printer.writeVtk("meshes/outtest/simphex27.vtk");
 
   int Hex27NodesId[] = {98,101,112,105,68};
 
@@ -1194,7 +1194,7 @@ TEST(AuxSetConnectedComponentIdTest, WithTri3)
   mesh = (SMesh<Triangle3,3>*)Mesh::create(TRIANGLE3,dim);
   msh_reader.readFileMsh("meshes/singular_tri3a.msh", mesh);
   vtk_printer.attachMesh(mesh);
-  //vtk_printer.writeVtk("meshes/out/simpedge2.vtk");
+  //vtk_printer.writeVtk("meshes/outtest/simpedge2.vtk");
 
   mesh->_setConnectedComponentsId(mesh->getCell(0), 3);
   mesh->_setConnectedComponentsId(mesh->getCell(4), 6);
@@ -1233,7 +1233,7 @@ TEST(SetConnectedComponentIdTest, WithTri3)
   mesh = Mesh::create(TRIANGLE3,dim);
   msh_reader.readFileMsh("meshes/singular_tri3a.msh", mesh);
   vtk_printer.attachMesh(mesh);
-  //vtk_printer.writeVtk("meshes/out/simpedge2.vtk");
+  //vtk_printer.writeVtk("meshes/outtest/simpedge2.vtk");
 
   //mesh->setUpConnectedComponentsId();
 
@@ -1277,7 +1277,7 @@ TEST(NextBoundaryFacetTest, WithTri3)
   mesh = Mesh::create(TRIANGLE3,dim);
   msh_reader.readFileMsh("meshes/singular_tri3a.msh", mesh);
   vtk_printer.attachMesh(mesh);
-  //vtk_printer.writeVtk("meshes/out/simpedge2.vtk");
+  //vtk_printer.writeVtk("meshes/outtest/simpedge2.vtk");
 
   Facet *f0, *fit;
 
@@ -1325,7 +1325,7 @@ TEST(SetBoundaryComponentIdTest, WithTri3)
   mesh = (SMesh<Triangle3,3>*)Mesh::create(TRIANGLE3,dim);
   msh_reader.readFileMsh("meshes/singular_tri3a.msh", mesh);
   //vtk_printer.attachMesh(mesh);
-  //vtk_printer.writeVtk("meshes/out/simpedge2.vtk");
+  //vtk_printer.writeVtk("meshes/outtest/simpedge2.vtk");
 
   int const n_bound_comps = mesh->numBoundaryComponents();
   
@@ -1366,7 +1366,7 @@ TEST(PushIncidCell2Point, WithSingularVertex)
   
   msh_reader.readFileMsh("meshes/singular_tri3a.msh", mesh);
   //vtk_printer.attachMesh(mesh);
-  //vtk_printer.writeVtk("meshes/out/simpedge2.vtk");
+  //vtk_printer.writeVtk("meshes/outtest/simpedge2.vtk");
 
   Point* p = mesh->getNode(0);
 
@@ -1426,7 +1426,7 @@ TEST(NodeSingularityTest, WithTri3)
   //msh_reader.readFileMsh("meshes/singular_tri3a.msh", mesh.get());
   msh_reader.readFileMsh("meshes/singular_tri3a.msh", mesh);
   //vtk_printer.attachMesh(mesh);
-  //vtk_printer.writeVtk("meshes/out/simpedge2.vtk");
+  //vtk_printer.writeVtk("meshes/outtest/simpedge2.vtk");
 
   bool is_sing[] = {1,0,0,0,0,1,0,0,0,0,0,0,1,1,0,0,0};
 

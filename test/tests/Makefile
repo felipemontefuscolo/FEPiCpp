@@ -64,29 +64,46 @@ gtest_main.a : gtest-all.o gtest_main.o
 # House-keeping build targets.
 
 CPPSOURCES = $(wildcard *.cpp)
+TOBJECTS = $(CPPSOURCES:.cpp=.o)
 
-all: gtest.a gtest_main.a $(CPPSOURCES:.cpp=.exe)
+all: gtest.a gtest_main.a $(CPPSOURCES:.cpp=.o) alltests.exe
 
 %.o: %.cpp $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< $(LDFLAGS) -o $@
-	
-%.exe: %.o gtest.a gtest_main.a
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $^ -o $@ $(LDFLAGS) gtest.a gtest_main.a
-#	rm $<
-	
+
 clean:
 	$(FEP_RM) *.o *.exe *~ gtest.a gtest_main.a
-	
-remade:
-	$(MAKE) clean
-	$(MAKE)
 
--include $(CPPSOURCES:.cpp=.d)
+include $(CPPSOURCES:.cpp=.d)
 
 %.d: %.cpp
 	$(FEP_CXX) $< -MM -MT '$*.o $*.d ' -MD $(CXXFLAGS) $(GTEST_INCLUDE)
 
-run:
-	for i in `ls *.exe`; do ./$${i}; done
+alltests.exe: $(TOBJECTS) gtest.a gtest_main.a
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(TOBJECTS) -o $@ $(LDFLAGS) gtest.a gtest_main.a
+
+#all: gtest.a gtest_main.a $(CPPSOURCES:.cpp=.cpp)
+#
+#%.o: %.cpp $(GTEST_HEADERS)
+#	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< $(LDFLAGS) -o $@
+#	
+#%.exe: %.o gtest.a gtest_main.a
+#	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $^ -o $@ $(LDFLAGS) gtest.a gtest_main.a
+##	rm $<
+#	
+#clean:
+#	$(FEP_RM) *.o *.exe *~ gtest.a gtest_main.a
+#	
+#remade:
+#	$(MAKE) clean
+#	$(MAKE)
+#
+#-include $(CPPSOURCES:.cpp=.d)
+#
+#%.d: %.cpp
+#	$(FEP_CXX) $< -MM -MT '$*.o $*.d ' -MD $(CXXFLAGS) $(GTEST_INCLUDE)
+#
+#run:
+#	for i in `ls *.exe`; do ./$${i}; done
 
 

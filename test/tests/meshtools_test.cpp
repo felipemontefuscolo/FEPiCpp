@@ -1,4 +1,3 @@
-
 // Copyright 2005, Google Inc.
 // All rights reserved.
 //
@@ -39,6 +38,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <ctime>
+
 
 using std::tr1::shared_ptr;
 using std::tr1::tuple;
@@ -131,7 +131,7 @@ TEST(FlipTest, WithTri3)
 
   ECellType cell_t      = TRIANGLE3;
   const char* mesh_in  = "meshes/circle_tri3.msh";
-  const char* mesh_out = "meshes/out/circle.vtk";
+  const char* mesh_out = "meshes/outtest/circle.vtk";
   
   mesh = Mesh::create(cell_t);
   msh_reader.readFileMsh(mesh_in, mesh);
@@ -200,7 +200,7 @@ TEST(inCircle2dTest, WithTri3)
 
   ECellType cell_t      = TRIANGLE3;
   const char* mesh_in  = "meshes/simptri3.msh";
-  //const char* mesh_out = "meshes/out/circle.vtk";
+  //const char* mesh_out = "meshes/outtest/circle.vtk";
   
   mesh = Mesh::create(cell_t);
   msh_reader.readFileMsh(mesh_in, mesh);
@@ -236,7 +236,7 @@ TEST(FlippingMovingPointsTest, WithTri3)
 
   ECellType cell_t      = TRIANGLE3;
   const char* mesh_in  = "meshes/circle_tri3.msh";
-  const char* mesh_out = "meshes/out/circle.vtk";
+  const char* mesh_out = "meshes/outtest/circle.vtk";
   
   mesh = Mesh::create(cell_t);
   msh_reader.readFileMsh(mesh_in, mesh);
@@ -297,7 +297,7 @@ TEST(FlippingMovingPointsTest, WithTri6)
 
   ECellType cell_t      = TRIANGLE6;
   const char* mesh_in  = "meshes/circle_tri6.msh";
-  const char* mesh_out = "meshes/out/circle.vtk";
+  const char* mesh_out = "meshes/outtest/circle.vtk";
   
   mesh = Mesh::create(cell_t);
   msh_reader.readFileMsh(mesh_in, mesh);
@@ -614,7 +614,7 @@ TEST(FlippingMovingPointsTest, WithTri6)
 //
 //  ECellType cell_t     = TRIANGLE3;
 //  const char* mesh_in  = "meshes/simptri3.msh";  
-//  //const char* mesh_out = "meshes/out/dof_tri3.vtk";
+//  //const char* mesh_out = "meshes/outtest/dof_tri3.vtk";
 //
 //  mesh = Mesh::create(cell_t);
 //  msh_reader.readFileMsh(mesh_in, mesh);
@@ -695,7 +695,7 @@ TEST(FlippingMovingPointsTest, WithTri6)
 //
 //  ECellType cell_t     = TRIANGLE6;
 //  const char* mesh_in  = "meshes/simptri6.msh";  
-//  const char* mesh_out = "meshes/out/dof_tri6.vtk";
+//  const char* mesh_out = "meshes/outtest/dof_tri6.vtk";
 //
 //  mesh = Mesh::create(cell_t);
 //  msh_reader.readFileMsh(mesh_in, mesh);
@@ -777,7 +777,7 @@ TEST(FlippingMovingPointsTest, WithTri6)
 //
 //  ECellType cell_t     = TETRAHEDRON10;
 //  const char* mesh_in  = "meshes/simptet10.msh";  
-//  const char* mesh_out = "meshes/out/dof_tet10.vtk";
+//  const char* mesh_out = "meshes/outtest/dof_tet10.vtk";
 //
 //  mesh = Mesh::create(cell_t);
 //  msh_reader.readFileMsh(mesh_in, mesh);
@@ -861,7 +861,7 @@ TEST(FlippingMovingPointsTest, WithTri6)
 //
 //  ECellType cell_t     = TRIANGLE3;
 //  const char* mesh_in  = "meshes/simptri3.msh";  
-//  const char* mesh_out = "meshes/out/metis_tri3.vtk";
+//  const char* mesh_out = "meshes/outtest/metis_tri3.vtk";
 //
 //  ShapeFunction *phi, *psi;
 //  phi = ShapeFunction::create(TRIANGLE3,    P2);
@@ -950,7 +950,7 @@ TEST(FlippingMovingPointsTest, WithTri6)
 //
 //  ECellType cell_t     = TRIANGLE3;
 //  const char* mesh_in  = "meshes/simptri3.msh";  
-//  const char* mesh_out = "meshes/out/metis_tet4.vtk";
+//  const char* mesh_out = "meshes/outtest/metis_tet4.vtk";
 //
 //  ShapeFunction *phi, *psi;
 //  phi = ShapeFunction::create(TETRAHEDRON4,    P1ph);
@@ -1048,7 +1048,7 @@ TEST(FlippingMovingPointsTest, WithTri6)
 //
 //  ECellType cell_t     = TRIANGLE3;
 //  const char* mesh_in  = "meshes/simptri3.msh";  
-//  //const char* mesh_out = "meshes/out/dof_tri3.vtk";
+//  //const char* mesh_out = "meshes/outtest/dof_tri3.vtk";
 //
 //  mesh = Mesh::create(cell_t);
 //  msh_reader.readFileMsh(mesh_in, mesh);
@@ -1112,7 +1112,7 @@ TEST(FlippingMovingPointsTest, WithTri6)
 //
 //  ECellType cell_t     = TETRAHEDRON10;
 //  const char* mesh_in  = "meshes/simptet10.msh";  
-//  const char* mesh_out = "meshes/out/dof_tet10.vtk";
+//  const char* mesh_out = "meshes/outtest/dof_tet10.vtk";
 //
 //  mesh = Mesh::create(cell_t);
 //  msh_reader.readFileMsh(mesh_in, mesh);
