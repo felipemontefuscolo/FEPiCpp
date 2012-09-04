@@ -302,7 +302,7 @@ std::vector<Eigen::Vector3i> genTetParametricPtsINT(int n, int a, int b)
       vj << a+1, a+1, a;
       vk << a+1, b-2, a;
       M << (vi-vk),(vj-vk);
-      for (int i = 0; i < face.size(); i++)
+      for (int i = 0; i < (int)face.size(); i++)
       {
         int N = n==3 ? 1 : (n-3);
         list.push_back(M*face[i]/N + vk);
@@ -315,7 +315,7 @@ std::vector<Eigen::Vector3i> genTetParametricPtsINT(int n, int a, int b)
       vj << b-2, a, a+1;
       vk << a+1, a, b-2;
       M << (vi-vk),(vj-vk);
-      for (int i = 0; i < face.size(); i++)
+      for (int i = 0; i < (int)face.size(); i++)
       {
         int N = n==3 ? 1 : (n-3);
         list.push_back(M*face[i]/N + vk);
@@ -326,7 +326,7 @@ std::vector<Eigen::Vector3i> genTetParametricPtsINT(int n, int a, int b)
       vj << a, a+1, a+1;
       vk << a, b-2, a+1;
       M << (vi-vk),(vj-vk);
-      for (int i = 0; i < face.size(); i++)
+      for (int i = 0; i < (int)face.size(); i++)
       {
         int N = n==3 ? 1 : (n-3);
         list.push_back(M*face[i]/N + vk);
@@ -337,7 +337,7 @@ std::vector<Eigen::Vector3i> genTetParametricPtsINT(int n, int a, int b)
       vj << a+1, a+1, b-2;
       vk << b-2, a+1, a+1;
       M << (vi-vk),(vj-vk);
-      for (int i = 0; i < face.size(); i++)
+      for (int i = 0; i < (int)face.size(); i++)
       {
         int N = n==3 ? 1 : (n-3);
         list.push_back(M*face[i]/N + vk);
