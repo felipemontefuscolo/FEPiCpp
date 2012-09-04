@@ -3,4 +3,5 @@
 *.a
 *.so
 *.d
+*.geany
 outtest/
