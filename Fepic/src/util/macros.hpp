@@ -22,7 +22,7 @@
 #ifndef FEPIC_MACROS_HPP
 #define FEPIC_MACROS_HPP
 
-#include "conf/macros.hpp"
+#include "conf/directives.hpp"
 
 /* utils */
 #define CALL_MEMBER_FN(object,ptrToMember)  ((object).*(ptrToMember)) 

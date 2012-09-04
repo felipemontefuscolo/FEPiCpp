@@ -26,7 +26,7 @@
 #define EIGEN_MATRIXBASE_PLUGIN "Fepic/src/custom_eigen/addons.hpp"
 
 #ifndef FEPIC_DEBUG_ON
-  #define EIGEN_NO_DEBUG
+//  #define EIGEN_NO_DEBUG
 #endif
 
 #include <Eigen/Core>

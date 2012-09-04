@@ -19,8 +19,8 @@
 // License and a copy of the GNU General Public License along with
 // FEPiC++. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef FEPIC_USERCONFIG_MACROS_HPP
-#define FEPIC_USERCONFIG_MACROS_HPP
+#ifndef FEPIC_DIRECTIVES_HPP
+#define FEPIC_DIRECTIVES_HPP
 
 /* user config */
 #ifdef _OPENMP
@@ -44,5 +44,8 @@
 #define FEPIC_MAX_ICELLS 128
 
 //#define FEPIC_   _INTEGER_TYPE __uint128_t
+
+
+// ---------------------------------------------------------------------
 
 #endif

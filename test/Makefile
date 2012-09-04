@@ -79,6 +79,9 @@ include $(CPPSOURCES:.cpp=.d)
 
 alltests.exe: $(TOBJECTS) gtest.a gtest_main.a
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(TOBJECTS) -o $@ $(LDFLAGS) gtest.a gtest_main.a
+	@echo 
+	@echo all tests successfully compiled
+	@echo 
 
 clean:
 	$(FEP_RM) *.o *.exe *~ gtest.a gtest_main.a
