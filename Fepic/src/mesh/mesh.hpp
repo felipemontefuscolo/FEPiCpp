@@ -183,8 +183,8 @@ public:
   virtual bool getCornerIdFromVertices(int const* vtcs, int &fid) =0;
 
   virtual int* edgeStar(int C, int eC, int *iCs, int *eiCs) const = 0;
-  virtual int* edgeStar(Facet  const*, int *iCs, int *eiCs) const = 0;
-  virtual int* edgeStar(Corner const*, int *iCs, int *eiCs) const = 0;
+  virtual int* edgeStar(CellElement  const*, int *iCs, int *eiCs) const = 0;
+  //virtual int* edgeStar(Corner const*, int *iCs, int *eiCs) const = 0;
   virtual int* vertexStar(int C, int vC, int *iCs, int *viCs) const = 0;
   virtual int* vertexStar(Point const* point, int *iCs, int *viCs) const = 0;
   virtual int* nodeStar(int C, int nC, int *iCs, int *niCs) const = 0;
@@ -616,26 +616,26 @@ public:
    * @return a pointer to the element following the end of the sequence iCs.
    * @note if an edge is not a Facet, use the Corner version function.
    */
-  int* edgeStar(Facet const* e, int *iCs, int *eiCs) const
+  int* edgeStar(CellElement const* e, int *iCs, int *eiCs) const
   {
-    return this->edgeStar_Template<CellT::dim>(static_cast<FacetT const*>(e)->FacetT::getIncidCell(),
-                                               static_cast<FacetT const*>(e)->FacetT::getPosition(),
+    return this->edgeStar_Template<CellT::dim>(e->getIncidCell(),
+                                               e->getPosition(),
                                                iCs, eiCs);
   }
 
-  /** Returns all incidents cells of a edge.
-   * @param[in] e a pointer to the edge.
-   * @param[out] iCs vector to put the incident cells.
-   * @param[out] eiCs edges's local ids in the incident cells.
-   * @return a pointer to the element following the end of the sequence iCs.
-   * @note if an edge is not a Corner, use the Facet version function.
-   */
-  int* edgeStar(Corner const* e, int *iCs, int *eiCs) const
-  {
-    return this->edgeStar_Template<CellT::dim>(static_cast<CornerT const*>(e)->CornerT::getIncidCell(),
-                                               static_cast<CornerT const*>(e)->CornerT::getPosition(),
-                                               iCs, eiCs);
-  }
+  ///** Returns all incidents cells of a edge.
+  // * @param[in] e a pointer to the edge.
+  // * @param[out] iCs vector to put the incident cells.
+  // * @param[out] eiCs edges's local ids in the incident cells.
+  // * @return a pointer to the element following the end of the sequence iCs.
+  // * @note if an edge is not a Corner, use the Facet version function.
+  // */
+  //int* edgeStar(Corner const* e, int *iCs, int *eiCs) const
+  //{
+  //  return this->edgeStar_Template<CellT::dim>(static_cast<CornerT const*>(e)->CornerT::getIncidCell(),
+  //                                             static_cast<CornerT const*>(e)->CornerT::getPosition(),
+  //                                             iCs, eiCs);
+  //}
 
   // ---------------------------------------------------- FACE STAR ---------------------------------------------------
 
