@@ -136,7 +136,7 @@ public:
   virtual void getCellFacetsId(Cell const* cell, int* result) const = 0;
   virtual void getCellCornersId(Cell const* cell, int* result) const = 0;
   virtual void getFacetNodesId(Facet const* facet, int* result) const = 0;
-  virtual void getCornerNodesId(Corner const* corner, int* result) const = 0;
+  virtual void getCornerNodesId(CellElement const* corner, int* result) const = 0;
 
   virtual void getCellNodesId(int id, int *result) const = 0;
   virtual void getFacetNodesId(int id, int *result) const = 0;
@@ -153,7 +153,7 @@ public:
 
   virtual void getCellNodesContigId(Cell const* cell, int* result) const = 0;
   virtual void getFacetNodesContigId(Facet const* facet, int* result) const = 0;
-  virtual void getCornerNodesContigId(Corner const* corner, int* result) const = 0;
+  virtual void getCornerNodesContigId(CellElement const* corner, int* result) const = 0;
 
   /** Retorna na matriz X as coordenadas dos nós passados em map.
   *  As colunas de X correspondem a dimensão enquanto as linhas
@@ -937,10 +937,10 @@ public:
     int pos   = static_cast<FacetT const*>(facet)->FacetT::getPosition();
     this->MeshT::getCell(icell)->CellT::getFacetNodesId(pos, result);
   }
-  void getCornerNodesId(Corner const* corner, int *result) const
+  void getCornerNodesId(CellElement const* corner, int *result) const
   {
-    int icell = static_cast<CornerT const*>(corner)->CornerT::getIncidCell();
-    int pos   = static_cast<CornerT const*>(corner)->CornerT::getPosition();
+    int icell = corner->getIncidCell();
+    int pos   = corner->getPosition();
     this->MeshT::getCell(icell)->CellT::getCornerNodesId(pos, result);
   }
 
@@ -975,7 +975,7 @@ public:
       ++result;
     }
   }
-  void getCornerNodesContigId(Corner const* corner, int* result) const
+  void getCornerNodesContigId(CellElement const* corner, int* result) const
   {
     this->MeshT::getCornerNodesId(corner, result);
     for (int i = 0; i < CellT::n_nodes_per_corner; ++i)

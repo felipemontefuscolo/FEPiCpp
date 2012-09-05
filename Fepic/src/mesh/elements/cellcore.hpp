@@ -272,10 +272,14 @@ public:
   
   void getCornersId(int * begin) const
   {
-    if (CellT::dim < 2) return;
-    std::copy(CONST_THIS->_corners, // from
-              CONST_THIS->_corners+CellT::n_corners,
-              begin);              // to
+    if (CellT::dim == 3)
+      std::copy(CONST_THIS->_corners, // from
+                CONST_THIS->_corners+CellT::n_corners,
+                begin);              // to
+    else
+      std::copy(CONST_THIS->_nodes, // from
+                CONST_THIS->_nodes+CellT::n_vertices,
+                begin); 
   }  
 
   /** Check if the vertices form a corner of this cell, if so returns corner's id.
@@ -329,10 +333,12 @@ public:
  
   void resetCornersId()
   {
-    for (int i = 0; i < CellT::n_corners; ++i)
-    {
-      THIS->_corners[i] = -1;
-    }
+    if (CellT::dim==3)
+      for (int i = 0; i < CellT::n_corners; ++i)
+        THIS->_corners[i] = -1;
+    //else if (CellT::dim==2)
+    //  for (int i = 0; i < CellT::n_vertices; ++i)
+    //    THIS->_nodes[i] = -1;
   }
 
   void resetIncidCells()
@@ -345,8 +351,9 @@ public:
 
   void setCornerId(int corner, int cornerid)
   {
-    if (CellT::dim > 1)
+    if (CellT::dim ==3)
       THIS->_corners[corner] = cornerid;
+    
   }
 
   void setFacetId(int facet, int facetid)

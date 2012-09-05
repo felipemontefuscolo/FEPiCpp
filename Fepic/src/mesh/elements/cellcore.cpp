@@ -20,11 +20,13 @@ void _CellCore<CellT>::getCornerNodesId(int f, int *corner_nds) const
 {
   FEPIC_CHECK(f < CellT::n_corners, "invalid index", std::out_of_range);
 
-  for (int i = 0; i < CellT::n_nodes_per_corner; ++i)
-  {
-    *corner_nds++ = CONST_THIS->_nodes[CellT::table_bC_x_nC[f][i]];
-  }
-
+  if (CellT::dim==3)
+    for (int i = 0; i < CellT::n_nodes_per_corner; ++i)
+    {
+      *corner_nds++ = CONST_THIS->_nodes[CellT::table_bC_x_nC[f][i]];
+    }
+  else
+    *corner_nds = CONST_THIS->_nodes[f];
 }
 
 /** Get vertices of a corner
@@ -37,10 +39,13 @@ void _CellCore<CellT>::getCornerVerticesId(int f, int *corner_vtcs) const
 {
   FEPIC_CHECK(f < CellT::n_corners, "invalid index", std::out_of_range);
 
-  for (int i = 0; i < CellT::n_vertices_per_corner; ++i)
-  {
-    *corner_vtcs++ = CONST_THIS->_nodes[CellT::table_bC_x_vC[f][i]];
-  }
+  if (CellT::dim==3)
+    for (int i = 0; i < CellT::n_vertices_per_corner; ++i)
+    {
+      *corner_vtcs++ = CONST_THIS->_nodes[CellT::table_bC_x_vC[f][i]];
+    }
+  else
+    *corner_vtcs = CONST_THIS->_nodes[f];
 
 }
 
@@ -83,7 +88,9 @@ void _CellCore<CellT>::getFacetCornersId(int f, int * corns) const
 {
   FEPIC_CHECK(f < CellT::n_facets, "invalid index", std::out_of_range);
 
-  if (CellT::dim > 1)
+  // TODO: implement for CellT::dim==2 version
+
+  if (CellT::dim ==3)
     // note: n_corners_per_facet = CellT::n_vertices_per_facet
     for (int i = 0; i < CellT::n_vertices_per_facet; ++i)
     {

@@ -174,27 +174,30 @@ TEST_P(IteratorTest, FacetIteratorsTest)
 TEST_P(IteratorTest, CornerIteratorsTest)
 {
   
-  for (int i = 0; i < mesh->numCorners(); ++i)
+  if (mesh->cellDim()>2)
   {
-    mesh->getCorner(i)->setTag(0);
-  }
-  
-  // ====================== traversing the mesh ====================================
-  
-  {
-    corner_iterator corner = mesh->cornerBegin();
-    corner_iterator corner_end = mesh->cornerEnd();
-    
-    for (; corner != corner_end; ++corner)
-      corner->setTag(corner->getTag()+1);
-    // check
     for (int i = 0; i < mesh->numCorners(); ++i)
     {
-      EXPECT_EQ( 1, mesh->getCorner(i)->getTag());
-      mesh->getCorner(i)->setTag(0); // reseting
+      mesh->getCorner(i)->setTag(0);
     }
+    
+    // ====================== traversing the mesh ====================================
+    
+    {
+      corner_iterator corner = mesh->cornerBegin();
+      corner_iterator corner_end = mesh->cornerEnd();
+      
+      for (; corner != corner_end; ++corner)
+        corner->setTag(corner->getTag()+1);
+      // check
+      for (int i = 0; i < mesh->numCorners(); ++i)
+      {
+        EXPECT_EQ( 1, mesh->getCorner(i)->getTag());
+        mesh->getCorner(i)->setTag(0); // reseting
+      }
+    }
+    
   }
-  
   
   
 }
