@@ -22,6 +22,7 @@
 #ifndef FEPIC_CUSTOM_EIGEN_NE
 #define FEPIC_CUSTOM_EIGEN_NE
 
+#include "conf/directives.hpp"
 #include "Fepic/src/custom_eigen/custom_eigen.hpp"
 
 #endif

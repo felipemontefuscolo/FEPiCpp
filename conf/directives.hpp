@@ -46,6 +46,8 @@
 //#define FEPIC_   _INTEGER_TYPE __uint128_t
 
 
-// ---------------------------------------------------------------------
+// -----------------  TYPEDEFS -------------------------
+
+typedef FEPIC_SCALAR_TYPE Real;
 
 #endif

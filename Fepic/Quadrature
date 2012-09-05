@@ -22,6 +22,7 @@
 #ifndef FEPIC_QUADRATURE_NE
 #define FEPIC_QUADRATURE_NE
 
+#include "conf/directives.hpp"
 #include "Fepic/src/quadrature/quadrature.hpp"
 
 #endif

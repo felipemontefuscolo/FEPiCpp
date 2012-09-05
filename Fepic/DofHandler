@@ -22,6 +22,7 @@
 #ifndef FEPIC_DOFHANDLER_NE
 #define FEPIC_DOFHANDLER_NE
 
+#include "conf/directives.hpp"
 #include "Fepic/src/dofhandler/dof_handler.hpp"
 
 #endif

@@ -23,7 +23,6 @@
 #ifndef FEPIC_MESH_TOOLS_HPP
 #define FEPIC_MESH_TOOLS_HPP
 
-#include "../util/common.hpp"
 #include "../mesh/mesh.hpp"
 #include <utility>
 #include <vector>

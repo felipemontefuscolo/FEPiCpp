@@ -22,7 +22,7 @@
 #ifndef FEPIC_QUADRATURE_HPP
 #define FEPIC_QUADRATURE_HPP
 
-#include "../util/common.hpp"
+#include "conf/directives.hpp"
 #include "../mesh/enums.hpp"
 
 void _getQuadrPtsHypercube(int n, int dim, Real **points, Real *weights, int &n_points);

@@ -72,11 +72,6 @@ all: gtest.a gtest_main.a $(CPPSOURCES:.cpp=.o) alltests.exe
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< $(LDFLAGS) -o $@
 
 
-include $(CPPSOURCES:.cpp=.d)
-
-%.d: %.cpp
-	$(FEP_CXX) $< -MM -MT '$*.o $*.d ' -MD $(CXXFLAGS) $(CPPFLAGS)
-
 alltests.exe: $(TOBJECTS) gtest.a gtest_main.a
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(TOBJECTS) -o $@ $(LDFLAGS) gtest.a gtest_main.a
 	@echo 
@@ -85,6 +80,12 @@ alltests.exe: $(TOBJECTS) gtest.a gtest_main.a
 
 clean:
 	$(FEP_RM) *.o *.exe *~ gtest.a gtest_main.a
+
+
+-include $(CPPSOURCES:.cpp=.d)
+
+%.d: %.cpp
+	$(FEP_CXX) $< -MM -MT '$*.o $*.d ' -MD $(CXXFLAGS) $(CPPFLAGS)
 
 #all: gtest.a gtest_main.a $(CPPSOURCES:.cpp=.cpp)
 #

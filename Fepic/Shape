@@ -22,6 +22,7 @@
 #ifndef FEPIC_SHAPE_NE
 #define FEPIC_SHAPE_NE
 
+#include "conf/directives.hpp"
 #include "Fepic/src/shapefunctions/shape_functions.hpp"
 #include "Fepic/src/shapefunctions/parametric_pts.hpp"
 

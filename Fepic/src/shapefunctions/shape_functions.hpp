@@ -25,7 +25,6 @@
 #include "shape_declarations.hpp"
 #include "enums_sf.hpp"
 #include "../mesh/enums.hpp"
-#include "../util/common.hpp"
 #include "../util/macros.hpp"
 #include "../util/assert.hpp"
 #include "../dofhandler/dof_traits.hpp"

@@ -4,7 +4,6 @@
 template<typename CellT>
 class _CellCore;
 
-#include "../../util/common.hpp" // needed by point.hpp
 #include "../../util/forward_declarations.hpp"
 #include "../../util/typedefs.hpp"
 #include "../io/msh_tags.hpp"
