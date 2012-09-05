@@ -36,6 +36,12 @@ public:
   virtual void setIncidCell(int icell_id) = 0;
   virtual void setPosition(int pos) = 0;
   virtual void setIncidence(int icell_id, int pos) = 0;
+  void copy(CellElement const* other)
+  {
+    this->setTag(other->getTag());
+    this->setFlags(other->getFlags());
+    this->setIncidence(other->getIncidCell(), other->getPosition());
+  }
 
   ~CellElement() {}
 

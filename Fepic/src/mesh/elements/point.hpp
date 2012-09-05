@@ -322,7 +322,7 @@ protected:
   Real _coord[sdim];
 
   int   _icell;
-  char  _icell_pos;   // facet lid of incident cell
+  char  _icell_pos;
   char  _status;      // See it as an array of flags. See enum Masks.
   char  _padd[2];     // wasted space due to memory alignment.  supposing sizeof(int)=4 and sizeof(char)=1.
 

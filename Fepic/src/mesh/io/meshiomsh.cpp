@@ -220,9 +220,12 @@ void MeshIoMsh::readFileMsh(const char* filename, Mesh * mesh)
     aux = mesh->estimateNumFacets(num_cells, mesh->cellType());
     //mesh->_facetL_original_size = aux;
     mesh->reserveFacetL(aux);
-    aux = mesh->estimateNumCorners(num_cells, mesh->cellType());
-    //mesh->_cornerL_original_size = aux;
-    mesh->reserveCornerL(aux);
+    if (mesh->cellDim() > 2)
+    {
+      aux = mesh->estimateNumCorners(num_cells, mesh->cellType());
+      //mesh->_cornerL_original_size = aux;
+      mesh->reserveCornerL(aux);
+    }
   }
 
   /* --------------------------------------
