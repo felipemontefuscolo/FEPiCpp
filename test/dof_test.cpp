@@ -34,11 +34,12 @@
 #include <tr1/tuple>
 #include <tr1/memory>
 #include <algorithm>
+#include <functional>
 #include <iostream>
 
 
 using std::tr1::shared_ptr;
-using std::vector;
+using namespace std;
 using namespace Eigen;
 
 //TEST(RemoveCellTest, WithTri3)
@@ -93,6 +94,30 @@ TEST(AssignsDofsTest, WithTri3)
   
   EXPECT_EQ(75, DofH.numDofs());
   
+
+  // checking variable 1
+  int dofs[] = {-2,-2,-2,-2,-2,-2,-2,-2};
+  int * dofs_end = dofs+sizeof(dofs)/sizeof(int);
+  int nn;
+  Cell *cell;
+  CellElement *l;
+  for (int k = 0; k < mesh->numNodesTotal(); ++k)
+  {
+    l = mesh->getNode(k);
+    DofH.getVariable(1).getVertexDofs(dofs, l);
+    nn = count_if(dofs, dofs_end, bind2nd(greater_equal<int>(),0) ); // non-negative
+    EXPECT_EQ(2, nn) << "node id = " << mesh->getCell(l->getIncidCell())->getNodeId(l->getPosition());;
+    fill(dofs, dofs_end, -1);
+  }
+  for (int k = 0; k < mesh->numNodesTotal(); ++k)
+  {
+    l = mesh->getNode(k);
+    DofH.getVariable(1).getCornerDofs(dofs, l);
+    nn = count_if(dofs, dofs_end, bind2nd(greater_equal<int>(),0) ); // non-negative
+    EXPECT_EQ(2, nn) << "node id = " << mesh->getCell(l->getIncidCell())->getNodeId(l->getPosition());;
+    fill(dofs, dofs_end, -1);
+  }
+  
   
   MeshTools::removeCell(mesh->getCell(2), mesh);
   MeshTools::removeCell(mesh->getCell(3), mesh);
@@ -120,6 +145,7 @@ TEST(AssignsDofsTest, WithTri3)
       
     //std::cout << (*dat++) << std::endl;
   }
+  
   
   
   delete mesh;

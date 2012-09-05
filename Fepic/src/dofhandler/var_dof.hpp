@@ -25,6 +25,7 @@
 #include "dof_traits.hpp"
 #include "../shapefunctions/shape_functions.hpp"
 #include "../custom_eigen/custom_eigen.hpp"
+#include "Fepic/src/mesh/elements/cell_element.hpp"
 #include <vector>
 #include <string>
 
@@ -83,14 +84,14 @@ public:
   int numDofsPerCorner() const;
 
   void getCellDofs(int *dofs, Cell const*) const;
-  void getFacetDofs(int *dofs, Facet const*) const;
-  void getCornerDofs(int *dofs, Corner const*) const;
-  void getVertexDofs(int *dofs, Point const*) const;
+  void getFacetDofs(int *dofs, CellElement const*) const;
+  void getCornerDofs(int *dofs, CellElement const*) const;
+  void getVertexDofs(int *dofs, CellElement const*) const;
   
   void getCellAssociatedDofs(int* dofs, Cell const*) const;
-  void getFacetAssociatedDofs(int* dofs, Facet const*) const;
-  void getCornerAssociatedDofs(int* dofs, Corner const*) const;
-  void getVertexAssociatedDofs(int* dofs, Point const*) const;
+  void getFacetAssociatedDofs(int* dofs, CellElement const*) const;
+  void getCornerAssociatedDofs(int* dofs, CellElement const*) const;
+  void getVertexAssociatedDofs(int* dofs, CellElement const*) const;
   
   char const* getName() const {return _name.c_str();};
 
