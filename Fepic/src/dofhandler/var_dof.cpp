@@ -98,6 +98,9 @@ void VarDofs::setUp()
 
   Mesh * mesh = _mesh_ptr;
 
+  if (_mesh_ptr->cellDim() < 3)
+    _n_dof_within_corner = 0;
+
   unsigned dof_counter = _initial_dof_id;
 
   // vertices dof

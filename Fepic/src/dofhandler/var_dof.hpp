@@ -75,6 +75,10 @@ public:
     for (int i = 0; i < ntags; ++i)
       _considered_tags[i] = tags[i];
     
+    // nao precisa disso aqui, pode ser feito no setUp()
+    //if (m!=NULL && m->cellDim() < 3)
+    //  _n_dof_within_corner=0;
+    
   }
 
   // users

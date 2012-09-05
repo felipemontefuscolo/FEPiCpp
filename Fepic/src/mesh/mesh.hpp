@@ -1158,7 +1158,11 @@ public:
   */
   int numCorners() const
   {
-    return _cornerL.size();
+    if (CellT::dim==3)
+      return _cornerL.size();
+    else
+    // FIXME: high orders nodes are not corners
+      return _pointL.total_size();
   }
 
   /** Retorna o número de corners.
@@ -1166,7 +1170,11 @@ public:
   */
   int numCornersTotal() const
   {
-    return _cornerL.total_size();
+    if (CellT::dim==3)
+      return _cornerL.total_size();
+    else
+      // FIXME: high orders nodes are not corners
+      return _pointL.total_size();
   }
 
   int numNodesPerCell() const
