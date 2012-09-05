@@ -95,7 +95,7 @@ public:
   virtual ECellType cellType() const = 0;
   virtual EMshTag cellMshTag() const = 0;
 
-  virtual bool isVertex(Point const* p) const = 0;
+  virtual bool isVertex(CellElement const* p) const = 0;
   virtual bool inSingleCell(Point const* p) const = 0;
   virtual bool inSingleCell(Corner const* p) const = 0;
   virtual bool inSingleCell(Facet const* p) const = 0;
@@ -721,9 +721,9 @@ public:
   void getCenterCoord(Facet const* facet, Real* x) const;
   void getCenterCoord(Corner const* corner, Real* x) const;
 
-  bool isVertex(Point const* p) const
+  bool isVertex(CellElement const* p) const
   {
-    return static_cast<PointT const*>(p)->PointT::getPosition() < CellT::n_vertices;
+    return p->getPosition() < CellT::n_vertices;
   }
 
   bool inSingleCell(Point const* p) const;
