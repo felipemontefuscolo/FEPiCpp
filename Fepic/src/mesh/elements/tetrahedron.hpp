@@ -105,7 +105,6 @@ protected:
   int  _icells[4];     // incident cells id
   int  _corners[6];    // edges id
   int  _nodes[10];      // nodes id
-  int  _conn_comp_id;  // connected component to which the cell belongs.
 
 public:
   static const int table_vC_x_fC[4][6];

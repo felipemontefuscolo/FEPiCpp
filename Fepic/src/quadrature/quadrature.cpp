@@ -131,8 +131,7 @@ void _getQuadrPtsHypercube(int n, int dim, Real *points, Real *weights, int &n_p
   }
   
   
-};
- 
+}
  
  
 

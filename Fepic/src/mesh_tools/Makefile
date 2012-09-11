@@ -12,7 +12,7 @@ subdirs:
 
 
 %.o: %.cpp
-	$(warning In Objs Script)
+#	$(warning In Objs Script)
 	$(FEP_CXX) -c $< $(FEP_CXXFLAGS) -o $@
 	
 clean:

@@ -24,7 +24,7 @@ long int find_keyword(const char* word, int word_size, FILE *fp)
   }
   
   return -1;
-};
+}
 
 
 

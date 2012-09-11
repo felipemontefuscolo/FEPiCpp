@@ -397,7 +397,7 @@ Real Shape_TRI_P2::gradL(Real const*X, int ith, int c) const
 Real Shape_TRI_BUBBLE::operator() (Real const*X, int) const
 {
   return 27.*X[0]*X[1]*(1. - X[0] - X[1]);
-};
+}
 
 Real Shape_TRI_BUBBLE::gradL(Real const*X, int, int c) const
 {
@@ -1028,7 +1028,7 @@ Real Shape_TET_P2::gradL(Real const*X, int ith, int c) const
 Real Shape_TET_BUBBLE::operator() (Real const*X, int) const
 {
   return 256.*X[0]*X[1]*X[2]*(1. - X[0] - X[1] - X[2]);
-};
+}
 
 Real Shape_TET_BUBBLE::gradL(Real const*X, int, int c) const
 {

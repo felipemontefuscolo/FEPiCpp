@@ -86,7 +86,7 @@ public:
     #else
     _elapsed = (clock() - _temp)/(1.*CLOCKS_PER_SEC);
     #endif
-    sprintf(buff, "elapsed %8.3lfs in : %s\n", _elapsed, fname);
+    sprintf(buff, "elapsed %8.3fs in : %s\n", static_cast<float>(_elapsed), fname);
 
     if (print_now)
       printf("%s", buff);

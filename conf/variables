@@ -17,7 +17,7 @@ FEP_LIBS_DIR = $(FEPIC_DIR)/Fepic/slibs
 #FEP_LDFLAGS = -fopenmp -L$(METIS_LD) -lmetis
 FEP_LDFLAGS = -L$(METIS_LD) -lmetis
 
-FEP_CXXFLAGS  = -g -Wall -Wextra $(FEP_INCLUDE)
+FEP_CXXFLAGS  = -g  -Wall -Wextra $(FEP_INCLUDE)
 #FEP_CXXFLAGS = -O3 -march=native -msse2  $(FEP_INCLUDE) -fopenmp
 FEP_CXXFLAGS += $(FEP_LDFLAGS)
 
