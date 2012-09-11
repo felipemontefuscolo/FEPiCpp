@@ -99,7 +99,7 @@ public:
     std::vector<MarkT> marks(n_nodes); // also store if node is penalized 
     
     // penalized nodes are nodes that do not connect with themselves
-    #pragma omp parallel for
+    FEP_PRAGMA_OMP(parallel for)
     for (int i = 0; i < n_nodes; ++i)
     {
       if( table[i].find(i) == table[i].end() )
@@ -176,7 +176,7 @@ public:
       
     } // END WHILE
     
-    #pragma omp parallel for
+    FEP_PRAGMA_OMP(parallel for)
     for (int i = 0; i < n_nodes; ++i)
     {
       perm[iperm[i]] = n_nodes-i-1; // RCM
@@ -277,7 +277,7 @@ public:
     } // END WHILE
     
     // restoring marks
-    #pragma omp parallel for
+    FEP_PRAGMA_OMP(parallel for)
     for (int i = 0; i < n_nodes; ++i)
     {
       marks[i].unmark();

@@ -224,7 +224,7 @@ namespace _CellStaticTablesInitializers
     return tab;
   }
 
-};
+}
 
 Cell* Cell::create(ECellType type)
 {

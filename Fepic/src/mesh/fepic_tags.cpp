@@ -208,7 +208,7 @@ namespace _FepicTagsInitializers
     return tab;
   }
 
-};
+}
 
 int numNodesForCtype(ECellType type)
 {
@@ -224,7 +224,7 @@ int numNodesForCtype(ECellType type)
 
   return n_nds[idx];
 
-};
+}
 
 int orderForCtype(ECellType type)
 {

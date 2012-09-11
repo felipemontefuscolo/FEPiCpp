@@ -173,7 +173,7 @@ namespace _VtkTagsInitializers
     return tab;
   }
   
-};
+}
 
 
 int MeshIoVtk::getVtkTag(ECellType type)
@@ -307,7 +307,7 @@ void MeshIoVtk::addNodeScalarVtk(const char* nome_var, DefaultGetDataVtk const& 
   fprintf(file_ptr,"\n");
 
   fclose(file_ptr);
-};
+}
 
 
 void MeshIoVtk::addCellScalarVtk(const char* nome_var, DefaultGetDataVtk const& data)
@@ -341,7 +341,7 @@ void MeshIoVtk::addCellScalarVtk(const char* nome_var, DefaultGetDataVtk const& 
   fprintf(file_ptr,"\n");
 
   fclose(file_ptr);
-};
+}
 
 
 
@@ -376,7 +376,7 @@ void MeshIoVtk::addNodeIntVtk(const char* nome_var, DefaultGetDataVtk const& dat
   fprintf(file_ptr,"\n");
 
   fclose(file_ptr);
-};
+}
 
 
 void MeshIoVtk::addCellIntVtk(const char* nome_var, DefaultGetDataVtk const& data)
@@ -411,7 +411,7 @@ void MeshIoVtk::addCellIntVtk(const char* nome_var, DefaultGetDataVtk const& dat
   fprintf(file_ptr,"\n");
 
   fclose(file_ptr);
-};
+}
 
 
 
@@ -446,7 +446,7 @@ void MeshIoVtk::printPointTagVtk(const char* nome_var)
   fprintf(file_ptr,"\n");
 
   fclose(file_ptr);
-};
+}
 
 
 void MeshIoVtk::printPointIcellVtk(const char* nome_var)
@@ -480,7 +480,7 @@ void MeshIoVtk::printPointIcellVtk(const char* nome_var)
   fprintf(file_ptr,"\n");
 
   fclose(file_ptr);
-};
+}
 
 
 void MeshIoVtk::printPointPositionVtk(const char* nome_var)
@@ -514,7 +514,7 @@ void MeshIoVtk::printPointPositionVtk(const char* nome_var)
   fprintf(file_ptr,"\n");
 
   fclose(file_ptr);
-};
+}
 
 
 

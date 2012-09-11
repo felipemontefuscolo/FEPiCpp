@@ -34,7 +34,7 @@ class MeshTools
 {
 public:
   
-  friend class Mesh;
+  //friend class Mesh;
   
   static int checkConsistency(Mesh *mesh);
 

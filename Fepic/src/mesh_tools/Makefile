@@ -2,10 +2,12 @@ include $(FEPIC_DIR)/conf/variables
 
 CPPSOURCES = $(wildcard *.cpp)
 
-all: $(warning In a prerequisite list)$(CPPSOURCES:.cpp=.o) subdirs
+#all: $(warning In a prerequisite list)$(CPPSOURCES:.cpp=.o) subdirs
+all: $(CPPSOURCES:.cpp=.o) subdirs
 
 subdirs:
-	$(warning In subdir scrpt mesh tools)
+	
+#	$(warning In subdir scrpt mesh tools)
 
 
 

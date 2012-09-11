@@ -47,7 +47,7 @@ namespace __FepTimer
     char fname[256];
   };
 
-};
+}
 
 class Timer
 {

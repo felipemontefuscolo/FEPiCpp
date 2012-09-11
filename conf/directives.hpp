@@ -46,7 +46,17 @@
 //#define FEPIC_   _INTEGER_TYPE __uint128_t
 
 
+
+#if FEP_HAS_OPENMP
+#   define FEP_PRAGMA_OMP(x) FEP_DO_PRAGMA(omp x)
+#   define FEP_DO_PRAGMA(x) _Pragma ( #x ) // _Pragma eh soh pra linux?
+#else
+#   define FEP_PRAGMA_OMP(x)
+#endif
+
+
 // -----------------  TYPEDEFS -------------------------
+
 
 typedef FEPIC_SCALAR_TYPE Real;
 

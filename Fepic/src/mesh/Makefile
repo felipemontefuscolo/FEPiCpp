@@ -2,15 +2,16 @@ include $(FEPIC_DIR)/conf/variables
 
 CPPSOURCES = $(wildcard *.cpp)
 
-all: $(warning In a prerequisite list)$(CPPSOURCES:.cpp=.o) subdirs
+#all: $(warning In a prerequisite list)$(CPPSOURCES:.cpp=.o) subdirs
+all: $(CPPSOURCES:.cpp=.o) subdirs
 
 subdirs:
-	$(warning In subdir scrpt)
+#	$(warning In subdir scrpt)
 	$(MAKE) all -C io
 	$(MAKE) all -C elements
 
 %.o: %.cpp
-	$(warning In Objs Script)
+#	$(warning In Objs Script)
 	$(FEP_CXX) -c $< $(FEP_CXXFLAGS) -o $@
 	
 clean:

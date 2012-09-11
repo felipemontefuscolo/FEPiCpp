@@ -109,7 +109,7 @@ void reserve(V &vec, typename V::size_type amount,
   vec.reserve(amount);
 }
 
-};
+}
 
 // ====================================================================== //
 //                                                                        // 
@@ -168,7 +168,7 @@ ForwardIterator binary_find(ForwardIterator first, ForwardIterator last, const T
 {
   first = std::lower_bound(first, last, val, comp);
   return (first == last || val!=(*first)) ? last : first;  
-};
+}
 
 template <class ForwardIterator, class Type, class LessComp, class EqComp>
 static
@@ -176,7 +176,7 @@ ForwardIterator binary_find(ForwardIterator first, ForwardIterator last, const T
 {
   first = std::lower_bound(first, last, val, comp);
   return (first != last && eq(val,*first)) ? first : last; 
-};
+}
 
 
 

@@ -122,7 +122,7 @@ void checkConsistencyTri(Mesh *mesh)
   
 }
 
-TEST(FlipTest, WithTri3)
+TEST(MtoolsFlipTest, WithTri3)
 {
   
   MeshIoMsh msh_reader;
@@ -157,7 +157,7 @@ TEST(FlipTest, WithTri3)
   EXPECT_TRUE(true);
 }
 
-TEST(FlipTest, WithTri6)
+TEST(MtoolsFlipTest, WithTri6)
 {
   
   MeshIoMsh msh_reader;
@@ -192,7 +192,7 @@ TEST(FlipTest, WithTri6)
   EXPECT_TRUE(true);
 }
 
-TEST(inCircle2dTest, WithTri3)
+TEST(MtoolsinCircle2dTest, WithTri3)
 {
   MeshIoMsh msh_reader;
   MeshIoVtk vtk_printer;
@@ -228,7 +228,7 @@ TEST(inCircle2dTest, WithTri3)
   EXPECT_TRUE(true);
 }
 
-TEST(FlippingMovingPointsTest, WithTri3)
+TEST(MtoolsFlippingMovingPointsTest, WithTri3)
 {
   MeshIoMsh msh_reader;
   MeshIoVtk vtk_printer;
@@ -289,7 +289,7 @@ TEST(FlippingMovingPointsTest, WithTri3)
   
 }
 
-TEST(FlippingMovingPointsTest, WithTri6)
+TEST(MtoolsFlippingMovingPointsTest, WithTri6)
 {
   MeshIoMsh msh_reader;
   MeshIoVtk vtk_printer;

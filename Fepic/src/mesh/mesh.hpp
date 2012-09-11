@@ -183,7 +183,7 @@ public:
   virtual bool getCornerIdFromVertices(int const* vtcs, int &fid) =0;
 
   virtual int* edgeStar(int C, int eC, int *iCs, int *eiCs) const = 0;
-  virtual int* edgeStar(CellElement  const*, int *iCs, int *eiCs) const = 0;
+  virtual int* edgeStar(CellElement const*, int *iCs, int *eiCs) const = 0;
   //virtual int* edgeStar(Corner const*, int *iCs, int *eiCs) const = 0;
   virtual int* vertexStar(int C, int vC, int *iCs, int *viCs) const = 0;
   virtual int* vertexStar(Point const* point, int *iCs, int *viCs) const = 0;

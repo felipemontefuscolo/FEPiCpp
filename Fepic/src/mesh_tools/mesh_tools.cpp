@@ -187,6 +187,10 @@ void MeshTools::removeCell(Cell * cell, Mesh *mesh)
  *  @param mesh mesh context.
  *  @param move_edge_nds true to move high order nodes, false otherwise.
  *  @return true if an error occurred, false otherwise.
+ *  @note none of the ids (of the edge or cells) are changed, only the incidences.
+ *  @note for 2D and 3D space.
+ *  @note all tags are kept.
+ *  @pre the cells acell and acell->getIncidCell(afid) form a convex quadrilateral.
  */ 
 bool MeshTools::flipTri(Cell * acell, int afid, Mesh *mesh, bool move_edge_nds)
 {
@@ -442,5 +446,6 @@ std::pair<bool, Cell *> MeshToolsTri::searchConvexPoint(Real const* x, Cell cons
   }
   
 };
+
 
 

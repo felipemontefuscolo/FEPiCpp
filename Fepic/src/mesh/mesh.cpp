@@ -42,7 +42,7 @@ Mesh::Mesh(int /*sd*/, ECellType fept)
   _build_adjacency = true;
 
   timer = Timer();
-};
+}
 
 /** @param nc_ number of cells.
  *  @param type mesh cell type.
@@ -70,7 +70,7 @@ unsigned Mesh::estimateNumFacets(unsigned nc_, ECellType type)
 
 #undef _ROUND_2_INT_
 
-};
+}
 unsigned Mesh::estimateNumCorners(unsigned nc_, ECellType type)
 {
   ECellClass cc = ctype2cclass(type);
@@ -93,7 +93,7 @@ unsigned Mesh::estimateNumCorners(unsigned nc_, ECellType type)
   }
 
 #undef _ROUND_2_INT_
-};
+}
 
 
 
@@ -115,23 +115,23 @@ template<class CT, int SD> Corner* SMesh<CT,SD>::decCorner(Corner* a)     { retu
 
 
 
-template<class CT,int SD> cell_iterator   SMesh<CT,SD>::cellBegin()  { return cell_iterator  (this, &(*_cellL.begin()));};
-template<class CT,int SD> cell_iterator   SMesh<CT,SD>::cellEnd()    { return cell_iterator  (this, &(*_cellL.end()));};
-template<class CT,int SD> point_iterator  SMesh<CT,SD>::pointBegin() { return point_iterator (this, &(*_pointL.begin()));};
-template<class CT,int SD> point_iterator  SMesh<CT,SD>::pointEnd()   { return point_iterator (this, &(*_pointL.end()));};
-template<class CT,int SD> facet_iterator  SMesh<CT,SD>::facetBegin() { return facet_iterator (this, &(*_facetL.begin()));};
-template<class CT,int SD> facet_iterator  SMesh<CT,SD>::facetEnd()   { return facet_iterator (this, &(*_facetL.end()));};
-template<class CT,int SD> corner_iterator SMesh<CT,SD>::cornerBegin(){ return corner_iterator(this, &(*_cornerL.begin()));};
-template<class CT,int SD> corner_iterator SMesh<CT,SD>::cornerEnd()  { return corner_iterator(this, &(*_cornerL.end()));};
+template<class CT,int SD> cell_iterator   SMesh<CT,SD>::cellBegin()  { return cell_iterator  (this, &(*_cellL.begin()));}
+template<class CT,int SD> cell_iterator   SMesh<CT,SD>::cellEnd()    { return cell_iterator  (this, &(*_cellL.end()));}
+template<class CT,int SD> point_iterator  SMesh<CT,SD>::pointBegin() { return point_iterator (this, &(*_pointL.begin()));}
+template<class CT,int SD> point_iterator  SMesh<CT,SD>::pointEnd()   { return point_iterator (this, &(*_pointL.end()));}
+template<class CT,int SD> facet_iterator  SMesh<CT,SD>::facetBegin() { return facet_iterator (this, &(*_facetL.begin()));}
+template<class CT,int SD> facet_iterator  SMesh<CT,SD>::facetEnd()   { return facet_iterator (this, &(*_facetL.end()));}
+template<class CT,int SD> corner_iterator SMesh<CT,SD>::cornerBegin(){ return corner_iterator(this, &(*_cornerL.begin()));}
+template<class CT,int SD> corner_iterator SMesh<CT,SD>::cornerEnd()  { return corner_iterator(this, &(*_cornerL.end()));}
 
-template<class CT,int SD> cell_iterator   SMesh<CT,SD>::cellBegin  (int tid, int nthreads) { return cell_iterator  (this, &(*_cellL.begin  (tid,nthreads)));};
-template<class CT,int SD> cell_iterator   SMesh<CT,SD>::cellEnd    (int tid, int nthreads) { return cell_iterator  (this, &(*_cellL.end    (tid,nthreads)));};
-template<class CT,int SD> point_iterator  SMesh<CT,SD>::pointBegin (int tid, int nthreads) { return point_iterator (this, &(*_pointL.begin (tid,nthreads)));};
-template<class CT,int SD> point_iterator  SMesh<CT,SD>::pointEnd   (int tid, int nthreads) { return point_iterator (this, &(*_pointL.end   (tid,nthreads)));};
-template<class CT,int SD> facet_iterator  SMesh<CT,SD>::facetBegin (int tid, int nthreads) { return facet_iterator (this, &(*_facetL.begin (tid,nthreads)));};
-template<class CT,int SD> facet_iterator  SMesh<CT,SD>::facetEnd   (int tid, int nthreads) { return facet_iterator (this, &(*_facetL.end   (tid,nthreads)));};
-template<class CT,int SD> corner_iterator SMesh<CT,SD>::cornerBegin(int tid, int nthreads) { return corner_iterator(this, &(*_cornerL.begin(tid,nthreads)));};
-template<class CT,int SD> corner_iterator SMesh<CT,SD>::cornerEnd  (int tid, int nthreads) { return corner_iterator(this, &(*_cornerL.end  (tid,nthreads)));};
+template<class CT,int SD> cell_iterator   SMesh<CT,SD>::cellBegin  (int tid, int nthreads) { return cell_iterator  (this, &(*_cellL.begin  (tid,nthreads)));}
+template<class CT,int SD> cell_iterator   SMesh<CT,SD>::cellEnd    (int tid, int nthreads) { return cell_iterator  (this, &(*_cellL.end    (tid,nthreads)));}
+template<class CT,int SD> point_iterator  SMesh<CT,SD>::pointBegin (int tid, int nthreads) { return point_iterator (this, &(*_pointL.begin (tid,nthreads)));}
+template<class CT,int SD> point_iterator  SMesh<CT,SD>::pointEnd   (int tid, int nthreads) { return point_iterator (this, &(*_pointL.end   (tid,nthreads)));}
+template<class CT,int SD> facet_iterator  SMesh<CT,SD>::facetBegin (int tid, int nthreads) { return facet_iterator (this, &(*_facetL.begin (tid,nthreads)));}
+template<class CT,int SD> facet_iterator  SMesh<CT,SD>::facetEnd   (int tid, int nthreads) { return facet_iterator (this, &(*_facetL.end   (tid,nthreads)));}
+template<class CT,int SD> corner_iterator SMesh<CT,SD>::cornerBegin(int tid, int nthreads) { return corner_iterator(this, &(*_cornerL.begin(tid,nthreads)));}
+template<class CT,int SD> corner_iterator SMesh<CT,SD>::cornerEnd  (int tid, int nthreads) { return corner_iterator(this, &(*_cornerL.end  (tid,nthreads)));}
 
 
 // =====================================================================================
@@ -144,12 +144,12 @@ int SMesh<CT,SD>::numVertices() const
 {
   int num_vtcs = 0;
   int const num_nodes_total = MeshT::numNodesTotal();
-  #pragma omp parallel shared(num_vtcs)
+  FEP_PRAGMA_OMP(parallel shared(num_vtcs))
   {
     int num_vtcs_local = 0;
     PointT const* p;
 
-    #pragma omp for
+    FEP_PRAGMA_OMP(for)
     for (int i=0; i<num_nodes_total; ++i)
     {
       p = MeshT::getNode(i);
@@ -159,7 +159,7 @@ int SMesh<CT,SD>::numVertices() const
         ++num_vtcs_local;
     }
 
-    #pragma omp critical
+    FEP_PRAGMA_OMP(critical)
     num_vtcs += num_vtcs_local;
   }
   return num_vtcs;
@@ -1074,13 +1074,13 @@ void SMesh<CT,SD>::buildCellsAdjacency()
   _facetL.clear();
 
   // constroi uma tabela com as células e seus vizinhos
-  #pragma omp parallel private(cell_ith,facet_vtcs) shared(table) default(none)
+  FEP_PRAGMA_OMP(parallel private(cell_ith,facet_vtcs) shared(table) default(none))
   {
     CT const *cell;
     int ii;
     unsigned t;
 
-    #pragma omp for schedule (static) nowait
+    FEP_PRAGMA_OMP(for schedule (static) nowait)
     for (int k = 0; k < n_cells_total; ++k)
     {
       cell = static_cast<CT const*>(this->MeshT::getCell(k));
@@ -1114,7 +1114,7 @@ void SMesh<CT,SD>::buildCellsAdjacency()
   //FEP_STATIC_ASSERT_ITERATOR((std::tr1::is_same<_category,std::random_access_iterator_tag>::value));
 
   // reseting cells neighbors
-  #pragma omp parallel for     // WARNING: VALID ONLY FOR std::vector<> ....
+  FEP_PRAGMA_OMP(parallel for) // WARNING: VALID ONLY FOR std::vector<> ....
   for (int i=0; i<n_cells_total; ++i)
   {
     _cellL[i].resetIncidCells();
@@ -1123,7 +1123,7 @@ void SMesh<CT,SD>::buildCellsAdjacency()
   }
 
   //// reseting cells neighbors
-  //#pragma omp parallel for     // WARNING: VALID ONLY FOR std::vector<> ....
+  //FEP_PRAGMA_OMP(parallel for     // WARNING: VALID ONLY FOR std::vector<> ....)
   //for (CellIteratorT cit = _cellL.begin(); cit < _cellL.end(); ++cit)
   //  cit->resetIncidCells();
 
@@ -1133,7 +1133,7 @@ void SMesh<CT,SD>::buildCellsAdjacency()
   //
 
   //// build adjacency and create facets
-  //#pragma omp parallel private(facet_vtcs) shared(table) default(none)
+  //FEP_PRAGMA_OMP(parallel private(facet_vtcs) shared(table) default(none))
   //{
     //int otherC, otherith, thisC, thisith;
     //int a;
@@ -1143,7 +1143,7 @@ void SMesh<CT,SD>::buildCellsAdjacency()
     //bool found;
     //ConstIterT mid, table_end = table.end();
 
-    //#pragma omp for schedule (dynamic) nowait
+    //FEP_PRAGMA_OMP(for schedule (dynamic) nowait)
     //for (ConstIterT kit = table.begin(); kit < table_end; ++kit) // table loop
     //{
 
@@ -1191,7 +1191,7 @@ void SMesh<CT,SD>::buildCellsAdjacency()
         //facet->FacetT::setIncidCell(thisC);
         //facet->FacetT::setPosition(thisith);
         //facet->FacetT::setAnchor(-1);
-        //#pragma omp critical
+        //FEP_PRAGMA_OMP(critical)
         //facet_id = this->MeshT::pushFacet(facet.get());
         //this->MeshT::getCell(thisC)->CT::setFacetId(thisith, facet_id);
 
@@ -1209,7 +1209,7 @@ void SMesh<CT,SD>::buildCellsAdjacency()
 
 
   // build adjacency and create facets
-  #pragma omp parallel private(facet_vtcs) shared(table) default(none)
+  FEP_PRAGMA_OMP(parallel private(facet_vtcs) shared(table) default(none))
   {
     int otherC, otherith, thisC, thisith;
     int a;
@@ -1219,7 +1219,7 @@ void SMesh<CT,SD>::buildCellsAdjacency()
     bool found;
     ConstIterT mid, table_end = table.end(), table_beg = table.begin();
 
-    #pragma omp for schedule (guided) nowait
+    FEP_PRAGMA_OMP(for schedule (guided) nowait)
     for (ConstIterT kit = table.begin(); kit < table_end; ++kit) // table loop
     {
 
@@ -1266,7 +1266,7 @@ void SMesh<CT,SD>::buildCellsAdjacency()
           facet->FacetT::setIncidCell(thisC);
           facet->FacetT::setPosition(thisith);
           //facet->FacetT::setAnchor(-1);
-          #pragma omp critical
+          FEP_PRAGMA_OMP(critical)
           facet_id = this->MeshT::pushFacet(facet.get());
           this->MeshT::getCell(thisC)->CT::setFacetId(thisith, facet_id);
         }
@@ -1279,13 +1279,13 @@ void SMesh<CT,SD>::buildCellsAdjacency()
   // assigns facets to cells that remained
   if (CT::dim > 1)
   {
-    #pragma omp parallel
+    FEP_PRAGMA_OMP(parallel)
     {
       CT * cell;
       CT const* icell;
       int oth;
       int facet_id;
-      #pragma omp for
+      FEP_PRAGMA_OMP(for)
       for (int i=0; i<n_cells_total; ++i)
       {
         cell = MeshT::getCell(i);
@@ -1325,11 +1325,11 @@ void SMesh<CT,SD>::buildCorners_Template(typename EnableIf<(celldim==2)>::type*)
   //int const num_nodes = this->MeshT::numNodesTotal();
   _cornerL.clear();
 
-  //#pragma omp parallel for
+  //FEP_PRAGMA_OMP(parallel for)
   //for (unsigned c = 0; c<_cellL.total_size(); ++c)
   //  _cellL[c].CT::resetCornersId();
   //
-  ////#pragma omp parallel default(none)
+  ////FEP_PRAGMA_OMP(parallel default(none))
   //{
   //  PointT * point;
   //  //std::tr1::shared_ptr<CornerT> corner(new CornerT); // Corner
@@ -1340,7 +1340,7 @@ void SMesh<CT,SD>::buildCorners_Template(typename EnableIf<(celldim==2)>::type*)
   //  int const* iCs_end;
   //  int C, vC;
   //
-  //  //#pragma omp for
+  //  //FEP_PRAGMA_OMP(for)
   //  for (int i = 0; i < num_nodes; ++i)
   //  {
   //    point = this->MeshT::getNode(i);
@@ -1383,7 +1383,7 @@ void SMesh<CT,SD>::buildCorners_Template(typename EnableIf<(celldim==3)>::type*)
   //typedef typename CellIteratorT::iterator_category _category;
   //FEP_STATIC_ASSERT_ITERATOR((std::tr1::is_same<_category,std::random_access_iterator_tag>::value));
 
-  #pragma omp parallel for
+  FEP_PRAGMA_OMP(parallel for)
   for (unsigned c = 0; c<_cellL.total_size(); ++c)
     _cellL[c].CT::resetCornersId();
 
@@ -1448,7 +1448,7 @@ void SMesh<CT,SD>::buildNodesAdjacency()
   int const num_nodes    = this->numNodesTotal();
   int const nnpf         = this->numNodesPerFacet();
 
-  #pragma omp parallel for
+  FEP_PRAGMA_OMP(parallel for)
   for (int i=0; i<num_nodes; ++i)
   {
     //_pointL[i].setIncidCell(-1);
@@ -1456,13 +1456,13 @@ void SMesh<CT,SD>::buildNodesAdjacency()
     _pointL[i].clearIncidences();
   }
 
-  //#pragma omp parallel default(none)
+  //FEP_PRAGMA_OMP(parallel default(none))
   {
     CT const* cell;
     PointT * point;
     //
     //// first the cells that is not in boundary
-    ////#pragma omp for
+    ////FEP_PRAGMA_OMP(for)
     //for (int C = 0; C < num_cells; ++C)
     //{
     //  cell = this->MeshT::getCell(C);
@@ -1472,7 +1472,7 @@ void SMesh<CT,SD>::buildNodesAdjacency()
     //  for (int n = 0; n < nodes_p_cell; ++n)
     //  {
     //    point = this->MeshT::getNode(cell->CT::getNodeId(n));
-    //    //#pragma omp critical
+    //    //FEP_PRAGMA_OMP(critical)
     //    {
     //      point->PointT::setIncidCell(C);
     //      point->PointT::setPosition(n);
@@ -1482,7 +1482,7 @@ void SMesh<CT,SD>::buildNodesAdjacency()
 
     int fnodes[nnpf];
     // then the cells that is in boundary
-    //#pragma omp for
+    //FEP_PRAGMA_OMP(for)
     for (int C = 0; C < num_cells; ++C)
     {
       cell = this->MeshT::getCell(C);
@@ -1566,7 +1566,7 @@ void SMesh<CT,SD>::_setConnectedComponentsId(Cell * c_ini, int cc_id)
   //const int n_cells_total = _cellL.size();
   
   //clear flags
-  #pragma omp parallel for
+  FEP_PRAGMA_OMP(parallel for)
   for (int i = 0; i < n_cells_total; ++i)
   {
     this->MeshT::getCell(i)->CT::visited(false);
@@ -1581,7 +1581,7 @@ void SMesh<CT,SD>::setUpConnectedComponentsId()
   _connected_compL.clear();
   
   //clear conn comp ids
-  #pragma omp parallel for
+  FEP_PRAGMA_OMP(parallel for)
   for (int i = 0; i < n_cells_total; ++i)
   {
     this->MeshT::getCell(i)->CT::setConnectedComponentId(-1);
@@ -1633,7 +1633,7 @@ void SMesh<CT,SD>::setUpBoundaryComponentsId()
   int const n_facets_total = this->MeshT::numFacetsTotal();
   _boundary_compL.clear();
     //clear conn comp ids
-  #pragma omp parallel for
+  FEP_PRAGMA_OMP(parallel for)
   for (int i = 0; i < n_facets_total; ++i)
   {
     this->MeshT::getFacet(i)->FacetT::setBoundaryComponentId(-1);
@@ -1974,7 +1974,7 @@ namespace _MeshStaticTablesInitializers
     return tab;
   }
 
-};
+}
 
 
 
@@ -1997,7 +1997,7 @@ Mesh* Mesh::create(ECellType type, int spacedim)
   }
 
   return (*(creators[(spacedim-1)*N_CELL_TYPES + idx]))();
-};
+}
 
 
 

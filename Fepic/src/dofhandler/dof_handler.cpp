@@ -78,7 +78,7 @@ void DofHandler::SetUp()
   if (_data.capacity() < (unsigned)total_size)
     _data.reserve(total_size*(1.+_grow_factor)+1);
   _data.resize(total_size);
-  #pragma omp parallel for
+  FEP_PRAGMA_OMP(parallel for)
   for (unsigned i = 0; i < _data.size(); ++i)
     _data[i] = -1;
   
@@ -135,13 +135,13 @@ void DofHandler::printSparsityMatlab(std::string matname, std::string filename)
   getSparsityTable(table);
   
   int nnz = 0;
-  #pragma omp parallel
+  FEP_PRAGMA_OMP(parallel)
   {
     int nnz_local=0;
-    #pragma omp for
+    FEP_PRAGMA_OMP(for)
     for (int i = 0; i < n_dofs; ++i)
       nnz_local += table[i].size();
-    #pragma omp critical
+    FEP_PRAGMA_OMP(critical)
       nnz += nnz_local;
   }
   
@@ -289,13 +289,13 @@ void DofHandler::metisRenumber()
     getSparsityTable(table);
 
     int nnz = 0;
-    #pragma omp parallel
+    FEP_PRAGMA_OMP(parallel)
     {
       int nnz_local=0;
-      #pragma omp for
+      FEP_PRAGMA_OMP(for)
       for (int i = 0; i < n_dofs; ++i)
         nnz_local += table[i].size();
-      #pragma omp critical
+      FEP_PRAGMA_OMP(critical)
         nnz += nnz_local;
     }
     
@@ -325,7 +325,7 @@ void DofHandler::metisRenumber()
   
   const int tsize = totalSize();
   
-  #pragma omp parallel for
+  FEP_PRAGMA_OMP(parallel for)
   for (int k = 0; k < tsize; ++k)
   {
     if (_data[k]==-1)
@@ -397,7 +397,7 @@ void DofHandler::boostMinimumDegreeRenumber()
 
   const int tsize = totalSize();
   
-  #pragma omp parallel for
+  FEP_PRAGMA_OMP(parallel for)
   for (int k = 0; k < tsize; ++k)
   {
     if (_data[k]==-1)
@@ -456,13 +456,13 @@ void DofHandler::boostCuthillMcKeeRenumber()
   cuthill_mckee_ordering(G, iperm.rbegin(), get(boost::vertex_color, G),
                                  boost::make_degree_map(G));
   
-  #pragma omp parallel for
+  FEP_PRAGMA_OMP(parallel for)
   for (unsigned c = 0; c < iperm.size(); ++c)
      perm[index_map[iperm[c]]] = c;
 
   const int tsize = totalSize();
   
-  #pragma omp parallel for
+  FEP_PRAGMA_OMP(parallel for)
   for (int k = 0; k < tsize; ++k)
   {
     if (_data[k]==-1)
@@ -493,13 +493,13 @@ void DofHandler::getCSR_adjacency(std::vector<int> &adjncy, std::vector<int> &xa
     getSparsityTable(table);
     
     int nnz = 0;
-    #pragma omp parallel
+    FEP_PRAGMA_OMP(parallel)
     {
       int nnz_local=0;
-      #pragma omp for
+      FEP_PRAGMA_OMP(for)
       for (int i = 0; i < n_dofs; ++i)
         nnz_local += table[i].size();
-      #pragma omp critical
+      FEP_PRAGMA_OMP(critical)
         nnz += nnz_local;
     }
     
@@ -526,7 +526,7 @@ void DofHandler::getCSR_adjacency(std::vector<int> &adjncy, std::vector<int> &xa
   int const nnz = adjncy_temp.size();
   adjncy.resize(nnz); // to avoid fragmentation
   
-  #pragma omp parallel for
+  FEP_PRAGMA_OMP(parallel for)
   for (int i = 0; i < nnz; ++i)
     adjncy[i] = adjncy_temp[i];
   
@@ -548,7 +548,7 @@ void DofHandler::CuthillMcKeeRenumber()
   
   const int tsize = totalSize();
   
-  #pragma omp parallel for
+  FEP_PRAGMA_OMP(parallel for)
   for (int k = 0; k < tsize; ++k)
   {
     if (_data[k]==-1)

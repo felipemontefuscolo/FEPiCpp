@@ -154,7 +154,7 @@ bool sameElements(Iterator1 beg1, Iterator1 end1, Iterator2 beg2, Iterator2 end2
     beg2 = beg2_ini;
   }
   return true;
-};
+}
 
 /** @brief Checks if a range [first, last) has the value.
  */

@@ -332,7 +332,7 @@ protected:
   std::list<std::pair<int,char> > _incidences; // for singular nodes
   
   enum Masks {
-    mk_inboundary = (1<<0),
+    mk_inboundary = (1<<0)
   };
 };
 
