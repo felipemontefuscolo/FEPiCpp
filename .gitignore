@@ -5,4 +5,5 @@
 *.d
 *.geany
 *.swp
+octave.core
 outtest/
