@@ -40,23 +40,24 @@
 
 TEST(MeshTest, SizeOfElementsTest)
 {
-  std::cout << "sizeof(Edge2)         " << sizeof(Edge2)          << std::endl;
-  std::cout << "sizeof(Edge3)         " << sizeof(Edge3)          << std::endl;
-  std::cout << "sizeof(Triangle3)     " << sizeof(Triangle3)     << std::endl;
-  std::cout << "sizeof(Triangle6)     " << sizeof(Triangle6)     << std::endl;
-  std::cout << "sizeof(Tetrahedron4)  " << sizeof(Tetrahedron4)  << std::endl;
-  std::cout << "sizeof(Tetrahedron10) " << sizeof(Tetrahedron10) << std::endl;
-  std::cout << "sizeof(Hexahedron8)   " << sizeof(Hexahedron8)   << std::endl;
-  std::cout << "sizeof(Hexahedron20)  " << sizeof(Hexahedron20)  << std::endl;
-  std::cout << "sizeof(Hexahedron27)  " << sizeof(Hexahedron27)  << std::endl;
-                
-  std::cout << "sizeof(Facet)         " << sizeof(Facet)          << std::endl;
-  std::cout << "sizeof(Corner)        " << sizeof(Corner)         << std::endl;
-  std::cout << "sizeof(Point1d)       " << sizeof(Point1d)        << std::endl;
-  std::cout << "sizeof(Point2d)       " << sizeof(Point2d)        << std::endl;
-  std::cout << "sizeof(Point3d)       " << sizeof(Point3d)        << std::endl;
+  std::cout << "Size of:      " << "Actual:"               <<"\t  Would be better if it was:\n";
+  std::cout << "Edge2         " << sizeof(Edge2)          << "\t  40 "  <<   std::endl;   
+  std::cout << "Edge3         " << sizeof(Edge3)          << "\t  40 "  <<   std::endl;
+  std::cout << "Triangle3     " << sizeof(Triangle3)     << "\t  56 " <<    std::endl;
+  std::cout << "Triangle6     " << sizeof(Triangle6)     << "\t  72 " <<    std::endl;
+  std::cout << "Tetrahedron4  " << sizeof(Tetrahedron4)  << "\t  96 "  <<   std::endl;
+  std::cout << "Tetrahedron10 " << sizeof(Tetrahedron10) << "\t  120 " <<   std::endl;
+  std::cout << "Hexahedron8   " << sizeof(Hexahedron8)   << "\t  160 "<<    std::endl;
+  std::cout << "Hexahedron20  " << sizeof(Hexahedron20)  << "\t  208 " <<   std::endl;
+  std::cout << "Hexahedron27  " << sizeof(Hexahedron27)  << "\t  232 " <<   std::endl;
+  std::cout << "Facet         " << sizeof(Facet)          << "\t  24 "  <<    std::endl;
+  std::cout << "Corner        " << sizeof(Corner)         << "\t  16 "  <<   std::endl;
+  std::cout << "Point1d       " << sizeof(Point1d)        << "\t  48 "  <<   std::endl;
+  std::cout << "Point2d       " << sizeof(Point2d)        << "\t  56 "  <<   std::endl;
+  std::cout << "Point3d       " << sizeof(Point3d)        << "\t  64 "  <<   std::endl;
   
-  EXPECT_TRUE(1);
+  int a = 1;
+  EXPECT_EQ(1, a);
 }
 
 TEST(IOTest, identifiesMshMeshTypeTest)
@@ -67,7 +68,7 @@ TEST(IOTest, identifiesMshMeshTypeTest)
 
   ct = msh_reader.identifiesMshMeshType("meshes/simpedge2.msh",sd);
   EXPECT_EQ(EDGE2, ct);
-  EXPECT_EQ(sd, 2);
+  EXPECT_EQ(2, sd);
 
   ct = msh_reader.identifiesMshMeshType("meshes/simpedge3.msh",sd);
   EXPECT_EQ(EDGE3, ct);
