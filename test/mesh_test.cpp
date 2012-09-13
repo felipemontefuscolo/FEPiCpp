@@ -72,51 +72,51 @@ TEST(IOTest, identifiesMshMeshTypeTest)
 
   ct = msh_reader.identifiesMshMeshType("meshes/simpedge3.msh",sd);
   EXPECT_EQ(EDGE3, ct);
-  EXPECT_EQ(sd, 2);
+  EXPECT_EQ(2, sd);
 
   ct = msh_reader.identifiesMshMeshType("meshes/simptri3.msh",sd);
   EXPECT_EQ(TRIANGLE3, ct);
-  EXPECT_EQ(sd, 2);
+  EXPECT_EQ(2, sd);
 
   ct = msh_reader.identifiesMshMeshType("meshes/simptri6.msh",sd);
   EXPECT_EQ(TRIANGLE6, ct);
-  EXPECT_EQ(sd, 2);
+  EXPECT_EQ(2, sd);
 
   ct = msh_reader.identifiesMshMeshType("meshes/simpquad4.msh",sd);
   EXPECT_EQ(QUADRANGLE4, ct);
-  EXPECT_EQ(sd, 2);
+  EXPECT_EQ(2, sd);
 
   ct = msh_reader.identifiesMshMeshType("meshes/simpquad8.msh",sd);
   EXPECT_EQ(QUADRANGLE8, ct);
-  EXPECT_EQ(sd, 2);
+  EXPECT_EQ(2, sd);
 
   ct = msh_reader.identifiesMshMeshType("meshes/simpquad9.msh",sd);
   EXPECT_EQ(QUADRANGLE9, ct);
-  EXPECT_EQ(sd, 2);
+  EXPECT_EQ(2, sd);
 
   ct = msh_reader.identifiesMshMeshType("meshes/simptet4.msh",sd);
   EXPECT_EQ(TETRAHEDRON4, ct);
-  EXPECT_EQ(sd, 3);
+  EXPECT_EQ(3, sd);
 
   ct = msh_reader.identifiesMshMeshType("meshes/simptet4.msh",sd);
   EXPECT_EQ(TETRAHEDRON4, ct);
-  EXPECT_EQ(sd, 3);
+  EXPECT_EQ(3, sd);
 
   ct = msh_reader.identifiesMshMeshType("meshes/simptet10.msh",sd);
   EXPECT_EQ(TETRAHEDRON10, ct);
-  EXPECT_EQ(sd, 3);
+  EXPECT_EQ(3, sd);
 
   ct = msh_reader.identifiesMshMeshType("meshes/simphex8.msh",sd);
   EXPECT_EQ(HEXAHEDRON8, ct);
-  EXPECT_EQ(sd, 3);
+  EXPECT_EQ(3, sd);
 
   ct = msh_reader.identifiesMshMeshType("meshes/simphex20.msh",sd);
   EXPECT_EQ(HEXAHEDRON20, ct);
-  EXPECT_EQ(sd, 3);
+  EXPECT_EQ(3, sd);
 
   ct = msh_reader.identifiesMshMeshType("meshes/simphex27.msh",sd);
   EXPECT_EQ(HEXAHEDRON27, ct);
-  EXPECT_EQ(sd, 3);
+  EXPECT_EQ(3, sd);
 
 }
 
