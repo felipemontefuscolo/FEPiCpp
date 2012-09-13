@@ -110,8 +110,8 @@ protected:
   int  _nodes[6];      // nodes id
 
   /* não utilizados */
-  int _corners[0];
-  int _icells_anchors[0];
+  int  _corners[0];
+  char _icells_anchors[0];
 
 public:
 

@@ -38,6 +38,26 @@
 #include <algorithm>
 #include <tr1/memory>
 
+TEST(MeshTest, SizeOfElementsTest)
+{
+  std::cout << "sizeof(Edge2)         " << sizeof(Edge2)          << std::endl;
+  std::cout << "sizeof(Edge3)         " << sizeof(Edge3)          << std::endl;
+  std::cout << "sizeof(Triangle3)     " << sizeof(Triangle3)     << std::endl;
+  std::cout << "sizeof(Triangle6)     " << sizeof(Triangle6)     << std::endl;
+  std::cout << "sizeof(Tetrahedron4)  " << sizeof(Tetrahedron4)  << std::endl;
+  std::cout << "sizeof(Tetrahedron10) " << sizeof(Tetrahedron10) << std::endl;
+  std::cout << "sizeof(Hexahedron8)   " << sizeof(Hexahedron8)   << std::endl;
+  std::cout << "sizeof(Hexahedron20)  " << sizeof(Hexahedron20)  << std::endl;
+  std::cout << "sizeof(Hexahedron27)  " << sizeof(Hexahedron27)  << std::endl;
+                
+  std::cout << "sizeof(Facet)         " << sizeof(Facet)          << std::endl;
+  std::cout << "sizeof(Corner)        " << sizeof(Corner)         << std::endl;
+  std::cout << "sizeof(Point1d)       " << sizeof(Point1d)        << std::endl;
+  std::cout << "sizeof(Point2d)       " << sizeof(Point2d)        << std::endl;
+  std::cout << "sizeof(Point3d)       " << sizeof(Point3d)        << std::endl;
+  
+  EXPECT_TRUE(1);
+}
 
 TEST(IOTest, identifiesMshMeshTypeTest)
 {
