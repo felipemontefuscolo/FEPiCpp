@@ -27,7 +27,7 @@
 #include <cstring>
 #include <list>
 
-#if FEP_HAS_OPENMP
+#ifdef FEP_HAS_OPENMP
 #  include <omp.h>
 #else
 #  include <ctime>
@@ -61,7 +61,7 @@ public:
 
   explicit Timer()
   {
-    #if FEP_HAS_OPENMP
+    #ifdef FEP_HAS_OPENMP
     _method = "OpenMp";
     #else
     _method = "ctime";
@@ -70,7 +70,7 @@ public:
 
   void restart()
   {
-    #if FEP_HAS_OPENMP
+    #ifdef FEP_HAS_OPENMP
     _elapsed = omp_get_wtime();
     #else
     _temp = clock();
@@ -81,10 +81,10 @@ public:
   {
     char  buff[256];
 
-    #if FEP_HAS_OPENMP
+    #ifdef FEP_HAS_OPENMP
     _elapsed = omp_get_wtime() - _elapsed;
     #else
-    _elapsed = (clock() - _temp)/(1.*CLOCKS_PER_SEC);
+    _elapsed = static_cast<double>( clock()  - _temp)/(1.*CLOCKS_PER_SEC);
     #endif
     sprintf(buff, "elapsed %8.3fs in : %s\n", static_cast<float>(_elapsed), fname);
 
@@ -122,7 +122,7 @@ protected:
   double      _elapsed;
   const char* _method;
   List	      _list;
-  #if (!FEP_HAS_OPENMP)
+  #ifndef FEP_HAS_OPENMP
   clock_t     _temp;
   #endif
 

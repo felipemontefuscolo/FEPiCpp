@@ -50,14 +50,7 @@ public:
   virtual ~Quadrangle4() {}
 
 protected:
-  char _icells_pos[4];  // positions of icells
-  int _facets[4];     // facets id
-  int _icells[4];     // incident cells id
-  int _nodes[4];      // nodes id
-
-  /* não utilizados */
-  int _icells_anchors[0];
-  int _corners[0];
+  FEP_DEF_2D_CELLS_MEMBERS;
 
 public:
   
@@ -101,14 +94,7 @@ public:
   virtual ~Quadrangle8() {}
 
 protected:
-  char _icells_pos[4];  // positions of icells
-  int _facets[4];     // facets id
-  int _icells[4];     // incident cells id
-  int _nodes[8];      // nodes id
-
-  /* não utilizados */
-  int _corners[0];
-  int _icells_anchors[0];
+  FEP_DEF_2D_CELLS_MEMBERS;
   
 public:
   
@@ -152,14 +138,8 @@ public:
   virtual ~Quadrangle9() {}
 
 protected:
-  char _icells_pos[4];  // positions of icells
-  int _facets[4];     // facets id
-  int _icells[4];     // incident cells id
-  int _nodes[9];      // nodes id
-
-  /* não utilizados */
-  int _corners[0];
-  int _icells_anchors[0];
+  FEP_DEF_2D_CELLS_MEMBERS;
+  
   
 public:
   

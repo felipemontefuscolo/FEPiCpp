@@ -57,7 +57,7 @@ public:
                                int pos=-1,
                                int tag=0,
                                int flags=0) : CellElement(tag,flags),
-                                              _icell_pos(pos),
+                                              _icell_pos(static_cast<char>(pos)),
                                               _icell(ic)
                                               {}
   
@@ -81,14 +81,14 @@ public:
   // facet lid of incident cell
   void setPosition(int pos)
   {
-    _icell_pos = pos;
+    _icell_pos = static_cast<char>( pos );
   }
   
   /// is the same as doing setIncidCell(icell_id); setPosition(pos);
   void setIncidence(int icell_id, int pos)
   {
     _icell = icell_id;
-    _icell_pos = pos;
+    _icell_pos = static_cast<char>( pos );
   }
   // --------------------------------------- //
   

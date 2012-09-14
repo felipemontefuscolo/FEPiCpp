@@ -90,8 +90,8 @@ int countIfLess(V &vec, T value)
   return static_cast<int>(  std::lower_bound(vec.begin(), vec.end(), value) - vec.begin());
 }
 
-
-FEP_BUILD_MEM_FUN_CHECKER(reserve,reserve, void, , typename T::size_type);
+// suffix,mem_fun_name, mem_fun_return, qualif, mem_fun_args
+FEP_BUILD_MEM_FUN_CHECKER_1ARG(reserve,reserve, void, ;char none_qualif , typename T::size_type);
 
 
 template<class V>

@@ -52,14 +52,7 @@ public:
   virtual ~Triangle3() {}
 
 protected:
-  char _icells_pos[3]; // positions of icells
-  int  _nodes[3];      // nodes id
-  int  _facets[3];     // facets id
-  int  _icells[3];     // incident cells id
-
-  /* não utilizados */
-  int _icells_anchors[0];
-  int _corners[0];
+  FEP_DEF_2D_CELLS_MEMBERS;
 
 public:
   
@@ -104,14 +97,8 @@ public:
   virtual ~Triangle6() {};
   
 protected:
-  char _icells_pos[3]; // positions of icells
-  int  _facets[3];     // facets id
-  int  _icells[3];     // incident cells id
-  int  _nodes[6];      // nodes id
-
-  /* não utilizados */
-  int  _corners[0];
-  char _icells_anchors[0];
+  FEP_DEF_2D_CELLS_MEMBERS;
+  
 
 public:
 

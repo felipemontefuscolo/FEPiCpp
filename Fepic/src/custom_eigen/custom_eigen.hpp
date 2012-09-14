@@ -29,7 +29,11 @@
 //  #define EIGEN_NO_DEBUG
 #endif
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
 #include <Eigen/Core>
+#pragma GCC diagnostic pop
+
 
 //#include <Eigen/LU>
 //#include <Eigen/StdVector>

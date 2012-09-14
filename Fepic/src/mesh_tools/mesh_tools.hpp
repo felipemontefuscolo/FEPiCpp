@@ -331,8 +331,8 @@ public:
           // de novo, só que pra outro lado
           if (fabs(F(xa))<TOL)
           {
-            Real const xp[] = {xa[0]-2.e-7, xa[1]};
-            mesh->getNode(node_id)->setCoord(xp);
+            Real const xpp[] = {xa[0]-2.e-7, xa[1]};
+            mesh->getNode(node_id)->setCoord(xpp);
           };
         };
       }

@@ -51,12 +51,7 @@ public:
 
   
 protected:
-  char _icells_pos[6];     // positions of icells
-  char _icells_anchors[6]; // anchors of icells  
-  int _facets[6];          // facets id
-  int _icells[6];          // incident cells id
-  int _nodes[8];           // nodes id
-  int _corners[12];        // edges id
+  FEP_DEF_3D_CELLS_MEMBERS;
 
 public:
   static const int table_vC_x_fC[8][6];
@@ -97,12 +92,7 @@ public:
   static const EMshTag msh_tag = MSH_HEX_20;
 
 protected:
-  char _icells_pos[6];     // positions of icells
-  char _icells_anchors[6]; // anchors of icells  
-  int _facets[6];          // facets id
-  int _icells[6];          // incident cells id
-  int _nodes[20];           // nodes id
-  int _corners[12];        // edges id
+  FEP_DEF_3D_CELLS_MEMBERS;
 
 public:
   static const int table_vC_x_fC[8][6];
@@ -143,12 +133,7 @@ public:
   static const EMshTag msh_tag = MSH_HEX_27;
 
 protected:
-  char _icells_pos[6];     // positions of icells
-  char _icells_anchors[6]; // anchors of icells  
-  int _facets[6];          // facets id
-  int _icells[6];          // incident cells id
-  int _nodes[27];           // nodes id
-  int _corners[12];        // edges id
+  FEP_DEF_3D_CELLS_MEMBERS;
 
 public:
   static const int table_vC_x_fC[8][6];

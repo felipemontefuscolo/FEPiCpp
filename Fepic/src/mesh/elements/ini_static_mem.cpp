@@ -30,10 +30,10 @@
 template<> const int Edge<Order>::table_fC_x_vC[2][1] = {{0},{1}};          \
 template<> const int Edge<Order>::table_fC_x_nC[2][1] = {{0},{1}};          \
                                                                             \
-template<> const int Edge<Order>::table_bC_x_vC[0][0] = {};                 \
-template<> const int Edge<Order>::table_bC_x_nC[0][0] = {};                 \
-template<> const int Edge<Order>::table_fC_x_bC[0][0] = {};                 \
-template<> const int Edge<Order>::table_bC_x_fC[0][0] = {};                 \
+template<> const int Edge<Order>::table_bC_x_vC[/*0*/1][/*0*/1] = {{-1}}; /*avoid annoying compiler*/  \
+template<> const int Edge<Order>::table_bC_x_nC[/*0*/1][/*0*/1] = {{-1}}; /*avoid annoying compiler*/  \
+template<> const int Edge<Order>::table_fC_x_bC[/*0*/1][/*0*/1] = {{-1}}; /*avoid annoying compiler*/  \
+template<> const int Edge<Order>::table_bC_x_fC[/*0*/1][/*0*/1] = {{-1}}; /*avoid annoying compiler*/  \
 template<> const int Edge<Order>::table_vC_x_fC[2][1] = {{0},{1}};
 
 FEPIC_INSTANTIATE_MEMBERS_FUN(1)

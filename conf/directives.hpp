@@ -24,12 +24,12 @@
 
 /* user config */
 #ifdef _OPENMP
-#  define FEP_HAS_OPENMP 0
+//#  define FEP_HAS_OPENMP
 #endif
 
-#define FEP_HAS_OMPTL 0
-#define FEP_HAS_METIS 0
-#define FEP_HAS_BOOST 0
+// #define FEP_HAS_OMPTL
+// #define FEP_HAS_METIS
+// #define FEP_HAS_BOOST
 
 #define FEPIC_DEBUG_ON
 
@@ -47,7 +47,7 @@
 
 
 
-#if FEP_HAS_OPENMP
+#ifdef FEP_HAS_OPENMP
 #   define FEP_PRAGMA_OMP(x) FEP_DO_PRAGMA(omp x)
 #   define FEP_DO_PRAGMA(x) _Pragma ( #x ) // _Pragma eh soh pra linux?
 #else

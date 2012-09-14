@@ -47,10 +47,10 @@ public:
   virtual void getCoord(Real *coord) const = 0;
   virtual Real getCoord(int const i) const = 0;
   virtual Real const* getCoord() const = 0;
-  virtual void pushIncidCell(int cid, char pos) = 0;
+  virtual void pushIncidCell(int cid, int pos) = 0;
   virtual int  numConnectedComps() const = 0;
   virtual bool isSingular() const = 0;
-  virtual void replacesIncidCell(int cid, int cid_subs, char cid_subs_pos) = 0;
+  virtual void replacesIncidCell(int cid, int cid_subs, int cid_subs_pos) = 0;
   virtual void getIthIncidCell(int ith, int &ic, int &pos) const = 0;
   virtual void clearIncidences() = 0;
   virtual bool inBoundary() const = 0;
@@ -148,7 +148,7 @@ public:
    *  @param cid cell id.
    *  @param pos position of this node on the cell cid.
    */ 
-  void pushIncidCell(int cid, char pos)
+  void pushIncidCell(int cid, int pos)
   {
     FEPIC_CHECK(cid>=0 && pos >=0, "Point::pushIncidCell: invalid argument", std::invalid_argument);
     
@@ -158,7 +158,7 @@ public:
     if (this->_icell<0)
     {
       this->_icell = cid;
-      this->_icell_pos = pos;
+      this->_icell_pos = static_cast<char>( pos );
       return;
     }
     else
@@ -166,7 +166,7 @@ public:
       std::list<std::pair<int,char> >::iterator it = std::find_if(_incidences.begin(), _incidences.end(), _RemoveCriteria(cid));
         
       if (it == _incidences.end())
-        _incidences.push_back(std::make_pair(cid,pos));
+        _incidences.push_back(std::make_pair(cid,static_cast<char>( pos )));
     }
     
   }
@@ -203,7 +203,7 @@ public:
    * @param cid_subs id of an incident cell that will replace the cid. if cid_subs<0,
    * then cid is just removed.
    */ 
-  void replacesIncidCell(int cid, int cid_subs, char cid_subs_pos)
+  void replacesIncidCell(int cid, int cid_subs, int cid_subs_pos)
   {
     if (this->_icell == cid)
     {
@@ -225,13 +225,13 @@ public:
       else // replaces
       {
         this->_icell = cid_subs;
-        this->_icell_pos = cid_subs_pos;
+        this->_icell_pos = static_cast<char>(  cid_subs_pos  );
         return;
       }
     }
     else
     {
-      std::replace_if(_incidences.begin(), _incidences.end(), _RemoveCriteria(cid), std::make_pair(cid_subs,cid_subs_pos));
+      std::replace_if(_incidences.begin(), _incidences.end(), _RemoveCriteria(cid), std::make_pair(cid_subs, static_cast<char>(cid_subs_pos) ));
     }
     
   } // end replacesIncidCell()

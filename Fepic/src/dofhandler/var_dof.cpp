@@ -288,7 +288,8 @@ void VarDofs::getFacetDofs(int *dofs, CellElement const* facet) const
   Cell const* icell = _mesh_ptr->getCell(facet->getIncidCell());
   const int pos = facet->getPosition();
 
-  int vtcs_ids[n_vtcs_p_facet];
+  //int vtcs_ids[n_vtcs_p_facet];
+  int *vtcs_ids = new int [n_vtcs_p_facet];
   icell->getFacetVerticesId(pos, vtcs_ids);
 
   // vertices
@@ -300,7 +301,8 @@ void VarDofs::getFacetDofs(int *dofs, CellElement const* facet) const
     }
   }
 
-  int crns_ids[n_crns_p_facet];
+  //int crns_ids[n_crns_p_facet];
+  int *crns_ids = new int [n_crns_p_facet];
   icell->getFacetCornersId(pos, crns_ids);
   
   // corners
@@ -323,6 +325,10 @@ void VarDofs::getFacetDofs(int *dofs, CellElement const* facet) const
     }
   }
 
+  delete [] vtcs_ids;
+  vtcs_ids = NULL;
+  delete [] crns_ids;
+  crns_ids = NULL;
 }
 
 void VarDofs::getCornerDofs(int *dofs, CellElement const* corner) const
@@ -332,7 +338,8 @@ void VarDofs::getCornerDofs(int *dofs, CellElement const* corner) const
   Cell const* icell = _mesh_ptr->getCell(corner->getIncidCell());
   const int pos = corner->getPosition();
 
-  int vtcs_ids[n_vtcs_p_corner];
+  //int vtcs_ids[n_vtcs_p_corner];
+  int *vtcs_ids = new int [n_vtcs_p_corner];
   icell->getCornerVerticesId(pos, vtcs_ids);
 
 
@@ -355,7 +362,9 @@ void VarDofs::getCornerDofs(int *dofs, CellElement const* corner) const
       *dofs++ = _corners_dofs(crn_id,j);
     }
   }
-
+  
+  delete [] vtcs_ids;
+  vtcs_ids = NULL;
 }
 
 void VarDofs::getVertexDofs(int *dofs, CellElement const* point) const

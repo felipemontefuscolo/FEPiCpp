@@ -51,12 +51,7 @@ public:
   virtual ~Tetrahedron4() {}
   
 protected:
-  char _icells_pos[4];      // positions of icells
-  char _icells_anchors[4];  // anchors of icells  
-  int  _nodes[4];      // nodes id
-  int  _facets[4];     // facets id
-  int  _icells[4];     // incident cells id
-  int  _corners[6];    // edges id
+  FEP_DEF_3D_CELLS_MEMBERS;
 
 public:
   static const int table_vC_x_fC[4][6];
@@ -99,12 +94,7 @@ public:
   virtual ~Tetrahedron10() {}
 
 protected:
-  char _icells_pos[4];      // positions of icells
-  char _icells_anchors[4];  // anchors of icells  
-  int  _facets[4];     // facets id
-  int  _icells[4];     // incident cells id
-  int  _corners[6];    // edges id
-  int  _nodes[10];      // nodes id
+  FEP_DEF_3D_CELLS_MEMBERS;
 
 public:
   static const int table_vC_x_fC[4][6];

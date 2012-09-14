@@ -6,7 +6,7 @@
 #include <set>
 #include <utility>
 #include <iterator>
-#if (FEP_HAS_OPENMP)
+#ifdef FEP_HAS_OPENMP
 #  include "omp.h"
 #endif
 #include "../mesh/enums.hpp"
@@ -68,11 +68,13 @@ public:
   typedef          SeqList_const_iterator<Self>           const_iterator;
 
   // build TypeHas_reserve singnature checker.
-  // mem_fun_name, mem_fun_return, qualif, mem_fun_args
-  FEP_BUILD_MEM_FUN_CHECKER(reserve,reserve, void, , typename T::size_type);
-  FEP_BUILD_MEM_FUN_CHECKER(capacity,capacity, typename T::size_type, const, );
+  // suffix,mem_fun_name, mem_fun_return, qualif, mem_fun_args
+  //FEP_BUILD_MEM_FUN_CHECKER(reserve,reserve, void, /*empty*/ , typename T::size_type);
+  //FEP_BUILD_MEM_FUN_CHECKER(capacity,capacity, typename T::size_type, const, /*empty*/);
+  FEP_BUILD_MEM_FUN_CHECKER_1ARG(reserve,reserve, void, ;char none_qualif , typename T::size_type);
+  FEP_BUILD_MEM_FUN_CHECKER_0ARG(capacity,capacity, typename T::size_type, const);
 
-  explicit SeqList(float grow_f=0.05) : _grow_factor(grow_f), _n_reserve_calls(0),
+  explicit SeqList(float grow_f=0.05f) : _grow_factor(grow_f), _n_reserve_calls(0),
                                         _data(), _disabled_idcs(), _actived_beg(_data.begin())
                                         {}
 
@@ -126,9 +128,9 @@ public:
   {
     int const N = size();
     int const start = tid*(N/nthreads) + ((N%nthreads) < tid ? (N%nthreads) : tid);
-    int const end   = start + N/nthreads + ((N%nthreads) > tid);
+    int const end_   = start + N/nthreads + ((N%nthreads) > tid);
     iterator e = begin(tid,nthreads);
-    for (int i = 0; i < end-start; ++i)
+    for (int i = 0; i < end_-start; ++i)
       ++e;
     return e;
   }
@@ -147,9 +149,9 @@ public:
   {
     int const N = size();
     int const start = tid*(N/nthreads) + ((N%nthreads) < tid ? (N%nthreads) : tid);
-    int const end   = start + N/nthreads + ((N%nthreads) > tid);
+    int const end_   = start + N/nthreads + ((N%nthreads) > tid);
     const_iterator e = begin(tid,nthreads);
-    for (int i = 0; i < end-start; ++i)
+    for (int i = 0; i < end_-start; ++i)
       ++e;
     return e;
   }
@@ -216,7 +218,7 @@ public:
   void resize(size_type s)
   {
     if (s > _data.size())
-      _impl_reserve(_data, static_cast<size_type>( s*(1. + _grow_factor) ) );
+      _impl_reserve(_data, static_cast<size_type>( static_cast<float>(s)*(1.0f + _grow_factor) ) );
     _data.resize(s);
     _update_member_beg();
   }

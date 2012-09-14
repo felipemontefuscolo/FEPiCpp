@@ -54,7 +54,62 @@
  * 
  * reference: http://stackoverflow.com/questions/257288/is-it-possible-to-write-a-c-template-to-check-for-a-functions-existence
  */ 
-#define FEP_BUILD_MEM_FUN_CHECKER(suffix, mem_fun_name, mem_fun_return, qualif, ...)    \
+
+// this is the best version, but is not supported by some compiler .. sad ..
+// DO NOT DELETE IT!!
+/* 
+          #define FEP_BUILD_MEM_FUN_CHECKER(suffix, mem_fun_name, mem_fun_return, qualif, ...)    \
+            template <class Type>                                                 \
+            class TypeHas_##suffix                                                \
+            {                                                                     \
+                template <typename T, T> struct TypeCheck;                        \
+                                                                                  \
+                typedef char Yes;                                                 \
+                typedef long No;                                                  \
+                                                                                  \
+                template <typename T> struct Aux                                  \
+                {                                                                 \
+                    typedef mem_fun_return (T::*fptr)(__VA_ARGS__) qualif;        \
+                };                                                                \
+                                                                                  \
+                template <typename T> static Yes check(TypeCheck< typename Aux<T>::fptr,  \
+                                                       &T::mem_fun_name >*);              \
+                template <typename T> static No  check(...);                              \
+                                                                                          \
+            public:                                                                       \
+                static bool const value = (sizeof(check<Type>(0)) == sizeof(Yes));        \
+            }
+
+*/
+
+/* about FEP_BUILD_MEM_FUN_CHECKER:
+ * 
+ * struct TypeCheck:This type won't compile if the second template parameter isn't of type T,
+ *        so I can put a function pointer type in the first parameter and the function
+ *        itself in the second thus checking that the function has a specific signature.
+ * struct AuxA helper struct to hold the declaration of the function pointer.
+ *        Change it if the function signature changes.
+ */ 
+
+
+
+
+
+/*
+ * 
+ * 
+ * 
+ * 
+ *  variants of FEP_BUILD_MEM_FUN_CHECKER in standard C++ 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * */ 
+
+// suffix,mem_fun_name, mem_fun_return, qualif, mem_fun_args
+#define FEP_BUILD_MEM_FUN_CHECKER_0ARG(suffix, mem_fun_name, mem_fun_return, qualif)    \
   template <class Type>                                                 \
   class TypeHas_##suffix                                                \
   {                                                                     \
@@ -65,7 +120,7 @@
                                                                         \
       template <typename T> struct Aux                                  \
       {                                                                 \
-          typedef mem_fun_return (T::*fptr)(__VA_ARGS__) qualif;        \
+          typedef mem_fun_return (T::*fptr)() qualif;        \
       };                                                                \
                                                                         \
       template <typename T> static Yes check(TypeCheck< typename Aux<T>::fptr,  \
@@ -76,14 +131,45 @@
       static bool const value = (sizeof(check<Type>(0)) == sizeof(Yes));        \
   }
 
-/* about FEP_BUILD_MEM_FUN_CHECKER:
- * 
- * struct TypeCheck:This type won't compile if the second template parameter isn't of type T,
- *        so I can put a function pointer type in the first parameter and the function
- *        itself in the second thus checking that the function has a specific signature.
- * struct AuxA helper struct to hold the declaration of the function pointer.
- *        Change it if the function signature changes.
- */ 
+// suffix,mem_fun_name, mem_fun_return, qualif, mem_fun_args
+#define FEP_BUILD_MEM_FUN_CHECKER_1ARG(suffix, mem_fun_name, mem_fun_return, qualif, arg1)    \
+  template <class Type>                                                 \
+  class TypeHas_##suffix                                                \
+  {                                                                     \
+      template <typename T, T> struct TypeCheck;                        \
+                                                                        \
+      typedef char Yes;                                                 \
+      typedef long No;                                                  \
+                                                                        \
+      template <typename T> struct Aux                                  \
+      {                                                                 \
+          typedef mem_fun_return (T::*fptr)(arg1) qualif;        \
+      };                                                                \
+                                                                        \
+      template <typename T> static Yes check(TypeCheck< typename Aux<T>::fptr,  \
+                                             &T::mem_fun_name >*);              \
+      template <typename T> static No  check(...);                              \
+                                                                                \
+  public:                                                                       \
+      static bool const value = (sizeof(check<Type>(0)) == sizeof(Yes));        \
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

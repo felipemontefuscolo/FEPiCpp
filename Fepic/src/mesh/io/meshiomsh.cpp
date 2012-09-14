@@ -405,7 +405,8 @@ void MeshIoMsh::readFileMsh(const char* filename, Mesh * mesh)
   if (mesh->cellDim()>2)
   {
     const int n_corners_per_facet = mesh->numCornersPerFacet();
-    int facet_facets[n_corners_per_facet];
+    // int facet_facets[n_corners_per_facet];
+    int *facet_facets = new int [n_corners_per_facet];
     Facet const* facet;
     Corner* corner;
     for (int i = 0; i < mesh->numFacetsTotal(); ++i)
@@ -422,6 +423,9 @@ void MeshIoMsh::readFileMsh(const char* filename, Mesh * mesh)
           corner->setTag(facet->getTag());
       }
     }
+    
+    delete [] facet_facets;
+    facet_facets = NULL;
   }
 
   fclose(file_ptr);

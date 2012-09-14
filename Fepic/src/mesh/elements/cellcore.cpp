@@ -103,7 +103,7 @@ void _CellCore<CellT>::getFacetCornersId(int f, int * corns) const
 template<typename CellT>
 bool _CellCore<CellT>::isCorner(int const* vtcs, int &f) const
 {
-  int corner_vtcs[CellT::n_vertices_per_corner];
+  int corner_vtcs[CellT::n_vertices_per_corner + (CellT::dim==1)];
 
   if (CellT::dim==3)
   {

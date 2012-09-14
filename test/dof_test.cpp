@@ -99,7 +99,7 @@ TEST(AssignsDofsTest, WithTri3)
   int dofs[] = {-2,-2,-2,-2,-2,-2,-2,-2};
   int * dofs_end = dofs+sizeof(dofs)/sizeof(int);
   int nn;
-  Cell *cell;
+  //Cell *cell;
   CellElement *l;
   for (int k = 0; k < mesh->numNodesTotal(); ++k)
   {

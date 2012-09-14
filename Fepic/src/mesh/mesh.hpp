@@ -41,7 +41,7 @@ typedef _MeshIterator<Corner> corner_iterator;
 class Mesh
 {
 protected:
-  explicit Mesh(int sd=0, ECellType fept=UNDEFINED_CELLT);
+  Mesh(ECellType fept=UNDEFINED_CELLT);
 
   // iterators
   template<class> friend class _MeshIterator;
@@ -83,7 +83,7 @@ public:
   template<class CT, int SD>
   static Mesh* create()
   {
-    return new SMesh<CT,SD>;
+    return static_cast<Mesh*>(  new SMesh<CT,SD>  );
   }
 
   static Mesh* create(ECellType type, int spacedim = -1);
@@ -310,6 +310,7 @@ class SMesh : public Mesh
 
 public:
 
+  
   typedef Cell_Type               CellT;
   typedef PointX<Spacedim>        PointT;
   typedef Facet                   FacetT;
@@ -337,15 +338,18 @@ public:
   typedef typename CornerList::const_iterator CornerConstIteratorT;
 
 
-  explicit SMesh() : Mesh(-1, CellT::fep_tag)
+  explicit SMesh() : Mesh(CellT::fep_tag)
   {
   };
 
+
+
   ~SMesh(){};
 
-protected:
+private:
   SMesh(SMesh const&) : Mesh() {};
 
+protected:
   Cell*   incCell(Cell*);
   Point*  incPoint(Point*);
   Facet*  incFacet(Facet*);
@@ -682,13 +686,13 @@ public:
   void setUpConnectedComponentsId();
   int numConnectedComponents() const
   {
-    return _connected_compL.size();
+    return static_cast<int>( _connected_compL.size() );
   }
   
   void setUpBoundaryComponentsId();
   int numBoundaryComponents() const
   {
-    return _boundary_compL.size();
+    return static_cast<int>( _boundary_compL.size() );
   }
 
   void getConnectedComponentsPicks(int *comps, int *cells) const
@@ -1108,7 +1112,7 @@ public:
   */
   int numCells() const
   {
-    return _cellL.size();
+    return static_cast<int>( _cellL.size() );
   }
 
   /** Retorna o número de células.
@@ -1116,7 +1120,7 @@ public:
   */
   int numCellsTotal() const
   {
-    return _cellL.total_size();
+    return static_cast<int>( _cellL.total_size() );
   }
 
   /** Retorna o número de nós.
@@ -1124,7 +1128,7 @@ public:
   */
   int numNodes() const
   {
-    return _pointL.size();
+    return static_cast<int>( _pointL.size() );
   }
 
   /** Retorna no número de nós.
@@ -1132,7 +1136,7 @@ public:
   */
   int numNodesTotal() const
   {
-    return _pointL.total_size();
+    return static_cast<int>( _pointL.total_size() );
   }
 
   int numVertices() const;
@@ -1142,7 +1146,7 @@ public:
   */
   int numFacets() const
   {
-    return _facetL.size();
+    return static_cast<int>( _facetL.size() );
   }
 
   /** Retorna o número de facets.
@@ -1150,7 +1154,7 @@ public:
   */
   int numFacetsTotal() const
   {
-    return _facetL.total_size();
+    return static_cast<int>( _facetL.total_size() );
   }
 
   /** Retorna número de corners.
@@ -1159,10 +1163,10 @@ public:
   int numCorners() const
   {
     if (CellT::dim==3)
-      return _cornerL.size();
+      return static_cast<int>( _cornerL.size() );
     else
     // FIXME: high orders nodes are not corners
-      return _pointL.total_size();
+      return static_cast<int>( _pointL.total_size() );
   }
 
   /** Retorna o número de corners.
@@ -1171,10 +1175,10 @@ public:
   int numCornersTotal() const
   {
     if (CellT::dim==3)
-      return _cornerL.total_size();
+      return static_cast<int>( _cornerL.total_size() );
     else
       // FIXME: high orders nodes are not corners
-      return _pointL.total_size();
+      return static_cast<int>( _pointL.total_size() );
   }
 
   int numNodesPerCell() const

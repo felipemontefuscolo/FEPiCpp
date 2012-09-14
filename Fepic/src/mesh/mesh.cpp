@@ -7,11 +7,11 @@
 #include <map>
 #include <deque>
 #include <cmath>
-#if (FEP_HAS_OPENMP)
+#ifdef FEP_HAS_OPENMP
   #include <omp.h>
 #endif
 
-#if (FEP_HAS_OMPTL)
+#ifdef FEP_HAS_OMPTL
   #include <omptl/omptl_algorithm>
 #else
   //using namespace omptl = std;
@@ -33,8 +33,7 @@
 #endif
 
 
-
-Mesh::Mesh(int /*sd*/, ECellType fept)
+Mesh::Mesh(ECellType fept)
 {
   //_spacedim = sd; // BROKEN
   _cell_fep_tag = fept;
@@ -43,6 +42,7 @@ Mesh::Mesh(int /*sd*/, ECellType fept)
 
   timer = Timer();
 }
+
 
 /** @param nc_ number of cells.
  *  @param type mesh cell type.
@@ -323,10 +323,10 @@ void SMesh<CT,SD>::printInfo() const
 template<class CT, int SD>
 void SMesh<CT,SD>::printStatistics() const
 {
-  int cc = _cellL.capacity(),
-      pc = _pointL.capacity(),
-      fc = _facetL.capacity(),
-      bc = _cornerL.capacity();
+  int cc = static_cast<int> ( _cellL.capacity() ),
+      pc = static_cast<int> ( _pointL.capacity() ),
+      fc = static_cast<int> ( _facetL.capacity() ),
+      bc = static_cast<int> ( _cornerL.capacity() );
   printf("\n"
          "Cell list: \n"
          "  -allocated:      %d\n"
@@ -1274,6 +1274,7 @@ void SMesh<CT,SD>::buildCellsAdjacency()
 
     }
 
+
   } // end parallel
 
   // assigns facets to cells that remained
@@ -1480,7 +1481,7 @@ void SMesh<CT,SD>::buildNodesAdjacency()
     //  }
     //}
 
-    int fnodes[nnpf];
+    std::vector<int> fnodes(nnpf);
     // then the cells that is in boundary
     //FEP_PRAGMA_OMP(for)
     for (int C = 0; C < num_cells; ++C)
@@ -1491,7 +1492,7 @@ void SMesh<CT,SD>::buildNodesAdjacency()
 
       for (int j = 0; j < CT::n_facets; ++j)
       {
-        cell->CellT::getFacetNodesId(j,fnodes);
+        cell->CellT::getFacetNodesId(j,fnodes.data());
         //if (cell->CellT::getIncidCell(j) >= 0)
         //  continue;
         for (int n = 0; n < nnpf; ++n)
@@ -1577,7 +1578,7 @@ void SMesh<CT,SD>::_setConnectedComponentsId(Cell * c_ini, int cc_id)
 template<class CT, int SD>
 void SMesh<CT,SD>::setUpConnectedComponentsId()
 {
-  const int n_cells_total = _cellL.size();
+  const int n_cells_total = static_cast<int> (_cellL.size() );
   _connected_compL.clear();
   
   //clear conn comp ids
@@ -1862,8 +1863,8 @@ template<class CT, int SD>
 void SMesh<CT,SD>::getCenterCoord(Facet const* facet, Real* Xc) const
 {
   int ids[CT::n_nodes_per_facet];
-  int i;
-  for (i=0; i<SD; ++i) Xc[i]=0;
+
+  for (int i=0; i<SD; ++i) Xc[i]=0;
 
   MeshT::getFacetNodesId(facet,ids);
 
@@ -1871,16 +1872,22 @@ void SMesh<CT,SD>::getCenterCoord(Facet const* facet, Real* Xc) const
     for (int j = 0; j < SD; ++j)
       Xc[j] += MeshT::getNode( ids[i] )->getCoord(j);
 
-  for (i=0; i<SD; ++i)
+  for (int i=0; i<SD; ++i)
     Xc[i] /= CT::n_vertices_per_facet;
 
 }
 template<class CT, int SD>
 void SMesh<CT,SD>::getCenterCoord(Corner const* corner, Real* Xc) const
 {
-  int ids[CT::n_nodes_per_corner];
-  int i;
-  for (i=0; i<SD; ++i) Xc[i]=0;
+  if (CT::dim<3)
+  {
+    Xc = NULL;
+    return;
+  }
+  
+  int ids[CT::n_nodes_per_corner + (CT::dim<3)]; // (CT::dim<3) is to avoid compiler annoying
+
+  for (int i=0; i<SD; ++i) Xc[i]=0;
 
   MeshT::getCornerNodesId(corner,ids);
 
@@ -1888,7 +1895,7 @@ void SMesh<CT,SD>::getCenterCoord(Corner const* corner, Real* Xc) const
     for (int j = 0; j < SD; ++j)
       Xc[j] += MeshT::getNode( ids[i] )->getCoord(j);
 
-  for (i=0; i<SD; ++i)
+  for (int i=0; i<SD; ++i)
     Xc[i] /= CT::n_vertices_per_corner + (CT::dim==1?1:0);
 
 }
@@ -1914,6 +1921,7 @@ template class SMesh<Triangle6,2>;
 template class SMesh<Quadrangle4,2>;
 template class SMesh<Quadrangle8,2>;
 template class SMesh<Quadrangle9,2>;
+
 
 //template class SMesh<Edge2,1>;
 //template class SMesh<Edge3,1>; // em 1d, nó bolha é inútil ... utilizar DofHandler para dofs interior

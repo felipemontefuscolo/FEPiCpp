@@ -104,7 +104,7 @@ public:
   ~Quadrature_() {}
 
 protected:
-  Real _points[MaxNumQPoints][Dim!=0?Dim:0];
+  Real _points[MaxNumQPoints][Dim!=0?Dim:1];
   Real _weights[MaxNumQPoints];
 
 };

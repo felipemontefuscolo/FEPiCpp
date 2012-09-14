@@ -44,15 +44,15 @@ void MeshIoVtk::attachMesh(Mesh const* mesh)
 
 void MeshIoVtk::_printPointVtk_1d(Point const* p, FILE *fp) const
 {
-  fprintf(fp, "%lf %d %d\n", p->getCoord(0), 0, 0);
+  fprintf(fp, "%f %d %d\n", static_cast<float>(p->getCoord(0)), 0, 0);
 }
 void MeshIoVtk::_printPointVtk_2d(Point const* p, FILE *fp) const
 {
-  fprintf(fp, "%lf %lf %d\n", p->getCoord()[0], p->getCoord()[1], 0);
+  fprintf(fp, "%f %f %d\n", static_cast<float>(p->getCoord()[0]), static_cast<float>(p->getCoord()[1]), 0);
 }
 void MeshIoVtk::_printPointVtk_3d(Point const* p, FILE *fp) const
 {
-  fprintf(fp, "%lf %lf %lf\n", p->getCoord()[0], p->getCoord()[1], p->getCoord()[2]);
+  fprintf(fp, "%f %f %f\n", static_cast<float>(p->getCoord()[0]), static_cast<float>(p->getCoord()[1]), static_cast<float>(p->getCoord()[2]));
 }
 
 
@@ -302,7 +302,7 @@ void MeshIoVtk::addNodeScalarVtk(const char* nome_var, DefaultGetDataVtk const& 
   
   for (int i=0; i<num_pts_total; ++i)
     if (!(_mesh->getNode(i)->disabled()))
-      fprintf(file_ptr,"%lf\n", data.get_data_r(i));
+      fprintf(file_ptr,"%f\n", static_cast<float>(data.get_data_r(i)));
 
   fprintf(file_ptr,"\n");
 
@@ -335,7 +335,7 @@ void MeshIoVtk::addCellScalarVtk(const char* nome_var, DefaultGetDataVtk const& 
     if (_mesh->getCell(i)->disabled())
       continue;
     for (int j = 0; j < n_cd; ++j)
-      fprintf(file_ptr,"%lf\n", data.get_data_r(i));
+      fprintf(file_ptr,"%f\n", static_cast<float>(data.get_data_r(i)));
   }
 
   fprintf(file_ptr,"\n");

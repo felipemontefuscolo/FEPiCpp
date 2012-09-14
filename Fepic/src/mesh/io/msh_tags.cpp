@@ -125,7 +125,7 @@ namespace _MshTagsInitializers
     return tab;
   }
   
-};
+}
 
 
 int numNodeForMshTag(EMshTag type)

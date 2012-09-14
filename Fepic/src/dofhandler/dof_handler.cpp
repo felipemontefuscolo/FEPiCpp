@@ -26,7 +26,7 @@
 #include <cstdio>
 #include "../util/cuthil_mckee.hpp"
 
-#if (FEP_HAS_BOOST)
+#ifdef FEP_HAS_BOOST
 #  include <boost/config.hpp>
 #  include "boost/graph/adjacency_list.hpp"
 #  include "boost/graph/graph_utility.hpp"
@@ -36,7 +36,7 @@
 #  include <boost/graph/bandwidth.hpp>
 #endif
 
-#if (FEP_HAS_METIS)
+#ifdef FEP_HAS_METIS
 extern "C" {
 	#include <metis.h>
 };
@@ -274,7 +274,7 @@ void DofHandler::getMetisCSRfromTable(int* adjncy, int* xadj, std::vector<std::s
 
 
 void DofHandler::metisRenumber()
-#if (FEP_HAS_METIS)
+#ifdef FEP_HAS_METIS
 {
   const int n_dofs = numDofs();
 
@@ -339,7 +339,7 @@ void DofHandler::metisRenumber()
 
 
 void DofHandler::boostMinimumDegreeRenumber()
-#if (FEP_HAS_BOOST)
+#ifdef FEP_HAS_BOOST
 {
   typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS>  Graph;
   typedef boost::graph_traits<Graph>::vertex_descriptor Vertex;
@@ -412,7 +412,7 @@ void DofHandler::boostMinimumDegreeRenumber()
 
 
 void DofHandler::boostCuthillMcKeeRenumber()
-#if (FEP_HAS_BOOST)
+#ifdef FEP_HAS_BOOST
 {
   typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS, 
                           boost::property<boost::vertex_color_t, boost::default_color_type,

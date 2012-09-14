@@ -37,7 +37,7 @@ public:
   };
 
 protected:
-  explicit _Labelable(int tag, int flags=0) : _tag(tag), _flags(flags)
+  explicit _Labelable(int tag, int flags=0) : _tag(static_cast<unsigned char>(tag)), _flags(static_cast<unsigned char>(flags))
   {
     FEPIC_CHECK((tag>=0)&&(tag<tag_size), "tag number must be less than "+std::string(itoa(tag_size))+" and greater than 0", std::out_of_range);
     FEPIC_CHECK((flags>=0)&&(flags<flags_size), "wrong flags", std::out_of_range);
@@ -55,7 +55,7 @@ public:
   void setTag(int tag)
   {
     FEPIC_CHECK(unsigned(tag)<tag_size, "tag number must be less or equal "+std::string(itoa(tag_size)), std::out_of_range);
-    _tag = tag;
+    _tag = static_cast<unsigned char>( tag );
   }
 
   bool disabled() const
@@ -65,7 +65,7 @@ public:
 
   void disabled(bool disable_this)
   {
-    _flags = disable_this ? (_flags | mk_disabled) : (_flags & (~mk_disabled));
+    _flags = static_cast<unsigned char>(   disable_this ? (_flags | static_cast<unsigned char>(mk_disabled)) : (_flags & (~static_cast<unsigned char>(mk_disabled)))  );
   }
 
   bool marked() const
@@ -75,7 +75,7 @@ public:
 
   void marked(bool mark_this)
   {
-    _flags = mark_this ? (_flags | mk_marked) : (_flags & (~mark_this));
+    _flags = static_cast<unsigned char>(  mark_this ? (_flags | static_cast<unsigned char>(mk_marked)) : (_flags & (~static_cast<unsigned char>(mark_this)))  );
   }
 
   bool visited() const
@@ -85,7 +85,7 @@ public:
 
   void visited(bool visit)
   {
-    _flags = visit ? (_flags | mk_visited) : (_flags & (~mk_visited));
+    _flags = static_cast<unsigned char>( visit ? (_flags | static_cast<unsigned char>(mk_visited)) : (_flags & (~static_cast<unsigned char>(mk_visited)))  );
   }
 
   bool getFlag(unsigned flag_no) const
@@ -100,12 +100,13 @@ public:
 
   void setFlag(int flag_no, bool set=true)
   {
-    _flags = set ? (_flags | (1<<flag_no)) : (_flags & (~(1<<flag_no)));
+    unsigned char const one = static_cast<unsigned char>(1);
+    _flags = static_cast<unsigned char>(  set ? (_flags | (one<<flag_no)) : (_flags & (~(one<<flag_no)))  );
   }
 
   void setFlags(int flags)
   {
-    _flags = flags;
+    _flags = static_cast<unsigned char>( flags );
   }
 
   //inline void printFlags() const

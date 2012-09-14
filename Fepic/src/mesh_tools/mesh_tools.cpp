@@ -445,7 +445,7 @@ std::pair<bool, Cell *> MeshToolsTri::searchConvexPoint(Real const* x, Cell cons
     
   }
   
-};
+}
 
 
 
