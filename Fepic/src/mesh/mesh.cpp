@@ -153,7 +153,7 @@ int SMesh<CT,SD>::numVertices() const
     for (int i=0; i<num_nodes_total; ++i)
     {
       p = MeshT::getNode(i);
-      if (p->disabled())
+      if (p->isDisabled())
         continue;
       if (MeshT::isVertex(p))
         ++num_vtcs_local;
@@ -1084,7 +1084,7 @@ void SMesh<CT,SD>::buildCellsAdjacency()
     for (int k = 0; k < n_cells_total; ++k)
     {
       cell = static_cast<CT const*>(this->MeshT::getCell(k));
-      if (cell->CT::disabled())
+      if (cell->CT::isDisabled())
         continue;
 
       ii = this->MeshT::getCellContigId(k);
@@ -1290,7 +1290,7 @@ void SMesh<CT,SD>::buildCellsAdjacency()
       for (int i=0; i<n_cells_total; ++i)
       {
         cell = MeshT::getCell(i);
-        if (cell->disabled())
+        if (cell->isDisabled())
           continue;
         for (int j = 0; j < CT::n_facets; ++j)
         {
@@ -1345,7 +1345,7 @@ void SMesh<CT,SD>::buildCorners_Template(typename EnableIf<(celldim==2)>::type*)
   //  for (int i = 0; i < num_nodes; ++i)
   //  {
   //    point = this->MeshT::getNode(i);
-  //    if (point->disabled() || (!this->MeshT::isVertex(point)))
+  //    if (point->isDisabled() || (!this->MeshT::isVertex(point)))
   //      continue;
   //
   //    C = point->PointT::getIncidCell();
@@ -1403,7 +1403,7 @@ void SMesh<CT,SD>::buildCorners_Template(typename EnableIf<(celldim==3)>::type*)
     for (int C = 0; C < num_cells; ++C)
     {
       cell = this->MeshT::getCell(C);
-      if (cell->CT::disabled())
+      if (cell->CT::isDisabled())
         continue;
 
 
@@ -1467,7 +1467,7 @@ void SMesh<CT,SD>::buildNodesAdjacency()
     //for (int C = 0; C < num_cells; ++C)
     //{
     //  cell = this->MeshT::getCell(C);
-    //  if (cell->CT::disabled())
+    //  if (cell->CT::isDisabled())
     //    continue;
     //
     //  for (int n = 0; n < nodes_p_cell; ++n)
@@ -1487,7 +1487,7 @@ void SMesh<CT,SD>::buildNodesAdjacency()
     for (int C = 0; C < num_cells; ++C)
     {
       cell = this->MeshT::getCell(C);
-      if (cell->CT::disabled())
+      if (cell->CT::isDisabled())
         continue;
 
       for (int j = 0; j < CT::n_facets; ++j)
@@ -1539,7 +1539,7 @@ void SMesh<CT,SD>::_setConnectedComponentsId(Cell * c_ini, int cc_id)
   CellT *oc, *current;
 
   cells2setup.push_back(this->getCellId(c_ini));
-  this->MeshT::getCell(cells2setup.front())->CT::visited(true);
+  this->MeshT::getCell(cells2setup.front())->CT::setVisitedTo(true);
   
   while (!cells2setup.empty())
   {
@@ -1552,10 +1552,10 @@ void SMesh<CT,SD>::_setConnectedComponentsId(Cell * c_ini, int cc_id)
       if (current->CT::getIncidCell(i) < 0)
         continue;
       oc = this->MeshT::getCell(current->CT::getIncidCell(i));
-      if (!oc->CT::visited())
+      if (!oc->CT::isVisited())
       {
         cells2setup.push_back(this->getCellId(oc));
-        oc->CT::visited(true);
+        oc->CT::setVisitedTo(true);
       }
     }
     
@@ -1570,7 +1570,7 @@ void SMesh<CT,SD>::_setConnectedComponentsId(Cell * c_ini, int cc_id)
   FEP_PRAGMA_OMP(parallel for)
   for (int i = 0; i < n_cells_total; ++i)
   {
-    this->MeshT::getCell(i)->CT::visited(false);
+    this->MeshT::getCell(i)->CT::setVisitedTo(false);
   }  
   
 }
@@ -1595,7 +1595,7 @@ void SMesh<CT,SD>::setUpConnectedComponentsId()
   for (int i = 0; i < n_cells_total; ++i)
   {
     cell = this->MeshT::getCell(i);
-    if (cell->CT::disabled())
+    if (cell->CT::isDisabled())
       continue;
     if ( cell->CT::getConnectedComponentId() >= 0)
       continue;
@@ -1608,7 +1608,7 @@ void SMesh<CT,SD>::setUpConnectedComponentsId()
 template<class CT, int SD>
 void SMesh<CT,SD>::_setBoundaryComponentsId(Facet * f_ini, int bc_id)
 {
-  FEPIC_ASSERT(((unsigned)this->getFacetId(f_ini) < this->numFacetsTotal()) && !f_ini->disabled(), " invalid pointer",std::invalid_argument );
+  FEPIC_ASSERT(((unsigned)this->getFacetId(f_ini) < this->numFacetsTotal()) && !f_ini->isDisabled(), " invalid pointer",std::invalid_argument );
 
   if (CellT::dim==1 || CellT::dim==3)
   {
@@ -1646,7 +1646,7 @@ void SMesh<CT,SD>::setUpBoundaryComponentsId()
   for (int i = 0; i < n_facets_total; ++i)
   {
     facet = this->MeshT::getFacet(i);
-    if (!this->inBoundary(facet) || facet->FacetT::getBoundaryComponentId() >= 0 || facet->FacetT::disabled())
+    if (!this->inBoundary(facet) || facet->FacetT::getBoundaryComponentId() >= 0 || facet->FacetT::isDisabled())
       continue;
     this->MeshT::_setBoundaryComponentsId(facet,id);
      _boundary_compL.insert(std::pair<int,int>(id, i));

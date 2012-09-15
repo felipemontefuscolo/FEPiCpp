@@ -117,7 +117,7 @@ void VarDofs::setUp()
       // check for tag
       is_considered = _considered_tags.empty() ? true : checkValue(_considered_tags.begin(), _considered_tags.end(), tag);
       
-      if (!(mesh->isVertex(p)) || !is_considered || p->disabled() )
+      if (!(mesh->isVertex(p)) || !is_considered || p->isDisabled() )
         continue;
       for (unsigned j = 0; j < _vertices_dofs.cols(); ++j)
         _vertices_dofs(i,j) = dof_counter++;
@@ -138,7 +138,7 @@ void VarDofs::setUp()
       // check for tag
       is_considered = _considered_tags.empty() ? true : checkValue(_considered_tags.begin(), _considered_tags.end(), tag);
       
-      if (!is_considered || p->disabled())
+      if (!is_considered || p->isDisabled())
         continue;
       for (unsigned j = 0; j < _corners_dofs.cols(); ++j)
         _corners_dofs(i,j) = dof_counter++;
@@ -159,7 +159,7 @@ void VarDofs::setUp()
       // check for tag
       is_considered = _considered_tags.empty() ? true : checkValue(_considered_tags.begin(), _considered_tags.end(), tag);
       
-      if (!is_considered || p->disabled())
+      if (!is_considered || p->isDisabled())
         continue;
       for (unsigned j = 0; j < _facets_dofs.cols(); ++j)
         _facets_dofs(i,j) = dof_counter++;
@@ -181,7 +181,7 @@ void VarDofs::setUp()
       // check for tag
       is_considered = _considered_tags.empty() ? true : checkValue(_considered_tags.begin(), _considered_tags.end(), tag);
       
-      if (!is_considered || p->disabled())
+      if (!is_considered || p->isDisabled())
         continue;
       for (unsigned j = 0; j < _cells_dofs.cols(); ++j)
         _cells_dofs(i,j) = dof_counter++;

@@ -424,7 +424,7 @@ void MeshIoMsh::readFileMsh(const char* filename, Mesh * mesh)
     for (int i = 0; i < mesh->numFacetsTotal(); ++i)
     {
       facet = mesh->getFacet(i);
-      if (facet->disabled())
+      if (facet->isDisabled())
         continue;
       mesh->getCell(facet->getIncidCell())->getFacetCornersId(facet->getPosition(), facet_facets);
 

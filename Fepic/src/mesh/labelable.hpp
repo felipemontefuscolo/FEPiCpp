@@ -58,34 +58,34 @@ public:
     _tag = static_cast<unsigned char>( tag );
   }
 
-  bool disabled() const
+  bool isDisabled() const
   {
     return _flags & mk_disabled;
   }
 
-  void disabled(bool disable_this)
+  void setDisabledTo(bool disable_this)
   {
-    _flags = static_cast<unsigned char>(   disable_this ? (_flags | static_cast<unsigned char>(mk_disabled)) : (_flags & (~static_cast<unsigned char>(mk_disabled)))  );
+    _flags = disable_this ? (_flags | mk_disabled) : (_flags & (~mk_disabled))  ;
   }
 
-  bool marked() const
+  bool isMarked() const
   {
     return _flags & mk_marked;
   }
 
-  void marked(bool mark_this)
+  void setMarkedTo(bool mark_this)
   {
-    _flags = static_cast<unsigned char>(  mark_this ? (_flags | static_cast<unsigned char>(mk_marked)) : (_flags & (~static_cast<unsigned char>(mark_this)))  );
+    _flags = mark_this ? (_flags | mk_marked) : (_flags & (~mark_this))  ;
   }
 
-  bool visited() const
+  bool isVisited() const
   {
     return _flags & mk_visited;
   }
 
-  void visited(bool visit)
+  void setVisitedTo(bool visit)
   {
-    _flags = static_cast<unsigned char>( visit ? (_flags | static_cast<unsigned char>(mk_visited)) : (_flags & (~static_cast<unsigned char>(mk_visited)))  );
+    _flags =  visit ? (_flags | mk_visited) : (_flags & (~mk_visited))  ;
   }
 
   bool getFlag(unsigned flag_no) const
@@ -101,7 +101,7 @@ public:
   void setFlag(int flag_no, bool set=true)
   {
     unsigned char const one = static_cast<unsigned char>(1);
-    _flags = static_cast<unsigned char>(  set ? (_flags | (one<<flag_no)) : (_flags & (~(one<<flag_no)))  );
+    _flags =  set ? (_flags | (one<<flag_no)) : (_flags & (~(one<<flag_no)))  ;
   }
 
   void setFlags(int flags)
@@ -119,6 +119,7 @@ public:
   //}
   
 protected:
+  // poderia usar bit-field, mas não é portável
   unsigned char _tag; // 0 a 256
   unsigned char _flags; // 8 flags ...
 

@@ -86,16 +86,16 @@ TEST(LabelableTest, Constructors) { // also copy assignment
       {
         idx = 4*b0 + 2*b1 + b2;
         EXPECT_EQ(tags[idx], L[idx].getTag());
-        EXPECT_EQ(b0, L[idx].disabled());
-        EXPECT_EQ(b1, L[idx].marked());
-        EXPECT_EQ(b2, L[idx].visited());
+        EXPECT_EQ(b0, L[idx].isDisabled());
+        EXPECT_EQ(b1, L[idx].isMarked());
+        EXPECT_EQ(b2, L[idx].isVisited());
       }
 
   // check deafult constructor
   EXPECT_EQ(0, L[8].getTag());
-  EXPECT_EQ(0, L[8].marked());
-  EXPECT_EQ(0, L[8].disabled());
-  EXPECT_EQ(0, L[8].visited());
+  EXPECT_EQ(0, L[8].isMarked());
+  EXPECT_EQ(0, L[8].isDisabled());
+  EXPECT_EQ(0, L[8].isVisited());
 
 }
 
@@ -116,9 +116,9 @@ TEST(LabelableTest, SetUps) {
         idx = 4*b0 + 2*b1 + b2;
         tags[idx] = rand()%255;
         L[idx].setTag(tags[idx]);
-        L[idx].disabled(b0);
-        L[idx].marked(b1);
-        L[idx].visited(b2);
+        L[idx].setDisabledTo(b0);
+        L[idx].setMarkedTo(b1);
+        L[idx].setVisitedTo(b2);
       }
 
 
@@ -129,9 +129,9 @@ TEST(LabelableTest, SetUps) {
       {
         idx = 4*b0 + 2*b1 + b2;
         EXPECT_EQ(tags[idx], L[idx].getTag());
-        EXPECT_EQ(b0, L[idx].disabled());
-        EXPECT_EQ(b1, L[idx].marked());
-        EXPECT_EQ(b2, L[idx].visited());
+        EXPECT_EQ(b0, L[idx].isDisabled());
+        EXPECT_EQ(b1, L[idx].isMarked());
+        EXPECT_EQ(b2, L[idx].isVisited());
       }
 
 

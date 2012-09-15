@@ -373,12 +373,12 @@ public:
       // coloca os vizinhos na pilha
       int const c_a = c0->getIncidCell((f_free+1)%3);
       int const c_b = c0->getIncidCell((f_free+2)%3);
-      if (c_a>=0 && !mesh->getCell(c_a)->visited())
+      if (c_a>=0 && !mesh->getCell(c_a)->isVisited())
         cells_id.push_back(c_a);
-      if (c_b>=0 && !mesh->getCell(c_b)->visited())
+      if (c_b>=0 && !mesh->getCell(c_b)->isVisited())
         cells_id.push_back(c_b);
         
-      c0->visited(true);
+      c0->setVisitedTo(true);
       ++cth_cell;
       
     }
@@ -386,7 +386,7 @@ public:
     // remove os flags
     for (std::vector<int>::iterator cit = cells_id.begin(); cit != cells_id.end(); ++cit)
     {
-      mesh->getCell(*cit)->visited(false);
+      mesh->getCell(*cit)->setVisitedTo(false);
     }
     
     

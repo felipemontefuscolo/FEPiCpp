@@ -175,10 +175,10 @@ public:
   void disable(int del_id)
   {
     ContainerIterator it = ContainerIterator(&_data[del_id]);
-    if (it->disabled())
+    if (it->isDisabled())
       return;
     _disabled_idcs.insert(del_id);
-    it->disabled(true);
+    it->setDisabledTo(true);
 
     if (it == _actived_beg)
       _update_member_beg();
@@ -293,7 +293,7 @@ protected:
   void _update_member_beg()
   {
     _actived_beg = _data.begin();
-    while (_actived_beg != _data.end() && _actived_beg->disabled())
+    while (_actived_beg != _data.end() && _actived_beg->isDisabled())
       ++_actived_beg;
   }
 
@@ -363,7 +363,7 @@ public:
   operator++()
   {
     ++_iter_to_t;
-    while(_iter_to_t != _ptr_to_seq->_data.end() && _iter_to_t->disabled())
+    while(_iter_to_t != _ptr_to_seq->_data.end() && _iter_to_t->isDisabled())
       ++_iter_to_t;
     return *this;
   }
@@ -373,7 +373,7 @@ public:
   {
     Self tmp = *this;
     ++_iter_to_t;
-    while(_iter_to_t != _ptr_to_seq->_data.end() && _iter_to_t->disabled())
+    while(_iter_to_t != _ptr_to_seq->_data.end() && _iter_to_t->isDisabled())
       ++_iter_to_t;
     return tmp;
   }
@@ -382,7 +382,7 @@ public:
   operator--()
   {
     --_iter_to_t;
-    while(_iter_to_t != _ptr_to_seq->_data.begin() && _iter_to_t->disabled())
+    while(_iter_to_t != _ptr_to_seq->_data.begin() && _iter_to_t->isDisabled())
       --_iter_to_t;
     return *this;
   }
@@ -392,7 +392,7 @@ public:
   {
     Self tmp = *this;
     --_iter_to_t;
-    while(_iter_to_t != _ptr_to_seq->_data.begin() && _iter_to_t->disabled())
+    while(_iter_to_t != _ptr_to_seq->_data.begin() && _iter_to_t->isDisabled())
       --_iter_to_t;
     return tmp;
   }
@@ -470,7 +470,7 @@ public:
   operator++()
   {
     ++_iter_to_t;
-    while(_iter_to_t != _ptr_to_seq->_data.end() && _iter_to_t->disabled())
+    while(_iter_to_t != _ptr_to_seq->_data.end() && _iter_to_t->isDisabled())
       ++_iter_to_t;
     return *this;
   }
@@ -480,7 +480,7 @@ public:
   {
     Self tmp = *this;
     ++_iter_to_t;
-    while(_iter_to_t != _ptr_to_seq->_data.end() && _iter_to_t->disabled())
+    while(_iter_to_t != _ptr_to_seq->_data.end() && _iter_to_t->isDisabled())
       ++_iter_to_t;
     return tmp;
   }
@@ -489,7 +489,7 @@ public:
   operator--()
   {
     --_iter_to_t;
-    while(_iter_to_t != _ptr_to_seq->_data.begin() && _iter_to_t->disabled())
+    while(_iter_to_t != _ptr_to_seq->_data.begin() && _iter_to_t->isDisabled())
       --_iter_to_t;
     return *this;
   }
@@ -499,7 +499,7 @@ public:
   {
     Self tmp = *this;
     --_iter_to_t;
-    while(_iter_to_t != _ptr_to_seq->_data.begin() && _iter_to_t->disabled())
+    while(_iter_to_t != _ptr_to_seq->_data.begin() && _iter_to_t->isDisabled())
       --_iter_to_t;
     return tmp;
   }
