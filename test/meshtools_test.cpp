@@ -217,8 +217,8 @@ TEST(MtoolsinCircle2dTest, WithTri3)
   Real coord[2] = {0.45, 0.18};
   Real coord_old[2];
   
-  mesh->getNode(8)->getCoord(coord_old);
-  mesh->getNode(8)->setCoord(coord);
+  mesh->getNode(8)->getCoord(coord_old,2);
+  mesh->getNode(8)->setCoord(coord,2);
   
   EXPECT_FALSE(MeshTools::inCircle2d(mesh->getCell(9), 1, mesh));
   EXPECT_FALSE(MeshTools::inCircle2d(mesh->getCell(2), 1, mesh));
@@ -264,10 +264,10 @@ TEST(MtoolsFlippingMovingPointsTest, WithTri3)
     {
       double X[2];
       p = mesh->getNode(i);
-      p->getCoord(X);
+      p->getCoord(X,2);
       double a = 1. - sqrt(X[0]*X[0] + X[1]*X[1]);
       double Xnew[2] = {X[0] + dt*a*(-X[1]), X[1] + dt*a*X[0]};
-      p->setCoord(Xnew);
+      p->setCoord(Xnew,2);
     }
     
     // Delaunay
@@ -325,10 +325,10 @@ TEST(MtoolsFlippingMovingPointsTest, WithTri6)
     {
       double X[2];
       p = mesh->getNode(i);
-      p->getCoord(X);
+      p->getCoord(X,2);
       double a = 1. - sqrt(X[0]*X[0] + X[1]*X[1]);
       double Xnew[2] = {X[0] + dt*a*(-X[1]), X[1] + dt*a*X[0]};
-      p->setCoord(Xnew);
+      p->setCoord(Xnew,2);
     }
     
     // Delaunay

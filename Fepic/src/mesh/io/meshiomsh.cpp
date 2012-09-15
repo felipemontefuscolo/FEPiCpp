@@ -164,7 +164,7 @@ void MeshIoMsh::readFileMsh(const char* filename, Mesh * mesh)
       FEPIC_ASSERT(false, "invalid msh format", std::runtime_error);
     sscanf(buffer, "%d %lf %lf %lf", &node_number, &coord[0], &coord[1], &coord[2]);
     FEPIC_ASSERT(node_number==i+1, "wrong file format", std::invalid_argument);
-    mesh->getNode(i)->setCoord(coord);
+    mesh->getNode(i)->setCoord(coord,spacedim);
   }
   // os pontos não estão completas: falta atribuir os labels
 

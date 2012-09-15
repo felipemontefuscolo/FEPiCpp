@@ -42,46 +42,13 @@ public:
          n_nodes_per_facet=0,
          n_nodes_per_corner=1};
 
-  virtual int  spaceDim() const = 0;
-  virtual void setCoord(Real const*const coord) = 0;
-  virtual void getCoord(Real *coord) const = 0;
-  virtual Real getCoord(int const i) const = 0;
-  virtual Real const* getCoord() const = 0;
-  virtual void pushIncidCell(int cid, int pos) = 0;
-  virtual int  numConnectedComps() const = 0;
-  virtual bool isSingular() const = 0;
-  virtual void replacesIncidCell(int cid, int cid_subs, int cid_subs_pos) = 0;
-  virtual void getIthIncidCell(int ith, int &ic, int &pos) const = 0;
-  virtual void clearIncidences() = 0;
-  virtual bool inBoundary() const = 0;
-  virtual void setAsBoundary(bool ib) = 0;
-  
-  // inherited from CellElement
-  virtual int getIncidCell() const = 0;
-  virtual int getPosition() const = 0;
-  virtual void setIncidCell(int icell_id) = 0;
-  virtual void setPosition(int pos) = 0;
-  virtual void setIncidence(int icell_id, int pos) = 0;
-
-  virtual ~Point(){};
-};
-
-
-template<int sdim>
-class PointX : public Point
-{
-public:
-  enum {spacedim=sdim};
-
   static const EMshTag msh_tag = MSH_PNT;
-
-  //typedef Eigen::Matrix<Real, spacedim, 1> VecT;
 
   /** Construtor.
   *  @param coord um vetor com Dim elementos que armazena a coordenada.
   *  @param label seu rótulo.
   */
-  explicit PointX(double const* coord, int ic=-1, char pos=-1, char stat=0) : _icell(ic), _icell_pos(pos), _status(stat)
+  Point(double const* coord, int spacedim, int ic=-1, int pos=-1, int tag=0, int flags=0, int stat=0) : CellElement(ic, pos, tag, flags, stat)
   {
     for (int i = 0; i < spacedim; ++i)
       _coord[i] = coord[i];
@@ -89,20 +56,12 @@ public:
 
   /** Construtor.
   */
-  PointX()  : _icell(-1), _icell_pos(-1), _status(0) {}
-  // construtor de cópia não necessário, pois não há nenhum ponteiro.
-
-  /** @return a dimensão do espaço.
-  */
-  int spaceDim() const
-  {
-    return spacedim;
-  }
+  Point() {}
 
   /** Define a coordenada deste ponto.
   *  @param coord um vetor com a coordenada.
   */
-  void setCoord(Real const*const coord)
+  void setCoord(Real const* coord, int spacedim)
   {
     for (int i = 0; i < spacedim; ++i)
       _coord[i] = coord[i];
@@ -111,7 +70,7 @@ public:
   /** Retorna a coordenada deste ponto em coord.
   *  @param[out] coord a coordenada.
   */
-  void getCoord(Real *coord) const
+  void getCoord(Real *coord, int spacedim) const
   {
     for (int i = 0; i < spacedim; ++i)
       coord[i] = _coord[i];
@@ -129,21 +88,6 @@ public:
     return _coord[i];
   }
 
-  ///** Retorna a distância até a coordenada p.
-  //*/
-  //Real getDistance(Eigen::VectorXr const& p) const
-  //{
-    //return sqrt( (_coord-p).dot(_coord-p) );
-  //}
-
-  ///** Retorna a distância até o ponto p.
-  //*/
-  //Real getDistance(Point const*const p) const
-  //{
-    //PointX const*const pp = static_cast<PointX const*const>(p);
-    //return sqrt( (_coord - pp->_coord).dot(_coord - pp->_coord) );
-  //}
-
   /** add a singular cell if it does not yet exist.
    *  @param cid cell id.
    *  @param pos position of this node on the cell cid.
@@ -152,13 +96,13 @@ public:
   {
     FEPIC_CHECK(cid>=0 && pos >=0, "Point::pushIncidCell: invalid argument", std::invalid_argument);
     
-    if (cid==this->_icell) // nothing to do
+    if (cid==getIncidCell()) // nothing to do
       return;
     else
-    if (this->_icell<0)
+    if (getIncidCell()<0)
     {
-      this->_icell = cid;
-      this->_icell_pos = static_cast<char>( pos );
+      setIncidCell(cid);
+      setPosition(pos);
       return;
     }
     else
@@ -175,12 +119,12 @@ public:
    */
   int numConnectedComps() const
   {
-    return _incidences.size()+(_icell>=0);
+    return _incidences.size()+(getIncidCell()>=0);
   }
 
   bool isSingular() const
   {
-    if (this->_icell < 0)
+    if (getIncidCell() < 0)
       return _incidences.size() > 1;
     else
       return !_incidences.empty();
@@ -192,12 +136,6 @@ public:
     int _id_to_compare;
   };
 
-  //class _PairIntChar { public:
-  //  bool operator() (std::pair<int,char> const& p, int const& a) {return p.first<a};
-  //  bool operator() (int const& a, std::pair<int,char> const& p) {return a<p.first};
-  //  bool operator() (std::pair<int,char> const& p, std::pair<int,char> const& a) {return p.first<a.first};
-  //};
-
   /** consistently replaces (or removes) a incident cell id (singular or not).
    * @param cid id of the incident cell of this node that will be replaced/removed.
    * @param cid_subs id of an incident cell that will replace the cid. if cid_subs<0,
@@ -205,27 +143,27 @@ public:
    */ 
   void replacesIncidCell(int cid, int cid_subs, int cid_subs_pos)
   {
-    if (this->_icell == cid)
+    if (getIncidCell() == cid)
     {
       if (cid_subs < 0) // remove
       {
         if (_incidences.empty())
         {
-          this->_icell = -1;
+          setIncidCell(-1);
           return;
         }
         else
         {
-          this->_icell     = _incidences.front().first;
-          this->_icell_pos = _incidences.front().second;
+          setIncidCell(_incidences.front().first);
+          setPosition(_incidences.front().second);
           _incidences.pop_front();
           return;
         }
       }
       else // replaces
       {
-        this->_icell = cid_subs;
-        this->_icell_pos = static_cast<char>(  cid_subs_pos  );
+        setIncidCell(cid_subs);
+        setPosition(cid_subs_pos);
         return;
       }
     }
@@ -243,7 +181,7 @@ public:
     
     if (ith == 0)
     {
-      ic = _icell;
+      ic = getIncidCell();
       return;
     }
     
@@ -270,67 +208,32 @@ public:
   void clearIncidences()
   {
     this->_incidences.clear();
-    this->_icell = -1;
+    setIncidCell(-1);
     this->setAsBoundary(false);
   }
 
   /// @return true if this point is a boundary point, false otherwise.
   bool inBoundary() const
   {
-    return _status & mk_inboundary;
+    return CellElement::_status & mk_inboundary;
   }
 
   /// @param ib set ib=true(false) to (un)set this point as boundary point.
   void setAsBoundary(bool ib)
   {
-    _status = ib ? (_status | mk_inboundary) : (_status & (~mk_inboundary));
+    CellElement::_status = ib ? (_status | mk_inboundary) : (_status & (~mk_inboundary));
   }  
 
-  // --- inherited from CellElement ------------------------------------------------- //
-  
-  virtual int getIncidCell() const
-  {
-    return _icell;
-  }
-  virtual int getPosition() const
-  {
-    return _icell_pos;
-  }
-  virtual void setIncidCell(int icell_id)
-  {
-    _icell = icell_id;
-  }
-  virtual void setPosition(int pos)
-  {
-    _icell_pos = pos;
-  }
-  /// is the same as doing setIncidCell(icell_id); setPosition(pos);
-  virtual void setIncidence(int icell_id, int pos)
-  {
-    _icell = icell_id;
-    _icell_pos = pos;
-  }
 
   // ----------------------------------------------- inherited from CellElement ----- //
 
-
-
   /// Destrutor.
-  ~PointX() {}
+  ~Point() {}
 
 protected:
-  Real _coord[sdim];
-
-  int   _icell;
-  char  _icell_pos;
-  char  _status;      // See it as an array of flags. See enum Masks.
-  char  _padd[2];     // wasted space due to memory alignment.  supposing sizeof(int)=4 and sizeof(char)=1.
-
-  // main icell not included .. this list is for singular nodes only
-  // the reason for this is to save memory.
-  //                  iC  poiC
+  Real  _coord[3]; // x,y,z
   std::list<std::pair<int,char> > _incidences; // for singular nodes
-  
+
   enum Masks {
     mk_inboundary = (1<<0)
   };

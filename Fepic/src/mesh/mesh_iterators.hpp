@@ -25,7 +25,7 @@
 
 #include <iterator>
 
-template<class,int> class SMesh;
+template<class> class SMesh;
 class Mesh;
 class Cell;
 
@@ -33,7 +33,7 @@ class Cell;
 template<class VirtualEntity>
 class _MeshIterator
 {
-  template<class,int> friend class SMesh;
+  template<class> friend class SMesh;
   friend class Mesh;
   
   typedef _MeshIterator Self;

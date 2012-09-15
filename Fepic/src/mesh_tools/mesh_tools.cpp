@@ -375,8 +375,8 @@ bool MeshTools::flipTri(Cell * acell, int afid, Mesh *mesh, bool move_edge_nds)
       int const sdim = mesh->spaceDim();
       Real pleft[3], pright[3];
       
-      mesh->getNode(acell->getNodeId(afid_plus2))->getCoord(pright); // right node
-      mesh->getNode(bcell->getNodeId(bfid_plus2))->getCoord(pleft);  // left node
+      mesh->getNode(acell->getNodeId(afid_plus2))->getCoord(pright,sdim); // right node
+      mesh->getNode(bcell->getNodeId(bfid_plus2))->getCoord(pleft,sdim);  // left node
       
       // compute the center of the new edge
       pleft[0] = 0.5*(pleft[0]+pright[0]);
@@ -385,7 +385,7 @@ bool MeshTools::flipTri(Cell * acell, int afid, Mesh *mesh, bool move_edge_nds)
         pleft[2] = 0.5*(pleft[2]+pright[2]);
       
       p = mesh->getNode(acell->getNodeId(afid_plus1+3)); // mid node
-      p->setCoord(pleft);
+      p->setCoord(pleft, sdim);
     }
     
   }

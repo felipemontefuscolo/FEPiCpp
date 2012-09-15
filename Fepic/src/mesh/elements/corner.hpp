@@ -25,16 +25,16 @@
 #include "cell_element.hpp"
 #include "../labelable.hpp"
 
-class Corner : public _NodeLessElement
+class Corner : public CellElement
 {
 public:
   Corner(int ic,
          int pos,
          int tag,
-         int flags) : _NodeLessElement(ic,pos,tag,flags)
-  {}
+         int flags) : CellElement(ic,pos,tag,flags)
+  {};
   
-  Corner() : _NodeLessElement() {}
+  Corner() {}
   
 };
 

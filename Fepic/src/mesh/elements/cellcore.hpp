@@ -113,9 +113,11 @@ public:
   virtual int  numFacets() const = 0;
   virtual int  numNodes() const = 0;
   virtual int  numVerticesPerFacet() const = 0;
-  virtual void resetFacetsId() = 0;
-  virtual void resetCornersId() = 0;
+  virtual void reset() = 0;
+  virtual void resetFacets() = 0;
+  virtual void resetCorners() = 0;
   virtual void resetIncidCells() = 0;
+  virtual void resetNodes() = 0;
 //  virtual void setConnectedComponentId(int id) = 0;
   virtual void setCornerId(int corner, int cornerid) = 0;
   virtual void setFacetId(int facet, int facetid) = 0;
@@ -157,31 +159,7 @@ class _CellCore  : public Cell
 protected:
   _CellCore()
   {
-
-    for (int i = 0; i < CellT::n_nodes; ++i)
-      THIS->_nodes[i] = -1;
-
-    for (int i = 0; i < CellT::n_facets; ++i)
-    {
-      THIS->_icells[i] = -1;
-      THIS->_icells_pos[i] = -1;
-    }
-
-    if (CellT::dim != 1)
-    {
-      for (int i = 0; i < CellT::n_facets; ++i)
-        THIS->_facets[i] = -1;
-    }
-
-    if (CellT::dim==3)
-    {
-      for (int i = 0; i < CellT::n_facets; ++i)
-        THIS->_icells_anchors[i] = -1;
-
-      for (int i = 0; i < CellT::n_corners; ++i)
-        THIS->_corners[i] = -1;
-    }
-
+    reset();
   };
   //_CellCore(_CellCore const&) {};
 
@@ -373,7 +351,15 @@ public:
     return CellT::n_vertices_per_facet;
   }
 
-  void resetFacetsId()
+  void reset()
+  {
+    resetIncidCells();
+    resetFacets();
+    resetCorners();
+    resetNodes();
+  }
+
+  void resetFacets()
   {
     if (CellT::dim > 1)
     {
@@ -389,7 +375,7 @@ public:
     }
   }
 
-  void resetCornersId()
+  void resetCorners()
   {
     if (CellT::dim==3)
       for (int i = 0; i < CellT::n_corners; ++i)
@@ -405,6 +391,14 @@ public:
     {
       THIS->_icells[i] = -1;
     }
+  }
+
+  void resetNodes()
+  {
+    for (int i = 0; i < CellT::n_nodes; ++i)
+    {
+      THIS->_nodes[i] = -1;
+    }    
   }
 
   void setCornerId(int corner, int cornerid)

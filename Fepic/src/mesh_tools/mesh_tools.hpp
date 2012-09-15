@@ -75,6 +75,8 @@ public:
   template<class Functor>
   static bool cutConvexPart(Real *x0, Cell *c0, Functor const& F, Mesh * mesh)
   {
+    const int sdim = mesh->spaceDim();
+    
     std::vector<int> cells_id;
     std::vector<Real> slices;
     
@@ -82,7 +84,7 @@ public:
 
     std::vector<int> mid_nodes(cells_id.size()*6, int(-1));
     
-    PointX<2> pt;
+    Point pt;
     Triangle3 __sometri;
     Cell*  ce = &__sometri;
     Facet fa;
@@ -138,7 +140,7 @@ public:
         if (mid_nodes[6*cth + 2*f] < 0) // não foi construído nessa f
         {
           //cria os vértices
-          pt.setCoord(xmid);
+          pt.setCoord(xmid, sdim);
           pt.setTag(c0->getTag());
           mid_nodes[6*cth + 2*f + 0] = mesh->pushPoint(&pt);
           mid_nodes[6*cth + 2*f + 1] = mesh->pushPoint(&pt);
@@ -296,6 +298,8 @@ public:
   {
     FEPIC_ASSERT(x0!=NULL && c_ini!=NULL && mesh!=NULL,"NULL pointers",std::runtime_error);
     
+    const int sdim = mesh->spaceDim();
+    
     int f_nodes[2];
     
     cells_id.clear();
@@ -326,13 +330,13 @@ public:
         {
           
           Real const xp[] = {xa[0]+1.e-7, xa[1]+1.e-7};
-          mesh->getNode(node_id)->setCoord(xp);
+          mesh->getNode(node_id)->setCoord(xp,sdim);
           
           // de novo, só que pra outro lado
           if (fabs(F(xa))<TOL)
           {
             Real const xpp[] = {xa[0]-2.e-7, xa[1]};
-            mesh->getNode(node_id)->setCoord(xpp);
+            mesh->getNode(node_id)->setCoord(xpp,sdim);
           };
         };
       }

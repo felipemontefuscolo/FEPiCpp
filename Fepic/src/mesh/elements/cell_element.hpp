@@ -28,40 +28,14 @@ class CellElement : public _Labelable
 {
 public:  
   
-  CellElement(int tag, int flags) :  _Labelable(tag,flags) {}
+  CellElement(int icell, int position, int tag, int flags, int status = 0)
+      :  _Labelable(tag,flags),
+         _status(static_cast<char>(status)),
+         _position(static_cast<char>(position)),
+         _icell(icell)
+         {}
   CellElement() : _Labelable() {}
 
-  virtual int getIncidCell() const = 0;
-  virtual int getPosition() const = 0;
-  virtual void setIncidCell(int icell_id) = 0;
-  virtual void setPosition(int pos) = 0;
-  virtual void setIncidence(int icell_id, int pos) = 0;
-  void copy(CellElement const* other)
-  {
-    this->setTag(other->getTag());
-    this->setFlags(other->getFlags());
-    this->setIncidence(other->getIncidCell(), other->getPosition());
-  }
-
-  ~CellElement() {}
-
-};
-
-
-
-// Facets and corners have this
-class _NodeLessElement : public CellElement
-{
-public:  
-  explicit _NodeLessElement(int ic=-1,
-                               int pos=-1,
-                               int tag=0,
-                               int flags=0) : CellElement(tag,flags),
-                                              _icell_pos(static_cast<char>(pos)),
-                                              _icell(ic)
-                                              {}
-  
-  // --- inherited from CellElement --- ///
   
   int getIncidCell() const
   {
@@ -70,7 +44,7 @@ public:
   
   int getPosition() const
   {
-    return _icell_pos;
+    return static_cast<int>(_position);
   }
   
   void setIncidCell(int icell_id)
@@ -81,26 +55,33 @@ public:
   // facet lid of incident cell
   void setPosition(int pos)
   {
-    _icell_pos = static_cast<char>( pos );
+    _position = static_cast<char>( pos );
   }
   
   /// is the same as doing setIncidCell(icell_id); setPosition(pos);
   void setIncidence(int icell_id, int pos)
   {
     _icell = icell_id;
-    _icell_pos = static_cast<char>( pos );
+    _position = static_cast<char>( pos );
   }
-  // --------------------------------------- //
   
-  
-  
-  ~_NodeLessElement() {}
+  void copy(CellElement const* other)
+  {
+    this->setTag(other->getTag());
+    this->setFlags(other->getFlags());
+    this->setIncidence(other->getIncidCell(), other->getPosition());
+  }
+
+  ~CellElement() {}
 
 protected:
   // manter nessa ordem mesmo, para evitar padding
-  char  _icell_pos;   // facet lid of incident cell
+  char  _status;      // only Point use it; 
+  char  _position;   // facet lid of incident cell
   int   _icell;
   
 };
+
+
 
 #endif

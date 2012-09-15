@@ -31,7 +31,6 @@ class UndefinedCell;
 class _Labelable;
 
 class Point;
-template<int sdim> class PointX;
 
 class Cell;
 template<class Derived> class _CellCore;

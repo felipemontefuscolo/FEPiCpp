@@ -30,7 +30,7 @@
 #include "../util/list_type.hpp"
 #include "mesh_iterators.hpp"
 
-template<class CT, int SD> class SMesh;
+template<class CT> class SMesh;
 
 typedef _MeshIterator<Cell>   cell_iterator;
 typedef _MeshIterator<Point>  point_iterator;
@@ -41,7 +41,7 @@ typedef _MeshIterator<Corner> corner_iterator;
 class Mesh
 {
 protected:
-  Mesh(ECellType fept=UNDEFINED_CELLT);
+  Mesh(ECellType fept=UNDEFINED_CELLT, int spacedim = -1);
 
   // iterators
   template<class> friend class _MeshIterator;
@@ -78,20 +78,9 @@ public:
   virtual corner_iterator cornerBegin(int tid, int nthreads) = 0;
   virtual corner_iterator cornerEnd(int tid, int nthreads) = 0;
 
-  typedef Mesh* (*CreatorMemFunPtr)();
-
-  template<class CT, int SD>
-  static Mesh* create()
-  {
-    return static_cast<Mesh*>(  new SMesh<CT,SD>  );
-  }
-
   static Mesh* create(ECellType type, int spacedim = -1);
 
-
-
   virtual int cellDim() const = 0;
-  virtual int spaceDim() const = 0;
   virtual ECellType cellType() const = 0;
   virtual EMshTag cellMshTag() const = 0;
 
@@ -165,11 +154,12 @@ public:
   template<class Iterator1, class Iterator2>
   void getNodesCoords(Iterator1 first, Iterator1 last, Iterator2 X)
   {
+    int const sdim = this->spaceDim();
     Real const* c;
     while(first != last)
     {
       c = this->getNode(*first++)->getCoord();
-      for (int d = 0; d < this->spaceDim(); ++d)
+      for (int d = 0; d < sdim; ++d)
         *X++ = *c++;
     }
   }
@@ -275,6 +265,11 @@ public:
    */
   virtual void setGrowFactor(float factor) = 0;
 
+  int spaceDim() const
+  {
+    return _spacedim;
+  }
+
   virtual ~Mesh() {};
 
 
@@ -285,6 +280,9 @@ public:
   ECellType _cell_fep_tag;
   EMshTag   _cell_msh_tag;
   bool      _build_adjacency;
+
+protected:
+  int _spacedim;
 
 };
 
@@ -301,7 +299,7 @@ public:
 
 */ // =================================================
 
-template<class Cell_Type, int Spacedim = Cell_Type::dim>
+template<class Cell_Type>
 class SMesh : public Mesh
 {
   template<class> friend class _MeshIterator;
@@ -312,10 +310,10 @@ public:
 
   
   typedef Cell_Type               CellT;
-  typedef PointX<Spacedim>        PointT;
+  typedef Point                   PointT;
   typedef Facet                   FacetT;
   typedef Corner                  CornerT;
-  typedef SMesh<CellT, Spacedim>  MeshT;
+  typedef SMesh<CellT>            MeshT;
 
   //typedef std::vector<CellT>    CellList;
   //typedef std::vector<PointT>   PointList;
@@ -338,11 +336,9 @@ public:
   typedef typename CornerList::const_iterator CornerConstIteratorT;
 
 
-  explicit SMesh() : Mesh(CellT::fep_tag)
+  explicit SMesh(int spacedim) : Mesh(CellT::fep_tag, spacedim)
   {
   };
-
-
 
   ~SMesh(){};
 
@@ -782,11 +778,6 @@ public:
   int cellDim() const
   {
     return CellT::dim;
-  }
-
-  int spaceDim() const
-  {
-    return Spacedim;
   }
 
   ECellType cellType() const
