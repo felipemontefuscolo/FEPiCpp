@@ -1,7 +1,63 @@
+// This file is part of FEPiC++, a toolbox for finite element codes.
+//
+// FEPiC++ is free software; you can redistribute it and/or
+// modify it under the terms of the GNU Lesser General Public
+// License as published by the Free Software Foundation; either
+// version 3 of the License, or (at your option) any later version.
+//
+// Alternatively, you can redistribute it and/or
+// modify it under the terms of the GNU General Public License as
+// published by the Free Software Foundation; either version 2 of
+// the License, or (at your option) any later version.
+//
+// FEPiC++ is distributed in the hope that it will be useful, but WITHOUT ANY
+// WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+// FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License or the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public
+// License and a copy of the GNU General Public License along with
+// FEPiC++. If not, see <http://www.gnu.org/licenses/>.
+
 #include "mesh_tools.hpp"
 #include "Fepic/src/mesh/mesh.hpp"
 #include <vector>
 //#include <type_traits>
+
+
+// WARNING:
+/*
+ *  Antes de implementar uma operação sobre a malha, certifique-se
+ *  operação mantém a consistência da mesma, verificando os seguintes
+ *  itens:
+ * 
+ *  - tag of all elements.
+ * 
+ *  - nodes : _icell                   
+ *            _icell_pos               
+ *            _status                  
+ *            _incidences              
+ *                                     
+ *  - facets : _icell                  
+ *             _icell_pos              
+ *             _bound_comp_id                 
+ * 
+ *  - corners : _icell
+ *              _icell_pos
+ * 
+ *  - cells : _icells_pos 
+ *            _icells_anchors
+ *            _facets
+ *            _icells
+ *            _corners
+ *            _nodes          
+ *            _conn_comp_id
+ * 
+ *  - SMesh : _connected_compL // (connected component vs initial cell id) list
+ *            _boundary_compL  // (boundary component vs initialfacet id) list
+ * 
+ */ 
+
 
 /*
 //int MeshTools::checkConsistency(Mesh *mesh)

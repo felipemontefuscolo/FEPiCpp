@@ -1254,8 +1254,8 @@ private:
   FacetList     _facetL;
   CornerList    _cornerL;
 
-  std::map<int, int>  _connected_compL; // connected component vs initial cell id
-  std::map<int, int>  _boundary_compL;  // boundary component vs initialfacet id
+  std::map<int, int>  _connected_compL; // connected component vs initial cell id list
+  std::map<int, int>  _boundary_compL;  // boundary component vs initialfacet id list
 };
 
 
