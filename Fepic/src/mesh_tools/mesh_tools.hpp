@@ -40,17 +40,7 @@ public:
 
   static void removeCell(Cell * cell, Mesh *mesh);
   
-  static bool flipTri(Cell * cell, int fid, Mesh *mesh, bool move_edge_nds = true);
-  static bool flipTri(Facet* edge, Mesh* mesh, bool move_edge_nds = true)
-  {
-    return flipTri(mesh->getCell(edge->getIncidCell()), edge->getPosition(), mesh, move_edge_nds);
-  }
-
-  static bool inCircle2d(Cell const* cell, const int fid, Mesh const* mesh);
-  static bool inCircle2d(Facet const* edge, Mesh const* mesh)
-  {
-    return inCircle2d(mesh->getCell(edge->getIncidCell()), edge->getPosition(),mesh);
-  }
+  static void readMesh(int n_nodes, int n_cells, int const* nodes, Real const* xyz, Mesh *mesh);
   
 };
 
@@ -58,6 +48,18 @@ public:
 class MeshToolsTri
 {
 public:
+
+  static bool flipEdge(Cell * cell, int fid, Mesh *mesh, bool move_edge_nds = true);
+  static bool flipEdge(Facet* edge, Mesh* mesh, bool move_edge_nds = true)
+  {
+    return flipEdge(mesh->getCell(edge->getIncidCell()), edge->getPosition(), mesh, move_edge_nds);
+  }
+
+  static bool inCircle2d(Cell const* cell, const int fid, Mesh const* mesh);
+  static bool inCircle2d(Facet const* edge, Mesh const* mesh)
+  {
+    return inCircle2d(mesh->getCell(edge->getIncidCell()), edge->getPosition(),mesh);
+  }
 
 
   /** Tri3 only

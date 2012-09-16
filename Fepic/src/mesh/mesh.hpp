@@ -188,11 +188,11 @@ public:
   virtual void pushIncidCell2Point(Point *pt, int iC, int pos) = 0;
 
 
-  virtual void qBuildAdjacency(bool b)
+  void qBuildAdjacency(bool b)
   {
     _build_adjacency = b;
   };
-  virtual bool qBuildAdjacency()
+  bool qBuildAdjacency()
   {
     return _build_adjacency;
   };

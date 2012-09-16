@@ -144,9 +144,9 @@ TEST(MtoolsFlipTest, WithTri3)
   
   vtk_printer.writeVtk();
   
-  MeshTools::flipTri(mesh->getCell( 3), 2, mesh);
-  MeshTools::flipTri(mesh->getCell( 6), 0, mesh);
-  MeshTools::flipTri(mesh->getCell(13), 1, mesh);
+  MeshToolsTri::flipEdge(mesh->getCell( 3), 2, mesh);
+  MeshToolsTri::flipEdge(mesh->getCell( 6), 0, mesh);
+  MeshToolsTri::flipEdge(mesh->getCell(13), 1, mesh);
   
   checkConsistencyTri(mesh);
   
@@ -179,9 +179,9 @@ TEST(MtoolsFlipTest, WithTri6)
   
   //vtk_printer.writeVtk();
   //
-  MeshTools::flipTri(mesh->getCell( 3), 2, mesh);
-  MeshTools::flipTri(mesh->getCell( 6), 0, mesh);
-  MeshTools::flipTri(mesh->getCell(13), 1, mesh);
+  MeshToolsTri::flipEdge(mesh->getCell( 3), 2, mesh);
+  MeshToolsTri::flipEdge(mesh->getCell( 6), 0, mesh);
+  MeshToolsTri::flipEdge(mesh->getCell(13), 1, mesh);
   //
   checkConsistencyTri(mesh);
   
@@ -211,7 +211,7 @@ TEST(MtoolsinCircle2dTest, WithTri3)
   for (int i = 0; i < n_facets_total; ++i)
   {
     f = mesh->getFacet(i);
-    EXPECT_TRUE(MeshTools::inCircle2d(f, mesh));
+    EXPECT_TRUE(MeshToolsTri::inCircle2d(f, mesh));
   }
 
   Real coord[2] = {0.45, 0.18};
@@ -220,8 +220,8 @@ TEST(MtoolsinCircle2dTest, WithTri3)
   mesh->getNode(8)->getCoord(coord_old,2);
   mesh->getNode(8)->setCoord(coord,2);
   
-  EXPECT_FALSE(MeshTools::inCircle2d(mesh->getCell(9), 1, mesh));
-  EXPECT_FALSE(MeshTools::inCircle2d(mesh->getCell(2), 1, mesh));
+  EXPECT_FALSE(MeshToolsTri::inCircle2d(mesh->getCell(9), 1, mesh));
+  EXPECT_FALSE(MeshToolsTri::inCircle2d(mesh->getCell(2), 1, mesh));
   
   delete mesh;
   
@@ -274,9 +274,9 @@ TEST(MtoolsFlippingMovingPointsTest, WithTri3)
     for (int i = 0; i < n_facets_total; ++i)
     {
       f = mesh->getFacet(i);
-      if (!MeshTools::inCircle2d(f, mesh))
+      if (!MeshToolsTri::inCircle2d(f, mesh))
       {
-        MeshTools::flipTri(f, mesh);
+        MeshToolsTri::flipEdge(f, mesh);
       }
     }
     
@@ -335,9 +335,9 @@ TEST(MtoolsFlippingMovingPointsTest, WithTri6)
     for (int i = 0; i < n_facets_total; ++i)
     {
       f = mesh->getFacet(i);
-      if (!MeshTools::inCircle2d(f, mesh))
+      if (!MeshToolsTri::inCircle2d(f, mesh))
       {
-        MeshTools::flipTri(f, mesh, true);
+        MeshToolsTri::flipEdge(f, mesh, true);
       }
     }
     
@@ -348,6 +348,48 @@ TEST(MtoolsFlippingMovingPointsTest, WithTri6)
   
   EXPECT_TRUE(true);  
   
+}
+
+TEST(MtoolsReadMeshTest, WithTri3)
+{
+  Mesh *mesh = NULL;
+  mesh = Mesh::create(TRIANGLE3);
+  
+  MeshTools mtools;
+  MeshIoVtk vtk_printer;
+  
+  vtk_printer.attachMesh(mesh);
+  
+  int const nodes[] = {0,1,3,
+                        1,4,3,
+                        1,2,4,
+                        0,3,5,
+                        4,2,7,
+                        4,7,6,
+                        3,4,6,
+                        3,6,5};
+                        
+  Real const xyz[] = { 0.0, 0.0,
+                        0.5, 0.0,
+                        1.0, 0.0,
+                        0.3, 0.5,
+                        0.6, 0.5,
+                        0.0, 1.0,
+                        0.5, 1.0,
+                        1.0, 1.0 };
+
+  int const nnpc = 3;
+  int const n_cells = sizeof(nodes)/sizeof(int)/nnpc;
+  int const n_nodes = 1 + *std::max_element(nodes, nodes + n_cells*nnpc);
+  
+  mtools.readMesh(n_nodes, n_cells, nodes, xyz, mesh);
+  
+  checkConsistencyTri(mesh);
+  
+  vtk_printer.setOutputFileName("meshes/outtest/array2mesh.vtk");
+  vtk_printer.writeVtk();
+  
+  delete mesh;
 }
 
 //

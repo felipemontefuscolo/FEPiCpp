@@ -236,6 +236,44 @@ void MeshTools::removeCell(Cell * cell, Mesh *mesh)
   mesh->disableCell(id);
 }
 
+/** Read a mesh from input arrays.
+ * 
+ *  @param n_cells number of cells of the mesh.
+ *  
+ *  @param n_nodes number of nodes of the mesh.
+ * 
+ *  @param nodes a vector containing the nodes of the mesh where each
+ *          cell c has nnpc nodes, and where nodes[nnpe*c + i] is the i-th
+ *          node of the cell c.
+ *  @param xyz coordinates of the nodes, where xyz[spacedim*n + i] is
+ *          the ith coordinate of the node n.
+ *  
+ *  @param[out] mesh a pointer to the mesh.
+ */ 
+void MeshTools::readMesh(int n_nodes, int n_cells, int const* nodes, Real const* xyz, Mesh *mesh)
+{
+  FEPIC_ASSERT(mesh!=NULL, "invalid argument", std::runtime_error);
+  
+  int const sdim = mesh->spaceDim();
+  int const nnpe = mesh->numNodesPerCell();
+  
+  mesh->resizePointL(n_nodes);
+  mesh->resizeCellL(n_cells);
+
+  FEP_PRAGMA_OMP(paralle for)
+  for (int n = 0; n < n_nodes; ++n)
+      mesh->getNode(n)->setCoord(&xyz[sdim*n], sdim);
+  
+  FEP_PRAGMA_OMP(paralle for)
+  for (int c = 0; c < n_cells; ++c)
+    for (int i = 0; i < nnpe; ++i)
+      mesh->getCell(c)->setNodeId(i, nodes[nnpe*c + i]);
+  
+  if (mesh->qBuildAdjacency())
+    mesh->buildAdjacency();
+  
+}
+
 
 /** edge flipping for Tri3 and Tri6 cells.
  *  @param acell the cell that will be removed.
@@ -248,7 +286,7 @@ void MeshTools::removeCell(Cell * cell, Mesh *mesh)
  *  @note all tags are kept.
  *  @pre the cells acell and acell->getIncidCell(afid) form a convex quadrilateral.
  */ 
-bool MeshTools::flipTri(Cell * acell, int afid, Mesh *mesh, bool move_edge_nds)
+bool MeshToolsTri::flipEdge(Cell * acell, int afid, Mesh *mesh, bool move_edge_nds)
 {
   /*   
       A-reference                          | B-reference    
@@ -400,7 +438,7 @@ bool MeshTools::flipTri(Cell * acell, int afid, Mesh *mesh, bool move_edge_nds)
  *  @return true if the edge is Delaunay, false otherwise.
  *  @note for two-dimensinal space only.
  */ 
-bool MeshTools::inCircle2d(Cell const* cell, int const fid, Mesh const* mesh)
+bool MeshToolsTri::inCircle2d(Cell const* cell, int const fid, Mesh const* mesh)
 {
   int const ocid = cell->getIncidCell(fid);
   if (ocid<0)
