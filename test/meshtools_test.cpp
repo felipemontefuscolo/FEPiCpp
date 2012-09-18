@@ -78,7 +78,7 @@ void checkConsistencyTri(Mesh *mesh)
         // verifica a face
         f = mesh->getFacet(cell->getFacetId(i));
         int icf = f->getIncidCell();
-        EXPECT_TRUE(icf==myid || icf==cell->getIncidCell(i));
+        EXPECT_TRUE(icf==myid || icf==cell->getIncidCell(i))<<"myid="<<myid<<"; icf="<<icf<<"; i="<<i<<"; cell->getIncidCell(i)="<<cell->getIncidCell(i)<<"\n";
         if (icf==myid)
           EXPECT_TRUE(f->getPosition() == i) << "myid=" << myid<<"; f->getPosition()="<<f->getPosition()<<"; i="<<i<<"\n";
         else
@@ -388,6 +388,49 @@ TEST(MtoolsReadMeshTest, WithTri3)
   
   vtk_printer.setOutputFileName("meshes/outtest/array2mesh.vtk");
   vtk_printer.writeVtk();
+  
+  delete mesh;
+}
+
+TEST(MtoolInsertVertexOnEdgeTest, WithTri3)
+{
+  MeshIoMsh msh_reader;
+  MeshIoVtk vtk_printer;
+  Mesh *mesh = NULL;  
+  MeshToolsTri mtools;
+
+  ECellType cell_t      = TRIANGLE3;
+  const char* mesh_in  = "meshes/complex_tri3.msh";
+  const char* mesh_out = "meshes/outtest/complex.vtk";
+  
+  mesh = Mesh::create(cell_t);
+  msh_reader.readFileMsh(mesh_in, mesh);
+
+  int const n_facets = mesh->numFacetsTotal();
+
+  for (int i = 0; i < n_facets; ++i)
+  {
+    Facet* edge = mesh->getFacet(i);
+    
+    if (edge->isDisabled()) return;
+
+    //checkConsistencyTri(mesh);
+
+    cout << "cell: "<< mesh->getCellId(mesh->getCell(edge->getIncidCell()))<<"; node_id:"<< mesh->getCell(edge->getIncidCell())->getNodeId(edge->getPosition())
+         << "; edge position:" << edge->getPosition() <<"; num_nodes: " <<mesh->numNodes()<< endl;
+    //mtools.insertVertexOnEdge(edge, 0.5, mesh);
+    //vtk_printer.writeVtk();
+    mtools.insertVertexOnEdge(mesh->getCell(edge->getIncidCell()), edge->getPosition(), 0.5, mesh);
+    
+  }
+  
+  vtk_printer.attachMesh(mesh);
+  //vtk_printer.isFamily(true);
+  vtk_printer.setOutputFileName(mesh_out);
+  
+  checkConsistencyTri(mesh);
+  
+  
   
   delete mesh;
 }

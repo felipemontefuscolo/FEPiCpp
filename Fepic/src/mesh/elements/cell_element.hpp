@@ -34,7 +34,7 @@ public:
          _position(static_cast<char>(position)),
          _icell(icell)
          {}
-  CellElement() : _Labelable() {}
+  CellElement() : _Labelable(), _status(0), _position(-1), _icell(-1) {}
 
   
   int getIncidCell() const
@@ -76,7 +76,7 @@ public:
 
 protected:
   // manter nessa ordem mesmo, para evitar padding
-  char  _status;      // only Point use it; 
+  char  _status;     // ONLY POINT USE IT
   char  _position;   // facet lid of incident cell
   int   _icell;
   

@@ -35,7 +35,7 @@ public:
          int bid=-1) : CellElement(ic,pos,tag,flags), _bound_comp_id(bid)
   {}
   
-  Facet() {}
+  Facet() : _bound_comp_id(-1) {}
   
   void setBoundaryComponentId(int id)
   {
@@ -45,7 +45,19 @@ public:
   {
     return _bound_comp_id;
   }
-  
+  void setAllMembers(int const* ic, int const* pos, int const* tag, int const* flags, int const* bound_comp_id)
+  {
+    if (ic != NULL)
+      setIncidCell(*ic);
+    if (pos != NULL)
+      setPosition(*pos);
+    if (tag != NULL)
+      setTag(*tag);
+    if (flags != NULL)
+      setFlags(*flags);
+    if (bound_comp_id != NULL)
+      setBoundaryComponentId(*bound_comp_id);
+  }
   
 private:
   int _bound_comp_id;

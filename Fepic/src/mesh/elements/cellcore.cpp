@@ -8,7 +8,7 @@
   #define CONST_THIS static_cast<const CellT*>(this)
 #endif
 
-
+Cell::~Cell() {} //definition of a pure virtual destructor; should always be empty
 
 /** Get nodes of a corner
  * @param[in] f the corner local id.

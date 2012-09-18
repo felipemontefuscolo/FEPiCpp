@@ -167,76 +167,100 @@ int SMesh<CT>::numVertices() const
   return num_vtcs;
 }
 
-/** Adiciona uma célula e retorna seu id.
+/** Add a cell in the mesh's list.
+ *  @param cell a pointer to the cell.
+ *  @return the id of the new cell.
 */
 template<class CT>
-int SMesh<CT>::pushCell(Cell const* C)
+int SMesh<CT>::pushCell(Cell const* cell)
 {
-  return _cellL.insert(*static_cast<CT const*>(C));
+  return _cellL.insert(*static_cast<CT const*>(cell));
 }
 
-/** Adiciona um ponto e retorna seu id.
+/** Add a node in the mesh's list.
+ *  @param node a pointer to the node.
+ *  @return the id of the new node.
 */
 template<class CT>
-int SMesh<CT>::pushPoint(Point const* P)
+int SMesh<CT>::pushPoint(Point const* node)
 {
-  return _pointL.insert(*static_cast<PointT const*>(P));
+  return _pointL.insert(*static_cast<PointT const*>(node));
 }
 
-/** Adiciona uma facet
-*  @param h A facet-xxxx a ser adicionada.
-*  @return A posição da facet-xxxx na lista
+/** Add a facet in the mesh's list.
+ *  @param facet a pointer to the facet.
+ *  @return the id of the new facet.
 */
 template<class CT>
-int SMesh<CT>::pushFacet(Facet const* F)
+int SMesh<CT>::pushFacet(Facet const* facet)
 {
-  return _facetL.insert(*static_cast<FacetT const*>(F));
+  return _facetL.insert(*static_cast<FacetT const*>(facet));
 }
 
-/** Adiciona uma corner-xxxx
-*  @param h A corner-xxxx a ser adicionada.
-*  @return A posição da corner-xxxx na lista
+/** Add a corner in the mesh's list.
+ *  @param corner a pointer to the corner.
+ *  @return the id of the new corner.
 */
 template<class CT>
-int SMesh<CT>::pushCorner(Corner const* B)
+int SMesh<CT>::pushCorner(Corner const* corner)
 {
-  return _cornerL.insert(*static_cast<CornerT const*>(B));
+  return _cornerL.insert(*static_cast<CornerT const*>(corner));
 }
 
-/** Adiciona uma célula e retorna seu id.
+/** Create a cell in the mesh's list.
+ *  @param[out] cell_id a pointer to store the id of the new cell, can
+ *              be (int*)NULL pointer.
+ *  @return a pointer to the new cell.
 */
 template<class CT>
-Cell* SMesh<CT>::pushCell()
+Cell* SMesh<CT>::pushCell(int *cell_id)
 {
-  return this->MeshT::getCell(_cellL.insert(CT()));
+  int const tmp = _cellL.insert(CT());
+  if (cell_id)
+    *cell_id = tmp;
+  return this->MeshT::getCell(tmp);
 }
 
-/** Adiciona um ponto e retorna seu id.
+/** Create a node in the mesh's list.
+ *  @param[out] node_id a pointer to store the id of the new node, can
+ *              be (int*)NULL pointer.
+ *  @return a pointer to the new node.
 */
 template<class CT>
-Point* SMesh<CT>::pushPoint()
+Point* SMesh<CT>::pushPoint(int *node_id)
 {
-  return this->MeshT::getNode(_pointL.insert(PointT()));
+  int const tmp = _pointL.insert(PointT());
+  if (node_id)
+    *node_id = tmp;
+  return this->MeshT::getNode(tmp);
 }
 
-/** Adiciona uma facet
-*  @param h A facet-xxxx a ser adicionada.
-*  @return A posição da facet-xxxx na lista
+/** Create a facet in the mesh's list.
+ *  @param[out] facet_id a pointer to store the id of the new facet, can
+ *              be (int*)NULL pointer.
+ *  @return a pointer to the new facet.
 */
 template<class CT>
-Facet* SMesh<CT>::pushFacet()
+Facet* SMesh<CT>::pushFacet(int *facet_id)
 {
-  return this->MeshT::getFacet(_facetL.insert(FacetT()));
+  int const tmp = _facetL.insert(FacetT());
+  if (facet_id)
+    *facet_id = tmp;
+  return this->MeshT::getFacet(tmp);
 }
 
-/** Adiciona uma corner-xxxx
-*  @param h A corner-xxxx a ser adicionada.
-*  @return A posição da corner-xxxx na lista
+/** Create a corner in the mesh's list.
+ *  @param[out] corner_id a pointer to store the id of the new corner, can
+ *              be (int*)NULL pointer.
+ *  @return a pointer to the new corner.
 */
 template<class CT>
-Corner* SMesh<CT>::pushCorner()
+Corner* SMesh<CT>::pushCorner(int *corner_id)
 {
-  return this->MeshT::getCorner(_cornerL.insert(CornerT()));
+  int const tmp = _cornerL.insert(CornerT());
+  if (corner_id)
+    *corner_id = tmp;  
+  return this->MeshT::getCorner(tmp);
 }
 
 

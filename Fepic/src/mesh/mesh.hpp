@@ -23,6 +23,7 @@
 #define FEPIC_MESH_HPP
 
 #include <vector>
+#include <deque>
 #include "../util/macros.hpp"
 #include "../util/timer.hpp"
 #include "elements/cellcore.hpp"
@@ -216,10 +217,10 @@ public:
   virtual int pushFacet(Facet const* h) = 0;
   virtual int pushCorner(Corner const* b) = 0;
 
-  virtual Cell*   pushCell() = 0;
-  virtual Point*  pushPoint() = 0;
-  virtual Facet*  pushFacet() = 0;
-  virtual Corner* pushCorner() = 0;
+  virtual Cell*   pushCell(int *id) = 0;
+  virtual Point*  pushPoint(int *id) = 0;
+  virtual Facet*  pushFacet(int *id) = 0;
+  virtual Corner* pushCorner(int *id) = 0;
 
   virtual Cell*   createCell() const = 0;
   virtual Point*  createPoint() const = 0;
@@ -320,10 +321,10 @@ public:
   //typedef std::vector<Facet>    FacetList;
   //typedef std::vector<Corner>   CornerList;
 
-  typedef SeqList<CellT, std::vector<CellT>, SetVector<int> >     CellList;
-  typedef SeqList<PointT, std::vector<PointT>, SetVector<int> >   PointList;
-  typedef SeqList<FacetT, std::vector<FacetT>, SetVector<int> >   FacetList;
-  typedef SeqList<CornerT, std::vector<CornerT>, SetVector<int> > CornerList;
+  typedef SeqList<CellT, std::deque<CellT>, SetVector<int> >     CellList;
+  typedef SeqList<PointT, std::deque<PointT>, SetVector<int> >   PointList;
+  typedef SeqList<FacetT, std::deque<FacetT>, SetVector<int> >   FacetList;
+  typedef SeqList<CornerT, std::deque<CornerT>, SetVector<int> > CornerList;
 
   typedef typename CellList  ::iterator CellIteratorT;
   typedef typename PointList ::iterator PointIteratorT;
@@ -1081,13 +1082,13 @@ public:
   int pushCorner(Corner const* h);
 
   /// adds an element in the mesh and returns a pointer to it.
-  Cell*   pushCell();
+  Cell*   pushCell(int *id);
   /// adds a point in the mesh and returns a pointer to it.
-  Point*  pushPoint();
+  Point*  pushPoint(int *id);
   /// adds a facet in the mesh and returns a pointer to it.
-  Facet*  pushFacet();
+  Facet*  pushFacet(int *id);
   /// adds a corner in the mesh and returns a pointer to it.
-  Corner* pushCorner();
+  Corner* pushCorner(int *id);
          
   /// create a cell (but not put in the mesh)
   Cell*   createCell() const;

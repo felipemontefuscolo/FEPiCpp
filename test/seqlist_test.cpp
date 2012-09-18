@@ -37,6 +37,7 @@
 #include <sstream>
 #include <typeinfo>
 #include <vector>
+#include <deque>
 
 using namespace std;
 
@@ -328,9 +329,6 @@ TEST(SeqListTest, ParallelItersTest0)
 };
 
 
-
-
-
 TEST(SeqListTest, ParallelItersTest1)
 {
 
@@ -371,3 +369,99 @@ TEST(SeqListTest, ParallelItersTest1)
   
 };
   
+
+
+TEST(SeqListTest, TestStepWithDeque0)
+{
+  int a[] = {0,1,2,3,  0,1,2,3,  0,1,2,3,  0,1,2,3,  0,1,2,3,  0,1,2,3}; // 6 x 4 = 24
+  int a_size = sizeof(a)/sizeof(int);
+  
+  typedef SeqList<Dummy, std::deque<Dummy> > container_type;
+  
+  container_type v0;
+  container_type::iterator it;
+  container_type::const_iterator cit;
+
+
+  for (int i=0; i<a_size; ++i)
+    v0.push_back(Dummy(i)); // v0 = a
+
+
+  // ================== disable ===================
+
+  // disabling ? 3, except the last one
+  for (int i = 3; i <a_size-1; i+=4)
+    v0.disable(i);
+
+  // v0 = {0,1,2,x,  0,1,2,x,  0,1,2,x,  0,1,2,x,  0,1,2,x,  0,1,2,3};
+  
+  EXPECT_EQ(19u, v0.size());
+
+  v0.disable(a_size-1); // v0 = {0,1,2,x,  0,1,2,x,  0,1,2,x,  0,1,2,x,  0,1,2,x,  0,1,2,x};
+
+  EXPECT_EQ(18u, v0.size());
+
+  
+ 
+
+  // ================== disable ===================
+
+
+  // nothing
+  v0.disable(a_size-1); // v0 = {0,1,2,x,  0,1,2,x,  0,1,2,x,  0,1,2,x,  0,1,2,x,  0,1,2,x};
+
+  v0.disable(1); // v0 = {0,x,2,x,  0,1,2,x,  0,1,2,x,  0,1,2,x,  0,1,2,x,  0,1,2,x};
+
+  EXPECT_EQ(17u, v0.size());
+
+  v0.disable(21); // v0 = {0,x,2,x,  0,1,2,x,  0,1,2,x,  0,1,2,x,  0,1,2,x,  0,x,2,x};
+
+  v0.disable(9); // v0 = {0,x,2,x,  0,1,2,x,  0,x,2,x,  0,1,2,x,  0,1,2,x,  0,x,2,x};
+
+  // =====================================================
+
+  // v0 = {0,x,2,x,  0,1,2,x,  0,x,2,x,  0,1,2,x,  0,1,2,x,  0,x,2,x};
+  v0.disable(5);
+  v0.disable(13);
+  v0.disable(17);
+
+  // v0 = {0,x,2,x,  0,x,2,x,  0,x,2,x,  0,x,2,x,  0,x,2,x,  0,x,2,x};
+
+  // ================== insert =======================
+
+  // v0 = {0,x,2,x,  0,x,2,x,  0,x,2,x,  0,x,2,x,  0,x,2,x,  0,x,2,x};
+  int id;
+  id = v0.insert(Dummy(3)); // v0 = {0,x,2,x,  0,x,2,x,  0,x,2,x,  0,x,2,x,  0,x,2,x,  0,x,2,3};
+
+  EXPECT_EQ(23, id);
+  EXPECT_EQ(13u, v0.size());
+  EXPECT_EQ(24u, v0.total_size());
+
+  id = v0.insert(Dummy(3)); EXPECT_EQ( 21, id);
+  id = v0.insert(Dummy(3)); EXPECT_EQ( 19, id);
+  id = v0.insert(Dummy(3)); EXPECT_EQ( 17, id);
+  id = v0.insert(Dummy(3)); EXPECT_EQ( 15, id);
+  id = v0.insert(Dummy(3)); EXPECT_EQ( 13, id);
+  id = v0.insert(Dummy(3)); EXPECT_EQ( 11, id);
+  id = v0.insert(Dummy(3)); EXPECT_EQ(  9, id);
+  id = v0.insert(Dummy(3)); EXPECT_EQ(  7, id);
+  id = v0.insert(Dummy(3)); EXPECT_EQ(  5, id);
+  id = v0.insert(Dummy(3)); EXPECT_EQ(  3, id);
+  id = v0.insert(Dummy(3)); EXPECT_EQ(  1, id);
+
+  // v0 = {0,3,2,3,  0,3,2,3,  0,3,2,3,  0,3,2,3,  0,3,2,3,  0,3,2,3};
+
+  EXPECT_EQ(24u, v0.size());
+  EXPECT_EQ(24u, v0.total_size());
+
+  id = v0.insert(Dummy(5)); EXPECT_EQ( 24, id);
+  id = v0.insert(Dummy(5)); EXPECT_EQ( 25, id);
+  id = v0.insert(Dummy(5)); EXPECT_EQ( 26, id);
+
+  // v0 = {0,3,2,3,  0,3,2,3,  0,3,2,3,  0,3,2,3,  0,3,2,3,  0,3,2,3, 5,5,5};
+  EXPECT_EQ(27u, v0.size());
+  EXPECT_EQ(27u, v0.total_size());
+
+};
+
+

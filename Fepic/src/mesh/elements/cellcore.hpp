@@ -38,7 +38,7 @@
   {                                               \
     int _nodes[n_nodes]; /* nodes id; N=order */   \
     int _facets[n_vertices]; /* alias to _nodes */ \
-    int _corners[N+1]; /* dummy */                \
+    int _corners[n_vertices]; /* dummy */                \
   };                                               \
   union                                        \
   {                                             \
@@ -77,6 +77,8 @@
 class Cell : public _Labelable
 {
 public:
+
+  Cell() : _conn_comp_id(-1) {}
 
   typedef Cell* (*CreatorMemFunPtr)();
 
@@ -126,8 +128,18 @@ public:
   virtual void setIncidCellPos(int facet, int pos) = 0;
   virtual void setIncidence(int facet, int icellid, char pos, char anch=0) = 0;
   virtual void setNodeId(int const ith, int const nodeid) = 0;
+  virtual void setAllMembers(int const* nodes,
+                              int const* corners,
+                              int const* facets,
+                              int const* ics,
+                              int const* ics_pos,
+                              int const* ics_ancs,
+                              int const* conn_comp_id,
+                              int const* tag,
+                              int const* flags) = 0;
 
-  virtual ~Cell() {}
+
+  virtual ~Cell() = 0;
 
   /* NON VIRTUAL FUNCTIONS */
 
@@ -159,7 +171,21 @@ class _CellCore  : public Cell
 protected:
   _CellCore()
   {
-    reset();
+    for (int i = 0; i < CellT::n_facets; ++i)
+      THIS->_icells[i] = -1;
+    if (CellT::dim > 1)
+      for (int i = 0; i < CellT::n_facets; ++i)
+        THIS->_facets[i] = -1;
+    else
+    {
+      THIS->_nodes[0] = -1;
+      THIS->_nodes[1] = -1;
+    }
+    if (CellT::dim==3)
+      for (int i = 0; i < CellT::n_corners; ++i)
+        THIS->_corners[i] = -1;
+    for (int i = 0; i < CellT::n_nodes; ++i)
+      THIS->_nodes[i] = -1;
   };
   //_CellCore(_CellCore const&) {};
 
@@ -450,6 +476,49 @@ public:
     THIS->_nodes[ith] = nodeid;
   }
 
+
+  /*  Set all members of the cell. Pass NULL to ignore an members.
+   *  
+   * 
+   */ 
+  void setAllMembers(int const* nodes, int const* corners, int const* facets, int const* icells, int const* icells_pos,
+                      int const* icells_ancs, int const* conn_comp_id, int const* tag, int const* flags)
+  {
+    // nodes
+    if (nodes != NULL)
+      for (int i = 0; i < CellT::n_nodes; ++i)
+        THIS->_nodes[i] = nodes[i];
+    
+    if (CellT::dim>2 && corners!= NULL)
+      for (int i = 0; i < CellT::n_corners; ++i)
+        THIS->_corners[i] = corners[i];
+    
+    if (CellT::dim>1 && facets!= NULL)
+      for (int i = 0; i < CellT::n_facets; ++i)
+        THIS->_facets[i] = facets[i];
+    
+    if (icells!=NULL)
+      for (int i = 0; i < CellT::n_facets; ++i)
+        THIS->_icells[i] = icells[i];
+    
+    if (icells_pos!=NULL)
+      for (int i = 0; i < CellT::n_facets; ++i)
+        THIS->_icells_pos[i] = icells_pos[i];
+    
+    if (CellT::dim > 2 && icells_ancs!=NULL)
+      for (int i = 0; i < CellT::n_facets; ++i)
+        THIS->_icells_anchors[i] = icells_ancs[i];
+    
+    if (conn_comp_id != NULL)
+      THIS->setConnectedComponentId(*conn_comp_id);
+      
+    if (tag != NULL)
+      THIS->setTag(*tag);
+    
+    if (flags != NULL)
+      THIS->setFlags(*flags);
+    
+  }
 
   virtual ~_CellCore() {};
 

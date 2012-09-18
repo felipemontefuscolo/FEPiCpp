@@ -133,15 +133,18 @@ public:
   class _RemoveCriteria { public:
     _RemoveCriteria(int id) : _id_to_compare(id) {};
     bool operator() (std::pair<int,char> const& p) {return p.first==_id_to_compare;};
+    bool apply (std::pair<int,char> const& p) {return p.first==_id_to_compare;};
     int _id_to_compare;
   };
 
   /** consistently replaces (or removes) a incident cell id (singular or not).
-   * @param cid id of the incident cell of this node that will be replaced/removed.
+   * @param cid id of the incident cell of this node that will be replaced/removed. If cid
+   *         is not found in node's incidentes cell list, the function return false.
    * @param cid_subs id of an incident cell that will replace the cid. if cid_subs<0,
    * then cid is just removed.
+   * @return true if cid was found and removed/replaced, false otherwise.
    */ 
-  void replacesIncidCell(int cid, int cid_subs, int cid_subs_pos)
+  bool replacesIncidCell(int cid, int cid_subs, int cid_subs_pos)
   {
     if (getIncidCell() == cid)
     {
@@ -150,27 +153,39 @@ public:
         if (_incidences.empty())
         {
           setIncidCell(-1);
-          return;
+          setPosition(-1);
+          return true;
         }
         else
         {
           setIncidCell(_incidences.front().first);
           setPosition(_incidences.front().second);
           _incidences.pop_front();
-          return;
+          return true;
         }
       }
       else // replaces
       {
         setIncidCell(cid_subs);
         setPosition(cid_subs_pos);
-        return;
+        return true;
       }
     }
     else
     {
-      std::replace_if(_incidences.begin(), _incidences.end(), _RemoveCriteria(cid), std::make_pair(cid_subs, static_cast<char>(cid_subs_pos) ));
+      std::list<std::pair<int,char> >::iterator first = _incidences.begin();
+      std::list<std::pair<int,char> >::iterator last = _incidences.end();
+      _RemoveCriteria pred = _RemoveCriteria(cid);
+      
+      for (; first != last; ++first)
+        if (pred.apply(*first))
+        {
+          *first = std::make_pair(cid_subs, static_cast<char>(cid_subs_pos) );
+          return true;
+        }
+      //std::replace_if(_incidences.begin(), _incidences.end(), _RemoveCriteria(cid), std::make_pair(cid_subs, static_cast<char>(cid_subs_pos) ));
     }
+    return false;
     
   } // end replacesIncidCell()
 
@@ -230,13 +245,38 @@ public:
   /// Destrutor.
   ~Point() {}
 
+  void setAllMembers(Real const* coord, int spacedim, int const* ic, int const* pos, int const* tag,
+                    int const* flags, int const* stat, std::list<std::pair<int,char> > * incidences)
+  {
+    if (coord != NULL)
+    {
+      FEPIC_CHECK(static_cast<unsigned> (spacedim-1) < 3, "invalid argument", std::runtime_error);
+      for (int i = 0; i < spacedim; ++i)
+        _coord[i] = coord[i];
+    }
+    if (ic != NULL)
+      setIncidCell(*ic);
+    if (pos != NULL)
+      setPosition(*pos);
+    if (tag != NULL)
+      setTag(*tag);
+    if (flags != NULL)
+      setFlags(*flags);
+    if (stat != NULL)
+      _status = *stat;
+    if (incidences != NULL)
+      _incidences = *incidences;
+  }  
+
+  enum Masks
+  {
+    mk_inboundary = (1<<0)
+  };
+
 protected:
   Real  _coord[3]; // x,y,z
   std::list<std::pair<int,char> > _incidences; // for singular nodes
 
-  enum Masks {
-    mk_inboundary = (1<<0)
-  };
 };
 
 

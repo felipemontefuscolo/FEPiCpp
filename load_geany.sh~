@@ -23,7 +23,7 @@ F=`find $PWD/Fepic -maxdepth 1 -type f`
 G=`find $PWD/conf \* -type f`
 
 
-ALLFILES="$A $B $C $D $E $F $G"
+ALLFILES="$A $B $C $D $E $F"
 
 #echo Files to load:\n $ALLFILES\n
 

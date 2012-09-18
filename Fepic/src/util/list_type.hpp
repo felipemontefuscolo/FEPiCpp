@@ -174,19 +174,21 @@ public:
 
   void disable(int del_id)
   {
-    ContainerIterator it = ContainerIterator(&_data[del_id]);
+    //ContainerIterator it = ContainerIterator(&_data[del_id]);
+    pointer it = &_data.at(del_id);
     if (it->isDisabled())
       return;
     _disabled_idcs.insert(del_id);
     it->setDisabledTo(true);
 
-    if (it == _actived_beg)
+    if (it == &*_actived_beg)
       _update_member_beg();
   }
 
   /** @brief insert an element and return your id.
    *  @warning dont insert disabled elements.
    */
+  //int insert(value_type const& obj)
   int insert(value_type const& obj)
   {
     if (_disabled_idcs.empty())
@@ -261,7 +263,7 @@ public:
 protected:
 
   template<class V>
-  void _impl_reserve(V &vec, typename V::size_type amount,
+  void _impl_reserve(V &/*vec*/, typename V::size_type /*amount*/,
               typename EnableIf<!TypeHas_reserve<V>::value>::type * = NULL) {}
 
   template<class V>
@@ -278,7 +280,7 @@ protected:
 
   template<class V>
   static
-  typename V::size_type _impl_capacity(V const&vec,
+  typename V::size_type _impl_capacity(V const& /*vec*/,
                         typename EnableIf<!TypeHas_capacity<V>::value>::type * = NULL)
   { return 0; }
 

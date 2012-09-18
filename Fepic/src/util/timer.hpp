@@ -26,6 +26,8 @@
 #include <cstdio>
 #include <cstring>
 #include <list>
+#include <iostream>
+#include <string>
 
 #ifdef FEP_HAS_OPENMP
 #  include <omp.h>
@@ -115,12 +117,12 @@ public:
   
   void printMethod() const
   {
-    printf("%s\n", _method);
+    printf("%s\n", _method.c_str());
   }
 
 protected:
   double      _elapsed;
-  const char* _method;
+  std::string _method;
   List	      _list;
   #ifndef FEP_HAS_OPENMP
   clock_t     _temp;

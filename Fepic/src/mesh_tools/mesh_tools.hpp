@@ -61,6 +61,12 @@ public:
     return inCircle2d(mesh->getCell(edge->getIncidCell()), edge->getPosition(),mesh);
   }
 
+  static Point* insertVertexOnEdge(Cell *cellA, int fidA, Real t, Mesh *mesh);
+  static Point* insertVertexOnEdge(Facet * edge, Real t, Mesh *mesh)
+  {
+    return insertVertexOnEdge(mesh->getCell(edge->getIncidCell()), edge->getPosition(), t, mesh);
+  }
+
 
   /** Tri3 only
    *  slice a convex part of the mesh with an isocontour of a 

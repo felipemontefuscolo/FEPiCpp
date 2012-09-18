@@ -35,7 +35,18 @@ public:
   {};
   
   Corner() {}
-  
+
+  void setAllMembers(int const* ic, int const* pos, int const* tag, int const* flags)
+  {
+    if (ic != NULL)
+      setIncidCell(*ic);
+    if (pos != NULL)
+      setPosition(*pos);
+    if (tag != NULL)
+      setTag(*tag);
+    if (flags != NULL)
+      setFlags(*flags);
+  }  
 };
 
 #endif
