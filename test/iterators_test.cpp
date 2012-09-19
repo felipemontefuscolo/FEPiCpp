@@ -89,7 +89,7 @@ TEST_P(IteratorTest, PointIteratorsTest)
   
   for (int i = 0; i < n_nodes; ++i)
   {
-    mesh->getNode(i)->setTag(0);
+    mesh->getNodePtr(i)->setTag(0);
   }
   
   // ====================== traversing the mesh ====================================
@@ -103,8 +103,8 @@ TEST_P(IteratorTest, PointIteratorsTest)
     // check
     for (int i = 0; i < n_nodes; ++i)
     {
-      EXPECT_EQ( 1, mesh->getNode(i)->getTag());
-      mesh->getNode(i)->setTag(0); // reseting
+      EXPECT_EQ( 1, mesh->getNodePtr(i)->getTag());
+      mesh->getNodePtr(i)->setTag(0); // reseting
     }
   }
 
@@ -118,7 +118,7 @@ TEST_P(IteratorTest, CellIteratorsTest)
   
   for (int i = 0; i < mesh->numCells(); ++i)
   {
-    mesh->getCell(i)->setTag(0);
+    mesh->getCellPtr(i)->setTag(0);
   }
   
   // ====================== traversing the mesh ====================================
@@ -132,8 +132,8 @@ TEST_P(IteratorTest, CellIteratorsTest)
     // check
     for (int i = 0; i < mesh->numCells(); ++i)
     {
-      EXPECT_EQ( 1, mesh->getCell(i)->getTag());
-      mesh->getCell(i)->setTag(0); // reseting
+      EXPECT_EQ( 1, mesh->getCellPtr(i)->getTag());
+      mesh->getCellPtr(i)->setTag(0); // reseting
     }
   }
   
@@ -147,7 +147,7 @@ TEST_P(IteratorTest, FacetIteratorsTest)
   
   for (int i = 0; i < mesh->numFacets(); ++i)
   {
-    mesh->getFacet(i)->setTag(0);
+    mesh->getFacetPtr(i)->setTag(0);
   }
   
   // ====================== traversing the mesh ====================================
@@ -161,8 +161,8 @@ TEST_P(IteratorTest, FacetIteratorsTest)
     // check
     for (int i = 0; i < mesh->numFacets(); ++i)
     {
-      EXPECT_EQ( 1, mesh->getFacet(i)->getTag());
-      mesh->getFacet(i)->setTag(0); // reseting
+      EXPECT_EQ( 1, mesh->getFacetPtr(i)->getTag());
+      mesh->getFacetPtr(i)->setTag(0); // reseting
     }
   }
   
@@ -178,7 +178,7 @@ TEST_P(IteratorTest, CornerIteratorsTest)
   {
     for (int i = 0; i < mesh->numCorners(); ++i)
     {
-      mesh->getCorner(i)->setTag(0);
+      mesh->getCornerPtr(i)->setTag(0);
     }
     
     // ====================== traversing the mesh ====================================
@@ -192,8 +192,8 @@ TEST_P(IteratorTest, CornerIteratorsTest)
       // check
       for (int i = 0; i < mesh->numCorners(); ++i)
       {
-        EXPECT_EQ( 1, mesh->getCorner(i)->getTag());
-        mesh->getCorner(i)->setTag(0); // reseting
+        EXPECT_EQ( 1, mesh->getCornerPtr(i)->getTag());
+        mesh->getCornerPtr(i)->setTag(0); // reseting
       }
     }
     

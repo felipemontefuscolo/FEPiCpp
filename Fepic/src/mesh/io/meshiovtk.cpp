@@ -235,7 +235,7 @@ void MeshIoVtk::writeVtk(std::string outname)
   /* printing the points */
   for (int i = 0; i < n_points_total; ++i)
   {
-    point = _mesh->getNode(i);
+    point = _mesh->getNodePtr(i);
     if (point->isDisabled())
       continue;
     CALL_MEMBER_FN(*this, _p_printer)(point, file_ptr);
@@ -255,7 +255,7 @@ void MeshIoVtk::writeVtk(std::string outname)
   //printf("DEBUG n_cells_total = %d\n", n_cells_total);
   for (int k = 0; k < n_cells_total; ++k)
   {
-    cell = _mesh->getCell(k);
+    cell = _mesh->getCellPtr(k);
     if (cell->isDisabled())
       continue;
     _mesh->getCellNodesContigId(cell,nodes);
@@ -267,7 +267,7 @@ void MeshIoVtk::writeVtk(std::string outname)
   fprintf(file_ptr,"\nCELL_TYPES %d\n", n_pseudo_cells);
   for (int k = 0; k < n_cells_total; ++k)
   {
-    cell = _mesh->getCell(k);
+    cell = _mesh->getCellPtr(k);
     if (cell->isDisabled())
       continue;
     for (int i = 0; i < n_cd; ++i)
@@ -301,7 +301,7 @@ void MeshIoVtk::addNodeScalarVtk(const char* nome_var, DefaultGetDataVtk const& 
 
   
   for (int i=0; i<num_pts_total; ++i)
-    if (!(_mesh->getNode(i)->isDisabled()))
+    if (!(_mesh->getNodePtr(i)->isDisabled()))
       fprintf(file_ptr,"%f\n", static_cast<float>(data.get_data_r(i)));
 
   fprintf(file_ptr,"\n");
@@ -332,7 +332,7 @@ void MeshIoVtk::addCellScalarVtk(const char* nome_var, DefaultGetDataVtk const& 
 
   for (int i=0; i<num_cells_total; ++i)
   {
-    if (_mesh->getCell(i)->isDisabled())
+    if (_mesh->getCellPtr(i)->isDisabled())
       continue;
     for (int j = 0; j < n_cd; ++j)
       fprintf(file_ptr,"%f\n", static_cast<float>(data.get_data_r(i)));
@@ -370,7 +370,7 @@ void MeshIoVtk::addNodeIntVtk(const char* nome_var, DefaultGetDataVtk const& dat
 
   
   for (int i=0; i<num_pts_total; ++i)
-    if (!(_mesh->getNode(i)->isDisabled()))
+    if (!(_mesh->getNodePtr(i)->isDisabled()))
       fprintf(file_ptr,"%d\n", data.get_data_i(i));
 
   fprintf(file_ptr,"\n");
@@ -402,7 +402,7 @@ void MeshIoVtk::addCellIntVtk(const char* nome_var, DefaultGetDataVtk const& dat
 
   for (int i=0; i<num_cells_total; ++i)
   {
-    if (_mesh->getCell(i)->isDisabled())
+    if (_mesh->getCellPtr(i)->isDisabled())
       continue;
     for (int j = 0; j < n_cd; ++j)
       fprintf(file_ptr,"%d\n", data.get_data_i(i));
@@ -437,7 +437,7 @@ void MeshIoVtk::printPointTagVtk(const char* nome_var)
   Point const* point;
   for (int i=0; i<num_pts_total; ++i)
   {
-    point = _mesh->getNode(i);
+    point = _mesh->getNodePtr(i);
     if (point->isDisabled())
       continue;
     fprintf(file_ptr,"%d\n", point->getTag());
@@ -471,7 +471,7 @@ void MeshIoVtk::printPointIcellVtk(const char* nome_var)
   Point const* point;
   for (int i=0; i<num_pts_total; ++i)
   {
-    point = _mesh->getNode(i);
+    point = _mesh->getNodePtr(i);
     if (point->isDisabled())
       continue;
     fprintf(file_ptr,"%d\n", _mesh->getCellContigId(point->getIncidCell()));
@@ -505,7 +505,7 @@ void MeshIoVtk::printPointPositionVtk(const char* nome_var)
   Point const* point;
   for (int i=0; i<num_pts_total; ++i)
   {
-    point = _mesh->getNode(i);
+    point = _mesh->getNodePtr(i);
     if (point->isDisabled())
       continue;
     fprintf(file_ptr,"%d\n", point->getPosition());

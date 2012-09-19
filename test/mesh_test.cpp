@@ -137,7 +137,7 @@ TEST(ReadVtktest, WithEdge2)
 
   for (int i = 0; i < mesh->numCells(); ++i)
   {
-    cell = (Edge2*)mesh->getCell(i);
+    cell = (Edge2*)mesh->getCellPtr(i);
     ans[0] = cell->Edge2::getIncidCell(0);
     ans[1] = cell->Edge2::getIncidCell(1);
 
@@ -183,7 +183,7 @@ TEST(VertexStarTest, WithTri3)
   {
     id = k;
 
-    p = mesh->getNode(id);
+    p = mesh->getNodePtr(id);
 
     n = (int)(mesh->vertexStar(p, iCs, viCs)-iCs);
 
@@ -229,7 +229,7 @@ TEST(VertexStarTest, WithQuad4)
   {
     id = k;
 
-    p = mesh->getNode(id);
+    p = mesh->getNodePtr(id);
 
     n = (int)(mesh->vertexStar(p, iCs, viCs)-iCs);
 
@@ -284,7 +284,7 @@ TEST(VertexStarTest, WithTet4)
   {
     id = *it;
 
-    p = mesh->getNode(id);
+    p = mesh->getNodePtr(id);
 
     n = (int)(mesh->vertexStar(p, iCs, viCs)-iCs);
 
@@ -331,7 +331,7 @@ TEST(VertexStarTest, WithTet4Case2)
   {
     id = *it;
 
-    f = mesh->getCorner(id);
+    f = mesh->getCornerPtr(id);
 
     n = (int)(mesh->edgeStar(f, iCs, eiCs)-iCs);
 
@@ -403,7 +403,7 @@ TEST(VertexStarTest, WithHex8)
   {
     id = *it;
 
-    p = mesh->getNode(id);
+    p = mesh->getNodePtr(id);
 
     n = (int)(mesh->vertexStar(p, iCs, viCs)-iCs);
 
@@ -452,7 +452,7 @@ TEST(NodeStarTest, WithTri6)
       continue;
     id = k;
 
-    p = mesh->getNode(id);
+    p = mesh->getNodePtr(id);
 
     n = (int)(mesh->nodeStar(p, iCs, viCs)-iCs);
 
@@ -498,7 +498,7 @@ TEST(NodeStarTest, WithQuad8)
   {
     id = *it;
     //
-    p = mesh->getNode(id);
+    p = mesh->getNodePtr(id);
     //
     n = (int)(mesh->nodeStar(p, iCs, viCs)-iCs);
 
@@ -543,7 +543,7 @@ TEST(NodeStarTest, WithQuad9)
   {
     id = *it;
 
-    p = mesh->getNode(id);
+    p = mesh->getNodePtr(id);
 
     n = (int)(mesh->nodeStar(p, iCs, viCs)-iCs);
 
@@ -589,7 +589,7 @@ TEST(NodeStarTest, WithTet10)
 
     id = *it;
 
-    p = mesh->getNode(id);
+    p = mesh->getNodePtr(id);
 
     n = (int)(mesh->nodeStar(p, iCs, viCs)-iCs);
 
@@ -635,7 +635,7 @@ TEST(NodeStarTest, WithHex20)
   {
     id = *it;
 
-    p = mesh->getNode(id);
+    p = mesh->getNodePtr(id);
 
     n = (int)(mesh->nodeStar(p, iCs, viCs)-iCs);
 
@@ -680,7 +680,7 @@ TEST(NodeStarTest, WithHex27)
   {
     id = *it;
 
-    p = mesh->getNode(id);
+    p = mesh->getNodePtr(id);
 
     n = (int)(mesh->nodeStar(p, iCs, viCs)-iCs);
 
@@ -729,7 +729,7 @@ TEST(ConnectedNodesTest, WithTet10)
   {
     id = *it;
 
-    p = mesh->getNode(id);
+    p = mesh->getNodePtr(id);
 
     n = (int)(mesh->connectedNodes(p, iNs)-iNs);
 
@@ -818,7 +818,7 @@ TEST(ConnectedVtcs, WithTet4)
 
   id = 8;
 
-  p = mesh->getNode(id);
+  p = mesh->getNodePtr(id);
 
   n = (int)(mesh->connectedVtcs(p, iNs)-iNs);
 
@@ -866,7 +866,7 @@ TEST(TetIteratorsTest, PointIteratorsTest)
 
   for (int i = 0; i < mesh->numNodes(); ++i)
   {
-    mesh->getNode(i)->setTag(0);
+    mesh->getNodePtr(i)->setTag(0);
   }
 
   // ====================== traversing the mesh ====================================
@@ -880,8 +880,8 @@ TEST(TetIteratorsTest, PointIteratorsTest)
     // check
     for (int i = 0; i < mesh->numNodes(); ++i)
     {
-      EXPECT_EQ( 1, mesh->getNode(i)->getTag());
-      mesh->getNode(i)->setTag(0); // reseting
+      EXPECT_EQ( 1, mesh->getNodePtr(i)->getTag());
+      mesh->getNodePtr(i)->setTag(0); // reseting
     }
   }
 
@@ -905,7 +905,7 @@ TEST(SingleCell, WithTri3Case1)
   Point const* p;
   for (int i = 0; i < 12; ++i)
   {
-    p = mesh->getNode(i);
+    p = mesh->getNodePtr(i);
     EXPECT_EQ(singles[i], mesh->inSingleCell(p));
   }
 
@@ -913,7 +913,7 @@ TEST(SingleCell, WithTri3Case1)
   int n_sing_facets = 0;
   for (int i = 0; i < mesh->numFacets(); ++i)
   {
-    f = mesh->getFacet(i);
+    f = mesh->getFacetPtr(i);
     if (mesh->inSingleCell(f))
       ++n_sing_facets;
   }
@@ -939,13 +939,13 @@ TEST(SingleCell, WithTri3Case2)
   Point const*p;
   for (int i = 0; i < 7; ++i)
   {
-    p = mesh->getNode(i);
+    p = mesh->getNodePtr(i);
     EXPECT_EQ(singles[i], mesh->inSingleCell(p));
   }
 
-  //std::cout << mesh->getCell(0)->getIncidCell(0) << std::endl;
-  //std::cout << mesh->getCell(0)->getIncidCell(1) << std::endl;
-  //std::cout << mesh->getCell(0)->getIncidCell(2) << std::endl;
+  //std::cout << mesh->getCellPtr(0)->getIncidCell(0) << std::endl;
+  //std::cout << mesh->getCellPtr(0)->getIncidCell(1) << std::endl;
+  //std::cout << mesh->getCellPtr(0)->getIncidCell(2) << std::endl;
 
   delete mesh;
 
@@ -968,7 +968,7 @@ TEST(SingleCell, WithTri6Case1)
   Point const*p;
   for (int i = 0; i < 37; ++i)
   {
-    p = mesh->getNode(i);
+    p = mesh->getNodePtr(i);
     EXPECT_EQ(sing_pts[i], mesh->inSingleCell(p));
   }
 
@@ -993,13 +993,13 @@ TEST(SingleCell, WithTri6Case2)
   Point const*p;
   for (int i = 0; i < 18; ++i)
   {
-    p = mesh->getNode(i);
+    p = mesh->getNodePtr(i);
     EXPECT_EQ(sing_pts[i], mesh->inSingleCell(p));
   }
 
-  //std::cout << mesh->getCell(0)->getIncidCell(0) << std::endl;
-  //std::cout << mesh->getCell(0)->getIncidCell(1) << std::endl;
-  //std::cout << mesh->getCell(0)->getIncidCell(2) << std::endl;
+  //std::cout << mesh->getCellPtr(0)->getIncidCell(0) << std::endl;
+  //std::cout << mesh->getCellPtr(0)->getIncidCell(1) << std::endl;
+  //std::cout << mesh->getCellPtr(0)->getIncidCell(2) << std::endl;
 
   delete mesh;
 
@@ -1022,7 +1022,7 @@ TEST(SingleCell, WithTet4Case1)
   Point const* p;
   for (int i = 0; i < 8; ++i)
   {
-    p = mesh->getNode(i);
+    p = mesh->getNodePtr(i);
     EXPECT_EQ(singles[i], mesh->inSingleCell(p));
   }
 
@@ -1031,7 +1031,7 @@ TEST(SingleCell, WithTet4Case1)
   int n_sing_facets = 0;
   for (int i = 0; i < mesh->numFacets(); ++i)
   {
-    f = mesh->getFacet(i);
+    f = mesh->getFacetPtr(i);
     if (mesh->inSingleCell(f))
       ++n_sing_facets;
   }
@@ -1043,7 +1043,7 @@ TEST(SingleCell, WithTet4Case1)
   int n_sing_corners = 0;
   for (int i = 0; i < mesh->numCorners(); ++i)
   {
-    r = mesh->getCorner(i);
+    r = mesh->getCornerPtr(i);
     if (mesh->inSingleCell(r))
       ++n_sing_corners;
   }
@@ -1070,7 +1070,7 @@ TEST(SingleCell, WithTet4Case2)
   Point const* p;
   for (int i = 0; i < 15; ++i)
   {
-    p = mesh->getNode(i);
+    p = mesh->getNodePtr(i);
     EXPECT_EQ(singles[i], mesh->inSingleCell(p));
   }
 
@@ -1079,7 +1079,7 @@ TEST(SingleCell, WithTet4Case2)
   int n_sing_facets = 0;
   for (int i = 0; i < mesh->numFacets(); ++i)
   {
-    f = mesh->getFacet(i);
+    f = mesh->getFacetPtr(i);
     if (mesh->inSingleCell(f))
       ++n_sing_facets;
   }
@@ -1090,7 +1090,7 @@ TEST(SingleCell, WithTet4Case2)
   int n_sing_corners = 0;
   for (int i = 0; i < mesh->numCorners(); ++i)
   {
-    r = mesh->getCorner(i);
+    r = mesh->getCornerPtr(i);
     if (mesh->inSingleCell(r))
       ++n_sing_corners;
   }
@@ -1119,7 +1119,7 @@ TEST(SingleCell, WithTet10)
   Point const* p;
   for (int i = 0; i < mesh->numNodes(); ++i)
   {
-    p = mesh->getNode(i);
+    p = mesh->getNodePtr(i);
     cit = mesh->nodeStar(p, iCs, viCs);
     EXPECT_EQ( (cit-iCs)==1, mesh->inSingleCell(p)) << " i = " << i;
     //EXPECT_EQ( i==24 || i==26, mesh->inSingleCell(p)) << " i = " << i;
@@ -1130,7 +1130,7 @@ TEST(SingleCell, WithTet10)
   int n_sing_facets = 0;
   for (int i = 0; i < mesh->numFacets(); ++i)
   {
-    f = mesh->getFacet(i);
+    f = mesh->getFacetPtr(i);
     if (mesh->inSingleCell(f))
     {
       ++n_sing_facets;
@@ -1143,7 +1143,7 @@ TEST(SingleCell, WithTet10)
   int n_sing_corners = 0;
   for (int i = 0; i < mesh->numCorners(); ++i)
   {
-    r = mesh->getCorner(i);
+    r = mesh->getCornerPtr(i);
     if (mesh->inSingleCell(r))
       ++n_sing_corners;
   }
@@ -1175,9 +1175,9 @@ TEST(IncidentFacets, WithTri6)
 
   for (int i = 0; i < 37; ++i)
   {
-    if (!mesh->isVertex(mesh->getNode(i)))
+    if (!mesh->isVertex(mesh->getNodePtr(i)))
       continue;
-    iFs_end = mesh->incidentFacets(mesh->getNode(i), iFs, viFs);
+    iFs_end = mesh->incidentFacets(mesh->getNodePtr(i), iFs, viFs);
 
     EXPECT_EQ(nif[i], iFs_end - iFs) << "at node i = " << i << std::endl;
 
@@ -1221,23 +1221,23 @@ TEST(AuxSetConnectedComponentIdTest, WithTri3)
   mesh->_setConnectedComponentsId(mesh->getCell(6), 99);
   mesh->_setConnectedComponentsId(mesh->getCell(12), 13);
 
-  EXPECT_EQ(3 , mesh->getCell( 0)->getConnectedComponentId());
+  EXPECT_EQ(3 , mesh->getCellPtr( 0)->getConnectedComponentId());
 
-  EXPECT_EQ(6 , mesh->getCell( 1)->getConnectedComponentId());
-  EXPECT_EQ(6 , mesh->getCell( 2)->getConnectedComponentId());
-  EXPECT_EQ(6 , mesh->getCell( 3)->getConnectedComponentId());
-  EXPECT_EQ(6 , mesh->getCell( 4)->getConnectedComponentId());
-  EXPECT_EQ(6 , mesh->getCell( 5)->getConnectedComponentId());
+  EXPECT_EQ(6 , mesh->getCellPtr( 1)->getConnectedComponentId());
+  EXPECT_EQ(6 , mesh->getCellPtr( 2)->getConnectedComponentId());
+  EXPECT_EQ(6 , mesh->getCellPtr( 3)->getConnectedComponentId());
+  EXPECT_EQ(6 , mesh->getCellPtr( 4)->getConnectedComponentId());
+  EXPECT_EQ(6 , mesh->getCellPtr( 5)->getConnectedComponentId());
 
-  EXPECT_EQ(10, mesh->getCell( 7)->getConnectedComponentId());
-  EXPECT_EQ(10, mesh->getCell( 8)->getConnectedComponentId());
-  EXPECT_EQ(10, mesh->getCell( 9)->getConnectedComponentId());
-  EXPECT_EQ(10, mesh->getCell(10)->getConnectedComponentId());
-  EXPECT_EQ(10, mesh->getCell(11)->getConnectedComponentId());
+  EXPECT_EQ(10, mesh->getCellPtr( 7)->getConnectedComponentId());
+  EXPECT_EQ(10, mesh->getCellPtr( 8)->getConnectedComponentId());
+  EXPECT_EQ(10, mesh->getCellPtr( 9)->getConnectedComponentId());
+  EXPECT_EQ(10, mesh->getCellPtr(10)->getConnectedComponentId());
+  EXPECT_EQ(10, mesh->getCellPtr(11)->getConnectedComponentId());
 
-  EXPECT_EQ(99, mesh->getCell( 6)->getConnectedComponentId());
+  EXPECT_EQ(99, mesh->getCellPtr( 6)->getConnectedComponentId());
 
-  EXPECT_EQ(13, mesh->getCell(12)->getConnectedComponentId());
+  EXPECT_EQ(13, mesh->getCellPtr(12)->getConnectedComponentId());
 
   delete mesh;
 }
@@ -1280,7 +1280,7 @@ TEST(SetConnectedComponentIdTest, WithTri3)
 
   for (int i = 0; i < n_connected_components; ++i)
     for (int j = i+1; j < n_connected_components; ++j)
-      EXPECT_TRUE(mesh->getCell(c_ini[i])->getConnectedComponentId() != mesh->getCell(c_ini[j])->getConnectedComponentId());
+      EXPECT_TRUE(mesh->getCellPtr(c_ini[i])->getConnectedComponentId() != mesh->getCellPtr(c_ini[j])->getConnectedComponentId());
 
 
   delete mesh;
@@ -1300,7 +1300,7 @@ TEST(NextBoundaryFacetTest, WithTri3)
 
   Facet *f0, *fit;
 
-  fit = f0 = mesh->getFacet( mesh->getCell(0)->getFacetId(0) );
+  fit = f0 = mesh->getFacetPtr( mesh->getCellPtr(0)->getFacetId(0) );
   fit = mesh->nextBoundaryFacet(fit);
   EXPECT_EQ(0, fit->getIncidCell());
   EXPECT_EQ(1, fit->getPosition());
@@ -1312,7 +1312,7 @@ TEST(NextBoundaryFacetTest, WithTri3)
   EXPECT_EQ(0, fit->getPosition());
   EXPECT_EQ(f0, fit);
   
-  fit = f0 = mesh->getFacet( mesh->getCell(1)->getFacetId(0) );
+  fit = f0 = mesh->getFacetPtr( mesh->getCellPtr(1)->getFacetId(0) );
   fit = mesh->nextBoundaryFacet(fit);
   EXPECT_EQ(4, fit->getIncidCell());
   EXPECT_EQ(2, fit->getPosition());
@@ -1357,14 +1357,14 @@ TEST(SetBoundaryComponentIdTest, WithTri3)
 
   for (int i = 0; i < n_bound_comps; ++i)
   {
-    Facet *f = mesh->nextBoundaryFacet( mesh->getFacet(f_inis[i]) );
+    Facet *f = mesh->nextBoundaryFacet( mesh->getFacetPtr(f_inis[i]) );
     
     do
     {
       EXPECT_EQ(bc_ids[i], f->getBoundaryComponentId());
       f = mesh->nextBoundaryFacet(f);
     }
-    while (f != mesh->getFacet(f_inis[i]));
+    while (f != mesh->getFacetPtr(f_inis[i]));
     
   }
   
@@ -1387,7 +1387,7 @@ TEST(PushIncidCell2Point, WithSingularVertex)
   //vtk_printer.attachMesh(mesh);
   //vtk_printer.writeVtk("meshes/outtest/simpedge2.vtk");
 
-  Point* p = mesh->getNode(0);
+  Point* p = mesh->getNodePtr(0);
 
   // que tipo de construtor devo fazer?
   //EXPECT_EQ(0, p->numConnectedComps());
@@ -1399,11 +1399,11 @@ TEST(PushIncidCell2Point, WithSingularVertex)
   EXPECT_EQ(4, p->getIncidCell());
   EXPECT_EQ(0, p->getPosition());
   
-  mesh->getCell(4)->setConnectedComponentId(1);
-  mesh->getCell(3)->setConnectedComponentId(1);
-  mesh->getCell(9)->setConnectedComponentId(2);
-  mesh->getCell(10)->setConnectedComponentId(2);
-  mesh->getCell(12)->setConnectedComponentId(3);
+  mesh->getCellPtr(4)->setConnectedComponentId(1);
+  mesh->getCellPtr(3)->setConnectedComponentId(1);
+  mesh->getCellPtr(9)->setConnectedComponentId(2);
+  mesh->getCellPtr(10)->setConnectedComponentId(2);
+  mesh->getCellPtr(12)->setConnectedComponentId(3);
 
   mesh->pushIncidCell2Point(p, 4,0);
   mesh->pushIncidCell2Point(p, 3,0);
@@ -1451,7 +1451,7 @@ TEST(NodeSingularityTest, WithTri3)
 
   for (int i = 0; i < static_cast<int>( sizeof(is_sing)/sizeof(bool) ); ++i)
   {
-    EXPECT_TRUE(mesh->getNode(i)->isSingular()==is_sing[i])  << "i= " << i << std::endl;
+    EXPECT_TRUE(mesh->getNodePtr(i)->isSingular()==is_sing[i])  << "i= " << i << std::endl;
   }
   
   
@@ -1474,7 +1474,7 @@ TEST(InBoundaryTest, WithTri3)
   
   for (int i = 0; i < n_nodes; ++i)
   {
-    p = mesh->getNode(i);
+    p = mesh->getNodePtr(i);
     EXPECT_TRUE(p->getIncidCell() >= 0);
   }
   
@@ -1484,13 +1484,13 @@ TEST(InBoundaryTest, WithTri3)
 
   for (int i = 0; (unsigned)i < sizeof(in_boundary_nds)/sizeof(int); ++i)
   {
-    p = mesh->getNode(in_boundary_nds[i]);
+    p = mesh->getNodePtr(in_boundary_nds[i]);
     EXPECT_TRUE(mesh->inBoundary(p)) << "node " << in_boundary_nds[i] << "; ic "<< p->getIncidCell() << std::endl;
   }
   
   for (int i = 0; (unsigned)i < sizeof(interior_nds)/sizeof(int); ++i)
   {
-    p = mesh->getNode(interior_nds[i]);
+    p = mesh->getNodePtr(interior_nds[i]);
     EXPECT_FALSE(mesh->inBoundary(p)) << "node " << interior_nds[i] << "; ic "<< p->getIncidCell() << std::endl;
   }
 

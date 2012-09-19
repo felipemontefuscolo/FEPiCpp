@@ -158,13 +158,23 @@
 
 
 
+#ifdef __GNUC__
+  #define FEP_GNUC_AT_LEAST(x,y) ((__GNUC__==x && __GNUC_MINOR__>=y) || __GNUC__>x)
+#else
+  #define FEP_GNUC_AT_LEAST(x,y) 0
+#endif
 
+#if (defined _MSC_VER) || (defined __INTEL_COMPILER)
+#define FEP_STRONG_INLINE __forceinline
+#else
+#define FEP_STRONG_INLINE inline
+#endif
 
-
-
-
-
-
+#if FEP_GNUC_AT_LEAST(4,0)
+#define FEP_ALWAYS_INLINE __attribute__((always_inline)) inline
+#else
+#define FEP_ALWAYS_INLINE FEP_STRONG_INLINE
+#endif
 
 
 

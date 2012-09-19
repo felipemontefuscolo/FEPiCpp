@@ -99,7 +99,7 @@ TEST_P(AdjacencyTest, FacetTest) {
       icell_id = cell->getIncidCell(i);
       if (icell_id < 0)
         break;
-      icell = mesh->getCell(icell_id);
+      icell = mesh->getCellPtr(icell_id);
       oth = cell->getIncidCellPos(i);
       
       EXPECT_EQ(cell->getFacetId(i), icell->getFacetId(oth))
@@ -126,13 +126,13 @@ TEST_P(AdjacencyTest, FacetTest) {
 //    {
 //      int facet_id = cell->getFacetId(i);
 //      EXPECT_TRUE(facet_id >= 0);
-//      EXPECT_FALSE(mesh->getFacet(facet_id)->disabled());
+//      EXPECT_FALSE(mesh->getFacetPtr(facet_id)->disabled());
 //    }
 //  }
 //  
-//  MeshTools::removeCell(mesh->getCell(1), mesh);
-//  MeshTools::removeCell(mesh->getCell(2), mesh);
-//  MeshTools::removeCell(mesh->getCell(3), mesh);
+//  MeshTools::removeCell(mesh->getCellPtr(1), mesh);
+//  MeshTools::removeCell(mesh->getCellPtr(2), mesh);
+//  MeshTools::removeCell(mesh->getCellPtr(3), mesh);
 //  
 //  cell = mesh->cellBegin();
 //  cell_end = mesh->cellEnd();
@@ -143,7 +143,7 @@ TEST_P(AdjacencyTest, FacetTest) {
 //    {
 //      int facet_id = cell->getFacetId(i);
 //      EXPECT_TRUE(facet_id >= 0);
-//      EXPECT_FALSE(mesh->getFacet(facet_id)->disabled())
+//      EXPECT_FALSE(mesh->getFacetPtr(facet_id)->disabled())
 //        << mesh->getCellId(&*cell);
 //    }
 //  }
@@ -156,7 +156,7 @@ TEST_P(AdjacencyTest, FacetTest) {
 //  {
 //    EXPECT_TRUE(point->getIncidCell() >= 0);
 //    EXPECT_TRUE(point->getPosition() >= 0);
-//    cell = cell_iterator(mesh,mesh->getCell(point->getIncidCell()));
+//    cell = cell_iterator(mesh,mesh->getCellPtr(point->getIncidCell()));
 //    EXPECT_EQ(mesh->getPointId(&*point), cell->getNodeId(point->getPosition()));
 //  }
 //  
@@ -167,7 +167,7 @@ TEST_P(AdjacencyTest, FacetTest) {
 //  {
 //    EXPECT_TRUE(facet->getIncidCell() >= 0);
 //    EXPECT_TRUE(facet->getPosition() >= 0);
-//    cell = cell_iterator(mesh,mesh->getCell(facet->getIncidCell()));
+//    cell = cell_iterator(mesh,mesh->getCellPtr(facet->getIncidCell()));
 //    EXPECT_EQ(mesh->getFacetId(&*facet), cell->getFacetId(facet->getPosition()));
 //  }
 //  
@@ -178,7 +178,7 @@ TEST_P(AdjacencyTest, FacetTest) {
 //  {
 //    EXPECT_TRUE(corner->getIncidCell() >= 0);
 //    EXPECT_TRUE(corner->getPosition() >= 0);
-//    cell = cell_iterator(mesh,mesh->getCell(corner->getIncidCell()));
+//    cell = cell_iterator(mesh,mesh->getCellPtr(corner->getIncidCell()));
 //    EXPECT_EQ(mesh->getCornerId(&*corner), cell->getCornerId(corner->getPosition()));
 //  }  
 //}

@@ -55,8 +55,8 @@ using namespace Eigen;
 //  mesh = Mesh::create(cell_t);
 //  msh_reader.readFileMsh(mesh_in, mesh);
 //  
-//  MeshTools::removeCell(mesh->getCell(0), mesh);
-//  MeshTools::removeCell(mesh->getCell(2), mesh);
+//  MeshTools::removeCell(mesh->getCellPtr(0), mesh);
+//  MeshTools::removeCell(mesh->getCellPtr(2), mesh);
 //  
 //  //cell_iterator cell = mesh->cellBegin();
 //  //cell_iterator cell_end = mesh->cellEnd();
@@ -103,24 +103,23 @@ TEST(AssignsDofsTest, WithTri3)
   CellElement *l;
   for (int k = 0; k < mesh->numNodesTotal(); ++k)
   {
-    l = mesh->getNode(k);
+    l = mesh->getNodePtr(k);
     DofH.getVariable(1).getVertexDofs(dofs, l);
     nn = count_if(dofs, dofs_end, bind2nd(greater_equal<int>(),0) ); // non-negative
-    EXPECT_EQ(2, nn) << "node id = " << mesh->getCell(l->getIncidCell())->getNodeId(l->getPosition());;
+    EXPECT_EQ(2, nn) << "node id = " << mesh->getCellPtr(l->getIncidCell())->getNodeId(l->getPosition());;
     fill(dofs, dofs_end, -1);
   }
   for (int k = 0; k < mesh->numNodesTotal(); ++k)
   {
-    l = mesh->getNode(k);
+    l = mesh->getNodePtr(k);
     DofH.getVariable(1).getCornerDofs(dofs, l);
     nn = count_if(dofs, dofs_end, bind2nd(greater_equal<int>(),0) ); // non-negative
-    EXPECT_EQ(2, nn) << "node id = " << mesh->getCell(l->getIncidCell())->getNodeId(l->getPosition());;
+    EXPECT_EQ(2, nn) << "node id = " << mesh->getCellPtr(l->getIncidCell())->getNodeId(l->getPosition());;
     fill(dofs, dofs_end, -1);
   }
   
-  
-  MeshTools::removeCell(mesh->getCell(2), mesh);
-  MeshTools::removeCell(mesh->getCell(3), mesh);
+  MeshTools::removeCell(mesh->getCellPtr(2), mesh);
+  MeshTools::removeCell(mesh->getCellPtr(3), mesh);
   
   DofH.SetUp();
   
@@ -160,7 +159,7 @@ public:
   int get_data_i(int nodeid) const
   {
     int dof;
-    Point const* p = mesh_ptr->getNode(nodeid);
+    Point const* p = mesh_ptr->getNodePtr(nodeid);
     if (!mesh_ptr->isVertex(p))
       return -1;
     dofh_ptr->getVariable(0).getVertexDofs(&dof, p);
@@ -200,8 +199,8 @@ TEST(AssignsDofsTest, WithTri6)
   
   EXPECT_EQ(75, DofH.numDofs());
   
-  MeshTools::removeCell(mesh->getCell(2), mesh);
-  MeshTools::removeCell(mesh->getCell(3), mesh);
+  MeshTools::removeCell(mesh->getCellPtr(2), mesh);
+  MeshTools::removeCell(mesh->getCellPtr(3), mesh);
   
   DofH.SetUp();
   
@@ -284,8 +283,8 @@ TEST(AssignsDofsTest, WithTet10)
   
   //DofH.SetUp();
   //
-  MeshTools::removeCell(mesh->getCell(2), mesh);
-  MeshTools::removeCell(mesh->getCell(3), mesh);
+  MeshTools::removeCell(mesh->getCellPtr(2), mesh);
+  MeshTools::removeCell(mesh->getCellPtr(3), mesh);
   //
   DofH.SetUp();
   //
@@ -363,20 +362,20 @@ TEST(BubbleTri3Test, WithTri3)
   DofH.addVariable("velo",   phi, 2);
   DofH.addVariable("press",  psi, 1);
   
-  //MeshTools::removeCell(mesh->getCell(0), mesh);
-  //MeshTools::removeCell(mesh->getCell(1), mesh);
-  //MeshTools::removeCell(mesh->getCell(10), mesh);
-  //MeshTools::removeCell(mesh->getCell(6), mesh);
-  //MeshTools::removeCell(mesh->getCell(7), mesh);
-  //MeshTools::removeCell(mesh->getCell(9), mesh);
-  //MeshTools::removeCell(mesh->getCell(2), mesh);
-  //MeshTools::removeCell(mesh->getCell(3), mesh);
-  //MeshTools::removeCell(mesh->getCell(12), mesh);
-  //MeshTools::removeCell(mesh->getCell(4), mesh);
-  //MeshTools::removeCell(mesh->getCell(5), mesh);
-  //MeshTools::removeCell(mesh->getCell(8), mesh);
-  //MeshTools::removeCell(mesh->getCell(11), mesh);
-  //MeshTools::removeCell(mesh->getCell(13), mesh);
+  //MeshTools::removeCell(mesh->getCellPtr(0), mesh);
+  //MeshTools::removeCell(mesh->getCellPtr(1), mesh);
+  //MeshTools::removeCell(mesh->getCellPtr(10), mesh);
+  //MeshTools::removeCell(mesh->getCellPtr(6), mesh);
+  //MeshTools::removeCell(mesh->getCellPtr(7), mesh);
+  //MeshTools::removeCell(mesh->getCellPtr(9), mesh);
+  //MeshTools::removeCell(mesh->getCellPtr(2), mesh);
+  //MeshTools::removeCell(mesh->getCellPtr(3), mesh);
+  //MeshTools::removeCell(mesh->getCellPtr(12), mesh);
+  //MeshTools::removeCell(mesh->getCellPtr(4), mesh);
+  //MeshTools::removeCell(mesh->getCellPtr(5), mesh);
+  //MeshTools::removeCell(mesh->getCellPtr(8), mesh);
+  //MeshTools::removeCell(mesh->getCellPtr(11), mesh);
+  //MeshTools::removeCell(mesh->getCellPtr(13), mesh);
   
   DofH.SetUp();
   //std::cout << "num dofs = " << DofH.numDofs() << std::endl;
@@ -398,8 +397,8 @@ TEST(BubbleTri3Test, WithTri3)
   //ArrayXi var_cell_dofs(8);
   //ArrayXi var_cell_dofs2(3);
   //
-  //DofH.getVariable(0).getCellDofs(var_cell_dofs.data(), mesh->getCell(13));
-  //DofH.getVariable(1).getCellDofs(var_cell_dofs2.data(), mesh->getCell(13));
+  //DofH.getVariable(0).getCellDofs(var_cell_dofs.data(), mesh->getCellPtr(13));
+  //DofH.getVariable(1).getCellDofs(var_cell_dofs2.data(), mesh->getCellPtr(13));
   //
   //std::cout << var_cell_dofs.transpose() << std::endl;
   //std::cout << var_cell_dofs2.transpose() << std::endl;
@@ -450,20 +449,20 @@ TEST(BubbleTet4Test, WithTet4)
   DofH.addVariable("velo",   phi, 2);
   DofH.addVariable("press",  psi, 1);
   
-  //MeshTools::removeCell(mesh->getCell(0), mesh);
-  //MeshTools::removeCell(mesh->getCell(1), mesh);
-  //MeshTools::removeCell(mesh->getCell(10), mesh);
-  //MeshTools::removeCell(mesh->getCell(6), mesh);
-  //MeshTools::removeCell(mesh->getCell(7), mesh);
-  //MeshTools::removeCell(mesh->getCell(9), mesh);
-  //MeshTools::removeCell(mesh->getCell(2), mesh);
-  //MeshTools::removeCell(mesh->getCell(3), mesh);
-  //MeshTools::removeCell(mesh->getCell(12), mesh);
-  //MeshTools::removeCell(mesh->getCell(4), mesh);
-  //MeshTools::removeCell(mesh->getCell(5), mesh);
-  //MeshTools::removeCell(mesh->getCell(8), mesh);
-  //MeshTools::removeCell(mesh->getCell(11), mesh);
-  //MeshTools::removeCell(mesh->getCell(13), mesh);
+  //MeshTools::removeCell(mesh->getCellPtr(0), mesh);
+  //MeshTools::removeCell(mesh->getCellPtr(1), mesh);
+  //MeshTools::removeCell(mesh->getCellPtr(10), mesh);
+  //MeshTools::removeCell(mesh->getCellPtr(6), mesh);
+  //MeshTools::removeCell(mesh->getCellPtr(7), mesh);
+  //MeshTools::removeCell(mesh->getCellPtr(9), mesh);
+  //MeshTools::removeCell(mesh->getCellPtr(2), mesh);
+  //MeshTools::removeCell(mesh->getCellPtr(3), mesh);
+  //MeshTools::removeCell(mesh->getCellPtr(12), mesh);
+  //MeshTools::removeCell(mesh->getCellPtr(4), mesh);
+  //MeshTools::removeCell(mesh->getCellPtr(5), mesh);
+  //MeshTools::removeCell(mesh->getCellPtr(8), mesh);
+  //MeshTools::removeCell(mesh->getCellPtr(11), mesh);
+  //MeshTools::removeCell(mesh->getCellPtr(13), mesh);
   
   DofH.SetUp();
   //std::cout << "num dofs = " << DofH.numDofs() << std::endl;
@@ -485,8 +484,8 @@ TEST(BubbleTet4Test, WithTet4)
   //ArrayXi var_cell_dofs(8);
   //ArrayXi var_cell_dofs2(3);
   //
-  //DofH.getVariable(0).getCellDofs(var_cell_dofs.data(), mesh->getCell(13));
-  //DofH.getVariable(1).getCellDofs(var_cell_dofs2.data(), mesh->getCell(13));
+  //DofH.getVariable(0).getCellDofs(var_cell_dofs.data(), mesh->getCellPtr(13));
+  //DofH.getVariable(1).getCellDofs(var_cell_dofs2.data(), mesh->getCellPtr(13));
   //
   //std::cout << var_cell_dofs.transpose() << std::endl;
   //std::cout << var_cell_dofs2.transpose() << std::endl;
@@ -552,8 +551,8 @@ TEST(TagsDofsTest, WithTri3)
   EXPECT_EQ(16, DofH.numDofs());
   
   
-  MeshTools::removeCell(mesh->getCell(2), mesh);
-  MeshTools::removeCell(mesh->getCell(3), mesh);
+  MeshTools::removeCell(mesh->getCellPtr(2), mesh);
+  MeshTools::removeCell(mesh->getCellPtr(3), mesh);
   
   DofH.SetUp();
   
@@ -618,8 +617,8 @@ TEST(TagsDofsTest, WithTet10)
   
   //DofH.SetUp();
   //
-  MeshTools::removeCell(mesh->getCell(2), mesh);
-  MeshTools::removeCell(mesh->getCell(3), mesh);
+  MeshTools::removeCell(mesh->getCellPtr(2), mesh);
+  MeshTools::removeCell(mesh->getCellPtr(3), mesh);
   //
   DofH.SetUp();
   //

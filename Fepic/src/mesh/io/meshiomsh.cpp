@@ -164,7 +164,7 @@ void MeshIoMsh::readFileMsh(const char* filename, Mesh * mesh)
       FEPIC_ASSERT(false, "invalid msh format", std::runtime_error);
     sscanf(buffer, "%d %lf %lf %lf", &node_number, &coord[0], &coord[1], &coord[2]);
     FEPIC_ASSERT(node_number==i+1, "wrong file format", std::invalid_argument);
-    mesh->getNode(i)->setCoord(coord,spacedim);
+    mesh->getNodePtr(i)->setCoord(coord,spacedim);
   }
   // os pontos não estão completas: falta atribuir os labels
 
@@ -272,11 +272,11 @@ void MeshIoMsh::readFileMsh(const char* filename, Mesh * mesh)
       if ( EOF == fscanf(file_ptr, "%d", &id_aux) )
         FEPIC_ASSERT(false, "invalid msh format", std::runtime_error);
       --id_aux;
-      mesh->getNode(id_aux)->setTag(physical);
+      mesh->getNodePtr(id_aux)->setTag(physical);
     }
     else if (elm_dim == cell_dim)
     {
-      cell = mesh->getCell(inc++);
+      cell = mesh->getCellPtr(inc++);
       FEPIC_ASSERT(cell_msh_tag == type_tag, "Invalid cell or invalid mesh", std::runtime_error);
       for (int i=0; i< nodes_per_cell; ++i)
       {
@@ -360,14 +360,14 @@ void MeshIoMsh::readFileMsh(const char* filename, Mesh * mesh)
       {
         fscanf(file_ptr, "%d", &nodes[i]);
         --nodes[i];
-        if (mesh->getNode(nodes[i])->getTag() == 0)
-          mesh->getNode(nodes[i])->setTag(physical);
+        if (mesh->getNodePtr(nodes[i])->getTag() == 0)
+          mesh->getNodePtr(nodes[i])->setTag(physical);
       }
       //std::copy( nodes, nodes + n_vertices_per_facet, vtcs );
       if (cell_dim > 1)
       {
         if (mesh->getFacetIdFromVertices(nodes, facet_id))
-          mesh->getFacet(abs(facet_id))->setTag(physical); //std::cout << (++TESTE) << std::endl;
+          mesh->getFacetPtr(abs(facet_id))->setTag(physical); //std::cout << (++TESTE) << std::endl;
         else
         {
           printf("WARNING: INVALID FACET IN INPUT MESH! vtcs: ");
@@ -383,17 +383,17 @@ void MeshIoMsh::readFileMsh(const char* filename, Mesh * mesh)
       {
         fscanf(file_ptr, "%d", &bnodes[i]);
         --bnodes[i];
-        if (mesh->getNode(bnodes[i])->getTag() == 0)
-          mesh->getNode(bnodes[i])->setTag(physical);
+        if (mesh->getNodePtr(bnodes[i])->getTag() == 0)
+          mesh->getNodePtr(bnodes[i])->setTag(physical);
       }
       //std::copy( bnodes, bnodes + n_vertices_per_corner, bvtcs );
       if (cell_dim>2)
       {
         if (mesh->getCornerIdFromVertices(bnodes, corner_id))
         {
-          mesh->getCorner(abs(corner_id))->setTag(physical); //std::cout << (++TESTE) << std::endl;
+          mesh->getCornerPtr(abs(corner_id))->setTag(physical); //std::cout << (++TESTE) << std::endl;
         }
-        else if (mesh->isVertex(mesh->getNode(bnodes[0])) ) // if is vertex
+        else if (mesh->isVertex(mesh->getNodePtr(bnodes[0])) ) // if is vertex
             printf("WARNING: INVALID CORNER IN INPUT MESH!\n");
       }
     }
@@ -404,8 +404,8 @@ void MeshIoMsh::readFileMsh(const char* filename, Mesh * mesh)
         fscanf(file_ptr, "%d", &id_aux);
         --id_aux;
 
-        if ((mesh->getNode(id_aux)->getTag()) == 0)
-          mesh->getNode(id_aux)->setTag(physical);
+        if ((mesh->getNodePtr(id_aux)->getTag()) == 0)
+          mesh->getNodePtr(id_aux)->setTag(physical);
       }
     }
 
@@ -423,14 +423,14 @@ void MeshIoMsh::readFileMsh(const char* filename, Mesh * mesh)
     Corner* corner;
     for (int i = 0; i < mesh->numFacetsTotal(); ++i)
     {
-      facet = mesh->getFacet(i);
+      facet = mesh->getFacetPtr(i);
       if (facet->isDisabled())
         continue;
-      mesh->getCell(facet->getIncidCell())->getFacetCornersId(facet->getPosition(), facet_facets);
+      mesh->getCellPtr(facet->getIncidCell())->getFacetCornersId(facet->getPosition(), facet_facets);
 
       for (int j = 0; j < n_corners_per_facet; ++j)
       {
-        corner = mesh->getCorner(facet_facets[j]);
+        corner = mesh->getCornerPtr(facet_facets[j]);
         if (corner->getTag() == 0)
           corner->setTag(facet->getTag());
       }

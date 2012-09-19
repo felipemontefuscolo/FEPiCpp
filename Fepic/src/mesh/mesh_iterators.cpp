@@ -1,97 +1,94 @@
 #include "mesh_iterators.hpp"
 #include "mesh.hpp"
 
-template<> 
+template<>
 typename _MeshIterator<Cell>::Self&
 _MeshIterator<Cell>::operator++()
-{ _elem_ptr = _mesh_ptr->incCell(_elem_ptr); return *this; }
+{ _elem_ptr = _mesh_ptr->incEnabledCell(_elem_id); return *this; }
 
-template<> 
+template<>
 typename _MeshIterator<Point>::Self&
 _MeshIterator<Point>::operator++()
-{ _elem_ptr = _mesh_ptr->incPoint(_elem_ptr); return *this; }
+{ _elem_ptr = _mesh_ptr->incEnabledPoint(_elem_id); return *this; }
 
-template<> 
+template<>
 typename _MeshIterator<Facet>::Self&
 _MeshIterator<Facet>::operator++()
-{ _elem_ptr = _mesh_ptr->incFacet(_elem_ptr); return *this; }
+{ _elem_ptr = _mesh_ptr->incEnabledFacet(_elem_id); return *this; }
 
-template<> 
+template<>
+
 typename _MeshIterator<Corner>::Self&
 _MeshIterator<Corner>::operator++()
-{ _elem_ptr = _mesh_ptr->incCorner(_elem_ptr); return *this; }
+{ _elem_ptr = _mesh_ptr->incEnabledCorner(_elem_id); return *this; }
 
 // =========================================================================
 
-template<> 
+template<>
 typename _MeshIterator<Cell>::Self
 _MeshIterator<Cell>::operator++(int)
-{ Self tmp = *this; _elem_ptr = _mesh_ptr->incCell(_elem_ptr); return tmp; }
+{ Self tmp = *this; _elem_ptr = _mesh_ptr->incEnabledCell(_elem_id); return tmp; }
 
-template<> 
+template<>
 typename _MeshIterator<Point>::Self
 _MeshIterator<Point>::operator++(int)
-{ Self tmp = *this; _elem_ptr = _mesh_ptr->incPoint(_elem_ptr); return tmp; }
+{ Self tmp = *this; _elem_ptr = _mesh_ptr->incEnabledPoint(_elem_id); return tmp; }
 
-template<> 
+template<>
 typename _MeshIterator<Facet>::Self
 _MeshIterator<Facet>::operator++(int)
-{ Self tmp = *this; _elem_ptr = _mesh_ptr->incFacet(_elem_ptr); return tmp; }
+{ Self tmp = *this; _elem_ptr = _mesh_ptr->incEnabledFacet(_elem_id); return tmp; }
 
-template<> 
+template<>
 typename _MeshIterator<Corner>::Self
 _MeshIterator<Corner>::operator++(int)
-{ Self tmp = *this; _elem_ptr = _mesh_ptr->incCorner(_elem_ptr); return tmp; }
-
+{ Self tmp = *this; _elem_ptr = _mesh_ptr->incEnabledCorner(_elem_id); return tmp; }
 
 // =========================================================================
 
 
-template<> 
+template<>
 typename _MeshIterator<Cell>::Self&
 _MeshIterator<Cell>::operator--()
-{ _elem_ptr = _mesh_ptr->decCell(_elem_ptr); return *this; }
+{ _elem_ptr = _mesh_ptr->decEnabledCell(_elem_id); return *this; }
 
-template<> 
+template<>
 typename _MeshIterator<Point>::Self&
 _MeshIterator<Point>::operator--()
-{ _elem_ptr = _mesh_ptr->decPoint(_elem_ptr); return *this; }
+{ _elem_ptr = _mesh_ptr->decEnabledPoint(_elem_id); return *this; }
 
-template<> 
+template<>
 typename _MeshIterator<Facet>::Self&
 _MeshIterator<Facet>::operator--()
-{ _elem_ptr = _mesh_ptr->decFacet(_elem_ptr); return *this; }
+{ _elem_ptr = _mesh_ptr->decEnabledFacet(_elem_id); return *this; }
 
-template<> 
+template<>
 typename _MeshIterator<Corner>::Self&
 _MeshIterator<Corner>::operator--()
-{ _elem_ptr = _mesh_ptr->decCorner(_elem_ptr); return *this; }
+{ _elem_ptr = _mesh_ptr->decEnabledCorner(_elem_id); return *this; }
 
 // =========================================================================
 
 template<> 
 typename _MeshIterator<Cell>::Self
 _MeshIterator<Cell>::operator--(int)
-{ Self tmp = *this; _elem_ptr = _mesh_ptr->decCell(_elem_ptr); return tmp; }
+{ Self tmp = *this; _elem_ptr = _mesh_ptr->decEnabledCell(_elem_id); return tmp; }
 
-template<> 
+template<>
 typename _MeshIterator<Point>::Self
 _MeshIterator<Point>::operator--(int)
-{ Self tmp = *this; _elem_ptr = _mesh_ptr->decPoint(_elem_ptr); return tmp; }
+{ Self tmp = *this; _elem_ptr = _mesh_ptr->decEnabledPoint(_elem_id); return tmp; }
 
-template<> 
+template<>
 typename _MeshIterator<Facet>::Self
 _MeshIterator<Facet>::operator--(int)
-{ Self tmp = *this; _elem_ptr = _mesh_ptr->decFacet(_elem_ptr); return tmp; }
+{ Self tmp = *this; _elem_ptr = _mesh_ptr->decEnabledFacet(_elem_id); return tmp; }
 
-template<> 
+template<>
 typename _MeshIterator<Corner>::Self
 _MeshIterator<Corner>::operator--(int)
-{ Self tmp = *this; _elem_ptr = _mesh_ptr->decCorner(_elem_ptr); return tmp; }
+{ Self tmp = *this; _elem_ptr = _mesh_ptr->decEnabledCorner(_elem_id); return tmp; }
+
 
 // =========================================================================
 // =========================================================================
-
-
-
-

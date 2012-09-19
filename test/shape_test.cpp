@@ -161,7 +161,7 @@ TEST_P(ShapeTest, GradPrecisionTest)
   
   for (int i = 0; i < n_nodes; ++i)
   {
-    x = mesh->getNode(i)->getCoord();
+    x = mesh->getNodePtr(i)->getCoord();
     
     for (ith = 0; ith < phi->getNumDof(); ++ith)
     {
@@ -197,7 +197,7 @@ TEST_P(ShapeTest, PartitionOfUnityTest)
   if (phi->partUnity())
     for (int i = 0; i < n_nodes; ++i)
     {
-      x = mesh->getNode(i)->getCoord();
+      x = mesh->getNodePtr(i)->getCoord();
       
       acc = 0;
       for (ith = 0; ith < phi->getNumDof(); ++ith)
@@ -233,7 +233,7 @@ TEST(OutroTeste, HaHaHaHa)
   Point * p;
   for (int k = 0; k < n_nodes; ++k)
   {
-    p = mesh->getNode(k);
+    p = mesh->getNodePtr(k);
     int aux = (int)(mesh->connectedVtcs(p, iVs)-iVs);
     int aux2= (int)(mesh->vertexStar(p, iVs, lalala) - iVs);
     if (q < aux)

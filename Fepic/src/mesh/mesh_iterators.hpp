@@ -24,14 +24,15 @@
 #define FEPIC_MESH_ITERATORS_HPP
 
 #include <iterator>
+#include "basehandler.hpp"
 
 template<class> class SMesh;
 class Mesh;
 class Cell;
 
-// VirtualEntity = Cell, Facet, Corner or Point
-template<class VirtualEntity>
-class _MeshIterator
+// EntityType = Cell, Facet, Corner or Point
+template<class EntityType>
+class _MeshIterator : public BaseHandler<EntityType>
 {
   template<class> friend class SMesh;
   friend class Mesh;
@@ -39,35 +40,55 @@ class _MeshIterator
   typedef _MeshIterator Self;
 public:
   
-  //typedef typename long                            difference_type;
-  typedef  VirtualEntity                   value_type;
-  typedef  VirtualEntity*                  pointer;
-  typedef  VirtualEntity&                  reference;
+  //typedef typename long                  difference_type;
   typedef  std::bidirectional_iterator_tag iterator_category;  
+  typedef typename BaseHandler<EntityType>::value_type      value_type;
+  typedef typename BaseHandler<EntityType>::pointer         pointer;
+  typedef typename BaseHandler<EntityType>::const_pointer   const_pointer;
+  typedef typename BaseHandler<EntityType>::reference       reference;
+  typedef typename BaseHandler<EntityType>::const_reference const_reference;  
   
-  explicit
-  _MeshIterator(Mesh * mesh, pointer elem) : _elem_ptr(elem), _mesh_ptr(mesh) {};
+  _MeshIterator(Mesh * mesh, pointer elem, int id) : BaseHandler<EntityType>(mesh,elem,id) {}
+  _MeshIterator(Mesh * mesh, int id) : BaseHandler<EntityType>(mesh,id) {}
   
-  _MeshIterator() : _elem_ptr(NULL), _mesh_ptr(NULL) {};
-  
-  reference operator*() const {return *_elem_ptr;}
-  pointer   operator->() const {return &(*_elem_ptr);}
+  _MeshIterator() : BaseHandler<EntityType>() {}
+
   Self&     operator++();
   Self      operator++(int);
   Self&     operator--();
   Self      operator--(int);
 
-  bool
-  operator==(const Self& x) const
-  { return _elem_ptr == x._elem_ptr; }
+};
 
-  bool
-  operator!=(const Self& x) const
-  { return _elem_ptr != x._elem_ptr; }
+
+// EntityType = Cell, Facet, Corner or Point
+template<class EntityType>
+class _MeshConstIterator : public ConstBaseHandler<EntityType>
+{
+  template<class> friend class SMesh;
+  friend class Mesh;
   
-private:
-  VirtualEntity * _elem_ptr;
-  Mesh * _mesh_ptr;
+  typedef _MeshConstIterator Self;
+public:
+  
+  //typedef typename long                  difference_type;
+  typedef  std::bidirectional_iterator_tag iterator_category;  
+  typedef  EntityType         value_type;
+  typedef  EntityType*        pointer;
+  typedef  EntityType const*  const_pointer;
+  typedef  EntityType&        reference;
+  typedef  EntityType const&  const_reference;
+  
+  _MeshConstIterator(Mesh const* mesh, const_pointer elem, int id) : ConstBaseHandler<EntityType>(mesh,elem,id) {}
+  _MeshConstIterator(Mesh const* mesh, int id) : ConstBaseHandler<EntityType>(mesh,id) {}
+  
+  _MeshConstIterator() : ConstBaseHandler<EntityType>() {}
+  
+  Self&           operator++();
+  Self            operator++(int);
+  Self&           operator--();
+  Self            operator--(int);
+
 };
 
 

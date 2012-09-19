@@ -15,6 +15,7 @@
 #include <tr1/type_traits>
 #include "../mesh/labelable.hpp"
 #include <iostream>
+#include "macros.hpp"
 
 /*
                         _      _  _       _
@@ -114,42 +115,50 @@ public:
 
   /*  PARALLEL VERSION  */
 
-  iterator begin(int tid, int nthreads)
+  iterator begin(int tid, int nthreads, int * begin_idx = NULL)
   {
     int const N = size();
     int const start = tid*(N/nthreads) + ((N%nthreads) < tid ? (N%nthreads) : tid);
+    if(begin_idx)
+      *begin_idx = start;
     iterator s = begin();
     for (int i = 0; i < start; ++i)
       ++s;
     return s;
   }
 
-  iterator end(int tid, int nthreads)
+  iterator end(int tid, int nthreads, int * end_idx = NULL)
   {
     int const N = size();
     int const start = tid*(N/nthreads) + ((N%nthreads) < tid ? (N%nthreads) : tid);
     int const end_   = start + N/nthreads + ((N%nthreads) > tid);
+    if (end_idx)
+      *end_idx = end_;
     iterator e = begin(tid,nthreads);
     for (int i = 0; i < end_-start; ++i)
       ++e;
     return e;
   }
 
-  const_iterator begin(int tid, int nthreads) const
+  const_iterator begin(int tid, int nthreads, int * begin_idx = NULL) const
   {
     int const N = size();
     int const start = tid*(N/nthreads) + ((N%nthreads) < tid ? (N%nthreads) : tid);
+    if(begin_idx)
+      *begin_idx = start;
     const_iterator s = begin();
     for (int i = 0; i < start; ++i)
       ++s;
     return s;
   }
 
-  const_iterator end(int tid, int nthreads) const
+  const_iterator end(int tid, int nthreads, int * end_idx = NULL) const
   {
     int const N = size();
     int const start = tid*(N/nthreads) + ((N%nthreads) < tid ? (N%nthreads) : tid);
     int const end_   = start + N/nthreads + ((N%nthreads) > tid);
+    if (end_idx)
+      *end_idx = end_;
     const_iterator e = begin(tid,nthreads);
     for (int i = 0; i < end_-start; ++i)
       ++e;
@@ -330,8 +339,8 @@ public:
 
   explicit
   SeqList_iterator(SeqListType * sq, ContainerIterator x) : _iter_to_t(x), _ptr_to_seq(sq) {}
-  explicit
-  SeqList_iterator(SeqListType * sq, pointer p) : _iter_to_t(ContainerIterator(p)), _ptr_to_seq(sq) {}
+  //explicit
+  //SeqList_iterator(SeqListType * sq, pointer p) : _iter_to_t(ContainerIterator(p)), _ptr_to_seq(sq) {}
   explicit
   SeqList_iterator(SeqListType * sq) : _iter_to_t(), _ptr_to_seq(sq) {}
 
@@ -342,6 +351,7 @@ public:
   ContainerIterator const& get() const
   { return _iter_to_t; }
 
+  FEP_STRONG_INLINE
   Self& operator=(Self const& foo)
   {
     _iter_to_t = foo._iter_to_t;
@@ -349,18 +359,22 @@ public:
     return *this;
   }
 
+  FEP_STRONG_INLINE
   reference
   operator*() const
   {
     return *_iter_to_t;
   }
 
+  FEP_STRONG_INLINE
   pointer
   operator->() const
   {
     return &(*_iter_to_t);
   }
 
+  
+  FEP_STRONG_INLINE
   Self&
   operator++()
   {
@@ -370,6 +384,7 @@ public:
     return *this;
   }
 
+  FEP_STRONG_INLINE
   Self
   operator++(int)
   {
@@ -380,6 +395,7 @@ public:
     return tmp;
   }
 
+  FEP_STRONG_INLINE
   Self&
   operator--()
   {
@@ -389,6 +405,7 @@ public:
     return *this;
   }
 
+  FEP_STRONG_INLINE
   Self
   operator--(int)
   {
@@ -399,10 +416,37 @@ public:
     return tmp;
   }
 
+  FEP_STRONG_INLINE
+  Self&
+  next()
+  {
+    ++_iter_to_t;
+    return *this;
+  }
+
+  FEP_STRONG_INLINE
+  Self&
+  previous()
+  {
+    --_iter_to_t;
+    return *this;
+  }
+
+  FEP_STRONG_INLINE
+  Self
+  plus(difference_type const& n)
+  {
+    Self tmp = Self(_ptr_to_seq, _iter_to_t + n);
+    return tmp;
+  }
+
+
+  FEP_STRONG_INLINE
   bool
   operator==(const Self& x) const
   { return _iter_to_t == x._iter_to_t; }
 
+  FEP_STRONG_INLINE
   bool
   operator!=(const Self& x) const
   { return _iter_to_t != x._iter_to_t; }
@@ -437,8 +481,8 @@ public:
 
   SeqList_const_iterator(SeqListType const* sq, ContainerIterator const& x) : _iter_to_t(x), _ptr_to_seq(sq) {}
   explicit
-  SeqList_const_iterator(SeqListType const* sq, pointer p) : _iter_to_t(ContainerIterator(p)), _ptr_to_seq(sq) {}
-  explicit
+  //SeqList_const_iterator(SeqListType const* sq, pointer p) : _iter_to_t(ContainerIterator(p)), _ptr_to_seq(sq) {}
+  //explicit
   SeqList_const_iterator(SeqListType const* sq) : _iter_to_t(), _ptr_to_seq(sq) {}
 
   SeqList_const_iterator(Self const& it)        : _iter_to_t(it._iter_to_t), _ptr_to_seq(it._ptr_to_seq) {}
@@ -446,9 +490,11 @@ public:
 
   SeqList_const_iterator() : _iter_to_t(), _ptr_to_seq(NULL) {}
 
+  FEP_STRONG_INLINE
   ContainerIterator const& get() const
   { return _iter_to_t; }
 
+  FEP_STRONG_INLINE
   Self& operator=(Self const& foo)
   {
     _iter_to_t = foo._iter_to_t;
@@ -456,18 +502,21 @@ public:
     return *this;
   }
 
+  FEP_STRONG_INLINE
   reference
   operator*() const
   {
     return *_iter_to_t;
   }
 
+  FEP_STRONG_INLINE
   pointer
   operator->() const
   {
     return &(*_iter_to_t);
   }
 
+  FEP_STRONG_INLINE
   Self&
   operator++()
   {
@@ -477,6 +526,7 @@ public:
     return *this;
   }
 
+  FEP_STRONG_INLINE
   Self
   operator++(int)
   {
@@ -487,6 +537,7 @@ public:
     return tmp;
   }
 
+  FEP_STRONG_INLINE
   Self&
   operator--()
   {
@@ -496,6 +547,7 @@ public:
     return *this;
   }
 
+  FEP_STRONG_INLINE
   Self
   operator--(int)
   {
@@ -506,10 +558,36 @@ public:
     return tmp;
   }
 
+  FEP_STRONG_INLINE
+  Self&
+  next()
+  {
+    ++_iter_to_t;
+    return *this;
+  }
+
+  FEP_STRONG_INLINE
+  Self&
+  previous()
+  {
+    --_iter_to_t;
+    return *this;
+  }
+
+  FEP_STRONG_INLINE
+  Self
+  plus(difference_type const& n)
+  {
+    Self tmp = Self(_ptr_to_seq, _iter_to_t + n);
+    return tmp;
+  }
+
+  FEP_STRONG_INLINE
   bool
   operator==(const Self& x) const
   { return _iter_to_t == x._iter_to_t; }
 
+  FEP_STRONG_INLINE
   bool
   operator!=(const Self& x) const
   { return _iter_to_t != x._iter_to_t; }

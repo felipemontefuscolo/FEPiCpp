@@ -84,7 +84,7 @@
 //      if (cell->getIncidCell(i) >= 0)
 //      {
 //        // checks whether the neighbor cell contains this cell.
-//        c = mesh->getCell(cell->getIncidCell(i));
+//        c = mesh->getCellPtr(cell->getIncidCell(i));
 //        int pos = cell->getIncidCellPos(i);
 //        if (myid != c->getIncidCell(pos))
 //          return -1;
@@ -92,7 +92,7 @@
 //        // checks facets
 //        if (!(static_cast<unsigned>(cell->getFacetId(i)) < mesh->numFacetsTotal()))
 //          return -2;
-//        f = mesh->getFacet(cell->getFacetId(i));
+//        f = mesh->getFacetPtr(cell->getFacetId(i));
 //        int icf = f->getIncidCell();
 //        if (!(icf==myid || icf==cell->getIncidCell(i)))
 //          return -3;
@@ -106,7 +106,7 @@
 //      else // bordo
 //      {
 //        // verifica a face
-//        f = mesh->getFacet(cell->getFacetId(i));
+//        f = mesh->getFacetPtr(cell->getFacetId(i));
 //        int icf = f->getIncidCell();
 //        // só pode ser o myid, pq do outro lado não tem ngm
 //        EXPECT_TRUE(icf==myid);
@@ -115,7 +115,7 @@
 //        mesh->getFacetNodesId(f, f_nds);
 //        for (int j = 0; j < nnpf; ++j)
 //        {
-//          EXPECT_TRUE(mesh->inBoundary(mesh->getNode(f_nds[j])));
+//          EXPECT_TRUE(mesh->inBoundary(mesh->getNodePtr(f_nds[j])));
 //        }
 //
 //      }
@@ -128,7 +128,7 @@
 //    int myid = mesh->getPointId(&*point);
 //    int ic = point->getIncidCell();
 //    int pos = point->getPosition();
-//    Cell *c = mesh->getCell(ic);
+//    Cell *c = mesh->getCellPtr(ic);
 //
 //    EXPECT_TRUE(c->getNodeId(pos) == myid);
 //
@@ -146,6 +146,7 @@
  */
 void MeshTools::removeCell(Cell * cell, Mesh *mesh)
 {
+  const int cell_id_to_remove = mesh->getCellId(cell);
   const int cell_dim = mesh->cellDim();
   const int nds_per_cell = mesh->numNodesPerCell();
 
@@ -162,7 +163,7 @@ void MeshTools::removeCell(Cell * cell, Mesh *mesh)
   for (int i = 0; i < nds_per_cell; ++i)
   {
     id = cell->getNodeId(i);
-    if (mesh->inSingleCell(mesh->getNode(id)))
+    if (mesh->inSingleCell(mesh->getNodePtr(id)))
       mesh->disablePoint(id);
   }
 
@@ -171,7 +172,7 @@ void MeshTools::removeCell(Cell * cell, Mesh *mesh)
     for (int i = 0; i < n_facets_per_cell; ++i)
     {
       id = cell->getFacetId(i);
-      if (mesh->inSingleCell(mesh->getFacet(id)))
+      if (mesh->inSingleCell(mesh->getFacetPtr(id)))
         mesh->disableFacet(id);
     }
 
@@ -180,7 +181,7 @@ void MeshTools::removeCell(Cell * cell, Mesh *mesh)
     for (int i = 0; i < n_corners_per_cell; ++i)
     {
       id = cell->getCornerId(i);
-      if (mesh->inSingleCell(mesh->getCorner(id)))
+      if (mesh->inSingleCell(mesh->getCornerPtr(id)))
         mesh->disableCorner(id);
     }
 
@@ -196,12 +197,12 @@ void MeshTools::removeCell(Cell * cell, Mesh *mesh)
     const int neib_id = cell->getIncidCell(i);
     if (neib_id < 0)
       continue;
-    neib = mesh->getCell( neib_id );
+    neib = mesh->getCellPtr( neib_id );
 
     // nodes
     for (int j = 0; j < nds_per_cell; ++j)
     {
-      pt = mesh->getNode(neib->getNodeId(j));
+      pt = mesh->getNodePtr(neib->getNodeId(j));
       pt->setIncidCell(neib_id);
       pt->setPosition(j);
     }
@@ -210,7 +211,7 @@ void MeshTools::removeCell(Cell * cell, Mesh *mesh)
     if (cell_dim > 1)
       for (int j = 0; j < n_facets_per_cell; ++j)
       {
-        ft = mesh->getFacet(neib->getFacetId(j));
+        ft = mesh->getFacetPtr(neib->getFacetId(j));
         ft->setIncidCell(neib_id);
         ft->setPosition(j);
       }
@@ -219,7 +220,7 @@ void MeshTools::removeCell(Cell * cell, Mesh *mesh)
     if (cell_dim > 2)
       for (int j = 0; j < n_corners_per_cell; ++j)
       {
-        cr = mesh->getCorner(neib->getCornerId(j));
+        cr = mesh->getCornerPtr(neib->getCornerId(j));
         cr->setIncidCell(neib_id);
         cr->setPosition(j);
       }
@@ -232,8 +233,7 @@ void MeshTools::removeCell(Cell * cell, Mesh *mesh)
 
 
   // killing cells
-  id = mesh->getCellId(cell);
-  mesh->disableCell(id);
+  mesh->disableCell(cell_id_to_remove);
 }
 
 /** Read a mesh from input arrays.
@@ -262,12 +262,12 @@ void MeshTools::readMesh(int n_nodes, int n_cells, int const* nodes, Real const*
 
   FEP_PRAGMA_OMP(paralle for)
   for (int n = 0; n < n_nodes; ++n)
-      mesh->getNode(n)->setCoord(&xyz[sdim*n], sdim);
+      mesh->getNodePtr(n)->setCoord(&xyz[sdim*n], sdim);
 
   FEP_PRAGMA_OMP(paralle for)
   for (int c = 0; c < n_cells; ++c)
     for (int i = 0; i < nnpe; ++i)
-      mesh->getCell(c)->setNodeId(i, nodes[nnpe*c + i]);
+      mesh->getCellPtr(c)->setNodeId(i, nodes[nnpe*c + i]);
 
   if (mesh->qBuildAdjacency())
     mesh->buildAdjacency();
@@ -320,27 +320,27 @@ bool MeshToolsTri::flipEdge(Cell * acell, int afid, Mesh *mesh, bool move_edge_n
 
   FEPIC_CHECK(bcid >= 0 && bfid>=0, "invalid mesh or argument", std::runtime_error);
 
-  Cell *bcell = mesh->getCell(bcid);
+  Cell *bcell = mesh->getCellPtr(bcid);
 
   /* changing the incidences of the facets */
   Facet *f;
-  f = mesh->getFacet(acell->getFacetId(afid_plus1)); // inferior-direita
+  f = mesh->getFacetPtr(acell->getFacetId(afid_plus1)); // inferior-direita
   f->setIncidence(bcid,bfid);
 
-  f = mesh->getFacet(bcell->getFacetId(bfid_plus1)); // superior-esquerda
+  f = mesh->getFacetPtr(bcell->getFacetId(bfid_plus1)); // superior-esquerda
   f->setIncidence(acid, afid);
 
-  f = mesh->getFacet(acell->getFacetId(afid)); // meio
+  f = mesh->getFacetPtr(acell->getFacetId(afid)); // meio
   f->setIncidence(acid,afid_plus1);
   // as outras faces são preservadas
 
   /* changing the incidences of the nodes only when is necessary */
   Point *p;
-  p = mesh->getNode(acell->getNodeId(afid)); // j de a
+  p = mesh->getNodePtr(acell->getNodeId(afid)); // j de a
   if (p->getIncidCell() == bcid)
     p->setIncidence(acid, afid);
 
-  p = mesh->getNode(bcell->getNodeId(bfid)); // j de b
+  p = mesh->getNodePtr(bcell->getNodeId(bfid)); // j de b
   if (p->getIncidCell() == acid)
     p->setIncidence(bcid, bfid);
 
@@ -350,14 +350,14 @@ bool MeshToolsTri::flipEdge(Cell * acell, int afid, Mesh *mesh, bool move_edge_n
   acell->setIncidence(afid, bcell->getIncidCell(bfid_plus1), bcell->getIncidCellPos(bfid_plus1));
   if (acell->getIncidCell(afid) >= 0)
   {
-    c = mesh->getCell(acell->getIncidCell(afid));
+    c = mesh->getCellPtr(acell->getIncidCell(afid));
     c->setIncidence(acell->getIncidCellPos(afid), acid, afid);
   }
   // inferior-direita
   bcell->setIncidence(bfid, acell->getIncidCell(afid_plus1), acell->getIncidCellPos(afid_plus1));
   if (bcell->getIncidCell(bfid) >= 0)
   {
-    c = mesh->getCell(bcell->getIncidCell(bfid));
+    c = mesh->getCellPtr(bcell->getIncidCell(bfid));
     c->setIncidence(bcell->getIncidCellPos(bfid), bcid, bfid);
   }
   // meio (tem que ser depois mesmo)
@@ -404,17 +404,17 @@ bool MeshToolsTri::flipEdge(Cell * acell, int afid, Mesh *mesh, bool move_edge_n
     bcell->setNodeId(bfid_plus1+3, f_m );
     //bcell->setNodeId(bfid_plus2+3, f_ie);
 
-    mesh->getNode(f_id)->setIncidence(bcid, bfid+3);       // inferior-direita
-    mesh->getNode(f_se)->setIncidence(acid, afid+3);       // superior-esquerda
-    mesh->getNode(f_m )->setIncidence(acid, afid_plus1+3); // meio
+    mesh->getNodePtr(f_id)->setIncidence(bcid, bfid+3);       // inferior-direita
+    mesh->getNodePtr(f_se)->setIncidence(acid, afid+3);       // superior-esquerda
+    mesh->getNodePtr(f_m )->setIncidence(acid, afid_plus1+3); // meio
 
     if (move_edge_nds)
     {
       int const sdim = mesh->spaceDim();
       Real pleft[3], pright[3];
 
-      mesh->getNode(acell->getNodeId(afid_plus2))->getCoord(pright,sdim); // right node
-      mesh->getNode(bcell->getNodeId(bfid_plus2))->getCoord(pleft,sdim);  // left node
+      mesh->getNodePtr(acell->getNodeId(afid_plus2))->getCoord(pright,sdim); // right node
+      mesh->getNodePtr(bcell->getNodeId(bfid_plus2))->getCoord(pleft,sdim);  // left node
 
       // compute the center of the new edge
       pleft[0] = 0.5*(pleft[0]+pright[0]);
@@ -422,7 +422,7 @@ bool MeshToolsTri::flipEdge(Cell * acell, int afid, Mesh *mesh, bool move_edge_n
       if (sdim==3)
         pleft[2] = 0.5*(pleft[2]+pright[2]);
 
-      p = mesh->getNode(acell->getNodeId(afid_plus1+3)); // mid node
+      p = mesh->getNodePtr(acell->getNodeId(afid_plus1+3)); // mid node
       p->setCoord(pleft, sdim);
     }
 
@@ -445,12 +445,12 @@ bool MeshToolsTri::inCircle2d(Cell const* cell, int const fid, Mesh const* mesh)
     return true;
 
   int const ofid = cell->getIncidCellPos(fid);
-  Cell const *ocell = mesh->getCell(ocid);
+  Cell const *ocell = mesh->getCellPtr(ocid);
 
-  Point const *a = mesh->getNode(cell->getNodeId(0));
-  Point const *b = mesh->getNode(cell->getNodeId(1));
-  Point const *c = mesh->getNode(cell->getNodeId(2));
-  Point const *d = mesh->getNode(ocell->getNodeId((ofid+2)%3));
+  Point const *a = mesh->getNodePtr(cell->getNodeId(0));
+  Point const *b = mesh->getNodePtr(cell->getNodeId(1));
+  Point const *c = mesh->getNodePtr(cell->getNodeId(2));
+  Point const *d = mesh->getNodePtr(ocell->getNodeId((ofid+2)%3));
 
   Real const ax = a->getCoord(0), ay = a->getCoord(1), aq = ax*ax + ay*ay;
   Real const bx = b->getCoord(0), by = b->getCoord(1), bq = bx*bx + by*by;
@@ -565,7 +565,7 @@ Point* MeshToolsTri::insertVertexOnEdge(Cell *cellA, int fidA, Real t, Mesh *mes
     //fidB_plus1 = (fidB+1)%3;
     fidB_plus2 = (fidB+2)%3;
 
-    cellB = mesh->getCell(cidB);
+    cellB = mesh->getCellPtr(cidB);
     cellC = mesh->pushCell(&cidC); //cellC = mesh->createCell(); cidC = mesh->pushCell(cellC);
   }
 
@@ -585,10 +585,10 @@ Point* MeshToolsTri::insertVertexOnEdge(Cell *cellA, int fidA, Real t, Mesh *mes
   int        nod_br_id;
   int        nod_bl_id;
 
-  Point *vtx_t = mesh->getNode(vtx_t_id);
-  Point *vtx_b = mesh->getNode(vtx_b_id);
+  Point *vtx_t = mesh->getNodePtr(vtx_t_id);
+  Point *vtx_b = mesh->getNodePtr(vtx_b_id);
   Point *vtx_l = NULL;
-  Point *vtx_r = mesh->getNode(vtx_r_id);
+  Point *vtx_r = mesh->getNodePtr(vtx_r_id);
   Point *vtx_m = mesh->pushPoint(&vtx_m_id);
   // high order nodes
   Point *nod_t = NULL;
@@ -608,7 +608,7 @@ Point* MeshToolsTri::insertVertexOnEdge(Cell *cellA, int fidA, Real t, Mesh *mes
   if (!edge_in_boundary)
   {
     vtx_l_id = cellB->getNodeId(fidB_plus2);
-    vtx_l = mesh->getNode(vtx_l_id);
+    vtx_l = mesh->getNodePtr(vtx_l_id);
     vl_xyz = vtx_l->getCoord();
   }
   if (high_order)
@@ -617,9 +617,9 @@ Point* MeshToolsTri::insertVertexOnEdge(Cell *cellA, int fidA, Real t, Mesh *mes
     //nod_tr_id = cellA->getNodeId(fidA_plus2 + 3);
     nod_br_id = cellA->getNodeId(fidA_plus1 + 3);
 
-    nod_t  = mesh->getNode(nod_t_id);
-    //nod_tr = mesh->getNode(nod_tr_id);
-    nod_br = mesh->getNode(nod_br_id);
+    nod_t  = mesh->getNodePtr(nod_t_id);
+    //nod_tr = mesh->getNodePtr(nod_tr_id);
+    nod_br = mesh->getNodePtr(nod_br_id);
     nod_b  = mesh->pushPoint(&nod_b_id);
     nod_r  = mesh->pushPoint(&nod_r_id);
 
@@ -628,8 +628,8 @@ Point* MeshToolsTri::insertVertexOnEdge(Cell *cellA, int fidA, Real t, Mesh *mes
       //nod_tl_id = cellB->getNodeId(fidB_plus1 + 3);
       nod_bl_id = cellB->getNodeId(fidB_plus2 + 3);
       nod_l  = mesh->pushPoint(&nod_l_id);
-      //nod_tl = mesh->getNode(nod_tl_id);
-      nod_bl = mesh->getNode(nod_bl_id);
+      //nod_tl = mesh->getNodePtr(nod_tl_id);
+      nod_bl = mesh->getNodePtr(nod_bl_id);
     }
   }
 
@@ -644,13 +644,13 @@ Point* MeshToolsTri::insertVertexOnEdge(Cell *cellA, int fidA, Real t, Mesh *mes
   int const edge_br_id = cellA->getFacetId(fidA_plus1);
   int       edge_bl_id = -1;
 
-  Facet *edge_t = mesh->getFacet(edge_t_id);
+  Facet *edge_t = mesh->getFacetPtr(edge_t_id);
   Facet *edge_b = mesh->pushFacet(&edge_b_id);
   Facet *edge_l = NULL;
   Facet *edge_r = mesh->pushFacet(&edge_r_id);;
-  //Facet *edge_tr = mesh->getFacet(edge_tr_id);
+  //Facet *edge_tr = mesh->getFacetPtr(edge_tr_id);
   //Facet *edge_tl = NULL;
-  Facet *edge_br = mesh->getFacet(edge_br_id);
+  Facet *edge_br = mesh->getFacetPtr(edge_br_id);
   Facet *edge_bl = NULL;
 
   if (!edge_in_boundary)
@@ -659,8 +659,8 @@ Point* MeshToolsTri::insertVertexOnEdge(Cell *cellA, int fidA, Real t, Mesh *mes
     edge_bl_id = cellB->getFacetId(fidB_plus2);
 
     edge_l = mesh->pushFacet(&edge_l_id);
-    //edge_tl = mesh->getFacet(edge_tl_id);
-    edge_bl = mesh->getFacet(edge_bl_id);
+    //edge_tl = mesh->getFacetPtr(edge_tl_id);
+    edge_bl = mesh->getFacetPtr(edge_bl_id);
   }
 
   /* -------- All elements created, now setup adjacencies -----------*/
@@ -769,13 +769,13 @@ Point* MeshToolsTri::insertVertexOnEdge(Cell *cellA, int fidA, Real t, Mesh *mes
   // top-left: nothing to do
   // top-right: nothing to do
   // bot-right
-  Cell *neighbor = mesh->getCell(cellA->getIncidCell(fidA_plus1));
+  Cell *neighbor = mesh->getCellPtr(cellA->getIncidCell(fidA_plus1));
   neighbor->setIncidence(cellA->getIncidCellPos(fidA_plus1), cidD, 2);
 
   if (!edge_in_boundary)
   {
     // bot-left
-    neighbor = mesh->getCell(cellB->getIncidCell(fidB_plus2));
+    neighbor = mesh->getCellPtr(cellB->getIncidCell(fidB_plus2));
     neighbor->setIncidence(cellB->getIncidCellPos(fidB_plus2), cidC, 0);
   }
 
@@ -864,9 +864,9 @@ std::pair<bool, Cell *> MeshToolsTri::searchConvexPoint(Real const* x, Cell cons
 
   while(true)
   {
-    x0 = mesh->getNode(cell->getNodeId(0))->getCoord();
-    x1 = mesh->getNode(cell->getNodeId(1))->getCoord();
-    x2 = mesh->getNode(cell->getNodeId(2))->getCoord();
+    x0 = mesh->getNodePtr(cell->getNodeId(0))->getCoord();
+    x1 = mesh->getNodePtr(cell->getNodeId(1))->getCoord();
+    x2 = mesh->getNodePtr(cell->getNodeId(2))->getCoord();
 
     a0 = x1[0]*x2[1] - x2[0]*x1[1];
     a1 = x2[0]*x0[1] - x0[0]*x2[1];
@@ -904,7 +904,7 @@ std::pair<bool, Cell *> MeshToolsTri::searchConvexPoint(Real const* x, Cell cons
 
     iC = cell->getIncidCell(l);
     if (iC >= 0)
-      cell = mesh->getCell(cell->getIncidCell(l));
+      cell = mesh->getCellPtr(cell->getIncidCell(l));
     else
       return std::pair<bool, Cell *>(false, const_cast<Cell *>(cell));
 
@@ -1053,7 +1053,7 @@ Point* MeshToolsTri::insertVertexOnEdge(Cell *cellA, int fidA, Real t, Mesh *mes
     //fidB_plus1 = (fidB+1)%3;
     fidB_plus2 = (fidB+2)%3;
 
-    cellB = mesh->getCell(cidB);
+    cellB = mesh->getCellPtr(cidB);
     cellC = mesh->pushCell(&cidC); //cellC = mesh->createCell(); cidC = mesh->pushCell(cellC);
   }
 
@@ -1073,10 +1073,10 @@ Point* MeshToolsTri::insertVertexOnEdge(Cell *cellA, int fidA, Real t, Mesh *mes
   int        nod_br_id;
   int        nod_bl_id;
 
-  Point *vtx_t = mesh->getNode(vtx_t_id);
-  Point *vtx_b = mesh->getNode(vtx_b_id);
+  Point *vtx_t = mesh->getNodePtr(vtx_t_id);
+  Point *vtx_b = mesh->getNodePtr(vtx_b_id);
   Point *vtx_l = NULL;
-  Point *vtx_r = mesh->getNode(vtx_r_id);
+  Point *vtx_r = mesh->getNodePtr(vtx_r_id);
   Point *vtx_m = mesh->pushPoint(&vtx_m_id);
   // high order nodes
   Point *nod_t = NULL;
@@ -1096,7 +1096,7 @@ Point* MeshToolsTri::insertVertexOnEdge(Cell *cellA, int fidA, Real t, Mesh *mes
   if (!edge_in_boundary)
   {
     vtx_l_id = cellB->getNodeId(fidB_plus2);
-    vtx_l = mesh->getNode(vtx_l_id);
+    vtx_l = mesh->getNodePtr(vtx_l_id);
     vl_xyz = vtx_l->getCoord();
   }
   if (high_order)
@@ -1105,9 +1105,9 @@ Point* MeshToolsTri::insertVertexOnEdge(Cell *cellA, int fidA, Real t, Mesh *mes
     //nod_tr_id = cellA->getNodeId(fidA_plus2 + 3);
     nod_br_id = cellA->getNodeId(fidA_plus1 + 3);
 
-    nod_t  = mesh->getNode(nod_t_id);
-    //nod_tr = mesh->getNode(nod_tr_id);
-    nod_br = mesh->getNode(nod_br_id);
+    nod_t  = mesh->getNodePtr(nod_t_id);
+    //nod_tr = mesh->getNodePtr(nod_tr_id);
+    nod_br = mesh->getNodePtr(nod_br_id);
     nod_b  = mesh->pushPoint(&nod_b_id);
     nod_r  = mesh->pushPoint(&nod_r_id);
 
@@ -1116,8 +1116,8 @@ Point* MeshToolsTri::insertVertexOnEdge(Cell *cellA, int fidA, Real t, Mesh *mes
       //nod_tl_id = cellB->getNodeId(fidB_plus1 + 3);
       nod_bl_id = cellB->getNodeId(fidB_plus2 + 3);
       nod_l  = mesh->pushPoint(&nod_l_id);
-      //nod_tl = mesh->getNode(nod_tl_id);
-      nod_bl = mesh->getNode(nod_bl_id);
+      //nod_tl = mesh->getNodePtr(nod_tl_id);
+      nod_bl = mesh->getNodePtr(nod_bl_id);
     }
   }
 
@@ -1132,13 +1132,13 @@ Point* MeshToolsTri::insertVertexOnEdge(Cell *cellA, int fidA, Real t, Mesh *mes
   int const edge_br_id = cellA->getFacetId(fidA_plus1);
   int       edge_bl_id = -1;
 
-  Facet *edge_t = mesh->getFacet(edge_t_id);
+  Facet *edge_t = mesh->getFacetPtr(edge_t_id);
   Facet *edge_b = mesh->pushFacet(&edge_b_id);
   Facet *edge_l = NULL;
   Facet *edge_r = mesh->pushFacet(&edge_r_id);;
-  //Facet *edge_tr = mesh->getFacet(edge_tr_id);
+  //Facet *edge_tr = mesh->getFacetPtr(edge_tr_id);
   //Facet *edge_tl = NULL;
-  Facet *edge_br = mesh->getFacet(edge_br_id);
+  Facet *edge_br = mesh->getFacetPtr(edge_br_id);
   Facet *edge_bl = NULL;
 
   if (!edge_in_boundary)
@@ -1147,8 +1147,8 @@ Point* MeshToolsTri::insertVertexOnEdge(Cell *cellA, int fidA, Real t, Mesh *mes
     edge_bl_id = cellB->getFacetId(fidB_plus2);
 
     edge_l = mesh->pushFacet(&edge_l_id);
-    //edge_tl = mesh->getFacet(edge_tl_id);
-    edge_bl = mesh->getFacet(edge_bl_id);
+    //edge_tl = mesh->getFacetPtr(edge_tl_id);
+    edge_bl = mesh->getFacetPtr(edge_bl_id);
   }
 
   /* -------- All elements created, now setup adjacencies -----------*/
@@ -1257,13 +1257,13 @@ Point* MeshToolsTri::insertVertexOnEdge(Cell *cellA, int fidA, Real t, Mesh *mes
   // top-left: nothing to do
   // top-right: nothing to do
   // bot-right
-  Cell *neighbor = mesh->getCell(cellA->getIncidCell(fidA_plus1));
+  Cell *neighbor = mesh->getCellPtr(cellA->getIncidCell(fidA_plus1));
   neighbor->setIncidence(cellA->getIncidCellPos(fidA_plus1), cidD, 2);
 
   if (!edge_in_boundary)
   {
     // bot-left
-    neighbor = mesh->getCell(cellB->getIncidCell(fidB_plus2));
+    neighbor = mesh->getCellPtr(cellB->getIncidCell(fidB_plus2));
     neighbor->setIncidence(cellB->getIncidCellPos(fidB_plus2), cidC, 0);
   }
 

@@ -71,12 +71,12 @@ void checkConsistencyTri(Mesh *mesh)
       if (cell->getIncidCell(i) >= 0)
       {
         // verifica o vizinho
-        c = mesh->getCell(cell->getIncidCell(i));
+        c = mesh->getCellPtr(cell->getIncidCell(i));
         int pos = cell->getIncidCellPos(i);
         EXPECT_EQ(myid, c->getIncidCell(pos))  << "myid=" << myid<<"; c->getIncidCell(pos)="<<c->getIncidCell(pos)<<"; i="<<i<<"; pos="<<pos;
         
         // verifica a face
-        f = mesh->getFacet(cell->getFacetId(i));
+        f = mesh->getFacetPtr(cell->getFacetId(i));
         int icf = f->getIncidCell();
         EXPECT_TRUE(icf==myid || icf==cell->getIncidCell(i))<<"myid="<<myid<<"; icf="<<icf<<"; i="<<i<<"; cell->getIncidCell(i)="<<cell->getIncidCell(i)<<"\n";
         if (icf==myid)
@@ -89,7 +89,7 @@ void checkConsistencyTri(Mesh *mesh)
       else // bordo
       {
         // verifica a face
-        f = mesh->getFacet(cell->getFacetId(i));
+        f = mesh->getFacetPtr(cell->getFacetId(i));
         int icf = f->getIncidCell();
         // só pode ser o myid, pq do outro lado não tem ngm
         EXPECT_TRUE(icf==myid);
@@ -98,9 +98,9 @@ void checkConsistencyTri(Mesh *mesh)
         mesh->getFacetNodesId(f, f_nds);
         for (int j = 0; j < nnpf; ++j)
         {
-          EXPECT_TRUE(mesh->inBoundary(mesh->getNode(f_nds[j])))
-            << "node="<<f_nds[j]<<"; icell="<<mesh->getNode(f_nds[j])->getIncidCell()
-            << "; pos="<< mesh->getNode(f_nds[j])->getPosition();
+          EXPECT_TRUE(mesh->inBoundary(mesh->getNodePtr(f_nds[j])))
+            << "node="<<f_nds[j]<<"; icell="<<mesh->getNodePtr(f_nds[j])->getIncidCell()
+            << "; pos="<< mesh->getNodePtr(f_nds[j])->getPosition();
         }
         
       }
@@ -113,7 +113,7 @@ void checkConsistencyTri(Mesh *mesh)
     int myid = mesh->getPointId(&*point);
     int ic = point->getIncidCell();
     int pos = point->getPosition();
-    Cell *c = mesh->getCell(ic);
+    Cell *c = mesh->getCellPtr(ic);
     
     EXPECT_TRUE(c->getNodeId(pos) == myid);
     
@@ -144,9 +144,9 @@ TEST(MtoolsFlipTest, WithTri3)
   
   vtk_printer.writeVtk();
   
-  MeshToolsTri::flipEdge(mesh->getCell( 3), 2, mesh);
-  MeshToolsTri::flipEdge(mesh->getCell( 6), 0, mesh);
-  MeshToolsTri::flipEdge(mesh->getCell(13), 1, mesh);
+  MeshToolsTri::flipEdge(mesh->getCellPtr( 3), 2, mesh);
+  MeshToolsTri::flipEdge(mesh->getCellPtr( 6), 0, mesh);
+  MeshToolsTri::flipEdge(mesh->getCellPtr(13), 1, mesh);
   
   checkConsistencyTri(mesh);
   
@@ -179,9 +179,9 @@ TEST(MtoolsFlipTest, WithTri6)
   
   //vtk_printer.writeVtk();
   //
-  MeshToolsTri::flipEdge(mesh->getCell( 3), 2, mesh);
-  MeshToolsTri::flipEdge(mesh->getCell( 6), 0, mesh);
-  MeshToolsTri::flipEdge(mesh->getCell(13), 1, mesh);
+  MeshToolsTri::flipEdge(mesh->getCellPtr( 3), 2, mesh);
+  MeshToolsTri::flipEdge(mesh->getCellPtr( 6), 0, mesh);
+  MeshToolsTri::flipEdge(mesh->getCellPtr(13), 1, mesh);
   //
   checkConsistencyTri(mesh);
   
@@ -210,18 +210,18 @@ TEST(MtoolsinCircle2dTest, WithTri3)
   
   for (int i = 0; i < n_facets_total; ++i)
   {
-    f = mesh->getFacet(i);
+    f = mesh->getFacetPtr(i);
     EXPECT_TRUE(MeshToolsTri::inCircle2d(f, mesh));
   }
 
   Real coord[2] = {0.45, 0.18};
   Real coord_old[2];
   
-  mesh->getNode(8)->getCoord(coord_old,2);
-  mesh->getNode(8)->setCoord(coord,2);
+  mesh->getNodePtr(8)->getCoord(coord_old,2);
+  mesh->getNodePtr(8)->setCoord(coord,2);
   
-  EXPECT_FALSE(MeshToolsTri::inCircle2d(mesh->getCell(9), 1, mesh));
-  EXPECT_FALSE(MeshToolsTri::inCircle2d(mesh->getCell(2), 1, mesh));
+  EXPECT_FALSE(MeshToolsTri::inCircle2d(mesh->getCellPtr(9), 1, mesh));
+  EXPECT_FALSE(MeshToolsTri::inCircle2d(mesh->getCellPtr(2), 1, mesh));
   
   delete mesh;
   
@@ -263,7 +263,7 @@ TEST(MtoolsFlippingMovingPointsTest, WithTri3)
     for (int i = 0; i < n_nodes_total; ++i)
     {
       double X[2];
-      p = mesh->getNode(i);
+      p = mesh->getNodePtr(i);
       p->getCoord(X,2);
       double a = 1. - sqrt(X[0]*X[0] + X[1]*X[1]);
       double Xnew[2] = {X[0] + dt*a*(-X[1]), X[1] + dt*a*X[0]};
@@ -273,7 +273,7 @@ TEST(MtoolsFlippingMovingPointsTest, WithTri3)
     // Delaunay
     for (int i = 0; i < n_facets_total; ++i)
     {
-      f = mesh->getFacet(i);
+      f = mesh->getFacetPtr(i);
       if (!MeshToolsTri::inCircle2d(f, mesh))
       {
         MeshToolsTri::flipEdge(f, mesh);
@@ -324,7 +324,7 @@ TEST(MtoolsFlippingMovingPointsTest, WithTri6)
     for (int i = 0; i < n_nodes_total; ++i)
     {
       double X[2];
-      p = mesh->getNode(i);
+      p = mesh->getNodePtr(i);
       p->getCoord(X,2);
       double a = 1. - sqrt(X[0]*X[0] + X[1]*X[1]);
       double Xnew[2] = {X[0] + dt*a*(-X[1]), X[1] + dt*a*X[0]};
@@ -334,7 +334,7 @@ TEST(MtoolsFlippingMovingPointsTest, WithTri6)
     // Delaunay
     for (int i = 0; i < n_facets_total; ++i)
     {
-      f = mesh->getFacet(i);
+      f = mesh->getFacetPtr(i);
       if (!MeshToolsTri::inCircle2d(f, mesh))
       {
         MeshToolsTri::flipEdge(f, mesh, true);
@@ -392,7 +392,7 @@ TEST(MtoolsReadMeshTest, WithTri3)
   delete mesh;
 }
 
-TEST(MtoolInsertVertexOnEdgeTest, WithTri3)
+TEST(DISABLE_MtoolInsertVertexOnEdgeTest, WithTri3)
 {
   MeshIoMsh msh_reader;
   MeshIoVtk vtk_printer;
@@ -410,17 +410,17 @@ TEST(MtoolInsertVertexOnEdgeTest, WithTri3)
 
   for (int i = 0; i < n_facets; ++i)
   {
-    Facet* edge = mesh->getFacet(i);
+    Facet* edge = mesh->getFacetPtr(i);
     
     if (edge->isDisabled()) return;
 
     //checkConsistencyTri(mesh);
 
-    cout << "cell: "<< mesh->getCellId(mesh->getCell(edge->getIncidCell()))<<"; node_id:"<< mesh->getCell(edge->getIncidCell())->getNodeId(edge->getPosition())
+    cout << "cell: "<< mesh->getCellId(mesh->getCellPtr(edge->getIncidCell()))<<"; node_id:"<< mesh->getCellPtr(edge->getIncidCell())->getNodeId(edge->getPosition())
          << "; edge position:" << edge->getPosition() <<"; num_nodes: " <<mesh->numNodes()<< endl;
     //mtools.insertVertexOnEdge(edge, 0.5, mesh);
     //vtk_printer.writeVtk();
-    mtools.insertVertexOnEdge(mesh->getCell(edge->getIncidCell()), edge->getPosition(), 0.5, mesh);
+    mtools.insertVertexOnEdge(mesh->getCellPtr(edge->getIncidCell()), edge->getPosition(), 0.5, mesh);
     
   }
   
@@ -479,7 +479,7 @@ TEST(MtoolInsertVertexOnEdgeTest, WithTri3)
 //      //cout << get<0>(loc[i]) << " " << get<1>(loc[i]) << " " << get<2>(loc[i]) << endl;
 //      X[0] = get<1>(loc[i]);
 //      X[1] = get<2>(loc[i]);
-//      bc = MeshToolsTri::searchConvexPoint(X, mesh->getCell(rand()%mesh->numCells()), mesh);
+//      bc = MeshToolsTri::searchConvexPoint(X, mesh->getCellPtr(rand()%mesh->numCells()), mesh);
 //      if (bc.first)
 //        cid = mesh->getCellId(bc.second);
 //      else
@@ -525,7 +525,7 @@ TEST(MtoolInsertVertexOnEdgeTest, WithTri3)
 //  std::vector<int> cells_id;
 //  std::vector<Real> slices;
 //  
-//  Cell *c0 = mesh->getCell(313);
+//  Cell *c0 = mesh->getCellPtr(313);
 //  
 //  MeshToolsTri::createPath(x0, c0, SomeFunc(), cells_id, slices,  mesh);
 //  
@@ -538,7 +538,7 @@ TEST(MtoolInsertVertexOnEdgeTest, WithTri3)
 //  // conferi os vizinhos
 //  for (int c = 0; c < (int)cells_id.size(); ++c)
 //  {
-//    c0 = mesh->getCell(cells_id[c]);
+//    c0 = mesh->getCellPtr(cells_id[c]);
 //    int myid = mesh->getCellId(c0);
 //    
 //    int f_free = -1;
@@ -558,7 +558,7 @@ TEST(MtoolInsertVertexOnEdgeTest, WithTri3)
 //      std::vector<int>::iterator it = find(cells_id.begin(), cells_id.end(), oc_id);
 //      EXPECT_FALSE(it == cells_id.end()) << cout << "ID: " << oc_id << ", MY: " << myid;
 //      
-//      EXPECT_EQ(myid, mesh->getCell(oc_id)->getIncidCell(pos));
+//      EXPECT_EQ(myid, mesh->getCellPtr(oc_id)->getIncidCell(pos));
 //      
 //      int octh = std::distance(cells_id.begin(),it);
 //      EXPECT_DOUBLE_EQ(1.0, slices[3*octh+pos]+slices[3*c+f])
@@ -615,7 +615,7 @@ TEST(MtoolInsertVertexOnEdgeTest, WithTri3)
 //  std::vector<int> cells_id;
 //  std::vector<Real> slices;
 //  
-//  Cell *c0 = mesh->getCell(246);
+//  Cell *c0 = mesh->getCellPtr(246);
 //  
 //  MeshToolsTri::createPath(x0, c0, SomeFunc2(), cells_id, slices,  mesh);
 //
@@ -626,7 +626,7 @@ TEST(MtoolInsertVertexOnEdgeTest, WithTri3)
 //  // conferi os vizinhos
 //  for (int c = 0; c < (int)cells_id.size(); ++c)
 //  {
-//    c0 = mesh->getCell(cells_id[c]);
+//    c0 = mesh->getCellPtr(cells_id[c]);
 //    int myid = mesh->getCellId(c0);
 //    
 //    int f_free = -1;
@@ -646,7 +646,7 @@ TEST(MtoolInsertVertexOnEdgeTest, WithTri3)
 //      std::vector<int>::iterator it = find(cells_id.begin(), cells_id.end(), oc_id);
 //      EXPECT_FALSE(it == cells_id.end()) << cout << "ID: " << oc_id << ", MY: " << myid;
 //      
-//      EXPECT_EQ(myid, mesh->getCell(oc_id)->getIncidCell(pos));
+//      EXPECT_EQ(myid, mesh->getCellPtr(oc_id)->getIncidCell(pos));
 //      
 //      int octh = std::distance(cells_id.begin(),it);
 //      EXPECT_DOUBLE_EQ(1.0, slices[3*octh+pos]+slices[3*c+f])
@@ -677,7 +677,7 @@ TEST(MtoolInsertVertexOnEdgeTest, WithTri3)
 //  
 //  Real x0[] = {SomeFunc2::Y(), SomeFunc2::Y()};
 //  
-//  Cell *c0 = mesh->getCell(246);
+//  Cell *c0 = mesh->getCellPtr(246);
 //  
 //  MeshToolsTri::cutConvexPart(x0, c0, SomeFunc2(), mesh);
 //
@@ -717,8 +717,8 @@ TEST(MtoolInsertVertexOnEdgeTest, WithTri3)
 //  EXPECT_EQ(87, DofH.numDofs());
 //  
 //  
-//  MeshTools::removeCell(mesh->getCell(2), mesh);
-//  MeshTools::removeCell(mesh->getCell(3), mesh);
+//  MeshTools::removeCell(mesh->getCellPtr(2), mesh);
+//  MeshTools::removeCell(mesh->getCellPtr(3), mesh);
 //  
 //  DofH.SetUp();
 //  
@@ -757,7 +757,7 @@ TEST(MtoolInsertVertexOnEdgeTest, WithTri3)
 //  int get_data_i(int nodeid) const
 //  {
 //    int dof;
-//    Point const* p = mesh_ptr->getNode(nodeid);
+//    Point const* p = mesh_ptr->getNodePtr(nodeid);
 //    if (!mesh_ptr->isVertex(p))
 //      return -1;
 //    dofh_ptr->getVariable(0).getVertexDofs(&dof, p);
@@ -797,8 +797,8 @@ TEST(MtoolInsertVertexOnEdgeTest, WithTri3)
 //  
 //  EXPECT_EQ(87, DofH.numDofs());
 //  
-//  MeshTools::removeCell(mesh->getCell(2), mesh);
-//  MeshTools::removeCell(mesh->getCell(3), mesh);
+//  MeshTools::removeCell(mesh->getCellPtr(2), mesh);
+//  MeshTools::removeCell(mesh->getCellPtr(3), mesh);
 //  
 //  DofH.SetUp();
 //  
@@ -885,8 +885,8 @@ TEST(MtoolInsertVertexOnEdgeTest, WithTri3)
 //  
 //  //DofH.SetUp();
 //  //
-//  MeshTools::removeCell(mesh->getCell(2), mesh);
-//  MeshTools::removeCell(mesh->getCell(3), mesh);
+//  MeshTools::removeCell(mesh->getCellPtr(2), mesh);
+//  MeshTools::removeCell(mesh->getCellPtr(3), mesh);
 //  //
 //  DofH.SetUp();
 //  //
@@ -965,20 +965,20 @@ TEST(MtoolInsertVertexOnEdgeTest, WithTri3)
 //  DofH.addVariable("velo",   phi, 2);
 //  DofH.addVariable("press",  psi, 1);
 //  
-//  //MeshTools::removeCell(mesh->getCell(0), mesh);
-//  //MeshTools::removeCell(mesh->getCell(1), mesh);
-//  //MeshTools::removeCell(mesh->getCell(10), mesh);
-//  //MeshTools::removeCell(mesh->getCell(6), mesh);
-//  //MeshTools::removeCell(mesh->getCell(7), mesh);
-//  //MeshTools::removeCell(mesh->getCell(9), mesh);
-//  //MeshTools::removeCell(mesh->getCell(2), mesh);
-//  //MeshTools::removeCell(mesh->getCell(3), mesh);
-//  //MeshTools::removeCell(mesh->getCell(12), mesh);
-//  //MeshTools::removeCell(mesh->getCell(4), mesh);
-//  //MeshTools::removeCell(mesh->getCell(5), mesh);
-//  //MeshTools::removeCell(mesh->getCell(8), mesh);
-//  //MeshTools::removeCell(mesh->getCell(11), mesh);
-//  //MeshTools::removeCell(mesh->getCell(13), mesh);
+//  //MeshTools::removeCell(mesh->getCellPtr(0), mesh);
+//  //MeshTools::removeCell(mesh->getCellPtr(1), mesh);
+//  //MeshTools::removeCell(mesh->getCellPtr(10), mesh);
+//  //MeshTools::removeCell(mesh->getCellPtr(6), mesh);
+//  //MeshTools::removeCell(mesh->getCellPtr(7), mesh);
+//  //MeshTools::removeCell(mesh->getCellPtr(9), mesh);
+//  //MeshTools::removeCell(mesh->getCellPtr(2), mesh);
+//  //MeshTools::removeCell(mesh->getCellPtr(3), mesh);
+//  //MeshTools::removeCell(mesh->getCellPtr(12), mesh);
+//  //MeshTools::removeCell(mesh->getCellPtr(4), mesh);
+//  //MeshTools::removeCell(mesh->getCellPtr(5), mesh);
+//  //MeshTools::removeCell(mesh->getCellPtr(8), mesh);
+//  //MeshTools::removeCell(mesh->getCellPtr(11), mesh);
+//  //MeshTools::removeCell(mesh->getCellPtr(13), mesh);
 //  
 //  DofH.SetUp();
 //  std::cout << "num dofs = " << DofH.numDofs() << std::endl;
@@ -1000,8 +1000,8 @@ TEST(MtoolInsertVertexOnEdgeTest, WithTri3)
 //  //ArrayXi var_cell_dofs(8);
 //  //ArrayXi var_cell_dofs2(3);
 //  //
-//  //DofH.getVariable(0).getCellDofs(var_cell_dofs.data(), mesh->getCell(13));
-//  //DofH.getVariable(1).getCellDofs(var_cell_dofs2.data(), mesh->getCell(13));
+//  //DofH.getVariable(0).getCellDofs(var_cell_dofs.data(), mesh->getCellPtr(13));
+//  //DofH.getVariable(1).getCellDofs(var_cell_dofs2.data(), mesh->getCellPtr(13));
 //  //
 //  //std::cout << var_cell_dofs.transpose() << std::endl;
 //  //std::cout << var_cell_dofs2.transpose() << std::endl;
@@ -1054,20 +1054,20 @@ TEST(MtoolInsertVertexOnEdgeTest, WithTri3)
 //  DofH.addVariable("velo",   phi, 2);
 //  DofH.addVariable("press",  psi, 1);
 //  
-//  //MeshTools::removeCell(mesh->getCell(0), mesh);
-//  //MeshTools::removeCell(mesh->getCell(1), mesh);
-//  //MeshTools::removeCell(mesh->getCell(10), mesh);
-//  //MeshTools::removeCell(mesh->getCell(6), mesh);
-//  //MeshTools::removeCell(mesh->getCell(7), mesh);
-//  //MeshTools::removeCell(mesh->getCell(9), mesh);
-//  //MeshTools::removeCell(mesh->getCell(2), mesh);
-//  //MeshTools::removeCell(mesh->getCell(3), mesh);
-//  //MeshTools::removeCell(mesh->getCell(12), mesh);
-//  //MeshTools::removeCell(mesh->getCell(4), mesh);
-//  //MeshTools::removeCell(mesh->getCell(5), mesh);
-//  //MeshTools::removeCell(mesh->getCell(8), mesh);
-//  //MeshTools::removeCell(mesh->getCell(11), mesh);
-//  //MeshTools::removeCell(mesh->getCell(13), mesh);
+//  //MeshTools::removeCell(mesh->getCellPtr(0), mesh);
+//  //MeshTools::removeCell(mesh->getCellPtr(1), mesh);
+//  //MeshTools::removeCell(mesh->getCellPtr(10), mesh);
+//  //MeshTools::removeCell(mesh->getCellPtr(6), mesh);
+//  //MeshTools::removeCell(mesh->getCellPtr(7), mesh);
+//  //MeshTools::removeCell(mesh->getCellPtr(9), mesh);
+//  //MeshTools::removeCell(mesh->getCellPtr(2), mesh);
+//  //MeshTools::removeCell(mesh->getCellPtr(3), mesh);
+//  //MeshTools::removeCell(mesh->getCellPtr(12), mesh);
+//  //MeshTools::removeCell(mesh->getCellPtr(4), mesh);
+//  //MeshTools::removeCell(mesh->getCellPtr(5), mesh);
+//  //MeshTools::removeCell(mesh->getCellPtr(8), mesh);
+//  //MeshTools::removeCell(mesh->getCellPtr(11), mesh);
+//  //MeshTools::removeCell(mesh->getCellPtr(13), mesh);
 //  
 //  DofH.SetUp();
 //  std::cout << "num dofs = " << DofH.numDofs() << std::endl;
@@ -1089,8 +1089,8 @@ TEST(MtoolInsertVertexOnEdgeTest, WithTri3)
 //  //ArrayXi var_cell_dofs(8);
 //  //ArrayXi var_cell_dofs2(3);
 //  //
-//  //DofH.getVariable(0).getCellDofs(var_cell_dofs.data(), mesh->getCell(13));
-//  //DofH.getVariable(1).getCellDofs(var_cell_dofs2.data(), mesh->getCell(13));
+//  //DofH.getVariable(0).getCellDofs(var_cell_dofs.data(), mesh->getCellPtr(13));
+//  //DofH.getVariable(1).getCellDofs(var_cell_dofs2.data(), mesh->getCellPtr(13));
 //  //
 //  //std::cout << var_cell_dofs.transpose() << std::endl;
 //  //std::cout << var_cell_dofs2.transpose() << std::endl;
@@ -1155,8 +1155,8 @@ TEST(MtoolInsertVertexOnEdgeTest, WithTri3)
 //  EXPECT_EQ(20, DofH.numDofs());
 //  
 //  
-//  MeshTools::removeCell(mesh->getCell(2), mesh);
-//  MeshTools::removeCell(mesh->getCell(3), mesh);
+//  MeshTools::removeCell(mesh->getCellPtr(2), mesh);
+//  MeshTools::removeCell(mesh->getCellPtr(3), mesh);
 //  
 //  DofH.SetUp();
 //  
@@ -1224,8 +1224,8 @@ TEST(MtoolInsertVertexOnEdgeTest, WithTri3)
 //  
 //  //DofH.SetUp();
 //  //
-//  MeshTools::removeCell(mesh->getCell(2), mesh);
-//  MeshTools::removeCell(mesh->getCell(3), mesh);
+//  MeshTools::removeCell(mesh->getCellPtr(2), mesh);
+//  MeshTools::removeCell(mesh->getCellPtr(3), mesh);
 //  //
 //  DofH.SetUp();
 //  //
