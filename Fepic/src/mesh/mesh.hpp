@@ -340,6 +340,7 @@ public:
   //typedef std::vector<Facet>    FacetList;
   //typedef std::vector<Corner>   CornerList;
 
+  // mesh operations invalidate some pointers when using vector, so use deque.
   typedef SeqList<CellT, std::deque<CellT>, SetVector<int> >     CellList;
   typedef SeqList<PointT, std::deque<PointT>, SetVector<int> >   PointList;
   typedef SeqList<FacetT, std::deque<FacetT>, SetVector<int> >   FacetList;

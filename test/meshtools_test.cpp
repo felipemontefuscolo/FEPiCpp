@@ -108,14 +108,22 @@ void checkConsistencyTri(Mesh *mesh)
     
   }
   
+  std::vector<int> ics(1);
   for (point_iterator point = mesh->pointBegin(); point != mesh->pointEnd(); ++point)
   {
-    int myid = mesh->getPointId(&*point);
-    int ic = point->getIncidCell();
-    int pos = point->getPosition();
-    Cell *c = mesh->getCellPtr(ic);
+    point->getAllIncidences(ics);
     
-    EXPECT_TRUE(c->getNodeId(pos) == myid);
+    int myid = point.getIdx();
+    
+    for (int i = 0; i < (int)ics.size()/2; ++i)
+    {
+      int ic = ics.at(2*i);
+      int pos = ics.at(2*i+1);
+      Cell *c = mesh->getCellPtr(ic);
+      EXPECT_TRUE(c);
+      if (c)
+        EXPECT_EQ(myid, c->getNodeId(pos)) << "ic = " << ic << "; pos = " << pos;
+    }
     
   }
   
@@ -392,7 +400,7 @@ TEST(MtoolsReadMeshTest, WithTri3)
   delete mesh;
 }
 
-TEST(DISABLE_MtoolInsertVertexOnEdgeTest, WithTri3)
+TEST(MtoolInsertVertexOnEdgeTest, WithTri3)
 {
   MeshIoMsh msh_reader;
   MeshIoVtk vtk_printer;
@@ -408,7 +416,11 @@ TEST(DISABLE_MtoolInsertVertexOnEdgeTest, WithTri3)
 
   int const n_facets = mesh->numFacetsTotal();
 
-  for (int i = 0; i < n_facets; ++i)
+  vtk_printer.isFamily(true);
+  vtk_printer.attachMesh(mesh);
+  vtk_printer.setOutputFileName(mesh_out);
+
+  for (int i = 0; i < 1; ++i)
   {
     Facet* edge = mesh->getFacetPtr(i);
     
@@ -416,20 +428,14 @@ TEST(DISABLE_MtoolInsertVertexOnEdgeTest, WithTri3)
 
     //checkConsistencyTri(mesh);
 
-    cout << "cell: "<< mesh->getCellId(mesh->getCellPtr(edge->getIncidCell()))<<"; node_id:"<< mesh->getCellPtr(edge->getIncidCell())->getNodeId(edge->getPosition())
-         << "; edge position:" << edge->getPosition() <<"; num_nodes: " <<mesh->numNodes()<< endl;
+    //cout << "cell: "<< mesh->getCellId(mesh->getCellPtr(edge->getIncidCell()))<<"; node_id:"<< mesh->getCellPtr(edge->getIncidCell())->getNodeId(edge->getPosition())
+    //     << "; edge position:" << edge->getPosition() <<"; num_nodes: " <<mesh->numNodes()<< endl;
     //mtools.insertVertexOnEdge(edge, 0.5, mesh);
-    //vtk_printer.writeVtk();
+    vtk_printer.writeVtk();
     mtools.insertVertexOnEdge(mesh->getCellPtr(edge->getIncidCell()), edge->getPosition(), 0.5, mesh);
-    
+    checkConsistencyTri(mesh);
   }
-  
-  vtk_printer.attachMesh(mesh);
-  //vtk_printer.isFamily(true);
-  vtk_printer.setOutputFileName(mesh_out);
-  
-  checkConsistencyTri(mesh);
-  
+  vtk_printer.writeVtk();
   
   
   delete mesh;

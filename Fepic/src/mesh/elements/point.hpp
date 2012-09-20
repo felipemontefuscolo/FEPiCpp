@@ -26,7 +26,7 @@
 #include <utility>
 #include "Fepic/src/util/assert.hpp"
 #include <algorithm>
-
+#include <vector>
 
 class Point : public CellElement
 {
@@ -218,6 +218,27 @@ public:
     ic = (*it).first;
     pos = (*it).second;
     
+  }
+
+  /** @param v the vector where will be places incid cells.
+   *         v[2*i]   = i-th incident cell
+   *         v[2*i+1] = position in i-th incident cell.
+   */ 
+  void getAllIncidences(std::vector<int> & v) const
+  {
+    if (!v.empty())
+      v.clear();
+    v.push_back(this->getIncidCell());
+    v.push_back(this->getPosition());
+    
+    std::list<std::pair<int,char> >::const_iterator it = _incidences.begin();
+    std::list<std::pair<int,char> >::const_iterator et = _incidences.end();
+    
+    for (; it != et; ++it)
+    {
+      v.push_back((*it).first);
+      v.push_back((*it).second);
+    }
   }
 
   void clearIncidences()

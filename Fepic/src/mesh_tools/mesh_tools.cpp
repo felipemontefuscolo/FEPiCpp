@@ -770,13 +770,15 @@ Point* MeshToolsTri::insertVertexOnEdge(Cell *cellA, int fidA, Real t, Mesh *mes
   // top-right: nothing to do
   // bot-right
   Cell *neighbor = mesh->getCellPtr(cellA->getIncidCell(fidA_plus1));
-  neighbor->setIncidence(cellA->getIncidCellPos(fidA_plus1), cidD, 2);
+  if (neighbor)
+    neighbor->setIncidence(cellA->getIncidCellPos(fidA_plus1), cidD, 2);
 
   if (!edge_in_boundary)
   {
     // bot-left
     neighbor = mesh->getCellPtr(cellB->getIncidCell(fidB_plus2));
-    neighbor->setIncidence(cellB->getIncidCellPos(fidB_plus2), cidC, 0);
+    if (neighbor)
+      neighbor->setIncidence(cellB->getIncidCellPos(fidB_plus2), cidC, 0);
   }
 
 
