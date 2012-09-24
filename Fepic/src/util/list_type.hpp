@@ -41,7 +41,7 @@ template<class> class SeqList_const_iterator;
  */
 template<class K,   // value type: class must be inherited of classe Labelable
          class C  = std::vector<K>, // a random access container
-         class S  = SetVector<int> >   // a sorted container for indices
+         class S  = SetVector<int> >   // a sorted container for internal indices
 class SeqList
 {
 
@@ -53,6 +53,7 @@ class SeqList
   typedef typename C::iterator                           ContainerIterator;
   typedef typename C::const_iterator                     ContainerConstIterator;
   typedef typename C::reverse_iterator                   ContainerReverseIterator;
+
 
 public:
   typedef          K                                      value_type;
@@ -67,6 +68,36 @@ public:
   typedef typename container_type::difference_type        difference_type;
   typedef          SeqList_iterator<Self>                 iterator;
   typedef          SeqList_const_iterator<Self>           const_iterator;
+
+private:
+  
+  template<class T> // T = value_type
+  struct _DisabledFlag
+  {
+    bool is_disabled(T const* a) const
+    {
+      return a->isDisabled();
+    }
+    void set_disabled_to(bool b, T * a) const
+    {
+      a->setDisabledTo(b);
+    }
+  };
+  
+  template<class T>
+  struct _DisabledFlag<T*>
+  {
+    bool is_disabled(T const* a) const
+    {
+      return a->isDisabled();
+    }
+    void set_disabled_to(bool b, T & a) const
+    {
+      a->setDisabledTo(b);
+    }
+  };
+  
+public:
 
   // build TypeHas_reserve singnature checker.
   // suffix,mem_fun_name, mem_fun_return, qualif, mem_fun_args
@@ -85,6 +116,7 @@ public:
     _disabled_idcs.clear();
   }
 
+  // TODO: only to vector type ...
   int getDataId(value_type const* v) const
   {
     return static_cast<int>(std::distance(_data.begin(), ContainerConstIterator(v)));
@@ -186,7 +218,10 @@ public:
     //ContainerIterator it = ContainerIterator(&_data[del_id]);
     pointer it = &_data.at(del_id);
     if (it->isDisabled())
-      return;
+    {
+      std::cout << "ERRROR: trying to disable a disabled element \n";
+      throw;
+    }
     _disabled_idcs.insert(del_id);
     it->setDisabledTo(true);
 

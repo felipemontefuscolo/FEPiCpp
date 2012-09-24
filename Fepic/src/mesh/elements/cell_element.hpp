@@ -19,6 +19,7 @@
 // License and a copy of the GNU General Public License along with
 // FEPiC++. If not, see <http://www.gnu.org/licenses/>.
 
+
 #ifndef FEPIC_CELLELEMENT_ELEMENT
 #define FEPIC_CELLELEMENT_ELEMENT
 
@@ -75,10 +76,9 @@ public:
   ~CellElement() {}
 
 protected:
-  // manter nessa ordem mesmo, para evitar padding
-  char  _status;     // ONLY POINT USE IT
-  char  _position;   // facet lid of incident cell
-  int   _icell;
+  char  _status;     // ONLY POINT CLASS USE IT .. it was put here to avoid problems with padding.
+  char  _position;   // local id of this element on the incident cell
+  int   _icell;      // global id of the incident cell
   
 };
 

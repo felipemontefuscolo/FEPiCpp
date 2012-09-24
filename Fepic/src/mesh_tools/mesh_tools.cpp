@@ -22,6 +22,7 @@
 #include "mesh_tools.hpp"
 #include "Fepic/src/mesh/mesh.hpp"
 #include <vector>
+#include <algorithm>
 //#include <type_traits>
 
 
@@ -144,7 +145,7 @@
  *  @param mesh mesh context.
  *  @return nothing.
  */
-void MeshTools::removeCell(Cell * cell, Mesh *mesh)
+void removeCell(Cell * cell, Mesh *mesh)
 {
   const int cell_id_to_remove = mesh->getCellId(cell);
   const int cell_dim = mesh->cellDim();
@@ -853,7 +854,29 @@ Point* MeshToolsTri::insertVertexOnEdge(Cell *cellA, int fidA, Real t, Mesh *mes
   return vtx_m;
 }
 
-
+///** Safely removes a triangle (high orders to)
+// *  @param cell the cell that will be removed.
+// *  @param mesh mesh context.
+// *  @return nothing.
+// */
+//void MeshToolsTri::removeTriCell(cell_handler cell)
+//{
+//  FEPIC_CHECK(cell.getPtr(), "invalid argument", std::runtime_error);
+//
+//  const int cell_dim = 2;
+//  const int n_facets_per_cell = 3;
+//
+//  Mesh * mesh = cell.getMesh();
+//  
+//  const int cell_id_to_remove = cell.getIdx();
+//  const int nds_per_cell = mesh->numNodesPerCell();
+//  int       facets_id[n_facets_per_cell];
+//  
+//  // check what type of remove algo will be used .. see doc
+//  
+//  
+//}
+//
 std::pair<bool, Cell *> MeshToolsTri::searchConvexPoint(Real const* x, Cell const* c0, Mesh const* mesh)
 {
   Cell const* cell = c0;

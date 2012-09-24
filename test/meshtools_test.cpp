@@ -108,11 +108,15 @@ void checkConsistencyTri(Mesh *mesh)
     
   }
   
-  std::vector<int> ics(1);
+  std::vector<int> ics;
+  std::vector<int> cc_ids;
+  std::vector<int>::iterator it;
   for (point_iterator point = mesh->pointBegin(); point != mesh->pointEnd(); ++point)
   {
     point->getAllIncidences(ics);
     
+    cc_ids.clear();
+
     int myid = point.getIdx();
     
     for (int i = 0; i < (int)ics.size()/2; ++i)
@@ -120,10 +124,16 @@ void checkConsistencyTri(Mesh *mesh)
       int ic = ics.at(2*i);
       int pos = ics.at(2*i+1);
       Cell *c = mesh->getCellPtr(ic);
-      EXPECT_TRUE(c);
-      if (c)
-        EXPECT_EQ(myid, c->getNodeId(pos)) << "ic = " << ic << "; pos = " << pos;
+      ASSERT_TRUE(c);
+      EXPECT_EQ(myid, c->getNodeId(pos)) << "ic = " << ic << "; pos = " << pos;
+      cc_ids.push_back(c->getConnectedComponentId());
     }
+    
+    std::sort(cc_ids.begin(), cc_ids.end());
+    it = unique (cc_ids.begin(), cc_ids.end());
+    
+    // checks if all incident cells have distinct connected component id
+    ASSERT_EQ( std::distance(cc_ids.begin(), it) , (int)cc_ids.size());
     
   }
   
@@ -420,7 +430,7 @@ TEST(MtoolInsertVertexOnEdgeTest, WithTri3)
   vtk_printer.attachMesh(mesh);
   vtk_printer.setOutputFileName(mesh_out);
 
-  for (int i = 0; i < 1; ++i)
+  for (int i = 0; i < n_facets; ++i)
   {
     Facet* edge = mesh->getFacetPtr(i);
     
@@ -431,7 +441,7 @@ TEST(MtoolInsertVertexOnEdgeTest, WithTri3)
     //cout << "cell: "<< mesh->getCellId(mesh->getCellPtr(edge->getIncidCell()))<<"; node_id:"<< mesh->getCellPtr(edge->getIncidCell())->getNodeId(edge->getPosition())
     //     << "; edge position:" << edge->getPosition() <<"; num_nodes: " <<mesh->numNodes()<< endl;
     //mtools.insertVertexOnEdge(edge, 0.5, mesh);
-    vtk_printer.writeVtk();
+    //vtk_printer.writeVtk();
     mtools.insertVertexOnEdge(mesh->getCellPtr(edge->getIncidCell()), edge->getPosition(), 0.5, mesh);
     checkConsistencyTri(mesh);
   }
@@ -440,6 +450,30 @@ TEST(MtoolInsertVertexOnEdgeTest, WithTri3)
   
   delete mesh;
 }
+
+TEST(ImprimeTest, TestTest)
+{
+  MeshIoMsh msh_reader;
+  MeshIoVtk vtk_printer;
+  Mesh *mesh = NULL;  
+  MeshToolsTri mtools;
+
+  ECellType cell_t      = TRIANGLE6;
+  const char* mesh_in  = "meshes/1level_tri6.msh";
+  const char* mesh_out = "meshes/1level_tri6.vtk";
+  
+  mesh = Mesh::create(cell_t);
+  msh_reader.readFileMsh(mesh_in, mesh);
+
+  int const n_facets = mesh->numFacetsTotal();
+
+  //vtk_printer.isFamily(true);
+  vtk_printer.attachMesh(mesh);
+  vtk_printer.setOutputFileName(mesh_out);
+  vtk_printer.writeVtk();
+}
+
+#if 0
 
 //
 //TEST(searchConvexPointTest, Tri3Test)
@@ -1291,10 +1325,7 @@ TEST(MtoolInsertVertexOnEdgeTest, WithTri3)
 
 
 
-
-
-
-
+#endif
 
 
 

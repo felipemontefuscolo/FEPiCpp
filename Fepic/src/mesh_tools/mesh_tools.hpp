@@ -40,6 +40,8 @@ public:
 
   static void removeCell(Cell * cell, Mesh *mesh);
   
+  static void removeTriCell(Cell * cell, Mesh *mesh);
+  
   static void readMesh(int n_nodes, int n_cells, int const* nodes, Real const* xyz, Mesh *mesh);
   
 };
