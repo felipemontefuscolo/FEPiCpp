@@ -471,6 +471,8 @@ TEST(ImprimeTest, TestTest)
   vtk_printer.attachMesh(mesh);
   vtk_printer.setOutputFileName(mesh_out);
   vtk_printer.writeVtk();
+  
+  delete mesh;
 }
 
 #if 0

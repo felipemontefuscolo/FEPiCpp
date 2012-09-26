@@ -423,16 +423,16 @@ void SMesh<CT>::printStatistics() const
          "  -used:           %d (%d%%)\n"
          "  -# reservations: %d\n",
          (int)_cellL.capacity(),
-         (int)_cellL.total_size(), (int)(100*_cellL.total_size()/(cc?cc:1)),
+         (int)_cellL.totalSize(), (int)(100*_cellL.totalSize()/(cc?cc:1)),
          (int)_cellL.numReserveCalls(),
          (int)_pointL.capacity(),
-         (int)_pointL.total_size(), (int)(100*_pointL.total_size()/(pc?pc:1)),
+         (int)_pointL.totalSize(), (int)(100*_pointL.totalSize()/(pc?pc:1)),
          (int)_pointL.numReserveCalls(),
          (int)_facetL.capacity(),
-         (int)_facetL.total_size(), (int)(100*_facetL.total_size()/(fc?fc:1)),
+         (int)_facetL.totalSize(), (int)(100*_facetL.totalSize()/(fc?fc:1)),
          (int)_facetL.numReserveCalls(),
          (int)_cornerL.capacity(),
-         (int)_cornerL.total_size(), (int)(100*_cornerL.total_size()/(bc?bc:1)),
+         (int)_cornerL.totalSize(), (int)(100*_cornerL.totalSize()/(bc?bc:1)),
          (int)_cornerL.numReserveCalls()
          );
 }
@@ -1409,7 +1409,7 @@ void SMesh<CT>::buildCorners_Template(typename EnableIf<(celldim==2)>::type*)
   _cornerL.clear();
 
   //FEP_PRAGMA_OMP(parallel for)
-  //for (unsigned c = 0; c<_cellL.total_size(); ++c)
+  //for (unsigned c = 0; c<_cellL.totalSize(); ++c)
   //  _cellL[c].CT::resetCorners();
   //
   ////FEP_PRAGMA_OMP(parallel default(none))
@@ -1467,7 +1467,7 @@ void SMesh<CT>::buildCorners_Template(typename EnableIf<(celldim==3)>::type*)
   //FEP_STATIC_ASSERT_ITERATOR((std::tr1::is_same<_category,std::random_access_iterator_tag>::value));
 
   FEP_PRAGMA_OMP(parallel for)
-  for (unsigned c = 0; c<_cellL.total_size(); ++c)
+  for (unsigned c = 0; c<_cellL.totalSize(); ++c)
     _cellL[c].CT::resetCorners();
 
   // TODO: think a way to parallelize this ...

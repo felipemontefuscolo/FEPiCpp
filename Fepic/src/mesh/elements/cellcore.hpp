@@ -22,7 +22,7 @@
 #ifndef FEPIC_CELLCORE_HPP
 #define FEPIC_CELLCORE_HPP
 
-#include "Fepic/src/mesh/labelable.hpp"
+#include "cell_base.hpp"
 
 #include "Fepic/src/mesh/enums.hpp"
 #include "Fepic/src/util/assert.hpp"

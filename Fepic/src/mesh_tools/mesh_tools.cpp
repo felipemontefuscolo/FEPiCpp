@@ -145,7 +145,7 @@
  *  @param mesh mesh context.
  *  @return nothing.
  */
-void removeCell(Cell * cell, Mesh *mesh)
+void MeshTools::removeCell(Cell * cell, Mesh *mesh)
 {
   const int cell_id_to_remove = mesh->getCellId(cell);
   const int cell_dim = mesh->cellDim();

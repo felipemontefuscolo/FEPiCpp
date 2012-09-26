@@ -341,10 +341,16 @@ public:
   //typedef std::vector<Corner>   CornerList;
 
   // mesh operations invalidate some pointers when using vector, so use deque.
-  typedef SeqList<CellT, std::deque<CellT>, SetVector<int> >     CellList;
-  typedef SeqList<PointT, std::deque<PointT>, SetVector<int> >   PointList;
-  typedef SeqList<FacetT, std::deque<FacetT>, SetVector<int> >   FacetList;
-  typedef SeqList<CornerT, std::deque<CornerT>, SetVector<int> > CornerList;
+  //typedef SeqList<CellT, std::deque<CellT>, SetVector<int> >     CellList;
+  //typedef SeqList<PointT, std::deque<PointT>, SetVector<int> >   PointList;
+  //typedef SeqList<FacetT, std::deque<FacetT>, SetVector<int> >   FacetList;
+  //typedef SeqList<CornerT, std::deque<CornerT>, SetVector<int> > CornerList;
+
+  typedef SeqList<std::deque<CellT>, SetVector<int> >     CellList;
+  typedef SeqList<std::deque<PointT>, SetVector<int> >    PointList;
+  typedef SeqList<std::deque<FacetT>, SetVector<int> >    FacetList;
+  typedef SeqList<std::deque<CornerT>, SetVector<int> >   CornerList;
+
 
   typedef typename CellList  ::iterator CellIteratorT;
   typedef typename PointList ::iterator PointIteratorT;
@@ -848,7 +854,7 @@ public:
   */
   CellT* getCellPtr(int nth)
   {
-    if (unsigned(nth)<this->_cellL.total_size())
+    if (unsigned(nth)<this->_cellL.totalSize())
       return &_cellL[nth];
     else
       return NULL;
@@ -857,7 +863,7 @@ public:
   */
   FacetT* getFacetPtr(int nth)
   {
-    if (unsigned(nth)<this->_facetL.total_size())
+    if (unsigned(nth)<this->_facetL.totalSize())
       return &_facetL[nth];
     else
       return NULL;
@@ -866,7 +872,7 @@ public:
   */
   CornerT* getCornerPtr(int nth)
   {
-    if (unsigned(nth)<this->_cornerL.total_size())
+    if (unsigned(nth)<this->_cornerL.totalSize())
       return &_cornerL[nth];
     else
       return NULL;
@@ -875,7 +881,7 @@ public:
   */
   PointT* getNodePtr(int nth)
   {
-    if (unsigned(nth)<this->_pointL.total_size())
+    if (unsigned(nth)<this->_pointL.totalSize())
       return &_pointL[nth];
     else
       return NULL;
@@ -883,28 +889,28 @@ public:
 
   cell_handler getCell(int nth)
   {
-    if (unsigned(nth)<this->_cellL.total_size())
+    if (unsigned(nth)<this->_cellL.totalSize())
       return cell_handler(this, &_cellL[nth], nth);
     else
       return cell_handler(this, NULL, -1);
   }
   facet_handler getFacet(int nth)
   {
-    if (unsigned(nth)<this->_facetL.total_size())
+    if (unsigned(nth)<this->_facetL.totalSize())
       return facet_handler(this, &_facetL[nth], nth);
     else
       return facet_handler(this, NULL, -1);
   }
   corner_handler getCorner(int nth)
   {
-    if (unsigned(nth)<this->_cornerL.total_size())
+    if (unsigned(nth)<this->_cornerL.totalSize())
       return corner_handler(this, &_cornerL[nth], nth);
     else
       return corner_handler(this, NULL, -1);
   }
   point_handler getNode(int nth)
   {
-    if (unsigned(nth)<this->_pointL.total_size())
+    if (unsigned(nth)<this->_pointL.totalSize())
       return point_handler(this, &_pointL[nth], nth);
     else
       return point_handler(this, NULL, -1);
@@ -912,22 +918,22 @@ public:
 
   const CellT* getCellPtr(int nth) const
   {
-    FEPIC_CHECK(unsigned(nth)<this->_cellL.total_size(), "invalid index", std::out_of_range);
+    FEPIC_CHECK(unsigned(nth)<this->_cellL.totalSize(), "invalid index", std::out_of_range);
     return &_cellL[nth];
   }
   const FacetT* getFacetPtr(int nth) const
   {
-    FEPIC_CHECK(unsigned(nth)<this->_facetL.total_size(), "invalid index", std::out_of_range);
+    FEPIC_CHECK(unsigned(nth)<this->_facetL.totalSize(), "invalid index", std::out_of_range);
     return &_facetL[nth];
   }
   const CornerT* getCornerPtr(int nth) const
   {
-    FEPIC_CHECK(unsigned(nth)<this->_cornerL.total_size(), "invalid index", std::out_of_range);
+    FEPIC_CHECK(unsigned(nth)<this->_cornerL.totalSize(), "invalid index", std::out_of_range);
     return &_cornerL[nth];
   }
   const PointT* getNodePtr(int nth) const
   {
-    FEPIC_CHECK(unsigned(nth)<this->_pointL.total_size(), "invalid index", std::out_of_range);
+    FEPIC_CHECK(unsigned(nth)<this->_pointL.totalSize(), "invalid index", std::out_of_range);
     return &_pointL[nth];
   }
 
@@ -1182,7 +1188,7 @@ public:
   */
   int numCellsTotal() const
   {
-    return static_cast<int>( _cellL.total_size() );
+    return static_cast<int>( _cellL.totalSize() );
   }
 
   /** Retorna o número de nós.
@@ -1198,7 +1204,7 @@ public:
   */
   int numNodesTotal() const
   {
-    return static_cast<int>( _pointL.total_size() );
+    return static_cast<int>( _pointL.totalSize() );
   }
 
   int numVertices() const;
@@ -1216,7 +1222,7 @@ public:
   */
   int numFacetsTotal() const
   {
-    return static_cast<int>( _facetL.total_size() );
+    return static_cast<int>( _facetL.totalSize() );
   }
 
   /** Retorna número de corners.
@@ -1228,7 +1234,7 @@ public:
       return static_cast<int>( _cornerL.size() );
     else
     // FIXME: high orders nodes are not corners
-      return static_cast<int>( _pointL.total_size() );
+      return static_cast<int>( _pointL.totalSize() );
   }
 
   /** Retorna o número de corners.
@@ -1237,10 +1243,10 @@ public:
   int numCornersTotal() const
   {
     if (CellT::dim==3)
-      return static_cast<int>( _cornerL.total_size() );
+      return static_cast<int>( _cornerL.totalSize() );
     else
       // FIXME: high orders nodes are not corners
-      return static_cast<int>( _pointL.total_size() );
+      return static_cast<int>( _pointL.totalSize() );
   }
 
   int numNodesPerCell() const

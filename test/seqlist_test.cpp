@@ -31,7 +31,7 @@
 
 #include <gtest/gtest.h>
 
-
+#include "Fepic/src/mesh/labelable.hpp"
 #include "Fepic/src/util/list_type.hpp"
 #include <iostream>
 #include <sstream>
@@ -74,13 +74,13 @@ TEST(SeqListTest, TestStep0)
 {
   int a[] = {0,1,2,3,  0,1,2,3,  0,1,2,3,  0,1,2,3,  0,1,2,3,  0,1,2,3}; // 6 x 4 = 24
   int a_size = sizeof(a)/sizeof(int);
-  SeqList<Dummy> v0;
-  SeqList<Dummy>::iterator it;
-  SeqList<Dummy>::const_iterator cit;
+  SeqList<std::vector<Dummy> > v0;
+  SeqList<std::vector<Dummy> >::iterator it;
+  SeqList<std::vector<Dummy> >::const_iterator cit;
 
 
   for (int i=0; i<a_size; ++i)
-    v0.push_back(Dummy(i)); // v0 = a
+    v0.insert(Dummy(i)); // v0 = a
 
 
   // ================== disable ===================
@@ -131,7 +131,7 @@ TEST(SeqListTest, TestStep0)
 
   EXPECT_EQ(23, id);
   EXPECT_EQ(13u, v0.size());
-  EXPECT_EQ(24u, v0.total_size());
+  EXPECT_EQ(24u, v0.totalSize());
 
   id = v0.insert(Dummy(3)); EXPECT_EQ( 21, id);
   id = v0.insert(Dummy(3)); EXPECT_EQ( 19, id);
@@ -148,7 +148,7 @@ TEST(SeqListTest, TestStep0)
   // v0 = {0,3,2,3,  0,3,2,3,  0,3,2,3,  0,3,2,3,  0,3,2,3,  0,3,2,3};
 
   EXPECT_EQ(24u, v0.size());
-  EXPECT_EQ(24u, v0.total_size());
+  EXPECT_EQ(24u, v0.totalSize());
 
   id = v0.insert(Dummy(5)); EXPECT_EQ( 24, id);
   id = v0.insert(Dummy(5)); EXPECT_EQ( 25, id);
@@ -156,7 +156,7 @@ TEST(SeqListTest, TestStep0)
 
   // v0 = {0,3,2,3,  0,3,2,3,  0,3,2,3,  0,3,2,3,  0,3,2,3,  0,3,2,3, 5,5,5};
   EXPECT_EQ(27u, v0.size());
-  EXPECT_EQ(27u, v0.total_size());
+  EXPECT_EQ(27u, v0.totalSize());
 
 };
 
@@ -165,9 +165,9 @@ TEST(SeqListTest, TestStep1)
 {
   int a[] = {0,1,2,3,  0,1,2,3,  0,1,2,3,  0,1,2,3,  0,1,2,3,  0,1,2,3}; // 6 x 4 = 24
   int a_size = sizeof(a)/sizeof(int);
-  SeqList<Dummy> v;
-  SeqList<Dummy>::iterator it;
-  SeqList<Dummy>::const_iterator cit;
+  SeqList<std::vector<Dummy> > v;
+  SeqList<std::vector<Dummy> >::iterator it;
+  SeqList<std::vector<Dummy> >::const_iterator cit;
   
   v.resize(24);
 
@@ -175,7 +175,7 @@ TEST(SeqListTest, TestStep1)
     v[i] = Dummy(i); // v = a
 
   EXPECT_EQ(24u, v.size());
-  EXPECT_EQ(24u, v.total_size());
+  EXPECT_EQ(24u, v.totalSize());
 
 
 };
@@ -186,9 +186,9 @@ TEST(SeqListTest, TestStep2)
   int a[] = {1,3,5,7,  1,3,5,7,  1,3,5,7,  1,3,5,7,  1,3,5,7,  1,3,5,7}; // 6 x 4 = 24
   //int a[] = {0,1,2,3,  0,1,2,3,  0,1,2,3,  0,1,2,3,  0,1,2,3,  0,1,2,3}; // 6 x 4 = 24
   int a_size = sizeof(a)/sizeof(int);
-  SeqList<Dummy> v;
-  SeqList<Dummy>::iterator it;
-  SeqList<Dummy>::const_iterator cit;
+  SeqList<std::vector<Dummy> > v;
+  SeqList<std::vector<Dummy> >::iterator it;
+  SeqList<std::vector<Dummy> >::const_iterator cit;
   
   //
 
@@ -198,7 +198,7 @@ TEST(SeqListTest, TestStep2)
     v[i] = Dummy(i); // v = a
 
   EXPECT_EQ(24u, v.size());
-  EXPECT_EQ(24u, v.total_size());
+  EXPECT_EQ(24u, v.totalSize());
 
 
   v.disable(0);
@@ -222,7 +222,7 @@ TEST(SeqListTest, TestStep2)
   EXPECT_EQ(4, v.begin()->getTag());
 
   EXPECT_EQ(20u, v.size());
-  EXPECT_EQ(24u, v.total_size());
+  EXPECT_EQ(24u, v.totalSize());
 
   int id;
   id = v.insert(Dummy(3)); EXPECT_EQ(3, id);
@@ -250,7 +250,7 @@ TEST(SeqListTest, TestStep2)
   
   EXPECT_EQ(12u, v.size());
   EXPECT_EQ(12u, size(v));
-  EXPECT_EQ(24u, v.total_size());  
+  EXPECT_EQ(24u, v.totalSize());  
   EXPECT_EQ(0, v.contiguousId(4));  EXPECT_EQ(6, v.contiguousId(12));
   EXPECT_EQ(1, v.contiguousId(6));  EXPECT_EQ(7, v.contiguousId(13));
   EXPECT_EQ(2, v.contiguousId(7));  EXPECT_EQ(8, v.contiguousId(14));
@@ -274,9 +274,9 @@ TEST(SeqListTest, ParallelItersTest0)
              0,1,2,3,  0,1,2,3,  0,1,2,3,  0,1,2,3,  0,1,2,3,  0,1,2,3,
              0,1,2,3,  0,1,2,3,  0,1,2,3,  0,1,2,3,  0,1,2,3,  0,1,2,3}; // 18 x 4 = 72
   int a_size = sizeof(a)/sizeof(int);
-  SeqList<Dummy> v;
-  SeqList<Dummy>::iterator it;
-  SeqList<Dummy>::const_iterator cit;
+  SeqList<std::vector<Dummy> > v;
+  SeqList<std::vector<Dummy> >::iterator it;
+  SeqList<std::vector<Dummy> >::const_iterator cit;
   
   
 
@@ -334,9 +334,9 @@ TEST(SeqListTest, ParallelItersTest1)
 
   int a[] = {0,1,2,3,  0,1,2,3}; // 2 x 4 = 8
   int a_size = sizeof(a)/sizeof(int);
-  SeqList<Dummy> v;
-  SeqList<Dummy>::iterator it;
-  SeqList<Dummy>::const_iterator cit;
+  SeqList<std::vector<Dummy> > v;
+  SeqList<std::vector<Dummy> >::iterator it;
+  SeqList<std::vector<Dummy> >::const_iterator cit;
   
   
 
@@ -376,7 +376,7 @@ TEST(SeqListTest, TestStepWithDeque0)
   int a[] = {0,1,2,3,  0,1,2,3,  0,1,2,3,  0,1,2,3,  0,1,2,3,  0,1,2,3}; // 6 x 4 = 24
   int a_size = sizeof(a)/sizeof(int);
   
-  typedef SeqList<Dummy, std::deque<Dummy> > container_type;
+  typedef SeqList<std::deque<Dummy> > container_type;
   
   container_type v0;
   container_type::iterator it;
@@ -384,7 +384,7 @@ TEST(SeqListTest, TestStepWithDeque0)
 
 
   for (int i=0; i<a_size; ++i)
-    v0.push_back(Dummy(i)); // v0 = a
+    v0.insert(Dummy(i)); // v0 = a
 
 
   // ================== disable ===================
@@ -435,7 +435,7 @@ TEST(SeqListTest, TestStepWithDeque0)
 
   EXPECT_EQ(23, id);
   EXPECT_EQ(13u, v0.size());
-  EXPECT_EQ(24u, v0.total_size());
+  EXPECT_EQ(24u, v0.totalSize());
 
   id = v0.insert(Dummy(3)); EXPECT_EQ( 21, id);
   id = v0.insert(Dummy(3)); EXPECT_EQ( 19, id);
@@ -452,7 +452,7 @@ TEST(SeqListTest, TestStepWithDeque0)
   // v0 = {0,3,2,3,  0,3,2,3,  0,3,2,3,  0,3,2,3,  0,3,2,3,  0,3,2,3};
 
   EXPECT_EQ(24u, v0.size());
-  EXPECT_EQ(24u, v0.total_size());
+  EXPECT_EQ(24u, v0.totalSize());
 
   id = v0.insert(Dummy(5)); EXPECT_EQ( 24, id);
   id = v0.insert(Dummy(5)); EXPECT_EQ( 25, id);
@@ -460,7 +460,7 @@ TEST(SeqListTest, TestStepWithDeque0)
 
   // v0 = {0,3,2,3,  0,3,2,3,  0,3,2,3,  0,3,2,3,  0,3,2,3,  0,3,2,3, 5,5,5};
   EXPECT_EQ(27u, v0.size());
-  EXPECT_EQ(27u, v0.total_size());
+  EXPECT_EQ(27u, v0.totalSize());
 
 };
 

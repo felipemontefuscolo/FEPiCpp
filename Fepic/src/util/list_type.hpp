@@ -6,26 +6,35 @@
 #include <set>
 #include <utility>
 #include <iterator>
+#include <tr1/type_traits>
 #ifdef FEP_HAS_OPENMP
 #  include "omp.h"
 #endif
 #include "../mesh/enums.hpp"
 #include "../util/misc.hpp"
 #include "contrib/Loki/set_vector.hpp"
-#include <tr1/type_traits>
-#include "../mesh/labelable.hpp"
+
+//#include "../mesh/labelable.hpp"  //nao precisa
 #include <iostream>
 #include "macros.hpp"
 
-/*
-                        _      _  _       _
-                       | |    | |(_) ___ | |_
-                       | |    | || |/ __|| __|
-                       | |___ | || |\__ \| |_
-                       |_____||_||_||___/ \__|
 
+#include "boost/static_assert.hpp"
+#include "boost/utility/enable_if.hpp"
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wundef"
+#include "boost/type_traits/remove_pointer.hpp"
+#pragma GCC diagnostic pop
 
-*/
+//
+//                      _      _  _       _
+//                     | |    | |(_) ___ | |_
+//                     | |    | || |/ __|| __|
+//                     | |___ | || |\__ \| |_
+//                     |_____||_||_||___/ \__|
+//
+//
+//
 
 // fwd
 template<class> class SeqList_iterator;
@@ -33,37 +42,37 @@ template<class> class SeqList_const_iterator;
 
 
 
-/** @brief a mix between list and vector. The type T must be an inheritance
- *  of classe _Labelable.
- *
- *  @note Container_t, SmallCont_t : random access containers.
- *  @note dont insert disabled elements.
- */
-template<class K,   // value type: class must be inherited of classe Labelable
-         class C  = std::vector<K>, // a random access container
-         class S  = SetVector<int> >   // a sorted container for internal indices
+/// @brief A container with a specific use for the mesh. The value type of this container is
+/// deducted from the container passed as template argument "C". This value type should have two
+/// functions: "bool isDisabled() const" and "void setDisabledTo(bool)", see _Labelable class.
+/// These functions are used to "delete" containers elements. If these functions don't have
+/// public access, make SeqList as a friend class.
+///
+template<class C,                      ///< A random access data container: std::vector, boost::ptr_vector, etc.
+                                       ///< it should have public access to its value type.
+                                       /// for store pointers, DO NOT USE std::vector<T*>. Use boost::ptr_vector<T> instead.
+         class S  = SetVector<int> >   ///< A sorted container for internal indices. For most
+                                       ///< purposes you will never have to change this default.
 class SeqList
 {
-
   template<class> friend class SeqList_iterator;
   template<class> friend class SeqList_const_iterator;
 
-
-  typedef          SeqList<K,C,S>                        Self;
-  typedef typename C::iterator                           ContainerIterator;
-  typedef typename C::const_iterator                     ContainerConstIterator;
-  typedef typename C::reverse_iterator                   ContainerReverseIterator;
-
+  typedef          SeqList<C,S>                          Self;
+  typedef typename C::iterator                           DataIterator;
+  typedef typename C::const_iterator                     DataConstIterator;
+  typedef typename C::reverse_iterator                   DataReverseIterator;
 
 public:
-  typedef          K                                      value_type;
+
+  // stl standard
   typedef          C                                      container_type;
-  typedef typename C::allocator_type                      allocator_type;
+  typedef typename container_type::value_type             value_type;
+  typedef typename container_type::allocator_type         allocator_type;
   typedef          S                                      ids_container_type;
   typedef typename container_type::reference              reference;
   typedef typename container_type::const_reference        const_reference;
   typedef typename container_type::pointer                pointer;
-  typedef typename container_type::const_pointer          const_pointer;
   typedef typename container_type::size_type              size_type;
   typedef typename container_type::difference_type        difference_type;
   typedef          SeqList_iterator<Self>                 iterator;
@@ -71,32 +80,13 @@ public:
 
 private:
   
-  template<class T> // T = value_type
-  struct _DisabledFlag
-  {
-    bool is_disabled(T const* a) const
-    {
-      return a->isDisabled();
-    }
-    void set_disabled_to(bool b, T * a) const
-    {
-      a->setDisabledTo(b);
-    }
-  };
-  
-  template<class T>
-  struct _DisabledFlag<T*>
-  {
-    bool is_disabled(T const* a) const
-    {
-      return a->isDisabled();
-    }
-    void set_disabled_to(bool b, T & a) const
-    {
-      a->setDisabledTo(b);
-    }
-  };
-  
+  // auxiliary typedefs
+  typedef typename boost::remove_pointer<value_type>::type RP_ValueType; // remove pointer value type
+  typedef          RP_ValueType &                          RP_Reference;
+  typedef          RP_ValueType const&                     RP_ConstReference;
+  typedef          RP_ValueType *                          RP_Pointer;
+  typedef          RP_ValueType const*                     RP_ConstPointer;
+
 public:
 
   // build TypeHas_reserve singnature checker.
@@ -106,8 +96,19 @@ public:
   FEP_BUILD_MEM_FUN_CHECKER_1ARG(reserve,reserve, void, ;char none_qualif , typename T::size_type);
   FEP_BUILD_MEM_FUN_CHECKER_0ARG(capacity,capacity, typename T::size_type, const);
 
+  template<class T> // T = value_type
+  struct _InsertFunArgument {
+    typedef T const& type;
+  };
+  
+  template<class T> // T* = value_type
+  struct _InsertFunArgument<T*> {
+    typedef T*  type;
+  };
+
+
   explicit SeqList(float grow_f=0.05f) : _grow_factor(grow_f), _n_reserve_calls(0),
-                                        _data(), _disabled_idcs(), _actived_beg(_data.begin())
+                                         _data(), _disabled_idcs(), _actived_beg(_data.begin())
                                         {}
 
   void clear()
@@ -116,20 +117,19 @@ public:
     _disabled_idcs.clear();
   }
 
-  // TODO: only to vector type ...
-  int getDataId(value_type const* v) const
-  {
-    return static_cast<int>(std::distance(_data.begin(), ContainerConstIterator(v)));
-  }
+  //// TODO: only to vector type ...
+  //int getDataId(const_pointer v) const
+  //{
+  //  return static_cast<int>(std::distance(_data.begin(), DataConstIterator(v)));
+  //}
 
   size_type size() const
   {return _data.size() - _disabled_idcs.size();};
 
-  size_type total_size() const
+  size_type totalSize() const
   {return _data.size();};
 
-
-  /*  SERIAL VERSION  */
+  //  SERIAL VERSION 
 
   iterator begin()
   { return iterator(this, _actived_beg); }
@@ -145,7 +145,7 @@ public:
 
 
 
-  /*  PARALLEL VERSION  */
+  //  PARALLEL VERSION
 
   iterator begin(int tid, int nthreads, int * begin_idx = NULL)
   {
@@ -199,28 +199,19 @@ public:
 
 
   // modifiers
-  void push_back(value_type const& obj)
-  {
-
-    if (_impl_capacity(_data) < _data.size()+1)
-      _impl_reserve(_data, (size_type)((_data.size()+1)*(1. + _grow_factor))+0.5);
-
-    _data.push_back(obj);
-
-    _update_member_beg();
-  };
 
   void disable(const_iterator it)
-  { disable((int)std::distance((ContainerConstIterator)_data.begin(), it.get()));};
+  { disable((int)std::distance((DataConstIterator)_data.begin(), it.get()));};
 
   void disable(int del_id)
   {
-    //ContainerIterator it = ContainerIterator(&_data[del_id]);
-    pointer it = &_data.at(del_id);
+    //DataIterator it = DataIterator(&_data[del_id]);
+    RP_Pointer it = &_data.at(del_id);
     if (it->isDisabled())
     {
-      std::cout << "ERRROR: trying to disable a disabled element \n";
-      throw;
+      //std::cout << "ERRROR: trying to disable a disabled element \n";
+      //throw;
+      return;
     }
     _disabled_idcs.insert(del_id);
     it->setDisabledTo(true);
@@ -230,24 +221,13 @@ public:
   }
 
   /** @brief insert an element and return your id.
-   *  @warning dont insert disabled elements.
    */
-  //int insert(value_type const& obj)
-  int insert(value_type const& obj)
+  int insert(typename _InsertFunArgument<value_type>::type obj)
   {
-    if (_disabled_idcs.empty())
-    {
-      push_back(obj);
-      return _data.size()-1;
-    }
-
-    int const new_id = _disabled_idcs.back();
-    _disabled_idcs.pop_back();
-    _data[new_id] = obj;
-
-    _update_member_beg();
-    return new_id;
-
+    //_InsertFunArgument<value_type>::type 
+    //    = T const& for non-pointer containers
+    //    = T*   for pointer containers
+    return insert_impl<value_type>(obj);
   }
 
   void setGrowFactor(float factor)
@@ -258,28 +238,28 @@ public:
 
   void reserve(size_type amount)
   {
-    _impl_reserve(_data, amount);
+    reserve_impl(_data, amount);
   }
 
   void resize(size_type s)
   {
     if (s > _data.size())
-      _impl_reserve(_data, static_cast<size_type>( static_cast<float>(s)*(1.0f + _grow_factor) ) );
+      reserve_impl(_data, static_cast<size_type>( static_cast<float>(s)*(1.0f + _grow_factor) ) );
     _data.resize(s);
     _update_member_beg();
   }
 
   size_type capacity() const
   {
-    return _impl_capacity(_data);
+    return capacity_impl(_data);
   }
 
-  reference operator[](size_type n)
+  RP_Reference operator[](size_type n)
   {
     return _data[n];
   }
 
-  const_reference operator[](size_type n) const
+  RP_ConstReference operator[](size_type n) const
   {
     return _data[n];
   }
@@ -294,8 +274,9 @@ public:
     return id - static_cast<int>( std::distance(_disabled_idcs.begin(), std::lower_bound(_disabled_idcs.begin(), _disabled_idcs.end(), id)));
   }
   
-  /** @param[out] cids contiguous ids.
-   */  
+  /// A shortcut to get multiples cids at same time.
+  /// @param[out] cids contiguous ids.
+  ///  
   void contiguousIds(int *ids_beg, int const* ids_end, int *cids) const
   {
     while (ids_beg != ids_end)
@@ -307,14 +288,14 @@ public:
 protected:
 
   template<class V>
-  void _impl_reserve(V &/*vec*/, typename V::size_type /*amount*/,
-              typename EnableIf<!TypeHas_reserve<V>::value>::type * = NULL) {}
+  void reserve_impl(V &/*vec*/, typename V::size_type /*amount*/,
+              typename boost::enable_if_c<!TypeHas_reserve<V>::value>::type * = NULL) {}
 
   template<class V>
-  void _impl_reserve(V &vec, typename V::size_type amount,
-              typename EnableIf<TypeHas_reserve<V>::value>::type * = NULL)
+  void reserve_impl(V &vec, typename V::size_type amount,
+              typename boost::enable_if_c<TypeHas_reserve<V>::value>::type * = NULL)
   {
-    if ( _impl_capacity(vec) < amount )
+    if ( capacity_impl(vec) < amount )
     {
       ++_n_reserve_calls;
       _update_member_beg();
@@ -324,16 +305,61 @@ protected:
 
   template<class V>
   static
-  typename V::size_type _impl_capacity(V const& /*vec*/,
-                        typename EnableIf<!TypeHas_capacity<V>::value>::type * = NULL)
-  { return 0; }
+  typename V::size_type capacity_impl(V const& /*vec*/,
+                        typename boost::enable_if_c<!TypeHas_capacity<V>::value>::type * = NULL)
+  { return ~(size_type)0; }
 
   template<class V>
   static
-  typename V::size_type _impl_capacity(V const&vec,
-                        typename EnableIf<TypeHas_capacity<V>::value>::type * = NULL)
+  typename V::size_type capacity_impl(V const&vec,
+                        typename boost::enable_if_c<TypeHas_capacity<V>::value>::type * = NULL)
   {
     return vec.capacity();
+  }
+
+  template<class Value_type>
+  int insert_impl(const_reference obj, typename boost::enable_if_c< ! std::tr1::is_pointer<Value_type>::value >::type * = NULL)
+  {
+    if (_disabled_idcs.empty())
+    {
+      // --- push_back ----
+      if (capacity_impl(_data) < _data.size()+1)
+        reserve_impl(_data, (size_type)((_data.size()+1)*(1. + _grow_factor))+0.5);
+      _data.push_back(obj);
+      _update_member_beg();
+      // -------------------
+      return _data.size()-1;
+    }
+
+    int const new_id = _disabled_idcs.back();
+    _disabled_idcs.pop_back();
+    _data[new_id] = obj;
+
+    _update_member_beg();
+    return new_id;
+
+  }
+
+  template<class Value_type>
+  int insert_impl(value_type obj, typename boost::enable_if_c< std::tr1::is_pointer<Value_type>::value >::type * = NULL)
+  {
+    if (_disabled_idcs.empty())
+    {
+      // --- push_back ----
+      if (capacity_impl(_data) < _data.size()+1)
+        reserve_impl(_data, (size_type)((_data.size()+1)*(1. + _grow_factor))+0.5);
+      _data.push_back(obj);
+      _update_member_beg();
+      // -------------------
+      return _data.size()-1;
+    }
+
+    int const new_id = _disabled_idcs.back();
+    _disabled_idcs.pop_back();
+    _data[new_id] = *obj;
+
+    _update_member_beg();
+    return new_id;
   }
 
   void _update_member_beg()
@@ -347,7 +373,7 @@ protected:
   unsigned            _n_reserve_calls;
   container_type      _data;
   ids_container_type  _disabled_idcs; // sorted vector
-  ContainerIterator   _actived_beg; // beginning of valid data
+  DataIterator        _actived_beg;   // iterator to the beginning of valid data
 
 };
 
@@ -359,23 +385,36 @@ template<class SeqListType>
 class SeqList_iterator
 {
 
-  template<class,class,class> friend class SeqList;
+  template<class,class> friend class SeqList;
   template<class> friend class SeqList_const_iterator;
 
   typedef SeqListType*                            PtrToSeqListType;
   typedef SeqList_iterator<SeqListType>           Self;
-  typedef typename SeqListType::ContainerIterator ContainerIterator;
+  typedef typename SeqListType::DataIterator DataIterator;
 public:
+
+  // stl standard
   typedef typename SeqListType::difference_type    difference_type;
   typedef typename SeqListType::value_type         value_type;
   typedef typename SeqListType::pointer            pointer;
   typedef typename SeqListType::reference          reference;
   typedef          std::bidirectional_iterator_tag iterator_category;
 
+private:
+  
+  // auxiliary typedefs
+  typedef typename SeqListType::RP_ValueType      RP_ValueType;
+  typedef typename SeqListType::RP_Reference      RP_Reference;
+  typedef typename SeqListType::RP_ConstReference RP_ConstReference;
+  typedef typename SeqListType::RP_Pointer        RP_Pointer;
+
+
+public:
+
   explicit
-  SeqList_iterator(SeqListType * sq, ContainerIterator x) : _iter_to_t(x), _ptr_to_seq(sq) {}
+  SeqList_iterator(SeqListType * sq, DataIterator x) : _iter_to_t(x), _ptr_to_seq(sq) {}
   //explicit
-  //SeqList_iterator(SeqListType * sq, pointer p) : _iter_to_t(ContainerIterator(p)), _ptr_to_seq(sq) {}
+  //SeqList_iterator(SeqListType * sq, pointer p) : _iter_to_t(DataIterator(p)), _ptr_to_seq(sq) {}
   explicit
   SeqList_iterator(SeqListType * sq) : _iter_to_t(), _ptr_to_seq(sq) {}
 
@@ -383,7 +422,7 @@ public:
 
   SeqList_iterator() : _iter_to_t(), _ptr_to_seq(NULL) {}
 
-  ContainerIterator const& get() const
+  DataIterator const& get() const
   { return _iter_to_t; }
 
   FEP_STRONG_INLINE
@@ -395,14 +434,14 @@ public:
   }
 
   FEP_STRONG_INLINE
-  reference
+  RP_Reference
   operator*() const
   {
     return *_iter_to_t;
   }
 
   FEP_STRONG_INLINE
-  pointer
+  RP_Pointer
   operator->() const
   {
     return &(*_iter_to_t);
@@ -452,6 +491,16 @@ public:
   }
 
   FEP_STRONG_INLINE
+  bool
+  operator==(const Self& x) const
+  { return _iter_to_t == x._iter_to_t; }
+
+  FEP_STRONG_INLINE
+  bool
+  operator!=(const Self& x) const
+  { return _iter_to_t != x._iter_to_t; }
+
+  FEP_STRONG_INLINE
   Self&
   next()
   {
@@ -475,19 +524,8 @@ public:
     return tmp;
   }
 
-
-  FEP_STRONG_INLINE
-  bool
-  operator==(const Self& x) const
-  { return _iter_to_t == x._iter_to_t; }
-
-  FEP_STRONG_INLINE
-  bool
-  operator!=(const Self& x) const
-  { return _iter_to_t != x._iter_to_t; }
-
 private:
-  ContainerIterator _iter_to_t;
+  DataIterator _iter_to_t;
   PtrToSeqListType  _ptr_to_seq;
 
 };
@@ -499,24 +537,36 @@ private:
 template<class SeqListType>
 class SeqList_const_iterator
 {
-  template<class,class,class> friend class SeqList;
+  template<class,class> friend class SeqList;
   template<class> friend class SeqList_iterator;
 
   typedef SeqListType const*                           PtrToSeqListType;
   typedef SeqList_const_iterator<SeqListType>          Self;
   typedef SeqList_iterator<SeqListType>                SelfNoConst;
-  typedef typename SeqListType::ContainerConstIterator ContainerIterator;
+  typedef typename SeqListType::DataConstIterator DataIterator;
 
 public:
   typedef typename SeqListType::difference_type    difference_type;
   typedef typename SeqListType::value_type         value_type;
-  typedef typename SeqListType::const_pointer      pointer;
+  //typedef typename SeqListType::const_pointer      pointer;
   typedef typename SeqListType::const_reference    reference;
   typedef          std::bidirectional_iterator_tag iterator_category;
 
-  SeqList_const_iterator(SeqListType const* sq, ContainerIterator const& x) : _iter_to_t(x), _ptr_to_seq(sq) {}
+private:
+  
+  // auxiliary typedefs
+  typedef typename SeqListType::RP_ValueType      RP_ValueType;
+  typedef typename SeqListType::RP_Reference      RP_Reference;
+  typedef typename SeqListType::RP_ConstReference RP_ConstReference;
+  typedef typename SeqListType::RP_Pointer        RP_Pointer;
+  typedef typename SeqListType::RP_ConstPointer   RP_ConstPointer;
+
+public:
+
+
+  SeqList_const_iterator(SeqListType const* sq, DataIterator const& x) : _iter_to_t(x), _ptr_to_seq(sq) {}
   explicit
-  //SeqList_const_iterator(SeqListType const* sq, pointer p) : _iter_to_t(ContainerIterator(p)), _ptr_to_seq(sq) {}
+  //SeqList_const_iterator(SeqListType const* sq, pointer p) : _iter_to_t(DataIterator(p)), _ptr_to_seq(sq) {}
   //explicit
   SeqList_const_iterator(SeqListType const* sq) : _iter_to_t(), _ptr_to_seq(sq) {}
 
@@ -526,7 +576,7 @@ public:
   SeqList_const_iterator() : _iter_to_t(), _ptr_to_seq(NULL) {}
 
   FEP_STRONG_INLINE
-  ContainerIterator const& get() const
+  DataIterator const& get() const
   { return _iter_to_t; }
 
   FEP_STRONG_INLINE
@@ -538,14 +588,14 @@ public:
   }
 
   FEP_STRONG_INLINE
-  reference
+  RP_Reference
   operator*() const
   {
     return *_iter_to_t;
   }
 
   FEP_STRONG_INLINE
-  pointer
+  RP_Pointer
   operator->() const
   {
     return &(*_iter_to_t);
@@ -594,6 +644,16 @@ public:
   }
 
   FEP_STRONG_INLINE
+  bool
+  operator==(const Self& x) const
+  { return _iter_to_t == x._iter_to_t; }
+
+  FEP_STRONG_INLINE
+  bool
+  operator!=(const Self& x) const
+  { return _iter_to_t != x._iter_to_t; }
+
+  FEP_STRONG_INLINE
   Self&
   next()
   {
@@ -617,18 +677,8 @@ public:
     return tmp;
   }
 
-  FEP_STRONG_INLINE
-  bool
-  operator==(const Self& x) const
-  { return _iter_to_t == x._iter_to_t; }
-
-  FEP_STRONG_INLINE
-  bool
-  operator!=(const Self& x) const
-  { return _iter_to_t != x._iter_to_t; }
-
 private:
-  ContainerIterator _iter_to_t;
+  DataIterator _iter_to_t;
   PtrToSeqListType  _ptr_to_seq;
 
 };
