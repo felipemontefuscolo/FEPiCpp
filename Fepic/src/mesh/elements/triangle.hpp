@@ -27,6 +27,8 @@ class Triangle3 :  public _CellCore<Triangle3>
 {
 public:
 
+  Triangle3() : _CellCore<Triangle3>() {}
+
   friend class _CellCore<Triangle3>;
 
   typedef Simplex<2>  PolytopeT;

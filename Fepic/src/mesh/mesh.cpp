@@ -31,7 +31,7 @@
 #  include <cstdint>
 #  include <type_traits>
 #endif
-
+#include "boost/scoped_ptr.hpp"
 
 Mesh::Mesh(ECellType fept, int spacedim)
 {
@@ -219,6 +219,27 @@ int SMesh<CT>::numVertices() const
   return num_vtcs;
 }
 
+template<class CT>
+struct ArgConverter // CT = SeqList value type
+{
+  template<class U> // U = push function argument
+  CT const& operator() (U const* u)
+  {
+    return *static_cast<CT const*>(u);
+  }
+};
+
+template<class CT>
+struct ArgConverter<CT*>
+{
+  template<class U>
+  CT* operator() (U const* u)
+  {
+    return new CT( *static_cast<CT const*>(u) );
+  }
+};
+
+
 /** Add a cell in the mesh's list.
  *  @param cell a pointer to the cell.
  *  @return the id of the new cell.
@@ -226,7 +247,8 @@ int SMesh<CT>::numVertices() const
 template<class CT>
 int SMesh<CT>::pushCell(Cell const* cell)
 {
-  return _cellL.insert(*static_cast<CT const*>(cell));
+  //return _cellL.insert(*static_cast<CT const*>(cell));
+  return _cellL.insert(ArgConverter<typename CellList::value_type>()(cell));
 }
 
 /** Add a node in the mesh's list.
@@ -259,6 +281,24 @@ int SMesh<CT>::pushCorner(Corner const* corner)
   return _cornerL.insert(*static_cast<CornerT const*>(corner));
 }
 
+template<class CT>
+struct CreateObj
+{
+  CT operator()() const
+  {
+    return CT();
+  }  
+};
+
+template<class CT>
+struct CreateObj<CT*>
+{
+  CT* operator()() const
+  {
+    return new CT();
+  } 
+};
+
 /** Create a cell in the mesh's list.
  *  @param[out] cell_id a pointer to store the id of the new cell, can
  *              be (int*)NULL pointer.
@@ -267,7 +307,7 @@ int SMesh<CT>::pushCorner(Corner const* corner)
 template<class CT>
 Cell* SMesh<CT>::pushCell(int *cell_id)
 {
-  int const tmp = _cellL.insert(CT());
+  int const tmp = _cellL.insert(CreateObj<typename CellList::value_type>()());
   if (cell_id)
     *cell_id = tmp;
   return this->MeshT::getCellPtr(tmp);
@@ -401,39 +441,19 @@ void SMesh<CT>::printInfo() const
 template<class CT>
 void SMesh<CT>::printStatistics() const
 {
-  int cc = static_cast<int> ( _cellL.capacity() ),
-      pc = static_cast<int> ( _pointL.capacity() ),
-      fc = static_cast<int> ( _facetL.capacity() ),
-      bc = static_cast<int> ( _cornerL.capacity() );
   printf("\n"
          "Cell list: \n"
-         "  -allocated:      %d\n"
-         "  -used:           %d (%d%%)\n"
-         "  -# reservations: %d\n"
+         "  -size:           %d\n"
          "Node list: \n"
-         "  -allocated:      %d\n"
-         "  -used:           %d (%d%%)\n"
-         "  -# reservations: %d\n"
+         "  -size:           %d\n"
          "Facet list: \n"
-         "  -allocated:      %d\n"
-         "  -used:           %d (%d%%)\n"
-         "  -# reservations: %d\n"
+         "  -size:           %d\n"
          "Corner list: \n"
-         "  -allocated:      %d\n"
-         "  -used:           %d (%d%%)\n"
-         "  -# reservations: %d\n",
-         (int)_cellL.capacity(),
-         (int)_cellL.totalSize(), (int)(100*_cellL.totalSize()/(cc?cc:1)),
-         (int)_cellL.numReserveCalls(),
-         (int)_pointL.capacity(),
-         (int)_pointL.totalSize(), (int)(100*_pointL.totalSize()/(pc?pc:1)),
-         (int)_pointL.numReserveCalls(),
-         (int)_facetL.capacity(),
-         (int)_facetL.totalSize(), (int)(100*_facetL.totalSize()/(fc?fc:1)),
-         (int)_facetL.numReserveCalls(),
-         (int)_cornerL.capacity(),
-         (int)_cornerL.totalSize(), (int)(100*_cornerL.totalSize()/(bc?bc:1)),
-         (int)_cornerL.numReserveCalls()
+         "  -size:           %d\n",
+         (int)_cellL.totalSize(),
+         (int)_pointL.totalSize(),
+         (int)_facetL.totalSize(),
+         (int)_cornerL.totalSize()
          );
 }
 

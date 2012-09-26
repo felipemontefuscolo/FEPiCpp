@@ -13,6 +13,7 @@ $(SUBDIRS):
 	
 clean:
 	$(FEP_RM) `find . -iname *.o`
+	$(FEP_RM) `find . -iname *.d`
 	
 # pay attention to the wildcard depth.
 build: subdirs

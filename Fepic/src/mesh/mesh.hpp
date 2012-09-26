@@ -30,6 +30,8 @@
 #include "elements/elements.hpp"
 #include "../util/list_type.hpp"
 #include "mesh_iterators.hpp"
+#include "boost/ptr_container/ptr_vector.hpp"
+#include "boost/ptr_container/ptr_deque.hpp"
 
 template<class CT> class SMesh;
 
@@ -275,11 +277,6 @@ public:
   static unsigned estimateNumFacets(unsigned nc, ECellType t);
   static unsigned estimateNumCorners(unsigned nc, ECellType t);
 
-  /** @brief estimate of how the containers will grow.
-   *  @param factor the size
-   */
-  virtual void setGrowFactor(float factor) = 0;
-
   int spaceDim() const
   {
     return _spacedim;
@@ -346,7 +343,7 @@ public:
   //typedef SeqList<FacetT, std::deque<FacetT>, SetVector<int> >   FacetList;
   //typedef SeqList<CornerT, std::deque<CornerT>, SetVector<int> > CornerList;
 
-  typedef SeqList<std::deque<CellT>, SetVector<int> >     CellList;
+  typedef SeqList<boost::ptr_vector<CellT>, SetVector<int> >     CellList;
   typedef SeqList<std::deque<PointT>, SetVector<int> >    PointList;
   typedef SeqList<std::deque<FacetT>, SetVector<int> >    FacetList;
   typedef SeqList<std::deque<CornerT>, SetVector<int> >   CornerList;
@@ -363,7 +360,7 @@ public:
   typedef typename CornerList::const_iterator CornerConstIteratorT;
 
 
-  explicit SMesh(int spacedim) : Mesh(CellT::fep_tag, spacedim)
+  explicit SMesh(int spacedim) : Mesh(CellT::fep_tag, spacedim), _cellL()
   {
   };
 
@@ -759,13 +756,6 @@ public:
   /** @brief estimate of how the containers will grow.
    *  @param factor the size
    */
-  void setGrowFactor(float factor)
-  {
-    _cellL.setGrowFactor(factor);
-    _pointL.setGrowFactor(factor);
-    _facetL.setGrowFactor(factor);
-    _cornerL.setGrowFactor(factor);
-  }
 
   int getCellContigId(int id) const
   {

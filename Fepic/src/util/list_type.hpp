@@ -89,13 +89,6 @@ private:
 
 public:
 
-  // build TypeHas_reserve singnature checker.
-  // suffix,mem_fun_name, mem_fun_return, qualif, mem_fun_args
-  //FEP_BUILD_MEM_FUN_CHECKER(reserve,reserve, void, /*empty*/ , typename T::size_type);
-  //FEP_BUILD_MEM_FUN_CHECKER(capacity,capacity, typename T::size_type, const, /*empty*/);
-  FEP_BUILD_MEM_FUN_CHECKER_1ARG(reserve,reserve, void, ;char none_qualif , typename T::size_type);
-  FEP_BUILD_MEM_FUN_CHECKER_0ARG(capacity,capacity, typename T::size_type, const);
-
   template<class T> // T = value_type
   struct _InsertFunArgument {
     typedef T const& type;
@@ -106,10 +99,11 @@ public:
     typedef T*  type;
   };
 
-
-  explicit SeqList(float grow_f=0.05f) : _grow_factor(grow_f), _n_reserve_calls(0),
-                                         _data(), _disabled_idcs(), _actived_beg(_data.begin())
-                                        {}
+  explicit SeqList()
+  {
+    _data.clear();
+    _actived_beg = _data.begin();
+  }
 
   void clear()
   {
@@ -230,28 +224,10 @@ public:
     return insert_impl<value_type>(obj);
   }
 
-  void setGrowFactor(float factor)
-  { _grow_factor = factor; }
-
-  float getGrowFactor() const
-  { return _grow_factor; }
-
-  void reserve(size_type amount)
-  {
-    reserve_impl(_data, amount);
-  }
-
   void resize(size_type s)
   {
-    if (s > _data.size())
-      reserve_impl(_data, static_cast<size_type>( static_cast<float>(s)*(1.0f + _grow_factor) ) );
     _data.resize(s);
     _update_member_beg();
-  }
-
-  size_type capacity() const
-  {
-    return capacity_impl(_data);
   }
 
   RP_Reference operator[](size_type n)
@@ -264,11 +240,6 @@ public:
     return _data[n];
   }
 
-  int numReserveCalls() const
-  {
-    return _n_reserve_calls;
-  }
-  
   int contiguousId(int id) const
   {
     return id - static_cast<int>( std::distance(_disabled_idcs.begin(), std::lower_bound(_disabled_idcs.begin(), _disabled_idcs.end(), id)));
@@ -287,44 +258,12 @@ public:
     
 protected:
 
-  template<class V>
-  void reserve_impl(V &/*vec*/, typename V::size_type /*amount*/,
-              typename boost::enable_if_c<!TypeHas_reserve<V>::value>::type * = NULL) {}
-
-  template<class V>
-  void reserve_impl(V &vec, typename V::size_type amount,
-              typename boost::enable_if_c<TypeHas_reserve<V>::value>::type * = NULL)
-  {
-    if ( capacity_impl(vec) < amount )
-    {
-      ++_n_reserve_calls;
-      _update_member_beg();
-    }
-    vec.reserve(amount);
-  }
-
-  template<class V>
-  static
-  typename V::size_type capacity_impl(V const& /*vec*/,
-                        typename boost::enable_if_c<!TypeHas_capacity<V>::value>::type * = NULL)
-  { return ~(size_type)0; }
-
-  template<class V>
-  static
-  typename V::size_type capacity_impl(V const&vec,
-                        typename boost::enable_if_c<TypeHas_capacity<V>::value>::type * = NULL)
-  {
-    return vec.capacity();
-  }
-
   template<class Value_type>
-  int insert_impl(const_reference obj, typename boost::enable_if_c< ! std::tr1::is_pointer<Value_type>::value >::type * = NULL)
+  int insert_impl(const_reference obj, typename EnableIf< ! std::tr1::is_pointer<Value_type>::value >::type * = NULL)
   {
     if (_disabled_idcs.empty())
     {
       // --- push_back ----
-      if (capacity_impl(_data) < _data.size()+1)
-        reserve_impl(_data, (size_type)((_data.size()+1)*(1. + _grow_factor))+0.5);
       _data.push_back(obj);
       _update_member_beg();
       // -------------------
@@ -341,13 +280,11 @@ protected:
   }
 
   template<class Value_type>
-  int insert_impl(value_type obj, typename boost::enable_if_c< std::tr1::is_pointer<Value_type>::value >::type * = NULL)
+  int insert_impl(value_type obj, typename EnableIf< std::tr1::is_pointer<Value_type>::value >::type * = NULL)
   {
     if (_disabled_idcs.empty())
     {
       // --- push_back ----
-      if (capacity_impl(_data) < _data.size()+1)
-        reserve_impl(_data, (size_type)((_data.size()+1)*(1. + _grow_factor))+0.5);
       _data.push_back(obj);
       _update_member_beg();
       // -------------------
@@ -369,8 +306,6 @@ protected:
       ++_actived_beg;
   }
 
-  float               _grow_factor;
-  unsigned            _n_reserve_calls;
   container_type      _data;
   ids_container_type  _disabled_idcs; // sorted vector
   DataIterator        _actived_beg;   // iterator to the beginning of valid data

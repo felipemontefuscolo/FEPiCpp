@@ -456,7 +456,7 @@ TEST(ImprimeTest, TestTest)
   MeshIoMsh msh_reader;
   MeshIoVtk vtk_printer;
   Mesh *mesh = NULL;  
-  MeshToolsTri mtools;
+  //MeshToolsTri mtools;
 
   ECellType cell_t      = TRIANGLE6;
   const char* mesh_in  = "meshes/1level_tri6.msh";
@@ -465,7 +465,7 @@ TEST(ImprimeTest, TestTest)
   mesh = Mesh::create(cell_t);
   msh_reader.readFileMsh(mesh_in, mesh);
 
-  int const n_facets = mesh->numFacetsTotal();
+  //int const n_facets = mesh->numFacetsTotal();
 
   //vtk_printer.isFamily(true);
   vtk_printer.attachMesh(mesh);
