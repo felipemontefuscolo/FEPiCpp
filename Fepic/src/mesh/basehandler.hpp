@@ -56,6 +56,9 @@ public:
   BaseHandler() : _elem_ptr(0), _mesh_ptr(0), _elem_id(-1) {};
   
   FEP_STRONG_INLINE
+  bool isValid() const {return _elem_ptr != 0;}
+  
+  FEP_STRONG_INLINE
   reference operator*() {return *(getPtr());}
   
   FEP_STRONG_INLINE

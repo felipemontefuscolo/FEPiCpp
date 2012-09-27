@@ -176,8 +176,8 @@ template<class CT> corner_iterator SMesh<CT>::cornerEnd()  { return corner_itera
   obj_type * a =  &(*_objL.end(tid, nthreads, &end_idx));         \
   return iter_type  (this, a, end_idx)
 
-template<class CT> cell_iterator   SMesh<CT>::cellBegin  (int tid, int nthreads) {FEPIC_BEGIN_ITERATOR_FUNC(CellT,   cell_iterator,   _cellL);}
-template<class CT> cell_iterator   SMesh<CT>::cellEnd    (int tid, int nthreads) {FEPIC_END_ITERATOR_FUNC  (CellT,   cell_iterator,   _cellL);}
+template<class CT> cell_iterator   SMesh<CT>::cellBegin  (int tid, int nthreads) {FEPIC_BEGIN_ITERATOR_FUNC(Cell,   cell_iterator,   _cellL);}
+template<class CT> cell_iterator   SMesh<CT>::cellEnd    (int tid, int nthreads) {FEPIC_END_ITERATOR_FUNC  (Cell,   cell_iterator,   _cellL);}
 template<class CT> point_iterator  SMesh<CT>::pointBegin (int tid, int nthreads) {FEPIC_BEGIN_ITERATOR_FUNC(PointT,  point_iterator,  _pointL);}
 template<class CT> point_iterator  SMesh<CT>::pointEnd   (int tid, int nthreads) {FEPIC_END_ITERATOR_FUNC  (PointT,  point_iterator,  _pointL);}
 template<class CT> facet_iterator  SMesh<CT>::facetBegin (int tid, int nthreads) {FEPIC_BEGIN_ITERATOR_FUNC(FacetT,  facet_iterator,  _facetL);}
@@ -248,7 +248,7 @@ template<class CT>
 int SMesh<CT>::pushCell(Cell const* cell)
 {
   //return _cellL.insert(*static_cast<CT const*>(cell));
-  return _cellL.insert(ArgConverter<typename CellList::value_type>()(cell));
+  return _cellL.insert(cell->clone());
 }
 
 /** Add a node in the mesh's list.
@@ -281,23 +281,6 @@ int SMesh<CT>::pushCorner(Corner const* corner)
   return _cornerL.insert(*static_cast<CornerT const*>(corner));
 }
 
-template<class CT>
-struct CreateObj
-{
-  CT operator()() const
-  {
-    return CT();
-  }  
-};
-
-template<class CT>
-struct CreateObj<CT*>
-{
-  CT* operator()() const
-  {
-    return new CT();
-  } 
-};
 
 /** Create a cell in the mesh's list.
  *  @param[out] cell_id a pointer to store the id of the new cell, can
@@ -307,7 +290,7 @@ struct CreateObj<CT*>
 template<class CT>
 Cell* SMesh<CT>::pushCell(int *cell_id)
 {
-  int const tmp = _cellL.insert(CreateObj<typename CellList::value_type>()());
+  int const tmp = _cellL.insert(new CT());
   if (cell_id)
     *cell_id = tmp;
   return this->MeshT::getCellPtr(tmp);
@@ -360,72 +343,27 @@ Corner* SMesh<CT>::pushCorner(int *corner_id)
 template<class CT>
 Cell* SMesh<CT>::createCell() const
 {
-  return new CT;
+  return new CT();
 }
 
 template<class CT>
 Point* SMesh<CT>::createPoint() const
 {
-  return new PointT;
+  return new PointT();
 }
 
 template<class CT>
 Facet* SMesh<CT>::createFacet() const
 {
-  return new FacetT;
+  return new FacetT();
 }
 
 template<class CT>
 Corner* SMesh<CT>::createCorner() const
 {
-  return new CornerT;
+  return new CornerT();
 }
 
-
-
-
-template<class CT>
-void SMesh<CT>::resizePointL(unsigned size)
-{
-  _pointL.resize(size);
-}
-template<class CT>
-void SMesh<CT>::resizeCellL(unsigned size)
-{
-  _cellL.resize(size);
-}
-template<class CT>
-void SMesh<CT>::resizeFacetL(unsigned size)
-{
-  _facetL.resize(size);
-}
-template<class CT>
-void SMesh<CT>::resizeCornerL(unsigned size)
-{
-  _cornerL.resize(size);
-}
-
-
-template<class CT>
-void SMesh<CT>::reservePointL(unsigned size)
-{
-  _pointL.resize(size);
-}
-template<class CT>
-void SMesh<CT>::reserveCellL(unsigned size)
-{
-  _cellL.resize(size);
-}
-template<class CT>
-void SMesh<CT>::reserveFacetL(unsigned size)
-{
-  _facetL.resize(size);
-}
-template<class CT>
-void SMesh<CT>::reserveCornerL(unsigned size)
-{
-  _cornerL.resize(size);
-}
 
 template<class CT>
 void SMesh<CT>::printInfo() const
@@ -1086,7 +1024,7 @@ void SMesh<CT>::pushIncidCell2Point(Point *pt, int iC, int pos)
 {
   FEPIC_CHECK((unsigned)iC<this->numCellsTotal(),"invalid index iC", std::invalid_argument);
   
-  CellT* icell = this->MeshT::getCellPtr(iC);
+  CellT* icell = (CellT*)this->MeshT::getCellPtr(iC);
   PointT* p = this->MeshT::getNodePtr(icell->CT::getNodeId(pos));
   
   FEPIC_CHECK(p == pt, "incompatible argument:pt must match the (iC,pos)", std::invalid_argument);
@@ -1106,7 +1044,7 @@ void SMesh<CT>::pushIncidCell2Point(Point *pt, int iC, int pos)
     {
       printf("i=%d iC_CCid=%d n_icells=%d \n",i,iC_CCid, n_icells);
     }
-    if (this->MeshT::getCellPtr(oic)->CT::getConnectedComponentId() == iC_CCid)
+    if (((CellT*)this->MeshT::getCellPtr(oic))->CT::getConnectedComponentId() == iC_CCid)
     {
       p->replacesIncidCell(oic, iC, pos);
       return;
@@ -1341,16 +1279,16 @@ void SMesh<CT>::buildCellsAdjacency()
           thisC = kit->second[0];
           thisith =  kit->second[1];
 
-          this->MeshT::getCellPtr(thisC)->CT::setIncidCell(thisith, otherC);
-          this->MeshT::getCellPtr(thisC)->CT::setIncidCellPos(thisith, otherith);
+          ((CellT*)this->MeshT::getCellPtr(thisC))->CT::setIncidCell(thisith, otherC);
+          ((CellT*)this->MeshT::getCellPtr(thisC))->CT::setIncidCellPos(thisith, otherith);
 
-          this->MeshT::getCellPtr(otherC)->CT::setIncidCell(otherith, thisC);
-          this->MeshT::getCellPtr(otherC)->CT::setIncidCellPos(otherith, thisith);
+          ((CellT*)this->MeshT::getCellPtr(otherC))->CT::setIncidCell(otherith, thisC);
+          ((CellT*)this->MeshT::getCellPtr(otherC))->CT::setIncidCellPos(otherith, thisith);
 
           if (CT::dim==3)
           {
-            this->MeshT::getCellPtr(thisC)->CT::setIncidCellAnch(thisith, a);
-            this->MeshT::getCellPtr(otherC)->CT::setIncidCellAnch(otherith, a);
+            ((CellT*)this->MeshT::getCellPtr(thisC))->CT::setIncidCellAnch(thisith, a);
+            ((CellT*)this->MeshT::getCellPtr(otherC))->CT::setIncidCellAnch(otherith, a);
           }
 
           found = true;
@@ -1488,7 +1426,7 @@ void SMesh<CT>::buildCorners_Template(typename EnableIf<(celldim==3)>::type*)
 
   FEP_PRAGMA_OMP(parallel for)
   for (unsigned c = 0; c<_cellL.totalSize(); ++c)
-    _cellL[c].CT::resetCorners();
+    _cellL[c].resetCorners();
 
   // TODO: think a way to parallelize this ...
   {
@@ -1693,18 +1631,31 @@ void SMesh<CT>::setUpConnectedComponentsId()
   // start from 1
   int id = 1;
   
-  CellT *cellt;
-  cell_iterator cell     = this->MeshT::cellBegin();
-  cell_iterator cell_end = this->MeshT::cellEnd();
-  for (; cell != cell_end; ++cell)
+  //CellT *cellt;
+  //cell_iterator cell     = this->MeshT::cellBegin();
+  //cell_iterator cell_end = this->MeshT::cellEnd();
+  //for (; cell != cell_end; ++cell)
+  //{
+  //  cellt = static_cast<CT*>(cell.getPtr());
+  //  if ( cellt->CT::getConnectedComponentId() >= 0)
+  //    continue;
+  //  this->MeshT::_setConnectedComponentsId(cell,id);
+  //   _connected_compL.insert(std::pair<int,int>(id, cell.getIdx()));
+  //  ++id;
+  //}
+  
+  cell_handler cell;
+  for (int i = 0; i < n_cells_total; ++i)
   {
-    cellt = static_cast<CT*>(cell.getPtr());
-    if ( cellt->CT::getConnectedComponentId() >= 0)
+    cell = this->getCell(i);
+    if ( !cell.isValid() || cell->getConnectedComponentId() >= 0)
       continue;
     this->MeshT::_setConnectedComponentsId(cell,id);
      _connected_compL.insert(std::pair<int,int>(id, cell.getIdx()));
     ++id;
   }
+  
+  
 }
 
 template<class CT>

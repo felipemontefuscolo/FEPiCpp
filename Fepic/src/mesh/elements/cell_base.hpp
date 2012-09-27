@@ -33,6 +33,9 @@
 
 class Cell : public _Labelable
 {
+protected:
+  int  _conn_comp_id;  // connected component to which the cell belongs.  
+  
 public:
 
   Cell() : _conn_comp_id(-1) {}
@@ -47,6 +50,7 @@ public:
 
   static Cell* create(ECellType fep_tag);
 
+  virtual Cell* clone() const = 0;
   virtual void copy(Cell const&) = 0;
   virtual EMshTag getMshTag() const = 0;
 //  virtual int  getConnectedComponentId() const = 0;
@@ -110,8 +114,6 @@ public:
     return _conn_comp_id;
   }
 
-protected:
-  int  _conn_comp_id;  // connected component to which the cell belongs.
 
 };
 

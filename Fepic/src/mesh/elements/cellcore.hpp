@@ -110,6 +110,11 @@ public:
     (*THIS) = *static_cast<const CellT*>(&c);
   }
 
+  Cell* clone() const
+  {
+    return new CellT(*CONST_THIS);
+  }
+
   EMshTag getMshTag() const
   {
     return CellT::msh_tag;

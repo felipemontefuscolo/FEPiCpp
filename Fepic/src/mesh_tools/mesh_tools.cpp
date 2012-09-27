@@ -19,6 +19,7 @@
 // License and a copy of the GNU General Public License along with
 // FEPiC++. If not, see <http://www.gnu.org/licenses/>.
 
+#include <tr1/memory>
 #include "mesh_tools.hpp"
 #include "Fepic/src/mesh/mesh.hpp"
 #include <vector>
@@ -257,18 +258,25 @@ void MeshTools::readMesh(int n_nodes, int n_cells, int const* nodes, Real const*
 
   int const sdim = mesh->spaceDim();
   int const nnpe = mesh->numNodesPerCell();
+  std::tr1::shared_ptr<Point> p_ptr(mesh->createPoint());
+  std::tr1::shared_ptr<Cell>  c_ptr(mesh->createCell());
 
-  mesh->resizePointL(n_nodes);
-  mesh->resizeCellL(n_cells);
+  //mesh->resizePointL(n_nodes);
+  //mesh->resizeCellL(n_cells);
 
-  FEP_PRAGMA_OMP(paralle for)
+  
   for (int n = 0; n < n_nodes; ++n)
-      mesh->getNodePtr(n)->setCoord(&xyz[sdim*n], sdim);
+  {
+    p_ptr->setCoord(&xyz[sdim*n], sdim);
+    mesh->pushPoint(p_ptr.get());
+  }
 
-  FEP_PRAGMA_OMP(paralle for)
   for (int c = 0; c < n_cells; ++c)
+  {
     for (int i = 0; i < nnpe; ++i)
-      mesh->getCellPtr(c)->setNodeId(i, nodes[nnpe*c + i]);
+      c_ptr->setNodeId(i, nodes[nnpe*c + i]);
+    mesh->pushCell(c_ptr.get());
+  }
 
   if (mesh->qBuildAdjacency())
     mesh->buildAdjacency();

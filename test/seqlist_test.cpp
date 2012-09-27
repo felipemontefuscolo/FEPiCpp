@@ -161,26 +161,6 @@ TEST(SeqListTest, TestStep0)
 };
 
 
-TEST(SeqListTest, TestStep1)
-{
-  int a[] = {0,1,2,3,  0,1,2,3,  0,1,2,3,  0,1,2,3,  0,1,2,3,  0,1,2,3}; // 6 x 4 = 24
-  int a_size = sizeof(a)/sizeof(int);
-  SeqList<std::vector<Dummy> > v;
-  SeqList<std::vector<Dummy> >::iterator it;
-  SeqList<std::vector<Dummy> >::const_iterator cit;
-  
-  v.resize(24);
-
-  for (int i=0; i<a_size; ++i)
-    v[i] = Dummy(i); // v = a
-
-  EXPECT_EQ(24u, v.size());
-  EXPECT_EQ(24u, v.totalSize());
-
-
-};
-
-
 TEST(SeqListTest, TestStep2)
 {
   int a[] = {1,3,5,7,  1,3,5,7,  1,3,5,7,  1,3,5,7,  1,3,5,7,  1,3,5,7}; // 6 x 4 = 24
@@ -192,10 +172,8 @@ TEST(SeqListTest, TestStep2)
   
   //
 
-  v.resize(24);
-
   for (int i=0; i<a_size; ++i)
-    v[i] = Dummy(i); // v = a
+    v.insert(Dummy(i)); // v = a
 
   EXPECT_EQ(24u, v.size());
   EXPECT_EQ(24u, v.totalSize());
@@ -280,10 +258,8 @@ TEST(SeqListTest, ParallelItersTest0)
   
   
 
-  v.resize(72);
-
   for (int i=0; i<a_size; ++i)
-    v[i] = Dummy( i); // v = a
+    v.insert(Dummy(i)); // v = a
 
   // ============================ iterators ==============================
   
@@ -340,10 +316,8 @@ TEST(SeqListTest, ParallelItersTest1)
   
   
 
-  v.resize(8);
-
   for (int i=0; i<a_size; ++i)
-    v[i] = Dummy( i); // v = a
+    v.insert(Dummy(i)); // v = a
 
   
   // ============================ iterators ==============================

@@ -265,15 +265,6 @@ public:
   virtual int numCornersPerCell()  const = 0;
   virtual int numCornersPerFacet() const = 0;
 
-  virtual void resizePointL(unsigned size) = 0;
-  virtual void resizeCellL(unsigned size) = 0;
-  virtual void resizeFacetL(unsigned size) = 0;
-  virtual void resizeCornerL(unsigned size) = 0;
-  virtual void reservePointL(unsigned size) = 0;
-  virtual void reserveCellL(unsigned size) = 0;
-  virtual void reserveFacetL(unsigned size) = 0;
-  virtual void reserveCornerL(unsigned size) = 0;
-
   static unsigned estimateNumFacets(unsigned nc, ECellType t);
   static unsigned estimateNumCorners(unsigned nc, ECellType t);
 
@@ -332,21 +323,10 @@ public:
   typedef Corner                  CornerT;
   typedef SMesh<CellT>            MeshT;
 
-  //typedef std::vector<CellT>    CellList;
-  //typedef std::vector<PointT>   PointList;
-  //typedef std::vector<Facet>    FacetList;
-  //typedef std::vector<Corner>   CornerList;
-
-  // mesh operations invalidate some pointers when using vector, so use deque.
-  //typedef SeqList<CellT, std::deque<CellT>, SetVector<int> >     CellList;
-  //typedef SeqList<PointT, std::deque<PointT>, SetVector<int> >   PointList;
-  //typedef SeqList<FacetT, std::deque<FacetT>, SetVector<int> >   FacetList;
-  //typedef SeqList<CornerT, std::deque<CornerT>, SetVector<int> > CornerList;
-
-  typedef SeqList<boost::ptr_vector<CellT>, SetVector<int> >     CellList;
-  typedef SeqList<std::deque<PointT>, SetVector<int> >    PointList;
-  typedef SeqList<std::deque<FacetT>, SetVector<int> >    FacetList;
-  typedef SeqList<std::deque<CornerT>, SetVector<int> >   CornerList;
+  typedef SeqList<boost::ptr_deque<Cell>, SetVector<int> >  CellList;
+  typedef SeqList<std::deque<PointT>,     SetVector<int> >  PointList;
+  typedef SeqList<std::deque<FacetT>,     SetVector<int> >  FacetList;
+  typedef SeqList<std::deque<CornerT>,    SetVector<int> >  CornerList;
 
 
   typedef typename CellList  ::iterator CellIteratorT;
@@ -845,7 +825,7 @@ public:
   CellT* getCellPtr(int nth)
   {
     if (unsigned(nth)<this->_cellL.totalSize())
-      return &_cellL[nth];
+      return (CellT*)&_cellL[nth];
     else
       return NULL;
   }
@@ -909,7 +889,7 @@ public:
   const CellT* getCellPtr(int nth) const
   {
     FEPIC_CHECK(unsigned(nth)<this->_cellL.totalSize(), "invalid index", std::out_of_range);
-    return &_cellL[nth];
+    return (CellT const*)&_cellL[nth];
   }
   const FacetT* getFacetPtr(int nth) const
   {
@@ -1277,16 +1257,6 @@ public:
   {
     return CellT::Derived::n_facets;
   }
-
-  void resizePointL(unsigned size);
-  void resizeCellL(unsigned size);
-  void resizeFacetL(unsigned size);
-  void resizeCornerL(unsigned size);
-
-  void reservePointL(unsigned size);
-  void reserveCellL(unsigned size);
-  void reserveFacetL(unsigned size);
-  void reserveCornerL(unsigned size);
 
   /** Check if the vertices form a facet of this mesh, if so returns facet's id.
    * @param[in] vtcs vector with the ids of the vertices.

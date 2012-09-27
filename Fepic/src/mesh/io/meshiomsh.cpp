@@ -1,7 +1,7 @@
+#include <tr1/memory>
 #include "meshiomsh.hpp"
 #include <cstdio>
 #include "../../util/assert.hpp"
-
 
 
 ECellType MeshIoMsh::identifiesMshMeshType(const char* filename, int &space_dim) const
@@ -131,6 +131,8 @@ void MeshIoMsh::readFileMsh(const char* filename, Mesh * mesh)
   double  coord[3];
   int     type_tag;
   char    buffer[256];
+  std::tr1::shared_ptr<Point> p_ptr(new Point());
+  std::tr1::shared_ptr<Cell> c_ptr(mesh->createCell());
 
   int const spacedim = mesh->spaceDim();
   FEPIC_ASSERT(spacedim>0 && spacedim < 4, "mesh has invalid spacedim", std::invalid_argument);
@@ -149,8 +151,7 @@ void MeshIoMsh::readFileMsh(const char* filename, Mesh * mesh)
   if ( EOF == fscanf(file_ptr, "%d", &num_pts) )
     FEPIC_ASSERT(false, "invalid msh format", std::runtime_error);
 
-  //mesh->_pointL_original_size = num_pts;
-  mesh->resizePointL(num_pts);
+  //mesh->resizePointL(num_pts);
   
   //mesh->printInfo();
   //std::cout << "DEBUGGGGGGGGGGGGGGGGGGG:  "<<mesh << std::endl;
@@ -164,7 +165,9 @@ void MeshIoMsh::readFileMsh(const char* filename, Mesh * mesh)
       FEPIC_ASSERT(false, "invalid msh format", std::runtime_error);
     sscanf(buffer, "%d %lf %lf %lf", &node_number, &coord[0], &coord[1], &coord[2]);
     FEPIC_ASSERT(node_number==i+1, "wrong file format", std::invalid_argument);
-    mesh->getNodePtr(i)->setCoord(coord,spacedim);
+    p_ptr->setCoord(coord, spacedim);
+    //mesh->getNodePtr(i)->setCoord(coord,spacedim);
+    mesh->pushPoint(p_ptr.get());
   }
   // os pontos não estão completas: falta atribuir os labels
 
@@ -219,20 +222,7 @@ void MeshIoMsh::readFileMsh(const char* filename, Mesh * mesh)
   Cell*  cell;
   //cell = Cell::create(mesh->cellType());
 
-  {
-    unsigned aux;
-    //mesh->_cellL_original_size = num_cells;
-    mesh->resizeCellL(num_cells);
-    aux = mesh->estimateNumFacets(num_cells, mesh->cellType());
-    //mesh->_facetL_original_size = aux;
-    mesh->reserveFacetL(aux);
-    if (mesh->cellDim() > 2)
-    {
-      aux = mesh->estimateNumCorners(num_cells, mesh->cellType());
-      //mesh->_cornerL_original_size = aux;
-      mesh->reserveCornerL(aux);
-    }
-  }
+
 
   /* --------------------------------------
    * Lendo as células
@@ -276,7 +266,8 @@ void MeshIoMsh::readFileMsh(const char* filename, Mesh * mesh)
     }
     else if (elm_dim == cell_dim)
     {
-      cell = mesh->getCellPtr(inc++);
+      cell = mesh->pushCell((int*)0);
+      ++inc;
       FEPIC_ASSERT(cell_msh_tag == type_tag, "Invalid cell or invalid mesh", std::runtime_error);
       for (int i=0; i< nodes_per_cell; ++i)
       {

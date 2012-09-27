@@ -224,11 +224,12 @@ public:
     return insert_impl<value_type>(obj);
   }
 
-  void resize(size_type s)
-  {
-    _data.resize(s);
-    _update_member_beg();
-  }
+  // com dor no coracao
+  //void resize(size_type s)
+  //{
+  //  _data.resize(s);
+  //  _update_member_beg();
+  //}
 
   RP_Reference operator[](size_type n)
   {
