@@ -214,35 +214,134 @@ public:
     return &_pointL[nth];
   }
 
+  void disablePoint(int id)
+  {
+    _pointL.disable(id);
+  }
+  void disableCorner(int id)
+  {
+    _cornerL.disable(id);
+  }
+  void disableFacet(int id)
+  {
+    _facetL.disable(id);
+  }
+  void disableCell(int id)
+  {
+    _cellL.disable(id);
+  }
 
-  virtual void disablePoint(int id) = 0;
-  virtual void disableCorner(int id) = 0;
-  virtual void disableFacet(int id) = 0;
-  virtual void disableCell(int id) = 0;
 
-  virtual void getCellNodesId(Cell const* cell, int* result) const = 0;
-  virtual void getCellVerticesId(Cell const* cell, int* result) const = 0;
-  virtual void getCellFacetsId(Cell const* cell, int* result) const = 0;
-  virtual void getCellCornersId(Cell const* cell, int* result) const = 0;
-  virtual void getFacetNodesId(Facet const* facet, int* result) const = 0;
-  virtual void getCornerNodesId(CellElement const* corner, int* result) const = 0;
 
-  virtual void getCellNodesId(int id, int *result) const = 0;
-  virtual void getFacetNodesId(int id, int *result) const = 0;
-  virtual void getCornerNodesId(int id, int *result) const = 0;
+  void getCellNodesId(Cell const* cell, int *result) const
+  {
+    cell->getNodesId(result);
+  }
+  void getCellVerticesId(Cell const* cell, int *result) const
+  {
+    cell->getVerticesId(result);
+  }
+  void getCellFacetsId(Cell const* cell, int *result) const
+  {
+    cell->getFacetsId(result);
+  }
+  void getCellCornersId(Cell const* cell, int *result) const
+  {
+    cell->getCornersId(result);
+  }
+  void getFacetNodesId(Facet const* facet, int *result) const
+  {
+    int icell = facet->getIncidCell();
+    int pos   = facet->getPosition();
+    this->getCellPtr(icell)->getFacetNodesId(pos, result);
+  }
+  void getCornerNodesId(CellElement const* corner, int *result) const
+  {
+    int icell = corner->getIncidCell();
+    int pos   = corner->getPosition();
+    this->getCellPtr(icell)->getCornerNodesId(pos, result);
+  }
 
-  virtual int getCellContigId(int id) const = 0;
-  virtual int getFacetContigId(int id) const = 0;
-  virtual int getCornerContigId(int id) const = 0;
-  virtual int getNodeContigId(int id) const = 0;
-  virtual void getCellsContigId(int* first, int const* last, int* result) const = 0;
-  virtual void getFacetsContigId(int* first, int const* last, int* result)const = 0;
-  virtual void getCornersContigId(int* first, int const* last, int* result) const = 0;
-  virtual void getNodesContigId(int* first, int const* last, int* result) const = 0;
 
-  virtual void getCellNodesContigId(Cell const* cell, int* result) const = 0;
-  virtual void getFacetNodesContigId(Facet const* facet, int* result) const = 0;
-  virtual void getCornerNodesContigId(CellElement const* corner, int* result) const = 0;
+
+  void getCellNodesId(int id, int *result) const
+  {
+    this->getCellNodesId(this->getCellPtr(id), result);
+  }
+  void getFacetNodesId(int id, int *result) const
+  {
+    this->getFacetNodesId(this->getFacetPtr(id), result);
+  }
+  void getCornerNodesId(int id, int *result) const
+  {
+    this->getCornerNodesId(this->getCornerPtr(id), result);
+  }
+
+
+  int getCellContigId(int id) const
+  {
+    return _cellL.contiguousId(id);
+  }
+  int getFacetContigId(int id) const
+  {
+    return _facetL.contiguousId(id);
+  }
+  int getCornerContigId(int id) const
+  {
+    return _cornerL.contiguousId(id);
+  }
+  int getNodeContigId(int id) const
+  {
+    return _pointL.contiguousId(id);
+  }
+
+  void getCellsContigId(int* first, int const* last, int* result) const
+  {
+    _cellL.contiguousIds(first, last, result);
+  }
+  void getFacetsContigId(int* first, int const* last, int* result)const
+  {
+    _facetL.contiguousIds(first, last, result);
+  }
+  void getCornersContigId(int* first, int const* last, int* result) const
+  {
+    _cornerL.contiguousIds(first, last, result);
+  }
+  void getNodesContigId(int* first, int const* last, int* result) const
+  {
+    _pointL.contiguousIds(first, last, result);
+  }
+
+
+  void getCellNodesContigId(Cell const* cell, int* result) const
+  {
+    this->getCellNodesId(cell, result);
+    for (int i = 0; i < this->numNodesPerCell(); ++i)
+    {
+      *result = _pointL.contiguousId(*result);
+      ++result;
+    }
+  }
+  void getFacetNodesContigId(Facet const* facet, int* result) const
+  {
+    this->getFacetNodesId(facet, result);
+    for (int i = 0; i < this->numNodesPerFacet(); ++i)
+    {
+      *result = _pointL.contiguousId(*result);
+      ++result;
+    }
+  }
+  void getCornerNodesContigId(CellElement const* corner, int* result) const
+  {
+    this->getCornerNodesId(corner, result);
+    for (int i = 0; i < this->numNodesPerCorner(); ++i)
+    {
+      *result = _pointL.contiguousId(*result);
+      ++result;
+    }
+  }
+  
+  
 
   /** Retorna na matriz X as coordenadas dos nós passados em map.
   *  As colunas de X correspondem a dimensão enquanto as linhas
@@ -789,39 +888,6 @@ public:
    *  @param factor the size
    */
 
-  int getCellContigId(int id) const
-  {
-    return _cellL.contiguousId(id);
-  }
-  int getFacetContigId(int id) const
-  {
-    return _facetL.contiguousId(id);
-  }
-  int getCornerContigId(int id) const
-  {
-    return _cornerL.contiguousId(id);
-  }
-  int getNodeContigId(int id) const
-  {
-    return _pointL.contiguousId(id);
-  }
-
-  void getCellsContigId(int* first, int const* last, int* result) const
-  {
-    _cellL.contiguousIds(first, last, result);
-  }
-  void getFacetsContigId(int* first, int const* last, int* result)const
-  {
-    _facetL.contiguousIds(first, last, result);
-  }
-  void getCornersContigId(int* first, int const* last, int* result) const
-  {
-    _cornerL.contiguousIds(first, last, result);
-  }
-  void getNodesContigId(int* first, int const* last, int* result) const
-  {
-    _pointL.contiguousIds(first, last, result);
-  }
 
   int cellDim() const
   {
@@ -933,93 +999,6 @@ public:
     return this->MeshT::getCellPtr(a->CornerT::getIncidCell())->getCornerId(a->CornerT::getPosition());
   }
 
-
-  void disablePoint(int id)
-  {
-    _pointL.disable(id);
-  }
-  void disableCorner(int id)
-  {
-    _cornerL.disable(id);
-  }
-  void disableFacet(int id)
-  {
-    _facetL.disable(id);
-  }
-  void disableCell(int id)
-  {
-    _cellL.disable(id);
-  }
-
-  void getCellNodesId(Cell const* cell, int *result) const
-  {
-    static_cast<Cell const*>(cell)->getNodesId(result);
-  }
-  void getCellVerticesId(Cell const* cell, int *result) const
-  {
-    static_cast<Cell const*>(cell)->getVerticesId(result);
-  }
-  void getCellFacetsId(Cell const* cell, int *result) const
-  {
-    static_cast<Cell const*>(cell)->getFacetsId(result);
-  }
-  void getCellCornersId(Cell const* cell, int *result) const
-  {
-    static_cast<Cell const*>(cell)->getCornersId(result);
-  }
-  void getFacetNodesId(Facet const* facet, int *result) const
-  {
-    int icell = static_cast<FacetT const*>(facet)->FacetT::getIncidCell();
-    int pos   = static_cast<FacetT const*>(facet)->FacetT::getPosition();
-    this->MeshT::getCellPtr(icell)->getFacetNodesId(pos, result);
-  }
-  void getCornerNodesId(CellElement const* corner, int *result) const
-  {
-    int icell = corner->getIncidCell();
-    int pos   = corner->getPosition();
-    this->MeshT::getCellPtr(icell)->getCornerNodesId(pos, result);
-  }
-
-  void getCellNodesId(int id, int *result) const
-  {
-    this->getCellNodesId(this->MeshT::getCellPtr(id), result);
-  }
-  void getFacetNodesId(int id, int *result) const
-  {
-    this->MeshT::getFacetNodesId(this->MeshT::getFacetPtr(id), result);
-  }
-  void getCornerNodesId(int id, int *result) const
-  {
-    this->MeshT::getCornerNodesId(this->MeshT::getCornerPtr(id), result);
-  }
-
-  void getCellNodesContigId(Cell const* cell, int* result) const
-  {
-    this->MeshT::getCellNodesId(cell, result);
-    for (int i = 0; i < CellT::n_nodes; ++i)
-    {
-      *result = _pointL.contiguousId(*result);
-      ++result;
-    }
-  }
-  void getFacetNodesContigId(Facet const* facet, int* result) const
-  {
-    this->MeshT::getFacetNodesId(facet, result);
-    for (int i = 0; i < CellT::n_nodes_per_facet; ++i)
-    {
-      *result = _pointL.contiguousId(*result);
-      ++result;
-    }
-  }
-  void getCornerNodesContigId(CellElement const* corner, int* result) const
-  {
-    this->MeshT::getCornerNodesId(corner, result);
-    for (int i = 0; i < CellT::n_nodes_per_corner; ++i)
-    {
-      *result = _pointL.contiguousId(*result);
-      ++result;
-    }
-  }
 
   bool inBoundary(Point const* p) const
   {
