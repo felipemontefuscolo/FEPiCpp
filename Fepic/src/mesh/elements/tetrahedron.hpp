@@ -54,13 +54,13 @@ protected:
   FEP_DEF_3D_CELLS_MEMBERS;
 
 public:
-  static const int table_vC_x_fC[4][6];
-  static const int table_fC_x_bC[4][3];
-  static const int table_fC_x_vC[4][6];
-  static const int table_fC_x_nC[4][3];
-  static const int table_bC_x_vC[6][2];
-  static const int table_bC_x_nC[6][2];
-  static const int table_bC_x_fC[6][4];
+  static const int _table_vC_x_fC[4][6];
+  static const int _table_fC_x_bC[4][3];
+  static const int _table_fC_x_vC[4][6];
+  static const int _table_fC_x_nC[4][3];
+  static const int _table_bC_x_vC[6][2];
+  static const int _table_bC_x_nC[6][2];
+  static const int _table_bC_x_fC[6][4];
     
 };
 
@@ -97,17 +97,17 @@ protected:
   FEP_DEF_3D_CELLS_MEMBERS;
 
 public:
-  static const int table_vC_x_fC[4][6];
-  static const int table_fC_x_bC[4][3];
-  static const int table_fC_x_vC[4][6];
-  static const int table_fC_x_nC[4][6];
-  static const int table_bC_x_vC[6][2];
-  static const int table_bC_x_nC[6][3];
-  static const int table_bC_x_fC[6][4];
+  static const int _table_vC_x_fC[4][6];
+  static const int _table_fC_x_bC[4][3];
+  static const int _table_fC_x_vC[4][6];
+  static const int _table_fC_x_nC[4][6];
+  static const int _table_bC_x_vC[6][2];
+  static const int _table_bC_x_nC[6][3];
+  static const int _table_bC_x_fC[6][4];
     
 };
 
-// only change table_fC_x_nC and table_bC_x_nC compared to Tetrahedron4
+// only change _table_fC_x_nC and _table_bC_x_nC compared to Tetrahedron4
 
 
 

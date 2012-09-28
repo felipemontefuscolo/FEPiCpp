@@ -54,13 +54,13 @@ protected:
 
 public:
   
-  static const int table_fC_x_vC[4][2];
-  static const int table_fC_x_nC[4][2];
-  static const int table_vC_x_fC[4][2];
-  static const int table_fC_x_bC[4][2];
-  static const int table_bC_x_vC[4][1];
-  static const int table_bC_x_nC[4][1];
-  static const int table_bC_x_fC[4][2];
+  static const int _table_fC_x_vC[4][2];
+  static const int _table_fC_x_nC[4][2];
+  static const int _table_vC_x_fC[4][2];
+  static const int _table_fC_x_bC[4][2];
+  static const int _table_bC_x_vC[4][1];
+  static const int _table_bC_x_nC[4][1];
+  static const int _table_bC_x_fC[4][2];
     
 };
 
@@ -98,13 +98,13 @@ protected:
   
 public:
   
-  static const int table_fC_x_vC[4][2];
-  static const int table_fC_x_nC[4][3];
-  static const int table_vC_x_fC[4][2];
-  static const int table_fC_x_bC[4][2];
-  static const int table_bC_x_vC[4][1];
-  static const int table_bC_x_nC[4][1];
-  static const int table_bC_x_fC[4][2];
+  static const int _table_fC_x_vC[4][2];
+  static const int _table_fC_x_nC[4][3];
+  static const int _table_vC_x_fC[4][2];
+  static const int _table_fC_x_bC[4][2];
+  static const int _table_bC_x_vC[4][1];
+  static const int _table_bC_x_nC[4][1];
+  static const int _table_bC_x_fC[4][2];
 
 };
 
@@ -143,13 +143,13 @@ protected:
   
 public:
   
-  static const int table_fC_x_vC[4][2];
-  static const int table_fC_x_nC[4][3];
-  static const int table_vC_x_fC[4][2];
-  static const int table_fC_x_bC[4][2];
-  static const int table_bC_x_vC[4][1];
-  static const int table_bC_x_nC[4][1];
-  static const int table_bC_x_fC[4][2];
+  static const int _table_fC_x_vC[4][2];
+  static const int _table_fC_x_nC[4][3];
+  static const int _table_vC_x_fC[4][2];
+  static const int _table_fC_x_bC[4][2];
+  static const int _table_bC_x_vC[4][1];
+  static const int _table_bC_x_nC[4][1];
+  static const int _table_bC_x_fC[4][2];
     
 };
 

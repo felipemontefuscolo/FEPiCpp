@@ -122,7 +122,14 @@ public:
     return _conn_comp_id;
   }
 
-
+  virtual int table_fC_x_vC(int i, int j) const = 0;
+  virtual int table_fC_x_nC(int i, int j) const = 0;
+  virtual int table_vC_x_fC(int i, int j) const = 0;
+  virtual int table_fC_x_bC(int i, int j) const = 0;
+  virtual int table_bC_x_vC(int i, int j) const = 0;
+  virtual int table_bC_x_nC(int i, int j) const = 0;
+  virtual int table_bC_x_fC(int i, int j) const = 0;
+  
 };
 
 

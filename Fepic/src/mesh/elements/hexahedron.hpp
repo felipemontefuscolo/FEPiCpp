@@ -54,13 +54,13 @@ protected:
   FEP_DEF_3D_CELLS_MEMBERS;
 
 public:
-  static const int table_vC_x_fC[8][6];
-  static const int table_fC_x_bC[6][4];
-  static const int table_fC_x_vC[6][8];
-  static const int table_fC_x_nC[6][4];
-  static const int table_bC_x_vC[12][2];
-  static const int table_bC_x_nC[12][2];
-  static const int table_bC_x_fC[12][4];
+  static const int _table_vC_x_fC[8][6];
+  static const int _table_fC_x_bC[6][4];
+  static const int _table_fC_x_vC[6][8];
+  static const int _table_fC_x_nC[6][4];
+  static const int _table_bC_x_vC[12][2];
+  static const int _table_bC_x_nC[12][2];
+  static const int _table_bC_x_fC[12][4];
     
 };
 
@@ -95,13 +95,13 @@ protected:
   FEP_DEF_3D_CELLS_MEMBERS;
 
 public:
-  static const int table_vC_x_fC[8][6];
-  static const int table_fC_x_bC[6][4];
-  static const int table_fC_x_vC[6][8];
-  static const int table_fC_x_nC[6][8];
-  static const int table_bC_x_vC[12][2];
-  static const int table_bC_x_nC[12][3];
-  static const int table_bC_x_fC[12][4];
+  static const int _table_vC_x_fC[8][6];
+  static const int _table_fC_x_bC[6][4];
+  static const int _table_fC_x_vC[6][8];
+  static const int _table_fC_x_nC[6][8];
+  static const int _table_bC_x_vC[12][2];
+  static const int _table_bC_x_nC[12][3];
+  static const int _table_bC_x_fC[12][4];
     
 };
 
@@ -136,13 +136,13 @@ protected:
   FEP_DEF_3D_CELLS_MEMBERS;
 
 public:
-  static const int table_vC_x_fC[8][6];
-  static const int table_fC_x_bC[6][4];
-  static const int table_fC_x_vC[6][8];
-  static const int table_fC_x_nC[6][9];
-  static const int table_bC_x_vC[12][2];
-  static const int table_bC_x_nC[12][3];
-  static const int table_bC_x_fC[12][4];
+  static const int _table_vC_x_fC[8][6];
+  static const int _table_fC_x_bC[6][4];
+  static const int _table_fC_x_vC[6][8];
+  static const int _table_fC_x_nC[6][9];
+  static const int _table_bC_x_vC[12][2];
+  static const int _table_bC_x_nC[12][3];
+  static const int _table_bC_x_fC[12][4];
     
 };
 

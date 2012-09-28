@@ -48,7 +48,8 @@ public:
   *  @param coord um vetor com Dim elementos que armazena a coordenada.
   *  @param label seu rótulo.
   */
-  Point(double const* coord, int spacedim, int ic=-1, int pos=-1, int tag=0, int flags=0, int stat=0) : CellElement(ic, pos, tag, flags, stat)
+  template<class VectorT>
+  Point(VectorT coord, int spacedim, int ic=-1, int pos=-1, int tag=0, int flags=0, int stat=0) : CellElement(ic, pos, tag, flags, stat)
   {
     for (int i = 0; i < spacedim; ++i)
       _coord[i] = coord[i];

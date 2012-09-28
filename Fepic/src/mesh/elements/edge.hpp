@@ -105,13 +105,13 @@ private:
   
   
 public:
-  static const int table_fC_x_vC[2][1];
-  static const int table_fC_x_nC[2][1];
-  static const int table_bC_x_nC[/*0*/1][/*0*/1];
-  static const int table_bC_x_vC[/*0*/1][/*0*/1];
-  static const int table_fC_x_bC[/*0*/1][/*0*/1];  
-  static const int table_bC_x_fC[/*0*/1][/*0*/1];
-  static const int table_vC_x_fC[2][1];
+  static const int _table_fC_x_vC[2][1];
+  static const int _table_fC_x_nC[2][1];
+  static const int _table_bC_x_nC[/*0*/1][/*0*/1];
+  static const int _table_bC_x_vC[/*0*/1][/*0*/1];
+  static const int _table_fC_x_bC[/*0*/1][/*0*/1];  
+  static const int _table_bC_x_fC[/*0*/1][/*0*/1];
+  static const int _table_vC_x_fC[2][1];
 };
 
 

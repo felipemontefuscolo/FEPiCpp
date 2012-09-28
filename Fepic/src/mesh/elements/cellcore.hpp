@@ -176,10 +176,10 @@ public:
     }
     else if (CellT::dim==2)
     {
-      return CONST_THIS->_nodes[CellT::table_fC_x_nC[eC][nCe]];
+      return CONST_THIS->_nodes[CellT::_table_fC_x_nC[eC][nCe]];
     }
     else
-      return CONST_THIS->_nodes[CellT::table_bC_x_nC[eC][nCe]];
+      return CONST_THIS->_nodes[CellT::_table_bC_x_nC[eC][nCe]];
   }
 
   int getFacetId(int facet) const
@@ -478,6 +478,15 @@ public:
       THIS->setFlags(*flags);
     
   }
+
+
+  int table_fC_x_vC(int i, int j) const {return CellT::_table_fC_x_vC[i][j];}
+  int table_fC_x_nC(int i, int j) const {return CellT::_table_fC_x_nC[i][j];}
+  int table_vC_x_fC(int i, int j) const {return CellT::_table_vC_x_fC[i][j];}
+  int table_fC_x_bC(int i, int j) const {return CellT::_table_fC_x_bC[i][j];}
+  int table_bC_x_vC(int i, int j) const {return CellT::_table_bC_x_vC[i][j];}
+  int table_bC_x_nC(int i, int j) const {return CellT::_table_bC_x_nC[i][j];}
+  int table_bC_x_fC(int i, int j) const {return CellT::_table_bC_x_fC[i][j];}
 
   ~_CellCore() {};
 

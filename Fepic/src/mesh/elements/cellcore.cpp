@@ -23,7 +23,7 @@ void _CellCore<CellT>::getCornerNodesId(int f, int *corner_nds) const
   if (CellT::dim==3)
     for (int i = 0; i < CellT::n_nodes_per_corner; ++i)
     {
-      *corner_nds++ = CONST_THIS->_nodes[CellT::table_bC_x_nC[f][i]];
+      *corner_nds++ = CONST_THIS->_nodes[CellT::_table_bC_x_nC[f][i]];
     }
   else
     *corner_nds = CONST_THIS->_nodes[f];
@@ -42,7 +42,7 @@ void _CellCore<CellT>::getCornerVerticesId(int f, int *corner_vtcs) const
   if (CellT::dim==3)
     for (int i = 0; i < CellT::n_vertices_per_corner; ++i)
     {
-      *corner_vtcs++ = CONST_THIS->_nodes[CellT::table_bC_x_vC[f][i]];
+      *corner_vtcs++ = CONST_THIS->_nodes[CellT::_table_bC_x_vC[f][i]];
     }
   else
     *corner_vtcs = CONST_THIS->_nodes[f];
@@ -61,7 +61,7 @@ void _CellCore<CellT>::getFacetNodesId(int f, int * facet_nds) const
 
   for (int i = 0; i < CellT::n_nodes_per_facet; ++i)
   {
-    *facet_nds++ = CONST_THIS->_nodes[CellT::table_fC_x_nC[f][i]];
+    *facet_nds++ = CONST_THIS->_nodes[CellT::_table_fC_x_nC[f][i]];
   }
 
 }
@@ -78,7 +78,7 @@ void _CellCore<CellT>::getFacetVerticesId(int f, int * facet_vtcs) const
 
   for (int i = 0; i < CellT::n_vertices_per_facet; ++i)
   {
-    *facet_vtcs++ = CONST_THIS->_nodes[CellT::table_fC_x_vC[f][i]];
+    *facet_vtcs++ = CONST_THIS->_nodes[CellT::_table_fC_x_vC[f][i]];
   }
 
 }
@@ -94,7 +94,7 @@ void _CellCore<CellT>::getFacetCornersId(int f, int * corns) const
     // note: n_corners_per_facet = CellT::n_vertices_per_facet
     for (int i = 0; i < CellT::n_vertices_per_facet; ++i)
     {
-      *corns++ = CONST_THIS->_corners[ CellT::table_fC_x_bC[f][i] ];
+      *corns++ = CONST_THIS->_corners[ CellT::_table_fC_x_bC[f][i] ];
     }
   else
     getFacetVerticesId(f, corns);

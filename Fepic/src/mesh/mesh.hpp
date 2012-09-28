@@ -107,10 +107,6 @@ protected:
   // End Mesh Attributes
   //
 
-
-
-
-
   /// constructor
   Mesh(ECellType fept=UNDEFINED_CELLT, int spacedim = -1);
 
@@ -211,10 +207,34 @@ public:
       return NULL;
   }
 
-  virtual cell_handler getCell(int nth) = 0;
-  virtual facet_handler getFacet(int nth) = 0;
-  virtual corner_handler getCorner(int nth) = 0;
-  virtual point_handler getNode(int nth) = 0;
+  cell_handler getCell(int nth)
+  {
+    if (unsigned(nth)<this->_cellL.totalSize())
+      return cell_handler(this, &_cellL[nth], nth);
+    else
+      return cell_handler(this, NULL, -1);
+  }
+  facet_handler getFacet(int nth)
+  {
+    if (unsigned(nth)<this->_facetL.totalSize())
+      return facet_handler(this, &_facetL[nth], nth);
+    else
+      return facet_handler(this, NULL, -1);
+  }
+  corner_handler getCorner(int nth)
+  {
+    if (unsigned(nth)<this->_cornerL.totalSize())
+      return corner_handler(this, &_cornerL[nth], nth);
+    else
+      return corner_handler(this, NULL, -1);
+  }
+  point_handler getNode(int nth)
+  {
+    if (unsigned(nth)<this->_pointL.totalSize())
+      return point_handler(this, &_pointL[nth], nth);
+    else
+      return point_handler(this, NULL, -1);
+  }
 
   Cell const* getCellPtr(int nth) const
   {
@@ -237,6 +257,7 @@ public:
     return &_pointL[nth];
   }
 
+
   void disablePoint(int id)
   {
     _pointL.disable(id);
@@ -253,7 +274,6 @@ public:
   {
     _cellL.disable(id);
   }
-
 
 
   void getCellNodesId(Cell const* cell, int *result) const
@@ -284,7 +304,6 @@ public:
     int pos   = corner->getPosition();
     this->getCellPtr(icell)->getCornerNodesId(pos, result);
   }
-
 
 
   void getCellNodesId(int id, int *result) const
@@ -385,9 +404,9 @@ public:
   }
 
   // TODO: linear only ...
-  virtual void getCenterCoord(Cell const* cell, Real* x) const = 0;
-  virtual void getCenterCoord(Facet const* facet, Real* x) const = 0;
-  virtual void getCenterCoord(Corner const* corner, Real* x) const = 0;
+  void getCenterCoord(Cell const* cell, Real* x) const;
+  void getCenterCoord(Facet const* facet, Real* x) const;
+  void getCenterCoord(Corner const* corner, Real* x) const;
 
   virtual bool getFacetIdFromVertices(int const* vtcs, int &fid) =0;
   virtual bool getCornerIdFromVertices(int const* vtcs, int &fid) =0;
@@ -427,46 +446,167 @@ public:
   virtual void getConnectedComponentsPicks(int *comps, int *cells) const = 0;
   virtual void getBoundaryComponentsPicks(int *comps, int *facets) const = 0;
 
-  virtual bool inBoundary(Point const* p) const = 0;
-  virtual bool inBoundary(Facet const* p) const = 0;
-  virtual bool inBoundary(Corner const* p) const = 0;
+  bool inBoundary(Point const* p) const
+  {
+    return p->inBoundary();
+  }
+  bool inBoundary(Facet const* f) const
+  {
+    Cell const* icell = this->getCellPtr(f->getIncidCell());
+    if (icell->getIncidCell(f->getPosition()) < 0)
+      return true;
+    else
+      return false;
+  }
+  bool inBoundary(Corner const* f) const
+  {
+    Cell const* icell = this->getCellPtr(f->getIncidCell());
+    if (!icell->inBoundary())
+      return false;
+    if (this->cellDim() == 2)
+    {
+      Point const* point = this->getNodePtr( icell->getNodeId(  f->getPosition() ) );
+      return this->inBoundary(point);
+    }
+    else
+    {
+      int const m = f->getPosition();
+      if (icell->getIncidCell(icell->table_bC_x_fC(m,0)) < 0) return true;
+      if (icell->getIncidCell(icell->table_bC_x_fC(m,1)) < 0) return true;
+      return false;
+    }
+  }
 
-  virtual int pushCell(Cell const* C) = 0;
-  virtual int pushPoint(Point const* P) = 0;
-  virtual int pushFacet(Facet const* h) = 0;
-  virtual int pushCorner(Corner const* b) = 0;
 
-  virtual Cell*   pushCell(int *id) = 0;
-  virtual Point*  pushPoint(int *id) = 0;
-  virtual Facet*  pushFacet(int *id) = 0;
-  virtual Corner* pushCorner(int *id) = 0;
+  int pushCell(Cell const* C);
+  int pushPoint(Point const* P);
+  int pushFacet(Facet const* h);
+  int pushCorner(Corner const* b);
+
+  Cell*   pushCell(int *id);
+  Point*  pushPoint(int *id);
+  Facet*  pushFacet(int *id);
+  Corner* pushCorner(int *id);
 
   virtual Cell*   createCell() const = 0;
   virtual Point*  createPoint() const = 0;
   virtual Facet*  createFacet() const = 0;
   virtual Corner* createCorner() const = 0;
 
-  virtual int numCells() const = 0;
-  virtual int numCellsTotal() const = 0;
-  virtual int numNodes() const = 0;
-  virtual int numNodesTotal() const = 0;
-  virtual int numVertices() const = 0;
-  virtual int numFacets() const = 0;
-  virtual int numFacetsTotal() const = 0;
-  virtual int numCorners() const = 0;
-  virtual int numCornersTotal() const = 0;
+  /** Retorna o número células
+  *  @note não conta com o/a(s) marcado/a(s) como killed.
+  */
+  int numCells() const
+  {
+    return static_cast<int>( _cellL.size() );
+  }
 
-  virtual int numNodesPerCell() const = 0;
-  virtual int numNodesPerFacet() const = 0;
-  virtual int numNodesPerCorner() const = 0;
+  /** Retorna o número de células.
+  * @note incluindo o/a(s) marcado/a(s) como killed.
+  */
+  int numCellsTotal() const
+  {
+    return static_cast<int>( _cellL.totalSize() );
+  }
 
-  virtual int numVerticesPerCell() const = 0;
-  virtual int numVerticesPerFacet() const = 0;
-  virtual int numVerticesPerCorner() const = 0;
+  /** Retorna o número de nós.
+  *  @note não conta com o/a(s) marcado/a(s) como killed.
+  */
+  int numNodes() const
+  {
+    return static_cast<int>( _pointL.size() );
+  }
 
-  virtual int numFacetsPerCell() const = 0;
-  virtual int numCornersPerCell()  const = 0;
-  virtual int numCornersPerFacet() const = 0;
+  /** Retorna no número de nós.
+  *  @note incluindo o/a(s) marcado/a(s) como killed.
+  */
+  int numNodesTotal() const
+  {
+    return static_cast<int>( _pointL.totalSize() );
+  }
+
+  int numVertices() const;
+
+  /** Retorna número de facets.
+  * @note não conta com o/a(s) marcado/a(s) como killed.
+  */
+  int numFacets() const
+  {
+    return static_cast<int>( _facetL.size() );
+  }
+
+  /** Retorna o número de facets.
+  *  @note incluindo o/a(s) marcado/a(s) como killed.
+  */
+  int numFacetsTotal() const
+  {
+    return static_cast<int>( _facetL.totalSize() );
+  }
+
+  /** Retorna número de corners.
+  * @note não conta com o/a(s) marcado/a(s) como killed.
+  */
+  int numCorners() const
+  {
+    if (this->_cell_dim == 3)
+      return static_cast<int>( _cornerL.size() );
+    else
+    // FIXME: high orders nodes are not corners
+      return static_cast<int>( _pointL.totalSize() );
+  }
+
+  /** Retorna o número de corners.
+  *  @note incluindo o/a(s) marcado/a(s) como killed.
+  */
+  int numCornersTotal() const
+  {
+    if (this->_cell_dim == 3)
+      return static_cast<int>( _cornerL.totalSize() );
+    else
+      // FIXME: high orders nodes are not corners
+      return static_cast<int>( _pointL.totalSize() );
+  }
+
+
+  int numNodesPerCell() const
+  {
+    return this->_n_nodes_per_cell;
+  }
+  int numNodesPerFacet() const
+  {
+    return this->_n_nodes_per_facet;
+  }
+  int numNodesPerCorner() const
+  {
+    return this->_n_nodes_per_corner;
+  }
+
+  int numVerticesPerCell() const
+  {
+    return this->_n_vertices_per_cell;
+  }
+  int numVerticesPerFacet() const
+  {
+    return this->_n_vertices_per_facet;
+  }
+  int numVerticesPerCorner() const
+  {
+    return this->_n_vertices_per_corner;
+  }
+
+  int numFacetsPerCell() const
+  {
+    return this->_n_facets_per_cell;
+  }
+  int numCornersPerCell() const
+  {
+    return this->_n_corners_per_cell;
+  }
+  int numCornersPerFacet() const
+  {
+    return this->_n_corners_per_facet;
+  }
+
 
   static unsigned estimateNumFacets(unsigned nc, ECellType t);
   static unsigned estimateNumCorners(unsigned nc, ECellType t);
@@ -476,10 +616,36 @@ public:
     return _spacedim;
   }
 
-  virtual int getCellId(Cell const* a) const = 0;
-  virtual int getPointId(Point const* a) const = 0;
-  virtual int getFacetId(Facet const* a) const = 0;
-  virtual int getCornerId(Corner const* a) const = 0;
+  int getCellId(Cell const* a) const
+  {
+    FEPIC_CHECK(_dont_build_adjacency, "this function can not be called without adjacency", std::runtime_error);
+    
+    int ic_id = a->getIncidCell(0);
+    
+    if (ic_id >= 0)
+      return this->getCellPtr(ic_id)->getIncidCell(a->getIncidCellPos(0));
+    else
+      return this->getFacetPtr(a->getFacetId(0))->getIncidCell();
+  }
+  
+  int getPointId(Point const* a) const
+  {
+    FEPIC_CHECK(_dont_build_adjacency, "this function can not be called without adjacency", std::runtime_error);
+    return this->getCellPtr(a->getIncidCell())->getNodeId(a->getPosition());
+  }
+  
+  int getFacetId(Facet const* a) const
+  {
+    FEPIC_CHECK(_dont_build_adjacency, "this function can not be called without adjacency", std::runtime_error);
+    return this->getCellPtr(a->getIncidCell())->getFacetId(a->getPosition());
+  }
+  
+  int getCornerId(Corner const* a) const
+  {
+    FEPIC_CHECK(_dont_build_adjacency, "this function can not be called without adjacency", std::runtime_error);
+    return this->getCellPtr(a->getIncidCell())->getCornerId(a->getPosition());
+  }
+
 
   virtual ~Mesh() = 0;
 
@@ -959,177 +1125,6 @@ public:
 
   void printStatistics() const;
 
-  cell_handler getCell(int nth)
-  {
-    if (unsigned(nth)<this->_cellL.totalSize())
-      return cell_handler(this, &_cellL[nth], nth);
-    else
-      return cell_handler(this, NULL, -1);
-  }
-  facet_handler getFacet(int nth)
-  {
-    if (unsigned(nth)<this->_facetL.totalSize())
-      return facet_handler(this, &_facetL[nth], nth);
-    else
-      return facet_handler(this, NULL, -1);
-  }
-  corner_handler getCorner(int nth)
-  {
-    if (unsigned(nth)<this->_cornerL.totalSize())
-      return corner_handler(this, &_cornerL[nth], nth);
-    else
-      return corner_handler(this, NULL, -1);
-  }
-  point_handler getNode(int nth)
-  {
-    if (unsigned(nth)<this->_pointL.totalSize())
-      return point_handler(this, &_pointL[nth], nth);
-    else
-      return point_handler(this, NULL, -1);
-  }
-
-  int getCellId(Cell const* a) const
-  {
-    FEPIC_CHECK(_dont_build_adjacency, "this function can not be called without adjacency", std::runtime_error);
-    
-    Cell const* aa = static_cast<Cell const*>(a);
-    
-    int ic_id = aa->getIncidCell(0);
-    
-    if (ic_id >= 0)
-      return this->MeshT::getCellPtr(ic_id)->getIncidCell(aa->getIncidCellPos(0));
-    else
-      return this->MeshT::getFacetPtr(aa->getFacetId(0))->Facet::getIncidCell();
-  }
-  
-  int getPointId(Point const* a) const
-  {
-    FEPIC_CHECK(_dont_build_adjacency, "this function can not be called without adjacency", std::runtime_error);
-    return this->MeshT::getCellPtr(a->PointT::getIncidCell())->getNodeId(a->PointT::getPosition());
-  }
-  
-  int getFacetId(Facet const* a) const
-  {
-    FEPIC_CHECK(_dont_build_adjacency, "this function can not be called without adjacency", std::runtime_error);
-    return this->MeshT::getCellPtr(a->FacetT::getIncidCell())->getFacetId(a->FacetT::getPosition());
-  }
-  
-  int getCornerId(Corner const* a) const
-  {
-    FEPIC_CHECK(_dont_build_adjacency, "this function can not be called without adjacency", std::runtime_error);
-    return this->MeshT::getCellPtr(a->CornerT::getIncidCell())->getCornerId(a->CornerT::getPosition());
-  }
-
-
-  bool inBoundary(Point const* p) const
-  {
-    
-    return static_cast<PointT const*>(p)->PointT::inBoundary();
-    
-    // OLD
-    ////return this->MeshT::getCellPtr(static_cast<PointT const*>(p)->PointT::getIncidCell())->inBoundary();
-    //Cell const* icell = this->MeshT::getCellPtr(static_cast<PointT const*>(p)->PointT::getIncidCell());
-    //if (!icell->inBoundary())
-    //  return false;
-    //
-    //const int m = static_cast<PointT const*>(p)->PointT::getPosition();
-    //if (CellT::dim==1)
-    //{
-    //  if (m>1)
-    //    return false;
-    //  else
-    //    return true;
-    //}
-    //if (this->MeshT::isVertex(p))
-    //{
-    //  if (icell->getIncidCell(CellT::table_vC_x_fC[m][0]) < 0) return true;
-    //  if (icell->getIncidCell(CellT::table_vC_x_fC[m][1]) < 0) return true;
-    //  if (CellT::dim>2)
-    //    if (icell->getIncidCell(CellT::table_vC_x_fC[m][2]) < 0) return true;
-    //  return false;
-    //}
-    //else
-    //{
-    //  const int q = m - CellT::n_vertices;
-    //  if (CellT::dim==2)
-    //  {
-    //    if (q>=CellT::n_facets)
-    //      return false;
-    //    return icell->getIncidCell(q)<0;
-    //  }
-    //  else
-    //  {
-    //    const int r = q - CellT::n_corners;
-    //    const int s = r - CellT::n_facets;
-    //
-    //    if (s>=0) return false;
-    //
-    //    if (r>=0) return icell->getIncidCell(r)<0;
-    //
-    //    if (icell->getIncidCell(CellT::table_bC_x_fC[q][0]) < 0) return true;
-    //    if (icell->getIncidCell(CellT::table_bC_x_fC[q][1]) < 0) return true;
-    //    return false;
-    //  }
-    //}
-
-
-  }
-  bool inBoundary(Facet const* f) const
-  {
-    Cell const* icell = this->MeshT::getCellPtr(static_cast<FacetT const*>(f)->FacetT::getIncidCell());
-    if (icell->getIncidCell(static_cast<FacetT const*>(f)->FacetT::getPosition()) < 0)
-      return true;
-    else
-      return false;
-  }
-  bool inBoundary(Corner const* f) const
-  {
-    Cell const* icell = this->MeshT::getCellPtr(static_cast<CornerT const*>(f)->CornerT::getIncidCell());
-    if (!icell->inBoundary())
-      return false;
-    if (CellT::dim==2)
-    {
-      PointT const* point = this->MeshT::getNodePtr( icell->getNodeId(  static_cast<CornerT const*>(f)->CornerT::getPosition() ) );
-      return this->MeshT::inBoundary(point);
-    }
-    else
-    {
-      int const m = static_cast<CornerT const*>(f)->CornerT::getPosition();
-      if (icell->getIncidCell(CellT::table_bC_x_fC[m][0]) < 0) return true;
-      if (icell->getIncidCell(CellT::table_bC_x_fC[m][1]) < 0) return true;
-      return false;
-    }
-  }
-
-  /** Adiciona uma célula e retorna seu id.
-  */
-  int pushCell(Cell const* C);
-
-  /** Adiciona um ponto e retorna seu id.
-  */
-  int pushPoint(Point const* P);
-
-  /** Adiciona uma facet
-  *  @param h A facet-xxxx a ser adicionada.
-  *  @return A posição da facet-xxxx na lista
-  */
-  int pushFacet(Facet const* h);
-
-  /** Adiciona uma corner-xxxx
-  *  @param h A corner-xxxx a ser adicionada.
-  *  @return A posição da corner-xxxx na lista
-  */
-  int pushCorner(Corner const* h);
-
-  /// adds an element in the mesh and returns a pointer to it.
-  Cell*   pushCell(int *id);
-  /// adds a point in the mesh and returns a pointer to it.
-  Point*  pushPoint(int *id);
-  /// adds a facet in the mesh and returns a pointer to it.
-  Facet*  pushFacet(int *id);
-  /// adds a corner in the mesh and returns a pointer to it.
-  Corner* pushCorner(int *id);
-         
   /// create a cell (but not put in the mesh)
   Cell*   createCell() const;
   /// create a point (but not put in the mesh)
@@ -1139,119 +1134,6 @@ public:
   /// create a corner (but not put in the mesh)
   Corner* createCorner() const;
           
-  /** Retorna o número células
-  *  @note não conta com o/a(s) marcado/a(s) como killed.
-  */
-  int numCells() const
-  {
-    return static_cast<int>( _cellL.size() );
-  }
-
-  /** Retorna o número de células.
-  * @note incluindo o/a(s) marcado/a(s) como killed.
-  */
-  int numCellsTotal() const
-  {
-    return static_cast<int>( _cellL.totalSize() );
-  }
-
-  /** Retorna o número de nós.
-  *  @note não conta com o/a(s) marcado/a(s) como killed.
-  */
-  int numNodes() const
-  {
-    return static_cast<int>( _pointL.size() );
-  }
-
-  /** Retorna no número de nós.
-  *  @note incluindo o/a(s) marcado/a(s) como killed.
-  */
-  int numNodesTotal() const
-  {
-    return static_cast<int>( _pointL.totalSize() );
-  }
-
-  int numVertices() const;
-
-  /** Retorna número de facets.
-  * @note não conta com o/a(s) marcado/a(s) como killed.
-  */
-  int numFacets() const
-  {
-    return static_cast<int>( _facetL.size() );
-  }
-
-  /** Retorna o número de facets.
-  *  @note incluindo o/a(s) marcado/a(s) como killed.
-  */
-  int numFacetsTotal() const
-  {
-    return static_cast<int>( _facetL.totalSize() );
-  }
-
-  /** Retorna número de corners.
-  * @note não conta com o/a(s) marcado/a(s) como killed.
-  */
-  int numCorners() const
-  {
-    if (CellT::dim==3)
-      return static_cast<int>( _cornerL.size() );
-    else
-    // FIXME: high orders nodes are not corners
-      return static_cast<int>( _pointL.totalSize() );
-  }
-
-  /** Retorna o número de corners.
-  *  @note incluindo o/a(s) marcado/a(s) como killed.
-  */
-  int numCornersTotal() const
-  {
-    if (CellT::dim==3)
-      return static_cast<int>( _cornerL.totalSize() );
-    else
-      // FIXME: high orders nodes are not corners
-      return static_cast<int>( _pointL.totalSize() );
-  }
-
-  int numNodesPerCell() const
-  {
-    return CellT::n_nodes;
-  }
-  int numNodesPerFacet() const
-  {
-    return CellT::n_nodes_per_facet;
-  }
-  int numNodesPerCorner() const
-  {
-    return CellT::n_nodes_per_corner;
-  }
-
-  int numVerticesPerCell() const
-  {
-    return CellT::n_vertices;
-  }
-  int numVerticesPerFacet() const
-  {
-    return CellT::n_vertices_per_facet;
-  }
-  int numVerticesPerCorner() const
-  {
-    return CellT::n_vertices_per_corner;
-  }
-
-  int numFacetsPerCell() const
-  {
-    return CellT::n_facets;
-  }
-  int numCornersPerCell() const
-  {
-    return CellT::n_corners;
-  }
-  int numCornersPerFacet() const
-  {
-    return CellT::Derived::n_facets;
-  }
-
   /** Check if the vertices form a facet of this mesh, if so returns facet's id.
    * @param[in] vtcs vector with the ids of the vertices.
    * @param[out] fid id of the facet that has those vertices. If the vertices form a facet

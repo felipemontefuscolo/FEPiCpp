@@ -27,14 +27,14 @@
 // ========================  EDGE =====================================
 
 #define FEPIC_INSTANTIATE_MEMBERS_FUN(Order)                                \
-template<> const int Edge<Order>::table_fC_x_vC[2][1] = {{0},{1}};          \
-template<> const int Edge<Order>::table_fC_x_nC[2][1] = {{0},{1}};          \
+template<> const int Edge<Order>::_table_fC_x_vC[2][1] = {{0},{1}};          \
+template<> const int Edge<Order>::_table_fC_x_nC[2][1] = {{0},{1}};          \
                                                                             \
-template<> const int Edge<Order>::table_bC_x_vC[/*0*/1][/*0*/1] = {{-1}}; /*avoid annoying compiler*/  \
-template<> const int Edge<Order>::table_bC_x_nC[/*0*/1][/*0*/1] = {{-1}}; /*avoid annoying compiler*/  \
-template<> const int Edge<Order>::table_fC_x_bC[/*0*/1][/*0*/1] = {{-1}}; /*avoid annoying compiler*/  \
-template<> const int Edge<Order>::table_bC_x_fC[/*0*/1][/*0*/1] = {{-1}}; /*avoid annoying compiler*/  \
-template<> const int Edge<Order>::table_vC_x_fC[2][1] = {{0},{1}};
+template<> const int Edge<Order>::_table_bC_x_vC[/*0*/1][/*0*/1] = {{-1}}; /*avoid annoying compiler*/  \
+template<> const int Edge<Order>::_table_bC_x_nC[/*0*/1][/*0*/1] = {{-1}}; /*avoid annoying compiler*/  \
+template<> const int Edge<Order>::_table_fC_x_bC[/*0*/1][/*0*/1] = {{-1}}; /*avoid annoying compiler*/  \
+template<> const int Edge<Order>::_table_bC_x_fC[/*0*/1][/*0*/1] = {{-1}}; /*avoid annoying compiler*/  \
+template<> const int Edge<Order>::_table_vC_x_fC[2][1] = {{0},{1}};
 
 FEPIC_INSTANTIATE_MEMBERS_FUN(1)
 FEPIC_INSTANTIATE_MEMBERS_FUN(2)
@@ -44,117 +44,117 @@ FEPIC_INSTANTIATE_MEMBERS_FUN(2)
 // ========================  TRIANGLE =====================================
 
 
-const int Triangle3::table_fC_x_vC[3][2] = {{0,1}, {1,2}, {2,0}};
-const int Triangle3::table_fC_x_nC[3][2] = {{0,1}, {1,2}, {2,0}};
-const int Triangle3::table_vC_x_fC[3][2] = {{0,2}, {1,0}, {2,1}};
-const int Triangle3::table_fC_x_bC[3][2] = {{0,1}, {1,2}, {2,0}};
-const int Triangle3::table_bC_x_vC[3][1] = {{0},{1},{2}};
-const int Triangle3::table_bC_x_nC[3][1] = {{0},{1},{2}};
-const int Triangle3::table_bC_x_fC[3][2] = {{0,2}, {1,0}, {2,1}};
+const int Triangle3::_table_fC_x_vC[3][2] = {{0,1}, {1,2}, {2,0}};
+const int Triangle3::_table_fC_x_nC[3][2] = {{0,1}, {1,2}, {2,0}};
+const int Triangle3::_table_vC_x_fC[3][2] = {{0,2}, {1,0}, {2,1}};
+const int Triangle3::_table_fC_x_bC[3][2] = {{0,1}, {1,2}, {2,0}};
+const int Triangle3::_table_bC_x_vC[3][1] = {{0},{1},{2}};
+const int Triangle3::_table_bC_x_nC[3][1] = {{0},{1},{2}};
+const int Triangle3::_table_bC_x_fC[3][2] = {{0,2}, {1,0}, {2,1}};
 
 
 
-const int Triangle6::table_fC_x_vC[3][2] = {{0,1}, {1,2}, {2,0}};
-const int Triangle6::table_fC_x_nC[3][3] = {{0,1,3}, {1,2,4}, {2,0,5}};
-const int Triangle6::table_vC_x_fC[3][2] = {{0,2}, {1,0}, {2,1}};
-const int Triangle6::table_fC_x_bC[3][2] = {{0,1}, {1,2}, {2,0}};
-const int Triangle6::table_bC_x_vC[3][1] = {{0},{1},{2}};
-const int Triangle6::table_bC_x_nC[3][1] = {{0},{1},{2}};
-const int Triangle6::table_bC_x_fC[3][2] = {{0,2}, {1,0}, {2,1}};
+const int Triangle6::_table_fC_x_vC[3][2] = {{0,1}, {1,2}, {2,0}};
+const int Triangle6::_table_fC_x_nC[3][3] = {{0,1,3}, {1,2,4}, {2,0,5}};
+const int Triangle6::_table_vC_x_fC[3][2] = {{0,2}, {1,0}, {2,1}};
+const int Triangle6::_table_fC_x_bC[3][2] = {{0,1}, {1,2}, {2,0}};
+const int Triangle6::_table_bC_x_vC[3][1] = {{0},{1},{2}};
+const int Triangle6::_table_bC_x_nC[3][1] = {{0},{1},{2}};
+const int Triangle6::_table_bC_x_fC[3][2] = {{0,2}, {1,0}, {2,1}};
 
 
 
 // ========================  QUADRANGLE =====================================
 
 
-const int Quadrangle4::table_fC_x_vC[4][2] = {{0,1}, {1,2}, {2,3}, {3,0}};
-const int Quadrangle4::table_fC_x_nC[4][2] = {{0,1}, {1,2}, {2,3}, {3,0}};
-const int Quadrangle4::table_vC_x_fC[4][2] = {{0,3}, {1,0}, {2,1}, {3,2}};
-const int Quadrangle4::table_fC_x_bC[4][2] = {{0,1}, {1,2}, {2,3}, {3,0}};
-const int Quadrangle4::table_bC_x_vC[4][1] = {{0}, {1}, {2}, {3}};
-const int Quadrangle4::table_bC_x_nC[4][1] = {{0}, {1}, {2}, {3}};
-const int Quadrangle4::table_bC_x_fC[4][2] = {{0,3}, {1,0}, {2,1}, {3,2}};
+const int Quadrangle4::_table_fC_x_vC[4][2] = {{0,1}, {1,2}, {2,3}, {3,0}};
+const int Quadrangle4::_table_fC_x_nC[4][2] = {{0,1}, {1,2}, {2,3}, {3,0}};
+const int Quadrangle4::_table_vC_x_fC[4][2] = {{0,3}, {1,0}, {2,1}, {3,2}};
+const int Quadrangle4::_table_fC_x_bC[4][2] = {{0,1}, {1,2}, {2,3}, {3,0}};
+const int Quadrangle4::_table_bC_x_vC[4][1] = {{0}, {1}, {2}, {3}};
+const int Quadrangle4::_table_bC_x_nC[4][1] = {{0}, {1}, {2}, {3}};
+const int Quadrangle4::_table_bC_x_fC[4][2] = {{0,3}, {1,0}, {2,1}, {3,2}};
 
 
-const int Quadrangle8::table_fC_x_vC[4][2] = {{0,1}, {1,2}, {2,3}, {3,0}};
-const int Quadrangle8::table_fC_x_nC[4][3] = {{0,1,4}, {1,2,5}, {2,3,6}, {3,0,7}};
-const int Quadrangle8::table_vC_x_fC[4][2] = {{0,3}, {1,0}, {2,1}, {3,2}};
-const int Quadrangle8::table_fC_x_bC[4][2] = {{0,1}, {1,2}, {2,3}, {3,0}};
-const int Quadrangle8::table_bC_x_vC[4][1] = {{0}, {1}, {2}, {3}};
-const int Quadrangle8::table_bC_x_nC[4][1] = {{0}, {1}, {2}, {3}};
-const int Quadrangle8::table_bC_x_fC[4][2] = {{0,3}, {1,0}, {2,1}, {3,2}};
+const int Quadrangle8::_table_fC_x_vC[4][2] = {{0,1}, {1,2}, {2,3}, {3,0}};
+const int Quadrangle8::_table_fC_x_nC[4][3] = {{0,1,4}, {1,2,5}, {2,3,6}, {3,0,7}};
+const int Quadrangle8::_table_vC_x_fC[4][2] = {{0,3}, {1,0}, {2,1}, {3,2}};
+const int Quadrangle8::_table_fC_x_bC[4][2] = {{0,1}, {1,2}, {2,3}, {3,0}};
+const int Quadrangle8::_table_bC_x_vC[4][1] = {{0}, {1}, {2}, {3}};
+const int Quadrangle8::_table_bC_x_nC[4][1] = {{0}, {1}, {2}, {3}};
+const int Quadrangle8::_table_bC_x_fC[4][2] = {{0,3}, {1,0}, {2,1}, {3,2}};
 
 
-const int Quadrangle9::table_fC_x_vC[4][2] = {{0,1}, {1,2}, {2,3}, {3,0}};
-const int Quadrangle9::table_fC_x_nC[4][3] = {{0,1,4}, {1,2,5}, {2,3,6}, {3,0,7}};
-const int Quadrangle9::table_vC_x_fC[4][2] = {{0,3}, {1,0}, {2,1}, {3,2}};
-const int Quadrangle9::table_fC_x_bC[4][2] = {{0,1}, {1,2}, {2,3}, {3,0}};
-const int Quadrangle9::table_bC_x_vC[4][1] = {{0}, {1}, {2}, {3}};
-const int Quadrangle9::table_bC_x_nC[4][1] = {{0}, {1}, {2}, {3}};
-const int Quadrangle9::table_bC_x_fC[4][2] = {{0,3}, {1,0}, {2,1}, {3,2}};
+const int Quadrangle9::_table_fC_x_vC[4][2] = {{0,1}, {1,2}, {2,3}, {3,0}};
+const int Quadrangle9::_table_fC_x_nC[4][3] = {{0,1,4}, {1,2,5}, {2,3,6}, {3,0,7}};
+const int Quadrangle9::_table_vC_x_fC[4][2] = {{0,3}, {1,0}, {2,1}, {3,2}};
+const int Quadrangle9::_table_fC_x_bC[4][2] = {{0,1}, {1,2}, {2,3}, {3,0}};
+const int Quadrangle9::_table_bC_x_vC[4][1] = {{0}, {1}, {2}, {3}};
+const int Quadrangle9::_table_bC_x_nC[4][1] = {{0}, {1}, {2}, {3}};
+const int Quadrangle9::_table_bC_x_fC[4][2] = {{0,3}, {1,0}, {2,1}, {3,2}};
 
 
 // ========================  TETRAHEDRON =====================================
 
                                                   // fC        vf
-const int Tetrahedron4::table_vC_x_fC[4][6]  = {{0, 1, 2,   1, 0, 2},
+const int Tetrahedron4::_table_vC_x_fC[4][6]  = {{0, 1, 2,   1, 0, 2},
                                                 {0, 1, 3,   0, 1, 2},
                                                 {0, 2, 3,   2, 1, 0},
                                                 {1, 2, 3,   2, 0, 1}};
-const int Tetrahedron4::table_fC_x_bC[4][3]   = {{0, 2, 1},
+const int Tetrahedron4::_table_fC_x_bC[4][3]   = {{0, 2, 1},
                                                  {0, 5, 3},
                                                  {4, 2, 3},
                                                  {4, 5, 1}};
                                                  
                                                  // vC   //fv
-const int Tetrahedron4::table_fC_x_vC[4][6]  = {{1,0,2,   0,0,0},
+const int Tetrahedron4::_table_fC_x_vC[4][6]  = {{1,0,2,   0,0,0},
                                                 {0,1,3,   1,1,0},
                                                 {3,2,0,   1,1,2},
                                                 {2,3,1,   2,2,2}};
 // same as above
-const int Tetrahedron4::table_fC_x_nC[4][3] = {{1,0,2},{0,1,3},{3,2,0},{2,3,1}};
+const int Tetrahedron4::_table_fC_x_nC[4][3] = {{1,0,2},{0,1,3},{3,2,0},{2,3,1}};
 
-const int Tetrahedron4::table_bC_x_vC[6][2] = {{0,1},{1,2},{2,0},{3,0},{3,2},{3,1}};
+const int Tetrahedron4::_table_bC_x_vC[6][2] = {{0,1},{1,2},{2,0},{3,0},{3,2},{3,1}};
 
-const int Tetrahedron4::table_bC_x_nC[6][2] = {{0,1},{1,2},{2,0},{3,0},{3,2},{3,1}};
+const int Tetrahedron4::_table_bC_x_nC[6][2] = {{0,1},{1,2},{2,0},{3,0},{3,2},{3,1}};
 
-const int Tetrahedron4::table_bC_x_fC[6][4] = {{0, 1, 0, 0},
+const int Tetrahedron4::_table_bC_x_fC[6][4] = {{0, 1, 0, 0},
                                                {0, 3, 2, 2},
                                                {0, 2, 1, 1},
                                                {2, 1, 2, 2},
                                                {3, 2, 0, 0},
                                                {1, 3, 1, 1}};
 
-const int Tetrahedron10::table_vC_x_fC[4][6]  = {{0, 1, 2, 1, 0, 2},
+const int Tetrahedron10::_table_vC_x_fC[4][6]  = {{0, 1, 2, 1, 0, 2},
                                                  {0, 1, 3, 0, 1, 2},
                                                  {0, 2, 3, 2, 1, 0},
                                                  {1, 2, 3, 2, 0, 1}};
-const int Tetrahedron10::table_fC_x_bC[4][3]   = {{0, 2, 1},
+const int Tetrahedron10::_table_fC_x_bC[4][3]   = {{0, 2, 1},
                                                   {0, 5, 3},
                                                   {4, 2, 3},
                                                   {4, 5, 1}};
                                                   
                                                  // vC   //fv
-const int Tetrahedron10::table_fC_x_vC[4][6]  = {{1,0,2,   0,0,0},
+const int Tetrahedron10::_table_fC_x_vC[4][6]  = {{1,0,2,   0,0,0},
                                                  {0,1,3,   1,1,0},
                                                  {3,2,0,   1,1,2},
                                                  {2,3,1,   2,2,2}};
 
-const int Tetrahedron10::table_fC_x_nC[4][6]     = {{1,0,2,4,6,5},
+const int Tetrahedron10::_table_fC_x_nC[4][6]     = {{1,0,2,4,6,5},
                                                     {0,1,3,4,9,7},
                                                     {3,2,0,8,6,7},
                                                     {2,3,1,8,9,5}};
 
-const int Tetrahedron10::table_bC_x_vC[6][2] = {{0,1},{1,2},{2,0},{3,0},{3,2},{3,1}};
+const int Tetrahedron10::_table_bC_x_vC[6][2] = {{0,1},{1,2},{2,0},{3,0},{3,2},{3,1}};
 
-const int Tetrahedron10::table_bC_x_nC[6][3]    = {{0,1,4},
+const int Tetrahedron10::_table_bC_x_nC[6][3]    = {{0,1,4},
                                                    {1,2,5},
                                                    {2,0,6},
                                                    {3,0,7},
                                                    {3,2,8},
                                                    {3,1,9}};
 
-const int Tetrahedron10::table_bC_x_fC[6][4]   = {{0, 1, 0, 0},
+const int Tetrahedron10::_table_bC_x_fC[6][4]   = {{0, 1, 0, 0},
                                                   {0, 3, 2, 2},
                                                   {0, 2, 1, 1},
                                                   {2, 1, 2, 2},
@@ -166,7 +166,7 @@ const int Tetrahedron10::table_bC_x_fC[6][4]   = {{0, 1, 0, 0},
 
 
 
-const int Hexahedron8::table_vC_x_fC[8][6]  = {{0, 1, 2, 0, 0, 0},
+const int Hexahedron8::_table_vC_x_fC[8][6]  = {{0, 1, 2, 0, 0, 0},
                                                {0, 1, 3, 3, 1, 0},
                                                {0, 3, 4, 2, 1, 0},
                                                {0, 2, 4, 1, 3, 1},
@@ -174,7 +174,7 @@ const int Hexahedron8::table_vC_x_fC[8][6]  = {{0, 1, 2, 0, 0, 0},
                                                {1, 3, 5, 2, 3, 1},
                                                {3, 4, 5, 2, 3, 2},
                                                {2, 4, 5, 2, 2, 3}};
-const int Hexahedron8::table_fC_x_bC[6][4]   = {{1, 5 , 3 , 0},
+const int Hexahedron8::_table_fC_x_bC[6][4]   = {{1, 5 , 3 , 0},
                                                 {0, 4 , 8 , 2},
                                                 {2, 9 , 7 , 1},
                                                 {3, 6 , 10, 4},
@@ -182,20 +182,20 @@ const int Hexahedron8::table_fC_x_bC[6][4]   = {{1, 5 , 3 , 0},
                                                 {8, 10, 11, 9}};
                                                 
                                                 // vC         fv
-const int Hexahedron8::table_fC_x_vC[6][8]  = {{0,3,2,1,   0,0,0,0},
+const int Hexahedron8::_table_fC_x_vC[6][8]  = {{0,3,2,1,   0,0,0,0},
                                                {0,1,5,4,   1,1,0,0},
                                                {0,4,7,3,   2,1,0,1},
                                                {1,2,6,5,   2,1,0,1},
                                                {2,3,7,6,   2,2,1,1},
                                                {4,5,6,7,   2,2,2,2}};
 // same as above
-const int Hexahedron8::table_fC_x_nC[6][4]     = {{0,3,2,1},{0,1,5,4},{0,4,7,3},{1,2,6,5},{2,3,7,6},{4,5,6,7}};
+const int Hexahedron8::_table_fC_x_nC[6][4]     = {{0,3,2,1},{0,1,5,4},{0,4,7,3},{1,2,6,5},{2,3,7,6},{4,5,6,7}};
 
-const int Hexahedron8::table_bC_x_vC[12][2]= {{0,1},{0,3},{0,4},{1,2},{1,5},{2,3},{2,6},{3,7},{4,5},{4,7},{5,6},{6,7}};
+const int Hexahedron8::_table_bC_x_vC[12][2]= {{0,1},{0,3},{0,4},{1,2},{1,5},{2,3},{2,6},{3,7},{4,5},{4,7},{5,6},{6,7}};
 
-const int Hexahedron8::table_bC_x_nC[12][2]   = {{0,1},{0,3},{0,4},{1,2},{1,5},{2,3},{2,6},{3,7},{4,5},{4,7},{5,6},{6,7}};
+const int Hexahedron8::_table_bC_x_nC[12][2]   = {{0,1},{0,3},{0,4},{1,2},{1,5},{2,3},{2,6},{3,7},{4,5},{4,7},{5,6},{6,7}};
 
-const int Hexahedron8::table_bC_x_fC[12][4]  = {{0, 1, 3, 0},
+const int Hexahedron8::_table_bC_x_fC[12][4]  = {{0, 1, 3, 0},
                                                 {2, 0, 3, 0},
                                                 {1, 2, 3, 0},
                                                 {0, 3, 2, 0},
@@ -216,9 +216,9 @@ const int Hexahedron8::table_bC_x_fC[12][4]  = {{0, 1, 3, 0},
 
 
 
-// only change table_fC_x_nC and table_bC_x_nC compared to Hexaheron8
+// only change _table_fC_x_nC and _table_bC_x_nC compared to Hexaheron8
 
-const int Hexahedron20::table_vC_x_fC[8][6]  = {{0, 1, 2, 0, 0, 0},
+const int Hexahedron20::_table_vC_x_fC[8][6]  = {{0, 1, 2, 0, 0, 0},
                                                 {0, 1, 3, 3, 1, 0},
                                                 {0, 3, 4, 2, 1, 0},
                                                 {0, 2, 4, 1, 3, 1},
@@ -227,7 +227,7 @@ const int Hexahedron20::table_vC_x_fC[8][6]  = {{0, 1, 2, 0, 0, 0},
                                                 {3, 4, 5, 2, 3, 2},
                                                 {2, 4, 5, 2, 2, 3}};
                                           
-const int Hexahedron20::table_fC_x_bC[6][4] = {{1, 5 , 3 , 0},
+const int Hexahedron20::_table_fC_x_bC[6][4] = {{1, 5 , 3 , 0},
                                                {0, 4 , 8 , 2},
                                                {2, 9 , 7 , 1},
                                                {3, 6 , 10, 4},
@@ -235,23 +235,23 @@ const int Hexahedron20::table_fC_x_bC[6][4] = {{1, 5 , 3 , 0},
                                                {8, 10, 11, 9}};
                                           
                                                 // vC         fv
-const int Hexahedron20::table_fC_x_vC[6][8]  = {{0,3,2,1,   0,0,0,0},
+const int Hexahedron20::_table_fC_x_vC[6][8]  = {{0,3,2,1,   0,0,0,0},
                                                 {0,1,5,4,   1,1,0,0},
                                                 {0,4,7,3,   2,1,0,1},
                                                 {1,2,6,5,   2,1,0,1},
                                                 {2,3,7,6,   2,2,1,1},
                                                 {4,5,6,7,   2,2,2,2}};
 
-const int Hexahedron20::table_fC_x_nC[6][8] = {{0, 3, 2, 1, 9,  13, 11, 8 },
+const int Hexahedron20::_table_fC_x_nC[6][8] = {{0, 3, 2, 1, 9,  13, 11, 8 },
                                                {0, 1, 5, 4, 8,  12, 16, 10},
                                                {0, 4, 7, 3, 10, 17, 15, 9 },
                                                {1, 2, 6, 5, 11, 14, 18, 12},
                                                {2, 3, 7, 6, 13, 15, 19, 14},
                                                {4, 5, 6, 7, 16, 18, 19, 17}};
 
-const int Hexahedron20::table_bC_x_vC[12][2]= {{0,1},{0,3},{0,4},{1,2},{1,5},{2,3},{2,6},{3,7},{4,5},{4,7},{5,6},{6,7}};
+const int Hexahedron20::_table_bC_x_vC[12][2]= {{0,1},{0,3},{0,4},{1,2},{1,5},{2,3},{2,6},{3,7},{4,5},{4,7},{5,6},{6,7}};
 
-const int Hexahedron20::table_bC_x_nC[12][3] = {{0, 1, 8 }, 
+const int Hexahedron20::_table_bC_x_nC[12][3] = {{0, 1, 8 }, 
                                                 {0, 3, 9 }, 
                                                 {0, 4, 10},
                                                 {1, 2, 11},
@@ -264,7 +264,7 @@ const int Hexahedron20::table_bC_x_nC[12][3] = {{0, 1, 8 },
                                                 {5, 6, 18},
                                                 {6, 7, 19}};
 
-const int Hexahedron20::table_bC_x_fC[12][4] = {{0, 1, 3, 0},
+const int Hexahedron20::_table_bC_x_fC[12][4] = {{0, 1, 3, 0},
                                                 {2, 0, 3, 0},
                                                 {1, 2, 3, 0},
                                                 {0, 3, 2, 0},
@@ -289,9 +289,9 @@ const int Hexahedron20::table_bC_x_fC[12][4] = {{0, 1, 3, 0},
 
 
 
-// only change table_fC_x_nC and table_bC_x_nC compared to Hexaheron8
+// only change _table_fC_x_nC and _table_bC_x_nC compared to Hexaheron8
 
-const int Hexahedron27::table_vC_x_fC[8][6]  = {{0, 1, 2, 0, 0, 0},
+const int Hexahedron27::_table_vC_x_fC[8][6]  = {{0, 1, 2, 0, 0, 0},
                                                 {0, 1, 3, 3, 1, 0},
                                                 {0, 3, 4, 2, 1, 0},
                                                 {0, 2, 4, 1, 3, 1},
@@ -300,7 +300,7 @@ const int Hexahedron27::table_vC_x_fC[8][6]  = {{0, 1, 2, 0, 0, 0},
                                                 {3, 4, 5, 2, 3, 2},
                                                 {2, 4, 5, 2, 2, 3}};
                                           
-const int Hexahedron27::table_fC_x_bC[6][4] = {{1, 5 , 3 , 0},
+const int Hexahedron27::_table_fC_x_bC[6][4] = {{1, 5 , 3 , 0},
                                                {0, 4 , 8 , 2},
                                                {2, 9 , 7 , 1},
                                                {3, 6 , 10, 4},
@@ -308,23 +308,23 @@ const int Hexahedron27::table_fC_x_bC[6][4] = {{1, 5 , 3 , 0},
                                                {8, 10, 11, 9}};
                                           
                                                 // vC         fv
-const int Hexahedron27::table_fC_x_vC[6][8]  = {{0,3,2,1,   0,0,0,0},
+const int Hexahedron27::_table_fC_x_vC[6][8]  = {{0,3,2,1,   0,0,0,0},
                                                {0,1,5,4,   1,1,0,0},
                                                {0,4,7,3,   2,1,0,1},
                                                {1,2,6,5,   2,1,0,1},
                                                {2,3,7,6,   2,2,1,1},
                                                {4,5,6,7,   2,2,2,2}};
 // same as above
-const int Hexahedron27::table_fC_x_nC[6][9] = {{0, 3, 2, 1, 9,  13, 11, 8,  20},
+const int Hexahedron27::_table_fC_x_nC[6][9] = {{0, 3, 2, 1, 9,  13, 11, 8,  20},
                                                {0, 1, 5, 4, 8,  12, 16, 10, 21},
                                                {0, 4, 7, 3, 10, 17, 15, 9,  22},
                                                {1, 2, 6, 5, 11, 14, 18, 12, 23},
                                                {2, 3, 7, 6, 13, 15, 19, 14, 24},
                                                {4, 5, 6, 7, 16, 18, 19, 17, 25}};
 
-const int Hexahedron27::table_bC_x_vC[12][2]= {{0,1},{0,3},{0,4},{1,2},{1,5},{2,3},{2,6},{3,7},{4,5},{4,7},{5,6},{6,7}};
+const int Hexahedron27::_table_bC_x_vC[12][2]= {{0,1},{0,3},{0,4},{1,2},{1,5},{2,3},{2,6},{3,7},{4,5},{4,7},{5,6},{6,7}};
 
-const int Hexahedron27::table_bC_x_nC[12][3] = {{0, 1, 8 }, 
+const int Hexahedron27::_table_bC_x_nC[12][3] = {{0, 1, 8 }, 
                                                 {0, 3, 9 }, 
                                                 {0, 4, 10},
                                                 {1, 2, 11},
@@ -337,7 +337,7 @@ const int Hexahedron27::table_bC_x_nC[12][3] = {{0, 1, 8 },
                                                 {5, 6, 18},
                                                 {6, 7, 19}};
 
-const int Hexahedron27::table_bC_x_fC[12][4] = {{0, 1, 3, 0},
+const int Hexahedron27::_table_bC_x_fC[12][4] = {{0, 1, 3, 0},
                                                 {2, 0, 3, 0},
                                                 {1, 2, 3, 0},
                                                 {0, 3, 2, 0},
