@@ -1,5 +1,5 @@
 #include "mesh.hpp"
-
+#include "boost/scoped_ptr.hpp"
 #include <vector>
 #include <set>
 #include "../util/misc2.hpp"
@@ -41,6 +41,21 @@ Mesh::Mesh(ECellType fept, int spacedim)
   _cell_fep_tag = fept;
   _cell_msh_tag = ctype2mshTag(fept);
   _dont_build_adjacency = true;
+
+  boost::scoped_ptr<Cell> cell(Cell::create(fept));
+  
+  
+  _is_parametric_cell = cell->isParametric();
+  _cell_dim = cell->dim();
+  _n_nodes_per_cell = cell->numNodes();
+  _n_nodes_per_facet = cell->numNodesPerFacet();
+  _n_nodes_per_corner = cell->numNodesPerCorner();
+  _n_vertices_per_cell = cell->numVertices();
+  _n_vertices_per_facet = cell->numVerticesPerFacet();
+  _n_vertices_per_corner = cell->numVerticesPerCorner();
+  _n_facets_per_cell = cell->numFacets();
+  _n_corners_per_cell = cell->numCorners();
+  _n_corners_per_facet = cell->numCornersPerFacet();
 
   timer = Timer();
 }
@@ -368,7 +383,7 @@ Corner* SMesh<CT>::createCorner() const
 template<class CT>
 void SMesh<CT>::printInfo() const
 {
-  printf("elem type: %s\n",      nameForCtype(CellT::fep_tag));
+  printf("elem type: %s\n",      ctypeName(CellT::fep_tag));
   printf("space dim: %d\n",      spaceDim()                  );
   printf("# nodes:   %d\n",      numNodes()                  );
   printf("# cells:   %d\n",      numCells()                  );
@@ -1893,7 +1908,7 @@ Mesh* Mesh::create(ECellType type, int spacedim)
 {
 
   if (static_cast<unsigned>(spacedim-1)>2)
-    spacedim = dimForCtype(type);
+    spacedim = ctypeDim(type);
 
   switch (type)
   {

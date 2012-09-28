@@ -115,6 +115,11 @@ public:
     return new CellT(*CONST_THIS);
   }
 
+  int dim() const
+  {
+    return CellT::dim;
+  }
+
   EMshTag getMshTag() const
   {
     return CellT::msh_tag;
@@ -281,6 +286,21 @@ public:
    */
   bool isFacet(int const* vtcs, int &lfid) const;
 
+  bool isParametric() const
+  {
+    return CellT::n_nodes > CellT::n_vertices;
+  }
+
+  int  numCorners() const
+  {
+    return CellT::n_corners;
+  }
+
+  int  numCornersPerFacet() const
+  {
+    return CellT::Derived::n_facets;
+  }
+
   int numFacets() const
   {
     return CellT::n_facets;
@@ -291,9 +311,29 @@ public:
     return CellT::n_nodes;
   }
 
+  int numNodesPerCorner() const
+  {
+    return CellT::n_nodes_per_corner;
+  }
+
+  int numNodesPerFacet() const
+  {
+    return CellT::n_nodes_per_facet;
+  }
+
+  int  numVertices() const
+  {
+    return CellT::n_vertices;
+  }
+
   int numVerticesPerFacet() const
   {
     return CellT::n_vertices_per_facet;
+  }
+
+  int  numVerticesPerCorner() const
+  {
+    return CellT::n_vertices_per_corner;
   }
 
   void reset()

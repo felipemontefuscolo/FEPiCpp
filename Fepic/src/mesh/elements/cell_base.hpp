@@ -52,6 +52,7 @@ public:
 
   virtual Cell* clone() const = 0;
   virtual void copy(Cell const&) = 0;
+  virtual int dim() const = 0;
   virtual EMshTag getMshTag() const = 0;
 //  virtual int  getConnectedComponentId() const = 0;
   virtual int  getCornerId(int corner) const = 0;
@@ -70,12 +71,19 @@ public:
   virtual void getVerticesId(int * begin) const = 0;
   virtual void getFacetsId(int * begin) const = 0;
   virtual void getCornersId(int * begin) const = 0;
-  virtual bool isCorner(int const* vtcs, int &lrid) const = 0;
   virtual bool inBoundary() const = 0;
+  virtual bool isCorner(int const* vtcs, int &lrid) const = 0;
   virtual bool isFacet(int const* vtcs, int &lfid) const = 0;
+  virtual bool isParametric() const = 0;
+  virtual int  numCorners() const = 0;
+  virtual int  numCornersPerFacet() const = 0;
   virtual int  numFacets() const = 0;
   virtual int  numNodes() const = 0;
+  virtual int  numNodesPerCorner() const = 0;
+  virtual int  numNodesPerFacet() const = 0;
+  virtual int  numVertices() const = 0;
   virtual int  numVerticesPerFacet() const = 0;
+  virtual int  numVerticesPerCorner() const = 0;
   virtual void reset() = 0;
   virtual void resetFacets() = 0;
   virtual void resetCorners() = 0;

@@ -5,7 +5,7 @@
 
 namespace _FepicTagsInitializers
 {
-  std::tr1::array<int, N_CELL_TYPES> numNodesForCtype_ini()
+  std::tr1::array<int, N_CELL_TYPES> ctypeNumNodes_ini()
   {
     std::tr1::array<int, N_CELL_TYPES> tab;
 
@@ -26,7 +26,7 @@ namespace _FepicTagsInitializers
     return tab;
   }
 
-  std::tr1::array<int, N_CELL_TYPES> orderForCtype_ini()
+  std::tr1::array<int, N_CELL_TYPES> ctypeDegree_ini()
   {
     std::tr1::array<int, N_CELL_TYPES> tab;
 
@@ -47,7 +47,7 @@ namespace _FepicTagsInitializers
     return tab;
   }
 
-  std::tr1::array<int, N_CELL_TYPES> dimForCtype_ini()
+  std::tr1::array<int, N_CELL_TYPES> ctypeDim_ini()
   {
     std::tr1::array<int, N_CELL_TYPES> tab;
 
@@ -68,7 +68,7 @@ namespace _FepicTagsInitializers
     return tab;
   }
 
-  std::tr1::array<const char*, N_CELL_TYPES> nameForCtype_ini()
+  std::tr1::array<const char*, N_CELL_TYPES> ctypeName_ini()
   {
     std::tr1::array<const char*, N_CELL_TYPES> tab;
 
@@ -210,10 +210,10 @@ namespace _FepicTagsInitializers
 
 }
 
-int numNodesForCtype(ECellType type)
+int ctypeNumNodes(ECellType type)
 {
   static const
-  std::tr1::array<int, N_CELL_TYPES> n_nds = _FepicTagsInitializers::numNodesForCtype_ini();
+  std::tr1::array<int, N_CELL_TYPES> n_nds = _FepicTagsInitializers::ctypeNumNodes_ini();
 
   unsigned idx = log2_i32(type);
   if (idx >= N_CELL_TYPES)
@@ -226,11 +226,11 @@ int numNodesForCtype(ECellType type)
 
 }
 
-int orderForCtype(ECellType type)
+int ctypeDegree(ECellType type)
 {
 
   static const
-  std::tr1::array<int, N_CELL_TYPES> orders = _FepicTagsInitializers::orderForCtype_ini();
+  std::tr1::array<int, N_CELL_TYPES> orders = _FepicTagsInitializers::ctypeDegree_ini();
 
   unsigned idx = log2_i32(type);
   if (idx >= N_CELL_TYPES)
@@ -242,11 +242,11 @@ int orderForCtype(ECellType type)
   return orders[idx];
 }
 
-int dimForCtype(ECellType type)
+int ctypeDim(ECellType type)
 {
 
   static const
-  std::tr1::array<int, N_CELL_TYPES> dims = _FepicTagsInitializers::dimForCtype_ini();
+  std::tr1::array<int, N_CELL_TYPES> dims = _FepicTagsInitializers::ctypeDim_ini();
 
   unsigned idx = log2_i32(type);
   if (idx >= N_CELL_TYPES)
@@ -258,10 +258,10 @@ int dimForCtype(ECellType type)
   return dims[idx];
 }
 
-const char* nameForCtype(ECellType type)
+const char* ctypeName(ECellType type)
 {
   static const
-  std::tr1::array<const char*, N_CELL_TYPES> names = _FepicTagsInitializers::nameForCtype_ini();
+  std::tr1::array<const char*, N_CELL_TYPES> names = _FepicTagsInitializers::ctypeName_ini();
 
   unsigned idx = log2_i32(type);
   if (idx >= N_CELL_TYPES)

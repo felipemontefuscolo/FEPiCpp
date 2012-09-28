@@ -74,7 +74,13 @@ public:
   typedef typename CornerList::const_iterator CornerConstIteratorT;
 protected:
 
-  // entities
+  // iterators
+  template<class> friend class _MeshIterator;
+  friend class MeshIoMsh;
+
+  //
+  // Mesh Attributes
+  //
   CellList      _cellL;
   PointList     _pointL;
   FacetList     _facetL;
@@ -83,11 +89,30 @@ protected:
   std::map<int, int>  _connected_compL; // connected component vs initial cell id list
   std::map<int, int>  _boundary_compL;  // boundary component vs initialfacet id list  
 
-  Mesh(ECellType fept=UNDEFINED_CELLT, int spacedim = -1);
+  int _spacedim;
 
-  // iterators
-  template<class> friend class _MeshIterator;
-  friend class MeshIoMsh;
+  // Cell attributes
+  bool _is_parametric_cell;
+  int _cell_dim;
+  int _n_nodes_per_cell;
+  int _n_nodes_per_facet;
+  int _n_nodes_per_corner;
+  int _n_vertices_per_cell;
+  int _n_vertices_per_facet;
+  int _n_vertices_per_corner;
+  int _n_facets_per_cell;
+  int _n_corners_per_cell;
+  int _n_corners_per_facet;
+  //
+  // End Mesh Attributes
+  //
+
+
+
+
+
+  /// constructor
+  Mesh(ECellType fept=UNDEFINED_CELLT, int spacedim = -1);
 
   virtual Cell*   incEnabledCell(int &id) = 0;
   virtual Point*  incEnabledPoint(int &id) = 0;
@@ -98,8 +123,6 @@ protected:
   virtual Point*  decEnabledPoint(int &id) = 0;
   virtual Facet*  decEnabledFacet(int &id) = 0;
   virtual Corner* decEnabledCorner(int &id) = 0;
-
-  int _spacedim;
 
 public:
 
@@ -341,8 +364,6 @@ public:
     }
   }
   
-  
-
   /** Retorna na matriz X as coordenadas dos nós passados em map.
   *  As colunas de X correspondem a dimensão enquanto as linhas
   *  correspondem aos graus de liberdade.

@@ -25,13 +25,13 @@
 
 #include "enums.hpp"
 
-int numNodesForCtype(ECellType type);
+int ctypeNumNodes(ECellType type);
 
-int orderForCtype(ECellType type);
+int ctypeDegree(ECellType type);
 
-int dimForCtype(ECellType type);
+int ctypeDim(ECellType type);
 
-const char* nameForCtype(ECellType type);
+const char* ctypeName(ECellType type);
 
 ECellType mshTag2ctype(EMshTag type);
 
