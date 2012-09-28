@@ -188,6 +188,16 @@ void MeshIoMsh::readFileMsh(const char* filename, Mesh * mesh)
    * e contando o número de células.
    * --------------------------------------- */
   const int mesh_cell_msh_tag = mesh->cellMshTag();
+  
+  if (mshTag2ctype(EMshTag(mesh_cell_msh_tag)) != mesh->cellType())
+  {
+    //FEPIC_ASSERT(false, "invalid msh format", std::runtime_error);
+    printf("ERROR: ctype2mshTag() = %d\n", ctype2mshTag(mesh->cellType()));
+    printf("ERROR: cell->getMshTag() = %d\n", c_ptr->getMshTag());
+    throw;
+  }
+  
+  
   bool wrong_file_err=true;
   int  elem_number;               // contagem para verificação de erros.
   for (int k = 0; k < num_elms; ++k)

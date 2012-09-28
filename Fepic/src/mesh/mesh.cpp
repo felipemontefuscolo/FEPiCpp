@@ -37,13 +37,14 @@ Mesh::Mesh(ECellType fept, int spacedim)
 {
   FEPIC_CHECK(spacedim>=1 && spacedim<4, "invalid space dimension", std::runtime_error);
   
+  boost::scoped_ptr<Cell> cell(Cell::create(fept));
+
   _spacedim = spacedim; // BROKEN
   _cell_fep_tag = fept;
   _cell_msh_tag = ctype2mshTag(fept);
+  //_cell_msh_tag = cell->getMshTag();
   _dont_build_adjacency = true;
 
-  boost::scoped_ptr<Cell> cell(Cell::create(fept));
-  
   
   _is_parametric_cell = cell->isParametric();
   _cell_dim = cell->dim();
@@ -371,19 +372,17 @@ Corner* SMesh<CT>::createCorner() const
 }
 
 
-template<class CT>
-void SMesh<CT>::printInfo() const
+void Mesh::printInfo() const
 {
-  printf("elem type: %s\n",      ctypeName(CellT::fep_tag));
-  printf("space dim: %d\n",      spaceDim()                  );
-  printf("# nodes:   %d\n",      numNodes()                  );
-  printf("# cells:   %d\n",      numCells()                  );
-  printf("# facets:  %d\n",      numFacets()                 );
-  printf("# corners: %d\n",      numCorners()                );
+  printf("elem type: %s\n",       ctypeName(this->cellType()));
+  printf("space dim: %d\n", this->spaceDim()                  );
+  printf("# nodes:   %d\n", this->numNodes()                  );
+  printf("# cells:   %d\n", this->numCells()                  );
+  printf("# facets:  %d\n", this->numFacets()                 );
+  printf("# corners: %d\n", this->numCorners()                );
 }
 
-template<class CT>
-void SMesh<CT>::printStatistics() const
+void Mesh::printStatistics() const
 {
   printf("\n"
          "Cell list: \n"

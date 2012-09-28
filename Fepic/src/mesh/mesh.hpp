@@ -78,9 +78,11 @@ protected:
   template<class> friend class _MeshIterator;
   friend class MeshIoMsh;
 
+  // ==========================================================
+  // BEGIN
+  //                      Mesh Attributes
   //
-  // Mesh Attributes
-  //
+  //  
   CellList      _cellL;
   PointList     _pointL;
   FacetList     _facetL;
@@ -103,9 +105,20 @@ protected:
   int _n_facets_per_cell;
   int _n_corners_per_cell;
   int _n_corners_per_facet;
+  
+  
+public:  
+  Timer timer; // time measure
+protected:
+  ECellType _cell_fep_tag;
+  EMshTag   _cell_msh_tag;
+  bool      _dont_build_adjacency;  
+  
+  //  
   //
-  // End Mesh Attributes
-  //
+  //                      Mesh Attributes 
+  //  END
+  // ==========================================================
 
   /// constructor
   Mesh(ECellType fept=UNDEFINED_CELLT, int spacedim = -1);
@@ -121,14 +134,6 @@ protected:
   virtual Corner* decEnabledCorner(int &id) = 0;
 
 public:
-
-  // time measure
-  Timer timer;
-
-//protected:
-  ECellType _cell_fep_tag;
-  EMshTag   _cell_msh_tag;
-  bool      _dont_build_adjacency;
 
   virtual cell_iterator   cellBegin() = 0;
   virtual cell_iterator   cellEnd() = 0;
@@ -150,25 +155,56 @@ public:
 
   static Mesh* create(ECellType type, int spacedim = -1);
 
-  virtual int cellDim() const = 0;
-  virtual ECellType cellType() const = 0;
-  virtual EMshTag cellMshTag() const = 0;
+  int cellDim() const
+  {
+    return this->_cell_dim;
+  }
+  ECellType cellType() const
+  {
+    return this->_cell_fep_tag;
+  }
+  EMshTag cellMshTag() const
+  {
+    return this->_cell_msh_tag;
+  }
 
   virtual bool isVertex(CellElement const* p) const = 0;
   virtual bool inSingleCell(Point const* p) const = 0;
   virtual bool inSingleCell(Corner const* p) const = 0;
   virtual bool inSingleCell(Facet const* p) const = 0;
 
-  virtual int nodesPerCell() const = 0;
-  virtual int nodesPerFacet() const = 0;
-  virtual int nodesPerCorner() const = 0;
+  int nodesPerCell() const
+  {
+    return this->_n_nodes_per_cell;
+  }
 
-  virtual int verticesPerCell() const = 0;
-  virtual int verticesPerFacet() const = 0;
-  virtual int verticesPerCorner() const = 0;
+  int nodesPerFacet() const
+  {
+    return this->_n_nodes_per_facet;
+  }
 
-  virtual void printInfo() const = 0;
-  virtual void printStatistics() const = 0;
+  int nodesPerCorner() const
+  {
+    return this->_n_nodes_per_corner;
+  }
+
+  int verticesPerCell() const
+  {
+    return this->_n_vertices_per_cell;
+  }
+
+  int verticesPerFacet() const
+  {
+    return this->_n_vertices_per_facet;
+  }
+
+  int verticesPerCorner() const
+  {
+    return this->_n_vertices_per_corner;
+  }
+
+  void printInfo() const;
+  void printStatistics() const;
 
   /** Retorna a n-ésima celula (adivinha o tipo de célula pelo tipo da malha)
   */
@@ -1076,11 +1112,6 @@ public:
    */
 
 
-  int cellDim() const
-  {
-    return CellT::dim;
-  }
-
   ECellType cellType() const
   {
     return CellT::fep_tag;
@@ -1090,40 +1121,6 @@ public:
   {
     return CellT::msh_tag;
   }
-
-  int nodesPerCell() const
-  {
-    return CellT::n_nodes;
-  }
-
-  int nodesPerFacet() const
-  {
-    return CellT::n_nodes_per_facet;
-  }
-
-  int nodesPerCorner() const
-  {
-    return CellT::Derived::n_nodes_per_facet;
-  }
-
-  int verticesPerCell() const
-  {
-    return CellT::n_vertices;
-  }
-
-  int verticesPerFacet() const
-  {
-    return CellT::n_vertices_per_facet;
-  }
-
-  int verticesPerCorner() const
-  {
-    return CellT::Derived::n_vertices_per_facet;
-  }
-
-  void printInfo() const;
-
-  void printStatistics() const;
 
   /// create a cell (but not put in the mesh)
   Cell*   createCell() const;

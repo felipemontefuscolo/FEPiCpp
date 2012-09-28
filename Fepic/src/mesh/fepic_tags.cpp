@@ -116,17 +116,17 @@ namespace _FepicTagsInitializers
 
     tab[log2_i32(POINT1       ) ] = MSH_PNT;
     tab[log2_i32(EDGE2        ) ] = MSH_LIN_2 ;
-    tab[log2_i32(EDGE3        ) ] = MSH_TRI_3 ;
-    tab[log2_i32(TRIANGLE3    ) ] = MSH_QUA_4 ;
-    tab[log2_i32(TRIANGLE6    ) ] = MSH_TET_4 ;
-    tab[log2_i32(QUADRANGLE4  ) ] = MSH_HEX_8 ;
-    tab[log2_i32(QUADRANGLE8  ) ] = MSH_LIN_3 ;
-    tab[log2_i32(QUADRANGLE9  ) ] = MSH_TRI_6 ;
-    tab[log2_i32(TETRAHEDRON4 ) ] = MSH_QUA_9 ;
+    tab[log2_i32(EDGE3        ) ] = MSH_LIN_3 ;
+    tab[log2_i32(TRIANGLE3    ) ] = MSH_TRI_3 ;
+    tab[log2_i32(TRIANGLE6    ) ] = MSH_TRI_6 ;
+    tab[log2_i32(QUADRANGLE4  ) ] = MSH_QUA_4 ;
+    tab[log2_i32(QUADRANGLE8  ) ] = MSH_QUA_8 ;
+    tab[log2_i32(QUADRANGLE9  ) ] = MSH_QUA_9 ;
+    tab[log2_i32(TETRAHEDRON4 ) ] = MSH_TET_4 ;
     tab[log2_i32(TETRAHEDRON10) ] = MSH_TET_10;
-    tab[log2_i32(HEXAHEDRON8  ) ] = MSH_HEX_27;
-    tab[log2_i32(HEXAHEDRON20 ) ] = MSH_QUA_8 ;
-    tab[log2_i32(HEXAHEDRON27 ) ] = MSH_HEX_20;
+    tab[log2_i32(HEXAHEDRON8  ) ] = MSH_HEX_8 ;
+    tab[log2_i32(HEXAHEDRON20 ) ] = MSH_HEX_20;
+    tab[log2_i32(HEXAHEDRON27 ) ] = MSH_HEX_27;
 
     return tab;
   }
