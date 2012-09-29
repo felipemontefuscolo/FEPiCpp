@@ -59,6 +59,11 @@ public:
   */
   Point() {}
 
+  static Point* create()
+  {
+    return new Point();
+  }
+
   /** Define a coordenada deste ponto.
   *  @param coord um vetor com a coordenada.
   */

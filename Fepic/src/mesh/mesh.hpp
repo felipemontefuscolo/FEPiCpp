@@ -168,10 +168,14 @@ public:
     return this->_cell_msh_tag;
   }
 
-  virtual bool isVertex(CellElement const* p) const = 0;
-  virtual bool inSingleCell(Point const* p) const = 0;
-  virtual bool inSingleCell(Corner const* p) const = 0;
-  virtual bool inSingleCell(Facet const* p) const = 0;
+  bool isVertex(CellElement const* p) const
+  {
+    return p->getPosition() < this->numVerticesPerCell();
+  }  
+  
+  bool inSingleCell(Point const* p) const;
+  bool inSingleCell(Corner const* p) const;
+  bool inSingleCell(Facet const* p) const;
 
   int nodesPerCell() const
   {
@@ -524,10 +528,10 @@ public:
   Facet*  pushFacet(int *id);
   Corner* pushCorner(int *id);
 
-  virtual Cell*   createCell() const = 0;
-  virtual Point*  createPoint() const = 0;
-  virtual Facet*  createFacet() const = 0;
-  virtual Corner* createCorner() const = 0;
+  Cell*   createCell() const;
+  Point*  createPoint() const;
+  Facet*  createFacet() const;
+  Corner* createCorner() const;
 
   /** Retorna o número células
   *  @note não conta com o/a(s) marcado/a(s) como killed.
@@ -1093,43 +1097,6 @@ public:
 
   // ----------------------------------------------------------------------------------------------------------------------
 
-  // TODO: linear only ...
-  void getCenterCoord(Cell const* cell, Real* x) const;
-  void getCenterCoord(Facet const* facet, Real* x) const;
-  void getCenterCoord(Corner const* corner, Real* x) const;
-
-  bool isVertex(CellElement const* p) const
-  {
-    return p->getPosition() < CellT::n_vertices;
-  }
-
-  bool inSingleCell(Point const* p) const;
-  bool inSingleCell(Corner const* p) const;
-  bool inSingleCell(Facet const* p) const;
-
-  /** @brief estimate of how the containers will grow.
-   *  @param factor the size
-   */
-
-
-  ECellType cellType() const
-  {
-    return CellT::fep_tag;
-  }
-
-  EMshTag cellMshTag() const
-  {
-    return CellT::msh_tag;
-  }
-
-  /// create a cell (but not put in the mesh)
-  Cell*   createCell() const;
-  /// create a point (but not put in the mesh)
-  Point*  createPoint() const;
-  /// create a facet (but not put in the mesh)
-  Facet*  createFacet() const;
-  /// create a corner (but not put in the mesh)
-  Corner* createCorner() const;
           
   /** Check if the vertices form a facet of this mesh, if so returns facet's id.
    * @param[in] vtcs vector with the ids of the vertices.

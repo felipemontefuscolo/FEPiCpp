@@ -37,6 +37,11 @@ public:
   
   Facet() : _bound_comp_id(-1) {}
   
+  static Facet* create()
+  {
+    return new Facet();
+  }
+  
   void setBoundaryComponentId(int id)
   {
     _bound_comp_id=id;

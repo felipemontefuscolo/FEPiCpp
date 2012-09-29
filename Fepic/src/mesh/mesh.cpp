@@ -347,28 +347,24 @@ Corner* Mesh::pushCorner(int *corner_id)
 
 
 
-template<class CT>
-Cell* SMesh<CT>::createCell() const
+Cell* Mesh::createCell() const
 {
-  return new CT();
+  return Cell::create(this->cellType());
 }
 
-template<class CT>
-Point* SMesh<CT>::createPoint() const
+Point* Mesh::createPoint() const
 {
-  return new PointT();
+  return Point::create();
 }
 
-template<class CT>
-Facet* SMesh<CT>::createFacet() const
+Facet* Mesh::createFacet() const
 {
-  return new FacetT();
+  return Facet::create();
 }
 
-template<class CT>
-Corner* SMesh<CT>::createCorner() const
+Corner* Mesh::createCorner() const
 {
-  return new CornerT();
+  return Corner::create();
 }
 
 
@@ -1711,43 +1707,48 @@ bool SMesh<CT>::getCornerIdFromVertices(int const* vtcs, int &rid)
 }
 
 
-template<class CT>
-bool SMesh<CT>::inSingleCell(Point const* p) const
+bool Mesh::inSingleCell(Point const* p) const
 {
-  int iC  = static_cast<PointT const*>(p)->getIncidCell();
-  int viC = static_cast<PointT const*>(p)->getPosition();
+  int const nvpc = this->numVerticesPerCell();
+  int const nrpc = this->numCornersPerCell();
+  int const nfpc = this->numFacetsPerCell();
+  int const cdim = this->cellDim();
+  
+  int iC  = p->getIncidCell();
+  int viC = p->getPosition();
 
-  Cell const* cell = MeshT::getCellPtr(iC);
+  Cell const* cell = this->getCellPtr(iC);
 
-  if (viC<CellT::n_vertices) // is a vertex
+  if (viC<nvpc) // is a vertex
   {
     int counter = 0;
-    for (int fv = 0; fv<CT::dim; ++fv) // for each incident facet
+    for (int fv = 0; fv<cdim; ++fv) // for each incident facet
     {
-      int f = CT::_table_vC_x_fC[ viC ][ fv ];
+      int f = cell->table_vC_x_fC( viC , fv );
       if (cell->getIncidCell(f) < 0)
         ++counter;
     }
-    if (counter == CT::dim)
+    if (counter == cdim)
       return true;
     else
       return false;
   }
   else
-  if (viC<CellT::n_vertices + CellT::n_corners) // is an edge vertex
+  if (viC<nvpc + nrpc) // is an edge vertex
   {
-    if (CT::dim == 1) return true;
-
-    if (CT::dim == 2)
-      return cell->getIncidCell(viC - CT::n_vertices) < 0;
-
-    if (CT::dim == 3)
+    if (cdim == 1)
+      return true;
+    else
+    if (cdim == 2)
+      return cell->getIncidCell(viC - nvpc) < 0;
+    else
+    //if (cdim == 3)
     {
       int counter = 0;
       for (int fe = 0; fe < 2; ++fe) // for each incident facet
       {
-        const int edge_lid = viC - CT::n_vertices;
-        int f = CT::_table_bC_x_fC[ edge_lid ][ fe ];
+        const int edge_lid = viC - nvpc;
+        int f = cell->table_bC_x_fC( edge_lid , fe );
         if (cell->getIncidCell(f) < 0)
           ++counter;
       }
@@ -1756,14 +1757,15 @@ bool SMesh<CT>::inSingleCell(Point const* p) const
       else
         return false;
     }
-
+  
   }
   else
-  if (viC<CellT::n_vertices + CellT::n_corners + CellT::n_facets) // is an face vertex
+  if (viC<nvpc + nrpc + nfpc) // is an face vertex
   {
-    if (CT::dim < 3) return true;
+    if (cdim < 3)
+      return true;
 
-    int f = viC - CT::n_vertices - CT::n_corners;
+    int f = viC - nvpc - nrpc;
     return cell->getIncidCell(f) < 0;
   }
   else // is a volume point
@@ -1774,18 +1776,18 @@ bool SMesh<CT>::inSingleCell(Point const* p) const
 }
 
 // only dim = 3
-template<class CT>
-bool SMesh<CT>::inSingleCell(Corner const* r) const
+bool Mesh::inSingleCell(Corner const* r) const
 {
-  if (CT::dim < 2)
+  int const cdim = this->cellDim();
+  if (cdim < 2)
     return false;
 
-  int iC  = static_cast<CornerT const*>(r)->getIncidCell();
-  int eiC = static_cast<CornerT const*>(r)->getPosition();
+  int iC  = r->getIncidCell();
+  int eiC = r->getPosition();
 
-  Cell const* cell = MeshT::getCellPtr(iC);
+  Cell const* cell = this->getCellPtr(iC);
 
-  if (CT::dim==2)
+  if (cdim==2)
   {
     Point const* p = this->getNodePtr(cell->getNodeId(eiC));
     return this->inSingleCell(p);
@@ -1794,7 +1796,7 @@ bool SMesh<CT>::inSingleCell(Corner const* r) const
   int counter = 0;
   for (int fe = 0; fe < 2; ++fe) // for each incident facet
   {
-    int f = CT::_table_bC_x_fC[ eiC ][ fe ];
+    int f = cell->table_bC_x_fC( eiC , fe );
     if (cell->getIncidCell(f) < 0)
       ++counter;
   }
@@ -1804,13 +1806,14 @@ bool SMesh<CT>::inSingleCell(Corner const* r) const
     return false;
 
 }
-template<class CT>
-bool SMesh<CT>::inSingleCell(Facet const* fa) const
-{
-  int iC  = static_cast<FacetT const*>(fa)->getIncidCell();
-  int fiC = static_cast<FacetT const*>(fa)->getPosition();
 
-  if (MeshT::getCellPtr(iC)->getIncidCell(fiC)<0)
+
+bool Mesh::inSingleCell(Facet const* fa) const
+{
+  int iC  = fa->getIncidCell();
+  int fiC = fa->getPosition();
+
+  if (this->getCellPtr(iC)->getIncidCell(fiC)<0)
     return true;
   else
     return false;

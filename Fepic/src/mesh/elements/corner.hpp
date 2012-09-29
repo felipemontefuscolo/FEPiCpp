@@ -36,6 +36,11 @@ public:
   
   Corner() {}
 
+  static Corner* create()
+  {
+    return new Corner();
+  }
+
   void setAllMembers(int const* ic, int const* pos, int const* tag, int const* flags)
   {
     if (ic != NULL)
