@@ -28,7 +28,6 @@
 template<class> class BaseHandler;
 template<class> class ConstBaseHandler;
 
-template<class> class SMesh;
 class Mesh;
 class Cell;
 
@@ -37,7 +36,6 @@ class Cell;
 template<class EntityType>
 class BaseHandler
 {
-  template<class> friend class SMesh;
   friend class Mesh;
   
   typedef BaseHandler Self;
@@ -127,7 +125,6 @@ protected:
 template<class EntityType>
 class ConstBaseHandler
 {
-  template<class> friend class SMesh;
   friend class Mesh;
   
   typedef ConstBaseHandler Self;

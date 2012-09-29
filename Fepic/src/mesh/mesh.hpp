@@ -33,7 +33,6 @@
 #include "boost/ptr_container/ptr_vector.hpp"
 #include "boost/ptr_container/ptr_deque.hpp"
 
-template<class CT> class SMesh;
 
 typedef _MeshIterator<Cell>        cell_iterator;
 typedef _MeshIterator<Point>       point_iterator;
@@ -125,38 +124,10 @@ protected:
   /// constructor
   Mesh(ECellType fept=UNDEFINED_CELLT, int spacedim = -1);
 public:
-  virtual ~Mesh() = 0;
-protected:
+  ~Mesh() {};
 
-  virtual Cell*   incEnabledCell(int &id) = 0;
-  virtual Point*  incEnabledPoint(int &id) = 0;
-  virtual Facet*  incEnabledFacet(int &id) = 0;
-  virtual Corner* incEnabledCorner(int &id) = 0;
-
-  virtual Cell*   decEnabledCell(int &id) = 0;
-  virtual Point*  decEnabledPoint(int &id) = 0;
-  virtual Facet*  decEnabledFacet(int &id) = 0;
-  virtual Corner* decEnabledCorner(int &id) = 0;
 
 public:
-
-  virtual cell_iterator   cellBegin() = 0;
-  virtual cell_iterator   cellEnd() = 0;
-  virtual point_iterator  pointBegin() = 0;
-  virtual point_iterator  pointEnd() = 0;
-  virtual facet_iterator  facetBegin() = 0;
-  virtual facet_iterator  facetEnd() = 0;
-  virtual corner_iterator cornerBegin() = 0;
-  virtual corner_iterator cornerEnd() = 0;
-
-  virtual cell_iterator   cellBegin(int tid, int nthreads) = 0;
-  virtual cell_iterator   cellEnd(int tid, int nthreads) = 0;
-  virtual point_iterator  pointBegin(int tid, int nthreads) = 0;
-  virtual point_iterator  pointEnd(int tid, int nthreads) = 0;
-  virtual facet_iterator  facetBegin(int tid, int nthreads) = 0;
-  virtual facet_iterator  facetEnd(int tid, int nthreads) = 0;
-  virtual corner_iterator cornerBegin(int tid, int nthreads) = 0;
-  virtual corner_iterator cornerEnd(int tid, int nthreads) = 0;
 
   static Mesh* create(ECellType type, int spacedim = -1);
 
@@ -1162,45 +1133,6 @@ public:
     
   }
 
-
-};
-
-
-/* ====================================================
-
-          ____  __  __ _____ ____  _   _
-         / ___||  \/  | ____/ ___|| | | |
-         \___ \| |\/| |  _| \___ \| |_| |
-          ___) | |  | | |___ ___) |  _  |
-         |____/|_|  |_|_____|____/|_| |_|
-
-
-
-*/ // =================================================
-
-template<class Cell_Type>
-class SMesh : public Mesh
-{
-  template<class> friend class _MeshIterator;
-  friend class Mesh;
-  friend class MeshIoMsh;
-
-public:
-  typedef Cell_Type               CellT;
-  typedef Point                   PointT;
-  typedef Facet                   FacetT;
-  typedef Corner                  CornerT;
-  typedef SMesh<CellT>            MeshT;
-
-  explicit SMesh(int spacedim) : Mesh(CellT::fep_tag, spacedim)
-  {
-  };
-
-  ~SMesh(){};
-
-private:
-  SMesh(SMesh const&) : Mesh() {};
-
 protected:
   Cell*   incEnabledCell(int &id);
   Point*  incEnabledPoint(int &id);
@@ -1232,14 +1164,12 @@ public:
   corner_iterator cornerBegin(int tid, int nthreads);
   corner_iterator cornerEnd(int tid, int nthreads);
 
-  // --------------------------------------------------- VERTEX STAR ---------------------------------------------------
 
-
-  // ----------------------------------------------------------------------------------------------------------------------
-          
 };
 
 
-#endif // SMesh
+
+
+#endif
 
 

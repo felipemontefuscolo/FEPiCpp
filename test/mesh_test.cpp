@@ -1207,10 +1207,10 @@ TEST(AuxSetConnectedComponentIdTest, WithTri3)
 {
   MeshIoMsh msh_reader;
   MeshIoVtk vtk_printer;
-  SMesh<Triangle3> *mesh;
+  Mesh *mesh;
   int dim = 3;
 
-  mesh = (SMesh<Triangle3>*)Mesh::create(TRIANGLE3,dim);
+  mesh = Mesh::create(TRIANGLE3,dim);
   msh_reader.readFileMsh("meshes/singular_tri3a.msh", mesh);
   vtk_printer.attachMesh(mesh);
   //vtk_printer.writeVtk("meshes/outtest/simpedge2.vtk");
@@ -1338,10 +1338,10 @@ TEST(SetBoundaryComponentIdTest, WithTri3)
 {
   MeshIoMsh msh_reader;
   MeshIoVtk vtk_printer;
-  SMesh<Triangle3> *mesh;
+  Mesh *mesh;
   int dim = 3;
 
-  mesh = (SMesh<Triangle3>*)Mesh::create(TRIANGLE3,dim);
+  mesh = Mesh::create(TRIANGLE3,dim);
   msh_reader.readFileMsh("meshes/singular_tri3a.msh", mesh);
   //vtk_printer.attachMesh(mesh);
   //vtk_printer.writeVtk("meshes/outtest/simpedge2.vtk");
@@ -1376,10 +1376,10 @@ TEST(PushIncidCell2Point, WithSingularVertex)
 {
   MeshIoMsh msh_reader;
   MeshIoVtk vtk_printer;
-  SMesh<Triangle3> *mesh;
+  Mesh *mesh;
   int dim = 3;
 
-  mesh = (SMesh<Triangle3>*)Mesh::create(TRIANGLE3,dim);
+  mesh = Mesh::create(TRIANGLE3,dim);
   
   mesh->qBuildAdjacency(false);
   

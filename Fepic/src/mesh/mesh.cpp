@@ -63,8 +63,6 @@ Mesh::Mesh(ECellType fept, int spacedim)
   timer = Timer();
 }
 
-Mesh::~Mesh() {}
-
 /** @param nc_ number of cells.
  *  @param type mesh cell type.
  */
@@ -130,10 +128,10 @@ unsigned Mesh::estimateNumCorners(unsigned nc_, ECellType type)
   return &(*it)
 
 
-template<class CT> Cell*   SMesh<CT>::incEnabledCell(int &id)   { FEPIC_INC_ITERATOR_FUNC(CellIteratorT,   _cellL);   }
-template<class CT> Point*  SMesh<CT>::incEnabledPoint(int &id)  { FEPIC_INC_ITERATOR_FUNC(PointIteratorT,  _pointL);  }
-template<class CT> Facet*  SMesh<CT>::incEnabledFacet(int &id)  { FEPIC_INC_ITERATOR_FUNC(FacetIteratorT,  _facetL);  }
-template<class CT> Corner* SMesh<CT>::incEnabledCorner(int &id) { FEPIC_INC_ITERATOR_FUNC(CornerIteratorT, _cornerL); }
+Cell*   Mesh::incEnabledCell(int &id)   { FEPIC_INC_ITERATOR_FUNC(CellIteratorT,   _cellL);   }
+Point*  Mesh::incEnabledPoint(int &id)  { FEPIC_INC_ITERATOR_FUNC(PointIteratorT,  _pointL);  }
+Facet*  Mesh::incEnabledFacet(int &id)  { FEPIC_INC_ITERATOR_FUNC(FacetIteratorT,  _facetL);  }
+Corner* Mesh::incEnabledCorner(int &id) { FEPIC_INC_ITERATOR_FUNC(CornerIteratorT, _cornerL); }
 
 #undef FEPIC_INC_ITERATOR_FUNC
 
@@ -148,10 +146,10 @@ template<class CT> Corner* SMesh<CT>::incEnabledCorner(int &id) { FEPIC_INC_ITER
   }                                                           \
   return &(*it)
 
-template<class CT> Cell*   SMesh<CT>::decEnabledCell(int &id)    { FEPIC_DEC_ITERATOR_FUNC(CellIteratorT,   _cellL);   }
-template<class CT> Point*  SMesh<CT>::decEnabledPoint(int &id)   { FEPIC_DEC_ITERATOR_FUNC(PointIteratorT,  _pointL);  }
-template<class CT> Facet*  SMesh<CT>::decEnabledFacet(int &id)   { FEPIC_DEC_ITERATOR_FUNC(FacetIteratorT,  _facetL);  }
-template<class CT> Corner* SMesh<CT>::decEnabledCorner(int &id)  { FEPIC_DEC_ITERATOR_FUNC(CornerIteratorT, _cornerL); }
+Cell*   Mesh::decEnabledCell(int &id)    { FEPIC_DEC_ITERATOR_FUNC(CellIteratorT,   _cellL);   }
+Point*  Mesh::decEnabledPoint(int &id)   { FEPIC_DEC_ITERATOR_FUNC(PointIteratorT,  _pointL);  }
+Facet*  Mesh::decEnabledFacet(int &id)   { FEPIC_DEC_ITERATOR_FUNC(FacetIteratorT,  _facetL);  }
+Corner* Mesh::decEnabledCorner(int &id)  { FEPIC_DEC_ITERATOR_FUNC(CornerIteratorT, _cornerL); }
 
 #undef FEPIC_DEC_ITERATOR_FUNC
 
@@ -174,14 +172,14 @@ template<class CT> Corner* SMesh<CT>::decEnabledCorner(int &id)  { FEPIC_DEC_ITE
 
 
 
-template<class CT> cell_iterator   SMesh<CT>::cellBegin()  { return cell_iterator  (this, &(*_cellL.begin()  ), 0                             );}
-template<class CT> cell_iterator   SMesh<CT>::cellEnd()    { return cell_iterator  (this, &(*_cellL.end()    ), this->numCellsTotal()  );}
-template<class CT> point_iterator  SMesh<CT>::pointBegin() { return point_iterator (this, &(*_pointL.begin() ), 0                             );}
-template<class CT> point_iterator  SMesh<CT>::pointEnd()   { return point_iterator (this, &(*_pointL.end()   ), this->numNodesTotal()  );}
-template<class CT> facet_iterator  SMesh<CT>::facetBegin() { return facet_iterator (this, &(*_facetL.begin() ), 0                             );}
-template<class CT> facet_iterator  SMesh<CT>::facetEnd()   { return facet_iterator (this, &(*_facetL.end()   ), this->numFacetsTotal() );}
-template<class CT> corner_iterator SMesh<CT>::cornerBegin(){ return corner_iterator(this, &(*_cornerL.begin()), 0                             );}
-template<class CT> corner_iterator SMesh<CT>::cornerEnd()  { return corner_iterator(this, &(*_cornerL.end()  ), this->numCornersTotal());}
+cell_iterator   Mesh::cellBegin()  { return cell_iterator  (this, &(*_cellL.begin()  ), 0                      );}
+cell_iterator   Mesh::cellEnd()    { return cell_iterator  (this, &(*_cellL.end()    ), this->numCellsTotal()  );}
+point_iterator  Mesh::pointBegin() { return point_iterator (this, &(*_pointL.begin() ), 0                      );}
+point_iterator  Mesh::pointEnd()   { return point_iterator (this, &(*_pointL.end()   ), this->numNodesTotal()  );}
+facet_iterator  Mesh::facetBegin() { return facet_iterator (this, &(*_facetL.begin() ), 0                      );}
+facet_iterator  Mesh::facetEnd()   { return facet_iterator (this, &(*_facetL.end()   ), this->numFacetsTotal() );}
+corner_iterator Mesh::cornerBegin(){ return corner_iterator(this, &(*_cornerL.begin()), 0                      );}
+corner_iterator Mesh::cornerEnd()  { return corner_iterator(this, &(*_cornerL.end()  ), this->numCornersTotal());}
 
 
 #define FEPIC_BEGIN_ITERATOR_FUNC(obj_type, iter_type, _objL)       \
@@ -194,14 +192,14 @@ template<class CT> corner_iterator SMesh<CT>::cornerEnd()  { return corner_itera
   obj_type * a =  &(*_objL.end(tid, nthreads, &end_idx));         \
   return iter_type  (this, a, end_idx)
 
-template<class CT> cell_iterator   SMesh<CT>::cellBegin  (int tid, int nthreads) {FEPIC_BEGIN_ITERATOR_FUNC(Cell,   cell_iterator,   _cellL);}
-template<class CT> cell_iterator   SMesh<CT>::cellEnd    (int tid, int nthreads) {FEPIC_END_ITERATOR_FUNC  (Cell,   cell_iterator,   _cellL);}
-template<class CT> point_iterator  SMesh<CT>::pointBegin (int tid, int nthreads) {FEPIC_BEGIN_ITERATOR_FUNC(PointT,  point_iterator,  _pointL);}
-template<class CT> point_iterator  SMesh<CT>::pointEnd   (int tid, int nthreads) {FEPIC_END_ITERATOR_FUNC  (PointT,  point_iterator,  _pointL);}
-template<class CT> facet_iterator  SMesh<CT>::facetBegin (int tid, int nthreads) {FEPIC_BEGIN_ITERATOR_FUNC(FacetT,  facet_iterator,  _facetL);}
-template<class CT> facet_iterator  SMesh<CT>::facetEnd   (int tid, int nthreads) {FEPIC_END_ITERATOR_FUNC  (FacetT,  facet_iterator,  _facetL);}
-template<class CT> corner_iterator SMesh<CT>::cornerBegin(int tid, int nthreads) {FEPIC_BEGIN_ITERATOR_FUNC(CornerT, corner_iterator, _cornerL);}
-template<class CT> corner_iterator SMesh<CT>::cornerEnd  (int tid, int nthreads) {FEPIC_END_ITERATOR_FUNC  (CornerT, corner_iterator, _cornerL);}
+cell_iterator   Mesh::cellBegin  (int tid, int nthreads) {FEPIC_BEGIN_ITERATOR_FUNC(Cell,   cell_iterator,   _cellL);}
+cell_iterator   Mesh::cellEnd    (int tid, int nthreads) {FEPIC_END_ITERATOR_FUNC  (Cell,   cell_iterator,   _cellL);}
+point_iterator  Mesh::pointBegin (int tid, int nthreads) {FEPIC_BEGIN_ITERATOR_FUNC(Point,  point_iterator,  _pointL);}
+point_iterator  Mesh::pointEnd   (int tid, int nthreads) {FEPIC_END_ITERATOR_FUNC  (Point,  point_iterator,  _pointL);}
+facet_iterator  Mesh::facetBegin (int tid, int nthreads) {FEPIC_BEGIN_ITERATOR_FUNC(Facet,  facet_iterator,  _facetL);}
+facet_iterator  Mesh::facetEnd   (int tid, int nthreads) {FEPIC_END_ITERATOR_FUNC  (Facet,  facet_iterator,  _facetL);}
+corner_iterator Mesh::cornerBegin(int tid, int nthreads) {FEPIC_BEGIN_ITERATOR_FUNC(Corner, corner_iterator, _cornerL);}
+corner_iterator Mesh::cornerEnd  (int tid, int nthreads) {FEPIC_END_ITERATOR_FUNC  (Corner, corner_iterator, _cornerL);}
 
 #undef FEPIC_BEGIN_ITERATOR_FUNC
 #undef FEPIC_END_ITERATOR_FUNC
@@ -1739,21 +1737,6 @@ void Mesh::getCenterCoord(Corner const* corner, Real* Xc) const
 }
 
 
-template class SMesh<Edge2>;
-template class SMesh<Edge3>;
-template class SMesh<Triangle3>;
-template class SMesh<Triangle6>;
-template class SMesh<Quadrangle4>;
-template class SMesh<Quadrangle8>;
-template class SMesh<Quadrangle9>;
-template class SMesh<Tetrahedron4>;
-template class SMesh<Tetrahedron10>;
-template class SMesh<Hexahedron8>;
-template class SMesh<Hexahedron20>;
-template class SMesh<Hexahedron27>;
-
-
-
 Mesh* Mesh::create(ECellType type, int spacedim)
 {
 
@@ -1762,26 +1745,45 @@ Mesh* Mesh::create(ECellType type, int spacedim)
 
   switch (type)
   {
-    case EDGE2        : {return static_cast<Mesh*>(  new SMesh<Edge2>          (spacedim) );}
-    case EDGE3        : {return static_cast<Mesh*>(  new SMesh<Edge3>          (spacedim) );}
-    case TRIANGLE3    : {return static_cast<Mesh*>(  new SMesh<Triangle3>     (spacedim) );}
-    case TRIANGLE6    : {return static_cast<Mesh*>(  new SMesh<Triangle6>     (spacedim) );}
-    case QUADRANGLE4  : {return static_cast<Mesh*>(  new SMesh<Quadrangle4>   (spacedim) );}
-    case QUADRANGLE8  : {return static_cast<Mesh*>(  new SMesh<Quadrangle8>   (spacedim) );}
-    case QUADRANGLE9  : {return static_cast<Mesh*>(  new SMesh<Quadrangle9>   (spacedim) );}
-    case TETRAHEDRON4 : {return static_cast<Mesh*>(  new SMesh<Tetrahedron4>  (spacedim) );}
-    case TETRAHEDRON10: {return static_cast<Mesh*>(  new SMesh<Tetrahedron10> (spacedim) );}
-    case HEXAHEDRON8  : {return static_cast<Mesh*>(  new SMesh<Hexahedron8>   (spacedim) );}
-    case HEXAHEDRON20 : {return static_cast<Mesh*>(  new SMesh<Hexahedron20>  (spacedim) );}
-    case HEXAHEDRON27 : {return static_cast<Mesh*>(  new SMesh<Hexahedron27>  (spacedim) );}
+    case EDGE2        : {return new Mesh(type, spacedim);}
+    case EDGE3        : {return new Mesh(type, spacedim);}
+    case TRIANGLE3    : {return new Mesh(type, spacedim);}
+    case TRIANGLE6    : {return new Mesh(type, spacedim);}
+    case QUADRANGLE4  : {return new Mesh(type, spacedim);}
+    case QUADRANGLE8  : {return new Mesh(type, spacedim);}
+    case QUADRANGLE9  : {return new Mesh(type, spacedim);}
+    case TETRAHEDRON4 : {return new Mesh(type, spacedim);}
+    case TETRAHEDRON10: {return new Mesh(type, spacedim);}
+    case HEXAHEDRON8  : {return new Mesh(type, spacedim);}
+    case HEXAHEDRON20 : {return new Mesh(type, spacedim);}
+    case HEXAHEDRON27 : {return new Mesh(type, spacedim);}
     default:
     {
       FEPIC_CHECK(false, "invalid or not supported mesh type", std::invalid_argument);
       return NULL;
     }
-      
-      
   }
+
+  //~ switch (type)
+  //~ {
+    //~ case EDGE2        : {return static_cast<Mesh*>(  new SMesh<Edge2>          (spacedim) );}
+    //~ case EDGE3        : {return static_cast<Mesh*>(  new SMesh<Edge3>          (spacedim) );}
+    //~ case TRIANGLE3    : {return static_cast<Mesh*>(  new SMesh<Triangle3>     (spacedim) );}
+    //~ case TRIANGLE6    : {return static_cast<Mesh*>(  new SMesh<Triangle6>     (spacedim) );}
+    //~ case QUADRANGLE4  : {return static_cast<Mesh*>(  new SMesh<Quadrangle4>   (spacedim) );}
+    //~ case QUADRANGLE8  : {return static_cast<Mesh*>(  new SMesh<Quadrangle8>   (spacedim) );}
+    //~ case QUADRANGLE9  : {return static_cast<Mesh*>(  new SMesh<Quadrangle9>   (spacedim) );}
+    //~ case TETRAHEDRON4 : {return static_cast<Mesh*>(  new SMesh<Tetrahedron4>  (spacedim) );}
+    //~ case TETRAHEDRON10: {return static_cast<Mesh*>(  new SMesh<Tetrahedron10> (spacedim) );}
+    //~ case HEXAHEDRON8  : {return static_cast<Mesh*>(  new SMesh<Hexahedron8>   (spacedim) );}
+    //~ case HEXAHEDRON20 : {return static_cast<Mesh*>(  new SMesh<Hexahedron20>  (spacedim) );}
+    //~ case HEXAHEDRON27 : {return static_cast<Mesh*>(  new SMesh<Hexahedron27>  (spacedim) );}
+    //~ default:
+    //~ {
+      //~ FEPIC_CHECK(false, "invalid or not supported mesh type", std::invalid_argument);
+      //~ return NULL;
+    //~ }
+  //~ }
 }
 
 

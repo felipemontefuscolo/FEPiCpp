@@ -26,7 +26,6 @@
 #include <iterator>
 #include "basehandler.hpp"
 
-template<class> class SMesh;
 class Mesh;
 class Cell;
 
@@ -34,7 +33,6 @@ class Cell;
 template<class EntityType>
 class _MeshIterator : public BaseHandler<EntityType>
 {
-  template<class> friend class SMesh;
   friend class Mesh;
   
   typedef _MeshIterator Self;
@@ -65,7 +63,6 @@ public:
 template<class EntityType>
 class _MeshConstIterator : public ConstBaseHandler<EntityType>
 {
-  template<class> friend class SMesh;
   friend class Mesh;
   
   typedef _MeshConstIterator Self;
