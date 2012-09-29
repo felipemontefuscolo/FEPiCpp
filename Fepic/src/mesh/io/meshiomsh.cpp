@@ -392,7 +392,9 @@ void MeshIoMsh::readFileMsh(const char* filename, Mesh * mesh)
       {
         if (mesh->getCornerIdFromVertices(bnodes, corner_id))
         {
-          mesh->getCornerPtr(abs(corner_id))->setTag(physical); //std::cout << (++TESTE) << std::endl;
+          Corner *r_ptr = mesh->getCornerPtr(abs(corner_id));
+          int const n_corns = mesh->numCornersTotal();
+          r_ptr->setTag(physical); //std::cout << (++TESTE) << std::endl;
         }
         else if (mesh->isVertex(mesh->getNodePtr(bnodes[0])) ) // if is vertex
             printf("WARNING: INVALID CORNER IN INPUT MESH!\n");

@@ -71,6 +71,9 @@ public:
   virtual void getVerticesId(int * begin) const = 0;
   virtual void getFacetsId(int * begin) const = 0;
   virtual void getCornersId(int * begin) const = 0;
+  virtual bool hasEdgeNodes() const = 0;
+  virtual bool hasFaceNodes() const = 0;
+  virtual bool hasVolumeNodes() const = 0;
   virtual bool inBoundary() const = 0;
   virtual bool isCorner(int const* vtcs, int &lrid) const = 0;
   virtual bool isFacet(int const* vtcs, int &lfid) const = 0;

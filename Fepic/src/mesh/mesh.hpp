@@ -105,7 +105,9 @@ protected:
   int _n_facets_per_cell;
   int _n_corners_per_cell;
   int _n_corners_per_facet;
-  
+  bool _cell_has_edge_nodes;
+  bool _cell_has_face_nodes;
+  bool _cell_has_volume_nodes;
   
 public:  
   Timer timer; // time measure
@@ -122,6 +124,9 @@ protected:
 
   /// constructor
   Mesh(ECellType fept=UNDEFINED_CELLT, int spacedim = -1);
+public:
+  virtual ~Mesh() = 0;
+protected:
 
   virtual Cell*   incEnabledCell(int &id) = 0;
   virtual Point*  incEnabledPoint(int &id) = 0;
@@ -176,6 +181,19 @@ public:
   bool inSingleCell(Point const* p) const;
   bool inSingleCell(Corner const* p) const;
   bool inSingleCell(Facet const* p) const;
+
+  bool cellHasEdgeNodes() const
+  {
+    return this->_cell_has_edge_nodes;
+  }
+  bool cellHasFaceNodes() const
+  {
+    return this->_cell_has_face_nodes;
+  }
+  bool cellHasVolumeNodes() const
+  {
+    return this->_cell_has_volume_nodes;
+  };
 
   int nodesPerCell() const
   {
@@ -247,6 +265,44 @@ public:
       return NULL;
   }
 
+  /** Retorna a n-ésima celula (adivinha o tipo de célula pelo tipo da malha)
+  */
+  Cell const* getCellPtr(int nth) const
+  {
+    if (unsigned(nth)<this->_cellL.totalSize())
+      return &_cellL[nth];
+    else
+      return NULL;
+  }
+  /** Retorna a n-ésima facet
+  */
+  Facet const* getFacetPtr(int nth) const
+  {
+    if (unsigned(nth)<this->_facetL.totalSize())
+      return &_facetL[nth];
+    else
+      return NULL;
+  }
+  /** Retorna a n-ésima corner
+  */
+  Corner const* getCornerPtr(int nth) const
+  {
+    if (unsigned(nth)<this->_cornerL.totalSize())
+      return &_cornerL[nth];
+    else
+      return NULL;
+  }
+  /** Retorna o n-ésimo nó da malha.
+  */
+  Point const* getNodePtr(int nth) const
+  {
+    if (unsigned(nth)<this->_pointL.totalSize())
+      return &_pointL[nth];
+    else
+      return NULL;
+  }
+
+
   cell_handler getCell(int nth)
   {
     if (unsigned(nth)<this->_cellL.totalSize())
@@ -275,28 +331,6 @@ public:
     else
       return point_handler(this, NULL, -1);
   }
-
-  Cell const* getCellPtr(int nth) const
-  {
-    FEPIC_CHECK(unsigned(nth)<this->_cellL.totalSize(), "invalid index", std::out_of_range);
-    return &_cellL[nth];
-  }
-  Facet const* getFacetPtr(int nth) const
-  {
-    FEPIC_CHECK(unsigned(nth)<this->_facetL.totalSize(), "invalid index", std::out_of_range);
-    return &_facetL[nth];
-  }
-  Corner const* getCornerPtr(int nth) const
-  {
-    FEPIC_CHECK(unsigned(nth)<this->_cornerL.totalSize(), "invalid index", std::out_of_range);
-    return &_cornerL[nth];
-  }
-  Point const* getNodePtr(int nth) const
-  {
-    FEPIC_CHECK(unsigned(nth)<this->_pointL.totalSize(), "invalid index", std::out_of_range);
-    return &_pointL[nth];
-  }
-
 
   void disablePoint(int id)
   {
@@ -448,23 +482,377 @@ public:
   void getCenterCoord(Facet const* facet, Real* x) const;
   void getCenterCoord(Corner const* corner, Real* x) const;
 
-  virtual bool getFacetIdFromVertices(int const* vtcs, int &fid) =0;
-  virtual bool getCornerIdFromVertices(int const* vtcs, int &fid) =0;
+  /** Check if the vertices form a facet of this mesh, if so returns facet's id.
+   * @param[in] vtcs vector with the ids of the vertices.
+   * @param[out] fid id of the facet that has those vertices. If the vertices form a facet
+   *  in a anticyclically manner, then the negative of the facet's id is returned.
+   * @return true if a facet were found, false otherwise.
+   */ 
+  bool getFacetIdFromVertices(int const* vtcs, int &fid);
 
-  virtual int* edgeStar(int C, int eC, int *iCs, int *eiCs) const = 0;
-  virtual int* edgeStar(CellElement const*, int *iCs, int *eiCs) const = 0;
+  /** Check if the vertices form a corner of this mesh, if so returns corner's id.
+   * @param[in] vtcs vector with the ids of the vertices.
+   * @param[out] fid id of the corner that has those vertices. If the vertices form a corner
+   *  in a anticyclically manner, then the negative of the corner's id is returned.
+   * @return true if a corner were found, false otherwise.
+   */ 
+  bool  getCornerIdFromVertices(int const* vtcs, int &rid);
+
+  // ---------------------------------------------------- EDGE STAR ---------------------------------------------------
+
+private:
+  // TODO: implementar versão para 1d
+  int* vertexStar_1D(int C, int vC, int *iCs, int *viCs) const;
+
+  /** INTERNAL USE ONLY\n
+   *  Returns all incident cells of a vertex.
+   *  @param[in] C an incident cell of a vertex to start the search (initial cell).
+   *  @param[in] vC vertex's local id in the initial cell.
+   *  @param[out] iCs vector to put the incident cells.
+   *  @param[out] viCs vertex's local ids in the incident cells.
+   *  @return a pointer to the element following the end of the sequence iCs.
+   *  @note the vectors iCs and viCs must have enough space to store the data.
+   *  @note does not support high order nodes, only vertices.
+   */
+  int* vertexStar_2D(int C, int vC, int *iCs, int *viCs) const;
+
+  /** INTERNAL USE ONLY\n
+   *  Returns all incident cells of a vertex.
+   *  @param[in] C an incident cell of a vertex to start the search (initial cell).
+   *  @param[in] vC vertex's local id in the initial cell.
+   *  @param[out] iCs vector to put the incident cells.
+   *  @param[out] viCs vertex's local ids in the incident cells.
+   *  @return a pointer to the element following the end of the sequence iCs.
+   *  @note the vectors iCs and viCs must have enough space to store the data.
+   * */
+  int* vertexStar_3D(int C, int vC, int *iCs, int *viCs) const;
+
+public:
+
   //virtual int* edgeStar(Corner const*, int *iCs, int *eiCs) const = 0;
-  virtual int* vertexStar(int C, int vC, int *iCs, int *viCs) const = 0;
-  virtual int* vertexStar(Point const* point, int *iCs, int *viCs) const = 0;
-  virtual int* nodeStar(int C, int nC, int *iCs, int *niCs) const = 0;
-  virtual int* nodeStar(Point const* point, int *iCs, int *niCs) const = 0;
-  virtual int* connectedVtcs(Point const* p, int *iVs) const = 0;
-  virtual int* connectedVtcs(Point const* p, int *iVs, int *iCs, int *viCs) const = 0;
-  virtual int* connectedNodes(Point const* p, int *iVs) const = 0;
-  virtual int* incidentFacets(Point const* p, int *iFs, int *viFs) const = 0;
-  virtual int* incidentFacets(int nodeid, int *iFs, int *viFs) const = 0;
-  virtual Facet* nextBoundaryFacet(Facet const*f) const = 0;
-  virtual void pushIncidCell2Point(Point *pt, int iC, int pos) = 0;
+  /** Returns all incident cells of a vertex.
+   *  @param[in] C an incident cell of a vertex to start the search (initial cell).
+   *  @param[in] vC vertex's local id in the initial cell.
+   *  @param[out] iCs vector to put the incident cells.
+   *  @param[out] vCs vertex's local ids in the initial cells.
+   *  @return a pointer to the element following the end of the sequence iCs.
+   *  @note the vectors iCs and viCs must have enough space to store the data.
+   *  @note does not support high order nodes, only vertices.
+   */
+  int* vertexStar(int C, int vC, int *iCs, int *viCs) const
+  {
+    switch (this->cellDim())
+    {
+      case 1:
+        return vertexStar_1D(C,vC,iCs,viCs);
+        break;
+      case 2:
+        return vertexStar_2D(C,vC,iCs,viCs);
+        break;
+      case 3:
+        return vertexStar_3D(C,vC,iCs,viCs);
+        break;
+      default:
+        return NULL;
+    }
+  }
+  /** Returns all incident cells of a vertex.
+   *  @param[in] p a pointer to the vertex.
+   *  @param[out] iCs vector to put the incident cells.
+   *  @param[out] vCs vertex's local ids in the initial cells.
+   *  @return a pointer to the element following the end of the sequence iCs.
+   *  @note the vectors iCs and viCs must have enough space to store the data.
+   *  @note does not support high order nodes, only vertices.
+   */
+  int* vertexStar(Point const* p, int *iCs, int *viCs) const
+  {
+    return this->vertexStar(p->getIncidCell(),
+                            p->getPosition(),
+                            iCs, viCs);
+  }
+  
+// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+  /** Returns all incident cells of a node.
+   *  @param[in] C an incident cell of a node to start the search (initial cell).
+   *  @param[in] nC node's local id in the initial cell.
+   *  @param[out] iCs vector to put the incident cells.
+   *  @param[out] niCs node's local ids in the initial cells.
+   *  @return a pointer to the element following the end of the sequence iCs.
+   *  @note the vectors iCs and niCs must have enough space to store the data.
+   *  @note this function assumes that each edge, face or volume has only one
+   *        node in its interior, i.e., cells of third order are not supported.
+   */
+  int* nodeStar(int C, int nC, int *iCs, int *niCs) const
+  {
+    int const nvpc = this->numVerticesPerCell();
+    int const nrpc = this->numCornersPerCell();
+    int const nfpc = this->numFacetsPerCell();
+    
+    if (!this->cellHasEdgeNodes() || nC<nvpc)
+    {
+      return this->vertexStar(C, nC, iCs, niCs);
+    }
+
+    else if (!this->cellHasFaceNodes() || nC<nvpc + nrpc)
+    {
+      // number of nodes within the cell.
+      int const eC = nC - nvpc;
+      int * iCs_end = this->edgeStar(C, eC, iCs, niCs);
+      *niCs++ = nC;
+      ++iCs;
+      for (; iCs!=iCs_end; ++iCs,++niCs)
+        *niCs += nvpc;
+      return iCs_end;
+    }
+
+    else if (!this->cellHasVolumeNodes() || nC<nvpc + nrpc + nfpc)
+    {
+      int const fC = nC - nvpc - nrpc;
+      int * iCs_end = this->faceStar(C, fC, iCs, niCs);
+      *niCs++ = nC;
+      ++iCs;
+      for (; iCs!=iCs_end; ++iCs,++niCs)
+        *niCs += nvpc + nrpc;
+      return iCs_end;
+    }
+    else
+    {
+      *iCs++ = C;
+      *niCs  = nC;
+      return iCs;
+    }
+  }
+  
+  /** Returns all incident cells of a node.
+   *  @param[in] p a pointer to the node.
+   *  @param[out] iCs vector to put the incident cells.
+   *  @param[out] niCs node's local ids in the initial cells.
+   *  @return a pointer to the end of the sequence iCs.
+   *  @note the vectors iCs and niCs must have enough space to store the data.
+   *  @note this function assumes that each edge, face or volume has only one
+   *        node in its interior, i.e., cells of third order are not supported.
+   */
+  int* nodeStar(Point const* point, int *iCs, int *niCs) const;
+
+private:
+  // TODO: implementar uma versão para 1D
+  int* edgeStar_1D(int C, int eC, int *iCs, int *eiCs) const;
+
+  /** INTERNA USE ONLY\n
+   * Returns all incidents cells of a edge.
+   * @param[in] C an incident cell of a edge to start the search (initial cell).
+   * @param[in] eC edge's local id in the initial cell.
+   * @param[out] iCs vector to put the incident cells.
+   * @param[out] eiCs edges's local ids in the incident cells.
+   * @return a pointer to the element following the end of the sequence iCs.
+   */
+  int* edgeStar_2D(int C, int eC, int *iCs, int *eiCs) const;
+
+  /** INTERNA USE ONLY\n
+   * Returns all incidents cells of a edge.
+   * @param[in] C an incident cell of a edge to start the search (initial cell).
+   * @param[in] eC edge's local id in the initial cell.
+   * @param[out] iCs vector to put the incident cells.
+   * @param[out] eiCs edges's local ids in the incident cells.
+   * @return the a pointer to the element following the end of the sequence iCs.
+   */
+  int* edgeStar_3D(int C, int eC, int *iCs, int *eiCs) const;
+
+public:
+
+  /** Returns all incidents cells of a edge.
+   * @param[in] C an incident cell of a edge to start the search (initial cell).
+   * @param[in] eC edge's local id in the initial cell.
+   * @param[out] iCs vector to put the incident cells.
+   * @param[out] eiCs edges's local ids in the incident cells.
+   * @return a pointer to the element following the end of the sequence iCs.
+   */
+  int* edgeStar(int C, int eC, int *iCs, int *eiCs) const
+  {
+    switch (this->cellDim())
+    {
+      case 3:
+        return this->edgeStar_3D(C, eC, iCs, eiCs);
+        break;
+      case 2:
+        return this->edgeStar_2D(C, eC, iCs, eiCs);
+        break;
+      case 1:
+        return this->edgeStar_1D(C, eC, iCs, eiCs);
+        break;
+      default:
+        return NULL;
+    }
+  }
+
+  /** Returns all incidents cells of a edge.
+   * @param[in] e a pointer to the edge.
+   * @param[out] iCs vector to put the incident cells.
+   * @param[out] eiCs edges's local ids in the incident cells.
+   * @return a pointer to the element following the end of the sequence iCs.
+   * @note if an edge is not a Facet, use the Corner version function.
+   */
+  int* edgeStar(CellElement const* e, int *iCs, int *eiCs) const
+  {
+    return this->edgeStar(e->getIncidCell(),
+                          e->getPosition(),
+                          iCs, eiCs);
+  }
+
+  // ---------------------------------------------------- FACE STAR ---------------------------------------------------
+private:
+  int* faceStar_3D(int C, int fC, int *iCs, int *fiCs) const;
+
+  int* faceStar_2D(int C, int fC, int *iCs, int *fiCs) const;
+
+  int* faceStar_1D(int C, int fC, int *iCs, int *fiCs) const;
+public:
+
+  int* faceStar(int C, int fC, int *iCs, int *fiCs) const
+  {
+    switch (this->cellDim())
+    {
+      case 3:
+        return faceStar_3D(C, fC, iCs, fiCs);
+        break;
+      case 2:
+        return faceStar_2D(C, fC, iCs, fiCs);
+        break;
+      case 1:
+        return faceStar_1D(C, fC, iCs, fiCs);
+        break;
+      default:
+        return NULL;
+    }
+  }
+
+  /** @brief Returns all vertices that are connected to a vertex.
+   *  @param[in] p a pointer to the vertex.
+   *  @param[out] iVs vector with the connected vertices.
+   *  @return a pointer to the element following the end of the sequence iVs.
+   */
+  int* connectedVtcs(Point const* p, int *iVs) const;
+
+  /** @brief Returns all vertices that are connected to a vertex, as well the incident cells.
+   *  @param[in] p a pointer to the vertex.
+   *  @param[out] iVs vector with the connected vertices.
+   *  @param[out] iCs vector with the incident cells.
+   *  @param[out] viCs vector with the p local-ids in each cell.
+   *  @return a pointer to the element following the end of the sequence iVs.
+   *  @note iVs[k] = getCellPtr(iCd[k])->getNodeId(viCs[k]);
+   */
+  int* connectedVtcs(Point const* p, int *iVs, int *iCs, int *viCs) const;
+
+  /** @brief Returns all nodes that are connected to a node.
+   *  @param[in] p a pointer to the node.
+   *  @param[out] iNs vector with the connected nodes.
+   *  @return a pointer to the element following the end of the sequence iNs.
+   */
+  int* connectedNodes(Point const* p, int *iNs) const;
+
+  /** INTERNAL USE ONLY\n
+   *  @brief Returns all incident facets to a vertex.
+   *  @param[in] p a pointer to the vertex.
+   *  @param[out] iFs vector to put the incident facets.
+   *  @param[out] viFs vertex's local ids in the incident facets.
+   *  @return a pointer to the element following the end of the sequence iFs.
+   *  @note the vectors iCs and viCs must have enough space to store the data.
+   *  @note does not support high order nodes, only vertices.
+   */
+  int* incidentFacets_1D(Point const* p, int *iFs, int *viFs) const;
+
+  /** INTERNAL USE ONLY\n
+   *  @brief Returns all incident facets to a vertex.
+   *  @param[in] p a pointer to the vertex.
+   *  @param[out] iFs vector to put the incident facets.
+   *  @param[out] viFs vertex's local ids in the incident facets.
+   *  @return a pointer to the element following the end of the sequence iFs.
+   *  @note the vectors iCs and viCs must have enough space to store the data.
+   *  @note does not support high order nodes, only vertices.
+   */
+  int* incidentFacets_2D(Point const* p, int *iFs, int *viFs) const;
+
+  /** INTERNAL USE ONLY\n
+   *  @brief Returns all incident facets to a vertex.
+   *  @param[in] p a pointer to the vertex.
+   *  @param[out] iFs vector to put the incident facets.
+   *  @param[out] viFs vertex's local ids in the incident facets.
+   *  @return a pointer to the element following the end of the sequence iFs.
+   *  @note the vectors iCs and viCs must have enough space to store the data.
+   *  @note does not support high order nodes, only vertices.
+   */
+  int* incidentFacets_3D(Point const* p, int *iFs, int *viFs) const;
+
+  /** @brief Returns all incident facets to a vertex.
+   *  @param[in] p a pointer to the vertex.
+   *  @param[out] iFs vector to put the incident facets.
+   *  @param[out] viFs vertex's local ids in the incident facets.
+   *  @return a pointer to the element following the end of the sequence iFs.
+   *  @note the vectors iCs and viCs must have enough space to store the data.
+   *  @note does not support high order nodes, only vertices.
+   */
+  int* incidentFacets(Point const* p, int *iFs, int *viFs) const
+  {
+    FEPIC_CHECK(this->isVertex(p), "invalid C or vC", std::invalid_argument);
+    
+    switch (this->cellDim())
+    {
+      case 1:
+        return this->incidentFacets_1D(p, iFs, viFs);
+        break;
+      case 2:
+        return this->incidentFacets_2D(p, iFs, viFs);
+        break;
+      case 3:
+        return this->incidentFacets_3D(p, iFs, viFs);
+        break;
+      default:
+        return NULL;
+    }
+  }
+
+  /** @brief Returns all incident facets to a node.
+   *  @param[in] nodeid id oh the node.
+   *  @param[out] iFs vector to put the incident facets.
+   *  @param[out] viFs vertex's local ids in the incident facets.
+   *  @return a pointer to the element following the end of the sequence iFs.
+   *  @note the vectors iCs and viCs must have enough space to store the data.
+   *  @note does not support high order nodes, only vertices.
+   */
+  int* incidentFacets(int nodeid, int *iFs, int *viFs) const
+  {
+    FEPIC_CHECK(this->isVertex(this->getNodePtr(nodeid)), "invalid C or vC", std::invalid_argument);
+    return this->incidentFacets(this->getNodePtr(nodeid), iFs, viFs);
+  }
+  
+  Facet* nextBoundaryFacet_1D(Facet const*f);
+
+  Facet* nextBoundaryFacet_2D(Facet const*f);
+  
+  Facet* nextBoundaryFacet_3D(Facet const*f);
+  
+  /** given a boundary facet, return the next boundary facet.
+   */ 
+  Facet* nextBoundaryFacet(Facet const*f)
+  {
+    switch (this->cellDim())
+    {
+      case 2:
+        return this->nextBoundaryFacet_2D(f);
+        break;
+      case 3:
+        return this->nextBoundaryFacet_3D(f);
+        break;
+      case 1:
+        return this->nextBoundaryFacet_1D(f);
+        break;                
+      default:
+        return NULL;
+    }
+  }
+  
+  void pushIncidCell2Point(Point *pt, int iC, int pos);
 
 
   void qBuildAdjacency(bool b)
@@ -475,16 +863,59 @@ public:
   {
     return _dont_build_adjacency;
   };
-  virtual void buildAdjacency() = 0;
-  virtual void buildNodesAdjacency() = 0;
 
-  virtual void setUpConnectedComponentsId() = 0;
-  virtual int  numConnectedComponents() const = 0;
-  virtual void setUpBoundaryComponentsId() = 0;
-  virtual int  numBoundaryComponents() const = 0;
+
+  void buildCorners_1D();
+  void buildCorners_2D();
+  void buildCorners_3D();
+  void buildCorners()
+  {
+    switch (this->cellDim())
+    {
+      case 3:
+        this->buildCorners_3D();
+        break;
+      case 1:
+        this->buildCorners_1D();
+        break;
+      case 2:
+        this->buildCorners_2D();
+        break;
+      default:
+        FEPIC_ASSERT(false, "invalid cell dimension", std::runtime_error);
+    }
+  }
+
   
-  virtual void getConnectedComponentsPicks(int *comps, int *cells) const = 0;
-  virtual void getBoundaryComponentsPicks(int *comps, int *facets) const = 0;
+  /// Constrói as informações topológicas da malha
+  void buildAdjacency()
+  {
+    this->timer.restart();
+    this->buildCellsAdjacency();
+    this->timer.elapsed("buildCellsAdjacency()");
+
+    // only for 3D
+    this->timer.restart();
+    this->buildCorners();
+    this->timer.elapsed("buildCorners_Template()");
+
+    // its need to be here, because these func use getCellId() wich needs
+    // adjacency information.
+    this->timer.restart();
+    this->setUpConnectedComponentsId();
+    this->setUpBoundaryComponentsId();
+    this->timer.elapsed("setUpConnected/BoundaryComponentsId()");
+
+    // its need etUpConnectedComponentsId() function because of singular vertices
+    this->timer.restart();
+    this->buildNodesAdjacency();
+    this->timer.elapsed("buildNodesAdjacency()");
+
+  }
+  
+  void buildCellsAdjacency();
+  void buildNodesAdjacency();
+  /// Constrói as informações topológicas da malha
 
   bool inBoundary(Point const* p) const
   {
@@ -686,8 +1117,51 @@ public:
     return this->getCellPtr(a->getIncidCell())->getCornerId(a->getPosition());
   }
 
+  // --------------------------------------------------- ADJACENCY -------------------------------------------------------
 
-  virtual ~Mesh() = 0;
+  /** NOT FOR USERS
+   * auxiliary function 
+   * set the connected component id starting from c_ini with id cc_id.
+   * @warning isVisited() flags are used.
+   */ 
+  void _setConnectedComponentsId(cell_handler c_ini, int cc_id);
+  void _setBoundaryComponentsId(facet_handler f_ini, int bc_id);
+
+  void setUpConnectedComponentsId();
+  int numConnectedComponents() const
+  {
+    return static_cast<int>( _connected_compL.size() );
+  }
+  
+  void setUpBoundaryComponentsId();
+  int numBoundaryComponents() const
+  {
+    return static_cast<int>( _boundary_compL.size() );
+  }
+
+  void getConnectedComponentsPicks(int *comps, int *cells) const
+  {
+    int k = 0;
+    for (std::map<int,int>::const_iterator it = _connected_compL.begin(); it != _connected_compL.end(); ++it)
+    {
+      comps[k] = (*it).first;
+      cells[k] = (*it).second;
+      ++k;
+    }
+    
+  }
+  void getBoundaryComponentsPicks(int *comps, int *facets) const
+  {
+    int k = 0;
+    for (std::map<int,int>::const_iterator it = _boundary_compL.begin(); it != _boundary_compL.end(); ++it)
+    {
+      comps[k] = (*it).first;
+      facets[k] = (*it).second;
+      ++k;
+    }
+    
+  }
+
 
 };
 
@@ -760,360 +1234,9 @@ public:
 
   // --------------------------------------------------- VERTEX STAR ---------------------------------------------------
 
-  // TODO: implementar versão para 1d
-  template<int celldim>
-  int* vertexStar_Template(int C, int vC, int *iCs, int *viCs, typename EnableIf<(celldim==1)>::type* = NULL) const;
-
-  /** INTERNAL USE ONLY\n
-   *  Returns all incident cells of a vertex.
-   *  @param[in] C an incident cell of a vertex to start the search (initial cell).
-   *  @param[in] vC vertex's local id in the initial cell.
-   *  @param[out] iCs vector to put the incident cells.
-   *  @param[out] viCs vertex's local ids in the incident cells.
-   *  @return a pointer to the element following the end of the sequence iCs.
-   *  @note the vectors iCs and viCs must have enough space to store the data.
-   *  @note does not support high order nodes, only vertices.
-   */
-  template<int celldim>
-  int* vertexStar_Template(int C, int vC, int *iCs, int *viCs, typename EnableIf<(celldim==2)>::type* = NULL) const;
-
-  /** INTERNAL USE ONLY\n
-   *  Returns all incident cells of a vertex.
-   *  @param[in] C an incident cell of a vertex to start the search (initial cell).
-   *  @param[in] vC vertex's local id in the initial cell.
-   *  @param[out] iCs vector to put the incident cells.
-   *  @param[out] viCs vertex's local ids in the incident cells.
-   *  @return a pointer to the element following the end of the sequence iCs.
-   *  @note the vectors iCs and viCs must have enough space to store the data.
-   * */
-  template<int celldim>
-  int* vertexStar_Template(int C, int vC, int *iCs, int *viCs, typename EnableIf<(celldim==3)>::type* = NULL) const;
-
-
-  /** Returns all incident cells of a vertex.
-   *  @param[in] C an incident cell of a vertex to start the search (initial cell).
-   *  @param[in] vC vertex's local id in the initial cell.
-   *  @param[out] iCs vector to put the incident cells.
-   *  @param[out] vCs vertex's local ids in the initial cells.
-   *  @return a pointer to the element following the end of the sequence iCs.
-   *  @note the vectors iCs and viCs must have enough space to store the data.
-   *  @note does not support high order nodes, only vertices.
-   */
-  int* vertexStar(int C, int vC, int *iCs, int *viCs) const
-  {
-    return this->MeshT::vertexStar_Template<CellT::dim>(C, vC, iCs, viCs);
-  }
-
-  /** Returns all incident cells of a vertex.
-   *  @param[in] p a pointer to the vertex.
-   *  @param[out] iCs vector to put the incident cells.
-   *  @param[out] vCs vertex's local ids in the initial cells.
-   *  @return a pointer to the element following the end of the sequence iCs.
-   *  @note the vectors iCs and viCs must have enough space to store the data.
-   *  @note does not support high order nodes, only vertices.
-   */
-  int* vertexStar(Point const* p, int *iCs, int *viCs) const
-  {
-    return this->MeshT::vertexStar_Template<CellT::dim>(static_cast<PointT const*>(p)->PointT::getIncidCell(),
-                                                        static_cast<PointT const*>(p)->PointT::getPosition(),
-                                                        iCs, viCs);
-  }
-
-
-  /** Returns all incident cells of a node.
-   *  @param[in] C an incident cell of a node to start the search (initial cell).
-   *  @param[in] nC node's local id in the initial cell.
-   *  @param[out] iCs vector to put the incident cells.
-   *  @param[out] niCs node's local ids in the initial cells.
-   *  @return a pointer to the element following the end of the sequence iCs.
-   *  @note the vectors iCs and niCs must have enough space to store the data.
-   *  @note this function assumes that each edge, face or volume has only one
-   *        node in its interior, i.e., cells of third order are not supported.
-   */
-  int* nodeStar(int C, int nC, int *iCs, int *niCs) const;
-
-  /** Returns all incident cells of a node.
-   *  @param[in] p a pointer to the node.
-   *  @param[out] iCs vector to put the incident cells.
-   *  @param[out] niCs node's local ids in the initial cells.
-   *  @return a pointer to the end of the sequence iCs.
-   *  @note the vectors iCs and niCs must have enough space to store the data.
-   *  @note this function assumes that each edge, face or volume has only one
-   *        node in its interior, i.e., cells of third order are not supported.
-   */
-  int* nodeStar(Point const* p, int *iCs, int *niCs) const;
-
-  /** @brief Returns all vertices that are connected to a vertex.
-   *  @param[in] p a pointer to the vertex.
-   *  @param[out] iVs vector with the connected vertices.
-   *  @return a pointer to the element following the end of the sequence iVs.
-   */
-  int* connectedVtcs(Point const* p, int *iVs) const;
-
-  /** @brief Returns all vertices that are connected to a vertex, as well the incident cells.
-   *  @param[in] p a pointer to the vertex.
-   *  @param[out] iVs vector with the connected vertices.
-   *  @param[out] iCs vector with the incident cells.
-   *  @param[out] viCs vector with the p local-ids in each cell.
-   *  @return a pointer to the element following the end of the sequence iVs.
-   *  @note iVs[k] = getCellPtr(iCd[k])->getNodeId(viCs[k]);
-   */
-  int* connectedVtcs(Point const* p, int *iVs, int *iCs, int *viCs) const;
-
-  /** @brief Returns all nodes that are connected to a node.
-   *  @param[in] p a pointer to the node.
-   *  @param[out] iNs vector with the connected nodes.
-   *  @return a pointer to the element following the end of the sequence iNs.
-   */
-  int* connectedNodes(Point const* p, int *iNs) const;
-
-  /** INTERNAL USE ONLY\n
-   *  @brief Returns all incident facets to a vertex.
-   *  @param[in] p a pointer to the vertex.
-   *  @param[out] iFs vector to put the incident facets.
-   *  @param[out] viFs vertex's local ids in the incident facets.
-   *  @return a pointer to the element following the end of the sequence iFs.
-   *  @note the vectors iCs and viCs must have enough space to store the data.
-   *  @note does not support high order nodes, only vertices.
-   */
-  template<int celldim>
-  int* incidentFacets_Template(Point const* p, int *iFs, int *viFs, typename EnableIf<(celldim==1)>::type* = NULL) const;
-
-  /** INTERNAL USE ONLY\n
-   *  @brief Returns all incident facets to a vertex.
-   *  @param[in] p a pointer to the vertex.
-   *  @param[out] iFs vector to put the incident facets.
-   *  @param[out] viFs vertex's local ids in the incident facets.
-   *  @return a pointer to the element following the end of the sequence iFs.
-   *  @note the vectors iCs and viCs must have enough space to store the data.
-   *  @note does not support high order nodes, only vertices.
-   */
-  template<int celldim>
-  int* incidentFacets_Template(Point const* p, int *iFs, int *viFs, typename EnableIf<(celldim==2)>::type* = NULL) const;
-
-  /** INTERNAL USE ONLY\n
-   *  @brief Returns all incident facets to a vertex.
-   *  @param[in] p a pointer to the vertex.
-   *  @param[out] iFs vector to put the incident facets.
-   *  @param[out] viFs vertex's local ids in the incident facets.
-   *  @return a pointer to the element following the end of the sequence iFs.
-   *  @note the vectors iCs and viCs must have enough space to store the data.
-   *  @note does not support high order nodes, only vertices.
-   */
-  template<int celldim>
-  int* incidentFacets_Template(Point const* p, int *iFs, int *viFs, typename EnableIf<(celldim==3)>::type* = NULL) const;
-
-  /** @brief Returns all incident facets to a vertex.
-   *  @param[in] p a pointer to the vertex.
-   *  @param[out] iFs vector to put the incident facets.
-   *  @param[out] viFs vertex's local ids in the incident facets.
-   *  @return a pointer to the element following the end of the sequence iFs.
-   *  @note the vectors iCs and viCs must have enough space to store the data.
-   *  @note does not support high order nodes, only vertices.
-   */
-  int* incidentFacets(Point const* p, int *iFs, int *viFs) const
-  {
-    FEPIC_CHECK(this->MeshT::isVertex(p), "invalid C or vC", std::invalid_argument);
-    return this->MeshT::incidentFacets_Template<CellT::dim>(p, iFs, viFs);
-  }
-
-  /** @brief Returns all incident facets to a node.
-   *  @param[in] nodeid id oh the node.
-   *  @param[out] iFs vector to put the incident facets.
-   *  @param[out] viFs vertex's local ids in the incident facets.
-   *  @return a pointer to the element following the end of the sequence iFs.
-   *  @note the vectors iCs and viCs must have enough space to store the data.
-   *  @note does not support high order nodes, only vertices.
-   */
-  int* incidentFacets(int nodeid, int *iFs, int *viFs) const
-  {
-    FEPIC_CHECK(this->MeshT::isVertex(this->MeshT::getNodePtr(nodeid)), "invalid C or vC", std::invalid_argument);
-    return this->MeshT::incidentFacets_Template<CellT::dim>(this->MeshT::getNodePtr(nodeid), iFs, viFs);
-  }
-
-  template<int celldim>
-  Facet* nextBoundaryFacet_template(Facet const*f, typename EnableIf<(celldim==1)>::type* = NULL) const;
-
-  template<int celldim>
-  Facet* nextBoundaryFacet_template(Facet const*f, typename EnableIf<(celldim==2)>::type* = NULL) const;
-  
-  template<int celldim>
-  Facet* nextBoundaryFacet_template(Facet const*f, typename EnableIf<(celldim==3)>::type* = NULL) const;
-  
-  /** given a boundary facet, return the next boundary facet.
-   */ 
-  Facet* nextBoundaryFacet(Facet const*f) const
-  {
-    return this->MeshT::nextBoundaryFacet_template<CellT::dim>(f);
-  }
-
-
-  void pushIncidCell2Point(Point *pt, int iC, int pos);
-
-  // ---------------------------------------------------- EDGE STAR ---------------------------------------------------
-
-  /** INTERNA USE ONLY\n
-   * Returns all incidents cells of a edge.
-   * @param[in] C an incident cell of a edge to start the search (initial cell).
-   * @param[in] eC edge's local id in the initial cell.
-   * @param[out] iCs vector to put the incident cells.
-   * @param[out] eiCs edges's local ids in the incident cells.
-   * @return the a pointer to the element following the end of the sequence iCs.
-   */
-  template<int celldim>
-  int* edgeStar_Template(int C, int eC, int *iCs, int *eiCs, typename EnableIf<(celldim==3)>::type* = NULL) const;
-
-  /** INTERNA USE ONLY\n
-   * Returns all incidents cells of a edge.
-   * @param[in] C an incident cell of a edge to start the search (initial cell).
-   * @param[in] eC edge's local id in the initial cell.
-   * @param[out] iCs vector to put the incident cells.
-   * @param[out] eiCs edges's local ids in the incident cells.
-   * @return a pointer to the element following the end of the sequence iCs.
-   */
-  template<int celldim>
-  int* edgeStar_Template(int C, int eC, int *iCs, int *eiCs, typename EnableIf<(celldim==2)>::type* = NULL) const;
-
-  // TODO: implementar uma versão para 1D
-  template<int celldim>
-  int* edgeStar_Template(int C, int eC, int *iCs, int *eiCs, typename EnableIf<(celldim==1)>::type* = NULL) const;
-
-  /** Returns all incidents cells of a edge.
-   * @param[in] C an incident cell of a edge to start the search (initial cell).
-   * @param[in] eC edge's local id in the initial cell.
-   * @param[out] iCs vector to put the incident cells.
-   * @param[out] eiCs edges's local ids in the incident cells.
-   * @return a pointer to the element following the end of the sequence iCs.
-   */
-  int* edgeStar(int C, int eC, int *iCs, int *eiCs) const
-  {
-    return this->edgeStar_Template<CellT::dim>(C, eC, iCs, eiCs);
-  }
-
-  /** Returns all incidents cells of a edge.
-   * @param[in] e a pointer to the edge.
-   * @param[out] iCs vector to put the incident cells.
-   * @param[out] eiCs edges's local ids in the incident cells.
-   * @return a pointer to the element following the end of the sequence iCs.
-   * @note if an edge is not a Facet, use the Corner version function.
-   */
-  int* edgeStar(CellElement const* e, int *iCs, int *eiCs) const
-  {
-    return this->edgeStar_Template<CellT::dim>(e->getIncidCell(),
-                                               e->getPosition(),
-                                               iCs, eiCs);
-  }
-
-  ///** Returns all incidents cells of a edge.
-  // * @param[in] e a pointer to the edge.
-  // * @param[out] iCs vector to put the incident cells.
-  // * @param[out] eiCs edges's local ids in the incident cells.
-  // * @return a pointer to the element following the end of the sequence iCs.
-  // * @note if an edge is not a Corner, use the Facet version function.
-  // */
-  //int* edgeStar(Corner const* e, int *iCs, int *eiCs) const
-  //{
-  //  return this->edgeStar_Template<CellT::dim>(static_cast<CornerT const*>(e)->CornerT::getIncidCell(),
-  //                                             static_cast<CornerT const*>(e)->CornerT::getPosition(),
-  //                                             iCs, eiCs);
-  //}
-
-  // ---------------------------------------------------- FACE STAR ---------------------------------------------------
-
-  template<int celldim>
-  int* faceStar_Template(int C, int fC, int *iCs, int *fiCs, typename EnableIf<(celldim==3)>::type* = NULL) const;
-
-  template<int celldim>
-  int* faceStar_Template(int C, int fC, int *iCs, int *fiCs, typename EnableIf<(celldim==2)>::type* = NULL) const;
-
-  template<int celldim>
-  int* faceStar_Template(int C, int fC, int *iCs, int *fiCs, typename EnableIf<(celldim==1)>::type* = NULL) const;
-
-  int* faceStar(int C, int fC, int *iCs, int *fiCs) const
-  {
-    return faceStar_Template<CellT::dim>(C, fC, iCs, fiCs);
-  }
-
-  // --------------------------------------------------- ADJACENCY -------------------------------------------------------
-
-  void buildCellsAdjacency();
-
-  template<int celldim>
-  void buildCorners_Template(typename EnableIf<(celldim==1)>::type* = NULL);
-
-  template<int celldim>
-  void buildCorners_Template(typename EnableIf<(celldim==2)>::type* = NULL);
-
-  template<int celldim>
-  void buildCorners_Template(typename EnableIf<(celldim==3)>::type* = NULL);
-
-  void buildNodesAdjacency();
-
-  /// Constrói as informações topológicas da malha
-  void buildAdjacency();
-
-  /** NOT FOR USERS
-   * auxiliary function 
-   * set the connected component id starting from c_ini with id cc_id.
-   * @warning isVisited() flags are used.
-   */ 
-  void _setConnectedComponentsId(cell_handler c_ini, int cc_id);
-  void _setBoundaryComponentsId(facet_handler f_ini, int bc_id);
-
-  void setUpConnectedComponentsId();
-  int numConnectedComponents() const
-  {
-    return static_cast<int>( _connected_compL.size() );
-  }
-  
-  void setUpBoundaryComponentsId();
-  int numBoundaryComponents() const
-  {
-    return static_cast<int>( _boundary_compL.size() );
-  }
-
-  void getConnectedComponentsPicks(int *comps, int *cells) const
-  {
-    int k = 0;
-    for (std::map<int,int>::const_iterator it = _connected_compL.begin(); it != _connected_compL.end(); ++it)
-    {
-      comps[k] = (*it).first;
-      cells[k] = (*it).second;
-      ++k;
-    }
-    
-  }
-  void getBoundaryComponentsPicks(int *comps, int *facets) const
-  {
-    int k = 0;
-    for (std::map<int,int>::const_iterator it = _boundary_compL.begin(); it != _boundary_compL.end(); ++it)
-    {
-      comps[k] = (*it).first;
-      facets[k] = (*it).second;
-      ++k;
-    }
-    
-  }
 
   // ----------------------------------------------------------------------------------------------------------------------
-
           
-  /** Check if the vertices form a facet of this mesh, if so returns facet's id.
-   * @param[in] vtcs vector with the ids of the vertices.
-   * @param[out] fid id of the facet that has those vertices. If the vertices form a facet
-   *  in a anticyclically manner, then the negative of the facet's id is returned.
-   * @return true if a facet were found, false otherwise.
-   */ 
-  bool getFacetIdFromVertices(int const* vtcs, int &fid);
-
-  /** Check if the vertices form a corner of this mesh, if so returns corner's id.
-   * @param[in] vtcs vector with the ids of the vertices.
-   * @param[out] fid id of the corner that has those vertices. If the vertices form a corner
-   *  in a anticyclically manner, then the negative of the corner's id is returned.
-   * @return true if a corner were found, false otherwise.
-   */ 
-  bool  getCornerIdFromVertices(int const* vtcs, int &rid);
-
 };
 
 

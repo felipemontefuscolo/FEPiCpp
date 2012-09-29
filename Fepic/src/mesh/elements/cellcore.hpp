@@ -268,6 +268,19 @@ public:
                 begin);
   }
 
+  bool hasEdgeNodes() const
+  {
+    return CellT::has_edge_nodes;
+  }
+  bool hasFaceNodes() const
+  {
+    return CellT::has_face_nodes;
+  }
+  bool hasVolumeNodes() const
+  {
+    return CellT::has_volume_nodes;
+  }
+
   /** Check if the vertices form a corner of this cell, if so returns corner's id.
    * @param[in] vtcs vector with the ids of the vertices.
    * @param[out] lrid local id of the corner that has those vertices. If the vertices form a corner
