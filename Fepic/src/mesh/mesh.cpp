@@ -114,100 +114,17 @@ unsigned Mesh::estimateNumCorners(unsigned nc_, ECellType type)
 #undef _ROUND_2_INT_
 }
 
-// @param iter_type type of the iterator of that container
-// @param _objL the container, e.g., _cellL, _pointL, ...
-#define FEPIC_INC_ITERATOR_FUNC(iter_type, _objL)          \
-  iter_type it = iter_type(_objL.begin().plus(id));    \
-  it.next();                                               \
-  ++id;                                                    \
-  while (it != _objL.end() && it->isDisabled())            \
-  {                                                        \
-    ++id;                                                  \
-    it.next();                                             \
-  }                                                        \
-  return &(*it)
 
-
-Cell*   Mesh::incEnabledCell(int &id)   { FEPIC_INC_ITERATOR_FUNC(CellIteratorT,   _cellL);   }
-Point*  Mesh::incEnabledPoint(int &id)  { FEPIC_INC_ITERATOR_FUNC(PointIteratorT,  _pointL);  }
-Facet*  Mesh::incEnabledFacet(int &id)  { FEPIC_INC_ITERATOR_FUNC(FacetIteratorT,  _facetL);  }
-Corner* Mesh::incEnabledCorner(int &id) { FEPIC_INC_ITERATOR_FUNC(CornerIteratorT, _cornerL); }
-
-#undef FEPIC_INC_ITERATOR_FUNC
-
-#define FEPIC_DEC_ITERATOR_FUNC(iter_type, _objL)              \
-  iter_type it = iter_type(_objL.begin().plus(id));   \
-  it.previous();                                              \
-  --id;                                                       \
-  while (it != _objL.begin() && it->isDisabled())             \
-  {                                                           \
-    --id;                                                     \
-    it.previous();                                            \
-  }                                                           \
-  return &(*it)
-
-Cell*   Mesh::decEnabledCell(int &id)    { FEPIC_DEC_ITERATOR_FUNC(CellIteratorT,   _cellL);   }
-Point*  Mesh::decEnabledPoint(int &id)   { FEPIC_DEC_ITERATOR_FUNC(PointIteratorT,  _pointL);  }
-Facet*  Mesh::decEnabledFacet(int &id)   { FEPIC_DEC_ITERATOR_FUNC(FacetIteratorT,  _facetL);  }
-Corner* Mesh::decEnabledCorner(int &id)  { FEPIC_DEC_ITERATOR_FUNC(CornerIteratorT, _cornerL); }
-
-#undef FEPIC_DEC_ITERATOR_FUNC
-
-
-//template<class CT> Cell*   SMesh<CT>::incEnabledCell(int a)       { return static_cast<Cell*>  ( &(*++(CellIteratorT  (&_cellL  , _cellL.begin()  +a))) );}
-//template<class CT> Point*  SMesh<CT>::incEnabledPoint(int a)      { return static_cast<Point*> ( &(*++(PointIteratorT (&_pointL , _pointL.begin() +a))) );}
-//template<class CT> Facet*  SMesh<CT>::incEnabledFacet(int a)      { return static_cast<Facet*> ( &(*++(FacetIteratorT (&_facetL , _facetL.begin() +a))) );}
-//template<class CT> Corner* SMesh<CT>::incEnabledCorner(int a)     { return static_cast<Corner*>( &(*++(CornerIteratorT(&_cornerL, _cornerL.begin()+a))) );}
-//// -------------------------------------------- dec ------------------------
-//template<class CT> Cell*   SMesh<CT>::decEnabledCell(int a)       { return static_cast<Cell*>  ( &(*--(CellIteratorT  (&_cellL  , _cellL.begin()  +a))) );}
-//template<class CT> Point*  SMesh<CT>::decEnabledPoint(int a)      { return static_cast<Point*> ( &(*--(PointIteratorT (&_pointL , _pointL.begin() +a))) );}
-//template<class CT> Facet*  SMesh<CT>::decEnabledFacet(int a)      { return static_cast<Facet*> ( &(*--(FacetIteratorT (&_facetL , _facetL.begin() +a))) );}
-//template<class CT> Corner* SMesh<CT>::decEnabledCorner(int a)     { return static_cast<Corner*>( &(*--(CornerIteratorT(&_cornerL, _cornerL.begin()+a))) );}
 
 // =====================================================================================
 // =====================================================================================
-//                                  ITERATORS
-// =====================================================================================
-// =====================================================================================
 
+template<> FEP_STRONG_INLINE Cell  * Mesh::entityPtr<Cell  >(int ith) {return this->getCellPtr(ith);}
+template<> FEP_STRONG_INLINE Facet * Mesh::entityPtr<Facet >(int ith) {return this->getFacetPtr(ith);}
+template<> FEP_STRONG_INLINE Point * Mesh::entityPtr<Point >(int ith) {return this->getNodePtr(ith);}
+template<> FEP_STRONG_INLINE Corner* Mesh::entityPtr<Corner>(int ith) {return this->getCornerPtr(ith);}
 
-
-cell_iterator   Mesh::cellBegin()  { return cell_iterator  (this, &(*_cellL.begin()  ), 0                      );}
-cell_iterator   Mesh::cellEnd()    { return cell_iterator  (this, &(*_cellL.end()    ), this->numCellsTotal()  );}
-point_iterator  Mesh::pointBegin() { return point_iterator (this, &(*_pointL.begin() ), 0                      );}
-point_iterator  Mesh::pointEnd()   { return point_iterator (this, &(*_pointL.end()   ), this->numNodesTotal()  );}
-facet_iterator  Mesh::facetBegin() { return facet_iterator (this, &(*_facetL.begin() ), 0                      );}
-facet_iterator  Mesh::facetEnd()   { return facet_iterator (this, &(*_facetL.end()   ), this->numFacetsTotal() );}
-corner_iterator Mesh::cornerBegin(){ return corner_iterator(this, &(*_cornerL.begin()), 0                      );}
-corner_iterator Mesh::cornerEnd()  { return corner_iterator(this, &(*_cornerL.end()  ), this->numCornersTotal());}
-
-
-#define FEPIC_BEGIN_ITERATOR_FUNC(obj_type, iter_type, _objL)       \
-  int begin_idx;                                                    \
-  obj_type * a =  &(*_objL.begin(tid, nthreads, &begin_idx));       \
-  return iter_type  (this, a, begin_idx)
-
-#define FEPIC_END_ITERATOR_FUNC(obj_type, iter_type, _objL)       \
-  int end_idx;                                                    \
-  obj_type * a =  &(*_objL.end(tid, nthreads, &end_idx));         \
-  return iter_type  (this, a, end_idx)
-
-cell_iterator   Mesh::cellBegin  (int tid, int nthreads) {FEPIC_BEGIN_ITERATOR_FUNC(Cell,   cell_iterator,   _cellL);}
-cell_iterator   Mesh::cellEnd    (int tid, int nthreads) {FEPIC_END_ITERATOR_FUNC  (Cell,   cell_iterator,   _cellL);}
-point_iterator  Mesh::pointBegin (int tid, int nthreads) {FEPIC_BEGIN_ITERATOR_FUNC(Point,  point_iterator,  _pointL);}
-point_iterator  Mesh::pointEnd   (int tid, int nthreads) {FEPIC_END_ITERATOR_FUNC  (Point,  point_iterator,  _pointL);}
-facet_iterator  Mesh::facetBegin (int tid, int nthreads) {FEPIC_BEGIN_ITERATOR_FUNC(Facet,  facet_iterator,  _facetL);}
-facet_iterator  Mesh::facetEnd   (int tid, int nthreads) {FEPIC_END_ITERATOR_FUNC  (Facet,  facet_iterator,  _facetL);}
-corner_iterator Mesh::cornerBegin(int tid, int nthreads) {FEPIC_BEGIN_ITERATOR_FUNC(Corner, corner_iterator, _cornerL);}
-corner_iterator Mesh::cornerEnd  (int tid, int nthreads) {FEPIC_END_ITERATOR_FUNC  (Corner, corner_iterator, _cornerL);}
-
-#undef FEPIC_BEGIN_ITERATOR_FUNC
-#undef FEPIC_END_ITERATOR_FUNC
-
-// =====================================================================================
-// =====================================================================================
-// =====================================================================================
-// =====================================================================================
+// -----------------------------------------------------------------------------------
 
 int Mesh::numVertices() const
 {
@@ -232,139 +149,6 @@ int Mesh::numVertices() const
     num_vtcs += num_vtcs_local;
   }
   return num_vtcs;
-}
-
-template<class CT>
-struct ArgConverter // CT = SeqList value type
-{
-  template<class U> // U = push function argument
-  CT const& operator() (U const* u)
-  {
-    return *static_cast<Cell const*>(u);
-  }
-};
-
-template<class CT>
-struct ArgConverter<CT*>
-{
-  template<class U>
-  CT* operator() (U const* u)
-  {
-    return new CT( *static_cast<Cell const*>(u) );
-  }
-};
-
-
-/** Add a cell in the mesh's list.
- *  @param cell a pointer to the cell.
- *  @return the id of the new cell.
-*/
-int Mesh::pushCell(Cell const* cell)
-{
-  //return _cellL.insert(*static_cast<Cell const*>(cell));
-  return _cellL.insert(cell->clone());
-}
-
-/** Add a node in the mesh's list.
- *  @param node a pointer to the node.
- *  @return the id of the new node.
-*/
-int Mesh::pushPoint(Point const* node)
-{
-  return _pointL.insert(*node);
-}
-
-/** Add a facet in the mesh's list.
- *  @param facet a pointer to the facet.
- *  @return the id of the new facet.
-*/
-int Mesh::pushFacet(Facet const* facet)
-{
-  return _facetL.insert(*facet);
-}
-
-/** Add a corner in the mesh's list.
- *  @param corner a pointer to the corner.
- *  @return the id of the new corner.
-*/
-int Mesh::pushCorner(Corner const* corner)
-{
-  return _cornerL.insert(*corner);
-}
-
-
-/** Create a cell in the mesh's list.
- *  @param[out] cell_id a pointer to store the id of the new cell, can
- *              be (int*)NULL pointer.
- *  @return a pointer to the new cell.
-*/
-Cell* Mesh::pushCell(int *cell_id)
-{
-  int const tmp = _cellL.insert(Cell::create(this->cellType()));
-  if (cell_id)
-    *cell_id = tmp;
-  return this->getCellPtr(tmp);
-}
-
-/** Create a node in the mesh's list.
- *  @param[out] node_id a pointer to store the id of the new node, can
- *              be (int*)NULL pointer.
- *  @return a pointer to the new node.
-*/
-Point* Mesh::pushPoint(int *node_id)
-{
-  int const tmp = _pointL.insert(Point());
-  if (node_id)
-    *node_id = tmp;
-  return this->getNodePtr(tmp);
-}
-
-/** Create a facet in the mesh's list.
- *  @param[out] facet_id a pointer to store the id of the new facet, can
- *              be (int*)NULL pointer.
- *  @return a pointer to the new facet.
-*/
-Facet* Mesh::pushFacet(int *facet_id)
-{
-  int const tmp = _facetL.insert(Facet());
-  if (facet_id)
-    *facet_id = tmp;
-  return this->getFacetPtr(tmp);
-}
-
-/** Create a corner in the mesh's list.
- *  @param[out] corner_id a pointer to store the id of the new corner, can
- *              be (int*)NULL pointer.
- *  @return a pointer to the new corner.
-*/
-Corner* Mesh::pushCorner(int *corner_id)
-{
-  int const tmp = _cornerL.insert(Corner());
-  if (corner_id)
-    *corner_id = tmp;  
-  return this->getCornerPtr(tmp);
-}
-
-
-
-Cell* Mesh::createCell() const
-{
-  return Cell::create(this->cellType());
-}
-
-Point* Mesh::createPoint() const
-{
-  return Point::create();
-}
-
-Facet* Mesh::createFacet() const
-{
-  return Facet::create();
-}
-
-Corner* Mesh::createCorner() const
-{
-  return Corner::create();
 }
 
 
@@ -1347,7 +1131,7 @@ void Mesh::_setConnectedComponentsId(cell_handler c_ini, int cc_id)
   //std::list<int>::iterator current_id;
   Cell *oc, *current;
 
-  cells2setup.push_back(c_ini.getIdx());
+  cells2setup.push_back(c_ini.index());
   this->getCellPtr(cells2setup.front())->setVisitedTo(true);
   
   while (!cells2setup.empty())
@@ -1408,7 +1192,7 @@ void Mesh::setUpConnectedComponentsId()
   //  if ( cellt->getConnectedComponentId() >= 0)
   //    continue;
   //  this->_setConnectedComponentsId(cell,id);
-  //   _connected_compL.insert(std::pair<int,int>(id, cell.getIdx()));
+  //   _connected_compL.insert(std::pair<int,int>(id, cell.index()));
   //  ++id;
   //}
   
@@ -1419,7 +1203,7 @@ void Mesh::setUpConnectedComponentsId()
     if ( !cell.isValid() || cell->getConnectedComponentId() >= 0)
       continue;
     this->_setConnectedComponentsId(cell,id);
-     _connected_compL.insert(std::pair<int,int>(id, cell.getIdx()));
+     _connected_compL.insert(std::pair<int,int>(id, cell.index()));
     ++id;
   }
   
@@ -1435,9 +1219,9 @@ void Mesh::_setBoundaryComponentsId(facet_handler f_ini, int bc_id)
     return;
   }
 
-  Facet* fit = nextBoundaryFacet(f_ini.getPtr());
+  Facet* fit = nextBoundaryFacet(f_ini.ptr());
   f_ini->setBoundaryComponentId(bc_id);
-  while (fit != f_ini.getPtr() )
+  while (fit != f_ini.ptr() )
   {
     fit->setBoundaryComponentId(bc_id);
     fit = nextBoundaryFacet(fit);
@@ -1465,11 +1249,11 @@ void Mesh::setUpBoundaryComponentsId()
   facet_iterator facet_end = this->facetEnd();
   for ( ;facet != facet_end; ++facet)
   {
-    facett = facet.getPtr();
+    facett = &*facet;
     if (!this->inBoundary(facett) || facett->getBoundaryComponentId() >= 0 || facett->isDisabled())
       continue;
-    this->_setBoundaryComponentsId(facet,id);
-     _boundary_compL.insert(std::pair<int,int>(id, facet.getIdx()));
+    this->_setBoundaryComponentsId(this->handler(facet),id);
+     _boundary_compL.insert(std::pair<int,int>(id, facet.index()));
     ++id;
   }  
   
@@ -1735,7 +1519,6 @@ void Mesh::getCenterCoord(Corner const* corner, Real* Xc) const
     Xc[i] /= nvpr + (cdim==1?1:0);
 
 }
-
 
 Mesh* Mesh::create(ECellType type, int spacedim)
 {

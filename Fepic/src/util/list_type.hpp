@@ -24,6 +24,7 @@
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wundef"
 #include "boost/type_traits/remove_pointer.hpp"
+#include "boost/type_traits/is_same.hpp"
 #pragma GCC diagnostic pop
 
 //
@@ -37,9 +38,7 @@
 //
 
 // fwd
-template<class> class SeqList_iterator;
-template<class> class SeqList_const_iterator;
-
+template<class,class> class SeqList_iterator;
 
 
 /// @brief A container with a specific use for the mesh. The value type of this container is
@@ -55,8 +54,7 @@ template<class C,                      ///< A random access data container: std:
                                        ///< purposes you will never have to change this default.
 class SeqList
 {
-  template<class> friend class SeqList_iterator;
-  template<class> friend class SeqList_const_iterator;
+  template<class,class> friend class SeqList_iterator;
 
   typedef          SeqList<C,S>                          Self;
   typedef typename C::iterator                           DataIterator;
@@ -75,8 +73,9 @@ public:
   typedef typename container_type::pointer                pointer;
   typedef typename container_type::size_type              size_type;
   typedef typename container_type::difference_type        difference_type;
-  typedef          SeqList_iterator<Self>                 iterator;
-  typedef          SeqList_const_iterator<Self>           const_iterator;
+  
+  typedef SeqList_iterator<DataIterator,Self>             iterator;
+  typedef SeqList_iterator<DataConstIterator,Self const>  const_iterator;
 
 private:
   
@@ -195,7 +194,7 @@ public:
   // modifiers
 
   void disable(const_iterator it)
-  { disable((int)std::distance((DataConstIterator)_data.begin(), it.get()));};
+  { disable(it.index());};
 
   void disable(int del_id)
   {
@@ -232,19 +231,13 @@ public:
   //}
 
   RP_Reference operator[](size_type n)
-  {
-    return _data[n];
-  }
+  { return _data[n]; }
 
   RP_ConstReference operator[](size_type n) const
-  {
-    return _data[n];
-  }
+  { return _data[n]; }
 
   int contiguousId(int id) const
-  {
-    return id - static_cast<int>( std::distance(_disabled_idcs.begin(), std::lower_bound(_disabled_idcs.begin(), _disabled_idcs.end(), id)));
-  }
+  { return id - static_cast<int>( std::distance(_disabled_idcs.begin(), std::lower_bound(_disabled_idcs.begin(), _disabled_idcs.end(), id)));  }
   
   /// A shortcut to get multiples cids at same time.
   /// @param[out] cids contiguous ids.
@@ -252,9 +245,7 @@ public:
   void contiguousIds(int *ids_beg, int const* ids_end, int *cids) const
   {
     while (ids_beg != ids_end)
-    {
-      *cids++ = contiguousId(*ids_beg++);
-    }
+    { *cids++ = contiguousId(*ids_beg++); }
   }
     
 protected:
@@ -316,309 +307,212 @@ protected:
 
 
 
-// fwd
-template<class SeqListType>
+// an iterator adaptor
+template<typename _Iterator, typename _Container>
 class SeqList_iterator
 {
 
   template<class,class> friend class SeqList;
   template<class> friend class SeqList_const_iterator;
 
-  typedef SeqListType*                            PtrToSeqListType;
-  typedef SeqList_iterator<SeqListType>           Self;
-  typedef typename SeqListType::DataIterator DataIterator;
+  typedef _Container*      SeqListPtr;
+  typedef SeqList_iterator Self;
+  typedef _Iterator        DataIterator;
 public:
 
   // stl standard
-  typedef typename SeqListType::difference_type    difference_type;
-  typedef typename SeqListType::value_type         value_type;
-  typedef typename SeqListType::pointer            pointer;
-  typedef typename SeqListType::reference          reference;
-  typedef          std::bidirectional_iterator_tag iterator_category;
+  typedef typename DataIterator::difference_type   difference_type;
+  typedef typename DataIterator::value_type        value_type;
+  typedef typename DataIterator::pointer           pointer;
+  typedef typename DataIterator::reference         reference;
+  typedef typename DataIterator::iterator_category iterator_category;
 
-private:
-  
-  // auxiliary typedefs
-  typedef typename SeqListType::RP_ValueType      RP_ValueType;
-  typedef typename SeqListType::RP_Reference      RP_Reference;
-  typedef typename SeqListType::RP_ConstReference RP_ConstReference;
-  typedef typename SeqListType::RP_Pointer        RP_Pointer;
+protected:
 
+  // attributes
+  DataIterator _data_iter;
+  SeqListPtr   _seq_ptr;
 
 public:
 
-  explicit
-  SeqList_iterator(SeqListType * sq, DataIterator x) : _iter_to_t(x), _ptr_to_seq(sq) {}
-  //explicit
-  //SeqList_iterator(SeqListType * sq, pointer p) : _iter_to_t(DataIterator(p)), _ptr_to_seq(sq) {}
-  explicit
-  SeqList_iterator(SeqListType * sq) : _iter_to_t(), _ptr_to_seq(sq) {}
+  SeqList_iterator(SeqListPtr sq, DataIterator x) : _data_iter(x), _seq_ptr(sq) {}
 
-  SeqList_iterator(Self const& it) : _iter_to_t(it._iter_to_t), _ptr_to_seq(it._ptr_to_seq) {}
+  SeqList_iterator() : _data_iter(), _seq_ptr(NULL) {}
 
-  SeqList_iterator() : _iter_to_t(), _ptr_to_seq(NULL) {}
+  // Allow iterator to const_iterator conversion
+  template<class _Iter>
+  SeqList_iterator(const SeqList_iterator<_Iter,_Container> & __i)
+  : _data_iter(__i.base()),  _seq_ptr(__i._seq_ptr) { }
 
-  DataIterator const& get() const
-  { return _iter_to_t; }
+  DataIterator const& base() const
+  { return _data_iter; }
 
-  FEP_STRONG_INLINE
-  Self& operator=(Self const& foo)
-  {
-    _iter_to_t = foo._iter_to_t;
-    _ptr_to_seq = foo._ptr_to_seq;
-    return *this;
-  }
+  difference_type index() const
+  { return base() - _seq_ptr->_data.begin();}
 
-  FEP_STRONG_INLINE
-  RP_Reference
+  reference
   operator*() const
-  {
-    return *_iter_to_t;
-  }
+  {return *_data_iter; }
 
-  FEP_STRONG_INLINE
-  RP_Pointer
+  pointer
   operator->() const
-  {
-    return &(*_iter_to_t);
-  }
-
+  { return &(operator*()); }
   
-  FEP_STRONG_INLINE
   Self&
   operator++()
   {
-    ++_iter_to_t;
-    while(_iter_to_t != _ptr_to_seq->_data.end() && _iter_to_t->isDisabled())
-      ++_iter_to_t;
+    ++_data_iter;
+    while(_data_iter != _seq_ptr->_data.end() && _data_iter->isDisabled())
+      ++_data_iter;
     return *this;
   }
 
-  FEP_STRONG_INLINE
   Self
   operator++(int)
   {
     Self tmp = *this;
-    ++_iter_to_t;
-    while(_iter_to_t != _ptr_to_seq->_data.end() && _iter_to_t->isDisabled())
-      ++_iter_to_t;
+    ++_data_iter;
+    while(_data_iter != _seq_ptr->_data.end() && _data_iter->isDisabled())
+      ++_data_iter;
     return tmp;
   }
 
-  FEP_STRONG_INLINE
   Self&
   operator--()
   {
-    --_iter_to_t;
-    while(_iter_to_t != _ptr_to_seq->_data.begin() && _iter_to_t->isDisabled())
-      --_iter_to_t;
+    --_data_iter;
+    while(_data_iter != _seq_ptr->_data.begin() && _data_iter->isDisabled())
+      --_data_iter;
     return *this;
   }
 
-  FEP_STRONG_INLINE
   Self
   operator--(int)
   {
     Self tmp = *this;
-    --_iter_to_t;
-    while(_iter_to_t != _ptr_to_seq->_data.begin() && _iter_to_t->isDisabled())
-      --_iter_to_t;
+    --_data_iter;
+    while(_data_iter != _seq_ptr->_data.begin() && _data_iter->isDisabled())
+      --_data_iter;
     return tmp;
   }
-
-  FEP_STRONG_INLINE
-  bool
-  operator==(const Self& x) const
-  { return _iter_to_t == x._iter_to_t; }
-
-  FEP_STRONG_INLINE
-  bool
-  operator!=(const Self& x) const
-  { return _iter_to_t != x._iter_to_t; }
-
-  FEP_STRONG_INLINE
-  Self&
-  next()
-  {
-    ++_iter_to_t;
-    return *this;
-  }
-
-  FEP_STRONG_INLINE
-  Self&
-  previous()
-  {
-    --_iter_to_t;
-    return *this;
-  }
-
-  FEP_STRONG_INLINE
-  Self
-  plus(difference_type const& n)
-  {
-    Self tmp = Self(_ptr_to_seq, _iter_to_t + n);
-    return tmp;
-  }
-
-private:
-  DataIterator _iter_to_t;
-  PtrToSeqListType  _ptr_to_seq;
-
+ 
 };
 
+  //
+  // inspired by /usr/include/c++/4.6.3/bits/stl_iterator.h
+  //
 
+  // Note: In what follows, the left- and right-hand-side iterators are
+  // allowed to vary in types (conceptually in cv-qualification) so that
+  // comparison between cv-qualified and non-cv-qualified iterators be
+  // valid.  However, the greedy and unfriendly operators in std::rel_ops
+  // will make overload resolution ambiguous (when in scope) if we don't
+  // provide overloads whose operands are of the same type.  Can someone
+  // remind me what generic programming is about? -- Gaby
 
+  // Forward iterator requirements
+  template<typename _IteratorL, typename _IteratorR, typename _Container>
+    inline bool
+    operator==(const SeqList_iterator<_IteratorL, _Container>& __lhs,
+               const SeqList_iterator<_IteratorR, _Container>& __rhs)
+    { return __lhs.base() == __rhs.base(); }
 
-// fwd
-template<class SeqListType>
-class SeqList_const_iterator
-{
-  template<class,class> friend class SeqList;
-  template<class> friend class SeqList_iterator;
+  template<typename _Iterator, typename _Container>
+    inline bool
+    operator==(const SeqList_iterator<_Iterator, _Container>& __lhs,
+               const SeqList_iterator<_Iterator, _Container>& __rhs)
+    { return __lhs.base() == __rhs.base(); }
 
-  typedef SeqListType const*                           PtrToSeqListType;
-  typedef SeqList_const_iterator<SeqListType>          Self;
-  typedef SeqList_iterator<SeqListType>                SelfNoConst;
-  typedef typename SeqListType::DataConstIterator DataIterator;
+  template<typename _IteratorL, typename _IteratorR, typename _Container>
+    inline bool
+    operator!=(const SeqList_iterator<_IteratorL, _Container>& __lhs,
+               const SeqList_iterator<_IteratorR, _Container>& __rhs)
+    { return __lhs.base() != __rhs.base(); }
 
-public:
-  typedef typename SeqListType::difference_type    difference_type;
-  typedef typename SeqListType::value_type         value_type;
-  //typedef typename SeqListType::const_pointer      pointer;
-  typedef typename SeqListType::const_reference    reference;
-  typedef          std::bidirectional_iterator_tag iterator_category;
+  template<typename _Iterator, typename _Container>
+    inline bool
+    operator!=(const SeqList_iterator<_Iterator, _Container>& __lhs,
+               const SeqList_iterator<_Iterator, _Container>& __rhs)
+    { return __lhs.base() != __rhs.base(); }
 
-private:
-  
-  // auxiliary typedefs
-  typedef typename SeqListType::RP_ValueType      RP_ValueType;
-  typedef typename SeqListType::RP_Reference      RP_Reference;
-  typedef typename SeqListType::RP_ConstReference RP_ConstReference;
-  typedef typename SeqListType::RP_Pointer        RP_Pointer;
-  typedef typename SeqListType::RP_ConstPointer   RP_ConstPointer;
+  // Random access iterator requirements
+  template<typename _IteratorL, typename _IteratorR, typename _Container>
+    inline bool
+    operator<(const SeqList_iterator<_IteratorL, _Container>& __lhs,
+              const SeqList_iterator<_IteratorR, _Container>& __rhs)
+    { return __lhs.base() < __rhs.base(); }
 
-public:
+  template<typename _Iterator, typename _Container>
+    inline bool
+    operator<(const SeqList_iterator<_Iterator, _Container>& __lhs,
+              const SeqList_iterator<_Iterator, _Container>& __rhs)
+    { return __lhs.base() < __rhs.base(); }
 
+  template<typename _IteratorL, typename _IteratorR, typename _Container>
+    inline bool
+    operator>(const SeqList_iterator<_IteratorL, _Container>& __lhs,
+              const SeqList_iterator<_IteratorR, _Container>& __rhs)
+    { return __lhs.base() > __rhs.base(); }
 
-  SeqList_const_iterator(SeqListType const* sq, DataIterator const& x) : _iter_to_t(x), _ptr_to_seq(sq) {}
-  explicit
-  //SeqList_const_iterator(SeqListType const* sq, pointer p) : _iter_to_t(DataIterator(p)), _ptr_to_seq(sq) {}
-  //explicit
-  SeqList_const_iterator(SeqListType const* sq) : _iter_to_t(), _ptr_to_seq(sq) {}
+  template<typename _Iterator, typename _Container>
+    inline bool
+    operator>(const SeqList_iterator<_Iterator, _Container>& __lhs,
+              const SeqList_iterator<_Iterator, _Container>& __rhs)
+    { return __lhs.base() > __rhs.base(); }
 
-  SeqList_const_iterator(Self const& it)        : _iter_to_t(it._iter_to_t), _ptr_to_seq(it._ptr_to_seq) {}
-  SeqList_const_iterator(SelfNoConst const& it) : _iter_to_t(it._iter_to_t), _ptr_to_seq(it._ptr_to_seq) {}
+  template<typename _IteratorL, typename _IteratorR, typename _Container>
+    inline bool
+    operator<=(const SeqList_iterator<_IteratorL, _Container>& __lhs,
+               const SeqList_iterator<_IteratorR, _Container>& __rhs)
+    { return __lhs.base() <= __rhs.base(); }
 
-  SeqList_const_iterator() : _iter_to_t(), _ptr_to_seq(NULL) {}
+  template<typename _Iterator, typename _Container>
+    inline bool
+    operator<=(const SeqList_iterator<_Iterator, _Container>& __lhs,
+               const SeqList_iterator<_Iterator, _Container>& __rhs)
+    { return __lhs.base() <= __rhs.base(); }
 
-  FEP_STRONG_INLINE
-  DataIterator const& get() const
-  { return _iter_to_t; }
+  template<typename _IteratorL, typename _IteratorR, typename _Container>
+    inline bool
+    operator>=(const SeqList_iterator<_IteratorL, _Container>& __lhs,
+               const SeqList_iterator<_IteratorR, _Container>& __rhs)
+    { return __lhs.base() >= __rhs.base(); }
 
-  FEP_STRONG_INLINE
-  Self& operator=(Self const& foo)
-  {
-    _iter_to_t = foo._iter_to_t;
-    _ptr_to_seq = foo._ptr_to_seq;
-    return *this;
-  }
+  template<typename _Iterator, typename _Container>
+    inline bool
+    operator>=(const SeqList_iterator<_Iterator, _Container>& __lhs,
+               const SeqList_iterator<_Iterator, _Container>& __rhs)
+    { return __lhs.base() >= __rhs.base(); }
 
-  FEP_STRONG_INLINE
-  RP_Reference
-  operator*() const
-  {
-    return *_iter_to_t;
-  }
+  // _GLIBCXX_RESOLVE_LIB_DEFECTS
+  // According to the resolution of DR179 not only the various comparison
+  // operators but also operator- must accept mixed iterator/const_iterator
+  // parameters.
+  template<typename _IteratorL, typename _IteratorR, typename _Container>
+#ifdef __GXX_EXPERIMENTAL_CXX0X__
+    // DR 685.
+    inline auto
+    operator-(const SeqList_iterator<_IteratorL, _Container>& __lhs,
+              const SeqList_iterator<_IteratorR, _Container>& __rhs)
+    -> decltype(__lhs.base() - __rhs.base())
+#else
+    inline typename SeqList_iterator<_IteratorL, _Container>::difference_type
+    operator-(const SeqList_iterator<_IteratorL, _Container>& __lhs,
+              const SeqList_iterator<_IteratorR, _Container>& __rhs)
+#endif
+    { return __lhs.base() - __rhs.base(); }
 
-  FEP_STRONG_INLINE
-  RP_Pointer
-  operator->() const
-  {
-    return &(*_iter_to_t);
-  }
-
-  FEP_STRONG_INLINE
-  Self&
-  operator++()
-  {
-    ++_iter_to_t;
-    while(_iter_to_t != _ptr_to_seq->_data.end() && _iter_to_t->isDisabled())
-      ++_iter_to_t;
-    return *this;
-  }
-
-  FEP_STRONG_INLINE
-  Self
-  operator++(int)
-  {
-    Self tmp = *this;
-    ++_iter_to_t;
-    while(_iter_to_t != _ptr_to_seq->_data.end() && _iter_to_t->isDisabled())
-      ++_iter_to_t;
-    return tmp;
-  }
-
-  FEP_STRONG_INLINE
-  Self&
-  operator--()
-  {
-    --_iter_to_t;
-    while(_iter_to_t != _ptr_to_seq->_data.begin() && _iter_to_t->isDisabled())
-      --_iter_to_t;
-    return *this;
-  }
-
-  FEP_STRONG_INLINE
-  Self
-  operator--(int)
-  {
-    Self tmp = *this;
-    --_iter_to_t;
-    while(_iter_to_t != _ptr_to_seq->_data.begin() && _iter_to_t->isDisabled())
-      --_iter_to_t;
-    return tmp;
-  }
-
-  FEP_STRONG_INLINE
-  bool
-  operator==(const Self& x) const
-  { return _iter_to_t == x._iter_to_t; }
-
-  FEP_STRONG_INLINE
-  bool
-  operator!=(const Self& x) const
-  { return _iter_to_t != x._iter_to_t; }
-
-  FEP_STRONG_INLINE
-  Self&
-  next()
-  {
-    ++_iter_to_t;
-    return *this;
-  }
-
-  FEP_STRONG_INLINE
-  Self&
-  previous()
-  {
-    --_iter_to_t;
-    return *this;
-  }
-
-  FEP_STRONG_INLINE
-  Self
-  plus(difference_type const& n)
-  {
-    Self tmp = Self(_ptr_to_seq, _iter_to_t + n);
-    return tmp;
-  }
-
-private:
-  DataIterator _iter_to_t;
-  PtrToSeqListType  _ptr_to_seq;
-
-};
+  template<typename _Iterator, typename _Container>
+    inline typename SeqList_iterator<_Iterator, _Container>::difference_type
+    operator-(const SeqList_iterator<_Iterator, _Container>& __lhs,
+              const SeqList_iterator<_Iterator, _Container>& __rhs)
+    { return __lhs.base() - __rhs.base(); }
 
 
 
 #endif
+
+
+                          
+                          
+                          

@@ -30,51 +30,103 @@
 #include "elements/elements.hpp"
 #include "../util/list_type.hpp"
 #include "mesh_iterators.hpp"
+#include "entityhandler.hpp"
 #include "boost/ptr_container/ptr_vector.hpp"
 #include "boost/ptr_container/ptr_deque.hpp"
 
 
-typedef _MeshIterator<Cell>        cell_iterator;
-typedef _MeshIterator<Point>       point_iterator;
-typedef _MeshIterator<Facet>       facet_iterator;
-typedef _MeshIterator<Corner>      corner_iterator;
-typedef _MeshIterator<CellElement> abstract_iterator; // TODO
+class Mesh;
 
-typedef _MeshIterator<Cell>        const_cell_iterator;
-typedef _MeshIterator<Point>       const_point_iterator;
-typedef _MeshIterator<Facet>       const_facet_iterator;
-typedef _MeshIterator<Corner>      const_corner_iterator;
-typedef _MeshIterator<CellElement> const_abstract_iterator; // TODO
+namespace fep_internal
+{
+  typedef SeqList<std::deque<Point>     , SetVector<int> > Mesh_PointContainer ;
+  typedef SeqList<std::deque<Corner>    , SetVector<int> > Mesh_CornerContainer;
+  typedef SeqList<std::deque<Facet>     , SetVector<int> > Mesh_FacetContainer ;
+  typedef SeqList<boost::ptr_deque<Cell>, SetVector<int> > Mesh_CellContainer  ;
+  
+  typedef typename Mesh_PointContainer::iterator  Mesh_PointContainer_iterator;
+  typedef typename Mesh_CornerContainer::iterator Mesh_CornerContainer_iterator;
+  typedef typename Mesh_FacetContainer::iterator  Mesh_FacetContainer_iterator;
+  typedef typename Mesh_CellContainer::iterator   Mesh_CellContainer_iterator;
 
-// TODO: criar uma classe para cell_handler, etc.
-// atribuir funções especiais para os handlers
-typedef BaseHandler<Cell>    cell_handler;
-typedef BaseHandler<Point>   point_handler;
-typedef BaseHandler<Facet>   facet_handler;
-typedef BaseHandler<Corner>  corner_handler;
+  typedef typename Mesh_PointContainer::const_iterator  Mesh_PointContainer_const_iterator;  
+  typedef typename Mesh_CornerContainer::const_iterator Mesh_CornerContainer_const_iterator;
+  typedef typename Mesh_FacetContainer::const_iterator  Mesh_FacetContainer_const_iterator;
+  typedef typename Mesh_CellContainer::const_iterator   Mesh_CellContainer_const_iterator;
+
+  typedef MeshIterator<Mesh_PointContainer_iterator , Mesh_PointContainer , Mesh>  point_iterator ;
+  typedef MeshIterator<Mesh_CornerContainer_iterator, Mesh_CornerContainer, Mesh>  corner_iterator;
+  typedef MeshIterator<Mesh_FacetContainer_iterator , Mesh_FacetContainer , Mesh>  facet_iterator ;
+  typedef MeshIterator<Mesh_CellContainer_iterator  , Mesh_CellContainer  , Mesh>  cell_iterator  ;
+  
+  typedef MeshIterator<Mesh_PointContainer_const_iterator , Mesh_PointContainer , Mesh>  point_const_iterator ;
+  typedef MeshIterator<Mesh_CornerContainer_const_iterator, Mesh_CornerContainer, Mesh>  corner_const_iterator;
+  typedef MeshIterator<Mesh_FacetContainer_const_iterator , Mesh_FacetContainer , Mesh>  facet_const_iterator ;
+  typedef MeshIterator<Mesh_CellContainer_const_iterator  , Mesh_CellContainer  , Mesh>  cell_const_iterator  ;  
+  
+  //typedef MeshIterator<CellElement> abstract_iterator; // TODO
+  typedef EntityHandler<Cell  , Mesh>      cell_handler  ;
+  typedef EntityHandler<Point , Mesh>      point_handler ;
+  typedef EntityHandler<Facet , Mesh>      facet_handler ;
+  typedef EntityHandler<Corner, Mesh>      corner_handler;
+
+  typedef EntityHandler<Cell   const, Mesh const> cell_const_handler;
+  typedef EntityHandler<Point  const, Mesh const> point_const_handler;
+  typedef EntityHandler<Facet  const, Mesh const> facet_const_handler;
+  typedef EntityHandler<Corner const, Mesh const> corner_const_handler;
+  
+}
+
+
+//
+// Public
+//
+
+typedef fep_internal::point_iterator  point_iterator ;
+typedef fep_internal::corner_iterator corner_iterator;
+typedef fep_internal::facet_iterator  facet_iterator ;
+typedef fep_internal::cell_iterator   cell_iterator  ;
+
+typedef fep_internal::point_const_iterator  point_const_iterator ;
+typedef fep_internal::corner_const_iterator corner_const_iterator;
+typedef fep_internal::facet_const_iterator  facet_const_iterator ;
+typedef fep_internal::cell_const_iterator   cell_const_iterator  ;
+
+typedef fep_internal::cell_handler   cell_handler  ;
+typedef fep_internal::point_handler  point_handler ;
+typedef fep_internal::facet_handler  facet_handler ;
+typedef fep_internal::corner_handler corner_handler;
+
+typedef fep_internal::cell_const_handler   cell_const_handler  ;
+typedef fep_internal::point_const_handler  point_const_handler ;
+typedef fep_internal::facet_const_handler  facet_const_handler ;
+typedef fep_internal::corner_const_handler corner_const_handler;
 
 
 class Mesh
 {
+  // iterators
+  template<class,class,class> friend class MeshIterator;
+  template<class,class>       friend class EntityHandler;
+  
 public:
-  typedef SeqList<boost::ptr_deque<Cell>, SetVector<int> >  CellList;
-  typedef SeqList<std::deque<Point>,     SetVector<int> >  PointList;
-  typedef SeqList<std::deque<Facet>,     SetVector<int> >  FacetList;
-  typedef SeqList<std::deque<Corner>,    SetVector<int> >  CornerList;
+  typedef fep_internal::Mesh_PointContainer  PointList ;
+  typedef fep_internal::Mesh_CornerContainer CornerList;
+  typedef fep_internal::Mesh_FacetContainer  FacetList ;
+  typedef fep_internal::Mesh_CellContainer   CellList  ;
 
-  typedef typename CellList  ::iterator CellIteratorT;
-  typedef typename PointList ::iterator PointIteratorT;
-  typedef typename FacetList ::iterator FacetIteratorT;
-  typedef typename CornerList::iterator CornerIteratorT;
+  typedef  fep_internal::Mesh_PointContainer_iterator  CellIteratorT;
+  typedef  fep_internal::Mesh_CornerContainer_iterator PointIteratorT;
+  typedef  fep_internal::Mesh_FacetContainer_iterator  FacetIteratorT;
+  typedef  fep_internal::Mesh_CellContainer_iterator   CornerIteratorT;
 
-  typedef typename CellList  ::const_iterator CellConstIteratorT;
-  typedef typename PointList ::const_iterator PointConstIteratorT;
-  typedef typename FacetList ::const_iterator FacetConstIteratorT;
-  typedef typename CornerList::const_iterator CornerConstIteratorT;
+  typedef  fep_internal::Mesh_PointContainer_const_iterator  CellConstIteratorT;
+  typedef  fep_internal::Mesh_CornerContainer_const_iterator PointConstIteratorT;
+  typedef  fep_internal::Mesh_FacetContainer_const_iterator  FacetConstIteratorT;
+  typedef  fep_internal::Mesh_CellContainer_const_iterator   CornerConstIteratorT;
+  
 protected:
 
-  // iterators
-  template<class> friend class _MeshIterator;
   friend class MeshIoMsh;
 
   // ==========================================================
@@ -273,6 +325,23 @@ public:
       return NULL;
   }
 
+  cell_handler handler(cell_iterator it)
+  { return cell_handler(this, &*it, it.index()); }
+
+  facet_handler handler(facet_iterator it)
+  { return facet_handler(this, &*it, it.index()); }
+  
+  corner_handler handler(corner_iterator it)
+  { return corner_handler(this, &*it, it.index()); }  
+
+  point_handler handler(point_iterator it)
+  { return point_handler(this, &*it, it.index()); }
+
+private:
+  template<class EntityType>
+  EntityType* entityPtr(int ith);
+
+public:
 
   cell_handler getCell(int nth)
   {
@@ -1167,6 +1236,163 @@ public:
 
 };
 
+
+
+
+// =====================================================================================
+// =====================================================================================
+//                                  ITERATORS
+// =====================================================================================
+// =====================================================================================
+
+cell_iterator   FEP_STRONG_INLINE Mesh::cellBegin()  { return cell_iterator  (this, _cellL.begin()  );}
+cell_iterator   FEP_STRONG_INLINE Mesh::cellEnd()    { return cell_iterator  (this, _cellL.end()    );}
+point_iterator  FEP_STRONG_INLINE Mesh::pointBegin() { return point_iterator (this, _pointL.begin() );}
+point_iterator  FEP_STRONG_INLINE Mesh::pointEnd()   { return point_iterator (this, _pointL.end()   );}
+facet_iterator  FEP_STRONG_INLINE Mesh::facetBegin() { return facet_iterator (this, _facetL.begin() );}
+facet_iterator  FEP_STRONG_INLINE Mesh::facetEnd()   { return facet_iterator (this, _facetL.end()   );}
+corner_iterator FEP_STRONG_INLINE Mesh::cornerBegin(){ return corner_iterator(this, _cornerL.begin());}
+corner_iterator FEP_STRONG_INLINE Mesh::cornerEnd()  { return corner_iterator(this, _cornerL.end()  );}
+
+cell_iterator   FEP_STRONG_INLINE Mesh::cellBegin  (int tid, int nthreads) { return cell_iterator  (this, _cellL.begin  (tid, nthreads)  );}
+cell_iterator   FEP_STRONG_INLINE Mesh::cellEnd    (int tid, int nthreads) { return cell_iterator  (this, _cellL.end    (tid, nthreads)  );}
+point_iterator  FEP_STRONG_INLINE Mesh::pointBegin (int tid, int nthreads) { return point_iterator (this, _pointL.begin (tid, nthreads)  );}
+point_iterator  FEP_STRONG_INLINE Mesh::pointEnd   (int tid, int nthreads) { return point_iterator (this, _pointL.end   (tid, nthreads)  );}
+facet_iterator  FEP_STRONG_INLINE Mesh::facetBegin (int tid, int nthreads) { return facet_iterator (this, _facetL.begin (tid, nthreads)  );}
+facet_iterator  FEP_STRONG_INLINE Mesh::facetEnd   (int tid, int nthreads) { return facet_iterator (this, _facetL.end   (tid, nthreads)  );}
+corner_iterator FEP_STRONG_INLINE Mesh::cornerBegin(int tid, int nthreads) { return corner_iterator(this, _cornerL.begin(tid, nthreads)  );}
+corner_iterator FEP_STRONG_INLINE Mesh::cornerEnd  (int tid, int nthreads) { return corner_iterator(this, _cornerL.end  (tid, nthreads)  );}
+
+// =====================================================================================
+// =====================================================================================
+
+
+template<class CT>
+struct ArgConverter // CT = SeqList value type
+{
+  template<class U> // U = push function argument
+  CT const& operator() (U const* u)
+  {
+    return *static_cast<Cell const*>(u);
+  }
+};
+
+template<class CT>
+struct ArgConverter<CT*>
+{
+  template<class U>
+  CT* operator() (U const* u)
+  {
+    return new CT( *static_cast<Cell const*>(u) );
+  }
+};
+
+
+/** Add a cell in the mesh's list.
+ *  @param cell a pointer to the cell.
+ *  @return the id of the new cell.
+*/
+FEP_STRONG_INLINE
+int Mesh::pushCell(Cell const* cell)
+{ return _cellL.insert(cell->clone()); }
+
+/** Add a node in the mesh's list.
+ *  @param node a pointer to the node.
+ *  @return the id of the new node.
+*/
+FEP_STRONG_INLINE
+int Mesh::pushPoint(Point const* node)
+{ return _pointL.insert(*node); }
+
+/** Add a facet in the mesh's list.
+ *  @param facet a pointer to the facet.
+ *  @return the id of the new facet.
+*/
+FEP_STRONG_INLINE
+int Mesh::pushFacet(Facet const* facet)
+{ return _facetL.insert(*facet); }
+
+/** Add a corner in the mesh's list.
+ *  @param corner a pointer to the corner.
+ *  @return the id of the new corner.
+*/
+FEP_STRONG_INLINE
+int Mesh::pushCorner(Corner const* corner)
+{ return _cornerL.insert(*corner); }
+
+
+/** Create a cell in the mesh's list.
+ *  @param[out] cell_id a pointer to store the id of the new cell, can
+ *              be (int*)NULL pointer.
+ *  @return a pointer to the new cell.
+*/
+FEP_STRONG_INLINE
+Cell* Mesh::pushCell(int *cell_id)
+{
+  int const tmp = _cellL.insert(Cell::create(this->cellType()));
+  if (cell_id)
+    *cell_id = tmp;
+  return this->getCellPtr(tmp);
+}
+
+/** Create a node in the mesh's list.
+ *  @param[out] node_id a pointer to store the id of the new node, can
+ *              be (int*)NULL pointer.
+ *  @return a pointer to the new node.
+*/
+FEP_STRONG_INLINE
+Point* Mesh::pushPoint(int *node_id)
+{
+  int const tmp = _pointL.insert(Point());
+  if (node_id)
+    *node_id = tmp;
+  return this->getNodePtr(tmp);
+}
+
+/** Create a facet in the mesh's list.
+ *  @param[out] facet_id a pointer to store the id of the new facet, can
+ *              be (int*)NULL pointer.
+ *  @return a pointer to the new facet.
+*/
+FEP_STRONG_INLINE
+Facet* Mesh::pushFacet(int *facet_id)
+{
+  int const tmp = _facetL.insert(Facet());
+  if (facet_id)
+    *facet_id = tmp;
+  return this->getFacetPtr(tmp);
+}
+
+/** Create a corner in the mesh's list.
+ *  @param[out] corner_id a pointer to store the id of the new corner, can
+ *              be (int*)NULL pointer.
+ *  @return a pointer to the new corner.
+*/
+FEP_STRONG_INLINE
+Corner* Mesh::pushCorner(int *corner_id)
+{
+  int const tmp = _cornerL.insert(Corner());
+  if (corner_id)
+    *corner_id = tmp;  
+  return this->getCornerPtr(tmp);
+}
+
+
+FEP_STRONG_INLINE
+Cell* Mesh::createCell() const
+{ return Cell::create(this->cellType()); }
+
+FEP_STRONG_INLINE
+Point* Mesh::createPoint() const
+{ return Point::create(); }
+
+FEP_STRONG_INLINE
+Facet* Mesh::createFacet() const
+{ return Facet::create(); }
+
+FEP_STRONG_INLINE
+Corner* Mesh::createCorner() const
+{ return Corner::create(); }
 
 
 

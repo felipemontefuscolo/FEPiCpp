@@ -24,71 +24,185 @@
 #define FEPIC_MESH_ITERATORS_HPP
 
 #include <iterator>
-#include "basehandler.hpp"
 
 class Mesh;
-class Cell;
 
 // EntityType = Cell, Facet, Corner or Point
-template<class EntityType>
-class _MeshIterator : public BaseHandler<EntityType>
+template<class _Iterator, class _Container, class _Mesh>
+class MeshIterator
 {
+protected:  
+
   friend class Mesh;
+
+  typedef _Iterator      SeqListIter;
+  typedef MeshIterator   Self;
+  typedef _Mesh*         MeshPtr;
+  typedef _Container     ContainerType;
   
-  typedef _MeshIterator Self;
 public:
   
   //typedef typename long                  difference_type;
-  typedef  std::bidirectional_iterator_tag iterator_category;  
-  typedef typename BaseHandler<EntityType>::value_type      value_type;
-  typedef typename BaseHandler<EntityType>::pointer         pointer;
-  typedef typename BaseHandler<EntityType>::const_pointer   const_pointer;
-  typedef typename BaseHandler<EntityType>::reference       reference;
-  typedef typename BaseHandler<EntityType>::const_reference const_reference;  
-  
-  _MeshIterator(Mesh * mesh, pointer elem, int id) : BaseHandler<EntityType>(mesh,elem,id) {}
-  _MeshIterator(Mesh * mesh, int id) : BaseHandler<EntityType>(mesh,id) {}
-  
-  _MeshIterator() : BaseHandler<EntityType>() {}
+  typedef typename SeqListIter::difference_type   difference_type;
+  typedef typename SeqListIter::iterator_category iterator_category;  
+  typedef typename SeqListIter::value_type        value_type;
+  typedef typename SeqListIter::pointer           pointer;
+  typedef typename SeqListIter::reference         reference;
 
-  Self&     operator++();
-  Self      operator++(int);
-  Self&     operator--();
-  Self      operator--(int);
+protected:
+  //MeshPtr     _mesh_ptr; // DO NOT DELETE ME ... I will be useful later.
+  SeqListIter _seq_iter;
 
-};
-
-
-// EntityType = Cell, Facet, Corner or Point
-template<class EntityType>
-class _MeshConstIterator : public ConstBaseHandler<EntityType>
-{
-  friend class Mesh;
-  
-  typedef _MeshConstIterator Self;
 public:
   
-  //typedef typename long                  difference_type;
-  typedef  std::bidirectional_iterator_tag iterator_category;  
-  typedef  EntityType         value_type;
-  typedef  EntityType*        pointer;
-  typedef  EntityType const*  const_pointer;
-  typedef  EntityType&        reference;
-  typedef  EntityType const&  const_reference;
+  template<class _Iter>
+  MeshIterator(MeshPtr, _Iter it) : _seq_iter(it) {}
   
-  _MeshConstIterator(Mesh const* mesh, const_pointer elem, int id) : ConstBaseHandler<EntityType>(mesh,elem,id) {}
-  _MeshConstIterator(Mesh const* mesh, int id) : ConstBaseHandler<EntityType>(mesh,id) {}
-  
-  _MeshConstIterator() : ConstBaseHandler<EntityType>() {}
-  
-  Self&           operator++();
-  Self            operator++(int);
-  Self&           operator--();
-  Self            operator--(int);
+  MeshIterator() {}
+
+  // Allow iterator to const_iterator conversion
+  template<class _Iter>
+  MeshIterator(const MeshIterator<_Iter,_Container, _Mesh> & i)
+              : _seq_iter(i.base()) { }  
+
+  SeqListIter const& base() const
+  { return _seq_iter; }
+
+public:
+
+  difference_type index() const
+  { return _seq_iter.index(); }
+
+  reference
+  operator*() const
+  { return *_seq_iter; }
+
+  pointer
+  operator->() const
+  { return &operator*(); }
+
+  Self&
+  operator++()
+  {
+    ++_seq_iter;
+    return *this;
+  }
+
+  Self
+  operator++(int)
+  { return Self(_seq_iter++); }
+
+  // Bidirectional iterator requirements
+  Self&
+  operator--()
+  {
+    --_seq_iter;
+    return *this;
+  }
+
+  Self
+  operator--(int)
+  { return Self(_seq_iter--); }
 
 };
 
+// Forward iterator requirements
+template<class _IteratorL, class _IteratorR, class _Container, class _Mesh>
+  inline bool
+  operator==(const MeshIterator<_IteratorL, _Container, _Mesh>& __lhs,
+             const MeshIterator<_IteratorR, _Container, _Mesh>& __rhs)
+  { return __lhs.base() == __rhs.base(); }
 
+template<class _Iterator, class _Container, class _Mesh>
+  inline bool
+  operator==(const MeshIterator<_Iterator, _Container, _Mesh>& __lhs,
+             const MeshIterator<_Iterator, _Container, _Mesh>& __rhs)
+  { return __lhs.base() == __rhs.base(); }
+
+template<class _IteratorL, class _IteratorR, class _Container, class _Mesh>
+  inline bool
+  operator!=(const MeshIterator<_IteratorL, _Container, _Mesh>& __lhs,
+             const MeshIterator<_IteratorR, _Container, _Mesh>& __rhs)
+  { return __lhs.base() != __rhs.base(); }
+
+template<class _Iterator, class _Container, class _Mesh>
+  inline bool
+  operator!=(const MeshIterator<_Iterator, _Container, _Mesh>& __lhs,
+             const MeshIterator<_Iterator, _Container, _Mesh>& __rhs)
+  { return __lhs.base() != __rhs.base(); }
+
+// Random access iterator requirements
+template<class _IteratorL, class _IteratorR, class _Container, class _Mesh>
+  inline bool
+  operator<(const MeshIterator<_IteratorL, _Container, _Mesh>& __lhs,
+            const MeshIterator<_IteratorR, _Container, _Mesh>& __rhs)
+  { return __lhs.base() < __rhs.base(); }
+
+template<class _Iterator, class _Container, class _Mesh>
+  inline bool
+  operator<(const MeshIterator<_Iterator, _Container, _Mesh>& __lhs,
+            const MeshIterator<_Iterator, _Container, _Mesh>& __rhs)
+  { return __lhs.base() < __rhs.base(); }
+
+template<class _IteratorL, class _IteratorR, class _Container, class _Mesh>
+  inline bool
+  operator>(const MeshIterator<_IteratorL, _Container, _Mesh>& __lhs,
+            const MeshIterator<_IteratorR, _Container, _Mesh>& __rhs)
+  { return __lhs.base() > __rhs.base(); }
+
+template<class _Iterator, class _Container, class _Mesh>
+  inline bool
+  operator>(const MeshIterator<_Iterator, _Container, _Mesh>& __lhs,
+            const MeshIterator<_Iterator, _Container, _Mesh>& __rhs)
+  { return __lhs.base() > __rhs.base(); }
+
+template<class _IteratorL, class _IteratorR, class _Container, class _Mesh>
+  inline bool
+  operator<=(const MeshIterator<_IteratorL, _Container, _Mesh>& __lhs,
+             const MeshIterator<_IteratorR, _Container, _Mesh>& __rhs)
+  { return __lhs.base() <= __rhs.base(); }
+
+template<class _Iterator, class _Container, class _Mesh>
+  inline bool
+  operator<=(const MeshIterator<_Iterator, _Container, _Mesh>& __lhs,
+             const MeshIterator<_Iterator, _Container, _Mesh>& __rhs)
+  { return __lhs.base() <= __rhs.base(); }
+
+template<class _IteratorL, class _IteratorR, class _Container, class _Mesh>
+  inline bool
+  operator>=(const MeshIterator<_IteratorL, _Container, _Mesh>& __lhs,
+             const MeshIterator<_IteratorR, _Container, _Mesh>& __rhs)
+  { return __lhs.base() >= __rhs.base(); }
+
+template<class _Iterator, class _Container, class _Mesh>
+  inline bool
+  operator>=(const MeshIterator<_Iterator, _Container, _Mesh>& __lhs,
+             const MeshIterator<_Iterator, _Container, _Mesh>& __rhs)
+  { return __lhs.base() >= __rhs.base(); }
+
+// _GLIBCXX_RESOLVE_LIB_DEFECTS
+// According to the resolution of DR179 not only the various comparison
+// operators but also operator- must accept mixed iterator/const_iterator
+// parameters.
+template<class _IteratorL, class _IteratorR, class _Container, class _Mesh>
+#ifdef __GXX_EXPERIMENTAL_CXX0X__
+  // DR 685.
+  inline auto
+  operator-(const MeshIterator<_IteratorL, _Container, _Mesh>& __lhs,
+            const MeshIterator<_IteratorR, _Container, _Mesh>& __rhs)
+  -> decltype(__lhs.base() - __rhs.base())
+#else
+  inline class MeshIterator<_IteratorL, _Container, _Mesh>::difference_type
+  operator-(const MeshIterator<_IteratorL, _Container, _Mesh>& __lhs,
+            const MeshIterator<_IteratorR, _Container, _Mesh>& __rhs)
+#endif
+  { return __lhs.base() - __rhs.base(); }
+
+template<class _Iterator, class _Container, class _Mesh>
+  inline class MeshIterator<_Iterator, _Container, _Mesh>::difference_type
+  operator-(const MeshIterator<_Iterator, _Container, _Mesh>& __lhs,
+            const MeshIterator<_Iterator, _Container, _Mesh>& __rhs)
+  { return __lhs.base() - __rhs.base(); }
 
 
 #endif

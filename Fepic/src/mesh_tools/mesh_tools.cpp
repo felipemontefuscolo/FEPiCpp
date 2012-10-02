@@ -874,9 +874,9 @@ Point* MeshToolsTri::insertVertexOnEdge(Cell *cellA, int fidA, Real t, Mesh *mes
 //  const int cell_dim = 2;
 //  const int n_facets_per_cell = 3;
 //
-//  Mesh * mesh = cell.getMesh();
+//  Mesh * mesh = cell.meshPtr();
 //  
-//  const int cell_id_to_remove = cell.getIdx();
+//  const int cell_id_to_remove = cell.index();
 //  const int nds_per_cell = mesh->numNodesPerCell();
 //  int       facets_id[n_facets_per_cell];
 //  

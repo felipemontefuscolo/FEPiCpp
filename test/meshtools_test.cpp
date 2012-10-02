@@ -117,7 +117,7 @@ void checkConsistencyTri(Mesh *mesh)
     
     cc_ids.clear();
 
-    int myid = point.getIdx();
+    int myid = point.index();
     
     for (int i = 0; i < (int)ics.size()/2; ++i)
     {
