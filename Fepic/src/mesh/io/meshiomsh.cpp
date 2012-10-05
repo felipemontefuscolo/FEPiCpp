@@ -68,19 +68,19 @@ ECellType MeshIoMsh::identifiesMshMeshType(const char* filename, int &space_dim)
    * e contando o número de células.
    * --------------------------------------- */
 //  bool wrong_file_err=true;
-  int  elem_number, elm_dim, num_tags, physical;
+  int  elem_number, elm_dim, numm_tags, physical;
   int current_elm_dim = 0;
   ECellType current_elm_type = UNDEFINED_CELLT;
   fgets(buffer, sizeof(buffer), file_ptr); // escapa do \n
   for (int k=0; k < num_elms; ++k)
   {
 
-    fscanf(file_ptr, "%d %d %d %d", &elem_number, &type_tag, &num_tags, &physical);
+    fscanf(file_ptr, "%d %d %d %d", &elem_number, &type_tag, &numm_tags, &physical);
 
     //// sincronização
     FEPIC_ASSERT(elem_number==k+1, "invalid file format", std::invalid_argument);
 
-    for (int j=1; j<num_tags; ++j)
+    for (int j=1; j<numm_tags; ++j)
     {
       fscanf(file_ptr, "%s", buffer);
     }
@@ -124,7 +124,7 @@ void MeshIoMsh::readFileMsh(const char* filename, Mesh * mesh)
   FEPIC_ASSERT(mesh, "invalid mesh pointer", std::invalid_argument);
 
 
-  this->_registerFile(filename, ".msh");
+  this->fi_registerFile(filename, ".msh");
 
   FILE * file_ptr = fopen(filename, "r");
 
@@ -187,9 +187,9 @@ void MeshIoMsh::readFileMsh(const char* filename, Mesh * mesh)
    * Detectando a ordem da malha, verificando sequencia dos elementos,
    * e contando o número de células.
    * --------------------------------------- */
-  const int mesh_cell_msh_tag = mesh->cellMshTag();
+  const int meshm_cell_msh_tag = mesh->cellMshTag();
   
-  if (mshTag2ctype(EMshTag(mesh_cell_msh_tag)) != mesh->cellType())
+  if (mshTag2ctype(EMshTag(meshm_cell_msh_tag)) != mesh->cellType())
   {
     //FEPIC_ASSERT(false, "invalid msh format", std::runtime_error);
     printf("ERROR: ctype2mshTag() = %d\n", ctype2mshTag(mesh->cellType()));
@@ -214,7 +214,7 @@ void MeshIoMsh::readFileMsh(const char* filename, Mesh * mesh)
     }
 
     // check type
-    if (type_tag == mesh_cell_msh_tag)
+    if (type_tag == meshm_cell_msh_tag)
     {
       wrong_file_err=false;
       ++num_cells;
@@ -246,20 +246,20 @@ void MeshIoMsh::readFileMsh(const char* filename, Mesh * mesh)
   int  inc(0);
   int  nodes_per_cell = mesh->nodesPerCell();
   int  id_aux;
-  int  num_tags;
+  int  numm_tags;
   int  elm_dim;
   int  physical;
   int const cell_dim = mesh->cellDim();
   int const cell_msh_tag = mesh->cellMshTag();
   for (int k=0; k < num_elms; ++k)
   {
-    if ( EOF == fscanf(file_ptr, "%d %d %d %d", &elem_number, &type_tag, &num_tags, &physical) )
+    if ( EOF == fscanf(file_ptr, "%d %d %d %d", &elem_number, &type_tag, &numm_tags, &physical) )
       FEPIC_ASSERT(false, "invalid msh format", std::runtime_error);
 
     // sincronização
     FEPIC_ASSERT(elem_number==k+1, "invalid file format", std::invalid_argument);
 
-    for (int j=1; j<num_tags; ++j)
+    for (int j=1; j<numm_tags; ++j)
     {
       if ( EOF == fscanf(file_ptr, "%s", buffer) )
         FEPIC_ASSERT(false, "invalid msh format", std::runtime_error);
@@ -339,12 +339,12 @@ void MeshIoMsh::readFileMsh(const char* filename, Mesh * mesh)
   for (int k=0; k < num_elms; ++k)
   {
 
-    fscanf(file_ptr, "%d %d %d %d", &elem_number, &type_tag, &num_tags, &physical);
+    fscanf(file_ptr, "%d %d %d %d", &elem_number, &type_tag, &numm_tags, &physical);
 
     //// sincronização
     //FEPIC_ASSERT(elem_number==k+1, "invalid file format", std::invalid_argument);
 
-    for (int j=1; j<num_tags; ++j)
+    for (int j=1; j<numm_tags; ++j)
     {
       fscanf(file_ptr, "%s", buffer);
     }
@@ -418,8 +418,8 @@ void MeshIoMsh::readFileMsh(const char* filename, Mesh * mesh)
   if (mesh->cellDim()>2)
   {
     const int n_corners_per_facet = mesh->numCornersPerFacet();
-    // int facet_facets[n_corners_per_facet];
-    int *facet_facets = new int [n_corners_per_facet];
+    // int facetm_facets[n_corners_per_facet];
+    int *facetm_facets = new int [n_corners_per_facet];
     Facet const* facet;
     Corner* corner;
     for (int i = 0; i < mesh->numFacetsTotal(); ++i)
@@ -427,18 +427,18 @@ void MeshIoMsh::readFileMsh(const char* filename, Mesh * mesh)
       facet = mesh->getFacetPtr(i);
       if (facet->isDisabled())
         continue;
-      mesh->getCellPtr(facet->getIncidCell())->getFacetCornersId(facet->getPosition(), facet_facets);
+      mesh->getCellPtr(facet->getIncidCell())->getFacetCornersId(facet->getPosition(), facetm_facets);
 
       for (int j = 0; j < n_corners_per_facet; ++j)
       {
-        corner = mesh->getCornerPtr(facet_facets[j]);
+        corner = mesh->getCornerPtr(facetm_facets[j]);
         if (corner->getTag() == 0)
           corner->setTag(facet->getTag());
       }
     }
     
-    delete [] facet_facets;
-    facet_facets = NULL;
+    delete [] facetm_facets;
+    facetm_facets = NULL;
   }
 
   fclose(file_ptr);

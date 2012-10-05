@@ -59,8 +59,6 @@
 #define MSH_UNDEFINED_ELEM 33
 #define MSH_MAX_ELEMENT_NODES 56
 
-
-
 static
 int getNumVerticesForElementTypeMsh(int type)
 {

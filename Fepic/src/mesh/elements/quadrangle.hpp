@@ -23,10 +23,10 @@
 #define FEPIC_QUADRANGLE_HPP
 
 /* linear Quadrangle */
-class Quadrangle4 :  public _CellCore<Quadrangle4>
+class Quadrangle4 :  public iCellCore<Quadrangle4>
 {
 public:
-  friend class _CellCore<Quadrangle4>;
+  friend class iCellCore<Quadrangle4>;
   
   typedef Hypercube<2> PolytopeT;
   typedef Edge2        Derived;
@@ -54,23 +54,23 @@ protected:
 
 public:
   
-  static const int _table_fC_x_vC[4][2];
-  static const int _table_fC_x_nC[4][2];
-  static const int _table_vC_x_fC[4][2];
-  static const int _table_fC_x_bC[4][2];
-  static const int _table_bC_x_vC[4][1];
-  static const int _table_bC_x_nC[4][1];
-  static const int _table_bC_x_fC[4][2];
+  static const int m_table_fC_x_vC[4][2];
+  static const int m_table_fC_x_nC[4][2];
+  static const int m_table_vC_x_fC[4][2];
+  static const int m_table_fC_x_bC[4][2];
+  static const int m_table_bC_x_vC[4][1];
+  static const int m_table_bC_x_nC[4][1];
+  static const int m_table_bC_x_fC[4][2];
     
 };
 
 
 
 /* quadratic Quadrangle (serendipity) */
-class Quadrangle8 :  public _CellCore<Quadrangle8>
+class Quadrangle8 :  public iCellCore<Quadrangle8>
 {
 public:
-  friend class _CellCore<Quadrangle8>;
+  friend class iCellCore<Quadrangle8>;
 
   typedef Hypercube<2> PolytopeT;
   typedef Edge3        Derived;
@@ -98,23 +98,23 @@ protected:
   
 public:
   
-  static const int _table_fC_x_vC[4][2];
-  static const int _table_fC_x_nC[4][3];
-  static const int _table_vC_x_fC[4][2];
-  static const int _table_fC_x_bC[4][2];
-  static const int _table_bC_x_vC[4][1];
-  static const int _table_bC_x_nC[4][1];
-  static const int _table_bC_x_fC[4][2];
+  static const int m_table_fC_x_vC[4][2];
+  static const int m_table_fC_x_nC[4][3];
+  static const int m_table_vC_x_fC[4][2];
+  static const int m_table_fC_x_bC[4][2];
+  static const int m_table_bC_x_vC[4][1];
+  static const int m_table_bC_x_nC[4][1];
+  static const int m_table_bC_x_fC[4][2];
 
 };
 
 
 
 /* quadratic Quadrangle */
-class Quadrangle9 :  public _CellCore<Quadrangle9>
+class Quadrangle9 :  public iCellCore<Quadrangle9>
 {
 public:
-  friend class _CellCore<Quadrangle9>;
+  friend class iCellCore<Quadrangle9>;
 
   typedef Hypercube<2> PolytopeT;
   typedef Edge3        Derived;
@@ -143,13 +143,13 @@ protected:
   
 public:
   
-  static const int _table_fC_x_vC[4][2];
-  static const int _table_fC_x_nC[4][3];
-  static const int _table_vC_x_fC[4][2];
-  static const int _table_fC_x_bC[4][2];
-  static const int _table_bC_x_vC[4][1];
-  static const int _table_bC_x_nC[4][1];
-  static const int _table_bC_x_fC[4][2];
+  static const int m_table_fC_x_vC[4][2];
+  static const int m_table_fC_x_nC[4][3];
+  static const int m_table_vC_x_fC[4][2];
+  static const int m_table_fC_x_bC[4][2];
+  static const int m_table_bC_x_vC[4][1];
+  static const int m_table_bC_x_nC[4][1];
+  static const int m_table_bC_x_fC[4][2];
     
 };
 

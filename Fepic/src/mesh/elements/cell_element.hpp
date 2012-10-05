@@ -25,45 +25,45 @@
 
 #include "../labelable.hpp"
 
-class CellElement : public _Labelable
+class CellElement : public Labelable
 {
 public:  
   
   CellElement(int icell, int position, int tag, int flags, int status = 0)
-      :  _Labelable(tag,flags),
-         _status(static_cast<char>(status)),
-         _position(static_cast<char>(position)),
-         _icell(icell)
+      :  Labelable(tag,flags),
+         m_status(static_cast<char>(status)),
+         m_position(static_cast<char>(position)),
+         m_icell(icell)
          {}
-  CellElement() : _Labelable(), _status(0), _position(-1), _icell(-1) {}
+  CellElement() : Labelable(), m_status(0), m_position(-1), m_icell(-1) {}
 
   
   int getIncidCell() const
   {
-    return _icell;
+    return m_icell;
   }
   
   int getPosition() const
   {
-    return static_cast<int>(_position);
+    return static_cast<int>(m_position);
   }
   
   void setIncidCell(int icell_id)
   {
-    _icell = icell_id;
+    m_icell = icell_id;
   }
 
   // facet lid of incident cell
   void setPosition(int pos)
   {
-    _position = static_cast<char>( pos );
+    m_position = static_cast<char>( pos );
   }
   
   /// is the same as doing setIncidCell(icell_id); setPosition(pos);
   void setIncidence(int icell_id, int pos)
   {
-    _icell = icell_id;
-    _position = static_cast<char>( pos );
+    m_icell = icell_id;
+    m_position = static_cast<char>( pos );
   }
   
   void copy(CellElement const* other)
@@ -76,9 +76,9 @@ public:
   ~CellElement() {}
 
 protected:
-  char  _status;     // ONLY POINT CLASS USE IT .. it was put here to avoid problems with padding.
-  char  _position;   // local id of this element on the incident cell
-  int   _icell;      // global id of the incident cell
+  char  m_status;     // ONLY POINT CLASS USE IT .. it was put here to avoid problems with padding.
+  char  m_position;   // local id of this element on the incident cell
+  int   m_icell;      // global id of the incident cell
   
 };
 

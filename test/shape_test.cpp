@@ -45,7 +45,7 @@ using namespace std::tr1::placeholders;
 Real const FEP_EPS = std::numeric_limits<Real>::epsilon();
 Real const FEP_TOL = 500000*FEP_EPS; // ~ 1.1e-10 para double
 
-typedef std::tr1::tuple<ECellType, EShapeType, const char*> CSN_t;
+typedef std::tr1::tuple<ECellType, EShapeType, const char*> CSN_T;
 
 // calculates the derivative a function f(x)
 // f: callable object in form  "Real f(Real const*)"
@@ -79,7 +79,7 @@ Real diff_(F const& f, Real const*x, int c, int Dim)
 }
 
 
-class ShapeTest : public testing::TestWithParam< CSN_t >
+class ShapeTest : public testing::TestWithParam< CSN_T >
 { // vertex id
 public:
 
@@ -112,37 +112,37 @@ public:
 };
 
 static const
-CSN_t csn_table[] = {CSN_t(EDGE2,        P0    , "meshes/uni_edge.msh"),  //  0
-                     CSN_t(EDGE2,        P1    , "meshes/uni_edge.msh"),  //  1
-                     CSN_t(EDGE2,        P2    , "meshes/uni_edge.msh"),  //  2
-                     CSN_t(TRIANGLE3,    P0    , "meshes/uni_tri.msh"),   //  3
-                     CSN_t(TRIANGLE3,    P1    , "meshes/uni_tri.msh"),   //  4
-                     CSN_t(TRIANGLE3,    P2    , "meshes/uni_tri.msh"),   //  5
-                     CSN_t(TRIANGLE3,    P1ph  , "meshes/uni_tri.msh"),   //  6
-                     CSN_t(TRIANGLE3,    P2ph  , "meshes/uni_tri.msh"),   //  7
-                     CSN_t(TRIANGLE3,    Pm1   , "meshes/uni_tri.msh"),   //  8
-                     CSN_t(TRIANGLE3,    BUBBLE, "meshes/uni_tri.msh"),   //  9
-                     CSN_t(QUADRANGLE4,  Q0    , "meshes/uni_quad.msh"),  // 10
-                     CSN_t(QUADRANGLE4,  Q1    , "meshes/uni_quad.msh"),  // 11
-                     CSN_t(QUADRANGLE4,  Q2    , "meshes/uni_quad.msh"),  // 12
-                     CSN_t(QUADRANGLE4,  Q1ph  , "meshes/uni_quad.msh"),  // 13
-                     CSN_t(QUADRANGLE4,  Pm1   , "meshes/uni_quad.msh"),  // 14
-                     CSN_t(QUADRANGLE4,  Q2ser , "meshes/uni_quad.msh"),  // 15
-                     CSN_t(QUADRANGLE4,  BUBBLE, "meshes/uni_quad.msh"),  // 16
-                     CSN_t(TETRAHEDRON4, P0    , "meshes/uni_tet.msh"),   // 17
-                     CSN_t(TETRAHEDRON4, P1    , "meshes/uni_tet.msh"),   // 18
-                     CSN_t(TETRAHEDRON4, P2    , "meshes/uni_tet.msh"),   // 19
-                     CSN_t(TETRAHEDRON4, P1ph  , "meshes/uni_tet.msh"),   // 20
-                     CSN_t(TETRAHEDRON4, P2ph  , "meshes/uni_tet.msh"),   // 21
-                     CSN_t(TETRAHEDRON4, Pm1   , "meshes/uni_tet.msh"),   // 22
-                     CSN_t(TETRAHEDRON4, BUBBLE, "meshes/uni_tet.msh"),   // 23
-                     CSN_t(HEXAHEDRON8,  Q0    , "meshes/uni_hex.msh"),   // 24
-                     CSN_t(HEXAHEDRON8,  Q1    , "meshes/uni_hex.msh"),   // 25
-                     CSN_t(HEXAHEDRON8,  Q2    , "meshes/uni_hex.msh"),   // 26
-                     CSN_t(HEXAHEDRON8,  Q1ph  , "meshes/uni_hex.msh"),   // 27
-                     CSN_t(HEXAHEDRON8,  Pm1   , "meshes/uni_hex.msh"),   // 28
-                     CSN_t(HEXAHEDRON8,  Q2ser , "meshes/uni_hex.msh"),   // 29
-                     CSN_t(HEXAHEDRON8,  BUBBLE, "meshes/uni_hex.msh")};  // 30
+CSN_T csn_table[] = {CSN_T(EDGE2,        P0    , "meshes/uni_edge.msh"),  //  0
+                     CSN_T(EDGE2,        P1    , "meshes/uni_edge.msh"),  //  1
+                     CSN_T(EDGE2,        P2    , "meshes/uni_edge.msh"),  //  2
+                     CSN_T(TRIANGLE3,    P0    , "meshes/uni_tri.msh"),   //  3
+                     CSN_T(TRIANGLE3,    P1    , "meshes/uni_tri.msh"),   //  4
+                     CSN_T(TRIANGLE3,    P2    , "meshes/uni_tri.msh"),   //  5
+                     CSN_T(TRIANGLE3,    P1ph  , "meshes/uni_tri.msh"),   //  6
+                     CSN_T(TRIANGLE3,    P2ph  , "meshes/uni_tri.msh"),   //  7
+                     CSN_T(TRIANGLE3,    Pm1   , "meshes/uni_tri.msh"),   //  8
+                     CSN_T(TRIANGLE3,    BUBBLE, "meshes/uni_tri.msh"),   //  9
+                     CSN_T(QUADRANGLE4,  Q0    , "meshes/uni_quad.msh"),  // 10
+                     CSN_T(QUADRANGLE4,  Q1    , "meshes/uni_quad.msh"),  // 11
+                     CSN_T(QUADRANGLE4,  Q2    , "meshes/uni_quad.msh"),  // 12
+                     CSN_T(QUADRANGLE4,  Q1ph  , "meshes/uni_quad.msh"),  // 13
+                     CSN_T(QUADRANGLE4,  Pm1   , "meshes/uni_quad.msh"),  // 14
+                     CSN_T(QUADRANGLE4,  Q2ser , "meshes/uni_quad.msh"),  // 15
+                     CSN_T(QUADRANGLE4,  BUBBLE, "meshes/uni_quad.msh"),  // 16
+                     CSN_T(TETRAHEDRON4, P0    , "meshes/uni_tet.msh"),   // 17
+                     CSN_T(TETRAHEDRON4, P1    , "meshes/uni_tet.msh"),   // 18
+                     CSN_T(TETRAHEDRON4, P2    , "meshes/uni_tet.msh"),   // 19
+                     CSN_T(TETRAHEDRON4, P1ph  , "meshes/uni_tet.msh"),   // 20
+                     CSN_T(TETRAHEDRON4, P2ph  , "meshes/uni_tet.msh"),   // 21
+                     CSN_T(TETRAHEDRON4, Pm1   , "meshes/uni_tet.msh"),   // 22
+                     CSN_T(TETRAHEDRON4, BUBBLE, "meshes/uni_tet.msh"),   // 23
+                     CSN_T(HEXAHEDRON8,  Q0    , "meshes/uni_hex.msh"),   // 24
+                     CSN_T(HEXAHEDRON8,  Q1    , "meshes/uni_hex.msh"),   // 25
+                     CSN_T(HEXAHEDRON8,  Q2    , "meshes/uni_hex.msh"),   // 26
+                     CSN_T(HEXAHEDRON8,  Q1ph  , "meshes/uni_hex.msh"),   // 27
+                     CSN_T(HEXAHEDRON8,  Pm1   , "meshes/uni_hex.msh"),   // 28
+                     CSN_T(HEXAHEDRON8,  Q2ser , "meshes/uni_hex.msh"),   // 29
+                     CSN_T(HEXAHEDRON8,  BUBBLE, "meshes/uni_hex.msh")};  // 30
 
 
 TEST_P(ShapeTest, GradPrecisionTest)

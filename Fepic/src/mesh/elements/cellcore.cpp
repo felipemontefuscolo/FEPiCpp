@@ -16,17 +16,17 @@ Cell::~Cell() {} //definition of a pure virtual destructor; should always be emp
  * @note the vector corner_nds must have enough space allocated (num nodes per corner).
  */
 template<typename CellT>
-void _CellCore<CellT>::getCornerNodesId(int f, int *corner_nds) const
+void iCellCore<CellT>::getCornerNodesId(int f, int *corner_nds) const
 {
   FEPIC_CHECK(f < CellT::n_corners, "invalid index", std::out_of_range);
 
   if (CellT::dim==3)
     for (int i = 0; i < CellT::n_nodes_per_corner; ++i)
     {
-      *corner_nds++ = CONST_THIS->_nodes[CellT::_table_bC_x_nC[f][i]];
+      *corner_nds++ = CONST_THIS->m_nodes[CellT::m_table_bC_x_nC[f][i]];
     }
   else
-    *corner_nds = CONST_THIS->_nodes[f];
+    *corner_nds = CONST_THIS->m_nodes[f];
 }
 
 /** Get vertices of a corner
@@ -35,17 +35,17 @@ void _CellCore<CellT>::getCornerNodesId(int f, int *corner_nds) const
   * @note the vector vtcs must have enough space allocated (num vertices per corner).
   */
 template<typename CellT>
-void _CellCore<CellT>::getCornerVerticesId(int f, int *corner_vtcs) const
+void iCellCore<CellT>::getCornerVerticesId(int f, int *corner_vtcs) const
 {
   FEPIC_CHECK(f < CellT::n_corners, "invalid index", std::out_of_range);
 
   if (CellT::dim==3)
     for (int i = 0; i < CellT::n_vertices_per_corner; ++i)
     {
-      *corner_vtcs++ = CONST_THIS->_nodes[CellT::_table_bC_x_vC[f][i]];
+      *corner_vtcs++ = CONST_THIS->m_nodes[CellT::m_table_bC_x_vC[f][i]];
     }
   else
-    *corner_vtcs = CONST_THIS->_nodes[f];
+    *corner_vtcs = CONST_THIS->m_nodes[f];
 
 }
 
@@ -55,13 +55,13 @@ void _CellCore<CellT>::getCornerVerticesId(int f, int *corner_vtcs) const
   * @note the vector facet_nds must have enough space allocated (num nodes per facet).
   */
 template<typename CellT>
-void _CellCore<CellT>::getFacetNodesId(int f, int * facet_nds) const
+void iCellCore<CellT>::getFacetNodesId(int f, int * facet_nds) const
 {
   FEPIC_CHECK(f < CellT::n_facets, "invalid index", std::out_of_range);
 
   for (int i = 0; i < CellT::n_nodes_per_facet; ++i)
   {
-    *facet_nds++ = CONST_THIS->_nodes[CellT::_table_fC_x_nC[f][i]];
+    *facet_nds++ = CONST_THIS->m_nodes[CellT::m_table_fC_x_nC[f][i]];
   }
 
 }
@@ -72,19 +72,19 @@ void _CellCore<CellT>::getFacetNodesId(int f, int * facet_nds) const
   * @note the vector vtcs must have enough space allocated (num vertices per facet).
   */
 template<typename CellT>
-void _CellCore<CellT>::getFacetVerticesId(int f, int * facet_vtcs) const
+void iCellCore<CellT>::getFacetVerticesId(int f, int * facet_vtcs) const
 {
   FEPIC_CHECK(f < CellT::n_facets, "invalid index", std::out_of_range);
 
   for (int i = 0; i < CellT::n_vertices_per_facet; ++i)
   {
-    *facet_vtcs++ = CONST_THIS->_nodes[CellT::_table_fC_x_vC[f][i]];
+    *facet_vtcs++ = CONST_THIS->m_nodes[CellT::m_table_fC_x_vC[f][i]];
   }
 
 }
 
 template<typename CellT>
-void _CellCore<CellT>::getFacetCornersId(int f, int * corns) const
+void iCellCore<CellT>::getFacetCornersId(int f, int * corns) const
 {
   FEPIC_CHECK(f < CellT::n_facets, "invalid index", std::out_of_range);
 
@@ -94,14 +94,14 @@ void _CellCore<CellT>::getFacetCornersId(int f, int * corns) const
     // note: n_corners_per_facet = CellT::n_vertices_per_facet
     for (int i = 0; i < CellT::n_vertices_per_facet; ++i)
     {
-      *corns++ = CONST_THIS->_corners[ CellT::_table_fC_x_bC[f][i] ];
+      *corns++ = CONST_THIS->m_corners[ CellT::m_table_fC_x_bC[f][i] ];
     }
   else
     getFacetVerticesId(f, corns);
 }
 
 template<typename CellT>
-bool _CellCore<CellT>::isCorner(int const* vtcs, int &f) const
+bool iCellCore<CellT>::isCorner(int const* vtcs, int &f) const
 {
   int corner_vtcs[CellT::n_vertices_per_corner + (CellT::dim==1)];
 
@@ -134,7 +134,7 @@ bool _CellCore<CellT>::isCorner(int const* vtcs, int &f) const
 
 
 template<typename CellT>
-bool _CellCore<CellT>::isFacet(int const* vtcs, int &f) const
+bool iCellCore<CellT>::isFacet(int const* vtcs, int &f) const
 {
   int facet_vtcs[CellT::n_vertices_per_facet];
 
@@ -159,11 +159,11 @@ bool _CellCore<CellT>::isFacet(int const* vtcs, int &f) const
 /** @brief returns that if the cell has one or more facets in the boundary.
  */
 template<typename CellT>
-bool _CellCore<CellT>::inBoundary() const
+bool iCellCore<CellT>::inBoundary() const
 {
   for (int i = 0; i < CellT::n_facets; ++i)
   {
-    if (CONST_THIS->_icells[i]<0)
+    if (CONST_THIS->m_icells[i]<0)
       return true;
   }
   return false;
@@ -177,13 +177,13 @@ bool _CellCore<CellT>::inBoundary() const
 
 #define FEPIC_INSTANTIATE_MEMBERS_FUN(CellT)                            \
                                                                         \
-template  void _CellCore<CellT>::getCornerNodesId(int, int *) const;    \
-template  void _CellCore<CellT>::getCornerVerticesId(int, int *) const; \
-template  void _CellCore<CellT>::getFacetNodesId(int, int *) const;     \
-template  void _CellCore<CellT>::getFacetVerticesId(int, int *) const;  \
-template  int  _CellCore<CellT>::isCorner(int const*) const;            \
-template  int  _CellCore<CellT>::isFacet(int const*) const;             \
-template  bool _CellCore<CellT>::inBoundary() const;
+template  void iCellCore<CellT>::getCornerNodesId(int, int *) const;    \
+template  void iCellCore<CellT>::getCornerVerticesId(int, int *) const; \
+template  void iCellCore<CellT>::getFacetNodesId(int, int *) const;     \
+template  void iCellCore<CellT>::getFacetVerticesId(int, int *) const;  \
+template  int  iCellCore<CellT>::isCorner(int const*) const;            \
+template  int  iCellCore<CellT>::isFacet(int const*) const;             \
+template  bool iCellCore<CellT>::inBoundary() const;
 
 //FEPIC_INSTANTIATE_MEMBERS_FUN(Edge2)
 //FEPIC_INSTANTIATE_MEMBERS_FUN(Edge3)
@@ -200,7 +200,7 @@ template  bool _CellCore<CellT>::inBoundary() const;
 
 #undef FEPIC_INSTANTIATE_MEMBERS_FUN
 
-namespace _CellStaticTablesInitializers
+namespace fi_CellStaticTablesInitializers
 {
   typedef Cell::CreatorMemFunPtr MemFunPtr;
 
@@ -229,7 +229,7 @@ namespace _CellStaticTablesInitializers
 Cell* Cell::create(ECellType type)
 {
   static const
-  std::tr1::array<CreatorMemFunPtr, N_CELL_TYPES> creators = _CellStaticTablesInitializers::creators_tab();
+  std::tr1::array<CreatorMemFunPtr, N_CELL_TYPES> creators = fi_CellStaticTablesInitializers::creators_tab();
 
   unsigned idx = log2_i32(type);
   if (idx >= N_CELL_TYPES)

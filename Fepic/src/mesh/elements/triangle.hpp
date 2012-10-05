@@ -23,13 +23,13 @@
 #define FEPIC_TRIANGLE_HPP
 
 /* linear Triangle */
-class Triangle3 :  public _CellCore<Triangle3>
+class Triangle3 :  public iCellCore<Triangle3>
 {
 public:
 
-  Triangle3() : _CellCore<Triangle3>() {}
+  Triangle3() : iCellCore<Triangle3>() {}
 
-  friend class _CellCore<Triangle3>;
+  friend class iCellCore<Triangle3>;
 
   typedef Simplex<2>  PolytopeT;
   typedef Edge2       Derived;
@@ -58,24 +58,24 @@ protected:
 
 public:
   
-  static const int _table_fC_x_vC[3][2];
-  static const int _table_fC_x_nC[3][2];
-  static const int _table_vC_x_fC[3][2];
-  static const int _table_fC_x_bC[3][2];
-  static const int _table_bC_x_vC[3][1];
-  static const int _table_bC_x_nC[3][1];
-  static const int _table_bC_x_fC[3][2];
+  static const int m_table_fC_x_vC[3][2];
+  static const int m_table_fC_x_nC[3][2];
+  static const int m_table_vC_x_fC[3][2];
+  static const int m_table_fC_x_bC[3][2];
+  static const int m_table_bC_x_vC[3][1];
+  static const int m_table_bC_x_nC[3][1];
+  static const int m_table_bC_x_fC[3][2];
   
 };
 
 
 
 /* quadratic Triangle */
-class Triangle6 :  public _CellCore<Triangle6>
+class Triangle6 :  public iCellCore<Triangle6>
 {
 public:
 
-  friend class _CellCore<Triangle6>;
+  friend class iCellCore<Triangle6>;
 
   typedef  Simplex<2> PolytopeT;
   typedef  Edge3      Derived;
@@ -104,13 +104,13 @@ protected:
 
 public:
 
-  static const int _table_fC_x_vC[3][2];
-  static const int _table_fC_x_nC[3][3];
-  static const int _table_vC_x_fC[3][2];
-  static const int _table_fC_x_bC[3][2];
-  static const int _table_bC_x_vC[3][1];
-  static const int _table_bC_x_nC[3][1];
-  static const int _table_bC_x_fC[3][2];
+  static const int m_table_fC_x_vC[3][2];
+  static const int m_table_fC_x_nC[3][3];
+  static const int m_table_vC_x_fC[3][2];
+  static const int m_table_fC_x_bC[3][2];
+  static const int m_table_bC_x_vC[3][1];
+  static const int m_table_bC_x_nC[3][1];
+  static const int m_table_bC_x_fC[3][2];
 
 };
 

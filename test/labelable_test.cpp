@@ -33,16 +33,18 @@
 #include <Fepic/Mesh>
 #include <cstdlib>
 
-/* necessary inheritance: can not instantiate _Labelable because it has
+/* necessary inheritance: can not instantiate Labelable because it has
  * protected constructor */
-class tLabelable : public _Labelable
+class tLabelable : public Labelable
 {
 public:
-  tLabelable(int tag, int flags=0) : _Labelable(tag, flags)
+  tLabelable(int tag, int flags=0) : Labelable(tag, flags)
   {
   }
 
-  tLabelable() : _Labelable(0, 0) {}
+  using Labelable::setDisabledTo;  // changes access rights
+
+  tLabelable() : Labelable(0, 0) {}
 };
 
 class LabelableTest : public testing::Test {

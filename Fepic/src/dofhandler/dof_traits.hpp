@@ -26,12 +26,12 @@
 
 
 template<class ShapeClass>
-struct _DofTraits;
+struct DofTraits_T;
 
 
 #define FEP_FORM_DOF_TRAITS(Shape, ndpv, ndpr, ndpf, ndpc, nv, nr, nf, di)     \
 template<>                                              \
-struct _DofTraits<Shape>                                \
+struct DofTraits_T<Shape>                                \
 {                                                       \
   enum{ n_dof_per_vertice  = ndpv,    /*interior*/      \
         n_dof_per_corner   = ndpr,    /*interior*/      \

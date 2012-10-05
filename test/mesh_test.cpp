@@ -308,7 +308,7 @@ TEST(VertexStarTest, WithTet4)
   delete mesh;
 }
 
-std::tr1::array<int, 2> _retArray(int i, int j) {std::tr1::array<int, 2> v;v[0]=i;v[1]=j; return v;}
+std::tr1::array<int, 2> fi_retArray(int i, int j) {std::tr1::array<int, 2> v;v[0]=i;v[1]=j; return v;}
 
 TEST(VertexStarTest, WithTet4Case2)
 {
@@ -341,19 +341,19 @@ TEST(VertexStarTest, WithTet4Case2)
       std::swap(nds[0], nds[1]);
 
     // nodes of the edges
-    std::tr1::array<int, 2> nodes[]= {_retArray(0,1), _retArray(0,3),
-                                      _retArray(0,6), _retArray(0,7),
-                                      _retArray(0,8), _retArray(1,2),
-                                      _retArray(1,3), _retArray(1,4),
-                                      _retArray(1,5), _retArray(1,7),
-                                      _retArray(1,8), _retArray(2,3),
-                                      _retArray(2,5), _retArray(2,8),
-                                      _retArray(3,5), _retArray(3,6),
-                                      _retArray(3,8), _retArray(4,5),
-                                      _retArray(4,7), _retArray(4,8),
-                                      _retArray(5,6), _retArray(5,7),
-                                      _retArray(5,8), _retArray(6,7),
-                                      _retArray(6,8), _retArray(7,8)};
+    std::tr1::array<int, 2> nodes[]= {fi_retArray(0,1), fi_retArray(0,3),
+                                      fi_retArray(0,6), fi_retArray(0,7),
+                                      fi_retArray(0,8), fi_retArray(1,2),
+                                      fi_retArray(1,3), fi_retArray(1,4),
+                                      fi_retArray(1,5), fi_retArray(1,7),
+                                      fi_retArray(1,8), fi_retArray(2,3),
+                                      fi_retArray(2,5), fi_retArray(2,8),
+                                      fi_retArray(3,5), fi_retArray(3,6),
+                                      fi_retArray(3,8), fi_retArray(4,5),
+                                      fi_retArray(4,7), fi_retArray(4,8),
+                                      fi_retArray(5,6), fi_retArray(5,7),
+                                      fi_retArray(5,8), fi_retArray(6,7),
+                                      fi_retArray(6,8), fi_retArray(7,8)};
 
     int id2 = std::distance(nodes, std::find(nodes, nodes+26, nds));
 
@@ -910,14 +910,14 @@ TEST(SingleCell, WithTri3Case1)
   }
 
   Facet const* f;
-  int n_sing_facets = 0;
+  int n_singm_facets = 0;
   for (int i = 0; i < mesh->numFacets(); ++i)
   {
     f = mesh->getFacetPtr(i);
     if (mesh->inSingleCell(f))
-      ++n_sing_facets;
+      ++n_singm_facets;
   }
-  EXPECT_EQ(8, n_sing_facets);
+  EXPECT_EQ(8, n_singm_facets);
   delete mesh;
 
 }
@@ -1028,26 +1028,26 @@ TEST(SingleCell, WithTet4Case1)
 
   // check facets
   Facet const* f;
-  int n_sing_facets = 0;
+  int n_singm_facets = 0;
   for (int i = 0; i < mesh->numFacets(); ++i)
   {
     f = mesh->getFacetPtr(i);
     if (mesh->inSingleCell(f))
-      ++n_sing_facets;
+      ++n_singm_facets;
   }
-  EXPECT_EQ(12, n_sing_facets);
+  EXPECT_EQ(12, n_singm_facets);
 
 
   // check corners
   Corner const* r;
-  int n_sing_corners = 0;
+  int n_singm_corners = 0;
   for (int i = 0; i < mesh->numCorners(); ++i)
   {
     r = mesh->getCornerPtr(i);
     if (mesh->inSingleCell(r))
-      ++n_sing_corners;
+      ++n_singm_corners;
   }
-  EXPECT_EQ(0, n_sing_corners);
+  EXPECT_EQ(0, n_singm_corners);
 
 
   delete mesh;
@@ -1076,25 +1076,25 @@ TEST(SingleCell, WithTet4Case2)
 
   // check facets
   Facet const* f;
-  int n_sing_facets = 0;
+  int n_singm_facets = 0;
   for (int i = 0; i < mesh->numFacets(); ++i)
   {
     f = mesh->getFacetPtr(i);
     if (mesh->inSingleCell(f))
-      ++n_sing_facets;
+      ++n_singm_facets;
   }
-  EXPECT_EQ(26, n_sing_facets);
+  EXPECT_EQ(26, n_singm_facets);
 
   // check corners
   Corner const* r;
-  int n_sing_corners = 0;
+  int n_singm_corners = 0;
   for (int i = 0; i < mesh->numCorners(); ++i)
   {
     r = mesh->getCornerPtr(i);
     if (mesh->inSingleCell(r))
-      ++n_sing_corners;
+      ++n_singm_corners;
   }
-  EXPECT_EQ(14, n_sing_corners);
+  EXPECT_EQ(14, n_singm_corners);
 
 
   delete mesh;
@@ -1127,27 +1127,27 @@ TEST(SingleCell, WithTet10)
 
   // check facets
   Facet const* f;
-  int n_sing_facets = 0;
+  int n_singm_facets = 0;
   for (int i = 0; i < mesh->numFacets(); ++i)
   {
     f = mesh->getFacetPtr(i);
     if (mesh->inSingleCell(f))
     {
-      ++n_sing_facets;
+      ++n_singm_facets;
     }
   }
-  EXPECT_EQ(26, n_sing_facets);
+  EXPECT_EQ(26, n_singm_facets);
 
   // check corners
   Corner const* r;
-  int n_sing_corners = 0;
+  int n_singm_corners = 0;
   for (int i = 0; i < mesh->numCorners(); ++i)
   {
     r = mesh->getCornerPtr(i);
     if (mesh->inSingleCell(r))
-      ++n_sing_corners;
+      ++n_singm_corners;
   }
-  EXPECT_EQ(14, n_sing_corners);
+  EXPECT_EQ(14, n_singm_corners);
 
 
 
@@ -1215,11 +1215,11 @@ TEST(AuxSetConnectedComponentIdTest, WithTri3)
   vtk_printer.attachMesh(mesh);
   //vtk_printer.writeVtk("meshes/outtest/simpedge2.vtk");
 
-  mesh->_setConnectedComponentsId(mesh->getCell(0), 3);
-  mesh->_setConnectedComponentsId(mesh->getCell(4), 6);
-  mesh->_setConnectedComponentsId(mesh->getCell(8), 10);
-  mesh->_setConnectedComponentsId(mesh->getCell(6), 99);
-  mesh->_setConnectedComponentsId(mesh->getCell(12), 13);
+  mesh->fi_setConnectedComponentsId(mesh->getCell(0), 3);
+  mesh->fi_setConnectedComponentsId(mesh->getCell(4), 6);
+  mesh->fi_setConnectedComponentsId(mesh->getCell(8), 10);
+  mesh->fi_setConnectedComponentsId(mesh->getCell(6), 99);
+  mesh->fi_setConnectedComponentsId(mesh->getCell(12), 13);
 
   EXPECT_EQ(3 , mesh->getCellPtr( 0)->getConnectedComponentId());
 

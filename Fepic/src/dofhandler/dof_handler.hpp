@@ -36,9 +36,9 @@ class DofHandler
   typedef Eigen::Array<bool,Eigen::Dynamic,Eigen::Dynamic> MatrixBool;
 public:  
   
-  DofHandler(Mesh* mesh=NULL, float gf=0.07) : _mesh_ptr(mesh), _grow_factor(gf) {}
+  DofHandler(Mesh* mesh=NULL, float gf=0.07) : m_mesh_ptr(mesh), m_grow_factor(gf) {}
   
-  void setMesh(Mesh * mesh) {_mesh_ptr=mesh;};
+  void setMesh(Mesh * mesh) {m_mesh_ptr=mesh;};
   
   /* Add a variable
    * @param var_name name of the variable
@@ -59,8 +59,8 @@ public:
    * @param tags only mesh elements with these tags will be considered.
    */ 
   void addVariable(const char* var_name, int ndpv, int ndpr, int ndpf, int ndpc, int ntags=0, int const* tags=NULL);
-  VarDofs const& getVariable(int i) const {return _vars[i];}
-  VarDofs & getVariable(int i) {return _vars[i];}
+  VarDofs const& getVariable(int i) const {return m_vars[i];}
+  VarDofs & getVariable(int i) {return m_vars[i];}
   
   void setVariablesRelationship(bool const* v);
   
@@ -74,19 +74,19 @@ public:
   void boostCuthillMcKeeRenumber();
   void CuthillMcKeeRenumber();
   
-  int numVars() const {return _vars.size();};
+  int numVars() const {return m_vars.size();};
   int numDofs() const;
   void SetUp();
-  int const* data() const {return _data.data();};
-  int* data() {return _data.data();};
-  int totalSize() const {return _data.size();};
+  int const* data() const {return m_data.data();};
+  int* data() {return m_data.data();};
+  int totalSize() const {return m_data.size();};
   
 private:
-  Mesh*         _mesh_ptr;
-  float         _grow_factor;
-  MatrixBool    _relations;
-  DofsContainer _vars;
-  DataContainer _data; // single block with dofs
+  Mesh*         m_mesh_ptr;
+  float         m_grow_factor;
+  MatrixBool    m_relations;
+  DofsContainer m_vars;
+  DataContainer m_data; // single block with dofs
 };
 
 

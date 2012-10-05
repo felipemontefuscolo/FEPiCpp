@@ -28,12 +28,12 @@ template<int dim> class Simplex;
 template<int dim> class Hypercube;
 class UndefinedCell;
 
-class _Labelable;
+class Labelable;
 
 class Point;
 
 class Cell;
-template<class Derived> class _CellCore;
+template<class Derived> class iCellCore;
 template<int N> class Edge;
 class Triangle3;
 class Triangle6;

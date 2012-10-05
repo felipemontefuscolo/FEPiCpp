@@ -2,7 +2,7 @@
 #define FEPIC_ELEMENTS_HPP
 
 template<typename CellT>
-class _CellCore;
+class iCellCore;
 
 #include "../../util/forward_declarations.hpp"
 #include "../../util/typedefs.hpp"

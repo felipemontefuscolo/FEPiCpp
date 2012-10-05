@@ -159,8 +159,8 @@ int log2_i64(uint64_t v)
 
 
 
-class __RemoveWarningMisc2 {
-  __RemoveWarningMisc2() {log2_i32(0); log2_i64(0); /* log2_i128(0);*/ };
+class fi_RemoveWarningMisc2 {
+  fi_RemoveWarningMisc2() {log2_i32(0); log2_i64(0); /* log2_i128(0);*/ };
 };
 
 

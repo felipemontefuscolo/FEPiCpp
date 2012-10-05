@@ -23,11 +23,11 @@
 #define FEPIC_TETRAHEDRON_HPP
 
 /* linear tetrahedron */
-class Tetrahedron4 :  public _CellCore<Tetrahedron4>
+class Tetrahedron4 :  public iCellCore<Tetrahedron4>
 {
 public:
 
-  friend class _CellCore<Tetrahedron4>;
+  friend class iCellCore<Tetrahedron4>;
 
   typedef Simplex<3> PolytopeT;
   typedef Triangle3  Derived;
@@ -54,23 +54,23 @@ protected:
   FEP_DEF_3D_CELLS_MEMBERS;
 
 public:
-  static const int _table_vC_x_fC[4][6];
-  static const int _table_fC_x_bC[4][3];
-  static const int _table_fC_x_vC[4][6];
-  static const int _table_fC_x_nC[4][3];
-  static const int _table_bC_x_vC[6][2];
-  static const int _table_bC_x_nC[6][2];
-  static const int _table_bC_x_fC[6][4];
+  static const int m_table_vC_x_fC[4][6];
+  static const int m_table_fC_x_bC[4][3];
+  static const int m_table_fC_x_vC[4][6];
+  static const int m_table_fC_x_nC[4][3];
+  static const int m_table_bC_x_vC[6][2];
+  static const int m_table_bC_x_nC[6][2];
+  static const int m_table_bC_x_fC[6][4];
     
 };
 
 
 /* quadratic tetrahedron */
-class Tetrahedron10 : public _CellCore<Tetrahedron10>
+class Tetrahedron10 : public iCellCore<Tetrahedron10>
 {
 public:
 
-  friend class _CellCore<Tetrahedron10>;
+  friend class iCellCore<Tetrahedron10>;
 
   typedef Simplex<3> PolytopeT;
   typedef Triangle6  Derived;
@@ -97,17 +97,17 @@ protected:
   FEP_DEF_3D_CELLS_MEMBERS;
 
 public:
-  static const int _table_vC_x_fC[4][6];
-  static const int _table_fC_x_bC[4][3];
-  static const int _table_fC_x_vC[4][6];
-  static const int _table_fC_x_nC[4][6];
-  static const int _table_bC_x_vC[6][2];
-  static const int _table_bC_x_nC[6][3];
-  static const int _table_bC_x_fC[6][4];
+  static const int m_table_vC_x_fC[4][6];
+  static const int m_table_fC_x_bC[4][3];
+  static const int m_table_fC_x_vC[4][6];
+  static const int m_table_fC_x_nC[4][6];
+  static const int m_table_bC_x_vC[6][2];
+  static const int m_table_bC_x_nC[6][3];
+  static const int m_table_bC_x_fC[6][4];
     
 };
 
-// only change _table_fC_x_nC and _table_bC_x_nC compared to Tetrahedron4
+// only change m_table_fC_x_nC and m_table_bC_x_nC compared to Tetrahedron4
 
 
 

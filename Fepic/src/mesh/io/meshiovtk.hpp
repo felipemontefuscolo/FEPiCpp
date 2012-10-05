@@ -57,14 +57,14 @@ protected:
 };
 
 
-class MeshIoVtk : public _MeshNameHandler
+class MeshIoVtk : public iMeshNameHandler
 {
 
 public:
 
-  MeshIoVtk() :_filenumVtk(0), _add_node_scalar_vtk_n_calls(0), _mesh(NULL) {};
+  MeshIoVtk() :m_filenumVtk(0), m_add_node_scalar_vtk_n_calls(0), m_mesh(NULL) {};
 
-  explicit MeshIoVtk(Mesh const* mesh, int filenum=0) : _filenumVtk(filenum), _add_node_scalar_vtk_n_calls(0)
+  explicit MeshIoVtk(Mesh const* mesh, int filenum=0) : m_filenumVtk(filenum), m_add_node_scalar_vtk_n_calls(0)
   {
     attachMesh(mesh);
   }
@@ -78,7 +78,7 @@ public:
 
   std::string outputFileName()
   {
-    return this->_popNextName(this->_filenumVtk, ".vtk");
+    return this->fi_popNextName(this->m_filenumVtk, ".vtk");
   }
   
   void writeVtk(std::string outname = "");
@@ -91,34 +91,34 @@ public:
   void printPointPositionVtk(const char* nome_var="pt_ic_pos"); //  debug
 
 
-  void _printPointVtk_1d(Point const* p, FILE *fp) const;
-  void _printPointVtk_2d(Point const* p, FILE *fp) const;
-  void _printPointVtk_3d(Point const* p, FILE *fp) const;
+  void fi_printPointVtk_1d(Point const* p, FILE *fp) const;
+  void fi_printPointVtk_2d(Point const* p, FILE *fp) const;
+  void fi_printPointVtk_3d(Point const* p, FILE *fp) const;
 
 
-  void _printCellVtk_Edge2(int const* ids, FILE *fp) const;
+  void fi_printCellVtk_Edge2(int const* ids, FILE *fp) const;
   
-  void _printCellVtk_Edge3(int const* ids, FILE *fp) const;
+  void fi_printCellVtk_Edge3(int const* ids, FILE *fp) const;
 
-  void _printCellVtk_Triangle3(int const* ids, FILE *fp) const;
+  void fi_printCellVtk_Triangle3(int const* ids, FILE *fp) const;
 
-  void _printCellVtk_Triangle6(int const* ids, FILE *fp) const;
+  void fi_printCellVtk_Triangle6(int const* ids, FILE *fp) const;
 
-  void _printCellVtk_Quadrangle4(int const* ids, FILE *fp) const;
+  void fi_printCellVtk_Quadrangle4(int const* ids, FILE *fp) const;
 
-  void _printCellVtk_Quadrangle8(int const* ids, FILE *fp) const;
+  void fi_printCellVtk_Quadrangle8(int const* ids, FILE *fp) const;
 
-  void _printCellVtk_Quadrangle9(int const* ids, FILE *fp) const;
+  void fi_printCellVtk_Quadrangle9(int const* ids, FILE *fp) const;
 
-  void _printCellVtk_Tetrahedron4(int const* ids, FILE *fp) const;
+  void fi_printCellVtk_Tetrahedron4(int const* ids, FILE *fp) const;
 
-  void _printCellVtk_Tetrahedron10(int const* ids, FILE *fp) const;
+  void fi_printCellVtk_Tetrahedron10(int const* ids, FILE *fp) const;
 
-  void _printCellVtk_Hexahedron8(int const* ids, FILE *fp) const;
+  void fi_printCellVtk_Hexahedron8(int const* ids, FILE *fp) const;
 
-  void _printCellVtk_Hexahedron20(int const* ids, FILE *fp) const;
+  void fi_printCellVtk_Hexahedron20(int const* ids, FILE *fp) const;
 
-  void _printCellVtk_Hexahedron27(int const* ids, FILE *fp) const;
+  void fi_printCellVtk_Hexahedron27(int const* ids, FILE *fp) const;
 
 
   static int getVtkTag(ECellType type);
@@ -126,14 +126,14 @@ public:
   static int getNumDivisions(ECellType type);
 
 protected:
-  int  _filenumVtk;
-  int  _add_node_scalar_vtk_n_calls;
-  int  _add_cell_scalar_vtk_n_calls;
-  int  _spacedim;
-  ECellType _fep_tag;
-  Mesh const* _mesh;
-  CprinterMemFunPtr _c_printer;
-  PprinterMemFunPtr _p_printer;
+  int  m_filenumVtk;
+  int  m_add_node_scalar_vtk_n_calls;
+  int  m_add_cell_scalar_vtk_n_calls;
+  int  m_spacedim;
+  ECellType m_fep_tag;
+  Mesh const* m_mesh;
+  CprinterMemFunPtr m_c_printer;
+  PprinterMemFunPtr m_p_printer;
 
 };
 

@@ -26,7 +26,7 @@
 #include "../../util/timer.hpp"
 #include "meshnamehandler.hpp"
 
-class MeshIoMsh : public _MeshNameHandler
+class MeshIoMsh : public iMeshNameHandler
 {
 public:
   

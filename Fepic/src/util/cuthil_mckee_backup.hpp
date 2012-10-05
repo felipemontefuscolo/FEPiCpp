@@ -43,12 +43,12 @@ public:
 
   struct NodeT {
     int number;
-    short pseudo_degree;
-    NodeT(int n=0, short p=0) : number(n), pseudo_degree(p) {}
+    short pseudom_degree;
+    NodeT(int n=0, short p=0) : number(n), pseudom_degree(p) {}
     //bool operator<(NodeT const& b)  const
     //{
-    //	if (pseudo_degree != b.pseudo_degree)
-    //		return pseudo_degree < b.pseudo_degree;
+    //	if (pseudom_degree != b.pseudom_degree)
+    //		return pseudom_degree < b.pseudom_degree;
     //	else
     //		return number < b.number;
     //}
@@ -56,29 +56,29 @@ public:
     {
     	if (number == b.number)
         return false;
-    	else if (pseudo_degree == b.pseudo_degree)
+    	else if (pseudom_degree == b.pseudom_degree)
         return number < b.number;
       else
-    		return pseudo_degree < b.pseudo_degree;
+    		return pseudom_degree < b.pseudom_degree;
     }    
     //bool operator<(NodeT const& b)  const
     //{
     //	if (number == b.number)
     //    return false;
     //  else
-    //		return pseudo_degree < b.pseudo_degree;
+    //		return pseudom_degree < b.pseudom_degree;
     //}    
   };
 
   struct MarkT {
     enum {MARKED=1, PENALIZED=2};
-    char _mark;
-    MarkT(char m=0) : _mark(m) {};
-    void mark() {_mark |= MARKED;}
-    void unmark() {_mark &= (!MARKED);}
-    bool marked() const {return _mark & MARKED;}
-    void penalize() {_mark |= PENALIZED;}
-    bool penalized() const {return _mark & PENALIZED;}
+    char m_mark;
+    MarkT(char m=0) : m_mark(m) {};
+    void mark() {m_mark |= MARKED;}
+    void unmark() {m_mark &= (!MARKED);}
+    bool marked() const {return m_mark & MARKED;}
+    void penalize() {m_mark |= PENALIZED;}
+    bool penalized() const {return m_mark & PENALIZED;}
   };
 
   typedef std::vector<std::set<int> >     TableT;
@@ -115,7 +115,7 @@ public:
     NodeT temp_node;
     
     temp_node.number        = first;
-    temp_node.pseudo_degree = table[first].size() - PENALTY*marks[first].penalized();
+    temp_node.pseudom_degree = table[first].size() - PENALTY*marks[first].penalized();
     
     actual_lvl.insert(temp_node);
     
@@ -148,8 +148,8 @@ public:
           }
           
           temp_node.number        = *neib_it;
-          //temp_node.pseudo_degree = table[*neib_it].size() - PENALTY*marks[*neib_it].penalized();
-          temp_node.pseudo_degree = std::distance(actual_lvl.begin(),lvl_it) - PENALTY*marks[*neib_it].penalized();
+          //temp_node.pseudom_degree = table[*neib_it].size() - PENALTY*marks[*neib_it].penalized();
+          temp_node.pseudom_degree = std::distance(actual_lvl.begin(),lvl_it) - PENALTY*marks[*neib_it].penalized();
           next_lvl.insert(temp_node);
           //marks[*neib_it].mark();
         }
@@ -164,7 +164,7 @@ public:
           if (!marks[i].marked())
           {
             temp_node.number        = i;
-            temp_node.pseudo_degree = table[i].size() - PENALTY*marks[i].penalized();
+            temp_node.pseudom_degree = table[i].size() - PENALTY*marks[i].penalized();
             actual_lvl.insert(temp_node);
             break;
           }
@@ -215,7 +215,7 @@ public:
     NodeT temp_node;
     
     temp_node.number        = node;
-    temp_node.pseudo_degree = table[node].size() - PENALTY*marks[node].penalized();
+    temp_node.pseudom_degree = table[node].size() - PENALTY*marks[node].penalized();
     
     actual_lvl.insert(temp_node);
     
@@ -247,7 +247,7 @@ public:
           }
           
           temp_node.number        = *neib_it;
-          temp_node.pseudo_degree = table[*neib_it].size() - PENALTY*marks[*neib_it].penalized();
+          temp_node.pseudom_degree = table[*neib_it].size() - PENALTY*marks[*neib_it].penalized();
           next_lvl.insert(temp_node);
         }
       }
@@ -261,7 +261,7 @@ public:
           if (!marks[i].marked())
           {
             temp_node.number        = i;
-            temp_node.pseudo_degree = table[i].size() - PENALTY*marks[i].penalized();
+            temp_node.pseudom_degree = table[i].size() - PENALTY*marks[i].penalized();
             next_lvl.insert(temp_node);
             break;
           }

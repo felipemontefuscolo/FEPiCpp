@@ -3,9 +3,9 @@
 #include "../../util/misc2.hpp"
 #include <tr1/array>
 
-namespace _MshTagsInitializers
+namespace fi_MshTagsInitializers
 {
-  std::tr1::array<int, MSH_MAX_INDEX+1> n_nodes_4_elm_t()
+  std::tr1::array<int, MSH_MAX_INDEX+1> n_nodes_4_elm_T()
   {
     std::tr1::array<int, MSH_MAX_INDEX+1> tab;
     
@@ -45,7 +45,7 @@ namespace _MshTagsInitializers
     return tab;
   }
  
-  std::tr1::array<int, MSH_MAX_INDEX+1> order_4_elm_t()
+  std::tr1::array<int, MSH_MAX_INDEX+1> order_4_elm_T()
   {
     std::tr1::array<int, MSH_MAX_INDEX+1> tab;
     
@@ -85,7 +85,7 @@ namespace _MshTagsInitializers
     return tab;
   }
  
-  std::tr1::array<int, MSH_MAX_INDEX+1> dim_4_elm_t()
+  std::tr1::array<int, MSH_MAX_INDEX+1> dim_4_elm_T()
   {
     std::tr1::array<int, MSH_MAX_INDEX+1> tab;
     
@@ -131,7 +131,7 @@ namespace _MshTagsInitializers
 int numNodeForMshTag(EMshTag type)
 {
   static const
-  std::tr1::array<int, MSH_MAX_INDEX+1> nds = _MshTagsInitializers::n_nodes_4_elm_t();
+  std::tr1::array<int, MSH_MAX_INDEX+1> nds = fi_MshTagsInitializers::n_nodes_4_elm_T();
 
   unsigned idx = static_cast<unsigned>(type);
   if (idx-1 >= MSH_MAX_INDEX)
@@ -147,7 +147,7 @@ int numNodeForMshTag(EMshTag type)
 int orderForMshTag(EMshTag type)
 {
   static const
-  std::tr1::array<int, MSH_MAX_INDEX+1> orders = _MshTagsInitializers::order_4_elm_t();
+  std::tr1::array<int, MSH_MAX_INDEX+1> orders = fi_MshTagsInitializers::order_4_elm_T();
   
   unsigned idx = static_cast<unsigned>(type);
   if (idx-1 >= MSH_MAX_INDEX)
@@ -163,7 +163,7 @@ int orderForMshTag(EMshTag type)
 int dimForMshTag(EMshTag type)
 {
   static const
-  std::tr1::array<int, MSH_MAX_INDEX+1> dims = _MshTagsInitializers::dim_4_elm_t();
+  std::tr1::array<int, MSH_MAX_INDEX+1> dims = fi_MshTagsInitializers::dim_4_elm_T();
 
   unsigned idx = static_cast<unsigned>(type);
   if (idx-1 >= MSH_MAX_INDEX)

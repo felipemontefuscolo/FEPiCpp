@@ -33,49 +33,49 @@
 // 1D Cells members
 #define FEP_DEF_1D_CELLS_MEMBERS                \
                                                    \
-  int _icells[n_facets]; /* incident cells id*/  \
+  int m_icells[n_facets]; /* incident cells id*/  \
   union                                          \
   {                                               \
-    int _nodes[n_nodes]; /* nodes id; N=order */   \
-    int _facets[n_vertices]; /* alias to _nodes */ \
-    int _corners[n_vertices]; /* dummy */                \
+    int m_nodes[n_nodes]; /* nodes id; N=order */   \
+    int m_facets[n_vertices]; /* alias to m_nodes */ \
+    int m_corners[n_vertices]; /* dummy */                \
   };                                               \
   union                                        \
   {                                             \
-    char _icells_pos[n_facets];                 \
-    char _icells_anchors[n_facets];             \
+    char m_icells_pos[n_facets];                 \
+    char m_icells_anchors[n_facets];             \
   }
 
 // 2D Cells members
 #define FEP_DEF_2D_CELLS_MEMBERS                           \
                                                     \
-  int _facets[n_facets];  /* facets id  */                  \
-  int _icells[n_facets]; /* incident cells id */            \
+  int m_facets[n_facets];  /* facets id  */                  \
+  int m_icells[n_facets]; /* incident cells id */            \
   union                                                     \
   {                                                          \
-    int _nodes[n_nodes];   /* nodes id */                    \
-    int _corners[n_vertices]; /* alias for _nodes */         \
+    int m_nodes[n_nodes];   /* nodes id */                    \
+    int m_corners[n_vertices]; /* alias for m_nodes */         \
   };                                                         \
   union                                                    \
   {                                                         \
-    char _icells_pos[n_facets]; /* positions of icells */   \
-    char _icells_anchors[n_facets]; /* dummy */             \
+    char m_icells_pos[n_facets]; /* positions of icells */   \
+    char m_icells_anchors[n_facets]; /* dummy */             \
   }                                                         \
   
   
 // 3D Cells members
 #define FEP_DEF_3D_CELLS_MEMBERS                                    \
-  char _icells_pos[n_facets];  /* positions of icells */            \
-  char _icells_anchors[n_vertices_per_facet];/* anchors of icells*/ \
-  int  _facets[n_facets];   /* facets id */                         \
-  int  _icells[n_facets];    /* incident cells id */                \
-  int  _corners[n_corners];  /* edges id */                         \
+  char m_icells_pos[n_facets];  /* positions of icells */            \
+  char m_icells_anchors[n_vertices_per_facet];/* anchors of icells*/ \
+  int  m_facets[n_facets];   /* facets id */                         \
+  int  m_icells[n_facets];    /* incident cells id */                \
+  int  m_corners[n_corners];  /* edges id */                         \
   /* nodes id */                                                     \
-  int  _nodes[n_nodes]
+  int  m_nodes[n_nodes]
 
 
 template<typename CellT>
-class _CellCore  : public Cell
+class iCellCore  : public Cell
 {
 #if !defined(THIS) && !defined(CONST_THIS)
   #define THIS static_cast<CellT*>(this)
@@ -83,25 +83,25 @@ class _CellCore  : public Cell
 #endif
 
 protected:
-  _CellCore()
+  iCellCore()
   {
     for (int i = 0; i < CellT::n_facets; ++i)
-      THIS->_icells[i] = -1;
+      THIS->m_icells[i] = -1;
     if (CellT::dim > 1)
       for (int i = 0; i < CellT::n_facets; ++i)
-        THIS->_facets[i] = -1;
+        THIS->m_facets[i] = -1;
     else
     {
-      THIS->_nodes[0] = -1;
-      THIS->_nodes[1] = -1;
+      THIS->m_nodes[0] = -1;
+      THIS->m_nodes[1] = -1;
     }
     if (CellT::dim==3)
       for (int i = 0; i < CellT::n_corners; ++i)
-        THIS->_corners[i] = -1;
+        THIS->m_corners[i] = -1;
     for (int i = 0; i < CellT::n_nodes; ++i)
-      THIS->_nodes[i] = -1;
+      THIS->m_nodes[i] = -1;
   };
-  //_CellCore(_CellCore const&) {};
+  //iCellCore(iCellCore const&) {};
 
 public:
 
@@ -128,9 +128,9 @@ public:
   int getCornerId(int corner) const
   {
     if (CellT::dim==3)
-      return CONST_THIS->_corners[corner];
+      return CONST_THIS->m_corners[corner];
     else
-      return CONST_THIS->_nodes[corner];
+      return CONST_THIS->m_nodes[corner];
   }
 
   /** Get nodes of a corner
@@ -171,23 +171,23 @@ public:
   {
     if (CellT::dim==1)
     {
-      return CONST_THIS->_nodes[nCe];
+      return CONST_THIS->m_nodes[nCe];
       ++eC; // avoid compiler warnings
     }
     else if (CellT::dim==2)
     {
-      return CONST_THIS->_nodes[CellT::_table_fC_x_nC[eC][nCe]];
+      return CONST_THIS->m_nodes[CellT::m_table_fC_x_nC[eC][nCe]];
     }
     else
-      return CONST_THIS->_nodes[CellT::_table_bC_x_nC[eC][nCe]];
+      return CONST_THIS->m_nodes[CellT::m_table_bC_x_nC[eC][nCe]];
   }
 
   int getFacetId(int facet) const
   {
     if (CellT::dim > 1)
-      return CONST_THIS->_facets[facet];
+      return CONST_THIS->m_facets[facet];
     else
-      return CONST_THIS->_nodes[facet];
+      return CONST_THIS->m_nodes[facet];
   }
 
   /** Get nodes of a facet
@@ -208,38 +208,38 @@ public:
 
   int getIncidCell(int facet) const
   {
-    return CONST_THIS->_icells[facet];
+    return CONST_THIS->m_icells[facet];
   }
 
   char getIncidCellAnch(int facet) const
   {
     if (CellT::dim==3)
-      return CONST_THIS->_icells_anchors[facet];
+      return CONST_THIS->m_icells_anchors[facet];
     else
       return -1;
   }
 
   char getIncidCellPos(int facet) const
   {
-    return CONST_THIS->_icells_pos[facet];
+    return CONST_THIS->m_icells_pos[facet];
   }
 
   int getNodeId(int const ith) const
   {
-    return CONST_THIS->_nodes[ith];
+    return CONST_THIS->m_nodes[ith];
   }
 
   void getNodesId(int * begin) const
   {
-    std::copy(CONST_THIS->_nodes, // from
-              CONST_THIS->_nodes+CellT::n_nodes,
+    std::copy(CONST_THIS->m_nodes, // from
+              CONST_THIS->m_nodes+CellT::n_nodes,
               begin);              // to
   }
 
   void getVerticesId(int * begin) const
   {
-    std::copy(CONST_THIS->_nodes, // from
-              CONST_THIS->_nodes+CellT::n_vertices,
+    std::copy(CONST_THIS->m_nodes, // from
+              CONST_THIS->m_nodes+CellT::n_vertices,
               begin);              // to
   }
 
@@ -247,24 +247,24 @@ public:
   {
     if (CellT::dim < 2)
     {
-      begin[0] = CONST_THIS->_nodes[0];
-      begin[1] = CONST_THIS->_nodes[1];
+      begin[0] = CONST_THIS->m_nodes[0];
+      begin[1] = CONST_THIS->m_nodes[1];
     }
     else
-      std::copy(CONST_THIS->_facets, // from
-                CONST_THIS->_facets+CellT::n_facets,
+      std::copy(CONST_THIS->m_facets, // from
+                CONST_THIS->m_facets+CellT::n_facets,
                 begin);              // to
   }
 
   void getCornersId(int * begin) const
   {
     if (CellT::dim == 3)
-      std::copy(CONST_THIS->_corners, // from
-                CONST_THIS->_corners+CellT::n_corners,
+      std::copy(CONST_THIS->m_corners, // from
+                CONST_THIS->m_corners+CellT::n_corners,
                 begin);              // to
     else
-      std::copy(CONST_THIS->_nodes, // from
-                CONST_THIS->_nodes+CellT::n_vertices,
+      std::copy(CONST_THIS->m_nodes, // from
+                CONST_THIS->m_nodes+CellT::n_vertices,
                 begin);
   }
 
@@ -363,13 +363,13 @@ public:
     {
       for (int i = 0; i < CellT::n_facets; ++i)
       {
-        THIS->_facets[i] = -1;
+        THIS->m_facets[i] = -1;
       }
     }
     else
     {
-      THIS->_nodes[0] = -1;
-      THIS->_nodes[1] = -1;
+      THIS->m_nodes[0] = -1;
+      THIS->m_nodes[1] = -1;
     }
   }
 
@@ -377,17 +377,17 @@ public:
   {
     if (CellT::dim==3)
       for (int i = 0; i < CellT::n_corners; ++i)
-        THIS->_corners[i] = -1;
+        THIS->m_corners[i] = -1;
     //else if (CellT::dim==2)
     //  for (int i = 0; i < CellT::n_vertices; ++i)
-    //    THIS->_nodes[i] = -1;
+    //    THIS->m_nodes[i] = -1;
   }
 
   void resetIncidCells()
   {
     for (int i = 0; i < CellT::n_facets; ++i)
     {
-      THIS->_icells[i] = -1;
+      THIS->m_icells[i] = -1;
     }
   }
 
@@ -395,39 +395,39 @@ public:
   {
     for (int i = 0; i < CellT::n_nodes; ++i)
     {
-      THIS->_nodes[i] = -1;
+      THIS->m_nodes[i] = -1;
     }    
   }
 
   void setCornerId(int corner, int cornerid)
   {
     if (CellT::dim ==3)
-      THIS->_corners[corner] = cornerid;
+      THIS->m_corners[corner] = cornerid;
 
   }
 
   void setFacetId(int facet, int facetid)
   {
     if (CellT::dim > 1)
-      THIS->_facets[facet] = facetid;
+      THIS->m_facets[facet] = facetid;
     else
-      THIS->_nodes[facet] = facetid;
+      THIS->m_nodes[facet] = facetid;
   }
 
   void setIncidCell(int facet, int icellid)
   {
-    THIS->_icells[facet] = icellid;
+    THIS->m_icells[facet] = icellid;
   }
 
   void setIncidCellAnch(int facet, int anch)
   {
     if (CellT::dim == 3)
-      THIS->_icells_anchors[facet] = static_cast<char>(  anch  );
+      THIS->m_icells_anchors[facet] = static_cast<char>(  anch  );
   }
 
   void setIncidCellPos(int facet, int pos)
   {
-    THIS->_icells_pos[facet] = static_cast<char>(  pos );
+    THIS->m_icells_pos[facet] = static_cast<char>(  pos );
   }
 
   /** is same to:
@@ -437,15 +437,15 @@ public:
    */
   void setIncidence(int facet, int icellid, char pos, char anch=0)
   {
-    THIS->_icells[facet] = icellid;
-    THIS->_icells_pos[facet] = pos;
+    THIS->m_icells[facet] = icellid;
+    THIS->m_icells_pos[facet] = pos;
     if (CellT::dim == 3)
-      THIS->_icells_anchors[facet] = anch;
+      THIS->m_icells_anchors[facet] = anch;
   }
 
   void setNodeId(int const ith, int const nodeid)
   {
-    THIS->_nodes[ith] = nodeid;
+    THIS->m_nodes[ith] = nodeid;
   }
 
 
@@ -459,27 +459,27 @@ public:
     // nodes
     if (nodes != NULL)
       for (int i = 0; i < CellT::n_nodes; ++i)
-        THIS->_nodes[i] = nodes[i];
+        THIS->m_nodes[i] = nodes[i];
     
     if (CellT::dim>2 && corners!= NULL)
       for (int i = 0; i < CellT::n_corners; ++i)
-        THIS->_corners[i] = corners[i];
+        THIS->m_corners[i] = corners[i];
     
     if (CellT::dim>1 && facets!= NULL)
       for (int i = 0; i < CellT::n_facets; ++i)
-        THIS->_facets[i] = facets[i];
+        THIS->m_facets[i] = facets[i];
     
     if (icells!=NULL)
       for (int i = 0; i < CellT::n_facets; ++i)
-        THIS->_icells[i] = icells[i];
+        THIS->m_icells[i] = icells[i];
     
     if (icells_pos!=NULL)
       for (int i = 0; i < CellT::n_facets; ++i)
-        THIS->_icells_pos[i] = icells_pos[i];
+        THIS->m_icells_pos[i] = icells_pos[i];
     
     if (CellT::dim > 2 && icells_ancs!=NULL)
       for (int i = 0; i < CellT::n_facets; ++i)
-        THIS->_icells_anchors[i] = icells_ancs[i];
+        THIS->m_icells_anchors[i] = icells_ancs[i];
     
     if (conn_comp_id != NULL)
       THIS->setConnectedComponentId(*conn_comp_id);
@@ -493,15 +493,15 @@ public:
   }
 
 
-  int table_fC_x_vC(int i, int j) const {return CellT::_table_fC_x_vC[i][j];}
-  int table_fC_x_nC(int i, int j) const {return CellT::_table_fC_x_nC[i][j];}
-  int table_vC_x_fC(int i, int j) const {return CellT::_table_vC_x_fC[i][j];}
-  int table_fC_x_bC(int i, int j) const {return CellT::_table_fC_x_bC[i][j];}
-  int table_bC_x_vC(int i, int j) const {return CellT::_table_bC_x_vC[i][j];}
-  int table_bC_x_nC(int i, int j) const {return CellT::_table_bC_x_nC[i][j];}
-  int table_bC_x_fC(int i, int j) const {return CellT::_table_bC_x_fC[i][j];}
+  int table_fC_x_vC(int i, int j) const {return CellT::m_table_fC_x_vC[i][j];}
+  int table_fC_x_nC(int i, int j) const {return CellT::m_table_fC_x_nC[i][j];}
+  int table_vC_x_fC(int i, int j) const {return CellT::m_table_vC_x_fC[i][j];}
+  int table_fC_x_bC(int i, int j) const {return CellT::m_table_fC_x_bC[i][j];}
+  int table_bC_x_vC(int i, int j) const {return CellT::m_table_bC_x_vC[i][j];}
+  int table_bC_x_nC(int i, int j) const {return CellT::m_table_bC_x_nC[i][j];}
+  int table_bC_x_fC(int i, int j) const {return CellT::m_table_bC_x_fC[i][j];}
 
-  ~_CellCore() {};
+  ~iCellCore() {};
 
 
 #undef THIS

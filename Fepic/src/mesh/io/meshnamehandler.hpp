@@ -24,32 +24,32 @@
 
 #include <string>
 
-class _MeshNameHandler
+class iMeshNameHandler
 {
 protected:
   
-  _MeshNameHandler() : _is_family(false), _high_order_nodes(true), _sofn_already_called(false) {}
+  iMeshNameHandler() : m_is_family(false), m_high_order_nodes(true), m_sofn_already_called(false) {}
   
 public:
 
   void isFamily(bool is_family)
   {
-    _is_family = is_family;
+    m_is_family = is_family;
   }
   
   bool isFamily() const
   {
-    return _is_family;
+    return m_is_family;
   }
   
   void printHighOrderNodes(bool h)
   {
-    _high_order_nodes = h;
+    m_high_order_nodes = h;
   }
   
   bool printHighOrderNodes() const
   {
-    return _high_order_nodes;
+    return m_high_order_nodes;
   }
 
   /** @param a file name (without extension) or a path in the form <tt>foo/bar/</tt>
@@ -75,20 +75,20 @@ protected:
    * @param extension expected extension
    * @param is_family output
    */ 
-  bool _registerFile(std::string filename, std::string const& extension);
+  bool fi_registerFile(std::string filename, std::string const& extension);
  
-  std::string _popNextName(int filenum, std::string const& ext);
+  std::string fi_popNextName(int filenum, std::string const& ext);
 
-  std::string _in_meshfile;  // eg.   /home/user/test.msh
-  std::string _in_basename;  // eg.   test
-  std::string _in_extension; // eg.   .msh
-  std::string _in_path;      // eg.   /home/user/
-  std::string _out_basename; // eg.   result_file
-  std::string _out_path;     // eg.   /home/user/result/
-  std::string _out_extension;// eg.
-  bool        _is_family; // se o output sera impresso como familia
-  bool        _high_order_nodes; // se imprime nós de controle
-  bool        _sofn_already_called; // if the function setOutputFileName has been called
+  std::string m_in_meshfile;  // eg.   /home/user/test.msh
+  std::string m_in_basename;  // eg.   test
+  std::string m_in_extension; // eg.   .msh
+  std::string m_in_path;      // eg.   /home/user/
+  std::string m_out_basename; // eg.   result_file
+  std::string m_out_path;     // eg.   /home/user/result/
+  std::string m_out_extension;// eg.
+  bool        m_is_family; // se o output sera impresso como familia
+  bool        m_high_order_nodes; // se imprime nós de controle
+  bool        m_sofn_already_called; // if the function setOutputFileName has been called
 
 };
 

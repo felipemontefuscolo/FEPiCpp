@@ -35,7 +35,7 @@
 #  include <ctime>
 #endif
 
-namespace __FepTimer
+namespace fi_FepTimer
 {
   struct Item {
     Item(double e, const char* n) : elapsed(e) {
@@ -54,7 +54,7 @@ namespace __FepTimer
 class Timer
 {
 public:
-  typedef __FepTimer::Item Item;
+  typedef fi_FepTimer::Item Item;
   typedef typename std::list<Item> List;
   typedef typename List::iterator Iter;
   typedef typename List::const_iterator CIter;
@@ -64,18 +64,18 @@ public:
   explicit Timer()
   {
     #ifdef FEP_HAS_OPENMP
-    _method = "OpenMp";
+    m_method = "OpenMp";
     #else
-    _method = "ctime";
+    m_method = "ctime";
     #endif
   }
 
   void restart()
   {
     #ifdef FEP_HAS_OPENMP
-    _elapsed = omp_get_wtime();
+    m_elapsed = omp_get_wtime();
     #else
-    _temp = clock();
+    m_temp = clock();
     #endif
   }
 
@@ -84,24 +84,24 @@ public:
     char  buff[256];
 
     #ifdef FEP_HAS_OPENMP
-    _elapsed = omp_get_wtime() - _elapsed;
+    m_elapsed = omp_get_wtime() - m_elapsed;
     #else
-    _elapsed = static_cast<double>( clock()  - _temp)/(1.*CLOCKS_PER_SEC);
+    m_elapsed = static_cast<double>( clock()  - m_temp)/(1.*CLOCKS_PER_SEC);
     #endif
-    sprintf(buff, "elapsed %8.3fs in : %s\n", static_cast<float>(_elapsed), fname);
+    sprintf(buff, "elapsed %8.3fs in : %s\n", static_cast<float>(m_elapsed), fname);
 
     if (print_now)
       printf("%s", buff);
 
-    if (_list.size() <= LimitPushBacks)
-      _list.push_back(Item(_elapsed, buff));
+    if (m_list.size() <= LimitPushBacks)
+      m_list.push_back(Item(m_elapsed, buff));
   
-    return _elapsed;
+    return m_elapsed;
   }
 
   void printTimes() const
   {
-    for (CIter it= _list.begin(); it != _list.end(); ++it)
+    for (CIter it= m_list.begin(); it != m_list.end(); ++it)
     {
       printf("%s", it->fname);
     }
@@ -109,23 +109,23 @@ public:
 
   void addItems(Timer const& other)
   {
-    if (other._list.empty())
+    if (other.m_list.empty())
       return;
-    for (CIter it= other._list.begin(); it != other._list.end(); ++it)
-      (this->_list).push_back( *it );
+    for (CIter it= other.m_list.begin(); it != other.m_list.end(); ++it)
+      (this->m_list).push_back( *it );
   }
   
   void printMethod() const
   {
-    printf("%s\n", _method.c_str());
+    printf("%s\n", m_method.c_str());
   }
 
 protected:
-  double      _elapsed;
-  std::string _method;
-  List	      _list;
+  double      m_elapsed;
+  std::string m_method;
+  List	      m_list;
   #ifndef FEP_HAS_OPENMP
-  clock_t     _temp;
+  clock_t     m_temp;
   #endif
 
 

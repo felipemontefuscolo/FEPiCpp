@@ -439,7 +439,7 @@ TEST(MtoolInsertVertexOnEdgeTest, WithTri3)
     //checkConsistencyTri(mesh);
 
     //cout << "cell: "<< mesh->getCellId(mesh->getCellPtr(edge->getIncidCell()))<<"; node_id:"<< mesh->getCellPtr(edge->getIncidCell())->getNodeId(edge->getPosition())
-    //     << "; edge position:" << edge->getPosition() <<"; num_nodes: " <<mesh->numNodes()<< endl;
+    //     << "; edge position:" << edge->getPosition() <<"; numm_nodes: " <<mesh->numNodes()<< endl;
     //mtools.insertVertexOnEdge(edge, 0.5, mesh);
     //vtk_printer.writeVtk();
     mtools.insertVertexOnEdge(mesh->getCellPtr(edge->getIncidCell()), edge->getPosition(), 0.5, mesh);

@@ -31,14 +31,14 @@
 #include "Fepic/src/util/typedefs.hpp"
 
 
-class Cell : public _Labelable
+class Cell : public Labelable
 {
 protected:
-  int  _conn_comp_id;  // connected component to which the cell belongs.  
+  int  m_conn_comp_id;  // connected component to which the cell belongs.  
   
 public:
 
-  Cell() : _conn_comp_id(-1) {}
+  Cell() : m_conn_comp_id(-1) {}
 
   typedef Cell* (*CreatorMemFunPtr)();
 
@@ -117,12 +117,12 @@ public:
 
   void setConnectedComponentId(int id)
   {
-    _conn_comp_id = id;
+    m_conn_comp_id = id;
   }
 
   int getConnectedComponentId() const
   {
-    return _conn_comp_id;
+    return m_conn_comp_id;
   }
 
   virtual int table_fC_x_vC(int i, int j) const = 0;

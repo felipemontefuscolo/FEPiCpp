@@ -134,38 +134,38 @@ protected:
   //                      Mesh Attributes
   //
   //  
-  CellList      _cellL;
-  PointList     _pointL;
-  FacetList     _facetL;
-  CornerList    _cornerL;
+  CellList      m_cells_list;
+  PointList     m_points_list;
+  FacetList     m_facets_list;
+  CornerList    m_corners_list;
 
-  std::map<int, int>  _connected_compL; // connected component vs initial cell id list
-  std::map<int, int>  _boundary_compL;  // boundary component vs initialfacet id list  
+  std::map<int, int>  m_connected_comp_l; // connected component vs initial cell id list
+  std::map<int, int>  m_boundary_comp_l;  // boundary component vs initialfacet id list  
 
-  int _spacedim;
+  int m_spacedim;
 
   // Cell attributes
-  bool _is_parametric_cell;
-  int _cell_dim;
-  int _n_nodes_per_cell;
-  int _n_nodes_per_facet;
-  int _n_nodes_per_corner;
-  int _n_vertices_per_cell;
-  int _n_vertices_per_facet;
-  int _n_vertices_per_corner;
-  int _n_facets_per_cell;
-  int _n_corners_per_cell;
-  int _n_corners_per_facet;
-  bool _cell_has_edge_nodes;
-  bool _cell_has_face_nodes;
-  bool _cell_has_volume_nodes;
+  bool m_is_parametric_cell;
+  int m_cell_dim;
+  int m_n_nodes_per_cell;
+  int m_n_nodes_per_facet;
+  int m_n_nodes_per_corner;
+  int m_n_vertices_per_cell;
+  int m_n_vertices_per_facet;
+  int m_n_vertices_per_corner;
+  int m_n_facets_per_cell;
+  int m_n_corners_per_cell;
+  int m_n_corners_per_facet;
+  bool m_cell_has_edge_nodes;
+  bool m_cell_has_face_nodes;
+  bool m_cell_has_volume_nodes;
   
 public:  
   Timer timer; // time measure
 protected:
-  ECellType _cell_fep_tag;
-  EMshTag   _cell_msh_tag;
-  bool      _dont_build_adjacency;  
+  ECellType m_cellm_fep_tag;
+  EMshTag   m_cell_msh_tag;
+  bool      m_dont_build_adjacency;  
   
   //  
   //
@@ -185,15 +185,15 @@ public:
 
   int cellDim() const
   {
-    return this->_cell_dim;
+    return this->m_cell_dim;
   }
   ECellType cellType() const
   {
-    return this->_cell_fep_tag;
+    return this->m_cellm_fep_tag;
   }
   EMshTag cellMshTag() const
   {
-    return this->_cell_msh_tag;
+    return this->m_cell_msh_tag;
   }
 
   bool isVertex(CellElement const* p) const
@@ -207,45 +207,45 @@ public:
 
   bool cellHasEdgeNodes() const
   {
-    return this->_cell_has_edge_nodes;
+    return this->m_cell_has_edge_nodes;
   }
   bool cellHasFaceNodes() const
   {
-    return this->_cell_has_face_nodes;
+    return this->m_cell_has_face_nodes;
   }
   bool cellHasVolumeNodes() const
   {
-    return this->_cell_has_volume_nodes;
+    return this->m_cell_has_volume_nodes;
   };
 
   int nodesPerCell() const
   {
-    return this->_n_nodes_per_cell;
+    return this->m_n_nodes_per_cell;
   }
 
   int nodesPerFacet() const
   {
-    return this->_n_nodes_per_facet;
+    return this->m_n_nodes_per_facet;
   }
 
   int nodesPerCorner() const
   {
-    return this->_n_nodes_per_corner;
+    return this->m_n_nodes_per_corner;
   }
 
   int verticesPerCell() const
   {
-    return this->_n_vertices_per_cell;
+    return this->m_n_vertices_per_cell;
   }
 
   int verticesPerFacet() const
   {
-    return this->_n_vertices_per_facet;
+    return this->m_n_vertices_per_facet;
   }
 
   int verticesPerCorner() const
   {
-    return this->_n_vertices_per_corner;
+    return this->m_n_vertices_per_corner;
   }
 
   void printInfo() const;
@@ -255,8 +255,8 @@ public:
   */
   Cell* getCellPtr(int nth)
   {
-    if (unsigned(nth)<this->_cellL.totalSize())
-      return &_cellL[nth];
+    if (unsigned(nth)<this->m_cells_list.totalSize())
+      return &m_cells_list[nth];
     else
       return NULL;
   }
@@ -264,8 +264,8 @@ public:
   */
   Facet* getFacetPtr(int nth)
   {
-    if (unsigned(nth)<this->_facetL.totalSize())
-      return &_facetL[nth];
+    if (unsigned(nth)<this->m_facets_list.totalSize())
+      return &m_facets_list[nth];
     else
       return NULL;
   }
@@ -273,8 +273,8 @@ public:
   */
   Corner* getCornerPtr(int nth)
   {
-    if (unsigned(nth)<this->_cornerL.totalSize())
-      return &_cornerL[nth];
+    if (unsigned(nth)<this->m_corners_list.totalSize())
+      return &m_corners_list[nth];
     else
       return NULL;
   }
@@ -282,8 +282,8 @@ public:
   */
   Point* getNodePtr(int nth)
   {
-    if (unsigned(nth)<this->_pointL.totalSize())
-      return &_pointL[nth];
+    if (unsigned(nth)<this->m_points_list.totalSize())
+      return &m_points_list[nth];
     else
       return NULL;
   }
@@ -292,8 +292,8 @@ public:
   */
   Cell const* getCellPtr(int nth) const
   {
-    if (unsigned(nth)<this->_cellL.totalSize())
-      return &_cellL[nth];
+    if (unsigned(nth)<this->m_cells_list.totalSize())
+      return &m_cells_list[nth];
     else
       return NULL;
   }
@@ -301,8 +301,8 @@ public:
   */
   Facet const* getFacetPtr(int nth) const
   {
-    if (unsigned(nth)<this->_facetL.totalSize())
-      return &_facetL[nth];
+    if (unsigned(nth)<this->m_facets_list.totalSize())
+      return &m_facets_list[nth];
     else
       return NULL;
   }
@@ -310,8 +310,8 @@ public:
   */
   Corner const* getCornerPtr(int nth) const
   {
-    if (unsigned(nth)<this->_cornerL.totalSize())
-      return &_cornerL[nth];
+    if (unsigned(nth)<this->m_corners_list.totalSize())
+      return &m_corners_list[nth];
     else
       return NULL;
   }
@@ -319,23 +319,36 @@ public:
   */
   Point const* getNodePtr(int nth) const
   {
-    if (unsigned(nth)<this->_pointL.totalSize())
-      return &_pointL[nth];
+    if (unsigned(nth)<this->m_points_list.totalSize())
+      return &m_points_list[nth];
     else
       return NULL;
   }
 
-  cell_handler handler(cell_iterator it)
+  cell_handler handler(cell_iterator & it)
   { return cell_handler(this, &*it, it.index()); }
 
-  facet_handler handler(facet_iterator it)
+  facet_handler handler(facet_iterator & it)
   { return facet_handler(this, &*it, it.index()); }
   
-  corner_handler handler(corner_iterator it)
+  corner_handler handler(corner_iterator & it)
   { return corner_handler(this, &*it, it.index()); }  
 
-  point_handler handler(point_iterator it)
+  point_handler handler(point_iterator & it)
   { return point_handler(this, &*it, it.index()); }
+
+  cell_const_handler handler(cell_const_iterator const& it)
+  { return cell_const_handler(this, &*it, it.index()); }
+
+  facet_const_handler handler(facet_const_iterator const& it)
+  { return facet_const_handler(this, &*it, it.index()); }
+  
+  corner_const_handler handler(corner_const_iterator const& it)
+  { return corner_const_handler(this, &*it, it.index()); }  
+
+  point_const_handler handler(point_const_iterator const& it)
+  { return point_const_handler(this, &*it, it.index()); }
+  
 
 private:
   template<class EntityType>
@@ -345,49 +358,75 @@ public:
 
   cell_handler getCell(int nth)
   {
-    if (unsigned(nth)<this->_cellL.totalSize())
-      return cell_handler(this, &_cellL[nth], nth);
+    if (unsigned(nth)<this->m_cells_list.totalSize())
+      return cell_handler(this, &m_cells_list[nth], nth);
     else
       return cell_handler(this, NULL, -1);
   }
   facet_handler getFacet(int nth)
   {
-    if (unsigned(nth)<this->_facetL.totalSize())
-      return facet_handler(this, &_facetL[nth], nth);
+    if (unsigned(nth)<this->m_facets_list.totalSize())
+      return facet_handler(this, &m_facets_list[nth], nth);
     else
       return facet_handler(this, NULL, -1);
   }
   corner_handler getCorner(int nth)
   {
-    if (unsigned(nth)<this->_cornerL.totalSize())
-      return corner_handler(this, &_cornerL[nth], nth);
+    if (unsigned(nth)<this->m_corners_list.totalSize())
+      return corner_handler(this, &m_corners_list[nth], nth);
     else
       return corner_handler(this, NULL, -1);
   }
   point_handler getNode(int nth)
   {
-    if (unsigned(nth)<this->_pointL.totalSize())
-      return point_handler(this, &_pointL[nth], nth);
+    if (unsigned(nth)<this->m_points_list.totalSize())
+      return point_handler(this, &m_points_list[nth], nth);
     else
       return point_handler(this, NULL, -1);
   }
 
+
+  cell_const_handler getCell(int nth) const
+  {
+    if (unsigned(nth)<this->m_cells_list.totalSize())
+      return cell_const_handler(this, &m_cells_list[nth], nth);
+    else
+      return cell_const_handler(this, NULL, -1);
+  }
+  facet_const_handler getFacet(int nth) const
+  {
+    if (unsigned(nth)<this->m_facets_list.totalSize())
+      return facet_const_handler(this, &m_facets_list[nth], nth);
+    else
+      return facet_const_handler(this, NULL, -1);
+  }
+  corner_const_handler getCorner(int nth) const
+  {
+    if (unsigned(nth)<this->m_corners_list.totalSize())
+      return corner_const_handler(this, &m_corners_list[nth], nth);
+    else
+      return corner_const_handler(this, NULL, -1);
+  }
+  point_const_handler getNode(int nth) const
+  {
+    if (unsigned(nth)<this->m_points_list.totalSize())
+      return point_const_handler(this, &m_points_list[nth], nth);
+    else
+      return point_const_handler(this, NULL, -1);
+  }
+
+
   void disablePoint(int id)
-  {
-    _pointL.disable(id);
-  }
+  { m_points_list.disable(id); }
+  
   void disableCorner(int id)
-  {
-    _cornerL.disable(id);
-  }
+  { m_corners_list.disable(id); }
+  
   void disableFacet(int id)
-  {
-    _facetL.disable(id);
-  }
+  { m_facets_list.disable(id); }
+  
   void disableCell(int id)
-  {
-    _cellL.disable(id);
-  }
+  { m_cells_list.disable(id); }
 
 
   void getCellNodesId(Cell const* cell, int *result) const
@@ -436,36 +475,36 @@ public:
 
   int getCellContigId(int id) const
   {
-    return _cellL.contiguousId(id);
+    return m_cells_list.contiguousId(id);
   }
   int getFacetContigId(int id) const
   {
-    return _facetL.contiguousId(id);
+    return m_facets_list.contiguousId(id);
   }
   int getCornerContigId(int id) const
   {
-    return _cornerL.contiguousId(id);
+    return m_corners_list.contiguousId(id);
   }
   int getNodeContigId(int id) const
   {
-    return _pointL.contiguousId(id);
+    return m_points_list.contiguousId(id);
   }
 
   void getCellsContigId(int* first, int const* last, int* result) const
   {
-    _cellL.contiguousIds(first, last, result);
+    m_cells_list.contiguousIds(first, last, result);
   }
   void getFacetsContigId(int* first, int const* last, int* result)const
   {
-    _facetL.contiguousIds(first, last, result);
+    m_facets_list.contiguousIds(first, last, result);
   }
   void getCornersContigId(int* first, int const* last, int* result) const
   {
-    _cornerL.contiguousIds(first, last, result);
+    m_corners_list.contiguousIds(first, last, result);
   }
   void getNodesContigId(int* first, int const* last, int* result) const
   {
-    _pointL.contiguousIds(first, last, result);
+    m_points_list.contiguousIds(first, last, result);
   }
 
 
@@ -474,7 +513,7 @@ public:
     this->getCellNodesId(cell, result);
     for (int i = 0; i < this->numNodesPerCell(); ++i)
     {
-      *result = _pointL.contiguousId(*result);
+      *result = m_points_list.contiguousId(*result);
       ++result;
     }
   }
@@ -483,7 +522,7 @@ public:
     this->getFacetNodesId(facet, result);
     for (int i = 0; i < this->numNodesPerFacet(); ++i)
     {
-      *result = _pointL.contiguousId(*result);
+      *result = m_points_list.contiguousId(*result);
       ++result;
     }
   }
@@ -492,7 +531,7 @@ public:
     this->getCornerNodesId(corner, result);
     for (int i = 0; i < this->numNodesPerCorner(); ++i)
     {
-      *result = _pointL.contiguousId(*result);
+      *result = m_points_list.contiguousId(*result);
       ++result;
     }
   }
@@ -897,11 +936,11 @@ public:
 
   void qBuildAdjacency(bool b)
   {
-    _dont_build_adjacency = b;
+    m_dont_build_adjacency = b;
   };
   bool qBuildAdjacency()
   {
-    return _dont_build_adjacency;
+    return m_dont_build_adjacency;
   };
 
 
@@ -1009,7 +1048,7 @@ public:
   */
   int numCells() const
   {
-    return static_cast<int>( _cellL.size() );
+    return static_cast<int>( m_cells_list.size() );
   }
 
   /** Retorna o número de células.
@@ -1017,7 +1056,7 @@ public:
   */
   int numCellsTotal() const
   {
-    return static_cast<int>( _cellL.totalSize() );
+    return static_cast<int>( m_cells_list.totalSize() );
   }
 
   /** Retorna o número de nós.
@@ -1025,7 +1064,7 @@ public:
   */
   int numNodes() const
   {
-    return static_cast<int>( _pointL.size() );
+    return static_cast<int>( m_points_list.size() );
   }
 
   /** Retorna no número de nós.
@@ -1033,7 +1072,7 @@ public:
   */
   int numNodesTotal() const
   {
-    return static_cast<int>( _pointL.totalSize() );
+    return static_cast<int>( m_points_list.totalSize() );
   }
 
   int numVertices() const;
@@ -1043,7 +1082,7 @@ public:
   */
   int numFacets() const
   {
-    return static_cast<int>( _facetL.size() );
+    return static_cast<int>( m_facets_list.size() );
   }
 
   /** Retorna o número de facets.
@@ -1051,7 +1090,7 @@ public:
   */
   int numFacetsTotal() const
   {
-    return static_cast<int>( _facetL.totalSize() );
+    return static_cast<int>( m_facets_list.totalSize() );
   }
 
   /** Retorna número de corners.
@@ -1059,11 +1098,11 @@ public:
   */
   int numCorners() const
   {
-    if (this->_cell_dim == 3)
-      return static_cast<int>( _cornerL.size() );
+    if (this->m_cell_dim == 3)
+      return static_cast<int>( m_corners_list.size() );
     else
     // FIXME: high orders nodes are not corners
-      return static_cast<int>( _pointL.totalSize() );
+      return static_cast<int>( m_points_list.totalSize() );
   }
 
   /** Retorna o número de corners.
@@ -1071,51 +1110,51 @@ public:
   */
   int numCornersTotal() const
   {
-    if (this->_cell_dim == 3)
-      return static_cast<int>( _cornerL.totalSize() );
+    if (this->m_cell_dim == 3)
+      return static_cast<int>( m_corners_list.totalSize() );
     else
       // FIXME: high orders nodes are not corners
-      return static_cast<int>( _pointL.totalSize() );
+      return static_cast<int>( m_points_list.totalSize() );
   }
 
 
   int numNodesPerCell() const
   {
-    return this->_n_nodes_per_cell;
+    return this->m_n_nodes_per_cell;
   }
   int numNodesPerFacet() const
   {
-    return this->_n_nodes_per_facet;
+    return this->m_n_nodes_per_facet;
   }
   int numNodesPerCorner() const
   {
-    return this->_n_nodes_per_corner;
+    return this->m_n_nodes_per_corner;
   }
 
   int numVerticesPerCell() const
   {
-    return this->_n_vertices_per_cell;
+    return this->m_n_vertices_per_cell;
   }
   int numVerticesPerFacet() const
   {
-    return this->_n_vertices_per_facet;
+    return this->m_n_vertices_per_facet;
   }
   int numVerticesPerCorner() const
   {
-    return this->_n_vertices_per_corner;
+    return this->m_n_vertices_per_corner;
   }
 
   int numFacetsPerCell() const
   {
-    return this->_n_facets_per_cell;
+    return this->m_n_facets_per_cell;
   }
   int numCornersPerCell() const
   {
-    return this->_n_corners_per_cell;
+    return this->m_n_corners_per_cell;
   }
   int numCornersPerFacet() const
   {
-    return this->_n_corners_per_facet;
+    return this->m_n_corners_per_facet;
   }
 
 
@@ -1124,12 +1163,12 @@ public:
 
   int spaceDim() const
   {
-    return _spacedim;
+    return m_spacedim;
   }
 
   int getCellId(Cell const* a) const
   {
-    FEPIC_CHECK(_dont_build_adjacency, "this function can not be called without adjacency", std::runtime_error);
+    FEPIC_CHECK(m_dont_build_adjacency, "this function can not be called without adjacency", std::runtime_error);
     
     int ic_id = a->getIncidCell(0);
     
@@ -1141,19 +1180,19 @@ public:
   
   int getPointId(Point const* a) const
   {
-    FEPIC_CHECK(_dont_build_adjacency, "this function can not be called without adjacency", std::runtime_error);
+    FEPIC_CHECK(m_dont_build_adjacency, "this function can not be called without adjacency", std::runtime_error);
     return this->getCellPtr(a->getIncidCell())->getNodeId(a->getPosition());
   }
   
   int getFacetId(Facet const* a) const
   {
-    FEPIC_CHECK(_dont_build_adjacency, "this function can not be called without adjacency", std::runtime_error);
+    FEPIC_CHECK(m_dont_build_adjacency, "this function can not be called without adjacency", std::runtime_error);
     return this->getCellPtr(a->getIncidCell())->getFacetId(a->getPosition());
   }
   
   int getCornerId(Corner const* a) const
   {
-    FEPIC_CHECK(_dont_build_adjacency, "this function can not be called without adjacency", std::runtime_error);
+    FEPIC_CHECK(m_dont_build_adjacency, "this function can not be called without adjacency", std::runtime_error);
     return this->getCellPtr(a->getIncidCell())->getCornerId(a->getPosition());
   }
 
@@ -1164,25 +1203,25 @@ public:
    * set the connected component id starting from c_ini with id cc_id.
    * @warning isVisited() flags are used.
    */ 
-  void _setConnectedComponentsId(cell_handler c_ini, int cc_id);
-  void _setBoundaryComponentsId(facet_handler f_ini, int bc_id);
+  void fi_setConnectedComponentsId(cell_handler c_ini, int cc_id);
+  void fi_setBoundaryComponentsId(facet_handler f_ini, int bc_id);
 
   void setUpConnectedComponentsId();
   int numConnectedComponents() const
   {
-    return static_cast<int>( _connected_compL.size() );
+    return static_cast<int>( m_connected_comp_l.size() );
   }
   
   void setUpBoundaryComponentsId();
   int numBoundaryComponents() const
   {
-    return static_cast<int>( _boundary_compL.size() );
+    return static_cast<int>( m_boundary_comp_l.size() );
   }
 
   void getConnectedComponentsPicks(int *comps, int *cells) const
   {
     int k = 0;
-    for (std::map<int,int>::const_iterator it = _connected_compL.begin(); it != _connected_compL.end(); ++it)
+    for (std::map<int,int>::const_iterator it = m_connected_comp_l.begin(); it != m_connected_comp_l.end(); ++it)
     {
       comps[k] = (*it).first;
       cells[k] = (*it).second;
@@ -1193,7 +1232,7 @@ public:
   void getBoundaryComponentsPicks(int *comps, int *facets) const
   {
     int k = 0;
-    for (std::map<int,int>::const_iterator it = _boundary_compL.begin(); it != _boundary_compL.end(); ++it)
+    for (std::map<int,int>::const_iterator it = m_boundary_comp_l.begin(); it != m_boundary_comp_l.end(); ++it)
     {
       comps[k] = (*it).first;
       facets[k] = (*it).second;
@@ -1245,23 +1284,23 @@ public:
 // =====================================================================================
 // =====================================================================================
 
-cell_iterator   FEP_STRONG_INLINE Mesh::cellBegin()  { return cell_iterator  (this, _cellL.begin()  );}
-cell_iterator   FEP_STRONG_INLINE Mesh::cellEnd()    { return cell_iterator  (this, _cellL.end()    );}
-point_iterator  FEP_STRONG_INLINE Mesh::pointBegin() { return point_iterator (this, _pointL.begin() );}
-point_iterator  FEP_STRONG_INLINE Mesh::pointEnd()   { return point_iterator (this, _pointL.end()   );}
-facet_iterator  FEP_STRONG_INLINE Mesh::facetBegin() { return facet_iterator (this, _facetL.begin() );}
-facet_iterator  FEP_STRONG_INLINE Mesh::facetEnd()   { return facet_iterator (this, _facetL.end()   );}
-corner_iterator FEP_STRONG_INLINE Mesh::cornerBegin(){ return corner_iterator(this, _cornerL.begin());}
-corner_iterator FEP_STRONG_INLINE Mesh::cornerEnd()  { return corner_iterator(this, _cornerL.end()  );}
+cell_iterator   FEP_STRONG_INLINE Mesh::cellBegin()  { return cell_iterator  (this, m_cells_list.begin()  );}
+cell_iterator   FEP_STRONG_INLINE Mesh::cellEnd()    { return cell_iterator  (this, m_cells_list.end()    );}
+point_iterator  FEP_STRONG_INLINE Mesh::pointBegin() { return point_iterator (this, m_points_list.begin() );}
+point_iterator  FEP_STRONG_INLINE Mesh::pointEnd()   { return point_iterator (this, m_points_list.end()   );}
+facet_iterator  FEP_STRONG_INLINE Mesh::facetBegin() { return facet_iterator (this, m_facets_list.begin() );}
+facet_iterator  FEP_STRONG_INLINE Mesh::facetEnd()   { return facet_iterator (this, m_facets_list.end()   );}
+corner_iterator FEP_STRONG_INLINE Mesh::cornerBegin(){ return corner_iterator(this, m_corners_list.begin());}
+corner_iterator FEP_STRONG_INLINE Mesh::cornerEnd()  { return corner_iterator(this, m_corners_list.end()  );}
 
-cell_iterator   FEP_STRONG_INLINE Mesh::cellBegin  (int tid, int nthreads) { return cell_iterator  (this, _cellL.begin  (tid, nthreads)  );}
-cell_iterator   FEP_STRONG_INLINE Mesh::cellEnd    (int tid, int nthreads) { return cell_iterator  (this, _cellL.end    (tid, nthreads)  );}
-point_iterator  FEP_STRONG_INLINE Mesh::pointBegin (int tid, int nthreads) { return point_iterator (this, _pointL.begin (tid, nthreads)  );}
-point_iterator  FEP_STRONG_INLINE Mesh::pointEnd   (int tid, int nthreads) { return point_iterator (this, _pointL.end   (tid, nthreads)  );}
-facet_iterator  FEP_STRONG_INLINE Mesh::facetBegin (int tid, int nthreads) { return facet_iterator (this, _facetL.begin (tid, nthreads)  );}
-facet_iterator  FEP_STRONG_INLINE Mesh::facetEnd   (int tid, int nthreads) { return facet_iterator (this, _facetL.end   (tid, nthreads)  );}
-corner_iterator FEP_STRONG_INLINE Mesh::cornerBegin(int tid, int nthreads) { return corner_iterator(this, _cornerL.begin(tid, nthreads)  );}
-corner_iterator FEP_STRONG_INLINE Mesh::cornerEnd  (int tid, int nthreads) { return corner_iterator(this, _cornerL.end  (tid, nthreads)  );}
+cell_iterator   FEP_STRONG_INLINE Mesh::cellBegin  (int tid, int nthreads) { return cell_iterator  (this, m_cells_list.begin  (tid, nthreads)  );}
+cell_iterator   FEP_STRONG_INLINE Mesh::cellEnd    (int tid, int nthreads) { return cell_iterator  (this, m_cells_list.end    (tid, nthreads)  );}
+point_iterator  FEP_STRONG_INLINE Mesh::pointBegin (int tid, int nthreads) { return point_iterator (this, m_points_list.begin (tid, nthreads)  );}
+point_iterator  FEP_STRONG_INLINE Mesh::pointEnd   (int tid, int nthreads) { return point_iterator (this, m_points_list.end   (tid, nthreads)  );}
+facet_iterator  FEP_STRONG_INLINE Mesh::facetBegin (int tid, int nthreads) { return facet_iterator (this, m_facets_list.begin (tid, nthreads)  );}
+facet_iterator  FEP_STRONG_INLINE Mesh::facetEnd   (int tid, int nthreads) { return facet_iterator (this, m_facets_list.end   (tid, nthreads)  );}
+corner_iterator FEP_STRONG_INLINE Mesh::cornerBegin(int tid, int nthreads) { return corner_iterator(this, m_corners_list.begin(tid, nthreads)  );}
+corner_iterator FEP_STRONG_INLINE Mesh::cornerEnd  (int tid, int nthreads) { return corner_iterator(this, m_corners_list.end  (tid, nthreads)  );}
 
 // =====================================================================================
 // =====================================================================================
@@ -1294,7 +1333,7 @@ struct ArgConverter<CT*>
 */
 FEP_STRONG_INLINE
 int Mesh::pushCell(Cell const* cell)
-{ return _cellL.insert(cell->clone()); }
+{ return m_cells_list.insert(cell->clone()); }
 
 /** Add a node in the mesh's list.
  *  @param node a pointer to the node.
@@ -1302,7 +1341,7 @@ int Mesh::pushCell(Cell const* cell)
 */
 FEP_STRONG_INLINE
 int Mesh::pushPoint(Point const* node)
-{ return _pointL.insert(*node); }
+{ return m_points_list.insert(*node); }
 
 /** Add a facet in the mesh's list.
  *  @param facet a pointer to the facet.
@@ -1310,7 +1349,7 @@ int Mesh::pushPoint(Point const* node)
 */
 FEP_STRONG_INLINE
 int Mesh::pushFacet(Facet const* facet)
-{ return _facetL.insert(*facet); }
+{ return m_facets_list.insert(*facet); }
 
 /** Add a corner in the mesh's list.
  *  @param corner a pointer to the corner.
@@ -1318,7 +1357,7 @@ int Mesh::pushFacet(Facet const* facet)
 */
 FEP_STRONG_INLINE
 int Mesh::pushCorner(Corner const* corner)
-{ return _cornerL.insert(*corner); }
+{ return m_corners_list.insert(*corner); }
 
 
 /** Create a cell in the mesh's list.
@@ -1329,7 +1368,7 @@ int Mesh::pushCorner(Corner const* corner)
 FEP_STRONG_INLINE
 Cell* Mesh::pushCell(int *cell_id)
 {
-  int const tmp = _cellL.insert(Cell::create(this->cellType()));
+  int const tmp = m_cells_list.insert(Cell::create(this->cellType()));
   if (cell_id)
     *cell_id = tmp;
   return this->getCellPtr(tmp);
@@ -1343,7 +1382,7 @@ Cell* Mesh::pushCell(int *cell_id)
 FEP_STRONG_INLINE
 Point* Mesh::pushPoint(int *node_id)
 {
-  int const tmp = _pointL.insert(Point());
+  int const tmp = m_points_list.insert(Point());
   if (node_id)
     *node_id = tmp;
   return this->getNodePtr(tmp);
@@ -1357,7 +1396,7 @@ Point* Mesh::pushPoint(int *node_id)
 FEP_STRONG_INLINE
 Facet* Mesh::pushFacet(int *facet_id)
 {
-  int const tmp = _facetL.insert(Facet());
+  int const tmp = m_facets_list.insert(Facet());
   if (facet_id)
     *facet_id = tmp;
   return this->getFacetPtr(tmp);
@@ -1371,7 +1410,7 @@ Facet* Mesh::pushFacet(int *facet_id)
 FEP_STRONG_INLINE
 Corner* Mesh::pushCorner(int *corner_id)
 {
-  int const tmp = _cornerL.insert(Corner());
+  int const tmp = m_corners_list.insert(Corner());
   if (corner_id)
     *corner_id = tmp;  
   return this->getCornerPtr(tmp);

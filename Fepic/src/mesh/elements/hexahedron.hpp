@@ -22,13 +22,13 @@
 #ifndef FEPIC_HEXAHEDRON_HPP
 #define FEPIC_HEXAHEDRON_HPP
 
-template<class CT> class _CellCore;
+template<class CT> class iCellCore;
 
 /* linear hexahedron */
-class Hexahedron8 :  public _CellCore<Hexahedron8>
+class Hexahedron8 :  public iCellCore<Hexahedron8>
 {
 public:
-  friend class _CellCore<Hexahedron8>;
+  friend class iCellCore<Hexahedron8>;
 
   typedef Hypercube<3> PolytopeT;
   typedef Quadrangle4  Derived;
@@ -54,23 +54,23 @@ protected:
   FEP_DEF_3D_CELLS_MEMBERS;
 
 public:
-  static const int _table_vC_x_fC[8][6];
-  static const int _table_fC_x_bC[6][4];
-  static const int _table_fC_x_vC[6][8];
-  static const int _table_fC_x_nC[6][4];
-  static const int _table_bC_x_vC[12][2];
-  static const int _table_bC_x_nC[12][2];
-  static const int _table_bC_x_fC[12][4];
+  static const int m_table_vC_x_fC[8][6];
+  static const int m_table_fC_x_bC[6][4];
+  static const int m_table_fC_x_vC[6][8];
+  static const int m_table_fC_x_nC[6][4];
+  static const int m_table_bC_x_vC[12][2];
+  static const int m_table_bC_x_nC[12][2];
+  static const int m_table_bC_x_fC[12][4];
     
 };
 
 
 
 /* quadratic hexahedron (serendipity) */
-class Hexahedron20 :  public _CellCore<Hexahedron20>
+class Hexahedron20 :  public iCellCore<Hexahedron20>
 {
 public:
-  friend class _CellCore<Hexahedron20>;
+  friend class iCellCore<Hexahedron20>;
 
   typedef Hypercube<3> PolytopeT;
   typedef Quadrangle8  Derived;
@@ -95,23 +95,23 @@ protected:
   FEP_DEF_3D_CELLS_MEMBERS;
 
 public:
-  static const int _table_vC_x_fC[8][6];
-  static const int _table_fC_x_bC[6][4];
-  static const int _table_fC_x_vC[6][8];
-  static const int _table_fC_x_nC[6][8];
-  static const int _table_bC_x_vC[12][2];
-  static const int _table_bC_x_nC[12][3];
-  static const int _table_bC_x_fC[12][4];
+  static const int m_table_vC_x_fC[8][6];
+  static const int m_table_fC_x_bC[6][4];
+  static const int m_table_fC_x_vC[6][8];
+  static const int m_table_fC_x_nC[6][8];
+  static const int m_table_bC_x_vC[12][2];
+  static const int m_table_bC_x_nC[12][3];
+  static const int m_table_bC_x_fC[12][4];
     
 };
 
 
 
 /* quadratic hexahedron (serendipity) */
-class Hexahedron27 :  public _CellCore<Hexahedron27>
+class Hexahedron27 :  public iCellCore<Hexahedron27>
 {
 public:
-  friend class _CellCore<Hexahedron27>;
+  friend class iCellCore<Hexahedron27>;
 
   typedef Hypercube<3> PolytopeT;
   typedef Quadrangle9  Derived;
@@ -136,13 +136,13 @@ protected:
   FEP_DEF_3D_CELLS_MEMBERS;
 
 public:
-  static const int _table_vC_x_fC[8][6];
-  static const int _table_fC_x_bC[6][4];
-  static const int _table_fC_x_vC[6][8];
-  static const int _table_fC_x_nC[6][9];
-  static const int _table_bC_x_vC[12][2];
-  static const int _table_bC_x_nC[12][3];
-  static const int _table_bC_x_fC[12][4];
+  static const int m_table_vC_x_fC[8][6];
+  static const int m_table_fC_x_bC[6][4];
+  static const int m_table_fC_x_vC[6][8];
+  static const int m_table_fC_x_nC[6][9];
+  static const int m_table_bC_x_vC[12][2];
+  static const int m_table_bC_x_nC[12][3];
+  static const int m_table_bC_x_fC[12][4];
     
 };
 

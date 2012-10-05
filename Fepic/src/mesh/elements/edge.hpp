@@ -38,10 +38,10 @@
  
  // linear edge
 template<int N> // N = order
-class Edge :  public _CellCore<Edge<N> >
+class Edge :  public iCellCore<Edge<N> >
 {
 public:
-  friend class _CellCore<Edge<N> >;
+  friend class iCellCore<Edge<N> >;
 
   typedef Polytope<1> PolytopeT;
   typedef Point       Derived;
@@ -69,9 +69,9 @@ public:
   */
   int isAligned (Edge const& e) const
   {
-    if ( (_nodes[0] == e._nodes[0]) && (_nodes[1] == e._nodes[1]) )
+    if ( (m_nodes[0] == e.m_nodes[0]) && (m_nodes[1] == e.m_nodes[1]) )
       return 1;
-    else if ( (_nodes[0] == e._nodes[1]) && (_nodes[1] == e._nodes[0]) )
+    else if ( (m_nodes[0] == e.m_nodes[1]) && (m_nodes[1] == e.m_nodes[0]) )
       return -1;
     else
       return 0;
@@ -84,9 +84,9 @@ public:
   */
   int isAligned (int* nodes) const
   {
-    if ((_nodes[1] == nodes[1]) && (_nodes[0] == nodes[0]) )
+    if ((m_nodes[1] == nodes[1]) && (m_nodes[0] == nodes[0]) )
       return 1;
-    else if ( (_nodes[0] == nodes[1]) && (_nodes[1] == nodes[0]) )
+    else if ( (m_nodes[0] == nodes[1]) && (m_nodes[1] == nodes[0]) )
       return -1;
     else
       return 0;
@@ -105,13 +105,13 @@ private:
   
   
 public:
-  static const int _table_fC_x_vC[2][1];
-  static const int _table_fC_x_nC[2][1];
-  static const int _table_bC_x_nC[/*0*/1][/*0*/1];
-  static const int _table_bC_x_vC[/*0*/1][/*0*/1];
-  static const int _table_fC_x_bC[/*0*/1][/*0*/1];  
-  static const int _table_bC_x_fC[/*0*/1][/*0*/1];
-  static const int _table_vC_x_fC[2][1];
+  static const int m_table_fC_x_vC[2][1];
+  static const int m_table_fC_x_nC[2][1];
+  static const int m_table_bC_x_nC[/*0*/1][/*0*/1];
+  static const int m_table_bC_x_vC[/*0*/1][/*0*/1];
+  static const int m_table_fC_x_bC[/*0*/1][/*0*/1];  
+  static const int m_table_bC_x_fC[/*0*/1][/*0*/1];
+  static const int m_table_vC_x_fC[2][1];
 };
 
 

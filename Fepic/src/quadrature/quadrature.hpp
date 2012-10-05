@@ -25,7 +25,7 @@
 #include "conf/directives.hpp"
 #include "../mesh/enums.hpp"
 
-void _getQuadrPtsHypercube(int n, int dim, Real **points, Real *weights, int &n_points);
+void igetQuadrPtsHypercube(int n, int dim, Real **points, Real *weights, int &nm_points);
 
 class Quadrature
 {
@@ -45,12 +45,12 @@ public:
 
   int numPoints() const
   {
-    return _n_points;
+    return m_nm_points;
   }
 
   int order() const
   {
-    return _order;
+    return m_order;
   }
 
   static
@@ -61,8 +61,8 @@ public:
 
   ~Quadrature() {};
 protected:
-  int _n_points;
-  int _order;
+  int m_nm_points;
+  int m_order;
 };
 
 
@@ -80,18 +80,18 @@ public:
 
   Real const* point(int qp) const
   {
-    return this->_points[qp];
+    return this->m_points[qp];
   }
 
   void getPoint(int qp, Real *x) const
   {
     for (int i = 0; i < Dim; ++i)
-      x[i] = this->_points[qp][i];
+      x[i] = this->m_points[qp][i];
   }
 
   Real weight(int qp) const
   {
-    return this->_weights[qp];
+    return this->m_weights[qp];
   }
 
   int  maxOrder() const
@@ -104,8 +104,8 @@ public:
   ~Quadrature_() {}
 
 protected:
-  Real _points[MaxNumQPoints][Dim!=0?Dim:1];
-  Real _weights[MaxNumQPoints];
+  Real m_points[MaxNumQPoints][Dim!=0?Dim:1];
+  Real m_weights[MaxNumQPoints];
 
 };
 

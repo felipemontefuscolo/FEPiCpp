@@ -3,7 +3,7 @@
 #include "../util/misc2.hpp"
 #include "../util/assert.hpp"
 
-namespace _FepicTagsInitializers
+namespace fi_FepicTagsInitializers
 {
   std::tr1::array<int, N_CELL_TYPES> ctypeNumNodes_ini()
   {
@@ -213,7 +213,7 @@ namespace _FepicTagsInitializers
 int ctypeNumNodes(ECellType type)
 {
   static const
-  std::tr1::array<int, N_CELL_TYPES> n_nds = _FepicTagsInitializers::ctypeNumNodes_ini();
+  std::tr1::array<int, N_CELL_TYPES> n_nds = fi_FepicTagsInitializers::ctypeNumNodes_ini();
 
   unsigned idx = log2_i32(type);
   if (idx >= N_CELL_TYPES)
@@ -230,7 +230,7 @@ int ctypeDegree(ECellType type)
 {
 
   static const
-  std::tr1::array<int, N_CELL_TYPES> orders = _FepicTagsInitializers::ctypeDegree_ini();
+  std::tr1::array<int, N_CELL_TYPES> orders = fi_FepicTagsInitializers::ctypeDegree_ini();
 
   unsigned idx = log2_i32(type);
   if (idx >= N_CELL_TYPES)
@@ -246,7 +246,7 @@ int ctypeDim(ECellType type)
 {
 
   static const
-  std::tr1::array<int, N_CELL_TYPES> dims = _FepicTagsInitializers::ctypeDim_ini();
+  std::tr1::array<int, N_CELL_TYPES> dims = fi_FepicTagsInitializers::ctypeDim_ini();
 
   unsigned idx = log2_i32(type);
   if (idx >= N_CELL_TYPES)
@@ -261,7 +261,7 @@ int ctypeDim(ECellType type)
 const char* ctypeName(ECellType type)
 {
   static const
-  std::tr1::array<const char*, N_CELL_TYPES> names = _FepicTagsInitializers::ctypeName_ini();
+  std::tr1::array<const char*, N_CELL_TYPES> names = fi_FepicTagsInitializers::ctypeName_ini();
 
   unsigned idx = log2_i32(type);
   if (idx >= N_CELL_TYPES)
@@ -276,7 +276,7 @@ const char* ctypeName(ECellType type)
 ECellType mshTag2ctype(EMshTag type)
 {
   static const
-  std::tr1::array<ECellType, MSH_MAX_INDEX+1> tab = _FepicTagsInitializers::mshTag2ctype_ini();
+  std::tr1::array<ECellType, MSH_MAX_INDEX+1> tab = fi_FepicTagsInitializers::mshTag2ctype_ini();
 
   unsigned idx = static_cast<unsigned>(type);
   if (idx-1 >= MSH_MAX_INDEX)
@@ -292,7 +292,7 @@ ECellType mshTag2ctype(EMshTag type)
 EMshTag ctype2mshTag(ECellType type)
 {
   static const
-  std::tr1::array<EMshTag, N_CELL_TYPES> tab = _FepicTagsInitializers::ctype2mshTag_ini();
+  std::tr1::array<EMshTag, N_CELL_TYPES> tab = fi_FepicTagsInitializers::ctype2mshTag_ini();
 
   unsigned idx = log2_i32(type);
   if (idx >= N_CELL_TYPES)
@@ -307,7 +307,7 @@ EMshTag ctype2mshTag(ECellType type)
 
 ECellClass ctype2cclass(ECellType type)
 {
-  std::tr1::array<ECellClass, N_CELL_TYPES> tab = _FepicTagsInitializers::ctype2cclass_ini();
+  std::tr1::array<ECellClass, N_CELL_TYPES> tab = fi_FepicTagsInitializers::ctype2cclass_ini();
   
   unsigned idx = log2_i32(type);
   if (idx >= N_CELL_TYPES)
@@ -320,7 +320,7 @@ ECellClass ctype2cclass(ECellType type)
 
 ECellFamily ctype2cfamily(ECellType type)
 {
-  std::tr1::array<ECellFamily, N_CELL_TYPES> tab = _FepicTagsInitializers::ctype2cfamily_ini();
+  std::tr1::array<ECellFamily, N_CELL_TYPES> tab = fi_FepicTagsInitializers::ctype2cfamily_ini();
   
   unsigned idx = log2_i32(type);
   if (idx >= N_CELL_TYPES)
@@ -333,7 +333,7 @@ ECellFamily ctype2cfamily(ECellType type)
 
 ECellFamily cclass2cfamily(ECellClass type)
 {
-  std::tr1::array<ECellFamily, N_CELL_CLASSES> tab = _FepicTagsInitializers::cclass2cfamily_ini();
+  std::tr1::array<ECellFamily, N_CELL_CLASSES> tab = fi_FepicTagsInitializers::cclass2cfamily_ini();
   
   unsigned idx = log2_i32(type);
   if (idx >= N_CELL_CLASSES)
@@ -346,7 +346,7 @@ ECellFamily cclass2cfamily(ECellClass type)
 
 ECellType facetof(ECellType type)
 {
-  std::tr1::array<ECellType, N_CELL_TYPES> tab = _FepicTagsInitializers::facetof_ini();
+  std::tr1::array<ECellType, N_CELL_TYPES> tab = fi_FepicTagsInitializers::facetof_ini();
   
   unsigned idx = log2_i32(type);
   if (idx >= N_CELL_TYPES)

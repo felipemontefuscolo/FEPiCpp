@@ -28,130 +28,82 @@
 class Mesh;
 
 // EntityType = Cell, Facet, Corner or Point
-template<class _Entity, class _Mesh>
+template<class Entity_t, class Mesh_t>
 class EntityHandler
 {
   friend class Mesh;
   
   typedef EntityHandler Self;
-  typedef _Mesh*        MeshPtr;
+  typedef Mesh_t*        MeshPtr;
 public:
   
   //typedef typename long                  difference_type;
-  typedef _Entity   value_type;
-  typedef _Entity*  pointer;
-  typedef _Entity&  reference;
+  typedef Entity_t   value_type;
+  typedef Entity_t*  pointer;
+  typedef Entity_t&  reference;
 
 protected:
-  MeshPtr _mesh_ptr;
-  pointer _entity_ptr;
-  int     _entity_id;
+  MeshPtr m_mesh_ptr;
+  pointer m_entity_ptr;
+  int     m_entity_id;
 
 public:
   
-  EntityHandler(MeshPtr mesh, pointer elem, int id) : _mesh_ptr(mesh), _entity_ptr(elem), _entity_id(id) {}
-  //EntityHandler(MeshPtr mesh, int id) :  _mesh_ptr(mesh), _entity_ptr(mesh->entityPtr<value_type>(id)), _entity_id(id) {}
-  EntityHandler(MeshPtr mesh, int id) :  _mesh_ptr(mesh), _entity_ptr(0), _entity_id(id) {}
+  EntityHandler(MeshPtr mesh, pointer elem, int id) : m_mesh_ptr(mesh), m_entity_ptr(elem), m_entity_id(id) {}
+  //EntityHandler(MeshPtr mesh, int id) :  m_mesh_ptr(mesh), m_entity_ptr(mesh->entityPtr<value_type>(id)), m_entity_id(id) {}
+  EntityHandler(MeshPtr mesh, int id) :  m_mesh_ptr(mesh), m_entity_ptr(0), m_entity_id(id) {}
   
     // Allow iterator to const_iterator conversion
-  template<class _Etty, class _Mse>
-  EntityHandler(const EntityHandler<_Etty, _Mse> & i) : _mesh_ptr(i.meshPtr()), _entity_ptr(i.ptr()), _entity_id(i.index()) {}
+  template<class Etty_t, class Mse_t>
+  EntityHandler(const EntityHandler<Etty_t, Mse_t> & i) : m_mesh_ptr(i.meshPtr()), m_entity_ptr(i.ptr()), m_entity_id(i.index()) {}
   
-  EntityHandler() : _mesh_ptr(0), _entity_ptr(0), _entity_id(-1) {}
+  EntityHandler() : m_mesh_ptr(0), m_entity_ptr(0), m_entity_id(-1) {}
 
   MeshPtr const& meshPtr() const
-  { return _mesh_ptr; }
+  { return m_mesh_ptr; }
 
   pointer ptr() const
-  {return _entity_ptr; }
+  {return m_entity_ptr; }
 
   int index() const
-  { return _entity_id; }
+  { return m_entity_id; }
 
   reference
   operator*() const
-  { return *_entity_ptr; }
+  { return *m_entity_ptr; }
 
   pointer
   operator->() const
-  { return _entity_ptr; }
+  { return m_entity_ptr; }
 
   bool isValid() const {return ptr() != 0;}
 
 };
 
-template<class _EntityL, class _EntityR, class _Mesh>
+template<class EntityL_t, class EntityR_t, class Mesh_t>
   inline bool
-  operator==(const EntityHandler<_EntityL, _Mesh>& __lhs,
-             const EntityHandler<_EntityR, _Mesh>& __rhs)
-  { return __lhs.ptr() == __rhs.ptr(); }
+  operator==(const EntityHandler<EntityL_t, Mesh_t>& lhs,
+             const EntityHandler<EntityR_t, Mesh_t>& rhs)
+  { return lhs.ptr() == rhs.ptr(); }
 
-template<class _Entity, class _Mesh>
+template<class Entity_t, class Mesh_t>
   inline bool
-  operator==(const EntityHandler<_Entity, _Mesh>& __lhs,
-             const EntityHandler<_Entity, _Mesh>& __rhs)
-  { return __lhs.ptr() == __rhs.ptr(); }
+  operator==(const EntityHandler<Entity_t, Mesh_t>& lhs,
+             const EntityHandler<Entity_t, Mesh_t>& rhs)
+  { return lhs.ptr() == rhs.ptr(); }
 
-template<class _EntityL, class _EntityR, class _Mesh>
+template<class EntityL_t, class EntityR_t, class Mesh_t>
   inline bool
-  operator!=(const EntityHandler<_EntityL, _Mesh>& __lhs,
-             const EntityHandler<_EntityR, _Mesh>& __rhs)
-  { return __lhs.ptr() != __rhs.ptr(); }
+  operator!=(const EntityHandler<EntityL_t, Mesh_t>& lhs,
+             const EntityHandler<EntityR_t, Mesh_t>& rhs)
+  { return lhs.ptr() != rhs.ptr(); }
 
-template<class _Entity, class _Mesh>
+template<class Entity_t, class Mesh_t>
   inline bool
-  operator!=(const EntityHandler<_Entity, _Mesh>& __lhs,
-             const EntityHandler<_Entity, _Mesh>& __rhs)
-  { return __lhs.ptr() != __rhs.ptr(); }
+  operator!=(const EntityHandler<Entity_t, Mesh_t>& lhs,
+             const EntityHandler<Entity_t, Mesh_t>& rhs)
+  { return lhs.ptr() != rhs.ptr(); }
 
-// Random access iterator requirements
-//template<class _IteratorL, class _IteratorR, class _Container, class _Mesh>
-  //inline bool
-  //operator<(const EntityHandler<_IteratorL, _Container, _Mesh>& __lhs,
-            //const EntityHandler<_IteratorR, _Container, _Mesh>& __rhs)
-  //{ return __lhs.index() < __rhs.index(); }
-//
-//template<class _Iterator, class _Container, class _Mesh>
-  //inline bool
-  //operator<(const EntityHandler<_Iterator, _Container, _Mesh>& __lhs,
-            //const EntityHandler<_Iterator, _Container, _Mesh>& __rhs)
-  //{ return __lhs.index() < __rhs.index(); }
-//
-//template<class _IteratorL, class _IteratorR, class _Container, class _Mesh>
-  //inline bool
-  //operator>(const EntityHandler<_IteratorL, _Container, _Mesh>& __lhs,
-            //const EntityHandler<_IteratorR, _Container, _Mesh>& __rhs)
-  //{ return __lhs.index() > __rhs.index(); }
-//
-//template<class _Iterator, class _Container, class _Mesh>
-  //inline bool
-  //operator>(const EntityHandler<_Iterator, _Container, _Mesh>& __lhs,
-            //const EntityHandler<_Iterator, _Container, _Mesh>& __rhs)
-  //{ return __lhs.index() > __rhs.index(); }
-//
-//template<class _IteratorL, class _IteratorR, class _Container, class _Mesh>
-  //inline bool
-  //operator<=(const EntityHandler<_IteratorL, _Container, _Mesh>& __lhs,
-             //const EntityHandler<_IteratorR, _Container, _Mesh>& __rhs)
-  //{ return __lhs.index() <= __rhs.index(); }
-//
-//template<class _Iterator, class _Container, class _Mesh>
-  //inline bool
-  //operator<=(const EntityHandler<_Iterator, _Container, _Mesh>& __lhs,
-             //const EntityHandler<_Iterator, _Container, _Mesh>& __rhs)
-  //{ return __lhs.index() <= __rhs.index(); }
-//
-//template<class _IteratorL, class _IteratorR, class _Container, class _Mesh>
-  //inline bool
-  //operator>=(const EntityHandler<_IteratorL, _Container, _Mesh>& __lhs,
-             //const EntityHandler<_IteratorR, _Container, _Mesh>& __rhs)
-  //{ return __lhs.index() >= __rhs.index(); }
-//
-//template<class _Iterator, class _Container, class _Mesh>
-  //inline bool
-  //operator>=(const EntityHandler<_Iterator, _Container, _Mesh>& __lhs,
-             //const EntityHandler<_Iterator, _Container, _Mesh>& __rhs)
-  //{ return __lhs.index() >= __rhs.index(); }
 
 
 #endif

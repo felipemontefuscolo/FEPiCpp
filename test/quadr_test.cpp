@@ -40,7 +40,7 @@ typedef std::numeric_limits< Real > dbl;
 Real const FEP_EPS = std::numeric_limits<Real>::epsilon();
 Real const FEP_TOL = 500000*FEP_EPS; // ~ 1.1e-10 para double
 
-//typedef std::tr1::tuple<ECellType, EShapeType, const char*> CSN_t;
+//typedef std::tr1::tuple<ECellType, EShapeType, const char*> CSN_T;
 
 
 TEST(QuadratureTest, WeightTest)

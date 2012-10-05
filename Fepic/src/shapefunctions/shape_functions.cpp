@@ -548,7 +548,7 @@ Real Shape_TRI_Pm1::gradL(Real const*, int ith, int c) const
         -1.0-----------+1.0
 */
 
-const int Shape_QUAD_Q1::_nds_pos[4][2] = {{-1,-1}, {+1,-1}, {+1,+1}, {-1,+1}};
+const int Shape_QUAD_Q1::m_nds_pos[4][2] = {{-1,-1}, {+1,-1}, {+1,+1}, {-1,+1}};
 
 Real Shape_QUAD_Q1::operator() (Real const*X, int ith) const
 {
@@ -556,7 +556,7 @@ Real Shape_QUAD_Q1::operator() (Real const*X, int ith) const
 
   Real x=X[0], y=X[1];
 
-  int xi = _nds_pos[ith][0], yi = _nds_pos[ith][1];
+  int xi = m_nds_pos[ith][0], yi = m_nds_pos[ith][1];
 
   return (1 + x*xi)*(1 + y*yi)/4;
 
@@ -568,7 +568,7 @@ Real Shape_QUAD_Q1::gradL(Real const*X, int ith, int c) const
               "invalid index: ith="+itoa(ith)+", c= "+itoa(c), std::out_of_range);
 
   Real x=X[0], y=X[1];
-  int xi = _nds_pos[ith][0], yi = _nds_pos[ith][1];
+  int xi = m_nds_pos[ith][0], yi = m_nds_pos[ith][1];
 
   if (c == 0)
     return xi*(1 + y*yi)/4;
@@ -598,7 +598,7 @@ Real Shape_QUAD_Q1::gradL(Real const*X, int ith, int c) const
         -1.0-----------+1.0
 */
 
-const int Shape_QUAD_Q2::_nds_pos[9][2] = {{-1,-1}, {+1,-1}, {+1,+1}, {-1,+1},
+const int Shape_QUAD_Q2::m_nds_pos[9][2] = {{-1,-1}, {+1,-1}, {+1,+1}, {-1,+1},
                                            { 0,-1}, {+1, 0}, { 0,+1}, {-1, 0}, {0,0} };
 
 Real Shape_QUAD_Q2::operator() (Real const*X, int ith) const
@@ -607,7 +607,7 @@ Real Shape_QUAD_Q2::operator() (Real const*X, int ith) const
 
   Real x=X[0], y=X[1];
 
-  int xi = _nds_pos[ith][0], yi = _nds_pos[ith][1];
+  int xi = m_nds_pos[ith][0], yi = m_nds_pos[ith][1];
 
   if (ith < 4)
     return x*y*(x + xi)*(y + yi)/4;
@@ -632,7 +632,7 @@ Real Shape_QUAD_Q2::gradL(Real const*X, int ith, int c) const
 
   Real x=X[0], y=X[1];
 
-  int xi = _nds_pos[ith][0], yi = _nds_pos[ith][1];
+  int xi = m_nds_pos[ith][0], yi = m_nds_pos[ith][1];
 
   if (c == 0)
   {
@@ -770,7 +770,7 @@ Real Shape_QUAD_Pm1::gradL(Real const*, int ith, int c) const
         -1.0-----------+1.0
 */
 
-const int Shape_QUAD_Q2ser::_nds_pos[8][2] = {{-1,-1},{+1,-1},{+1,+1},{-1,+1},
+const int Shape_QUAD_Q2ser::m_nds_pos[8][2] = {{-1,-1},{+1,-1},{+1,+1},{-1,+1},
                                               { 0,-1},{+1, 0},{ 0,+1},{-1, 0}};
 
 Real Shape_QUAD_Q2ser::operator() (Real const*X, int ith) const
@@ -778,7 +778,7 @@ Real Shape_QUAD_Q2ser::operator() (Real const*X, int ith) const
   FEPIC_CHECK(static_cast<unsigned>(ith)<n_dof, "invalid index: ith="+itoa(ith), std::out_of_range);
 
   Real x=X[0], y=X[1];
-  int xi = _nds_pos[ith][0], yi = _nds_pos[ith][1];
+  int xi = m_nds_pos[ith][0], yi = m_nds_pos[ith][1];
 
   if (ith < 4)
     return (1 + x*xi)*(1 + y*yi)*(x*xi + y*yi - 1)/4;
@@ -801,7 +801,7 @@ Real Shape_QUAD_Q2ser::gradL(Real const*X, int ith, int c) const
               "invalid index: ith="+itoa(ith)+", c= "+itoa(c), std::out_of_range);
 
   Real x=X[0], y=X[1];
-  int xi = _nds_pos[ith][0], yi = _nds_pos[ith][1];
+  int xi = m_nds_pos[ith][0], yi = m_nds_pos[ith][1];
 
   if (c == 0)
   {
@@ -1176,7 +1176,7 @@ Real Shape_TET_Pm1::gradL(Real const*, int ith, int c) const
          1----------2                                                     .
 */
 
-const int Shape_HEX_Q1::_nds_pos[8][3] = {{-1,-1,-1},{+1,-1,-1},{+1,+1,-1},{-1,+1,-1},
+const int Shape_HEX_Q1::m_nds_pos[8][3] = {{-1,-1,-1},{+1,-1,-1},{+1,+1,-1},{-1,+1,-1},
                                           {-1,-1,+1},{+1,-1,+1},{+1,+1,+1},{-1,+1,+1}};
 
 Real Shape_HEX_Q1::operator() (Real const*X, int ith) const
@@ -1184,7 +1184,7 @@ Real Shape_HEX_Q1::operator() (Real const*X, int ith) const
   FEPIC_CHECK(static_cast<unsigned>(ith)<n_dof, "invalid index: ith="+itoa(ith), std::out_of_range);
 
   Real x=X[0], y=X[1], z=X[2];
-  int xi = _nds_pos[ith][0], yi = _nds_pos[ith][1], zi = _nds_pos[ith][2];
+  int xi = m_nds_pos[ith][0], yi = m_nds_pos[ith][1], zi = m_nds_pos[ith][2];
 
   return (1 + x*xi)*(1 + y*yi)*(1 + z*zi)/8;
 
@@ -1196,7 +1196,7 @@ Real Shape_HEX_Q1::gradL(Real const*X, int ith, int c) const
               "invalid index: ith="+itoa(ith)+", c= "+itoa(c), std::out_of_range);
 
   Real x=X[0], y=X[1], z=X[2];
-  int xi = _nds_pos[ith][0], yi = _nds_pos[ith][1], zi = _nds_pos[ith][2];
+  int xi = m_nds_pos[ith][0], yi = m_nds_pos[ith][1], zi = m_nds_pos[ith][2];
 
   if (c == 0)
   {
@@ -1235,7 +1235,7 @@ Real Shape_HEX_Q1::gradL(Real const*X, int ith, int c) const
          1----11----2                                                     .
 */
 
-const int Shape_HEX_Q2::_nds_idx_lag[27][3] = {{0,0,0},{1,0,0},{1,1,0},{0,1,0},
+const int Shape_HEX_Q2::m_nds_idx_lag[27][3] = {{0,0,0},{1,0,0},{1,1,0},{0,1,0},
                                                {0,0,1},{1,0,1},{1,1,1},{0,1,1},
                                                {2,0,0},{0,2,0},{0,0,2},{1,2,0},
                                                {1,0,2},{2,1,0},{1,1,2},{0,1,2},
@@ -1247,9 +1247,9 @@ Real Shape_HEX_Q2::operator() (Real const*X, int ith) const
 {
   FEPIC_CHECK(static_cast<unsigned>(ith)<n_dof, "invalid index: ith="+itoa(ith), std::out_of_range);
 
-  return lag(X+0, _nds_idx_lag[ith][0])*
-         lag(X+1, _nds_idx_lag[ith][1])*
-         lag(X+2, _nds_idx_lag[ith][2]);
+  return lag(X+0, m_nds_idx_lag[ith][0])*
+         lag(X+1, m_nds_idx_lag[ith][1])*
+         lag(X+2, m_nds_idx_lag[ith][2]);
 }
 
 Real Shape_HEX_Q2::gradL(Real const*X, int ith, int c) const
@@ -1259,18 +1259,18 @@ Real Shape_HEX_Q2::gradL(Real const*X, int ith, int c) const
 
 
   if (c==0)
-    return lag.gradL(X+0, _nds_idx_lag[ith][0],0)*
-           lag      (X+1, _nds_idx_lag[ith][1])*
-           lag      (X+2, _nds_idx_lag[ith][2]);
+    return lag.gradL(X+0, m_nds_idx_lag[ith][0],0)*
+           lag      (X+1, m_nds_idx_lag[ith][1])*
+           lag      (X+2, m_nds_idx_lag[ith][2]);
   else
   if(c==1)
-    return lag.gradL(X+1, _nds_idx_lag[ith][1],0)*
-           lag      (X+2, _nds_idx_lag[ith][2])*
-           lag      (X+0, _nds_idx_lag[ith][0]);
+    return lag.gradL(X+1, m_nds_idx_lag[ith][1],0)*
+           lag      (X+2, m_nds_idx_lag[ith][2])*
+           lag      (X+0, m_nds_idx_lag[ith][0]);
   else
-    return lag.gradL(X+2, _nds_idx_lag[ith][2],0)*
-           lag      (X+0, _nds_idx_lag[ith][0])*
-           lag      (X+1, _nds_idx_lag[ith][1]);
+    return lag.gradL(X+2, m_nds_idx_lag[ith][2],0)*
+           lag      (X+0, m_nds_idx_lag[ith][0])*
+           lag      (X+1, m_nds_idx_lag[ith][1]);
 }
 
 
@@ -1372,7 +1372,7 @@ Real Shape_HEX_Pm1::gradL(Real const*, int ith, int c) const
          1----11----2                                                     .
 */
 
-const int Shape_HEX_Q2ser::_nds_pos[20][3] = {{-1,-1,-1},{+1,-1,-1},{+1,+1,-1},{-1,+1,-1},
+const int Shape_HEX_Q2ser::m_nds_pos[20][3] = {{-1,-1,-1},{+1,-1,-1},{+1,+1,-1},{-1,+1,-1},
                                               {-1,-1,+1},{+1,-1,+1},{+1,+1,+1},{-1,+1,+1},
                                               { 0,-1,-1},{-1, 0,-1},{-1,-1, 0},{+1, 0,-1},
                                               {+1,-1, 0},{ 0,+1,-1},{+1,+1, 0},{-1,+1, 0},
@@ -1383,7 +1383,7 @@ Real Shape_HEX_Q2ser::operator() (Real const*X, int ith) const
   FEPIC_CHECK(static_cast<unsigned>(ith)<n_dof, "invalid index: ith="+itoa(ith), std::out_of_range);
 
   Real x=X[0], y=X[1], z=X[2];
-  int xi = _nds_pos[ith][0], yi = _nds_pos[ith][1], zi = _nds_pos[ith][2];
+  int xi = m_nds_pos[ith][0], yi = m_nds_pos[ith][1], zi = m_nds_pos[ith][2];
 
   if (ith < 8)
     return (1 + x*xi)*(1 + y*yi)*(1 + z*zi)*(x*xi + y*yi + z*zi - 2)/8;
@@ -1408,7 +1408,7 @@ Real Shape_HEX_Q2ser::gradL(Real const*X, int ith, int c) const
               "invalid index: ith="+itoa(ith)+", c= "+itoa(c), std::out_of_range);
 
   Real x=X[0], y=X[1], z=X[2];
-  int xi = _nds_pos[ith][0], yi = _nds_pos[ith][1], zi = _nds_pos[ith][2];
+  int xi = m_nds_pos[ith][0], yi = m_nds_pos[ith][1], zi = m_nds_pos[ith][2];
 
   if (ith < 8)
   {

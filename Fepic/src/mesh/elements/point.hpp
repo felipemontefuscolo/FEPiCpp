@@ -30,6 +30,10 @@
 
 class Point : public CellElement
 {
+protected:
+  Real  m_coord[3]; // x,y,z
+  std::list<std::pair<int,char> > m_incidences; // for singular nodes  
+  
 public:
 
   enum { dim=0,
@@ -52,7 +56,7 @@ public:
   Point(VectorT coord, int spacedim, int ic=-1, int pos=-1, int tag=0, int flags=0, int stat=0) : CellElement(ic, pos, tag, flags, stat)
   {
     for (int i = 0; i < spacedim; ++i)
-      _coord[i] = coord[i];
+      m_coord[i] = coord[i];
   }
 
   /** Construtor.
@@ -70,7 +74,7 @@ public:
   void setCoord(Real const* coord, int spacedim)
   {
     for (int i = 0; i < spacedim; ++i)
-      _coord[i] = coord[i];
+      m_coord[i] = coord[i];
   }
 
   /** Retorna a coordenada deste ponto em coord.
@@ -79,19 +83,19 @@ public:
   void getCoord(Real *coord, int spacedim) const
   {
     for (int i = 0; i < spacedim; ++i)
-      coord[i] = _coord[i];
+      coord[i] = m_coord[i];
   }
 
   Real const* getCoord() const
   {
-    return &_coord[0];
+    return &m_coord[0];
   }
 
   /** Retorna a i-ésima componente da coordenada
   */
   Real getCoord(int i) const
   {
-    return _coord[i];
+    return m_coord[i];
   }
 
   /** add a singular cell if it does not yet exist.
@@ -113,10 +117,10 @@ public:
     }
     else
     {
-      std::list<std::pair<int,char> >::iterator it = std::find_if(_incidences.begin(), _incidences.end(), _RemoveCriteria(cid));
+      std::list<std::pair<int,char> >::iterator it = std::find_if(m_incidences.begin(), m_incidences.end(), fi_RemoveCriteria(cid));
         
-      if (it == _incidences.end())
-        _incidences.push_back(std::make_pair(cid,static_cast<char>( pos )));
+      if (it == m_incidences.end())
+        m_incidences.push_back(std::make_pair(cid,static_cast<char>( pos )));
     }
     
   }
@@ -125,22 +129,22 @@ public:
    */
   int numConnectedComps() const
   {
-    return _incidences.size()+(getIncidCell()>=0);
+    return m_incidences.size()+(getIncidCell()>=0);
   }
 
   bool isSingular() const
   {
     if (getIncidCell() < 0)
-      return _incidences.size() > 1;
+      return m_incidences.size() > 1;
     else
-      return !_incidences.empty();
+      return !m_incidences.empty();
   }
 
-  class _RemoveCriteria { public:
-    _RemoveCriteria(int id) : _id_to_compare(id) {};
-    bool operator() (std::pair<int,char> const& p) {return p.first==_id_to_compare;};
-    bool apply (std::pair<int,char> const& p) {return p.first==_id_to_compare;};
-    int _id_to_compare;
+  class fi_RemoveCriteria { public:
+    fi_RemoveCriteria(int id) : m_id_to_compare(id) {};
+    bool operator() (std::pair<int,char> const& p) {return p.first==m_id_to_compare;};
+    bool apply (std::pair<int,char> const& p) {return p.first==m_id_to_compare;};
+    int m_id_to_compare;
   };
 
   /** consistently replaces (or removes) a incident cell id (singular or not).
@@ -156,7 +160,7 @@ public:
     {
       if (cid_subs < 0) // remove
       {
-        if (_incidences.empty())
+        if (m_incidences.empty())
         {
           setIncidCell(-1);
           setPosition(-1);
@@ -164,9 +168,9 @@ public:
         }
         else
         {
-          setIncidCell(_incidences.front().first);
-          setPosition(_incidences.front().second);
-          _incidences.pop_front();
+          setIncidCell(m_incidences.front().first);
+          setPosition(m_incidences.front().second);
+          m_incidences.pop_front();
           return true;
         }
       }
@@ -179,9 +183,9 @@ public:
     }
     else
     {
-      std::list<std::pair<int,char> >::iterator first = _incidences.begin();
-      std::list<std::pair<int,char> >::iterator last = _incidences.end();
-      _RemoveCriteria pred = _RemoveCriteria(cid);
+      std::list<std::pair<int,char> >::iterator first = m_incidences.begin();
+      std::list<std::pair<int,char> >::iterator last = m_incidences.end();
+      fi_RemoveCriteria pred = fi_RemoveCriteria(cid);
       
       for (; first != last; ++first)
         if (pred.apply(*first))
@@ -189,7 +193,7 @@ public:
           *first = std::make_pair(cid_subs, static_cast<char>(cid_subs_pos) );
           return true;
         }
-      //std::replace_if(_incidences.begin(), _incidences.end(), _RemoveCriteria(cid), std::make_pair(cid_subs, static_cast<char>(cid_subs_pos) ));
+      //std::replace_if(m_incidences.begin(), m_incidences.end(), fi_RemoveCriteria(cid), std::make_pair(cid_subs, static_cast<char>(cid_subs_pos) ));
     }
     return false;
     
@@ -198,7 +202,7 @@ public:
 
   void getIthIncidCell(int ith, int &ic, int &pos) const
   {
-    //FEPIC_CHECK((unsigned)ith <= _incidences.size(), "invalid index", std::invalid_argument);
+    //FEPIC_CHECK((unsigned)ith <= m_incidences.size(), "invalid index", std::invalid_argument);
     
     if (ith == 0)
     {
@@ -208,8 +212,8 @@ public:
     
     --ith;
     
-    std::list<std::pair<int,char> >::const_iterator it = _incidences.begin();
-    std::list<std::pair<int,char> >::const_iterator et = _incidences.end();
+    std::list<std::pair<int,char> >::const_iterator it = m_incidences.begin();
+    std::list<std::pair<int,char> >::const_iterator et = m_incidences.end();
     
     for (int k=0; k<ith; ++k)
     {
@@ -217,7 +221,7 @@ public:
       if (it==et)
       {
         printf("ERROR: getIthIncidCell: invalid index\n");
-        printf("ith = %d  _incidences.size()=%d\n", ith, (int)_incidences.size());
+        printf("ith = %d  m_incidences.size()=%d\n", ith, (int)m_incidences.size());
         throw;          
       }
     }
@@ -237,8 +241,8 @@ public:
     v.push_back(this->getIncidCell());
     v.push_back(this->getPosition());
     
-    std::list<std::pair<int,char> >::const_iterator it = _incidences.begin();
-    std::list<std::pair<int,char> >::const_iterator et = _incidences.end();
+    std::list<std::pair<int,char> >::const_iterator it = m_incidences.begin();
+    std::list<std::pair<int,char> >::const_iterator et = m_incidences.end();
     
     for (; it != et; ++it)
     {
@@ -249,7 +253,7 @@ public:
 
   void clearIncidences()
   {
-    this->_incidences.clear();
+    this->m_incidences.clear();
     setIncidCell(-1);
     this->setAsBoundary(false);
   }
@@ -257,13 +261,13 @@ public:
   /// @return true if this point is a boundary point, false otherwise.
   bool inBoundary() const
   {
-    return CellElement::_status & mk_inboundary;
+    return CellElement::m_status & mk_inboundary;
   }
 
   /// @param ib set ib=true(false) to (un)set this point as boundary point.
   void setAsBoundary(bool ib)
   {
-    CellElement::_status = ib ? (_status | mk_inboundary) : (_status & (~mk_inboundary));
+    CellElement::m_status = ib ? (m_status | mk_inboundary) : (m_status & (~mk_inboundary));
   }  
 
 
@@ -279,7 +283,7 @@ public:
     {
       FEPIC_CHECK(static_cast<unsigned> (spacedim-1) < 3, "invalid argument", std::runtime_error);
       for (int i = 0; i < spacedim; ++i)
-        _coord[i] = coord[i];
+        m_coord[i] = coord[i];
     }
     if (ic != NULL)
       setIncidCell(*ic);
@@ -290,19 +294,15 @@ public:
     if (flags != NULL)
       setFlags(*flags);
     if (stat != NULL)
-      _status = *stat;
+      m_status = *stat;
     if (incidences != NULL)
-      _incidences = *incidences;
+      m_incidences = *incidences;
   }  
 
   enum Masks
   {
     mk_inboundary = (1<<0)
   };
-
-protected:
-  Real  _coord[3]; // x,y,z
-  std::list<std::pair<int,char> > _incidences; // for singular nodes
 
 };
 

@@ -30,8 +30,8 @@
 #  include <boost/config.hpp>
 #  include "boost/graph/adjacency_list.hpp"
 #  include "boost/graph/graph_utility.hpp"
-#  include "boost/graph/minimum_degree_ordering.hpp"
-#  include <boost/graph/cuthill_mckee_ordering.hpp>
+#  include "boost/graph/minimumm_degreem_ordering.hpp"
+#  include <boost/graph/cuthill_mckeem_ordering.hpp>
 #  include <boost/graph/properties.hpp>
 #  include <boost/graph/bandwidth.hpp>
 #endif
@@ -54,44 +54,44 @@ void DofHandler::addVariable(const char* var_name, ShapeFunction *sf, int ncomps
 
 void DofHandler::addVariable(const char* var_name, int ndpv, int ndpr, int ndpf, int ndpc, int ntags, int const* tags)
 {
-  FEPIC_CHECK(_mesh_ptr!=NULL, "mesh is NULL", std::invalid_argument);
-  FEPIC_CHECK(_mesh_ptr->numNodesTotal()>0, "did you forget to setup the mesh?", std::invalid_argument);
+  FEPIC_CHECK(m_mesh_ptr!=NULL, "mesh is NULL", std::invalid_argument);
+  FEPIC_CHECK(m_mesh_ptr->numNodesTotal()>0, "did you forget to setup the mesh?", std::invalid_argument);
   
-  _vars.push_back(VarDofs(var_name,_mesh_ptr,ndpv,ndpr,ndpf,ndpc, 0,NULL, ntags,tags));
+  m_vars.push_back(VarDofs(var_name,m_mesh_ptr,ndpv,ndpr,ndpf,ndpc, 0,NULL, ntags,tags));
 }
 
 void DofHandler::SetUp()
 {
-  if (_relations.size() < 1)
+  if (m_relations.size() < 1)
   {
-    _relations.resize(numVars(), numVars());
-    _relations.setOnes();
+    m_relations.resize(numVars(), numVars());
+    m_relations.setOnes();
   }
   
   // computes total size and allocates memory
   int total_size = 0;
-  for (unsigned i = 0; i < _vars.size(); ++i)
+  for (unsigned i = 0; i < m_vars.size(); ++i)
   {
-    total_size += _vars[i].totalSize();
+    total_size += m_vars[i].totalSize();
   }
   
-  if (_data.capacity() < (unsigned)total_size)
-    _data.reserve(total_size*(1.+_grow_factor)+1);
-  _data.resize(total_size);
+  if (m_data.capacity() < (unsigned)total_size)
+    m_data.reserve(total_size*(1.+m_grow_factor)+1);
+  m_data.resize(total_size);
   FEP_PRAGMA_OMP(parallel for)
-  for (unsigned i = 0; i < _data.size(); ++i)
-    _data[i] = -1;
+  for (unsigned i = 0; i < m_data.size(); ++i)
+    m_data[i] = -1;
   
   
   int  initial_dof=0;
-  int* initial_address=_data.data();
-  for (unsigned i = 0; i < _vars.size(); ++i)
+  int* initial_address=m_data.data();
+  for (unsigned i = 0; i < m_vars.size(); ++i)
   {
-    _vars[i].setInitialDofId(initial_dof);
-    _vars[i].setInitialDofAddress(initial_address);
-    _vars[i].setUp();
-    initial_dof += _vars[i].numDofs();
-    initial_address += _vars[i].totalSize();
+    m_vars[i].setInitialDofId(initial_dof);
+    m_vars[i].setInitialDofAddress(initial_address);
+    m_vars[i].setUp();
+    initial_dof += m_vars[i].numDofs();
+    initial_address += m_vars[i].totalSize();
   }
   
 }
@@ -99,9 +99,9 @@ void DofHandler::SetUp()
 int DofHandler::numDofs() const
 {
   int total = 0;
-  for (unsigned i = 0; i < _vars.size(); ++i) 
+  for (unsigned i = 0; i < m_vars.size(); ++i) 
   {
-    total += _vars[i].numDofs();
+    total += m_vars[i].numDofs();
   }
   return total;
   
@@ -111,12 +111,12 @@ int DofHandler::numDofs() const
  */ 
 void DofHandler::setVariablesRelationship(bool const* v)
 {
-  _relations.resize(numVars(), numVars());
+  m_relations.resize(numVars(), numVars());
   for (int i = 0; i < numVars(); ++i)
   {
     for (int j = 0; j < numVars(); ++j)
     {
-      _relations(i,j) = v[i*numVars() + j];
+      m_relations(i,j) = v[i*numVars() + j];
     }
   }
 }
@@ -192,8 +192,8 @@ void DofHandler::getSparsityTable(std::vector<std::set<int> > & table)
   for (int i = 0; i < n_vars; ++i)
     var_cell_dofs[i].resize( getVariable(i).numDofsPerCell() );
   
-  cell_iterator cell = _mesh_ptr->cellBegin();
-  cell_iterator cell_end = _mesh_ptr->cellEnd();  
+  cell_iterator cell = m_mesh_ptr->cellBegin();
+  cell_iterator cell_end = m_mesh_ptr->cellEnd();  
   // compute connectivity
   for (; cell != cell_end; ++cell)
   {
@@ -208,7 +208,7 @@ void DofHandler::getSparsityTable(std::vector<std::set<int> > & table)
       
       for (int j = 0; j < n_vars; ++j)
       {
-        if (!_relations(i,j))
+        if (!m_relations(i,j))
           continue;
         const int n_dof_p_cell_j = var_cell_dofs[j].size();
         
@@ -301,7 +301,7 @@ void DofHandler::metisRenumber()
     
     int diags=0;
     for (int i = 0; i < numVars(); ++i)
-      diags += getVariable(i).numDofs() * _relations(i,i);
+      diags += getVariable(i).numDofs() * m_relations(i,i);
     adjncy.resize(nnz-diags);
     
     getMetisCSRfromTable(adjncy.data(), xadj.data(), table);
@@ -328,9 +328,9 @@ void DofHandler::metisRenumber()
   FEP_PRAGMA_OMP(parallel for)
   for (int k = 0; k < tsize; ++k)
   {
-    if (_data[k]==-1)
+    if (m_data[k]==-1)
       continue;
-    _data[k] = perm[_data[k]];
+    m_data[k] = perm[m_data[k]];
   }
 }
 #else
@@ -387,7 +387,7 @@ void DofHandler::boostMinimumDegreeRenumber()
     id = get(boost::vertex_index, G);
 
   int delta = 0;
-  minimum_degree_ordering
+  minimumm_degreem_ordering
     (G,
      make_iterator_property_map(&degree[0], id, degree[0]),
      &iperm[0],
@@ -400,9 +400,9 @@ void DofHandler::boostMinimumDegreeRenumber()
   FEP_PRAGMA_OMP(parallel for)
   for (int k = 0; k < tsize; ++k)
   {
-    if (_data[k]==-1)
+    if (m_data[k]==-1)
       continue;
-    _data[k] = perm[_data[k]];
+    m_data[k] = perm[m_data[k]];
   }  
 }
 #else
@@ -416,7 +416,7 @@ void DofHandler::boostCuthillMcKeeRenumber()
 {
   typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS, 
                           boost::property<boost::vertex_color_t, boost::default_color_type,
-                          boost::property<boost::vertex_degree_t,int> > >   Graph;
+                          boost::property<boost::vertexm_degree_t,int> > >   Graph;
                           
   typedef boost::graph_traits<Graph>::vertex_descriptor Vertex;
   typedef boost::graph_traits<Graph>::vertices_size_type size_type;
@@ -452,9 +452,9 @@ void DofHandler::boostCuthillMcKeeRenumber()
   
   std::vector<Vertex> iperm(boost::num_vertices(G));
   std::vector<int> perm(boost::num_vertices(G));
-  //reverse cuthill_mckee_ordering
-  cuthill_mckee_ordering(G, iperm.rbegin(), get(boost::vertex_color, G),
-                                 boost::make_degree_map(G));
+  //reverse cuthill_mckeem_ordering
+  cuthill_mckeem_ordering(G, iperm.rbegin(), get(boost::vertex_color, G),
+                                 boost::makem_degree_map(G));
   
   FEP_PRAGMA_OMP(parallel for)
   for (unsigned c = 0; c < iperm.size(); ++c)
@@ -465,9 +465,9 @@ void DofHandler::boostCuthillMcKeeRenumber()
   FEP_PRAGMA_OMP(parallel for)
   for (int k = 0; k < tsize; ++k)
   {
-    if (_data[k]==-1)
+    if (m_data[k]==-1)
       continue;
-    _data[k] = perm[_data[k]];
+    m_data[k] = perm[m_data[k]];
   } 
      
 }
@@ -551,9 +551,9 @@ void DofHandler::CuthillMcKeeRenumber()
   FEP_PRAGMA_OMP(parallel for)
   for (int k = 0; k < tsize; ++k)
   {
-    if (_data[k]==-1)
+    if (m_data[k]==-1)
       continue;
-    _data[k] = perm[_data[k]];
+    m_data[k] = perm[m_data[k]];
   }   
   
 }

@@ -79,7 +79,7 @@ alltests.exe: $(TOBJECTS) gtest.a gtest_main.a
 	@echo 
 
 clean:
-	$(FEP_RM) *.o *.exe *~ gtest.a gtest_main.a
+	$(FEP_RM) *.o *.d *.exe *~ gtest.a gtest_main.a
 
 
 -include $(CPPSOURCES:.cpp=.d)

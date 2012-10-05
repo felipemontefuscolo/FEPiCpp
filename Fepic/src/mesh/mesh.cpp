@@ -39,26 +39,26 @@ Mesh::Mesh(ECellType fept, int spacedim)
   
   boost::scoped_ptr<Cell> cell(Cell::create(fept));
 
-  _spacedim = spacedim; // BROKEN
-  _cell_fep_tag = fept;
-  _cell_msh_tag = ctype2mshTag(fept);
-  //_cell_msh_tag = cell->getMshTag();
-  _dont_build_adjacency = true;
+  m_spacedim = spacedim; // BROKEN
+  m_cellm_fep_tag = fept;
+  m_cell_msh_tag = ctype2mshTag(fept);
+  //m_cell_msh_tag = cell->getMshTag();
+  m_dont_build_adjacency = true;
   
-  _is_parametric_cell = cell->isParametric();
-  _cell_dim = cell->dim();
-  _n_nodes_per_cell = cell->numNodes();
-  _n_nodes_per_facet = cell->numNodesPerFacet();
-  _n_nodes_per_corner = cell->numNodesPerCorner();
-  _n_vertices_per_cell = cell->numVertices();
-  _n_vertices_per_facet = cell->numVerticesPerFacet();
-  _n_vertices_per_corner = cell->numVerticesPerCorner();
-  _n_facets_per_cell = cell->numFacets();
-  _n_corners_per_cell = cell->numCorners();
-  _n_corners_per_facet = cell->numCornersPerFacet();
-  _cell_has_edge_nodes = cell->hasEdgeNodes();
-  _cell_has_face_nodes = cell->hasFaceNodes();
-  _cell_has_volume_nodes = cell->hasVolumeNodes();
+  m_is_parametric_cell = cell->isParametric();
+  m_cell_dim = cell->dim();
+  m_n_nodes_per_cell = cell->numNodes();
+  m_n_nodes_per_facet = cell->numNodesPerFacet();
+  m_n_nodes_per_corner = cell->numNodesPerCorner();
+  m_n_vertices_per_cell = cell->numVertices();
+  m_n_vertices_per_facet = cell->numVerticesPerFacet();
+  m_n_vertices_per_corner = cell->numVerticesPerCorner();
+  m_n_facets_per_cell = cell->numFacets();
+  m_n_corners_per_cell = cell->numCorners();
+  m_n_corners_per_facet = cell->numCornersPerFacet();
+  m_cell_has_edge_nodes = cell->hasEdgeNodes();
+  m_cell_has_face_nodes = cell->hasFaceNodes();
+  m_cell_has_volume_nodes = cell->hasVolumeNodes();
 
   timer = Timer();
 }
@@ -129,14 +129,14 @@ template<> FEP_STRONG_INLINE Corner* Mesh::entityPtr<Corner>(int ith) {return th
 int Mesh::numVertices() const
 {
   int num_vtcs = 0;
-  int const num_nodes_total = this->numNodesTotal();
+  int const numm_nodes_total = this->numNodesTotal();
   FEP_PRAGMA_OMP(parallel shared(num_vtcs))
   {
     int num_vtcs_local = 0;
     Point const* p;
 
     FEP_PRAGMA_OMP(for)
-    for (int i=0; i<num_nodes_total; ++i)
+    for (int i=0; i<numm_nodes_total; ++i)
     {
       p = this->getNodePtr(i);
       if (p->isDisabled())
@@ -173,10 +173,10 @@ void Mesh::printStatistics() const
          "  -size:           %d\n"
          "Corner list: \n"
          "  -size:           %d\n",
-         (int)_cellL.totalSize(),
-         (int)_pointL.totalSize(),
-         (int)_facetL.totalSize(),
-         (int)_cornerL.totalSize()
+         (int)m_cells_list.totalSize(),
+         (int)m_points_list.totalSize(),
+         (int)m_facets_list.totalSize(),
+         (int)m_corners_list.totalSize()
          );
 }
 
@@ -755,16 +755,16 @@ void Mesh::pushIncidCell2Point(Point *pt, int iC, int pos)
   
   FEPIC_CHECK(iC_CCid>=0, "input iC has no connected component id", std::invalid_argument);
   
-  const int n_icells = p->numConnectedComps();
+  const int nm_icells = p->numConnectedComps();
   
   int oic, opos;
   
-  for (int i = 0; i < n_icells; ++i)
+  for (int i = 0; i < nm_icells; ++i)
   {
     p->getIthIncidCell(i,oic,opos);
     if (oic<0)
     {
-      printf("i=%d iC_CCid=%d n_icells=%d \n",i,iC_CCid, n_icells);
+      printf("i=%d iC_CCid=%d nm_icells=%d \n",i,iC_CCid, nm_icells);
     }
     if ((this->getCellPtr(oic))->getConnectedComponentId() == iC_CCid)
     {
@@ -805,7 +805,7 @@ void Mesh::buildCellsAdjacency()
   VecxT    facet_vtcs(n_vtx_per_facet);
   Vec2T    cell_ith;
 
-  _facetL.clear();
+  m_facets_list.clear();
 
   // constroi uma tabela com as células e seus vizinhos
   FEP_PRAGMA_OMP(parallel private(cell_ith,facet_vtcs) shared(table) default(none))
@@ -851,9 +851,9 @@ void Mesh::buildCellsAdjacency()
   FEP_PRAGMA_OMP(parallel for) // WARNING: VALID ONLY FOR std::vector<> ....
   for (int i=0; i<n_cells_total; ++i)
   {
-    _cellL[i].resetIncidCells();
+    m_cells_list[i].resetIncidCells();
     if (cdim>1)
-      _cellL[i].resetFacets();
+      m_cells_list[i].resetFacets();
   }
 
   // build adjacency and create facets
@@ -961,13 +961,13 @@ void Mesh::buildCellsAdjacency()
 
 void Mesh::buildCorners_1D()
 {
-  _cornerL.clear();
+  m_corners_list.clear();
 }
 
 // assume that the vertices already have incident cells.
 void Mesh::buildCorners_2D()
 {
-  _cornerL.clear();
+  m_corners_list.clear();
 }
 
 void Mesh::buildCorners_3D()
@@ -976,7 +976,7 @@ void Mesh::buildCorners_3D()
   int const num_cells  = this->numCellsTotal();
   int const nrpc       = this->numCornersPerCell();
 
-  _cornerL.clear();
+  m_corners_list.clear();
 
   //// the CellList iterator must be "random access" for the algorithms that follows
   //// otherwise, the algorithms must be reimplementeds.
@@ -984,8 +984,8 @@ void Mesh::buildCorners_3D()
   //FEP_STATIC_ASSERT_ITERATOR((std::tr1::is_same<_category,std::random_access_iterator_tag>::value));
 
   FEP_PRAGMA_OMP(parallel for)
-  for (unsigned c = 0; c<_cellL.totalSize(); ++c)
-    _cellL[c].resetCorners();
+  for (unsigned c = 0; c<m_cells_list.totalSize(); ++c)
+    m_cells_list[c].resetCorners();
 
   // TODO: think a way to parallelize this ...
   {
@@ -1038,17 +1038,17 @@ void Mesh::buildNodesAdjacency()
 {
   int const num_cells    = this->numCellsTotal();
   int const nodes_p_cell = this->numNodesPerCell();
-  int const num_nodes    = this->numNodesTotal();
+  int const numm_nodes    = this->numNodesTotal();
   int const nnpf         = this->numNodesPerFacet();
   int const cdim         = this->cellDim();
   int const nfpc         = this->numFacetsPerCell();
 
   FEP_PRAGMA_OMP(parallel for)
-  for (int i=0; i<num_nodes; ++i)
+  for (int i=0; i<numm_nodes; ++i)
   {
-    //_pointL[i].setIncidCell(-1);
-    //_pointL[i].setPosition(-1);
-    _pointL[i].clearIncidences();
+    //m_points_list[i].setIncidCell(-1);
+    //m_points_list[i].setPosition(-1);
+    m_points_list[i].clearIncidences();
   }
 
   //FEP_PRAGMA_OMP(parallel default(none))
@@ -1097,13 +1097,13 @@ void Mesh::buildNodesAdjacency()
             point->setAsBoundary(true);
           //if (cell->getIncidCell(j) < 0)
           //{
-          //  this->pushIncidCell2Point(point,C,CT::_table_fC_x_nC[j][n]);
+          //  this->pushIncidCell2Point(point,C,CT::m_table_fC_x_nC[j][n]);
           //  point->PointT::setAsBoundary(true);
           //}
           //else // if the point is not in boundary, it cant be singular, so
           //{
           //  point->PointT::setIncidCell(C);
-          //  point->PointT::setPosition(CT::_table_fC_x_nC[j][n]);
+          //  point->PointT::setPosition(CT::m_table_fC_x_nC[j][n]);
           //}
         }
       }
@@ -1122,7 +1122,7 @@ void Mesh::buildNodesAdjacency()
 
 }
 
-void Mesh::_setConnectedComponentsId(cell_handler c_ini, int cc_id)
+void Mesh::fi_setConnectedComponentsId(cell_handler c_ini, int cc_id)
 {
   //FEPIC_ASSERT((unsigned)this->getCellId(c_ini) < this->numCellsTotal(), " invalid pointer",std::invalid_argument );
   int const nfpc = this->numFacetsPerCell();
@@ -1136,7 +1136,7 @@ void Mesh::_setConnectedComponentsId(cell_handler c_ini, int cc_id)
   
   while (!cells2setup.empty())
   {
-    FEPIC_ASSERT((int)cells2setup.size()<=n_cells_total, "Infinite loop at _setConnectedComponentsId", std::runtime_error);
+    FEPIC_ASSERT((int)cells2setup.size()<=n_cells_total, "Infinite loop at fi_setConnectedComponentsId", std::runtime_error);
     
     current = this->getCellPtr(cells2setup.front());
     
@@ -1157,7 +1157,7 @@ void Mesh::_setConnectedComponentsId(cell_handler c_ini, int cc_id)
 
   }
   
-  //const int n_cells_total = _cellL.size();
+  //const int n_cells_total = m_cells_list.size();
   
   //clear flags
   FEP_PRAGMA_OMP(parallel for)
@@ -1170,8 +1170,8 @@ void Mesh::_setConnectedComponentsId(cell_handler c_ini, int cc_id)
 
 void Mesh::setUpConnectedComponentsId()
 {
-  const int n_cells_total = static_cast<int> (_cellL.size() );
-  _connected_compL.clear();
+  const int n_cells_total = static_cast<int> (m_cells_list.size() );
+  m_connected_comp_l.clear();
   
   //clear conn comp ids
   FEP_PRAGMA_OMP(parallel for)
@@ -1191,8 +1191,8 @@ void Mesh::setUpConnectedComponentsId()
   //  cellt = static_cast<CT*>(cell.getPtr());
   //  if ( cellt->getConnectedComponentId() >= 0)
   //    continue;
-  //  this->_setConnectedComponentsId(cell,id);
-  //   _connected_compL.insert(std::pair<int,int>(id, cell.index()));
+  //  this->fi_setConnectedComponentsId(cell,id);
+  //   m_connected_comp_l.insert(std::pair<int,int>(id, cell.index()));
   //  ++id;
   //}
   
@@ -1202,15 +1202,15 @@ void Mesh::setUpConnectedComponentsId()
     cell = this->getCell(i);
     if ( !cell.isValid() || cell->getConnectedComponentId() >= 0)
       continue;
-    this->_setConnectedComponentsId(cell,id);
-     _connected_compL.insert(std::pair<int,int>(id, cell.index()));
+    this->fi_setConnectedComponentsId(cell,id);
+     m_connected_comp_l.insert(std::pair<int,int>(id, cell.index()));
     ++id;
   }
   
   
 }
 
-void Mesh::_setBoundaryComponentsId(facet_handler f_ini, int bc_id)
+void Mesh::fi_setBoundaryComponentsId(facet_handler f_ini, int bc_id)
 {
   int const cdim = this->cellDim();
   if (cdim==1 || cdim==3)
@@ -1234,7 +1234,7 @@ void Mesh::_setBoundaryComponentsId(facet_handler f_ini, int bc_id)
 void Mesh::setUpBoundaryComponentsId()
 {
   int const n_facets_total = this->numFacetsTotal();
-  _boundary_compL.clear();
+  m_boundary_comp_l.clear();
     //clear conn comp ids
   FEP_PRAGMA_OMP(parallel for)
   for (int i = 0; i < n_facets_total; ++i)
@@ -1252,8 +1252,8 @@ void Mesh::setUpBoundaryComponentsId()
     facett = &*facet;
     if (!this->inBoundary(facett) || facett->getBoundaryComponentId() >= 0 || facett->isDisabled())
       continue;
-    this->_setBoundaryComponentsId(this->handler(facet),id);
-     _boundary_compL.insert(std::pair<int,int>(id, facet.index()));
+    this->fi_setBoundaryComponentsId(this->handler(facet),id);
+     m_boundary_comp_l.insert(std::pair<int,int>(id, facet.index()));
     ++id;
   }  
   

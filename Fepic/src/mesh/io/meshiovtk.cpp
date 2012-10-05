@@ -6,35 +6,35 @@
 void MeshIoVtk::attachMesh(Mesh const* mesh)
 {
   FEPIC_ASSERT(mesh != NULL, "invalid mesh", std::invalid_argument);
-  _mesh = mesh;
-  _spacedim = _mesh->spaceDim();
+  m_mesh = mesh;
+  m_spacedim = m_mesh->spaceDim();
 
-  ECellType s = _mesh->cellType();
+  ECellType s = m_mesh->cellType();
   
   switch (s)
   {
-    case EDGE2:        _c_printer = &MeshIoVtk::_printCellVtk_Edge2;         break;
-    case EDGE3:        _c_printer = &MeshIoVtk::_printCellVtk_Edge3;         break;
-    case TRIANGLE3:    _c_printer = &MeshIoVtk::_printCellVtk_Triangle3;     break;
-    case TRIANGLE6:    _c_printer = &MeshIoVtk::_printCellVtk_Triangle6;     break;
-    case QUADRANGLE4:  _c_printer = &MeshIoVtk::_printCellVtk_Quadrangle4;   break;
-    case QUADRANGLE8:  _c_printer = &MeshIoVtk::_printCellVtk_Quadrangle8;   break;
-    case QUADRANGLE9:  _c_printer = &MeshIoVtk::_printCellVtk_Quadrangle9;   break;
-    case TETRAHEDRON4: _c_printer = &MeshIoVtk::_printCellVtk_Tetrahedron4;  break;
-    case TETRAHEDRON10:_c_printer = &MeshIoVtk::_printCellVtk_Tetrahedron10; break;
-    case HEXAHEDRON8:  _c_printer = &MeshIoVtk::_printCellVtk_Hexahedron8;   break;
-    case HEXAHEDRON20: _c_printer = &MeshIoVtk::_printCellVtk_Hexahedron20;  break;
-    case HEXAHEDRON27: _c_printer = &MeshIoVtk::_printCellVtk_Hexahedron27;  break;
+    case EDGE2:        m_c_printer = &MeshIoVtk::fi_printCellVtk_Edge2;         break;
+    case EDGE3:        m_c_printer = &MeshIoVtk::fi_printCellVtk_Edge3;         break;
+    case TRIANGLE3:    m_c_printer = &MeshIoVtk::fi_printCellVtk_Triangle3;     break;
+    case TRIANGLE6:    m_c_printer = &MeshIoVtk::fi_printCellVtk_Triangle6;     break;
+    case QUADRANGLE4:  m_c_printer = &MeshIoVtk::fi_printCellVtk_Quadrangle4;   break;
+    case QUADRANGLE8:  m_c_printer = &MeshIoVtk::fi_printCellVtk_Quadrangle8;   break;
+    case QUADRANGLE9:  m_c_printer = &MeshIoVtk::fi_printCellVtk_Quadrangle9;   break;
+    case TETRAHEDRON4: m_c_printer = &MeshIoVtk::fi_printCellVtk_Tetrahedron4;  break;
+    case TETRAHEDRON10:m_c_printer = &MeshIoVtk::fi_printCellVtk_Tetrahedron10; break;
+    case HEXAHEDRON8:  m_c_printer = &MeshIoVtk::fi_printCellVtk_Hexahedron8;   break;
+    case HEXAHEDRON20: m_c_printer = &MeshIoVtk::fi_printCellVtk_Hexahedron20;  break;
+    case HEXAHEDRON27: m_c_printer = &MeshIoVtk::fi_printCellVtk_Hexahedron27;  break;
     default:
       FEPIC_CHECK(false, "invalid mesh cell type", std::invalid_argument);
   }
   
 
-  switch (_spacedim)
+  switch (m_spacedim)
   {
-    case 1:  _p_printer = &MeshIoVtk::_printPointVtk_1d; break;
-    case 2:  _p_printer = &MeshIoVtk::_printPointVtk_2d; break;
-    case 3:  _p_printer = &MeshIoVtk::_printPointVtk_3d; break;
+    case 1:  m_p_printer = &MeshIoVtk::fi_printPointVtk_1d; break;
+    case 2:  m_p_printer = &MeshIoVtk::fi_printPointVtk_2d; break;
+    case 3:  m_p_printer = &MeshIoVtk::fi_printPointVtk_3d; break;
     default:
       FEPIC_CHECK(false, "invalid mesh dimension", std::invalid_argument);
   }
@@ -42,52 +42,52 @@ void MeshIoVtk::attachMesh(Mesh const* mesh)
 }
 
 
-void MeshIoVtk::_printPointVtk_1d(Point const* p, FILE *fp) const
+void MeshIoVtk::fi_printPointVtk_1d(Point const* p, FILE *fp) const
 {
   fprintf(fp, "%f %d %d\n", static_cast<float>(p->getCoord(0)), 0, 0);
 }
-void MeshIoVtk::_printPointVtk_2d(Point const* p, FILE *fp) const
+void MeshIoVtk::fi_printPointVtk_2d(Point const* p, FILE *fp) const
 {
   fprintf(fp, "%f %f %d\n", static_cast<float>(p->getCoord()[0]), static_cast<float>(p->getCoord()[1]), 0);
 }
-void MeshIoVtk::_printPointVtk_3d(Point const* p, FILE *fp) const
+void MeshIoVtk::fi_printPointVtk_3d(Point const* p, FILE *fp) const
 {
   fprintf(fp, "%f %f %f\n", static_cast<float>(p->getCoord()[0]), static_cast<float>(p->getCoord()[1]), static_cast<float>(p->getCoord()[2]));
 }
 
 
-void MeshIoVtk::_printCellVtk_Edge2(int const* ids, FILE *fp) const
+void MeshIoVtk::fi_printCellVtk_Edge2(int const* ids, FILE *fp) const
 {
     fprintf(fp,"2 %d %d\n", ids[0], ids[1]);
 }
 
-void MeshIoVtk::_printCellVtk_Edge3(int const* ids, FILE *fp) const
+void MeshIoVtk::fi_printCellVtk_Edge3(int const* ids, FILE *fp) const
 {
     fprintf(fp,"2 %d %d\n", ids[0], ids[2]);
     fprintf(fp,"2 %d %d\n", ids[2], ids[1]);
 }
 
-void MeshIoVtk::_printCellVtk_Triangle3(int const* ids, FILE *fp) const
+void MeshIoVtk::fi_printCellVtk_Triangle3(int const* ids, FILE *fp) const
 {
   fprintf(fp,"3 %d %d %d\n", *ids, ids[1], ids[2]);
 }
 
-void MeshIoVtk::_printCellVtk_Triangle6(int const* ids, FILE *fp) const
+void MeshIoVtk::fi_printCellVtk_Triangle6(int const* ids, FILE *fp) const
 {
   fprintf(fp,"6 %d %d %d %d %d %d\n", *ids, ids[1], ids[2], ids[3], ids[4], ids[5]);
 }
 
-void MeshIoVtk::_printCellVtk_Quadrangle4(int const* ids, FILE *fp) const
+void MeshIoVtk::fi_printCellVtk_Quadrangle4(int const* ids, FILE *fp) const
 {
   fprintf(fp,"4 %d %d %d %d\n", *ids, ids[1], ids[2], ids[3]);
 }
 
-void MeshIoVtk::_printCellVtk_Quadrangle8(int const* ids, FILE *fp) const
+void MeshIoVtk::fi_printCellVtk_Quadrangle8(int const* ids, FILE *fp) const
 {
   fprintf(fp,"8 %d %d %d %d %d %d %d %d\n", *ids, ids[1], ids[2], ids[3], ids[4], ids[5], ids[6], ids[7]);
 }
 
-void MeshIoVtk::_printCellVtk_Quadrangle9(int const* ids, FILE *fp) const
+void MeshIoVtk::fi_printCellVtk_Quadrangle9(int const* ids, FILE *fp) const
 {
   fprintf(fp,"4 %d %d %d %d\n", ids[8], ids[7], ids[0], ids[4]);
   fprintf(fp,"4 %d %d %d %d\n", ids[8], ids[4], ids[1], ids[5]);
@@ -95,30 +95,30 @@ void MeshIoVtk::_printCellVtk_Quadrangle9(int const* ids, FILE *fp) const
   fprintf(fp,"4 %d %d %d %d\n", ids[8], ids[6], ids[3], ids[7]);
 }
 
-void MeshIoVtk::_printCellVtk_Tetrahedron4(int const* ids, FILE *fp) const
+void MeshIoVtk::fi_printCellVtk_Tetrahedron4(int const* ids, FILE *fp) const
 {
   fprintf(fp,"4 %d %d %d %d\n", ids[0], ids[1], ids[2], ids[3]);
 }
 
-void MeshIoVtk::_printCellVtk_Tetrahedron10(int const* ids, FILE *fp) const
+void MeshIoVtk::fi_printCellVtk_Tetrahedron10(int const* ids, FILE *fp) const
 {
   fprintf(fp,"10 %d %d %d %d %d %d %d %d %d %d\n",
           ids[0], ids[1], ids[2], ids[3], ids[4], ids[5], ids[6], ids[7], ids[9], ids[8]);
 }
 
-void MeshIoVtk::_printCellVtk_Hexahedron8(int const* ids, FILE *fp) const
+void MeshIoVtk::fi_printCellVtk_Hexahedron8(int const* ids, FILE *fp) const
 {
   fprintf(fp,"8 %d %d %d %d %d %d %d %d\n", ids[0],ids[1],ids[2],ids[3],ids[4],ids[5],ids[6],ids[7]);
 }
 
-void MeshIoVtk::_printCellVtk_Hexahedron20(int const* ids, FILE *fp) const
+void MeshIoVtk::fi_printCellVtk_Hexahedron20(int const* ids, FILE *fp) const
 {
   fprintf(fp,"20 %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d\n",
          ids[0], ids[1], ids[2], ids[3], ids[4], ids[5], ids[6], ids[7], ids[8], ids[11],
          ids[13], ids[9], ids[16], ids[18], ids[19], ids[17], ids[10], ids[12], ids[14], ids[15]);
 }
 
-void MeshIoVtk::_printCellVtk_Hexahedron27(int const* ids, FILE *fp) const
+void MeshIoVtk::fi_printCellVtk_Hexahedron27(int const* ids, FILE *fp) const
 {
   fprintf(fp,"8 %d %d %d %d %d %d %d %d\n", ids[ 0],ids[ 8],ids[20],ids[ 9],ids[10],ids[21],ids[26],ids[22]);
   fprintf(fp,"8 %d %d %d %d %d %d %d %d\n", ids[10],ids[21],ids[26],ids[22],ids[ 4],ids[16],ids[25],ids[17]);
@@ -131,9 +131,9 @@ void MeshIoVtk::_printCellVtk_Hexahedron27(int const* ids, FILE *fp) const
 }
 
 
-namespace _VtkTagsInitializers
+namespace fi_VtkTagsInitializers
 {
-  std::tr1::array<int , N_CELL_TYPES> _tags()
+  std::tr1::array<int , N_CELL_TYPES> m_tags()
   {
     std::tr1::array<int , N_CELL_TYPES> tab;
     
@@ -153,7 +153,7 @@ namespace _VtkTagsInitializers
     return tab;
   }
   
-  std::tr1::array<int , N_CELL_TYPES> _n_divs()
+  std::tr1::array<int , N_CELL_TYPES> fi_n_divs()
   {
     std::tr1::array<int , N_CELL_TYPES> tab;
     
@@ -178,7 +178,7 @@ namespace _VtkTagsInitializers
 
 int MeshIoVtk::getVtkTag(ECellType type)
 {
-  std::tr1::array<int , N_CELL_TYPES> vtk_tag = _VtkTagsInitializers::_tags();
+  std::tr1::array<int , N_CELL_TYPES> vtk_tag = fi_VtkTagsInitializers::m_tags();
       
   unsigned idx = log2_i32(type);
     
@@ -189,7 +189,7 @@ int MeshIoVtk::getVtkTag(ECellType type)
 
 int MeshIoVtk::getNumDivisions(ECellType type)
 {
-  std::tr1::array<int , N_CELL_TYPES> divs = _VtkTagsInitializers::_n_divs();
+  std::tr1::array<int , N_CELL_TYPES> divs = fi_VtkTagsInitializers::fi_n_divs();
       
   unsigned idx = log2_i32(type);
     
@@ -210,16 +210,16 @@ void MeshIoVtk::writeVtk(std::string outname)
   *  DISABLE entities are not printed.
   */
 
-  this->_add_node_scalar_vtk_n_calls=0;
-  this->_add_cell_scalar_vtk_n_calls=0;
+  this->m_add_node_scalar_vtk_n_calls=0;
+  this->m_add_cell_scalar_vtk_n_calls=0;
 
-  if (!(this->_sofn_already_called))
+  if (!(this->m_sofn_already_called))
     this->setOutputFileName(outname.c_str());
 
   if (!strcmp(outname.c_str(), "")) // if equal
-    outname = this->_popNextName(this->_filenumVtk, ".vtk");
+    outname = this->fi_popNextName(this->m_filenumVtk, ".vtk");
   
-  ++_filenumVtk;
+  ++m_filenumVtk;
   
   FILE *file_ptr = fopen(outname.c_str(), "w");
 
@@ -227,47 +227,47 @@ void MeshIoVtk::writeVtk(std::string outname)
                     "unstructured grid\n"
                     "ASCII\n"
                     "DATASET UNSTRUCTURED_GRID\n"
-                    "POINTS %d float\n", _mesh->numNodes());
+                    "POINTS %d float\n", m_mesh->numNodes());
 
   Point const* point;
-  int n_points_total = _mesh->numNodesTotal();
+  int nm_points_total = m_mesh->numNodesTotal();
   
   /* printing the points */
-  for (int i = 0; i < n_points_total; ++i)
+  for (int i = 0; i < nm_points_total; ++i)
   {
-    point = _mesh->getNodePtr(i);
+    point = m_mesh->getNodePtr(i);
     if (point->isDisabled())
       continue;
-    CALL_MEMBER_FN(*this, _p_printer)(point, file_ptr);
+    CALL_MEMBER_FN(*this, m_p_printer)(point, file_ptr);
   }
   
   
-  int  n_cd   = getNumDivisions(_mesh->cellType());    // number os cell's division
-  int  n_pseudo_cells = _mesh->numCells() * n_cd;
-  int  n_cells_total  = _mesh->numCellsTotal();
+  int  n_cd   = getNumDivisions(m_mesh->cellType());    // number os cell's division
+  int  n_pseudo_cells = m_mesh->numCells() * n_cd;
+  int  n_cells_total  = m_mesh->numCellsTotal();
   int  nodes[FEPIC_MAX_N_NODES_P_CELL];
   Cell const *cell;
   
   /* imprimindo células */
-  fprintf(file_ptr,"\nCELLS %d %d\n", n_pseudo_cells, n_cd>1 ? n_pseudo_cells*(1+_mesh->verticesPerCell()) :
-                                                               n_pseudo_cells*(1+_mesh->nodesPerCell()));
+  fprintf(file_ptr,"\nCELLS %d %d\n", n_pseudo_cells, n_cd>1 ? n_pseudo_cells*(1+m_mesh->verticesPerCell()) :
+                                                               n_pseudo_cells*(1+m_mesh->nodesPerCell()));
                                                                
   //printf("DEBUG n_cells_total = %d\n", n_cells_total);
   for (int k = 0; k < n_cells_total; ++k)
   {
-    cell = _mesh->getCellPtr(k);
+    cell = m_mesh->getCellPtr(k);
     if (cell->isDisabled())
       continue;
-    _mesh->getCellNodesContigId(cell,nodes);
-    CALL_MEMBER_FN(*this, _c_printer)(nodes, file_ptr);
+    m_mesh->getCellNodesContigId(cell,nodes);
+    CALL_MEMBER_FN(*this, m_c_printer)(nodes, file_ptr);
   }
   
   // printing types
-  int type = MeshIoVtk::getVtkTag(_mesh->cellType());
+  int type = MeshIoVtk::getVtkTag(m_mesh->cellType());
   fprintf(file_ptr,"\nCELL_TYPES %d\n", n_pseudo_cells);
   for (int k = 0; k < n_cells_total; ++k)
   {
-    cell = _mesh->getCellPtr(k);
+    cell = m_mesh->getCellPtr(k);
     if (cell->isDisabled())
       continue;
     for (int i = 0; i < n_cd; ++i)
@@ -283,25 +283,25 @@ void MeshIoVtk::writeVtk(std::string outname)
 void MeshIoVtk::addNodeScalarVtk(const char* nome_var, DefaultGetDataVtk const& data)
 {
 
-  std::string ss = this->_popNextName(this->_filenumVtk-1, ".vtk");
+  std::string ss = this->fi_popNextName(this->m_filenumVtk-1, ".vtk");
 
   FILE * file_ptr = fopen(ss.c_str(), "a");
   
   FEPIC_ASSERT(file_ptr != NULL, "could not open the file", std::runtime_error);
   
-  const int num_pts_total = _mesh->numNodesTotal();
-  const int num_pts       = _mesh->numNodes();
-  if (_add_node_scalar_vtk_n_calls==0)
+  const int num_pts_total = m_mesh->numNodesTotal();
+  const int num_pts       = m_mesh->numNodes();
+  if (m_add_node_scalar_vtk_n_calls==0)
   {
     fprintf(file_ptr,"POINT_DATA %d\n\n", num_pts);
   }
-  _add_node_scalar_vtk_n_calls++;
+  m_add_node_scalar_vtk_n_calls++;
 
   fprintf(file_ptr,"SCALARS %s float\nLOOKUP_TABLE default\n", nome_var);
 
   
   for (int i=0; i<num_pts_total; ++i)
-    if (!(_mesh->getNodePtr(i)->isDisabled()))
+    if (!(m_mesh->getNodePtr(i)->isDisabled()))
       fprintf(file_ptr,"%f\n", static_cast<float>(data.get_data_r(i)));
 
   fprintf(file_ptr,"\n");
@@ -313,26 +313,26 @@ void MeshIoVtk::addNodeScalarVtk(const char* nome_var, DefaultGetDataVtk const& 
 void MeshIoVtk::addCellScalarVtk(const char* nome_var, DefaultGetDataVtk const& data)
 {
 
-  std::string ss = this->_popNextName(this->_filenumVtk-1, ".vtk");
+  std::string ss = this->fi_popNextName(this->m_filenumVtk-1, ".vtk");
 
   FILE * file_ptr = fopen(ss.c_str(), "a");
   
   FEPIC_ASSERT(file_ptr != NULL, "could not open the file", std::runtime_error);
   
-  int  n_cd   = getNumDivisions(_mesh->cellType()); // num divisions
-  const int num_cells_total = _mesh->numCellsTotal();
-  const int num_cells = _mesh->numCells();
-  if (_add_cell_scalar_vtk_n_calls==0)
+  int  n_cd   = getNumDivisions(m_mesh->cellType()); // num divisions
+  const int num_cells_total = m_mesh->numCellsTotal();
+  const int num_cells = m_mesh->numCells();
+  if (m_add_cell_scalar_vtk_n_calls==0)
   {
     fprintf(file_ptr,"CELL_DATA %d\n\n", num_cells*n_cd);
   }
-  _add_cell_scalar_vtk_n_calls++;
+  m_add_cell_scalar_vtk_n_calls++;
 
   fprintf(file_ptr,"SCALARS %s float\nLOOKUP_TABLE default\n", nome_var);
 
   for (int i=0; i<num_cells_total; ++i)
   {
-    if (_mesh->getCellPtr(i)->isDisabled())
+    if (m_mesh->getCellPtr(i)->isDisabled())
       continue;
     for (int j = 0; j < n_cd; ++j)
       fprintf(file_ptr,"%f\n", static_cast<float>(data.get_data_r(i)));
@@ -351,26 +351,26 @@ void MeshIoVtk::addCellScalarVtk(const char* nome_var, DefaultGetDataVtk const& 
 void MeshIoVtk::addNodeIntVtk(const char* nome_var, DefaultGetDataVtk const& data)
 {
 
-  std::string ss = this->_popNextName(this->_filenumVtk-1, ".vtk");
+  std::string ss = this->fi_popNextName(this->m_filenumVtk-1, ".vtk");
 
   FILE * file_ptr = fopen(ss.c_str(), "a");
   
   FEPIC_ASSERT(file_ptr != NULL, "could not open the file", std::runtime_error);
   
-  const int num_pts_total = _mesh->numNodesTotal();
-  const int num_pts = _mesh->numNodes();
+  const int num_pts_total = m_mesh->numNodesTotal();
+  const int num_pts = m_mesh->numNodes();
   
-  if (_add_node_scalar_vtk_n_calls==0)
+  if (m_add_node_scalar_vtk_n_calls==0)
   {
     fprintf(file_ptr,"POINT_DATA %d\n\n", num_pts);
   }
-  _add_node_scalar_vtk_n_calls++;
+  m_add_node_scalar_vtk_n_calls++;
 
   fprintf(file_ptr,"SCALARS %s int\nLOOKUP_TABLE default\n", nome_var);
 
   
   for (int i=0; i<num_pts_total; ++i)
-    if (!(_mesh->getNodePtr(i)->isDisabled()))
+    if (!(m_mesh->getNodePtr(i)->isDisabled()))
       fprintf(file_ptr,"%d\n", data.get_data_i(i));
 
   fprintf(file_ptr,"\n");
@@ -382,27 +382,27 @@ void MeshIoVtk::addNodeIntVtk(const char* nome_var, DefaultGetDataVtk const& dat
 void MeshIoVtk::addCellIntVtk(const char* nome_var, DefaultGetDataVtk const& data)
 {
 
-  std::string ss = this->_popNextName(this->_filenumVtk-1, ".vtk");
+  std::string ss = this->fi_popNextName(this->m_filenumVtk-1, ".vtk");
 
   FILE * file_ptr = fopen(ss.c_str(), "a");
   
   FEPIC_ASSERT(file_ptr != NULL, "could not open the file", std::runtime_error);
   
-  int  n_cd   = getNumDivisions(_mesh->cellType()); // num divisions
-  const int num_cells_total = _mesh->numCellsTotal();
-  const int num_cells = _mesh->numCells();
+  int  n_cd   = getNumDivisions(m_mesh->cellType()); // num divisions
+  const int num_cells_total = m_mesh->numCellsTotal();
+  const int num_cells = m_mesh->numCells();
   
-  if (_add_cell_scalar_vtk_n_calls==0)
+  if (m_add_cell_scalar_vtk_n_calls==0)
   {
     fprintf(file_ptr,"CELL_DATA %d\n\n", num_cells*n_cd);
   }
-  _add_cell_scalar_vtk_n_calls++;
+  m_add_cell_scalar_vtk_n_calls++;
 
   fprintf(file_ptr,"SCALARS %s int\nLOOKUP_TABLE default\n", nome_var);
 
   for (int i=0; i<num_cells_total; ++i)
   {
-    if (_mesh->getCellPtr(i)->isDisabled())
+    if (m_mesh->getCellPtr(i)->isDisabled())
       continue;
     for (int j = 0; j < n_cd; ++j)
       fprintf(file_ptr,"%d\n", data.get_data_i(i));
@@ -418,26 +418,26 @@ void MeshIoVtk::addCellIntVtk(const char* nome_var, DefaultGetDataVtk const& dat
 void MeshIoVtk::printPointTagVtk(const char* nome_var)
 {
 
-  std::string ss = this->_popNextName(this->_filenumVtk-1, ".vtk");
+  std::string ss = this->fi_popNextName(this->m_filenumVtk-1, ".vtk");
 
   FILE * file_ptr = fopen(ss.c_str(), "a");
   
   FEPIC_ASSERT(file_ptr != NULL, "could not open the file", std::runtime_error);
   
-  const int num_pts = _mesh->numNodes();
-  if (_add_node_scalar_vtk_n_calls==0)
+  const int num_pts = m_mesh->numNodes();
+  if (m_add_node_scalar_vtk_n_calls==0)
   {
     fprintf(file_ptr,"POINT_DATA %d\n\n", num_pts);
   }
-  _add_node_scalar_vtk_n_calls++;
+  m_add_node_scalar_vtk_n_calls++;
 
   fprintf(file_ptr,"SCALARS %s int\nLOOKUP_TABLE default\n", nome_var);
 
-  int const num_pts_total = _mesh->numNodesTotal();
+  int const num_pts_total = m_mesh->numNodesTotal();
   Point const* point;
   for (int i=0; i<num_pts_total; ++i)
   {
-    point = _mesh->getNodePtr(i);
+    point = m_mesh->getNodePtr(i);
     if (point->isDisabled())
       continue;
     fprintf(file_ptr,"%d\n", point->getTag());
@@ -452,29 +452,29 @@ void MeshIoVtk::printPointTagVtk(const char* nome_var)
 void MeshIoVtk::printPointIcellVtk(const char* nome_var)
 {
 
-  std::string ss = this->_popNextName(this->_filenumVtk-1, ".vtk");
+  std::string ss = this->fi_popNextName(this->m_filenumVtk-1, ".vtk");
 
   FILE * file_ptr = fopen(ss.c_str(), "a");
   
   FEPIC_ASSERT(file_ptr != NULL, "could not open the file", std::runtime_error);
   
-  const int num_pts = _mesh->numNodes();
-  if (_add_node_scalar_vtk_n_calls==0)
+  const int num_pts = m_mesh->numNodes();
+  if (m_add_node_scalar_vtk_n_calls==0)
   {
     fprintf(file_ptr,"POINT_DATA %d\n\n", num_pts);
   }
-  _add_node_scalar_vtk_n_calls++;
+  m_add_node_scalar_vtk_n_calls++;
 
   fprintf(file_ptr,"SCALARS %s int\nLOOKUP_TABLE default\n", nome_var);
 
-  int const num_pts_total = _mesh->numNodesTotal();
+  int const num_pts_total = m_mesh->numNodesTotal();
   Point const* point;
   for (int i=0; i<num_pts_total; ++i)
   {
-    point = _mesh->getNodePtr(i);
+    point = m_mesh->getNodePtr(i);
     if (point->isDisabled())
       continue;
-    fprintf(file_ptr,"%d\n", _mesh->getCellContigId(point->getIncidCell()));
+    fprintf(file_ptr,"%d\n", m_mesh->getCellContigId(point->getIncidCell()));
   }
 
   fprintf(file_ptr,"\n");
@@ -486,26 +486,26 @@ void MeshIoVtk::printPointIcellVtk(const char* nome_var)
 void MeshIoVtk::printPointPositionVtk(const char* nome_var)
 {
 
-  std::string ss = this->_popNextName(this->_filenumVtk-1, ".vtk");
+  std::string ss = this->fi_popNextName(this->m_filenumVtk-1, ".vtk");
 
   FILE * file_ptr = fopen(ss.c_str(), "a");
   
   FEPIC_ASSERT(file_ptr != NULL, "could not open the file", std::runtime_error);
   
-  const int num_pts = _mesh->numNodes();
-  if (_add_node_scalar_vtk_n_calls==0)
+  const int num_pts = m_mesh->numNodes();
+  if (m_add_node_scalar_vtk_n_calls==0)
   {
     fprintf(file_ptr,"POINT_DATA %d\n\n", num_pts);
   }
-  _add_node_scalar_vtk_n_calls++;
+  m_add_node_scalar_vtk_n_calls++;
 
   fprintf(file_ptr,"SCALARS %s int\nLOOKUP_TABLE default\n", nome_var);
 
-  int const num_pts_total = _mesh->numNodesTotal();
+  int const num_pts_total = m_mesh->numNodesTotal();
   Point const* point;
   for (int i=0; i<num_pts_total; ++i)
   {
-    point = _mesh->getNodePtr(i);
+    point = m_mesh->getNodePtr(i);
     if (point->isDisabled())
       continue;
     fprintf(file_ptr,"%d\n", point->getPosition());

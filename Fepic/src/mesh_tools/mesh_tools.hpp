@@ -92,7 +92,7 @@ public:
 //    
 //    MeshToolsTri::createPath(x0, c0, F, cells_id, slices,  mesh);
 //
-//    std::vector<int> mid_nodes(cells_id.size()*6, int(-1));
+//    std::vector<int> midm_nodes(cells_id.size()*6, int(-1));
 //    
 //    Point pt;
 //    Triangle3 __sometri;
@@ -147,13 +147,13 @@ public:
 //        Real Fa = F(xa);
 //        Real Fb = F(xb);
 //        
-//        if (mid_nodes[6*cth + 2*f] < 0) // não foi construído nessa f
+//        if (midm_nodes[6*cth + 2*f] < 0) // não foi construído nessa f
 //        {
 //          //cria os vértices
 //          pt.setCoord(xmid, sdim);
 //          pt.setTag(c0->getTag());
-//          mid_nodes[6*cth + 2*f + 0] = mesh->pushPoint(&pt);
-//          mid_nodes[6*cth + 2*f + 1] = mesh->pushPoint(&pt);
+//          midm_nodes[6*cth + 2*f + 0] = mesh->pushPoint(&pt);
+//          midm_nodes[6*cth + 2*f + 1] = mesh->pushPoint(&pt);
 //          
 //          // TODO: melhorar procura
 //          int oth = c0->getIncidCell(f);
@@ -162,14 +162,14 @@ public:
 //            std::vector<int>::iterator itl = find(cells_id.begin(), cells_id.end(), oth);
 //            oth = std::distance(cells_id.begin(),itl);
 //            int oth_f = c0->getIncidCellPos(f);
-//            mid_nodes[6*oth + 2*oth_f + 0] = mid_nodes[6*cth + 2*f + 0];
-//            mid_nodes[6*oth + 2*oth_f + 1] = mid_nodes[6*cth + 2*f + 1];
+//            midm_nodes[6*oth + 2*oth_f + 0] = midm_nodes[6*cth + 2*f + 0];
+//            midm_nodes[6*oth + 2*oth_f + 1] = midm_nodes[6*cth + 2*f + 1];
 //          }
 //          
-//          mesh->getNodePtr(mid_nodes[6*cth + 2*f + 0])->setIncidCell(new_cells[kk+1]);
-//          mesh->getNodePtr(mid_nodes[6*cth + 2*f + 1])->setIncidCell(new_cells[(kk+2)%3]);
-//          mesh->getNodePtr(mid_nodes[6*cth + 2*f + 0])->setPosition(new_cells[(kk+2)%3]);
-//          mesh->getNodePtr(mid_nodes[6*cth + 2*f + 1])->setPosition(new_cells[1]);
+//          mesh->getNodePtr(midm_nodes[6*cth + 2*f + 0])->setIncidCell(new_cells[kk+1]);
+//          mesh->getNodePtr(midm_nodes[6*cth + 2*f + 1])->setIncidCell(new_cells[(kk+2)%3]);
+//          mesh->getNodePtr(midm_nodes[6*cth + 2*f + 0])->setPosition(new_cells[(kk+2)%3]);
+//          mesh->getNodePtr(midm_nodes[6*cth + 2*f + 1])->setPosition(new_cells[1]);
 //          
 //          int new_efacets[2]; // externo
 //          fa.setTag(c0->getTag());
@@ -189,7 +189,7 @@ public:
 //        {
 //          for (int bingo = 0; bingo<2; ++bingo)
 //          {
-//            Cell *some_cell = mesh->getCellPtr(mesh->getNodePtr(mid_nodes[6*cth + 2*f + bingo])->getIncidCell());
+//            Cell *some_cell = mesh->getCellPtr(mesh->getNodePtr(midm_nodes[6*cth + 2*f + bingo])->getIncidCell());
 //            
 //            // se some_cell tem o no k, então ele está na face do sem tracejado.
 //            int fth_node = c0->getNodeId(f);
@@ -245,7 +245,7 @@ public:
 //      mesh->getCellPtr(new_cells[0])->setIncidCell(2, c0->getIncidCell(I));
 //      mesh->getCellPtr(new_cells[0])->setIncidCellPos(2, c0->getIncidCellPos(I));
 //      mesh->getCellPtr(new_cells[0])->setNodeId(0, c0->getNodeId(J));
-//      mesh->getCellPtr(new_cells[0])->setNodeId(1, mid_nodes[6*cth + 2*K + 1]);
+//      mesh->getCellPtr(new_cells[0])->setNodeId(1, midm_nodes[6*cth + 2*K + 1]);
 //      mesh->getCellPtr(new_cells[0])->setNodeId(2, c0->getNodeId(I));
 //      mesh->getCellPtr(new_cells[0])->setFacetId(0, new_ifacets[2]);
 //      mesh->getCellPtr(new_cells[0])->setFacetId(2, c0->getFacetId(I));
@@ -254,16 +254,16 @@ public:
 //      mesh->getCellPtr(new_cells[1])->setIncidCellPos(0, 0);
 //      mesh->getCellPtr(new_cells[1])->setIncidCell(2, -1);
 //      mesh->getCellPtr(new_cells[1])->setIncidCellPos(2, -1);
-//      mesh->getCellPtr(new_cells[1])->setNodeId(0, mid_nodes[6*cth + 2*K + 1]);
+//      mesh->getCellPtr(new_cells[1])->setNodeId(0, midm_nodes[6*cth + 2*K + 1]);
 //      mesh->getCellPtr(new_cells[1])->setNodeId(1, c0->getNodeId(J));
-//      mesh->getCellPtr(new_cells[1])->setNodeId(2, mid_nodes[6*cth + 2*J + 0]);
+//      mesh->getCellPtr(new_cells[1])->setNodeId(2, midm_nodes[6*cth + 2*J + 0]);
 //      mesh->getCellPtr(new_cells[1])->setFacetId(0, new_ifacets[2]);
 //      mesh->getCellPtr(new_cells[1])->setFacetId(2, -1);
 //      
 //      mesh->getCellPtr(new_cells[2])->setIncidCell(0, -1);
 //      mesh->getCellPtr(new_cells[2])->setIncidCellPos(0, -1);
-//      mesh->getCellPtr(new_cells[2])->setNodeId(0, mid_nodes[6*cth + 2*K + 0]);
-//      mesh->getCellPtr(new_cells[2])->setNodeId(1, mid_nodes[6*cth + 2*J + 1]);
+//      mesh->getCellPtr(new_cells[2])->setNodeId(0, midm_nodes[6*cth + 2*K + 0]);
+//      mesh->getCellPtr(new_cells[2])->setNodeId(1, midm_nodes[6*cth + 2*J + 1]);
 //      mesh->getCellPtr(new_cells[2])->setNodeId(2, c0->getNodeId(K));
 //      mesh->getCellPtr(new_cells[2])->setFacetId(0, new_ifacets[2]);
 //      //mesh->getCellPtr(new_cells[2])->setFacetId(2, -1);
@@ -310,7 +310,7 @@ public:
 //    
 //    const int sdim = mesh->spaceDim();
 //    
-//    int f_nodes[2];
+//    int fm_nodes[2];
 //    
 //    cells_id.clear();
 //    slices.clear();
@@ -358,9 +358,9 @@ public:
 //      int f_free=-1;
 //      for (int f = 0; f < 3; ++f)
 //      {
-//        c0->getFacetNodesId(f, f_nodes);
-//        Real const* xa = mesh->getNodePtr(f_nodes[0])->getCoord();
-//        Real const* xb = mesh->getNodePtr(f_nodes[1])->getCoord();
+//        c0->getFacetNodesId(f, fm_nodes);
+//        Real const* xa = mesh->getNodePtr(fm_nodes[0])->getCoord();
+//        Real const* xb = mesh->getNodePtr(fm_nodes[1])->getCoord();
 //        
 //        Real const Fa = F(xa);
 //        Real const Fb = F(xb);
@@ -375,7 +375,7 @@ public:
 //          {
 //            std::cout << "n pode duas faces sem cruzar" << std::endl;
 //            std::cout << "Fa =" << Fa << " Fb = " << Fb << std::endl;
-//            std::cout << "At nodes " << f_nodes[0]<<" "<<f_nodes[1] << " " << mesh->getNodePtr(52)->getCoord(0) << " " <<mesh->getNodePtr(52)->getCoord(1) << std::endl;
+//            std::cout << "At nodes " << fm_nodes[0]<<" "<<fm_nodes[1] << " " << mesh->getNodePtr(52)->getCoord(0) << " " <<mesh->getNodePtr(52)->getCoord(1) << std::endl;
 //            std::cout << "f = " << f << " cell = "<<mesh->getCellId(c0)<< std::endl;
 //            throw; // n pode duas faces sem cruzar
 //          }

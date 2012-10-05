@@ -31,17 +31,17 @@
 */
 
 template<int CellDim>
-struct _Meta_Edge;
+struct iMeta_Edge;
 
-template<> struct _Meta_Edge<1> {
+template<> struct iMeta_Edge<1> {
   typedef Cell type;
 };
 
-template<> struct _Meta_Edge<2> {
+template<> struct iMeta_Edge<2> {
   typedef Facet type;
 };
 
-template<> struct _Meta_Edge<3> {
+template<> struct iMeta_Edge<3> {
   typedef Corner type;
 };
 

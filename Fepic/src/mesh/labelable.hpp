@@ -24,111 +24,102 @@
 
 #include "../util/assert.hpp"
 
-class _Labelable
+template<class,class> class SeqList;
+
+class Labelable
 {
+  template<class,class> friend class SeqList;
+  
 public:
   enum {tag_size = 256,
        flags_size = 256};
 
   enum Masks {
     mk_disabled = (1<<0),
-    mk_marked   = (1<<1),
+    mkm_marked   = (1<<1),
     mk_visited  = (1<<2)
   };
 
 protected:
-  explicit _Labelable(int tag, int flags=0) : _tag(static_cast<unsigned char>(tag)), _flags(static_cast<unsigned char>(flags))
+  explicit Labelable(int tag, int flags=0) : m_tag(static_cast<unsigned char>(tag)), m_flags(static_cast<unsigned char>(flags))
   {
     FEPIC_CHECK((tag>=0)&&(tag<tag_size), "tag number must be less than "+std::string(itoa(tag_size))+" and greater than 0", std::out_of_range);
     FEPIC_CHECK((flags>=0)&&(flags<flags_size), "wrong flags", std::out_of_range);
   }
 
-  _Labelable() : _tag(0), _flags(0) {};
+  Labelable() : m_tag(0), m_flags(0) {};
 
 public:
   
   int getTag() const
-  {
-    return _tag;
-  }
+  { return m_tag; }
 
   void setTag(int tag)
   {
     FEPIC_CHECK(unsigned(tag)<tag_size, "tag number must be less or equal "+std::string(itoa(tag_size)), std::out_of_range);
-    _tag = static_cast<unsigned char>( tag );
+    m_tag = static_cast<unsigned char>( tag );
   }
+  
+public:
 
   bool isDisabled() const
-  {
-    return _flags & mk_disabled;
-  }
+  { return m_flags & mk_disabled; }
 
+protected:
   void setDisabledTo(bool disable_this)
   {
-    _flags = disable_this ? (_flags | mk_disabled) : (_flags & (~mk_disabled))  ;
+    m_flags = disable_this ? (m_flags | mk_disabled) : (m_flags & (~mk_disabled))  ;
   }
-
+  
+public:
   bool isMarked() const
-  {
-    return _flags & mk_marked;
-  }
+  { return m_flags & mkm_marked; }
 
   void setMarkedTo(bool mark_this)
-  {
-    _flags = mark_this ? (_flags | mk_marked) : (_flags & (~mark_this))  ;
-  }
+  { m_flags = mark_this ? (m_flags | mkm_marked) : (m_flags & (~mark_this))  ; }
 
   bool isVisited() const
-  {
-    return _flags & mk_visited;
-  }
+  { return m_flags & mk_visited; }
 
   void setVisitedTo(bool visit)
-  {
-    _flags =  visit ? (_flags | mk_visited) : (_flags & (~mk_visited))  ;
-  }
+  { m_flags =  visit ? (m_flags | mk_visited) : (m_flags & (~mk_visited))  ; }
 
   bool getFlag(unsigned flag_no) const
-  {
-    return static_cast<bool>(_flags & ( 1 << flag_no));
-  }
+  { return static_cast<bool>(m_flags & ( 1 << flag_no)); }
 
   int getFlags() const
-  {
-    return _flags;
-  }
+  { return m_flags; }
 
+protected:
   void setFlag(int flag_no, bool set=true)
   {
     unsigned char const one = static_cast<unsigned char>(1);
-    _flags =  set ? (_flags | (one<<flag_no)) : (_flags & (~(one<<flag_no)))  ;
+    m_flags =  set ? (m_flags | (one<<flag_no)) : (m_flags & (~(one<<flag_no)))  ;
   }
 
   void setFlags(int flags)
-  {
-    _flags = static_cast<unsigned char>( flags );
-  }
+  {  m_flags = static_cast<unsigned char>( flags ); }
 
   //inline void printFlags() const
   //{
-    //for (unsigned i=0; i<sizeof(_flags)*8; ++i)
+    //for (unsigned i=0; i<sizeof(m_flags)*8; ++i)
     //{
-      //std::cout << static_cast<bool>(_flags & (1<<i));
+      //std::cout << static_cast<bool>(m_flags & (1<<i));
     //}
     //std::cout << std::endl;
   //}
   
 protected:
   // poderia usar bit-field, mas não é portável
-  unsigned char _tag; // 0 a 256
-  unsigned char _flags; // 8 flags ...
+  unsigned char m_tag; // 0 a 256
+  unsigned char m_flags; // 8 flags ...
 
 };
 
 
-static const int DISABLED = _Labelable::mk_disabled;
-static const int MARKED   = _Labelable::mk_marked;
-static const int VISITED  = _Labelable::mk_visited;
+static const int DISABLED = Labelable::mk_disabled;
+static const int MARKED   = Labelable::mkm_marked;
+static const int VISITED  = Labelable::mk_visited;
 
 
 

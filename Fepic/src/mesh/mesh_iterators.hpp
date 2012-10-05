@@ -28,17 +28,17 @@
 class Mesh;
 
 // EntityType = Cell, Facet, Corner or Point
-template<class _Iterator, class _Container, class _Mesh>
+template<class Iterator_T, class Container_T, class Mesh_T>
 class MeshIterator
 {
 protected:  
 
   friend class Mesh;
 
-  typedef _Iterator      SeqListIter;
+  typedef Iterator_T      SeqListIter;
   typedef MeshIterator   Self;
-  typedef _Mesh*         MeshPtr;
-  typedef _Container     ContainerType;
+  typedef Mesh_T*         MeshPtr;
+  typedef Container_T     ContainerType;
   
 public:
   
@@ -50,32 +50,32 @@ public:
   typedef typename SeqListIter::reference         reference;
 
 protected:
-  //MeshPtr     _mesh_ptr; // DO NOT DELETE ME ... I will be useful later.
-  SeqListIter _seq_iter;
+  //MeshPtr     m_mesh_ptr; // DO NOT DELETE ME ... I will be useful later.
+  SeqListIter m_seq_iter;
 
 public:
   
-  template<class _Iter>
-  MeshIterator(MeshPtr, _Iter it) : _seq_iter(it) {}
+  template<class Iter_T>
+  MeshIterator(MeshPtr, Iter_T it) : m_seq_iter(it) {}
   
   MeshIterator() {}
 
   // Allow iterator to const_iterator conversion
-  template<class _Iter>
-  MeshIterator(const MeshIterator<_Iter,_Container, _Mesh> & i)
-              : _seq_iter(i.base()) { }  
+  template<class Iter_T>
+  MeshIterator(const MeshIterator<Iter_T,Container_T, Mesh_T> & i)
+              : m_seq_iter(i.base()) { }  
 
   SeqListIter const& base() const
-  { return _seq_iter; }
+  { return m_seq_iter; }
 
 public:
 
   difference_type index() const
-  { return _seq_iter.index(); }
+  { return m_seq_iter.index(); }
 
   reference
   operator*() const
-  { return *_seq_iter; }
+  { return *m_seq_iter; }
 
   pointer
   operator->() const
@@ -84,125 +84,125 @@ public:
   Self&
   operator++()
   {
-    ++_seq_iter;
+    ++m_seq_iter;
     return *this;
   }
 
   Self
   operator++(int)
-  { return Self(_seq_iter++); }
+  { return Self(m_seq_iter++); }
 
   // Bidirectional iterator requirements
   Self&
   operator--()
   {
-    --_seq_iter;
+    --m_seq_iter;
     return *this;
   }
 
   Self
   operator--(int)
-  { return Self(_seq_iter--); }
+  { return Self(m_seq_iter--); }
 
 };
 
 // Forward iterator requirements
-template<class _IteratorL, class _IteratorR, class _Container, class _Mesh>
+template<class IteratorL_T, class IteratorR_T, class Container_T, class Mesh_T>
   inline bool
-  operator==(const MeshIterator<_IteratorL, _Container, _Mesh>& __lhs,
-             const MeshIterator<_IteratorR, _Container, _Mesh>& __rhs)
-  { return __lhs.base() == __rhs.base(); }
+  operator==(const MeshIterator<IteratorL_T, Container_T, Mesh_T>& lhs,
+             const MeshIterator<IteratorR_T, Container_T, Mesh_T>& rhs)
+  { return lhs.base() == rhs.base(); }
 
-template<class _Iterator, class _Container, class _Mesh>
+template<class Iterator_T, class Container_T, class Mesh_T>
   inline bool
-  operator==(const MeshIterator<_Iterator, _Container, _Mesh>& __lhs,
-             const MeshIterator<_Iterator, _Container, _Mesh>& __rhs)
-  { return __lhs.base() == __rhs.base(); }
+  operator==(const MeshIterator<Iterator_T, Container_T, Mesh_T>& lhs,
+             const MeshIterator<Iterator_T, Container_T, Mesh_T>& rhs)
+  { return lhs.base() == rhs.base(); }
 
-template<class _IteratorL, class _IteratorR, class _Container, class _Mesh>
+template<class IteratorL_T, class IteratorR_T, class Container_T, class Mesh_T>
   inline bool
-  operator!=(const MeshIterator<_IteratorL, _Container, _Mesh>& __lhs,
-             const MeshIterator<_IteratorR, _Container, _Mesh>& __rhs)
-  { return __lhs.base() != __rhs.base(); }
+  operator!=(const MeshIterator<IteratorL_T, Container_T, Mesh_T>& lhs,
+             const MeshIterator<IteratorR_T, Container_T, Mesh_T>& rhs)
+  { return lhs.base() != rhs.base(); }
 
-template<class _Iterator, class _Container, class _Mesh>
+template<class Iterator_T, class Container_T, class Mesh_T>
   inline bool
-  operator!=(const MeshIterator<_Iterator, _Container, _Mesh>& __lhs,
-             const MeshIterator<_Iterator, _Container, _Mesh>& __rhs)
-  { return __lhs.base() != __rhs.base(); }
+  operator!=(const MeshIterator<Iterator_T, Container_T, Mesh_T>& lhs,
+             const MeshIterator<Iterator_T, Container_T, Mesh_T>& rhs)
+  { return lhs.base() != rhs.base(); }
 
 // Random access iterator requirements
-template<class _IteratorL, class _IteratorR, class _Container, class _Mesh>
+template<class IteratorL_T, class IteratorR_T, class Container_T, class Mesh_T>
   inline bool
-  operator<(const MeshIterator<_IteratorL, _Container, _Mesh>& __lhs,
-            const MeshIterator<_IteratorR, _Container, _Mesh>& __rhs)
-  { return __lhs.base() < __rhs.base(); }
+  operator<(const MeshIterator<IteratorL_T, Container_T, Mesh_T>& lhs,
+            const MeshIterator<IteratorR_T, Container_T, Mesh_T>& rhs)
+  { return lhs.base() < rhs.base(); }
 
-template<class _Iterator, class _Container, class _Mesh>
+template<class Iterator_T, class Container_T, class Mesh_T>
   inline bool
-  operator<(const MeshIterator<_Iterator, _Container, _Mesh>& __lhs,
-            const MeshIterator<_Iterator, _Container, _Mesh>& __rhs)
-  { return __lhs.base() < __rhs.base(); }
+  operator<(const MeshIterator<Iterator_T, Container_T, Mesh_T>& lhs,
+            const MeshIterator<Iterator_T, Container_T, Mesh_T>& rhs)
+  { return lhs.base() < rhs.base(); }
 
-template<class _IteratorL, class _IteratorR, class _Container, class _Mesh>
+template<class IteratorL_T, class IteratorR_T, class Container_T, class Mesh_T>
   inline bool
-  operator>(const MeshIterator<_IteratorL, _Container, _Mesh>& __lhs,
-            const MeshIterator<_IteratorR, _Container, _Mesh>& __rhs)
-  { return __lhs.base() > __rhs.base(); }
+  operator>(const MeshIterator<IteratorL_T, Container_T, Mesh_T>& lhs,
+            const MeshIterator<IteratorR_T, Container_T, Mesh_T>& rhs)
+  { return lhs.base() > rhs.base(); }
 
-template<class _Iterator, class _Container, class _Mesh>
+template<class Iterator_T, class Container_T, class Mesh_T>
   inline bool
-  operator>(const MeshIterator<_Iterator, _Container, _Mesh>& __lhs,
-            const MeshIterator<_Iterator, _Container, _Mesh>& __rhs)
-  { return __lhs.base() > __rhs.base(); }
+  operator>(const MeshIterator<Iterator_T, Container_T, Mesh_T>& lhs,
+            const MeshIterator<Iterator_T, Container_T, Mesh_T>& rhs)
+  { return lhs.base() > rhs.base(); }
 
-template<class _IteratorL, class _IteratorR, class _Container, class _Mesh>
+template<class IteratorL_T, class IteratorR_T, class Container_T, class Mesh_T>
   inline bool
-  operator<=(const MeshIterator<_IteratorL, _Container, _Mesh>& __lhs,
-             const MeshIterator<_IteratorR, _Container, _Mesh>& __rhs)
-  { return __lhs.base() <= __rhs.base(); }
+  operator<=(const MeshIterator<IteratorL_T, Container_T, Mesh_T>& lhs,
+             const MeshIterator<IteratorR_T, Container_T, Mesh_T>& rhs)
+  { return lhs.base() <= rhs.base(); }
 
-template<class _Iterator, class _Container, class _Mesh>
+template<class Iterator_T, class Container_T, class Mesh_T>
   inline bool
-  operator<=(const MeshIterator<_Iterator, _Container, _Mesh>& __lhs,
-             const MeshIterator<_Iterator, _Container, _Mesh>& __rhs)
-  { return __lhs.base() <= __rhs.base(); }
+  operator<=(const MeshIterator<Iterator_T, Container_T, Mesh_T>& lhs,
+             const MeshIterator<Iterator_T, Container_T, Mesh_T>& rhs)
+  { return lhs.base() <= rhs.base(); }
 
-template<class _IteratorL, class _IteratorR, class _Container, class _Mesh>
+template<class IteratorL_T, class IteratorR_T, class Container_T, class Mesh_T>
   inline bool
-  operator>=(const MeshIterator<_IteratorL, _Container, _Mesh>& __lhs,
-             const MeshIterator<_IteratorR, _Container, _Mesh>& __rhs)
-  { return __lhs.base() >= __rhs.base(); }
+  operator>=(const MeshIterator<IteratorL_T, Container_T, Mesh_T>& lhs,
+             const MeshIterator<IteratorR_T, Container_T, Mesh_T>& rhs)
+  { return lhs.base() >= rhs.base(); }
 
-template<class _Iterator, class _Container, class _Mesh>
+template<class Iterator_T, class Container_T, class Mesh_T>
   inline bool
-  operator>=(const MeshIterator<_Iterator, _Container, _Mesh>& __lhs,
-             const MeshIterator<_Iterator, _Container, _Mesh>& __rhs)
-  { return __lhs.base() >= __rhs.base(); }
+  operator>=(const MeshIterator<Iterator_T, Container_T, Mesh_T>& lhs,
+             const MeshIterator<Iterator_T, Container_T, Mesh_T>& rhs)
+  { return lhs.base() >= rhs.base(); }
 
 // _GLIBCXX_RESOLVE_LIB_DEFECTS
 // According to the resolution of DR179 not only the various comparison
 // operators but also operator- must accept mixed iterator/const_iterator
 // parameters.
-template<class _IteratorL, class _IteratorR, class _Container, class _Mesh>
-#ifdef __GXX_EXPERIMENTAL_CXX0X__
+template<class IteratorL_T, class IteratorR_T, class Container_T, class Mesh_T>
+#ifdef GXX_EXPERIMENTAL_CXX0X
   // DR 685.
   inline auto
-  operator-(const MeshIterator<_IteratorL, _Container, _Mesh>& __lhs,
-            const MeshIterator<_IteratorR, _Container, _Mesh>& __rhs)
-  -> decltype(__lhs.base() - __rhs.base())
+  operator-(const MeshIterator<IteratorL_T, Container_T, Mesh_T>& lhs,
+            const MeshIterator<IteratorR_T, Container_T, Mesh_T>& rhs)
+  -> decltype(lhs.base() - rhs.base())
 #else
-  inline class MeshIterator<_IteratorL, _Container, _Mesh>::difference_type
-  operator-(const MeshIterator<_IteratorL, _Container, _Mesh>& __lhs,
-            const MeshIterator<_IteratorR, _Container, _Mesh>& __rhs)
+  inline class MeshIterator<IteratorL_T, Container_T, Mesh_T>::difference_type
+  operator-(const MeshIterator<IteratorL_T, Container_T, Mesh_T>& lhs,
+            const MeshIterator<IteratorR_T, Container_T, Mesh_T>& rhs)
 #endif
-  { return __lhs.base() - __rhs.base(); }
+  { return lhs.base() - rhs.base(); }
 
-template<class _Iterator, class _Container, class _Mesh>
-  inline class MeshIterator<_Iterator, _Container, _Mesh>::difference_type
-  operator-(const MeshIterator<_Iterator, _Container, _Mesh>& __lhs,
-            const MeshIterator<_Iterator, _Container, _Mesh>& __rhs)
-  { return __lhs.base() - __rhs.base(); }
+template<class Iterator_T, class Container_T, class Mesh_T>
+  inline class MeshIterator<Iterator_T, Container_T, Mesh_T>::difference_type
+  operator-(const MeshIterator<Iterator_T, Container_T, Mesh_T>& lhs,
+            const MeshIterator<Iterator_T, Container_T, Mesh_T>& rhs)
+  { return lhs.base() - rhs.base(); }
 
 
 #endif

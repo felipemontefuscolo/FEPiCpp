@@ -31,7 +31,7 @@
 /** NOT FOR USERS
  */
 inline
-double _omega(int n, int Q, double x)
+double m_omega(int n, int Q, double x)
 {
   double prod=1;
   for (int k = 0; k < Q; k++)
@@ -47,11 +47,11 @@ double _omega(int n, int Q, double x)
 /** NOT FOR USERS
  */
 inline
-double _ddxomega(int n, int Q, double x)
+double fi_ddxomega(int n, int Q, double x)
 {
   if (Q==0)
     return 0.;
-  return (n*x - Q + 1.)*_ddxomega(n, Q-1, x) + n*_omega(n, Q-1, x);
+  return (n*x - Q + 1.)*fi_ddxomega(n, Q-1, x) + n*m_omega(n, Q-1, x);
 }
 
 /*
@@ -60,7 +60,7 @@ double _ddxomega(int n, int Q, double x)
 /** NOT FOR USERS
  */
 inline
-long int _prod3(int n, int Q)
+long int fi_prod3(int n, int Q)
 {
   long int prod=1;
   for (int k = 0; k < Q; k++)
@@ -74,7 +74,7 @@ long int _prod3(int n, int Q)
 /** NOT FOR USERS
  */
 inline
-long int _prod4(int n, int Q)
+long int fi_prod4(int n, int Q)
 {
   long int prod=1;
   for (int k = 0; k < Q; k++)
@@ -97,13 +97,13 @@ template<>
 class ShapeFunction<Simplex<1> >
 {
 public:
-  ShapeFunction(int degree=1) : _degree(degree)
+  ShapeFunction(int degree=1) : m_degree(degree)
   {
   };
 
   void setDegree(int degree)
   {
-    _degree=(degree);
+    m_degree=(degree);
   }
 
 
@@ -111,11 +111,11 @@ public:
    */
   double operator() (double qsi, int ith) const
   {
-    if (_degree==0)
+    if (m_degree==0)
     {
       return 1.;
     }
-    if (_degree==1)
+    if (m_degree==1)
     {
       switch (ith)
       {
@@ -126,11 +126,11 @@ public:
 
     double prod=1;
         double xk;
-        double xi = (2.*ith-_degree)/_degree;
-    for (int k = 0; k < _degree+1; ++k)
+        double xi = (2.*ith-m_degree)/m_degree;
+    for (int k = 0; k < m_degree+1; ++k)
       if (k!=ith)
       {
-        xk = (2.*k-_degree)/_degree;
+        xk = (2.*k-m_degree)/m_degree;
         prod *= (qsi - xk)/(xi - xk);
       }
 
@@ -144,10 +144,10 @@ public:
   double gradL(double qsi, int ith) const
   {
 
-    if (_degree == 0)
+    if (m_degree == 0)
       return 0;
 
-    if (_degree == 1)
+    if (m_degree == 1)
     {
       switch (ith)
       {
@@ -165,18 +165,18 @@ public:
     double denom = 1;
     double prod;
     double sum=0;
-    double xl,xk,xi = (2.*ith-_degree)/_degree;
+    double xl,xk,xi = (2.*ith-m_degree)/m_degree;
 
-    for (int k = 0; k < _degree+1; ++k)
+    for (int k = 0; k < m_degree+1; ++k)
       if (k!=ith)
       {
-        xk = (2.*k-_degree)/_degree;
+        xk = (2.*k-m_degree)/m_degree;
         prod=1;
-        for (int l = 0; l < _degree+1; ++l)
+        for (int l = 0; l < m_degree+1; ++l)
         {
           if ((l!=ith) && (l!=k))
           {
-            xl = (2.*l-_degree)/_degree;
+            xl = (2.*l-m_degree)/m_degree;
             prod *= (qsi - xl);
           }
         }
@@ -189,16 +189,16 @@ public:
 
   int getDegree() const
   {
-    return _degree;
+    return m_degree;
   }
 
   int getNumDof() const
   {
-    return _degree+1;
+    return m_degree+1;
   }
 
   /* member functions */
-  int _degree;
+  int m_degree;
 };
 
 /*
@@ -228,23 +228,23 @@ public:
    *
    *  @note se setar o bit1 automaticamente é setado o bit0
    * */
-  ShapeFunction(int degree=1, char flags=0) : _degree(degree), _flags(flags)
+  ShapeFunction(int degree=1, char flags=0) : m_degree(degree), m_flags(flags)
   {
-    if (get_bit(_flags,1))
-      set_bit(_flags,0);
-    _ndof = (degree+1)*(degree+2)/2 + get_bit(_flags,0);
-    this->_bar_nodes = genTriParametricPtsINT(degree);
+    if (get_bit(m_flags,1))
+      set_bit(m_flags,0);
+    m_ndof = (degree+1)*(degree+2)/2 + get_bit(m_flags,0);
+    this->m_barm_nodes = genTriParametricPtsINT(degree);
     this->calculateDenomList();
   };
 
   void setDegree(int degree)
   {
-    if (get_bit(_flags,1))
-      set_bit(_flags,0);
-    _ndof = (degree+1)*(degree+2)/2 + get_bit(_flags,0);
-    this->_bar_nodes = genTriParametricPtsINT(degree);
+    if (get_bit(m_flags,1))
+      set_bit(m_flags,0);
+    m_ndof = (degree+1)*(degree+2)/2 + get_bit(m_flags,0);
+    this->m_barm_nodes = genTriParametricPtsINT(degree);
     this->calculateDenomList();
-		_degree = degree;
+		m_degree = degree;
   }
 
   /** Defini o grau de função de lagrange.
@@ -258,32 +258,32 @@ public:
    */
   void setDegree(int degree, char flags)
   {
-    _flags = flags;
+    m_flags = flags;
     this->setDegree(degree);
   }
 
   /*  calcula os "coeficientes (demominadores)" das funções de lagrange ... ver doc ..
-   *  calcular a cada nova atualização de _degree;
+   *  calcular a cada nova atualização de m_degree;
    */
   /** NOT FOR USERS
    */
   void calculateDenomList()
   {
-    this->_denom.resize(_bar_nodes.size());
+    this->m_denom.resize(m_barm_nodes.size());
 
     /* long int para evitar overflow */
     long int  denom_partF, denom_partG, denom_partH, Q0, Q1, Q2;
 
     // para cada ponto, calcular o denominador
-    for (int i = 0; i < _bar_nodes.size(); i++)
+    for (int i = 0; i < m_barm_nodes.size(); i++)
     {
       denom_partF = 1;
       denom_partG = 1;
       denom_partH = 1;
 
-      Q1 = this->_bar_nodes[i][0];
-      Q2 = this->_bar_nodes[i][1];
-      Q0 = this->_degree-Q1-Q2;
+      Q1 = this->m_barm_nodes[i][0];
+      Q2 = this->m_barm_nodes[i][1];
+      Q0 = this->m_degree-Q1-Q2;
 
       for (int k = 0; k < Fepic::max(Q0, Q1, Q2); ++k)
       {
@@ -292,7 +292,7 @@ public:
         if (k<Q2) denom_partH *= Q2 - k;
       }
 
-      this->_denom[i] = denom_partF*denom_partG*denom_partH;
+      this->m_denom[i] = denom_partF*denom_partG*denom_partH;
 
     }
   }
@@ -301,37 +301,37 @@ public:
    */
   double operator() (double L1, double L2, int ith) const
   {
-    if ((ith<0) || (ith>=_ndof))
+    if ((ith<0) || (ith>=m_ndof))
     {
       std::cout << "error:ShapeFunction::operator(): invalid index." << std::endl;
       throw;
     }
 
-    if (_degree==0)
+    if (m_degree==0)
       return 1.;
 
     /* função bolha */
-    if (get_bit(_flags,0) && (ith==_ndof-1))
+    if (get_bit(m_flags,0) && (ith==m_ndof-1))
       return 27.*(1. - L1 - L2)*L1*L2;
 
     double L0 = 1. - L1 - L2;
-    int Q1 = this->_bar_nodes[ith][0],
-        Q2 = this->_bar_nodes[ith][1],
-        Q0 = this->_degree-Q1-Q2;
+    int Q1 = this->m_barm_nodes[ith][0],
+        Q2 = this->m_barm_nodes[ith][1],
+        Q0 = this->m_degree-Q1-Q2;
 
-    double result = _omega(_degree, Q0, L0)*
-                    _omega(_degree, Q1, L1)*
-                    _omega(_degree, Q2, L2);
+    double result = m_omega(m_degree, Q0, L0)*
+                    m_omega(m_degree, Q1, L1)*
+                    m_omega(m_degree, Q2, L2);
 
     /* correção da bolha */
-    if (get_bit(_flags,0) && (!get_bit(_flags,1)))
+    if (get_bit(m_flags,0) && (!get_bit(m_flags,1)))
     {
-      result -= pow(3,3-_degree)*_prod3(_degree, Q0)*
-      _prod3(_degree, Q1)*
-      _prod3(_degree, Q2)* (L0*L1*L2);
+      result -= pow(3,3-m_degree)*fi_prod3(m_degree, Q0)*
+      fi_prod3(m_degree, Q1)*
+      fi_prod3(m_degree, Q2)* (L0*L1*L2);
     }
 
-    return result / _denom[ith];
+    return result / m_denom[ith];
   }
 
   /** Retorna a função avaliada nas coordenadas (L1, L2) do triângulo unitário
@@ -347,25 +347,25 @@ public:
    */
   Eigen::Vector2d gradL(double L1, double L2, int ith) const
   {
-    if ((ith<0) || (ith>=_ndof))
+    if ((ith<0) || (ith>=m_ndof))
     {
       std::cout << "error:ShapeFunction::gradL(): invalid index." << std::endl;
       throw;
     }
 
-    if (_degree == 0)
+    if (m_degree == 0)
       return Eigen::Vector2d(0,0);
 
     double L0 = 1. - L1 - L2;
-    int Q1 = this->_bar_nodes[ith][0],
-        Q2 = this->_bar_nodes[ith][1],
-        Q0 = this->_degree-Q1-Q2,
-        n  = _degree;
+    int Q1 = this->m_barm_nodes[ith][0],
+        Q2 = this->m_barm_nodes[ith][1],
+        Q0 = this->m_degree-Q1-Q2,
+        n  = m_degree;
 
     Eigen::Vector2d V;
 
     /* função bolha */
-    if (get_bit(_flags,0) && (ith==_ndof-1))
+    if (get_bit(m_flags,0) && (ith==m_ndof-1))
     {
       V[0] = 27.*L2*(L0-L1);
       V[1] = 27.*L1*(L0-L2);
@@ -373,26 +373,26 @@ public:
     }
 
     /* lembrete: ddL1 = -ddL0 */
-    V[0] = -_ddxomega(n, Q0, L0)*_omega(n, Q1, L1)*_omega(n, Q2, L2) +
-            _ddxomega(n, Q1, L1)*_omega(n, Q2, L2)*_omega(n, Q0, L0);
+    V[0] = -fi_ddxomega(n, Q0, L0)*m_omega(n, Q1, L1)*m_omega(n, Q2, L2) +
+            fi_ddxomega(n, Q1, L1)*m_omega(n, Q2, L2)*m_omega(n, Q0, L0);
 
     /* lembrete: ddL2 = -ddL0 */
-    V[1] = -_ddxomega(n, Q0, L0)*_omega(n, Q1, L1)*_omega(n, Q2, L2) +
-            _ddxomega(n, Q2, L2)*_omega(n, Q1, L1)*_omega(n, Q0, L0);
+    V[1] = -fi_ddxomega(n, Q0, L0)*m_omega(n, Q1, L1)*m_omega(n, Q2, L2) +
+            fi_ddxomega(n, Q2, L2)*m_omega(n, Q1, L1)*m_omega(n, Q0, L0);
 
     /* correção da bolha */
-    if (get_bit(_flags,0) && (!get_bit(_flags,1)))
+    if (get_bit(m_flags,0) && (!get_bit(m_flags,1)))
     {
-      V[0] -= pow(3,3-_degree)*_prod3(_degree, Q0)*
-                               _prod3(_degree, Q1)*
-                               _prod3(_degree, Q2)* L2*(L0-L1);
+      V[0] -= pow(3,3-m_degree)*fi_prod3(m_degree, Q0)*
+                               fi_prod3(m_degree, Q1)*
+                               fi_prod3(m_degree, Q2)* L2*(L0-L1);
 
-      V[1] -= pow(3,3-_degree)*_prod3(_degree, Q0)*
-                               _prod3(_degree, Q1)*
-                               _prod3(_degree, Q2)* L1*(L0-L2);
+      V[1] -= pow(3,3-m_degree)*fi_prod3(m_degree, Q0)*
+                               fi_prod3(m_degree, Q1)*
+                               fi_prod3(m_degree, Q2)* L1*(L0-L2);
     }
 
-    return V/_denom[ith];
+    return V/m_denom[ith];
   }
 
   Eigen::Vector2d gradL(Eigen::Vector2d const& L, int ith)
@@ -404,21 +404,21 @@ public:
    */
   int getDegree() const
   {
-    return _degree;
+    return m_degree;
   }
 
   /** Retorna o número de graus de liberdade.
    */
   int getNumDof() const
   {
-    return (_degree+1)*(_degree+2)/2. + get_bit(_flags,0);
+    return (m_degree+1)*(m_degree+2)/2. + get_bit(m_flags,0);
   }
 
-  std::vector<Eigen::Vector2i> _bar_nodes; // integer baricentric nodes
-  std::vector<long int>    _denom;   // ver doc
-  int  _degree;
-  char _flags;                             // _flags[0] : enriched_bubble;  _flags[1] : hierarc_bubble
-  int  _ndof;
+  std::vector<Eigen::Vector2i> m_barm_nodes; // integer baricentric nodes
+  std::vector<long int>    m_denom;   // ver doc
+  int  m_degree;
+  char m_flags;                             // m_flags[0] : enriched_bubble;  m_flags[1] : hierarc_bubble
+  int  m_ndof;
 };
 
 /*
@@ -455,23 +455,23 @@ public:
    *
    *  @note se setar o bit1 automaticamente é setado o bit0
    * */
-  ShapeFunction(int degree=1, char flags=0) : _degree(degree), _flags(flags)
+  ShapeFunction(int degree=1, char flags=0) : m_degree(degree), m_flags(flags)
   {
-    if (get_bit(_flags,1))
-      set_bit(_flags,0);
-    _ndof = (degree+1)*(degree+2)*(degree+3)/6 + get_bit(_flags,0);
-    this->_bar_nodes = genTetParametricPtsINT(degree);
+    if (get_bit(m_flags,1))
+      set_bit(m_flags,0);
+    m_ndof = (degree+1)*(degree+2)*(degree+3)/6 + get_bit(m_flags,0);
+    this->m_barm_nodes = genTetParametricPtsINT(degree);
     this->calculateDenomList();
   };
 
   void setDegree(int degree)
   {
-    if (get_bit(_flags,1))
-      set_bit(_flags,0);
-    _ndof = (degree+1)*(degree+2)*(degree+3)/6 + get_bit(_flags,0);
-    this->_bar_nodes = genTetParametricPtsINT(degree);
+    if (get_bit(m_flags,1))
+      set_bit(m_flags,0);
+    m_ndof = (degree+1)*(degree+2)*(degree+3)/6 + get_bit(m_flags,0);
+    this->m_barm_nodes = genTetParametricPtsINT(degree);
     this->calculateDenomList();
-        _degree = degree;
+        m_degree = degree;
   }
 
   /** Defini o grau de função de lagrange.
@@ -485,33 +485,33 @@ public:
    */
   void setDegree(int degree, char flags)
   {
-    _flags = flags;
+    m_flags = flags;
     this->setDegree(degree);
   }
 
   /*  calcula os "coeficientes" das funções de lagrange ... ver doc ..
-   *  calcular a cada nova atualização de _degree;
+   *  calcular a cada nova atualização de m_degree;
    */
   /** NOT FOR USERS
    */
   void calculateDenomList()
   {
-    this->_denom.resize(_bar_nodes.size());
+    this->m_denom.resize(m_barm_nodes.size());
 
     long int  denom_partF, denom_partG, denom_partH, denom_partI, Q0, Q1, Q2, Q3;
 
     // para cada ponto, calcular o denominador
-    for (int i = 0; i < _bar_nodes.size(); i++)
+    for (int i = 0; i < m_barm_nodes.size(); i++)
     {
       denom_partF = 1;
       denom_partG = 1;
       denom_partH = 1;
       denom_partI = 1;
 
-      Q1 = this->_bar_nodes[i][0];
-      Q2 = this->_bar_nodes[i][1];
-      Q3 = this->_bar_nodes[i][2];
-      Q0 = this->_degree-Q1-Q2-Q3;
+      Q1 = this->m_barm_nodes[i][0];
+      Q2 = this->m_barm_nodes[i][1];
+      Q3 = this->m_barm_nodes[i][2];
+      Q0 = this->m_degree-Q1-Q2-Q3;
 
       for (int k = 0; k < Fepic::max(Q0,Q1,Q2,Q3); ++k)
       {
@@ -521,7 +521,7 @@ public:
         if (k<Q3) denom_partI *= Q3 - k;
       }
 
-      this->_denom[i] = denom_partF*denom_partG*denom_partH*denom_partI;
+      this->m_denom[i] = denom_partF*denom_partG*denom_partH*denom_partI;
 
     }
   }
@@ -530,44 +530,44 @@ public:
    */
   double operator() (double L1, double L2, double L3, int ith) const
   {
-    if ((ith<0) || (ith>=_ndof))
+    if ((ith<0) || (ith>=m_ndof))
     {
       std::cout << "error:ShapeFunction::operator(): invalid index." << std::endl;
       throw;
     }
 
-    if (_degree==0)
+    if (m_degree==0)
     {
       return 1.;
     }
 
     /* função bolha */
-    if (get_bit(_flags,0) && (ith==_ndof-1))
+    if (get_bit(m_flags,0) && (ith==m_ndof-1))
     {
       return 256.*(1.-L1-L2-L3)*L1*L2*L3;
     }
 
     double L0 = 1.-L1-L2-L3;
-    int Q1 = this->_bar_nodes[ith][0],
-        Q2 = this->_bar_nodes[ith][1],
-        Q3 = this->_bar_nodes[ith][2],
-        Q0 = this->_degree-Q1-Q2-Q3;
+    int Q1 = this->m_barm_nodes[ith][0],
+        Q2 = this->m_barm_nodes[ith][1],
+        Q3 = this->m_barm_nodes[ith][2],
+        Q0 = this->m_degree-Q1-Q2-Q3;
 
-    double result = _omega(_degree, Q0, L0)*
-                    _omega(_degree, Q1, L1)*
-                    _omega(_degree, Q2, L2)*
-                    _omega(_degree, Q3, L3);
+    double result = m_omega(m_degree, Q0, L0)*
+                    m_omega(m_degree, Q1, L1)*
+                    m_omega(m_degree, Q2, L2)*
+                    m_omega(m_degree, Q3, L3);
 
     /* correção da bolha */
-    if (get_bit(_flags,0) && (!get_bit(_flags,1)))
+    if (get_bit(m_flags,0) && (!get_bit(m_flags,1)))
     {
-      result -= pow(4,4-_degree)*_prod4(_degree, Q0)*
-                                 _prod4(_degree, Q1)*
-                                 _prod4(_degree, Q2)*
-                                 _prod4(_degree, Q3)* (L0*L1*L2*L3);
+      result -= pow(4,4-m_degree)*fi_prod4(m_degree, Q0)*
+                                 fi_prod4(m_degree, Q1)*
+                                 fi_prod4(m_degree, Q2)*
+                                 fi_prod4(m_degree, Q3)* (L0*L1*L2*L3);
     }
 
-    return result / _denom[ith];
+    return result / m_denom[ith];
   }
 
   /** Retorna a função avaliada nas coordenadas (L1, L2) do triângulo unitário
@@ -583,26 +583,26 @@ public:
    */
   Eigen::Vector3d gradL(double L1, double L2, double L3, int ith) const
   {
-    if ((ith<0) || (ith>=_ndof))
+    if ((ith<0) || (ith>=m_ndof))
     {
       std::cout << "error:ShapeFunction::gradL(): invalid index." << std::endl;
       throw;
     }
 
-    if (_degree == 0)
+    if (m_degree == 0)
       return Eigen::Vector3d(0,0,0);
 
     double L0 = 1.-L1-L2-L3;
-    int Q1 = this->_bar_nodes[ith][0],
-        Q2 = this->_bar_nodes[ith][1],
-        Q3 = this->_bar_nodes[ith][2],
-        Q0 = this->_degree-Q1-Q2-Q3,
-        n  = _degree;
+    int Q1 = this->m_barm_nodes[ith][0],
+        Q2 = this->m_barm_nodes[ith][1],
+        Q3 = this->m_barm_nodes[ith][2],
+        Q0 = this->m_degree-Q1-Q2-Q3,
+        n  = m_degree;
 
     Eigen::Vector3d V;
 
     /* função bolha */
-    if (get_bit(_flags,0) && (ith==_ndof-1))
+    if (get_bit(m_flags,0) && (ith==m_ndof-1))
     {
       V[0] = 256.*L2*L3*(L0-L1);
       V[1] = 256.*L1*L3*(L0-L2);
@@ -611,37 +611,37 @@ public:
     }
 
     /* lembrete: ddL1 = -ddL0 */
-    V[0] = -_ddxomega(n, Q0, L0)*_omega(n, Q1, L1)*_omega(n, Q2, L2)*_omega(n, Q3, L3) +
-            _ddxomega(n, Q1, L1)*_omega(n, Q0, L0)*_omega(n, Q2, L2)*_omega(n, Q3, L3);
+    V[0] = -fi_ddxomega(n, Q0, L0)*m_omega(n, Q1, L1)*m_omega(n, Q2, L2)*m_omega(n, Q3, L3) +
+            fi_ddxomega(n, Q1, L1)*m_omega(n, Q0, L0)*m_omega(n, Q2, L2)*m_omega(n, Q3, L3);
 
     /* lembrete: ddL2 = -ddL0 */
-    V[1] = -_ddxomega(n, Q0, L0)*_omega(n, Q1, L1)*_omega(n, Q2, L2)*_omega(n, Q3, L3) +
-            _ddxomega(n, Q2, L2)*_omega(n, Q1, L1)*_omega(n, Q0, L0)*_omega(n, Q3, L3);
+    V[1] = -fi_ddxomega(n, Q0, L0)*m_omega(n, Q1, L1)*m_omega(n, Q2, L2)*m_omega(n, Q3, L3) +
+            fi_ddxomega(n, Q2, L2)*m_omega(n, Q1, L1)*m_omega(n, Q0, L0)*m_omega(n, Q3, L3);
 
     /* lembrete: ddL3 = -ddL0 */
-    V[2] = -_ddxomega(n, Q0, L0)*_omega(n, Q1, L1)*_omega(n, Q2, L2)*_omega(n, Q3, L3) +
-            _ddxomega(n, Q3, L3)*_omega(n, Q1, L1)*_omega(n, Q2, L2)*_omega(n, Q0, L0);
+    V[2] = -fi_ddxomega(n, Q0, L0)*m_omega(n, Q1, L1)*m_omega(n, Q2, L2)*m_omega(n, Q3, L3) +
+            fi_ddxomega(n, Q3, L3)*m_omega(n, Q1, L1)*m_omega(n, Q2, L2)*m_omega(n, Q0, L0);
 
     /* correção da bolha */
-    if (get_bit(_flags,0) && (!get_bit(_flags,1)))
+    if (get_bit(m_flags,0) && (!get_bit(m_flags,1)))
     {
-      V[0] -= pow(4,4-_degree)*_prod4(_degree, Q0)*
-                               _prod4(_degree, Q1)*
-                               _prod4(_degree, Q2)*
-                               _prod4(_degree, Q3)* L2*L3*(L0-L1);
+      V[0] -= pow(4,4-m_degree)*fi_prod4(m_degree, Q0)*
+                               fi_prod4(m_degree, Q1)*
+                               fi_prod4(m_degree, Q2)*
+                               fi_prod4(m_degree, Q3)* L2*L3*(L0-L1);
 
-      V[1] -= pow(4,4-_degree)*_prod4(_degree, Q0)*
-                               _prod4(_degree, Q1)*
-                               _prod4(_degree, Q2)*
-                               _prod4(_degree, Q3)* L1*L3*(L0-L2);
+      V[1] -= pow(4,4-m_degree)*fi_prod4(m_degree, Q0)*
+                               fi_prod4(m_degree, Q1)*
+                               fi_prod4(m_degree, Q2)*
+                               fi_prod4(m_degree, Q3)* L1*L3*(L0-L2);
 
-      V[2] -= pow(4,4-_degree)*_prod4(_degree, Q0)*
-                               _prod4(_degree, Q1)*
-                               _prod4(_degree, Q2)*
-                               _prod4(_degree, Q3)* L1*L2*(L0-L3);
+      V[2] -= pow(4,4-m_degree)*fi_prod4(m_degree, Q0)*
+                               fi_prod4(m_degree, Q1)*
+                               fi_prod4(m_degree, Q2)*
+                               fi_prod4(m_degree, Q3)* L1*L2*(L0-L3);
     }
 
-    return V/_denom[ith];
+    return V/m_denom[ith];
   }
 
   Eigen::Vector3d gradL(Eigen::Vector3d const& L, int ith)
@@ -653,21 +653,21 @@ public:
    */
   int getDegree() const
   {
-    return _degree;
+    return m_degree;
   }
 
   /** Retorna o número de graus de liberdade.
    */
   int getNumDof() const
   {
-    return (_degree+1)*(_degree+2)*(_degree+3)/6 + get_bit(_flags,0);
+    return (m_degree+1)*(m_degree+2)*(m_degree+3)/6 + get_bit(m_flags,0);
   }
 
-  std::vector<Eigen::Vector3i> _bar_nodes; // integer baricentric nodes
-  std::vector<long int>    _denom;   // ver doc
-  int  _degree;
-  char _flags;                             // _flags[0] : enriched_bubble;  _flags[1] : hierarc_bubble
-  int  _ndof;
+  std::vector<Eigen::Vector3i> m_barm_nodes; // integer baricentric nodes
+  std::vector<long int>    m_denom;   // ver doc
+  int  m_degree;
+  char m_flags;                             // m_flags[0] : enriched_bubble;  m_flags[1] : hierarc_bubble
+  int  m_ndof;
 };
 
 double gradL(double const& L, ShapeFunction<Simplex<1> > PHI, int ith)

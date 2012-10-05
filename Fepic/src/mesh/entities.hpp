@@ -50,12 +50,12 @@ class UndefinedCell
          n_corners=0,
          n_vertices_per_facet=0};
 
-  int _icells_pos[0];
-  int _nodes[0];     
-  int _facets[0];    
-  int _icells[0];    
-  int _icells_anchors[0];
-  int _corners[0];         
+  int m_icells_pos[0];
+  int m_nodes[0];     
+  int m_facets[0];    
+  int m_icells[0];    
+  int m_icells_anchors[0];
+  int m_corners[0];         
 };
 
 #endif

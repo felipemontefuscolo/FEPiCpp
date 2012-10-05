@@ -44,9 +44,9 @@ class VarDofs
   //typedef std::vector<MiniContainer> Container;
   typedef Eigen::Map<Eigen::ArrayXXi> Container;
 
-  void setMesh(Mesh *m) {_mesh_ptr = m;}
-  void setInitialDofId(int fid) {_initial_dof_id = fid;}
-  void setInitialDofAddress(int* a) {_initial_dof_address = a;}
+  void setMesh(Mesh *m) {m_mesh_ptr = m;}
+  void setInitialDofId(int fid) {m_initial_dof_id = fid;}
+  void setInitialDofAddress(int* a) {m_initial_dof_address = a;}
   void setType(ShapeFunction * sf, int dim=1, int ntags=0, int const*tags=NULL);
   void setType(int ndpv, int ndpr, int ndpf, int ndpc, int ntags=0, int const*tags=NULL);
   void getDivisions(int*& vertices_beg, int*& corners_beg, int*& facets_beg, int*& cells_beg) const;
@@ -57,27 +57,27 @@ class VarDofs
 public:
 
   VarDofs(const char* name, Mesh * m=NULL, int ndpv=0, int ndpr=0, int ndpf=0, int ndpc=0, int fdi=0, int* a=NULL, int ntags=0, int const*tags=NULL)
-    : _name(name), _mesh_ptr(m), _vertices_dofs(NULL,0,0), _corners_dofs(NULL,0,0), _facets_dofs(NULL,0,0), _cells_dofs(NULL,0,0)
+    : m_name(name), m_mesh_ptr(m), m_vertices_dofs(NULL,0,0), m_corners_dofs(NULL,0,0), m_facets_dofs(NULL,0,0), m_cells_dofs(NULL,0,0)
   {
-    _n_dof_within_vertice = ndpv; // interior
-    _n_dof_within_corner = ndpr;  // interior
-    _n_dof_within_facet = ndpf;   // interior
-    _n_dof_within_cell = ndpc;    // interior
-    _n_dofs = 0;
-    _initial_dof_id = fdi;
-    _initial_dof_address = a;
+    m_n_dof_within_vertice = ndpv; // interior
+    m_n_dof_within_corner = ndpr;  // interior
+    m_n_dof_within_facet = ndpf;   // interior
+    m_n_dof_within_cell = ndpc;    // interior
+    m_n_dofs = 0;
+    m_initial_dof_id = fdi;
+    m_initial_dof_address = a;
 
     if (ntags>0)
     {
       FEPIC_CHECK(tags!=NULL, "tags NULL pointer", std::runtime_error);
-      _considered_tags.resize(ntags);
+      m_considered_tags.resize(ntags);
     }
     for (int i = 0; i < ntags; ++i)
-      _considered_tags[i] = tags[i];
+      m_considered_tags[i] = tags[i];
     
     // nao precisa disso aqui, pode ser feito no setUp()
     //if (m!=NULL && m->cellDim() < 3)
-    //  _n_dof_within_corner=0;
+    //  m_n_dof_within_corner=0;
     
   }
 
@@ -97,52 +97,52 @@ public:
   void getCornerAssociatedDofs(int* dofs, CellElement const*) const;
   void getVertexAssociatedDofs(int* dofs, CellElement const*) const;
   
-  char const* getName() const {return _name.c_str();};
+  char const* getName() const {return m_name.c_str();};
 
   int const* data() const
   {
-    if (_n_dof_within_vertice > 0)
-      {return _vertices_dofs.data(); }
-    else if (_n_dof_within_corner > 0)
-      {return _corners_dofs.data();  }
-    else if (_n_dof_within_facet > 0)
-      {return _facets_dofs.data();  }
+    if (m_n_dof_within_vertice > 0)
+      {return m_vertices_dofs.data(); }
+    else if (m_n_dof_within_corner > 0)
+      {return m_corners_dofs.data();  }
+    else if (m_n_dof_within_facet > 0)
+      {return m_facets_dofs.data();  }
     else
-      {return _cells_dofs.data();  }
+      {return m_cells_dofs.data();  }
   }
   int* data()
   {
-    if (_n_dof_within_vertice > 0)
-      {return _vertices_dofs.data(); }
-    else if (_n_dof_within_corner > 0)
-      {return _corners_dofs.data();  }
-    else if (_n_dof_within_facet > 0)
-      {return _facets_dofs.data();  }
+    if (m_n_dof_within_vertice > 0)
+      {return m_vertices_dofs.data(); }
+    else if (m_n_dof_within_corner > 0)
+      {return m_corners_dofs.data();  }
+    else if (m_n_dof_within_facet > 0)
+      {return m_facets_dofs.data();  }
     else
-      {return _cells_dofs.data();  }
+      {return m_cells_dofs.data();  }
   }
   int  totalSize() const;
 
-  float getGrowFactor() const {return _grow_factor;}
+  float getGrowFactor() const {return m_grow_factor;}
 
 protected:
-  std::string _name;
-  Mesh*       _mesh_ptr;
-  int         _n_dof_within_vertice;
-  int         _n_dof_within_corner;
-  int         _n_dof_within_facet;
-  int         _n_dof_within_cell;
-  int         _n_dofs;
-  int         _initial_dof_id;
-  int*        _initial_dof_address;
-  float       _grow_factor;
+  std::string m_name;
+  Mesh*       m_mesh_ptr;
+  int         m_n_dof_within_vertice;
+  int         m_n_dof_within_corner;
+  int         m_n_dof_within_facet;
+  int         m_n_dof_within_cell;
+  int         m_n_dofs;
+  int         m_initial_dof_id;
+  int*        m_initial_dof_address;
+  float       m_grow_factor;
   
-  std::vector<int> _considered_tags; /* if _considered_tags.size()==0, then all tags are considered. */
+  std::vector<int> m_considered_tags; /* if m_considered_tags.size()==0, then all tags are considered. */
 
-  Container _vertices_dofs;  // 0
-  Container _corners_dofs;   // 1
-  Container _facets_dofs;    // 2
-  Container _cells_dofs;     // 3
+  Container m_vertices_dofs;  // 0
+  Container m_corners_dofs;   // 1
+  Container m_facets_dofs;    // 2
+  Container m_cells_dofs;     // 3
   
 
 };

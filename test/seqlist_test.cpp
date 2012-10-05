@@ -61,9 +61,9 @@ std::string print_vector(V const& v, int size)
   return ss.str();
 }
 
-class Dummy : public _Labelable
+class Dummy : public Labelable
 {public:
-  Dummy(int tag = 0, bool d = false) : _Labelable(tag, DISABLED*d), hist(0) {}
+  Dummy(int tag = 0, bool d = false) : Labelable(tag, DISABLED*d), hist(0) {}
   int hist;
 };
 

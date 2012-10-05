@@ -40,10 +40,10 @@ public:
     Enriched      = 0x4
   };
 
-  explicit ShapeFunction() : _tags(0) {}
+  explicit ShapeFunction() : m_tags(0) {}
 
 protected:
-  explicit ShapeFunction(unsigned tags) : _tags(tags) {}
+  explicit ShapeFunction(unsigned tags) : m_tags(tags) {}
 
 public:
 
@@ -90,17 +90,17 @@ public:
 
   bool partUnity() const
   {
-    return _tags & Part_of_unity;
+    return m_tags & Part_of_unity;
   }
   
   bool enriched() const
   {
-    return _tags & Enriched;
+    return m_tags & Enriched;
   }
   
   bool discontinuous() const
   {
-    return _tags & Discontinuous;
+    return m_tags & Discontinuous;
   }
 
   /** @brief returns the number of degrees of freedom.
@@ -117,7 +117,7 @@ public:
   virtual ~ShapeFunction() {};
 
 protected:
-  unsigned _tags;
+  unsigned m_tags;
 
 };
 
@@ -129,7 +129,7 @@ protected:
 // `___/\___/|_|_|/__/  |_|   <___/|_|_|<___||  _/\___.
 //                                           |_| 
 // =====================================================
-class Shape_CONST : public ShapeFunction, public _DofTraits<Shape_CONST>
+class Shape_CONST : public ShapeFunction, public DofTraits_T<Shape_CONST>
 {
 public:
 
@@ -177,7 +177,7 @@ protected:
 //.                                                                        .
 //. ========================================================================
 
-class Shape_EDGE_P1 : public ShapeFunction, public _DofTraits<Shape_EDGE_P1>
+class Shape_EDGE_P1 : public ShapeFunction, public DofTraits_T<Shape_EDGE_P1>
 {
 public:
   typedef Shape_EDGE_P1 ShapeType;
@@ -202,7 +202,7 @@ protected:
 
 };
 
-class Shape_EDGE_P2 : public ShapeFunction, public _DofTraits<Shape_EDGE_P2>
+class Shape_EDGE_P2 : public ShapeFunction, public DofTraits_T<Shape_EDGE_P2>
 {
 public:
   typedef Shape_EDGE_P2 ShapeType;
@@ -242,7 +242,7 @@ protected:
 //.                                                                        .
 //. ========================================================================
 
-class Shape_TRI_P1 : public ShapeFunction, public _DofTraits<Shape_TRI_P1>
+class Shape_TRI_P1 : public ShapeFunction, public DofTraits_T<Shape_TRI_P1>
 {
 public:
   typedef Shape_TRI_P1 ShapeType;
@@ -269,7 +269,7 @@ protected:
 };
 
 
-class Shape_TRI_P2 : public ShapeFunction, public _DofTraits<Shape_TRI_P2>
+class Shape_TRI_P2 : public ShapeFunction, public DofTraits_T<Shape_TRI_P2>
 {
 public:
   typedef Shape_TRI_P2 ShapeType;
@@ -296,7 +296,7 @@ protected:
 };
 
 
-class Shape_TRI_BUBBLE : public ShapeFunction, public _DofTraits<Shape_TRI_BUBBLE>
+class Shape_TRI_BUBBLE : public ShapeFunction, public DofTraits_T<Shape_TRI_BUBBLE>
 {
 public:
   typedef Shape_TRI_BUBBLE ShapeType;
@@ -322,7 +322,7 @@ protected:
 };
 
 
-class Shape_TRI_P1ph : public ShapeFunction, public _DofTraits<Shape_TRI_P1ph>
+class Shape_TRI_P1ph : public ShapeFunction, public DofTraits_T<Shape_TRI_P1ph>
 {
 public:
   typedef Shape_TRI_P1ph ShapeType;
@@ -347,7 +347,7 @@ protected:
 };
 
 
-class Shape_TRI_P2ph : public ShapeFunction, public _DofTraits<Shape_TRI_P2ph>
+class Shape_TRI_P2ph : public ShapeFunction, public DofTraits_T<Shape_TRI_P2ph>
 {
 public:
   typedef Shape_TRI_P2ph ShapeType;
@@ -372,7 +372,7 @@ protected:
 };
 
 
-class Shape_TRI_Pm1 : public ShapeFunction, public _DofTraits<Shape_TRI_Pm1>
+class Shape_TRI_Pm1 : public ShapeFunction, public DofTraits_T<Shape_TRI_Pm1>
 {
 public:
   typedef Shape_TRI_Pm1 ShapeType;
@@ -402,7 +402,7 @@ protected:
 
 
 
-class Shape_QUAD_Q1 : public ShapeFunction, public _DofTraits<Shape_QUAD_Q1>
+class Shape_QUAD_Q1 : public ShapeFunction, public DofTraits_T<Shape_QUAD_Q1>
 {
 public:
   typedef Shape_QUAD_Q1 ShapeType;
@@ -424,12 +424,12 @@ public:
   ~Shape_QUAD_Q1() {}
 protected:
 
-  static const int _nds_pos[n_dof][dim];
+  static const int m_nds_pos[n_dof][dim];
 
 };
 
 
-class Shape_QUAD_Q2 : public ShapeFunction, public _DofTraits<Shape_QUAD_Q2>
+class Shape_QUAD_Q2 : public ShapeFunction, public DofTraits_T<Shape_QUAD_Q2>
 {
 public:
   typedef Shape_QUAD_Q2 ShapeType;
@@ -451,12 +451,12 @@ public:
   ~Shape_QUAD_Q2() {}
 protected:
 
-  static const int _nds_pos[n_dof][dim];
+  static const int m_nds_pos[n_dof][dim];
 
 };
 
 
-class Shape_QUAD_BUBBLE : public ShapeFunction, public _DofTraits<Shape_QUAD_BUBBLE>
+class Shape_QUAD_BUBBLE : public ShapeFunction, public DofTraits_T<Shape_QUAD_BUBBLE>
 {
 public:
   typedef Shape_QUAD_BUBBLE ShapeType;
@@ -483,7 +483,7 @@ protected:
 
 
 
-class Shape_QUAD_Q1ph : public ShapeFunction, public _DofTraits<Shape_QUAD_Q1ph>
+class Shape_QUAD_Q1ph : public ShapeFunction, public DofTraits_T<Shape_QUAD_Q1ph>
 {
 public:
   typedef Shape_QUAD_Q1ph ShapeType;
@@ -508,7 +508,7 @@ protected:
 };
 
 
-class Shape_QUAD_Pm1 : public ShapeFunction, public _DofTraits<Shape_QUAD_Pm1>
+class Shape_QUAD_Pm1 : public ShapeFunction, public DofTraits_T<Shape_QUAD_Pm1>
 {
 public:
   typedef Shape_QUAD_Pm1 ShapeType;
@@ -534,7 +534,7 @@ protected:
 
 
 
-class Shape_QUAD_Q2ser : public ShapeFunction, public _DofTraits<Shape_QUAD_Q2ser>
+class Shape_QUAD_Q2ser : public ShapeFunction, public DofTraits_T<Shape_QUAD_Q2ser>
 {
 public:
   typedef Shape_QUAD_Q2ser ShapeType;
@@ -556,7 +556,7 @@ public:
   ~Shape_QUAD_Q2ser() {}
 protected:
 
-  static const int _nds_pos[n_dof][dim];
+  static const int m_nds_pos[n_dof][dim];
 
 };
 
@@ -580,7 +580,7 @@ protected:
 //.                                                                        .
 // =========================================================================
 
-class Shape_TET_P1 : public ShapeFunction, public _DofTraits<Shape_TET_P1>
+class Shape_TET_P1 : public ShapeFunction, public DofTraits_T<Shape_TET_P1>
 {
 public:
   typedef Shape_TET_P1 ShapeType;
@@ -611,7 +611,7 @@ protected:
 };
 
 
-class Shape_TET_P2 : public ShapeFunction, public _DofTraits<Shape_TET_P2>
+class Shape_TET_P2 : public ShapeFunction, public DofTraits_T<Shape_TET_P2>
 {
 public:
   typedef Shape_TET_P2 ShapeType;
@@ -642,7 +642,7 @@ protected:
 };
 
 
-class Shape_TET_BUBBLE : public ShapeFunction, public _DofTraits<Shape_TET_BUBBLE>
+class Shape_TET_BUBBLE : public ShapeFunction, public DofTraits_T<Shape_TET_BUBBLE>
 {
 public:
   typedef Shape_TET_BUBBLE ShapeType;
@@ -669,7 +669,7 @@ protected:
 
 
 
-class Shape_TET_P1ph : public ShapeFunction, public _DofTraits<Shape_TET_P1ph>
+class Shape_TET_P1ph : public ShapeFunction, public DofTraits_T<Shape_TET_P1ph>
 {
 public:
   typedef Shape_TET_P1ph ShapeType;
@@ -694,7 +694,7 @@ protected:
 };
 
 
-class Shape_TET_P2ph : public ShapeFunction, public _DofTraits<Shape_TET_P2ph>
+class Shape_TET_P2ph : public ShapeFunction, public DofTraits_T<Shape_TET_P2ph>
 {
 public:
   typedef Shape_TET_P2ph ShapeType;
@@ -719,7 +719,7 @@ protected:
 };
 
 
-class Shape_TET_Pm1 : public ShapeFunction, public _DofTraits<Shape_TET_Pm1>
+class Shape_TET_Pm1 : public ShapeFunction, public DofTraits_T<Shape_TET_Pm1>
 {
 public:
   typedef Shape_TET_Pm1 ShapeType;
@@ -751,7 +751,7 @@ protected:
 
 
 
-class Shape_HEX_Q1 : public ShapeFunction, public _DofTraits<Shape_HEX_Q1>
+class Shape_HEX_Q1 : public ShapeFunction, public DofTraits_T<Shape_HEX_Q1>
 {
 public:
   typedef Shape_HEX_Q1 ShapeType;
@@ -773,13 +773,13 @@ public:
   ~Shape_HEX_Q1() {}
 protected:
 
-  static const int _nds_pos[n_dof][dim];
+  static const int m_nds_pos[n_dof][dim];
 
 };
 
 
 // TODO
-class Shape_HEX_Q2 : public ShapeFunction, public _DofTraits<Shape_HEX_Q2>
+class Shape_HEX_Q2 : public ShapeFunction, public DofTraits_T<Shape_HEX_Q2>
 {
 public:
   typedef Shape_HEX_Q2 ShapeType;
@@ -801,13 +801,13 @@ public:
   ~Shape_HEX_Q2() {}
 protected:
 
-  static const int _nds_idx_lag[n_dof][dim];
+  static const int m_nds_idx_lag[n_dof][dim];
   
   Shape_EDGE_P2 const lag;
 };
 
 
-class Shape_HEX_BUBBLE : public ShapeFunction, public _DofTraits<Shape_HEX_BUBBLE>
+class Shape_HEX_BUBBLE : public ShapeFunction, public DofTraits_T<Shape_HEX_BUBBLE>
 {
 public:
   typedef Shape_HEX_BUBBLE ShapeType;
@@ -834,7 +834,7 @@ protected:
 
 
 
-class Shape_HEX_Q1ph : public ShapeFunction, public _DofTraits<Shape_HEX_Q1ph>
+class Shape_HEX_Q1ph : public ShapeFunction, public DofTraits_T<Shape_HEX_Q1ph>
 {
 public:
   typedef Shape_HEX_Q1ph ShapeType;
@@ -859,7 +859,7 @@ protected:
 };
 
 
-class Shape_HEX_Pm1 : public ShapeFunction, public _DofTraits<Shape_HEX_Pm1>
+class Shape_HEX_Pm1 : public ShapeFunction, public DofTraits_T<Shape_HEX_Pm1>
 {
 public:
   typedef Shape_HEX_Pm1 ShapeType;
@@ -885,7 +885,7 @@ protected:
 
 
 // TODO
-class Shape_HEX_Q2ser : public ShapeFunction, public _DofTraits<Shape_HEX_Q2ser>
+class Shape_HEX_Q2ser : public ShapeFunction, public DofTraits_T<Shape_HEX_Q2ser>
 {
 public:
   typedef Shape_HEX_Q2ser ShapeType;
@@ -907,7 +907,7 @@ public:
   ~Shape_HEX_Q2ser() {}
 protected:
 
-  static const int _nds_pos[n_dof][dim];
+  static const int m_nds_pos[n_dof][dim];
 
 };
 

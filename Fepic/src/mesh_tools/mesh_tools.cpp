@@ -35,28 +35,28 @@
  *
  *  - tag of all elements.
  *
- *  - nodes : _icell
- *            _icell_pos
- *            _status
- *            _incidences
+ *  - nodes : m_icell
+ *            m_icell_pos
+ *            m_status
+ *            m_incidences
  *
- *  - facets : _icell
- *             _icell_pos
- *             _bound_comp_id
+ *  - facets : m_icell
+ *             m_icell_pos
+ *             m_bound_comp_id
  *
- *  - corners : _icell
- *              _icell_pos
+ *  - corners : m_icell
+ *              m_icell_pos
  *
- *  - cells : _icells_pos
- *            _icells_anchors
- *            _facets
- *            _icells
- *            _corners
- *            _nodes
- *            _conn_comp_id
+ *  - cells : m_icells_pos
+ *            m_icells_anchors
+ *            m_facets
+ *            m_icells
+ *            m_corners
+ *            m_nodes
+ *            m_conn_comp_id
  *
- *  - SMesh : _connected_compL // (connected component vs initial cell id) list
- *            _boundary_compL  // (boundary component vs initialfacet id) list
+ *  - SMesh : m_connected_comp_l // (connected component vs initial cell id) list
+ *            m_boundary_comp_l  // (boundary component vs initialfacet id) list
  *
  */
 
@@ -553,7 +553,7 @@ Point* MeshToolsTri::insertVertexOnEdge(Cell *cellA, int fidA, Real t, Mesh *mes
   int        nds[6], fts[3], ics[3], ics_pos[3];
   int        pos, tag, stat, bnd;
   const bool edge_in_boundary = cidB < 0;
-  const bool high_order = mesh->numNodesPerCell() > mesh->numVerticesPerCell();
+  const bool highm_order = mesh->numNodesPerCell() > mesh->numVerticesPerCell();
 
   int        fidB = -1;
   //int        fidB_plus1 = -1;
@@ -620,7 +620,7 @@ Point* MeshToolsTri::insertVertexOnEdge(Cell *cellA, int fidA, Real t, Mesh *mes
     vtx_l = mesh->getNodePtr(vtx_l_id);
     vl_xyz = vtx_l->getCoord();
   }
-  if (high_order)
+  if (highm_order)
   {
     nod_t_id  = cellA->getNodeId(fidA + 3); // node of the old edge
     //nod_tr_id = cellA->getNodeId(fidA_plus2 + 3);
@@ -691,7 +691,7 @@ Point* MeshToolsTri::insertVertexOnEdge(Cell *cellA, int fidA, Real t, Mesh *mes
   vm_xyz = vtx_m->getCoord();
   // setting vtx_l: nothing to do
 
-  if (high_order)
+  if (highm_order)
   {
     // setting nod_t: = (old edge node)
     for (int i = 0; i < sdim; ++i)
@@ -802,7 +802,7 @@ Point* MeshToolsTri::insertVertexOnEdge(Cell *cellA, int fidA, Real t, Mesh *mes
   nds[0] = vtx_r_id;
   nds[1] = vtx_m_id;
   nds[2] = vtx_b_id;
-  if (high_order)
+  if (highm_order)
   {
     nds[3] = nod_r_id;
     nds[4] = nod_b_id;
@@ -825,7 +825,7 @@ Point* MeshToolsTri::insertVertexOnEdge(Cell *cellA, int fidA, Real t, Mesh *mes
     nds[0] = vtx_l_id;
     nds[1] = vtx_b_id;
     nds[2] = vtx_m_id;
-    if (high_order)
+    if (highm_order)
     {
       nds[3] = nod_bl_id;
       nds[4] = nod_b_id;
@@ -844,7 +844,7 @@ Point* MeshToolsTri::insertVertexOnEdge(Cell *cellA, int fidA, Real t, Mesh *mes
 
   //setting cellA
   cellA->setNodeId(fidA_plus1, vtx_m_id);
-  if (high_order)
+  if (highm_order)
     cellA->setNodeId(fidA_plus1+3, nod_r_id);
   cellA->setFacetId(fidA_plus1, edge_r_id);
   cellA->setIncidence(fidA_plus1, cidD, 0);
@@ -853,7 +853,7 @@ Point* MeshToolsTri::insertVertexOnEdge(Cell *cellA, int fidA, Real t, Mesh *mes
   if (!edge_in_boundary)
   {
     cellB->setNodeId(fidB, vtx_m_id);
-    if (high_order)
+    if (highm_order)
       cellB->setNodeId(fidB_plus2+3, nod_l_id);
     cellB->setFacetId(fidB_plus2, edge_l_id);
     cellB->setIncidence(fidB_plus2, cidC, 2);
@@ -1065,7 +1065,7 @@ Point* MeshToolsTri::insertVertexOnEdge(Cell *cellA, int fidA, Real t, Mesh *mes
   int        nds[6], fts[3], ics[3], ics_pos[3];
   int        pos, tag, stat, bnd;
   const bool edge_in_boundary = cidB < 0;
-  const bool high_order = mesh->numNodesPerCell() > mesh->numVerticesPerCell();
+  const bool highm_order = mesh->numNodesPerCell() > mesh->numVerticesPerCell();
 
   int        fidB = -1;
   //int        fidB_plus1 = -1;
@@ -1132,7 +1132,7 @@ Point* MeshToolsTri::insertVertexOnEdge(Cell *cellA, int fidA, Real t, Mesh *mes
     vtx_l = mesh->getNodePtr(vtx_l_id);
     vl_xyz = vtx_l->getCoord();
   }
-  if (high_order)
+  if (highm_order)
   {
     nod_t_id  = cellA->getNodeId(fidA + 3); // node of the old edge
     //nod_tr_id = cellA->getNodeId(fidA_plus2 + 3);
@@ -1203,7 +1203,7 @@ Point* MeshToolsTri::insertVertexOnEdge(Cell *cellA, int fidA, Real t, Mesh *mes
   vm_xyz = vtx_m->getCoord();
   // setting vtx_l: nothing to do
 
-  if (high_order)
+  if (highm_order)
   {
     // setting nod_t: = (old edge node)
     for (int i = 0; i < sdim; ++i)
@@ -1312,7 +1312,7 @@ Point* MeshToolsTri::insertVertexOnEdge(Cell *cellA, int fidA, Real t, Mesh *mes
   nds[0] = vtx_r_id;
   nds[1] = vtx_m_id;
   nds[2] = vtx_b_id;
-  if (high_order)
+  if (highm_order)
   {
     nds[3] = nod_r_id;
     nds[4] = nod_b_id;
@@ -1335,7 +1335,7 @@ Point* MeshToolsTri::insertVertexOnEdge(Cell *cellA, int fidA, Real t, Mesh *mes
     nds[0] = vtx_l_id;
     nds[1] = vtx_b_id;
     nds[2] = vtx_m_id;
-    if (high_order)
+    if (highm_order)
     {
       nds[3] = nod_bl_id;
       nds[4] = nod_b_id;
@@ -1354,7 +1354,7 @@ Point* MeshToolsTri::insertVertexOnEdge(Cell *cellA, int fidA, Real t, Mesh *mes
 
   //setting cellA
   cellA->setNodeId(fidA_plus1, vtx_m_id);
-  if (high_order)
+  if (highm_order)
     cellA->setNodeId(fidA_plus1+3, nod_r_id);
   cellA->setFacetId(fidA_plus1, edge_r_id);
   cellA->setIncidence(fidA_plus1, cidD, 0);
@@ -1363,7 +1363,7 @@ Point* MeshToolsTri::insertVertexOnEdge(Cell *cellA, int fidA, Real t, Mesh *mes
   if (!edge_in_boundary)
   {
     cellB->setNodeId(fidB, vtx_m_id);
-    if (high_order)
+    if (highm_order)
       cellB->setNodeId(fidB_plus2+3, nod_l_id);
     cellB->setFacetId(fidB_plus2, edge_l_id);
     cellB->setIncidence(fidB_plus2, cidC, 2);

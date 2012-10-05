@@ -15,20 +15,20 @@
  *           -foo/bar/  (ok)
  *           -foo/bar/jow (ok only if <tt>bar</tt> exists)
  */ 
-void _MeshNameHandler::setOutputFileName(const char* name)
+void iMeshNameHandler::setOutputFileName(const char* name)
 {
-  _sofn_already_called = true;
-  _out_basename = getBaseName(name);
-  _out_path     = getRelativePath(name);
-  _out_extension= getExtension(name);
+  m_sofn_already_called = true;
+  m_out_basename = getBaseName(name);
+  m_out_path     = getRelativePath(name);
+  m_out_extension= getExtension(name);
   
-  if (_out_basename.empty())
-    _out_basename = "untitled";
+  if (m_out_basename.empty())
+    m_out_basename = "untitled";
   
   struct stat  dir_stat;
  
   /* check if path passed by user exists */
-  bool exists = static_cast<bool>(!lstat(_out_path.data(), &dir_stat));
+  bool exists = static_cast<bool>(!lstat(m_out_path.data(), &dir_stat));
   bool isdir  = S_ISDIR(dir_stat.st_mode);
   
   if (exists && isdir)
@@ -36,14 +36,14 @@ void _MeshNameHandler::setOutputFileName(const char* name)
   else if (!exists)
   {
     // try to create
-    if (mkdir(_out_path.data(), S_IRWXU | S_IRGRP | S_IXGRP | S_IXOTH))
+    if (mkdir(m_out_path.data(), S_IRWXU | S_IRGRP | S_IXGRP | S_IXOTH))
     {
-      printf("ERROR: can not create directory `%s'\n", _out_path.c_str());
+      printf("ERROR: can not create directory `%s'\n", m_out_path.c_str());
       throw;
     }
     return;
   }
-  else // so _out_path_ exists but it's not a path ... strange, ahn?
+  else // so m_out_path_ exists but it's not a path ... strange, ahn?
   {
     printf("ERROR: can not guess path name, sorry ...\n");
     throw;
@@ -61,28 +61,28 @@ void _MeshNameHandler::setOutputFileName(const char* name)
  * @param extension expected extension
  * @param is_family output
  */ 
-bool _MeshNameHandler::_registerFile(std::string filename, std::string const& extension)
+bool iMeshNameHandler::fi_registerFile(std::string filename, std::string const& extension)
 {
   
   FILE *file_ptr = fopen(filename.c_str(), "r");
   FEPIC_ASSERT(file_ptr!=NULL, "can not find mesh file", std::invalid_argument);
   fclose(file_ptr);
   
-  _in_meshfile  = ::stripTrailingSpaces(filename);
-  _in_extension = ::getExtension(filename);
-  _in_basename  = ::getBaseName(filename);
-  _in_path      = ::getRelativePath(filename);
+  m_in_meshfile  = ::stripTrailingSpaces(filename);
+  m_in_extension = ::getExtension(filename);
+  m_in_basename  = ::getBaseName(filename);
+  m_in_path      = ::getRelativePath(filename);
   
-  if (_in_extension.empty())
+  if (m_in_extension.empty())
     printf("WARNING: mesh file without extension\n");
-  else if ( _in_extension != extension)
+  else if ( m_in_extension != extension)
   {
-    printf("WARNING: wrong file extension: %s expected, got %s", extension.c_str(), _in_extension.c_str());
+    printf("WARNING: wrong file extension: %s expected, got %s", extension.c_str(), m_in_extension.c_str());
   }
   
   /* default values */
-  _out_path     = _in_path;
-  _out_basename = _in_basename; 
+  m_out_path     = m_in_path;
+  m_out_basename = m_in_basename; 
   
   return 0;
 }
@@ -90,31 +90,31 @@ bool _MeshNameHandler::_registerFile(std::string filename, std::string const& ex
 
 
 
-//const char* _MeshNameHandler::_popNextName(int filenum, std::string const& ext)
+//const char* iMeshNameHandler::fi_popNextName(int filenum, std::string const& ext)
 //{
   //// filenum : a suffix to basename; the series number
-  //if (_is_family)
-    //return (_out_path+_out_basename+itoafill0(filenum, FEPIC_FILE_FILL)+ext).c_str();
+  //if (m_is_family)
+    //return (m_out_path+m_out_basename+itoafill0(filenum, FEPIC_FILE_FILL)+ext).c_str();
   //else
-    //return (_out_path+_out_basename+ext).c_str();
+    //return (m_out_path+m_out_basename+ext).c_str();
 //}
 
-std::string _MeshNameHandler::_popNextName(int filenum, std::string const& ext)
+std::string iMeshNameHandler::fi_popNextName(int filenum, std::string const& ext)
 {
   // filenum : a suffix to basename; the series number
-  if (_is_family)
-    return _out_path+_out_basename+itoafill0(filenum, FEPIC_FILE_FILL)+ext;
+  if (m_is_family)
+    return m_out_path+m_out_basename+itoafill0(filenum, FEPIC_FILE_FILL)+ext;
   else
-    return _out_path+_out_basename+ext;
+    return m_out_path+m_out_basename+ext;
 }
 
 
-void _MeshNameHandler::printNames()
+void iMeshNameHandler::printNames()
 {
   printf("Input file: \n");
-  printf("meshfile:    %s\n",_in_meshfile.c_str());
-  printf("basename:    %s\n",_in_basename.c_str());
-  printf("suffix:      %s\n",_in_extension.c_str());
-  printf("path:        %s\n",_in_path.c_str());
+  printf("meshfile:    %s\n",m_in_meshfile.c_str());
+  printf("basename:    %s\n",m_in_basename.c_str());
+  printf("suffix:      %s\n",m_in_extension.c_str());
+  printf("path:        %s\n",m_in_path.c_str());
   printf("Output file:\n");
 }
