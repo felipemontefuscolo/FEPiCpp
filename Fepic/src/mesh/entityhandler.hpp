@@ -34,7 +34,7 @@ class EntityHandler
   friend class Mesh;
   
   typedef EntityHandler Self;
-  typedef Mesh_t*        MeshPtr;
+  typedef Mesh_t*       MeshPtr;
 public:
   
   //typedef typename long                  difference_type;
@@ -80,10 +80,10 @@ public:
 
 };
 
-template<class EntityL_t, class EntityR_t, class Mesh_t>
+template<class EntityL_t, class EntityR_t, class MeshL_t, class MeshR_t>
   inline bool
-  operator==(const EntityHandler<EntityL_t, Mesh_t>& lhs,
-             const EntityHandler<EntityR_t, Mesh_t>& rhs)
+  operator==(const EntityHandler<EntityL_t, MeshL_t>& lhs,
+             const EntityHandler<EntityR_t, MeshR_t>& rhs)
   { return lhs.ptr() == rhs.ptr(); }
 
 template<class Entity_t, class Mesh_t>
@@ -92,10 +92,10 @@ template<class Entity_t, class Mesh_t>
              const EntityHandler<Entity_t, Mesh_t>& rhs)
   { return lhs.ptr() == rhs.ptr(); }
 
-template<class EntityL_t, class EntityR_t, class Mesh_t>
+template<class EntityL_t, class EntityR_t, class MeshL_t, class MeshR_t>
   inline bool
-  operator!=(const EntityHandler<EntityL_t, Mesh_t>& lhs,
-             const EntityHandler<EntityR_t, Mesh_t>& rhs)
+  operator!=(const EntityHandler<EntityL_t, MeshL_t>& lhs,
+             const EntityHandler<EntityR_t, MeshR_t>& rhs)
   { return lhs.ptr() != rhs.ptr(); }
 
 template<class Entity_t, class Mesh_t>
