@@ -197,14 +197,15 @@ int* Mesh::vertexStar_2D(int C, int vC, int *iCs, int *viCs) const
   int const nvpc = this->numVerticesPerCell();
   int const nfpc = this->numFacetsPerCell();
   
-  FEPIC_CHECK(unsigned(vC)<nvpc && C>=0, "invalid C or vC", std::invalid_argument);
+  FEPIC_CHECK(vC<nvpc && C>=0, "invalid C or vC", std::invalid_argument);
 
   Point const* pt = this->getNodePtr(this->getCellPtr(C)->getNodeId(vC));
   int const n_connected_comps = pt->numConnectedComps();
 
   for (int cc = 0; cc < n_connected_comps; ++cc)
   {
-    pt->getIthIncidCell(cc,C,vC);
+    C = pt->getIncidCell();
+    vC = pt->getPosition();
     
     Cell const* cell;
     int g, D=C, vD=vC, q=0;
@@ -247,7 +248,7 @@ int* Mesh::vertexStar_3D(int C, int vC, int *iCs, int *viCs) const
   const int nfpc = this->numFacetsPerCell();
   const int nvpf = this->numVerticesPerFacet();
   
-  FEPIC_CHECK(unsigned(vC)<nvpc && C>=0, "invalid C or vC", std::invalid_argument);
+  FEPIC_CHECK(vC<nvpc && C>=0, "invalid C or vC", std::invalid_argument);
 
   Cell const*cell = this->getCellPtr(C);
   int f, D, vD, g, anc, vf, vg, gv;
@@ -744,7 +745,7 @@ Facet* Mesh::nextBoundaryFacet_3D(Facet const*)
   */ 
 void Mesh::pushIncidCell2Point(Point *pt, int iC, int pos)
 {
-  FEPIC_CHECK((unsigned)iC<this->numCellsTotal(),"invalid index iC", std::invalid_argument);
+  FEPIC_CHECK(iC<this->numCellsTotal(),"invalid index iC", std::invalid_argument);
   
   Cell* icell = this->getCellPtr(iC);
   Point* p = this->getNodePtr(icell->getNodeId(pos));
