@@ -415,7 +415,18 @@ void VarDofs::getVertexAssociatedDofs(int* dofs, CellElement const* point) const
 
 
 
-
+void VarDofs::linkVertexDofs(Point const* point1, Point const* point2)
+{
+  const int pt_id1 = m_mesh_ptr->getCellPtr(point1->getIncidCell())->getNodeId(point1->getPosition());
+  const int pt_id2 = m_mesh_ptr->getCellPtr(point2->getIncidCell())->getNodeId(point2->getPosition());
+  
+  for (int j = 0; j < m_n_dof_within_vertice; ++j)
+  {
+    FEPIC_CHECK(m_vertices_dofs(pt_id2,j) >= 0, "Point has no associated dofs", std::invalid_argument);
+    m_vertices_dofs(pt_id1,j) = m_vertices_dofs(pt_id2,j);
+  }
+  
+}
 
 
 

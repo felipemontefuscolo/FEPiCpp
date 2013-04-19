@@ -99,6 +99,8 @@ public:
   
   char const* getName() const {return m_name.c_str();};
 
+  void linkVertexDofs(Point const* point1, Point const* point2);
+
   int const* data() const
   {
     if (m_n_dof_within_vertice > 0)

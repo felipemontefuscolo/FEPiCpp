@@ -74,6 +74,9 @@ public:
   void boostCuthillMcKeeRenumber();
   void CuthillMcKeeRenumber();
   
+  void removeDofsGaps();
+  
+  
   int numVars() const {return m_vars.size();};
   int numDofs() const;
   void SetUp();

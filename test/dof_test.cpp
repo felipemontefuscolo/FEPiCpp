@@ -672,12 +672,167 @@ TEST(TagsDofsTest, WithTet10)
 
 
 
+TEST(TagsLinkTest, WithTri3)
+{
+  MeshIoMsh msh_reader;
+  MeshIoVtk vtk_printer;
+  Mesh *mesh = NULL;  
+
+  ECellType cell_t     = TRIANGLE3;
+  const char* mesh_in  = "meshes/simptri3.msh";  
+  //const char* mesh_out = "meshes/outtest/dof_tri3.vtk";
+
+  mesh = Mesh::create(cell_t);
+  msh_reader.readFileMsh(mesh_in, mesh);
+  
+  int ntags=1;
+  int tags=1;
+  
+  DofHandler DofH(mesh);
+  //                         ndpv,  ndpr,  ndpf,  ndpc
+  DofH.addVariable("altura",    1,     0,     0,     0, ntags, &tags);
+  DofH.addVariable("vetor",     2,     0,     0,     0, ntags, &tags);
+  
+  
+  DofH.SetUp();
+  
+  EXPECT_EQ(12, DofH.numDofs());
+
+  // .getVariable(0)
+  int *dat = DofH.data();
+
+#define PRINT_DAT                            \
+  for (int i = 0; i < DofH.totalSize(); ++i) \
+  {                                          \
+    std::cout.width (3);                     \
+    std::cout << dat[i] << "\t";             \
+    if (i==11)                               \
+      std::cout <<"|\t";                     \
+  }                                          \
+  std::cout << std::endl;
 
 
+  //PRINT_DAT
+  
+  DofH.getVariable(0).linkVertexDofs(mesh->getNodePtr(0), mesh->getNodePtr(4));
+  DofH.getVariable(1).linkVertexDofs(mesh->getNodePtr(0), mesh->getNodePtr(4));
+
+  //PRINT_DAT
+  
+  DofH.removeDofsGaps();
+  
+  //PRINT_DAT
+  
+  delete mesh;
+}
 
 
+TEST(TagsLinkTest2, WithTri3)
+{
+  MeshIoMsh msh_reader;
+  MeshIoVtk vtk_printer;
+  Mesh *mesh = NULL;  
+
+  ECellType cell_t     = TRIANGLE3;
+  const char* mesh_in  = "meshes/simptri3.msh";  
+  //const char* mesh_out = "meshes/outtest/dof_tri3.vtk";
+
+  mesh = Mesh::create(cell_t);
+  msh_reader.readFileMsh(mesh_in, mesh);
+  
+  int ntags=1;
+  int tags=1;
+  
+  DofHandler DofH(mesh);
+  //                         ndpv,  ndpr,  ndpf,  ndpc
+  DofH.addVariable("altura",    1,     0,     0,     0, ntags, &tags);
+  DofH.addVariable("vetor",     2,     0,     0,     0, ntags, &tags);
+  
+  
+  DofH.SetUp();
+  
+  EXPECT_EQ(12, DofH.numDofs());
+
+  // .getVariable(0)
+  int *dat = DofH.data();
+
+#define PRINT_DAT                            \
+  for (int i = 0; i < DofH.totalSize(); ++i) \
+  {                                          \
+    std::cout.width (3);                     \
+    std::cout << dat[i] << "\t";             \
+    if (i==11)                               \
+      std::cout <<"|\t";                     \
+  }                                          \
+  std::cout << std::endl;
 
 
+  //PRINT_DAT
+  
+  DofH.getVariable(0).linkVertexDofs(mesh->getNodePtr(0), mesh->getNodePtr(7));
+  DofH.getVariable(1).linkVertexDofs(mesh->getNodePtr(0), mesh->getNodePtr(7));
+
+  //PRINT_DAT
+  
+  DofH.removeDofsGaps();
+  
+  //PRINT_DAT
+  
+  delete mesh;
+}
+
+
+TEST(TagsLinkTest3, WithTri3)
+{
+  MeshIoMsh msh_reader;
+  MeshIoVtk vtk_printer;
+  Mesh *mesh = NULL;  
+
+  ECellType cell_t     = TRIANGLE3;
+  const char* mesh_in  = "meshes/simptri3.msh";  
+  //const char* mesh_out = "meshes/outtest/dof_tri3.vtk";
+
+  mesh = Mesh::create(cell_t);
+  msh_reader.readFileMsh(mesh_in, mesh);
+  
+  DofHandler DofH(mesh);
+  //                         ndpv,  ndpr,  ndpf,  ndpc
+  DofH.addVariable("altura",    1,     0,     0,     0);
+  DofH.addVariable("vetor",     2,     0,     0,     0);
+  
+  
+  DofH.SetUp();
+  
+  EXPECT_EQ(36, DofH.numDofs());
+
+  // .getVariable(0)
+  int *dat = DofH.data();
+
+#define PRINT_DAT                            \
+  for (int i = 0; i < DofH.totalSize(); ++i) \
+  {                                          \
+    std::cout.width (3);                     \
+    std::cout << dat[i] << "\t";             \
+    if (i==11)                               \
+      std::cout <<"|\t";                     \
+  }                                          \
+  std::cout << std::endl;
+
+
+  //PRINT_DAT
+  
+  DofH.getVariable(0).linkVertexDofs(mesh->getNodePtr(0), mesh->getNodePtr(11));
+  DofH.getVariable(1).linkVertexDofs(mesh->getNodePtr(0), mesh->getNodePtr(11));
+
+  //PRINT_DAT
+  
+  DofH.removeDofsGaps();
+  
+  //PRINT_DAT
+  
+  
+  delete mesh;
+}
 
 
 

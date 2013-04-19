@@ -559,3 +559,78 @@ void DofHandler::CuthillMcKeeRenumber()
 }
 
 
+class AuxRemoveGaps
+{
+public:
+  static
+  void doit(vector<int> &a)
+  {
+    vector<int*> b(a.size());
+
+    const int N = a.size();
+
+    vector<int>::iterator  ita;
+    vector<int*>::iterator itb;
+
+    for (int i = 0; i < N; ++i)
+      b[i] = &a[i];
+
+    sort(b.begin(), b.end(), compare_ptr);
+
+    // removing gaps from b
+    itb = b.begin();
+    while(**itb < 0 && itb != b.end())
+      ++itb;
+
+    if (itb == b.end())
+      return;
+
+    vector<int*>::iterator itb1 = itb+1, itr;
+
+    // removing ... initial step
+    if (itb != b.end())
+    {
+      int diff = **itb - 0;
+      if (diff > 0)
+      {
+        itr = itb;
+        while(itr != b.end())
+          **itr++ -= diff;        
+      }
+    }
+    // removing
+    while(itb1 != b.end())
+    {
+      int diff = **itb1 - **itb;
+      if (diff > 1)
+      {
+        itr = itb1;
+        while(itr != b.end())
+          **itr++ -= diff - 1;
+      }
+      else
+      {
+        ++itb1;
+        ++itb;
+      }
+    }
+  } // end removeGaps
+
+private:
+  static bool compare_ptr(int *a, int*b)
+  {
+    return *a < *b;
+  }
+};
+
+
+void DofHandler::removeDofsGaps()
+{
+  AuxRemoveGaps::doit(m_data);
+}
+
+
+
+
+
+
