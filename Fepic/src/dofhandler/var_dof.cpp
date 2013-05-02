@@ -195,7 +195,7 @@ void VarDofs::setUp()
 
 int VarDofs::numDofs() const
 {
-  return m_n_dofs;
+  return m_n_dofs - m_n_links;
 }
 
 
@@ -423,7 +423,12 @@ void VarDofs::linkVertexDofs(Point const* point1, Point const* point2)
   for (int j = 0; j < m_n_dof_within_vertice; ++j)
   {
     FEPIC_CHECK(m_vertices_dofs(pt_id2,j) >= 0, "Point has no associated dofs", std::invalid_argument);
-    m_vertices_dofs(pt_id1,j) = m_vertices_dofs(pt_id2,j);
+    
+    if (m_vertices_dofs(pt_id1,j) != m_vertices_dofs(pt_id2,j))
+    {
+      m_vertices_dofs(pt_id1,j) = m_vertices_dofs(pt_id2,j);
+      m_n_links++;
+    }
   }
   
 }

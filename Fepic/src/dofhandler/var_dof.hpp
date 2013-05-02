@@ -64,6 +64,7 @@ public:
     m_n_dof_within_facet = ndpf;   // interior
     m_n_dof_within_cell = ndpc;    // interior
     m_n_dofs = 0;
+    m_n_links = 0;
     m_initial_dof_id = fdi;
     m_initial_dof_address = a;
 
@@ -135,6 +136,7 @@ protected:
   int         m_n_dof_within_facet;
   int         m_n_dof_within_cell;
   int         m_n_dofs;
+  int         m_n_links;
   int         m_initial_dof_id;
   int*        m_initial_dof_address;
   float       m_grow_factor;

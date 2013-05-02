@@ -66,7 +66,7 @@
 // 3D Cells members
 #define FEP_DEF_3D_CELLS_MEMBERS                                    \
   char m_icells_pos[n_facets];  /* positions of icells */            \
-  char m_icells_anchors[n_vertices_per_facet];/* anchors of icells*/ \
+  char m_icells_anchors[n_facets];/* anchors of icells*/ \
   int  m_facets[n_facets];   /* facets id */                         \
   int  m_icells[n_facets];    /* incident cells id */                \
   int  m_corners[n_corners];  /* edges id */                         \

@@ -219,7 +219,7 @@ void DofHandler::getSparsityTable(std::vector<std::set<int> > & table)
           for (int n = 0; n < n_dof_p_cell_j; ++n)
           {
             int const dof_j = var_cell_dofs[j][n];
-            table[dof_i].insert(dof_j);
+            table.at(dof_i).insert(dof_j);
           }
         }
       }
