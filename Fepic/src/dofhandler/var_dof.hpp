@@ -52,7 +52,8 @@ class VarDofs
   void getDivisions(int*& vertices_beg, int*& corners_beg, int*& facets_beg, int*& cells_beg) const;
 
   void setUp();
-
+  // call this routine when only m_initial_dof_address was changed
+  void updateFromInitialDofAddres();
 
 public:
 

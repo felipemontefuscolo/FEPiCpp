@@ -69,7 +69,7 @@ using namespace Eigen;
 //  delete mesh;
 //}
 //
-TEST(AssignsDofsTest, WithTri3)
+TEST(DofHandlerTest, AssignsDofsTri3)
 {
   MeshIoMsh msh_reader;
   MeshIoVtk vtk_printer;
@@ -174,7 +174,7 @@ public:
   // int  * data_i; from MyGetDataVtk
 };
 
-TEST(AssignsDofsTest, WithTri6)
+TEST(DofHandlerTest, AssignsDofsTri6)
 {
   MeshIoMsh msh_reader;
   MeshIoVtk vtk_printer;
@@ -252,7 +252,7 @@ TEST(AssignsDofsTest, WithTri6)
   delete mesh;
 }
 
-TEST(AssignsDofsTest, WithTet10)
+TEST(DofHandlerTest, AssignsDofsTet10)
 {
   MeshIoMsh msh_reader;
   MeshIoVtk vtk_printer;
@@ -335,7 +335,7 @@ TEST(AssignsDofsTest, WithTet10)
   delete mesh;
 }
 
-TEST(BubbleTri3Test, WithTri3)
+TEST(DofHandlerTest, BubbleTri3)
 {
   MeshIoMsh msh_reader;
   MeshIoVtk vtk_printer;
@@ -412,7 +412,7 @@ TEST(BubbleTri3Test, WithTri3)
   int counter = 0;
   for (int i = 0; i < DofH.totalSize(); ++i)
   {
-    if (DofH.data() < 0) continue;
+    if (*DofH.data() < 0) continue;
     EXPECT_EQ(counter, DofH.data()[i]);
     counter++;
   }
@@ -422,7 +422,7 @@ TEST(BubbleTri3Test, WithTri3)
   delete mesh;
 }
 
-TEST(BubbleTet4Test, WithTet4)
+TEST(DofHandlerTest, BubbleTet4)
 {
   MeshIoMsh msh_reader;
   MeshIoVtk vtk_printer;
@@ -499,7 +499,7 @@ TEST(BubbleTet4Test, WithTet4)
   int counter = 0;
   for (int i = 0; i < DofH.totalSize(); ++i)
   {
-    if (DofH.data() < 0) continue;
+    if (*DofH.data() < 0) continue;
     EXPECT_EQ(counter, DofH.data()[i]);
     counter++;
   }
@@ -521,7 +521,7 @@ TEST(BubbleTet4Test, WithTet4)
 
 
 
-TEST(TagsDofsTest, WithTri3)
+TEST(DofHandlerTest, TagsDofsTri3)
 {
   MeshIoMsh msh_reader;
   MeshIoVtk vtk_printer;
@@ -582,7 +582,7 @@ TEST(TagsDofsTest, WithTri3)
   delete mesh;
 }
 
-TEST(TagsDofsTest, WithTet10)
+TEST(DofHandlerTest, TagsDofsTet10)
 {
   MeshIoMsh msh_reader;
   MeshIoVtk vtk_printer;
@@ -672,7 +672,7 @@ TEST(TagsDofsTest, WithTet10)
 
 
 
-TEST(TagsLinkTest, WithTri3)
+TEST(DofHandlerTest, TagsLinkTri3)
 {
   MeshIoMsh msh_reader;
   MeshIoVtk vtk_printer;
@@ -699,7 +699,7 @@ TEST(TagsLinkTest, WithTri3)
   EXPECT_EQ(12, DofH.numDofs());
 
   // .getVariable(0)
-  int *dat = DofH.data();
+  //int *dat = DofH.data();
 
 #define PRINT_DAT                            \
   for (int i = 0; i < DofH.totalSize(); ++i) \
@@ -727,7 +727,7 @@ TEST(TagsLinkTest, WithTri3)
 }
 
 
-TEST(TagsLinkTest2, WithTri3)
+TEST(DofHandlerTest, TagsLink2Tri3)
 {
   MeshIoMsh msh_reader;
   MeshIoVtk vtk_printer;
@@ -782,7 +782,7 @@ TEST(TagsLinkTest2, WithTri3)
 }
 
 
-TEST(TagsLinkTest3, WithTri3)
+TEST(DofHandlerTest, TagsLink3Tri3)
 {
   MeshIoMsh msh_reader;
   MeshIoVtk vtk_printer;
@@ -806,7 +806,7 @@ TEST(TagsLinkTest3, WithTri3)
   EXPECT_EQ(36, DofH.numDofs());
 
   // .getVariable(0)
-  int *dat = DofH.data();
+  //int *dat = DofH.data();
 
 #define PRINT_DAT                            \
   for (int i = 0; i < DofH.totalSize(); ++i) \
@@ -835,8 +835,63 @@ TEST(TagsLinkTest3, WithTri3)
 }
 
 
+TEST(DofHandlerTest, CopyFunctionTri3)
+{
+  
+  MeshIoMsh msh_reader;
+  MeshIoVtk vtk_printer;
+  Mesh *mesh = NULL;  
+
+  ECellType cell_t     = TRIANGLE3;
+  const char* mesh_in  = "meshes/simptri3.msh";  
+  //const char* mesh_out = "meshes/outtest/dof_tri3.vtk";
+
+  mesh = Mesh::create(cell_t);
+  msh_reader.readFileMsh(mesh_in, mesh);
+  
+  DofHandler DofH;
+  
+  {
+    DofHandler DofH_temp(mesh);
+    //                         ndpv,  ndpr,  ndpf,  ndpc
+    DofH_temp.addVariable("altura",    1,     0,     0,     0);
+    DofH_temp.addVariable("vetor",     2,     0,     0,     0);
+    
+    DofH_temp.SetUp();
+    
+    DofH.copy(DofH_temp);
+  }
+  
+  EXPECT_EQ(36, DofH.numDofs());
+
+  // .getVariable(0)
+  //int *dat = DofH.data();
 
 
+#define PRINT_DAT                            \
+  for (int i = 0; i < DofH.totalSize(); ++i) \
+  {                                          \
+    std::cout.width (3);                     \
+    std::cout << dat[i] << "\t";             \
+    if (i==11)                               \
+      std::cout <<"|\t";                     \
+  }                                          \
+  std::cout << std::endl;
 
+
+  //PRINT_DAT
+  
+  DofH.getVariable(0).linkVertexDofs(mesh->getNodePtr(0), mesh->getNodePtr(11));
+  DofH.getVariable(1).linkVertexDofs(mesh->getNodePtr(0), mesh->getNodePtr(11));
+
+  //PRINT_DAT
+  
+  DofH.removeDofsGaps();
+  
+  //PRINT_DAT
+  
+  
+  delete mesh;  
+}
 
 

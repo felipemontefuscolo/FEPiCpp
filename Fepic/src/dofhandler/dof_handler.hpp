@@ -34,9 +34,18 @@ class DofHandler
   typedef std::vector<int>                   DataContainer;
   typedef std::vector<VarDofs>               DofsContainer;
   typedef Eigen::Array<bool,Eigen::Dynamic,Eigen::Dynamic> MatrixBool;
+  
+  // if the compilers complains, just comment these lines
+  DofHandler(DofHandler const&c ) = default;
+  DofHandler& operator=(DofHandler const& c) = default;
+  
 public:  
   
   DofHandler(Mesh* mesh=NULL, float gf=0.07) : m_mesh_ptr(mesh), m_grow_factor(gf) {}
+  
+  // a safe copy
+  void copy(DofHandler const& c);
+  
   
   void setMesh(Mesh * mesh) {m_mesh_ptr=mesh;};
   
@@ -74,7 +83,16 @@ public:
   void boostCuthillMcKeeRenumber();
   void CuthillMcKeeRenumber();
   
+  /*  Remove gaps in the dofs numbering
+   */ 
   void removeDofsGaps();
+
+  /* @param deleted The deleted vertices
+   * @param added The added vertices
+   * @return A list of the deleted degree of freedoms
+   * @note TODO
+   */
+  std::vector<int> updateVerticesDofs(std::vector<int> &deleted, std::vector<int> &added);
   
   
   int numVars() const {return m_vars.size();};

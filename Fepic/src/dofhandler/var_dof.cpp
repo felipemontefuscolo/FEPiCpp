@@ -192,6 +192,43 @@ void VarDofs::setUp()
 
 }
 
+void VarDofs::updateFromInitialDofAddres()
+{
+  unsigned const n_nodes_total = m_mesh_ptr->numNodesTotal();
+  unsigned const n_corners_total = m_mesh_ptr->numCornersTotal();
+  unsigned const n_facets_total = m_mesh_ptr->numFacetsTotal();
+  unsigned const n_cells_total = m_mesh_ptr->numCellsTotal();
+
+  //unsigned const n_vertices = m_mesh_ptr->numVertices();
+  //unsigned const n_corners = m_mesh_ptr->numCorners();
+  //unsigned const n_facets  = m_mesh_ptr->numFacets();
+  //unsigned const n_cells  = m_mesh_ptr->numCells();
+
+  int* vertices_beg;
+  int* corners_beg;
+  int* facets_beg;
+  int* cells_beg;
+  
+
+  getDivisions(vertices_beg, corners_beg, facets_beg, cells_beg);
+  
+  // vertices dof
+  if (m_n_dof_within_vertice > 0)
+    new (&m_vertices_dofs) Container(vertices_beg, n_nodes_total, m_n_dof_within_vertice);
+  
+  // corners dof
+  if (m_n_dof_within_corner > 0)
+    new (&m_corners_dofs) Container(corners_beg, n_corners_total, m_n_dof_within_corner);
+    
+  // facets dof
+  if (m_n_dof_within_facet > 0)
+    new (&m_facets_dofs) Container(facets_beg, n_facets_total, m_n_dof_within_facet);
+  
+  // cells dof
+  if (m_n_dof_within_cell > 0)
+    new (&m_cells_dofs) Container(cells_beg, n_cells_total, m_n_dof_within_cell);    
+}
+
 
 int VarDofs::numDofs() const
 {

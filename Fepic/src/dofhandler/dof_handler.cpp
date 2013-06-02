@@ -42,6 +42,27 @@ extern "C" {
 };
 #endif
 
+
+// a safe copy
+void DofHandler::copy(DofHandler const& c)
+{
+  *this = c;
+  
+  int  initial_dof=0;
+  int* initial_address=m_data.data();
+  for (unsigned i = 0; i < m_vars.size(); ++i)
+  {
+    m_vars[i].setInitialDofId(initial_dof);
+    m_vars[i].setInitialDofAddress(initial_address);
+    m_vars[i].updateFromInitialDofAddres();
+    initial_dof += m_vars[i].numDofs();
+    initial_address += m_vars[i].totalSize();
+  }
+  
+  
+}
+
+
 void DofHandler::addVariable(const char* var_name, ShapeFunction *sf, int ncomps, int ntags, int const* tags)
 {
   addVariable(var_name, sf->numDofsAssociatedToVertice()*ncomps,
