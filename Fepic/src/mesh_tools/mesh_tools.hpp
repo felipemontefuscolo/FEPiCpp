@@ -37,11 +37,8 @@ public:
   //friend class Mesh;
   
   static int checkConsistency(Mesh *mesh);
-
-  static void removeCell(Cell * cell, Mesh *mesh);
-  
-  static void removeTriCell(Cell * cell, Mesh *mesh);
-  
+  static void removeCell(Cell * cell, Mesh *mesh);  
+  static void removeTriCell(Cell * cell, Mesh *mesh);  
   static void readMesh(int n_nodes, int n_cells, int const* nodes, Real const* xyz, Mesh *mesh);
   
 };
@@ -50,363 +47,33 @@ public:
 class MeshToolsTri
 {
 public:
-
+  // =====================================================================================================
+  // Métodos de adaptação ================================================================================
+  // =====================================================================================================
   static bool flipEdge(Cell * cell, int fid, Mesh *mesh, bool move_edge_nds = true);
   static bool flipEdge(Facet* edge, Mesh* mesh, bool move_edge_nds = true)
   {
     return flipEdge(mesh->getCellPtr(edge->getIncidCell()), edge->getPosition(), mesh, move_edge_nds);
+  }    
+  static int insertVertexOnEdge(int cell_A_id, int fidA, Real t, Mesh *mesh);
+  static int insertVertexOnEdge(Facet * edge, Real t, Mesh *mesh)
+  {
+    return insertVertexOnEdge(edge->getIncidCell(), edge->getPosition(), t, mesh);
+  }   
+  static int collapseEdge2d(int cell, int fidA, Real t, Mesh *mesh);
+  static int collapseEdge2d(Facet const* edge, Real t, Mesh *mesh)
+  {
+    return collapseEdge2d(edge->getIncidCell(), edge->getPosition(), t,mesh);
   }
-
+  
+  // =====================================================================================================
+  // Métodos de testes geométricos =======================================================================
+  // =====================================================================================================
   static bool inCircle2d(Cell const* cell, const int fid, Mesh const* mesh);
   static bool inCircle2d(Facet const* edge, Mesh const* mesh)
   {
-    return inCircle2d(mesh->getCellPtr(edge->getIncidCell()), edge->getPosition(),mesh);
-  }
-
-  static Point* insertVertexOnEdge(Cell *cellA, int fidA, Real t, Mesh *mesh);
-  static Point* insertVertexOnEdge(Facet * edge, Real t, Mesh *mesh)
-  {
-    return insertVertexOnEdge(mesh->getCellPtr(edge->getIncidCell()), edge->getPosition(), t, mesh);
-  }
-
-
-  /** Tri3 only
-   *  slice a convex part of the mesh with an isocontour of a 
-   *  scalar function F(x,y).
-   *  @param x0 a point such that F(x0)=0;
-   *  @param c0 a initial cell (need not contain the point x0,
-   *  but should be close enough to avoid convex issues).
-   *  @param F a functor that has an operator () (double *x), where x is
-   *  pointer to the coordinates.
-   *  @return returns true if it was successful.
-   *  @note the mesh has to be convex, otherwise the result is not guaranteed.
-   * 
-   */
-//  template<class Functor>
-//  static bool cutConvexPart(Real *x0, Cell *c0, Functor const& F, Mesh * mesh)
-//  {
-//    const int sdim = mesh->spaceDim();
-//    
-//    std::vector<int> cells_id;
-//    std::vector<Real> slices;
-//    
-//    MeshToolsTri::createPath(x0, c0, F, cells_id, slices,  mesh);
-//
-//    std::vector<int> midm_nodes(cells_id.size()*6, int(-1));
-//    
-//    Point pt;
-//    Triangle3 __sometri;
-//    Cell*  ce = &__sometri;
-//    Facet fa;
-//    int new_cells[3];
-//  
-//    
-//    for (int cth = 0; cth < (int)cells_id.size(); ++cth)
-//    //for (int cth = 0; cth<1; ++cth)
-//    {
-//      c0 = mesh->getCellPtr(cells_id[cth]);
-//      if (!c0)
-//      {
-//        std::cout << "NULLLLLLLLLLLL" << std::endl;
-//        throw;
-//      }
-//      
-//      int I;
-//      for (int i = 0; i < 3; ++i)
-//      {
-//        if (slices[3*cth + i] < 0)
-//        {
-//          I = i;
-//          break;
-//        }
-//      }
-//      int J = (I+1)%3;
-//      int K = (I+2)%3;
-//
-//      // cria as 3 células
-//      ce->setTag(c0->getTag());
-//      for (int i = 0; i < 3; ++i)
-//      {
-//        ce->setIncidCell(i, -1);
-//        ce->setIncidCellPos(i, -1);
-//      }
-//      new_cells[0] = mesh->pushCell(ce);
-//      new_cells[1] = mesh->pushCell(ce);
-//      new_cells[2] = mesh->pushCell(ce);
-//
-//      // para cada lado que é cortado
-//      for (int kk=0; kk<0; ++kk)
-//      //for (int kk=0; kk<2; ++kk)
-//      {
-//        int f = (I+kk+1)%3;
-//        int f_nds[2];
-//        c0->getFacetNodesId(f,f_nds);
-//        Real xa[2] = {mesh->getNodePtr(f_nds[0])->getCoord(0), mesh->getNodePtr(f_nds[0])->getCoord(1)};
-//        Real xb[2] = {mesh->getNodePtr(f_nds[1])->getCoord(0), mesh->getNodePtr(f_nds[1])->getCoord(1)};
-//        Real xmid[2] = {(xb[0]-xa[0])*slices[3*cth+f]+xa[0],(xb[1]-xa[1])*slices[3*cth+f]+xa[1]};
-//        Real Fa = F(xa);
-//        Real Fb = F(xb);
-//        
-//        if (midm_nodes[6*cth + 2*f] < 0) // não foi construído nessa f
-//        {
-//          //cria os vértices
-//          pt.setCoord(xmid, sdim);
-//          pt.setTag(c0->getTag());
-//          midm_nodes[6*cth + 2*f + 0] = mesh->pushPoint(&pt);
-//          midm_nodes[6*cth + 2*f + 1] = mesh->pushPoint(&pt);
-//          
-//          // TODO: melhorar procura
-//          int oth = c0->getIncidCell(f);
-//          if (oth>=0)
-//          {
-//            std::vector<int>::iterator itl = find(cells_id.begin(), cells_id.end(), oth);
-//            oth = std::distance(cells_id.begin(),itl);
-//            int oth_f = c0->getIncidCellPos(f);
-//            midm_nodes[6*oth + 2*oth_f + 0] = midm_nodes[6*cth + 2*f + 0];
-//            midm_nodes[6*oth + 2*oth_f + 1] = midm_nodes[6*cth + 2*f + 1];
-//          }
-//          
-//          mesh->getNodePtr(midm_nodes[6*cth + 2*f + 0])->setIncidCell(new_cells[kk+1]);
-//          mesh->getNodePtr(midm_nodes[6*cth + 2*f + 1])->setIncidCell(new_cells[(kk+2)%3]);
-//          mesh->getNodePtr(midm_nodes[6*cth + 2*f + 0])->setPosition(new_cells[(kk+2)%3]);
-//          mesh->getNodePtr(midm_nodes[6*cth + 2*f + 1])->setPosition(new_cells[1]);
-//          
-//          int new_efacets[2]; // externo
-//          fa.setTag(c0->getTag());
-//          fa.setIncidCell(new_cells[kk+1]);
-//          fa.setPosition(kk+1);
-//          new_efacets[0] = mesh->pushFacet(&fa); 
-//          fa.setIncidCell(new_cells[(kk+2)%3]);
-//          fa.setPosition(1);
-//          new_efacets[1] = mesh->pushFacet(&fa); 
-//          
-//          mesh->getCellPtr(new_cells[kk+1])->setFacetId(kk+1,new_efacets[0]); 
-//          mesh->getCellPtr(new_cells[(kk+2)%3])->setFacetId(1,new_efacets[1]); 
-//          
-//          mesh->disableFacet(c0->getFacetId(f));
-//        }
-//        else
-//        {
-//          for (int bingo = 0; bingo<2; ++bingo)
-//          {
-//            Cell *some_cell = mesh->getCellPtr(mesh->getNodePtr(midm_nodes[6*cth + 2*f + bingo])->getIncidCell());
-//            
-//            // se some_cell tem o no k, então ele está na face do sem tracejado.
-//            int fth_node = c0->getNodeId(f);
-//            for (int pos = 0; pos<3; ++pos)
-//            {
-//              if (some_cell->getNodeId(pos) == fth_node)
-//              {
-//                mesh->getCellPtr(new_cells[kk+1])->setIncidCell(kk+1, mesh->getCellId(some_cell));
-//                mesh->getCellPtr(new_cells[kk+1])->setIncidCellPos(kk+1, (pos+2)%3);
-//                mesh->getCellPtr(new_cells[kk+1])->setFacetId(kk+1, some_cell->getFacetId((pos+2)%3));
-//                some_cell->setIncidCell((pos+2)%3, new_cells[kk+1]);
-//                some_cell->setIncidCellPos((pos+2)%3, kk+1);
-//                break;
-//              }
-//            }
-//            for (int pos = 0; pos<3; ++pos)
-//            {
-//              if (some_cell->getNodeId(pos) == (fth_node+1)%3)
-//              {
-//                mesh->getCellPtr(new_cells[(kk+2)%3])->setIncidCell(1, mesh->getCellId(some_cell));
-//                mesh->getCellPtr(new_cells[(kk+2)%3])->setIncidCellPos(1, pos);
-//                mesh->getCellPtr(new_cells[(kk+2)%3])->setFacetId(1, some_cell->getFacetId(pos));
-//                some_cell->setIncidCell(pos, new_cells[(kk+2)%3]);
-//                some_cell->setIncidCellPos(pos, 1);
-//                break;
-//              }
-//            }
-//          }
-//        }
-//        
-//      } // end kk (cada lado cortado)
-//      
-//      // crias as arestas interiores
-//      int new_ifacets[3];
-//      //   1
-//      fa.setTag(c0->getTag());
-//      fa.setIncidCell(new_cells[2]);
-//      fa.setPosition(0);
-//      new_ifacets[0] = mesh->pushFacet(&fa);
-//      //   2
-//      fa.setIncidCell(new_cells[1]);
-//      fa.setPosition(2);
-//      new_ifacets[1] = mesh->pushFacet(&fa);
-//      //   3
-//      fa.setIncidCell(new_cells[0]);
-//      fa.setPosition(0);
-//      new_ifacets[2] = mesh->pushFacet(&fa);
-//      
-//      
-//      // seta as adjacências restantes
-//      mesh->getCellPtr(new_cells[0])->setIncidCell(0, new_cells[1]);
-//      mesh->getCellPtr(new_cells[0])->setIncidCellPos(0, 0);
-//      mesh->getCellPtr(new_cells[0])->setIncidCell(2, c0->getIncidCell(I));
-//      mesh->getCellPtr(new_cells[0])->setIncidCellPos(2, c0->getIncidCellPos(I));
-//      mesh->getCellPtr(new_cells[0])->setNodeId(0, c0->getNodeId(J));
-//      mesh->getCellPtr(new_cells[0])->setNodeId(1, midm_nodes[6*cth + 2*K + 1]);
-//      mesh->getCellPtr(new_cells[0])->setNodeId(2, c0->getNodeId(I));
-//      mesh->getCellPtr(new_cells[0])->setFacetId(0, new_ifacets[2]);
-//      mesh->getCellPtr(new_cells[0])->setFacetId(2, c0->getFacetId(I));
-//      
-//      mesh->getCellPtr(new_cells[1])->setIncidCell(0, new_cells[0]);
-//      mesh->getCellPtr(new_cells[1])->setIncidCellPos(0, 0);
-//      mesh->getCellPtr(new_cells[1])->setIncidCell(2, -1);
-//      mesh->getCellPtr(new_cells[1])->setIncidCellPos(2, -1);
-//      mesh->getCellPtr(new_cells[1])->setNodeId(0, midm_nodes[6*cth + 2*K + 1]);
-//      mesh->getCellPtr(new_cells[1])->setNodeId(1, c0->getNodeId(J));
-//      mesh->getCellPtr(new_cells[1])->setNodeId(2, midm_nodes[6*cth + 2*J + 0]);
-//      mesh->getCellPtr(new_cells[1])->setFacetId(0, new_ifacets[2]);
-//      mesh->getCellPtr(new_cells[1])->setFacetId(2, -1);
-//      
-//      mesh->getCellPtr(new_cells[2])->setIncidCell(0, -1);
-//      mesh->getCellPtr(new_cells[2])->setIncidCellPos(0, -1);
-//      mesh->getCellPtr(new_cells[2])->setNodeId(0, midm_nodes[6*cth + 2*K + 0]);
-//      mesh->getCellPtr(new_cells[2])->setNodeId(1, midm_nodes[6*cth + 2*J + 1]);
-//      mesh->getCellPtr(new_cells[2])->setNodeId(2, c0->getNodeId(K));
-//      mesh->getCellPtr(new_cells[2])->setFacetId(0, new_ifacets[2]);
-//      //mesh->getCellPtr(new_cells[2])->setFacetId(2, -1);
-//      
-//      mesh->getNodePtr(c0->getNodeId(I))->setIncidCell(new_cells[0]);
-//      mesh->getNodePtr(c0->getNodeId(I))->setPosition(2);
-//      mesh->getNodePtr(c0->getNodeId(J))->setIncidCell(new_cells[1]);
-//      mesh->getNodePtr(c0->getNodeId(J))->setPosition(1);
-//      mesh->getNodePtr(c0->getNodeId(K))->setIncidCell(new_cells[2]);
-//      mesh->getNodePtr(c0->getNodeId(K))->setPosition(2);
-//      
-//      //mesh->disableCell(cells_id[cth]);
-//      
-//    } // for celula
-//    
-//    for (int cth = 0; cth < (int)cells_id.size(); ++cth)
-//    {
-//      mesh->disableCell(cells_id[cth]);
-//    }
-//    
-//  }
-//  
-  /** Creates a path represented by elements slices.
-   *  @param x0 a point such that F(x0)=0;
-   *  @param c0 a initial cell (need not contain the point x0,
-   *  but should be close enough to avoid convex issues).
-   *  @param F a functor that has an operator () (double *x), where x is
-   *  @param[out] cells_id vector with cells that are sliced​​.
-   *  @param[out] slices vector with the slices. slices(3*c + j) is a value
-   *  between 0 and 1 which indicates where the jth facet of the cth cell
-   *  were sliced. If it is negative so that facet is not sliced. For example,
-   *  [0.1, 0.3, 0.5] means that facet 0, facet 1 and facet 2 are sliced at 0.1, 0.3
-   *  and 0.5.
-   *  @param mesh mesh context.
-   *  pointer to the coordinates.
-   *  @note o algoritmo garante que não vai er nenhuma célula singular.
-   *  @warning pode perturbar alguns pontos! ... só serve para TRIANGULO!!
-   *  @warning usa o flag visited.
-   */ 
-//  template<class Functor>
-//  static bool createPath(Real const* x0, Cell * c_ini, Functor const& F, std::vector<int> &cells_id, std::vector<Real> &slices, Mesh * mesh)
-//  {
-//    FEPIC_ASSERT(x0!=NULL && c_ini!=NULL && mesh!=NULL,"NULL pointers",std::runtime_error);
-//    
-//    const int sdim = mesh->spaceDim();
-//    
-//    int fm_nodes[2];
-//    
-//    cells_id.clear();
-//    slices.clear();
-//    cells_id.reserve(32);
-//    slices.reserve(128);
-//    
-//    std::pair<bool, Cell *> S0 = searchConvexPoint(x0,c_ini,mesh);
-//    
-//    if (!S0.first)
-//      return false;
-//    
-//    cells_id.push_back(mesh->getCellId(S0.second));
-//    int cth_cell = 0;
-//    
-//    Cell *c0;
-//    while (cth_cell < cells_id.size())
-//    {
-//      c0 = mesh->getCellPtr(cells_id[cth_cell]);
-//      
-//      const Real TOL = 1.e-15;
-//      // perturba os pontos se eles estiverem no level-set
-//      for (int i=0; i<3; ++i)
-//      {
-//        int const node_id = c0->getNodeId(i);
-//        Real const* xa = mesh->getNodePtr(node_id)->getCoord();
-//        if (fabs(F(xa))<TOL)
-//        {
-//          
-//          Real const xp[] = {xa[0]+1.e-7, xa[1]+1.e-7};
-//          mesh->getNodePtr(node_id)->setCoord(xp,sdim);
-//          
-//          // de novo, só que pra outro lado
-//          if (fabs(F(xa))<TOL)
-//          {
-//            Real const xpp[] = {xa[0]-2.e-7, xa[1]};
-//            mesh->getNodePtr(node_id)->setCoord(xpp,sdim);
-//          };
-//        };
-//      }
-//      
-//      // assume que apenas duas facets são cortadas
-//      slices.push_back(-1.0);
-//      slices.push_back(-1.0);
-//      slices.push_back(-1.0);
-//      int f_free=-1;
-//      for (int f = 0; f < 3; ++f)
-//      {
-//        c0->getFacetNodesId(f, fm_nodes);
-//        Real const* xa = mesh->getNodePtr(fm_nodes[0])->getCoord();
-//        Real const* xb = mesh->getNodePtr(fm_nodes[1])->getCoord();
-//        
-//        Real const Fa = F(xa);
-//        Real const Fb = F(xb);
-//        // se tem sinais opostos, cruza
-//        if ( ((Fa<0) && (Fb>0)) || ((Fa>0) && (Fb<0)))
-//        {
-//          slices[cth_cell*3 + f] = Fa/(Fa-Fb);
-//        }
-//        else
-//        {
-//          if (f_free>=0)
-//          {
-//            std::cout << "n pode duas faces sem cruzar" << std::endl;
-//            std::cout << "Fa =" << Fa << " Fb = " << Fb << std::endl;
-//            std::cout << "At nodes " << fm_nodes[0]<<" "<<fm_nodes[1] << " " << mesh->getNodePtr(52)->getCoord(0) << " " <<mesh->getNodePtr(52)->getCoord(1) << std::endl;
-//            std::cout << "f = " << f << " cell = "<<mesh->getCellId(c0)<< std::endl;
-//            throw; // n pode duas faces sem cruzar
-//          }
-//          f_free = f;
-//        }
-//        
-//      }
-//
-//      // coloca os vizinhos na pilha
-//      int const c_a = c0->getIncidCell((f_free+1)%3);
-//      int const c_b = c0->getIncidCell((f_free+2)%3);
-//      if (c_a>=0 && !mesh->getCellPtr(c_a)->isVisited())
-//        cells_id.push_back(c_a);
-//      if (c_b>=0 && !mesh->getCellPtr(c_b)->isVisited())
-//        cells_id.push_back(c_b);
-//        
-//      c0->setVisitedTo(true);
-//      ++cth_cell;
-//      
-//    }
-//    
-//    // remove os flags
-//    for (std::vector<int>::iterator cit = cells_id.begin(); cit != cells_id.end(); ++cit)
-//    {
-//      mesh->getCellPtr(*cit)->setVisitedTo(false);
-//    }
-//    
-//    
-//  }
-//  
-  
+     return inCircle2d(mesh->getCellPtr(edge->getIncidCell()), edge->getPosition(),mesh);
+  }   
   /** Search a point int the mesh.
    * @param x the point coordinates.
    * @param c0 a first cell to start the search.
@@ -418,14 +85,44 @@ public:
    * @note the mesh has to be convex, otherwise the result is not guaranteed.
    */ 
   static std::pair<bool, Cell *> searchConvexPoint(Real const* x, Cell const* c0, Mesh const* mesh);
-  
-  
-  
-  
+  static Real area(Cell const* cell, Mesh const* mesh); 
+  static void centroid(Cell const* cell, Real *coord_ctrd, Mesh const* mesh);
+  static Real edgeSize(Cell const* cell, const int fid, Mesh const* mesh);  
+  static Real meanRatio(Cell const* cell, Mesh const* mesh);
   
 };
 
-
+/// specific for tetrahedral meshes
+class MeshToolsTetr
+{
+public:
+  // =====================================================================================================
+  // Métodos de adaptação ================================================================================
+  // =====================================================================================================
+   static int insertVertexOnEdge3d(int cell_A_id, int face_Am_id, Real t, Mesh *mesh);
+  // static int colapseEdge3d(int cell_A_id, int corner_Am_pos, Real t, Mesh *mesh); // não passou por um teste
+  
+  // =====================================================================================================
+  // Métodos de testes geométricos =======================================================================
+  // =====================================================================================================
+  static Real volume(Cell const* cell, Mesh const* mesh); 
+  
+  // =====================================================================================================
+  // Métodos de uso para as adaptações ===================================================================
+  // =====================================================================================================
+  static int calcAnchors(int *idsA, int *idsB, Mesh *mesh);
+  static int calcAnchors(int cellA_id, int facetA_id, int cellB_id, int facetB_id, Mesh *mesh);
+  static int getOpositFacetPos(int vtx_pos);
+  static void getOpositVertexsPos(int vtx_t_pos, int vtx_b_pos, int* vtx_r_pos, int* vtx_l_pos);
+  static void getOpositCornersPos(int vtx_t_pos, int vtx_b_pos, int* corner_tr_pos, int* corner_tl_pos,
+																int* corner_br_pos, int* corner_bl_pos, 
+																int* corner_op_pos);
+																  
+  // =====================================================================================================
+  // Método de teste 3D ==================================================================================
+  // =====================================================================================================
+  static bool checkMesh(Mesh *mesh);
+};
 
 
 #endif // FEPIC_IMESH_IMPL_HPP

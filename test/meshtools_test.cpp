@@ -442,7 +442,12 @@ TEST(MtoolInsertVertexOnEdgeTest, WithTri3)
     //     << "; edge position:" << edge->getPosition() <<"; numm_nodes: " <<mesh->numNodes()<< endl;
     //mtools.insertVertexOnEdge(edge, 0.5, mesh);
     //vtk_printer.writeVtk();
-    mtools.insertVertexOnEdge(mesh->getCellPtr(edge->getIncidCell()), edge->getPosition(), 0.5, mesh);
+    int nd_id = mtools.insertVertexOnEdge(edge->getIncidCell(), edge->getPosition(), 0.5, mesh);
+    EXPECT_TRUE(nd_id > 0);
+    if (mesh->inBoundary(edge))
+    {
+      EXPECT_TRUE(mesh->inBoundary( mesh->getNodePtr(nd_id) ));
+    }
     checkConsistencyTri(mesh);
   }
   vtk_printer.writeVtk();
@@ -450,6 +455,43 @@ TEST(MtoolInsertVertexOnEdgeTest, WithTri3)
   
   delete mesh;
 }
+
+TEST(MtoolCollapseEdge2dTest, WithTri3)
+{
+  MeshIoMsh msh_reader;
+  MeshIoVtk vtk_printer;
+  Mesh *mesh = NULL;  
+  MeshToolsTri mtools;
+
+  ECellType cell_t      = TRIANGLE3;
+  const char* mesh_in  = "meshes/complex_tri3.msh";
+  const char* mesh_out = "meshes/outtest/collapse.vtk";
+  
+  mesh = Mesh::create(cell_t);
+  msh_reader.readFileMsh(mesh_in, mesh);
+
+  int const n_facets = mesh->numFacetsTotal();
+
+  vtk_printer.isFamily(true);
+  vtk_printer.attachMesh(mesh);
+  vtk_printer.setOutputFileName(mesh_out);
+
+  int nd_id = mtools.collapseEdge2d(96,0,.5,mesh);
+  checkConsistencyTri(mesh);
+  nd_id = mtools.collapseEdge2d(109,0,.5,mesh);
+  checkConsistencyTri(mesh);
+  nd_id = mtools.collapseEdge2d(102,2,.5,mesh);
+  checkConsistencyTri(mesh);
+  nd_id = mtools.collapseEdge2d(114,0,.5,mesh);
+  checkConsistencyTri(mesh);
+  
+
+  vtk_printer.writeVtk();
+  
+  
+  delete mesh;
+}
+
 
 TEST(ImprimeTest, TestTest)
 {
