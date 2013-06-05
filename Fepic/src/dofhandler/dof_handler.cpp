@@ -44,9 +44,19 @@ extern "C" {
 
 
 // a safe copy
+// NOTE: this function can not depends on the mesh
 void DofHandler::copy(DofHandler const& c)
 {
-  *this = c;
+  //*this = c;
+  
+  m_mesh_ptr    = c.m_mesh_ptr   ;
+  m_grow_factor = c.m_grow_factor;
+  m_relations   = c.m_relations  ;
+  m_vars        = c.m_vars       ;
+  m_data        = c.m_data       ;
+  
+  
+  
   
   int  initial_dof=0;
   int* initial_address=m_data.data();
@@ -56,7 +66,7 @@ void DofHandler::copy(DofHandler const& c)
     m_vars[i].setInitialDofAddress(initial_address);
     m_vars[i].updateFromInitialDofAddres();
     initial_dof += m_vars[i].numDofs();
-    initial_address += m_vars[i].totalSize();
+    initial_address += m_vars[i].totalSizeWithoutMeshInfo();
   }
   
   

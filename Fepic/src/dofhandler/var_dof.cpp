@@ -44,6 +44,22 @@ void VarDofs::setType(int ndpv, int ndpr, int ndpf, int ndpc, int ntags, int con
     m_considered_tags[i] = tags[i];  
 }
 
+int  VarDofs::totalSizeWithoutMeshInfo() const
+{
+  unsigned const n_nodes_total   = m_n_dof_within_vertice > 0 ? m_vertices_dofs.rows() : 0;
+  unsigned const n_corners_total = m_n_dof_within_corner > 0 ? m_corners_dofs.rows() : 0;
+  unsigned const n_facets_total  = m_n_dof_within_facet > 0 ? m_facets_dofs.rows() : 0;
+  unsigned const n_cells_total   = m_n_dof_within_cell > 0 ? m_cells_dofs.rows() : 0;  
+  
+  int 
+  total  = n_nodes_total*m_n_dof_within_vertice;
+  total += n_corners_total*m_n_dof_within_corner;
+  total += n_facets_total*m_n_dof_within_facet;
+  total += n_cells_total*m_n_dof_within_cell;
+  
+  return total;  
+}
+
 int VarDofs::totalSize() const
 {
   unsigned const n_nodes_total = m_mesh_ptr->numNodesTotal();
@@ -194,10 +210,10 @@ void VarDofs::setUp()
 
 void VarDofs::updateFromInitialDofAddres()
 {
-  unsigned const n_nodes_total = m_mesh_ptr->numNodesTotal();
-  unsigned const n_corners_total = m_mesh_ptr->numCornersTotal();
-  unsigned const n_facets_total = m_mesh_ptr->numFacetsTotal();
-  unsigned const n_cells_total = m_mesh_ptr->numCellsTotal();
+  unsigned const n_nodes_total   = m_n_dof_within_vertice > 0 ? m_vertices_dofs.rows() : 0;
+  unsigned const n_corners_total = m_n_dof_within_corner > 0 ? m_corners_dofs.rows() : 0;
+  unsigned const n_facets_total  = m_n_dof_within_facet > 0 ? m_facets_dofs.rows() : 0;
+  unsigned const n_cells_total   = m_n_dof_within_cell > 0 ? m_cells_dofs.rows() : 0;
 
   //unsigned const n_vertices = m_mesh_ptr->numVertices();
   //unsigned const n_corners = m_mesh_ptr->numCorners();
@@ -209,8 +225,10 @@ void VarDofs::updateFromInitialDofAddres()
   int* facets_beg;
   int* cells_beg;
   
-
-  getDivisions(vertices_beg, corners_beg, facets_beg, cells_beg);
+  vertices_beg = m_initial_dof_address;
+  corners_beg  = vertices_beg  +  n_nodes_total  *m_n_dof_within_vertice;
+  facets_beg   = corners_beg   +  n_corners_total*m_n_dof_within_corner;
+  cells_beg    = facets_beg    +  n_facets_total *m_n_dof_within_facet;
   
   // vertices dof
   if (m_n_dof_within_vertice > 0)
@@ -421,6 +439,13 @@ void VarDofs::getVertexDofs(int *dofs, CellElement const* point) const
 
 }
 
+void VarDofs::getVertexDofs(int *dofs, int pt_id) const
+{
+    for (int j = 0; j < m_n_dof_within_vertice; ++j)
+    {
+      *dofs++ = m_vertices_dofs(pt_id,j);
+    }
+}
 
 
 void VarDofs::getCellAssociatedDofs(int* dofs, Cell const* cell) const

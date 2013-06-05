@@ -55,6 +55,8 @@ class VarDofs
   // call this routine when only m_initial_dof_address was changed
   void updateFromInitialDofAddres();
 
+  int  totalSizeWithoutMeshInfo() const;
+
 public:
 
   VarDofs(const char* name, Mesh * m=NULL, int ndpv=0, int ndpr=0, int ndpf=0, int ndpc=0, int fdi=0, int* a=NULL, int ntags=0, int const*tags=NULL)
@@ -94,6 +96,7 @@ public:
   void getFacetDofs(int *dofs, CellElement const*) const;
   void getCornerDofs(int *dofs, CellElement const*) const;
   void getVertexDofs(int *dofs, CellElement const*) const;
+  void getVertexDofs(int *dofs, int vtx_id) const;
   
   void getCellAssociatedDofs(int* dofs, Cell const*) const;
   void getFacetAssociatedDofs(int* dofs, CellElement const*) const;

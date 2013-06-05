@@ -76,7 +76,7 @@ public:
   { return m_flags & mkm_marked; }
 
   void setMarkedTo(bool mark_this)
-  { m_flags = mark_this ? (m_flags | mkm_marked) : (m_flags & (~mark_this))  ; }
+  { m_flags = mark_this ? (m_flags | mkm_marked) : (m_flags & (~mkm_marked))  ; }
 
   bool isVisited() const
   { return m_flags & mk_visited; }
