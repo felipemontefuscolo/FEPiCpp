@@ -235,7 +235,10 @@ int VarDofs::numDofs() const
   return m_n_dofs - m_n_links;
 }
 
-
+int VarDofs::numDofsPerVertex() const
+{
+  return m_n_dof_within_vertice;
+}
 
 int VarDofs::numDofsPerCell() const
 {
@@ -245,7 +248,6 @@ int VarDofs::numDofsPerCell() const
          m_n_dof_within_cell;
 
 }
-
 
 int VarDofs::numDofsPerFacet() const
 {

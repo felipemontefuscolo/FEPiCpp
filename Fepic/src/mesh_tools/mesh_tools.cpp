@@ -373,12 +373,12 @@ bool MeshToolsTri::inCircle2d(Cell const* cell, int const fid, Mesh const* mesh)
     return true;
 
   int const ofid = cell->getIncidCellPos(fid);
-  //Cell const *ocell = mesh->getCellPtr(ocid);
+  Cell const *ocell = mesh->getCellPtr(ocid);
 
   Point const *a = mesh->getNodePtr(cell->getNodeId(0));
   Point const *b = mesh->getNodePtr(cell->getNodeId(1));
   Point const *c = mesh->getNodePtr(cell->getNodeId(2));
-  Point const *d = mesh->getNodePtr(cell->getNodeId((ofid+2)%3));
+  Point const *d = mesh->getNodePtr(ocell->getNodeId((ofid+2)%3));
 
   Real const ax = a->getCoord(0), ay = a->getCoord(1), aq = ax*ax + ay*ay;
   Real const bx = b->getCoord(0), by = b->getCoord(1), bq = bx*bx + by*by;
@@ -595,7 +595,7 @@ int MeshToolsTri::insertVertexOnEdge(int cell_A_id, int face_Am_id, Real t, Mesh
   Facet *edge_bl = NULL;							// 
 
   if (!edge_in_boundary)
-  { // Se a aresta não for da borda, então o vertice vtx_l existe a as arestas insidentes a este
+  { // Se a aresta não for da borda, então o vertice vtx_l existe a as arestas incidentes a este
     edge_bl_id = cell_B->getFacetId(face_Bbl_id);
 
     edge_l = mesh->pushFacet(&edge_l_id);

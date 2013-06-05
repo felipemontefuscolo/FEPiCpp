@@ -85,6 +85,7 @@ public:
 
   // users
   int numDofs() const;
+  int numDofsPerVertex() const;
   int numDofsPerCell() const;
   int numDofsPerFacet() const;
   int numDofsPerCorner() const;

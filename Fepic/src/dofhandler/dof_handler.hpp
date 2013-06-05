@@ -36,8 +36,8 @@ class DofHandler
   typedef Eigen::Array<bool,Eigen::Dynamic,Eigen::Dynamic> MatrixBool;
   
   // if the compilers complains, just comment these lines
-  DofHandler(DofHandler const&c ) = default;
-  DofHandler& operator=(DofHandler const& c) = default;
+  DofHandler(DofHandler const& ) = default;
+  DofHandler& operator=(DofHandler const& ) = default;
   
 public:  
   
