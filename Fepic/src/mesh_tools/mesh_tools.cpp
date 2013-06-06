@@ -408,7 +408,7 @@ bool MeshToolsTri::inCircle2d(Cell const* cell, int const fid, Mesh const* mesh)
     return true;
 }
 
-/**
+/** VERSAO LUZIA
  *  Insert a vertex r on an edge defined by two vertices p and q, in direction p -> q,
  *  splitting the edge in two parts.
  *  The vertex r is given by r = t*(p-q) + q, where t is a given parameter in ]0,1[.
@@ -422,108 +422,457 @@ bool MeshToolsTri::inCircle2d(Cell const* cell, int const fid, Mesh const* mesh)
  *        tag of the old edge.
  *
  */
-int MeshToolsTri::insertVertexOnEdge(int cell_A_id, int face_Am_id, Real t, Mesh *mesh)
+# if (0)
+//int MeshToolsTri::insertVertexOnEdge(int cell_A_id, int face_Am_id, Real t, Mesh *mesh)
+//{
+///* ---------------------------------------------------------------------------------------------------------------
+// *                      vtx_t                                                              vtx_t
+// *                  ,/|\,                                                              ,/|\
+// *                ,/  |  \,                                                          ,/  | `\
+// *   cellB      ,/    |    \,    cellA                                  cellB      ,/    |   `\    cellA    <-- edge_t
+// *            ,/      |      \,                                                  ,/      |vtx_m`\             = edge_old
+// *          ,/        |        \,                    to                        ,/      _-+-_     `\
+// *        ,/          | edge_    \,                     \,                   ,/   _,--'  |  '--,_  `\,
+// * vtx_l /            | old        \ vtx_r                \,                /_,--'edge_l | edge_r`--,_\
+// *       \,           |           ,/            ------------\               \,           |          ,/
+// *         \,         |         ,/              -----------,/                 \,         |        ,/
+// *           \,       |       ,/                         ,/                     \,       |       ,/         <-- edge_b
+// *             \,     |     ,/                          /                         \,     |     ,/
+// *               \,   |   ,/                                            cellC       \,   |   ,/    cellD
+// *                 \, | ,/                                                            \, | ,/
+// *                   \|/                                                                \|/
+// *                     vtx_b                                                               vtx_b
+// *
+// * cellA nodes order:   j                                                 cellC nodes order:     2
+// *                      | \ i                                                                0 / |
+// *                      | /                                                                    \ |
+// *                      k                                                                        1
+// *
+// * cellB nodes order:    k                                                cellD nodes order:  1
+// *                   i / |                                                                    | \ 0
+// *                     \ |                                                                    | /
+// *                       j                                                                    2
+// *
+// * nod_tl, nod_tr, nod_bl, nod_br, nod_t*, nod_b, nod_l, nod_r = high order nodes
+// *
+// * nod_top = node of the old edge
+// *
+// *
+// *///-------------------------------------------------------------------------------------------------------------
+//
+//  int const  sdim = mesh->spaceDim(); 		   // Pega a dimensão da malha
+//  
+//  Cell *const  cell_A = mesh->getCellPtr(cell_A_id);    // Pega o id da celula passada
+//  int const  cell_B_id = cell_A->getIncidCell(face_Am_id); // Pega id da outra celula que contem a aresta que será dividida
+//  
+//  FEPIC_CHECK((t<1 && t>0) && (cell_A_id>=0 && cell_A_id<mesh->numCellsTotal()), "t must be in ]0,1[", std::runtime_error);
+//
+//  int const  face_Abr_id = (face_Am_id+1)%3; // Aresta seguinte à aresta que será dividida
+//  int const  face_Atr_id = (face_Am_id+2)%3; // Segunda aresta seguinte à aresta que será dividida
+//  
+//  // Variaveis auxiliares
+//  Real       xyz_tmp[3];                       // 
+//  
+//  int        nds[6], 
+//			 fts[3], 
+//			 ics[3], 
+//			 ics_pos[3]; //
+//  int        pos, 
+//			 tag, 
+//			 stat, 
+//			 bnd;
+//			 
+//
+//  // testes para saber se a aresta é de bordo, e se os elementos da malha são de ordem superior
+//  const bool edge_in_boundary = cell_B_id < 0; // testa se a aresta a ser dividida é de bordo
+//  const bool highm_order = mesh->numNodesPerCell() > mesh->numVerticesPerCell(); // checa se o elemento é de ordem maior que 1
+//
+//  int        face_Bm_id = -1;       // Id local da aresta que será dividida
+//  int        face_Bbl_id = -1; // Id local da segunda aresta seguinte à aresta que será dividida
+//
+//  int        cell_C_id = -1;   // ids de uma das celulas que serão geradas
+//  int        cell_D_id = -1;   // id de uma das celulas que serão geradas
+//
+//  // creating cells to store informations ... the adjacencies
+//  // of the old cells are kept.
+//  Cell *cell_B = NULL;   // Ponteiros que não se sabe se serão usadados ainda
+//  Cell *cell_C = NULL;
+//  Cell *cell_D = mesh->pushCell(&cell_D_id); // Ponteiro para a celula que será criada
+//  
+//  if (!edge_in_boundary)
+//  {// Se a aresta não for uma celula do bordo 
+//    face_Bm_id = cell_A->getIncidCellPos(face_Am_id); // Pega id local da aresta na celula oposta
+//    //fidB_plus1 = (fidB+1)%3;
+//    face_Bbl_id = (face_Bm_id+2)%3;  // segunda aresta seguinte na celula oposta
+//
+//    cell_B = mesh->getCellPtr(cell_B_id); // Ponteiro para a celula oposta
+//    cell_C = mesh->pushCell(&cell_C_id); // Ponteiro para nova celula que será criada
+//  }
+//
+//  /* ---- First SetUp Lower dimension elements first ------  */
+//  // nodes First
+//  // Os vertices por ordem a partir do primeiro vertice da aresta
+//  int const vtx_t_id = cell_A->getNodeId(face_Am_id ); 
+//  int const vtx_b_id = cell_A->getNodeId(face_Abr_id);
+//  int const vtx_r_id = cell_A->getNodeId(face_Atr_id);
+//  
+//  int        vtx_l_id = -1;
+//  int        vtx_m_id;
+//  // Armazenaria os nós caso seja um elemento de maior ordem
+//  int        nod_t_id;
+//  int        nod_b_id;
+//  int        nod_r_id;
+//  int        nod_l_id;
+//  int        nod_br_id;
+//  int        nod_bl_id;
+//
+//  Point *vtx_t = mesh->getNodePtr(vtx_t_id);
+//  Point *vtx_b = mesh->getNodePtr(vtx_b_id);
+//  Point *vtx_l = NULL;
+//  Point *vtx_r = mesh->getNodePtr(vtx_r_id);
+//  Point *vtx_m = mesh->pushPoint(&vtx_m_id);
+//  // high order nodes
+//  Point *nod_t = NULL;
+//  Point *nod_b = NULL;
+//  Point *nod_l = NULL;
+//  Point *nod_r = NULL;
+//  //Point *nod_tr = NULL; // Não são alterados
+//  //Point *nod_tl = NULL; 
+//  Point *nod_br = NULL;
+//  Point *nod_bl = NULL;
+//  
+//  // Pega as coordenadas dos vertices
+//  Real const *vb_xyz = vtx_b->getCoord();
+//  Real const *vt_xyz = vtx_t->getCoord();
+//  Real const *vl_xyz = NULL; // vertice não exite caso a aresta seja de bordo
+//  Real const *vr_xyz = vtx_r->getCoord();
+//  Real const *vm_xyz = NULL; // vertice que será criado
+//
+//  if (!edge_in_boundary)
+//  { // Se a aresta não for de bordo
+//    vtx_l_id = cell_B->getNodeId(face_Bbl_id); // Pega o Id do vertice oposto à aresta na celula oposta
+//    vtx_l = mesh->getNodePtr(vtx_l_id);      // Pega um ponteiro o vertice acima
+//    vl_xyz = vtx_l->getCoord();              // Pega as coordenadas do vertice
+//  }
+//  
+//  if (highm_order) // Se o elemento for de ordem superior
+//  {
+//    nod_t_id  = cell_A->getNodeId(face_Am_id + 3); // nó do meio da aresta que será dividida
+//    //nod_tr_id = cellA->getNodeId(fidA_plus2 + 3); ??????????????????????????? Não mexe pois não precisa
+//    nod_br_id = cell_A->getNodeId(face_Abr_id + 3); // Nó do meio da aresta entre vtx_b e vtx_r
+//
+//    nod_t  = mesh->getNodePtr(nod_t_id); // Ponteiro para o nó do meio da aresta que será dividida
+//    //nod_tr = mesh->getNodePtr(nod_tr_id); ???????????????????????? Não mexe pois não precisa
+//    nod_br = mesh->getNodePtr(nod_br_id); // Ponteiro para o nó do meio da aresta entre vtx_b e vtx_r
+//    nod_b  = mesh->pushPoint(&nod_b_id); // 
+//    nod_r  = mesh->pushPoint(&nod_r_id); // 
+//
+//    if (!edge_in_boundary)
+//    {// Se não for uma aresta de bordo
+//      //nod_tl_id = cellB->getNodeId(fidB_plus1 + 3);
+//      nod_bl_id = cell_B->getNodeId(face_Bbl_id + 3);
+//      nod_l  = mesh->pushPoint(&nod_l_id);
+//      //nod_tl = mesh->getNodePtr(nod_tl_id);
+//      nod_bl = mesh->getNodePtr(nod_bl_id);
+//    }
+//  }
+//
+//  // ================= Recolhe informação das edges ====================================================================
+//  
+//  // Ids das arestas
+//  int const edge_t_id  = cell_A->getFacetId(face_Am_id); // = old edge
+//  int       edge_b_id; // Aresta que segue o vertice vtx_b
+//  int       edge_l_id  = -1; // Aresta que segue o vtx_l
+//  int       edge_r_id; // Aresta que segue o vertice vtx_r
+//  int const edge_br_id = cell_A->getFacetId(face_Abr_id); // Aresta entre o vertices vtx_b e vtx_r
+//  int       edge_bl_id = -1; // Aresta entre os vertices vtx_b e vtx_l
+//
+//  // Ponteiros para as arestas
+//  Facet *edge_t = mesh->getFacetPtr(edge_t_id); 	// 
+//  Facet *edge_b = mesh->pushFacet(&edge_b_id);  	// 
+//  Facet *edge_l = NULL;								// 
+//  Facet *edge_r = mesh->pushFacet(&edge_r_id);; 	// 
+//  Facet *edge_br = mesh->getFacetPtr(edge_br_id);	// 
+//  Facet *edge_bl = NULL;							// 
+//
+//  if (!edge_in_boundary)
+//  { // Se a aresta não for da borda, então o vertice vtx_l existe a as arestas incidentes a este
+//    edge_bl_id = cell_B->getFacetId(face_Bbl_id);
+//
+//    edge_l = mesh->pushFacet(&edge_l_id);
+//    //edge_tl = mesh->getFacetPtr(edge_tl_id);
+//    edge_bl = mesh->getFacetPtr(edge_bl_id);
+//  }
+//
+//  // ================================ All elements created, now setup adjacencies ======================================
+//
+//  // remeber: vtx_t, vtx_b, vtx_l, vtx_r, vtx_m, nod_t, nod_b, nod_l, nod_r, nod_tr, nod_tl, nod_br, nod_bl
+//  // void Point::setAllMembers(Real const* coord, int spacedim, int const* ic, int const* pos, int const* tag,
+//  //                            int const* flags, int const* stat, std::list<std::pair<int,char> > * incidences)
+//  // setting vtx_t: nothing to do
+//  // setting vtx_b:
+//  
+//  if ( ! vtx_b->replacesIncidCell(cell_A_id, cell_D_id, 2) )
+//    vtx_b->replacesIncidCell(cell_B_id, cell_D_id, 2);  // !!!!!!!!!!!!!!!!!!!!!!!!!!!! aqui acho que era C no lugar de D
+//  // setting vtx_r: nothing to do
+//  // setting vtx_m: 
+//  
+//  // Calculo da posição onde deve ser inserido um novo ponto
+//  for (int i = 0; i < sdim; ++i)
+//    xyz_tmp[i] = t*(vt_xyz[i] - vb_xyz[i]) + vb_xyz[i];
+//  
+//  // Guarda a Tag associada à aresta dividida
+//  tag = edge_t->getTag();
+//  
+//  // Guarda se a aresta é de bordo em uma variavel de estado 
+//  stat = edge_in_boundary ? Point::mk_inboundary : 0;
+//  
+//  // Seta os valores referentes ao vertice criado
+//  vtx_m->setAllMembers(xyz_tmp, sdim, &cell_A_id, &face_Abr_id, &tag, NULL/*flags*/, &stat, NULL/*singular list*/);
+//  
+//  // Pega as coordenadas deste vertice novo
+//  vm_xyz = vtx_m->getCoord();
+//  // setting vtx_l: nothing to do
+//
+//  if (highm_order)
+//  {
+//    // setting nod_t: = (old edge node)
+//    for (int i = 0; i < sdim; ++i)
+//      xyz_tmp[i] = 0.5 * ( vt_xyz[i] + vm_xyz[i]);
+//    nod_t->setCoord(xyz_tmp, sdim);
+//
+//    // setting nod_b:
+//    for (int i = 0; i < sdim; ++i)
+//      xyz_tmp[i] = 0.5 * ( vb_xyz[i] + vm_xyz[i]);
+//    tag = edge_t->getTag();
+//    pos = 4;
+//    stat = edge_in_boundary ? Point::mk_inboundary : 0;
+//    nod_b->setAllMembers(xyz_tmp, sdim, &cell_D_id, &pos, &tag, NULL, &stat, NULL);
+//
+//    //setting nod_r:
+//    for (int i = 0; i < sdim; ++i)
+//      xyz_tmp[i] = 0.5 * ( vr_xyz[i] + vm_xyz[i]);
+//    tag = cell_A->getTag();
+//    pos = 3;
+//    stat = 0;
+//    nod_r->setAllMembers(xyz_tmp, sdim, &cell_D_id, &pos, &tag, NULL, &stat, NULL);
+//
+//    //setting nod_tr: nothing to do
+//
+//    //setting nod_br:
+//    nod_br->setIncidence(cell_D_id, 5);
+//
+//    if (!edge_in_boundary)
+//    {
+//      //setting nod_bl
+//      nod_bl->setIncidence(cell_C_id, 3);
+//
+//      //setting nod_tl : nothing to do
+//
+//      //setting nod_l:
+//      for (int i = 0; i < sdim; ++i)
+//        xyz_tmp[i] = 0.5 * ( vl_xyz[i] + vm_xyz[i]);
+//      tag = cell_B->getTag();
+//      pos = 5;
+//      stat = 0;
+//      nod_l->setAllMembers(xyz_tmp, sdim, &cell_C_id, &pos, &tag, NULL, &stat, NULL);
+//
+//    }
+//  }
+//
+//  //  ----- SetUp edges -------------------
+//
+//  // remeber: edge_t, edge_b, edge_l, edge_r, edge_tr, edge_tl, edge_br, edge_bl
+//  // void Facet::setAllMembers(int const* ic, int const* pos, int const* tag, int const* flags, int const* bound_comp_id))
+//
+//  //setting edge_t (= old edge) : nothing to do
+//  //setting edge_tr: nothing to do
+//  //setting edge_tl: nothing to do
+//
+//  //setting edge_b:
+//  
+//  tag = edge_t->getTag(); 
+//  pos = 1; // in cidD 
+//  bnd = edge_t->getBoundaryComponentId(); 
+// 
+//  edge_b->setAllMembers(&cell_D_id, &pos, &tag, NULL, &bnd);
+//
+//  //setting edge_r:
+//  tag = cell_A->getTag();
+//  pos = 0; // in cidD
+//  bnd = -1;
+//  
+//  edge_r->setAllMembers(&cell_D_id, &pos, &tag, NULL, &bnd);
+//
+//  //setting edge_br:
+//  edge_br->setIncidence(cell_D_id, 2);
+//
+//  if (!edge_in_boundary)
+//  {
+//    //setting edge_l:
+//    tag = cell_B->getTag();
+//    pos = 2; // in cidC
+//    bnd = -1;
+//    edge_l->setAllMembers(&cell_C_id, &pos, &tag, NULL, &bnd);
+//
+//    //setting edge_bl
+//    edge_bl->setIncidence(cell_C_id, 0);
+//  }
+//
+//
+//  //=======================================  ----- SetUp Neighbors --------------  =====================================
+//  // top-left: nothing to do
+//  // top-right: nothing to do
+//  // bot-right
+//  
+//  Cell *neighbor = mesh->getCellPtr(cell_A->getIncidCell(face_Abr_id));
+//  if (neighbor)
+//    neighbor->setIncidence(cell_A->getIncidCellPos(face_Abr_id), cell_D_id, 2);
+//
+//  if (!edge_in_boundary)
+//  {
+//    // bot-left
+//    neighbor = mesh->getCellPtr(cell_B->getIncidCell(face_Bbl_id));
+//    if (neighbor)
+//      neighbor->setIncidence(cell_B->getIncidCellPos(face_Bbl_id), cell_C_id, 0);
+//  }
+//
+//  // ===================================== ----- SetUp Cells ------------------- =======================================
+//  // remember: cellA, cellB, cellC, cellD
+//  //void setAllMembers(int const* nodes, int const* corners, int const* facets, int const* icells, int const* icells_pos,
+//  //                    int const* icells_ancs, int const* conn_comp_id, int const* tag, int const* flags)
+//
+//  // set C and D first
+//
+//  // ============ setting cellD
+//  nds[0] = vtx_r_id;
+//  nds[1] = vtx_m_id;
+//  nds[2] = vtx_b_id;
+//  
+//  if (highm_order)
+//  {
+//    nds[3] = nod_r_id;
+//    nds[4] = nod_b_id;
+//    nds[5] = nod_br_id;
+//  }
+//  
+//  fts[0] =  edge_r_id;
+//  fts[1] =  edge_b_id;
+//  fts[2] =  edge_br_id;
+//  
+//  ics[0] =  cell_A_id;                             ics_pos[0] =  face_Abr_id;
+//  ics[1] =  cell_C_id;                             ics_pos[1] =  1;
+//  ics[2] =  cell_A->getIncidCell(face_Abr_id);     ics_pos[2] =  cell_A->getIncidCellPos(face_Abr_id);
+//  
+//  bnd = cell_A->getConnectedComponentId();
+//  tag = cell_A->getTag();
+//  
+//  cell_D->setAllMembers(nds, NULL, fts, ics, ics_pos, NULL, &bnd, &tag, NULL);
+//
+//  if (!edge_in_boundary)
+//  {
+//    // ================================ setting cellC ==================================================================
+//    nds[0] = vtx_l_id;
+//    nds[1] = vtx_b_id;
+//    nds[2] = vtx_m_id;
+//    
+//    if (highm_order)
+//    {
+//      nds[3] = nod_bl_id;
+//      nds[4] = nod_b_id;
+//      nds[5] = nod_l_id;
+//    }
+//    fts[0] =  edge_bl_id;
+//    fts[1] =  edge_b_id;
+//    fts[2] =  edge_l_id;
+//    ics[0] =  cell_B->getIncidCell(face_Bbl_id);  ics_pos[0] =  cell_B->getIncidCellPos(face_Bbl_id);
+//    ics[1] =  cell_D_id;                               ics_pos[1] =  1;
+//    ics[2] =  cell_B_id;                               ics_pos[2] =  face_Bbl_id;
+//    bnd = cell_B->getConnectedComponentId();
+//    tag = cell_B->getTag();
+//    cell_C->setAllMembers(nds, NULL, fts, ics, ics_pos, NULL, &bnd, &tag, NULL);
+//  }
+//
+//  // ======================================== setting cellA ============================================================
+//  cell_A->setNodeId(face_Abr_id, vtx_m_id);
+//  if (highm_order)
+//    cell_A->setNodeId(face_Abr_id+3, nod_r_id);
+//  cell_A->setFacetId(face_Abr_id, edge_r_id);
+//  cell_A->setIncidence(face_Abr_id, cell_D_id, 0);
+//
+//  // ========================================= setting cellB ===========================================================
+//  if (!edge_in_boundary)
+//  {
+//    cell_B->setNodeId(face_Bm_id, vtx_m_id);
+//    if (highm_order)
+//      cell_B->setNodeId(face_Bbl_id+3, nod_l_id);
+//    cell_B->setFacetId(face_Bbl_id, edge_l_id);
+//    cell_B->setIncidence(face_Bbl_id, cell_C_id, 2);
+//  }
+//
+//  return vtx_m_id;
+//}
+//
+// =====================================================================================================================
+#endif
+
+
+int MeshToolsTri::insertVertexOnEdge(int cidA, int fidA, Real t, Mesh *mesh)
 {
-/* ---------------------------------------------------------------------------------------------------------------
- *                      vtx_t                                                              vtx_t
- *                  ,/|\,                                                              ,/|\
- *                ,/  |  \,                                                          ,/  | `\
- *   cellB      ,/    |    \,    cellA                                  cellB      ,/    |   `\    cellA    <-- edge_t
- *            ,/      |      \,                                                  ,/      |vtx_m`\             = edge_old
- *          ,/        |        \,                    to                        ,/      _-+-_     `\
- *        ,/          | edge_    \,                     \,                   ,/   _,--'  |  '--,_  `\,
- * vtx_l /            | old        \ vtx_r                \,                /_,--'edge_l | edge_r`--,_\
- *       \,           |           ,/            ------------\               \,           |          ,/
- *         \,         |         ,/              -----------,/                 \,         |        ,/
- *           \,       |       ,/                         ,/                     \,       |       ,/         <-- edge_b
- *             \,     |     ,/                          /                         \,     |     ,/
- *               \,   |   ,/                                            cellC       \,   |   ,/    cellD
- *                 \, | ,/                                                            \, | ,/
- *                   \|/                                                                \|/
- *                     vtx_b                                                               vtx_b
- *
- * cellA nodes order:   j                                                 cellC nodes order:     2
- *                      | \ i                                                                0 / |
- *                      | /                                                                    \ |
- *                      k                                                                        1
- *
- * cellB nodes order:    k                                                cellD nodes order:  1
- *                   i / |                                                                    | \ 0
- *                     \ |                                                                    | /
- *                       j                                                                    2
- *
- * nod_tl, nod_tr, nod_bl, nod_br, nod_t*, nod_b, nod_l, nod_r = high order nodes
- *
- * nod_top = node of the old edge
- *
- *
- *///-------------------------------------------------------------------------------------------------------------
 
-  int const  sdim = mesh->spaceDim(); 		   // Pega a dimensão da malha
+  Cell *cellA = mesh->getCellPtr(cidA);
   
-  Cell *const  cell_A = mesh->getCellPtr(cell_A_id);    // Pega o id da celula passada
-  int const  cell_B_id = cell_A->getIncidCell(face_Am_id); // Pega id da outra celula que contem a aresta que será dividida
+  FEPIC_CHECK((t<1 && t>0) && (cidA>=0 && cidA<mesh->numCellsTotal()), "t must be in ]0,1[", std::runtime_error);
+
+  int const fidA_plus1 = (fidA+1)%3;
+  int const fidA_plus2 = (fidA+2)%3;
   
-  FEPIC_CHECK((t<1 && t>0) && (cell_A_id>=0 && cell_A_id<mesh->numCellsTotal()), "t must be in ]0,1[", std::runtime_error);
+  int const cidB = cellA->getIncidCell(fidA);
+  Real xyz_tmp[3];
+  int const sdim = mesh->spaceDim();
+  int nds[6], fts[3], ics[3], ics_pos[3];
+  int pos, tag, stat, bnd;
+  const bool edge_in_boundary = cidB < 0;
+  const bool highm_order = mesh->numNodesPerCell() > mesh->numVerticesPerCell();
 
-  int const  face_Abr_id = (face_Am_id+1)%3; // Aresta seguinte à aresta que será dividida
-  int const  face_Atr_id = (face_Am_id+2)%3; // Segunda aresta seguinte à aresta que será dividida
-  
-  // Variaveis auxiliares
-  Real       xyz_tmp[3];                       // 
-  
-  int        nds[6], 
-			 fts[3], 
-			 ics[3], 
-			 ics_pos[3]; //
-  int        pos, 
-			 tag, 
-			 stat, 
-			 bnd;
-			 
+  int fidB = -1;
+  //int fidB_plus1 = -1;
+  int fidB_plus2 = -1;
 
-  // testes para saber se a aresta é de bordo, e se os elementos da malha são de ordem superior
-  const bool edge_in_boundary = cell_B_id < 0; // testa se a aresta a ser dividida é de bordo
-  const bool highm_order = mesh->numNodesPerCell() > mesh->numVerticesPerCell(); // checa se o elemento é de ordem maior que 1
-
-  int        face_Bm_id = -1;       // Id local da aresta que será dividida
-  int        face_Bbl_id = -1; // Id local da segunda aresta seguinte à aresta que será dividida
-
-  int        cell_C_id = -1;   // ids de uma das celulas que serão geradas
-  int        cell_D_id = -1;   // id de uma das celulas que serão geradas
+  int cidC = -1;
+  int cidD = -1;
 
   // creating cells to store informations ... the adjacencies
   // of the old cells are kept.
-  Cell *cell_B = NULL;   // Ponteiros que não se sabe se serão usadados ainda
-  Cell *cell_C = NULL;
-  Cell *cell_D = mesh->pushCell(&cell_D_id); // Ponteiro para a celula que será criada
-  
-  if (!edge_in_boundary)
-  {// Se a aresta não for uma celula do bordo 
-    face_Bm_id = cell_A->getIncidCellPos(face_Am_id); // Pega id local da aresta na celula oposta
-    //fidB_plus1 = (fidB+1)%3;
-    face_Bbl_id = (face_Bm_id+2)%3;  // segunda aresta seguinte na celula oposta
+  Cell *cellB = NULL;
+  Cell *cellC = NULL;
+  Cell *cellD = mesh->pushCell(&cidD); //Cell *cellD = mesh->createCell(); cidD = mesh->pushCell(cellD);
 
-    cell_B = mesh->getCellPtr(cell_B_id); // Ponteiro para a celula oposta
-    cell_C = mesh->pushCell(&cell_C_id); // Ponteiro para nova celula que será criada
+  if (!edge_in_boundary)
+  {
+    fidB = cellA->getIncidCellPos(fidA);
+    //fidB_plus1 = (fidB+1)%3;
+    fidB_plus2 = (fidB+2)%3;
+
+    cellB = mesh->getCellPtr(cidB);
+    cellC = mesh->pushCell(&cidC); //cellC = mesh->createCell(); cidC = mesh->pushCell(cellC);
   }
 
-  /* ---- First SetUp Lower dimension elements first ------  */
+  /* ---- First SetUp Lower dimension elements first ------ */
   // nodes First
-  // Os vertices por ordem a partir do primeiro vertice da aresta
-  int const vtx_t_id = cell_A->getNodeId(face_Am_id ); 
-  int const vtx_b_id = cell_A->getNodeId(face_Abr_id);
-  int const vtx_r_id = cell_A->getNodeId(face_Atr_id);
-  
-  int        vtx_l_id = -1;
-  int        vtx_m_id;
-  // Armazenaria os nós caso seja um elemento de maior ordem
-  int        nod_t_id;
-  int        nod_b_id;
-  int        nod_r_id;
-  int        nod_l_id;
-  int        nod_br_id;
-  int        nod_bl_id;
+  int const vtx_t_id = cellA->getNodeId(fidA );
+  int const vtx_b_id = cellA->getNodeId(fidA_plus1);
+  int const vtx_r_id = cellA->getNodeId(fidA_plus2);
+  int vtx_l_id = -1;
+  int vtx_m_id;
+  int nod_t_id;
+  int nod_b_id;
+  int nod_r_id;
+  int nod_l_id;
+  //int nod_tr_id;
+  //int nod_tl_id;
+  int nod_br_id;
+  int nod_bl_id;
 
   Point *vtx_t = mesh->getNodePtr(vtx_t_id);
   Point *vtx_b = mesh->getNodePtr(vtx_b_id);
@@ -535,101 +884,90 @@ int MeshToolsTri::insertVertexOnEdge(int cell_A_id, int face_Am_id, Real t, Mesh
   Point *nod_b = NULL;
   Point *nod_l = NULL;
   Point *nod_r = NULL;
-  //Point *nod_tr = NULL; // Não são alterados
-  //Point *nod_tl = NULL; 
+  //Point *nod_tr = NULL;
+  //Point *nod_tl = NULL;
   Point *nod_br = NULL;
   Point *nod_bl = NULL;
-  
-  // Pega as coordenadas dos vertices
   Real const *vb_xyz = vtx_b->getCoord();
   Real const *vt_xyz = vtx_t->getCoord();
-  Real const *vl_xyz = NULL; // vertice não exite caso a aresta seja de bordo
+  Real const *vl_xyz = NULL;
   Real const *vr_xyz = vtx_r->getCoord();
-  Real const *vm_xyz = NULL; // vertice que será criado
+  Real const *vm_xyz = NULL;
 
   if (!edge_in_boundary)
-  { // Se a aresta não for de bordo
-    vtx_l_id = cell_B->getNodeId(face_Bbl_id); // Pega o Id do vertice oposto à aresta na celula oposta
-    vtx_l = mesh->getNodePtr(vtx_l_id);      // Pega um ponteiro o vertice acima
-    vl_xyz = vtx_l->getCoord();              // Pega as coordenadas do vertice
-  }
-  
-  if (highm_order) // Se o elemento for de ordem superior
   {
-    nod_t_id  = cell_A->getNodeId(face_Am_id + 3); // nó do meio da aresta que será dividida
-    //nod_tr_id = cellA->getNodeId(fidA_plus2 + 3); ??????????????????????????? Não mexe pois não precisa
-    nod_br_id = cell_A->getNodeId(face_Abr_id + 3); // Nó do meio da aresta entre vtx_b e vtx_r
+    vtx_l_id = cellB->getNodeId(fidB_plus2);
+    vtx_l = mesh->getNodePtr(vtx_l_id);
+    vl_xyz = vtx_l->getCoord();
+  }
+  if (highm_order)
+  {
+    nod_t_id = cellA->getNodeId(fidA + 3); // node of the old edge
+    //nod_tr_id = cellA->getNodeId(fidA_plus2 + 3);
+    nod_br_id = cellA->getNodeId(fidA_plus1 + 3);
 
-    nod_t  = mesh->getNodePtr(nod_t_id); // Ponteiro para o nó do meio da aresta que será dividida
-    //nod_tr = mesh->getNodePtr(nod_tr_id); ???????????????????????? Não mexe pois não precisa
-    nod_br = mesh->getNodePtr(nod_br_id); // Ponteiro para o nó do meio da aresta entre vtx_b e vtx_r
-    nod_b  = mesh->pushPoint(&nod_b_id); // 
-    nod_r  = mesh->pushPoint(&nod_r_id); // 
+    nod_t = mesh->getNodePtr(nod_t_id);
+    //nod_tr = mesh->getNodePtr(nod_tr_id);
+    nod_br = mesh->getNodePtr(nod_br_id);
+    nod_b = mesh->pushPoint(&nod_b_id);
+    nod_r = mesh->pushPoint(&nod_r_id);
 
     if (!edge_in_boundary)
-    {// Se não for uma aresta de bordo
+    {
       //nod_tl_id = cellB->getNodeId(fidB_plus1 + 3);
-      nod_bl_id = cell_B->getNodeId(face_Bbl_id + 3);
-      nod_l  = mesh->pushPoint(&nod_l_id);
+      nod_bl_id = cellB->getNodeId(fidB_plus2 + 3);
+      nod_l = mesh->pushPoint(&nod_l_id);
       //nod_tl = mesh->getNodePtr(nod_tl_id);
       nod_bl = mesh->getNodePtr(nod_bl_id);
     }
   }
 
-  // ================= Recolhe informação das edges ====================================================================
-  
-  // Ids das arestas
-  int const edge_t_id  = cell_A->getFacetId(face_Am_id); // = old edge
-  int       edge_b_id; // Aresta que segue o vertice vtx_b
-  int       edge_l_id  = -1; // Aresta que segue o vtx_l
-  int       edge_r_id; // Aresta que segue o vertice vtx_r
-  int const edge_br_id = cell_A->getFacetId(face_Abr_id); // Aresta entre o vertices vtx_b e vtx_r
-  int       edge_bl_id = -1; // Aresta entre os vertices vtx_b e vtx_l
+  /* -------- Edges ------ */
 
-  // Ponteiros para as arestas
-  Facet *edge_t = mesh->getFacetPtr(edge_t_id); 	// 
-  Facet *edge_b = mesh->pushFacet(&edge_b_id);  	// 
-  Facet *edge_l = NULL;								// 
-  Facet *edge_r = mesh->pushFacet(&edge_r_id);; 	// 
-  Facet *edge_br = mesh->getFacetPtr(edge_br_id);	// 
-  Facet *edge_bl = NULL;							// 
+  int const edge_t_id = cellA->getFacetId(fidA); // = old edge
+  int edge_b_id;
+  int edge_l_id = -1;
+  int edge_r_id;
+  //int const edge_tr_id = cellA->getFacetId(fidA_plus2);
+  //int edge_tl_id = -1;
+  int const edge_br_id = cellA->getFacetId(fidA_plus1);
+  int edge_bl_id = -1;
+
+  Facet *edge_t = mesh->getFacetPtr(edge_t_id);
+  Facet *edge_b = mesh->pushFacet(&edge_b_id);
+  Facet *edge_l = NULL;
+  Facet *edge_r = mesh->pushFacet(&edge_r_id);;
+  //Facet *edge_tr = mesh->getFacetPtr(edge_tr_id);
+  //Facet *edge_tl = NULL;
+  Facet *edge_br = mesh->getFacetPtr(edge_br_id);
+  Facet *edge_bl = NULL;
 
   if (!edge_in_boundary)
-  { // Se a aresta não for da borda, então o vertice vtx_l existe a as arestas incidentes a este
-    edge_bl_id = cell_B->getFacetId(face_Bbl_id);
+  {
+    //edge_tl_id = cellB->getFacetId(fidB_plus1);
+    edge_bl_id = cellB->getFacetId(fidB_plus2);
 
     edge_l = mesh->pushFacet(&edge_l_id);
     //edge_tl = mesh->getFacetPtr(edge_tl_id);
     edge_bl = mesh->getFacetPtr(edge_bl_id);
   }
 
-  // ================================ All elements created, now setup adjacencies ======================================
+  /* -------- All elements created, now setup adjacencies -----------*/
 
   // remeber: vtx_t, vtx_b, vtx_l, vtx_r, vtx_m, nod_t, nod_b, nod_l, nod_r, nod_tr, nod_tl, nod_br, nod_bl
   // void Point::setAllMembers(Real const* coord, int spacedim, int const* ic, int const* pos, int const* tag,
-  //                            int const* flags, int const* stat, std::list<std::pair<int,char> > * incidences)
+  // int const* flags, int const* stat, std::list<std::pair<int,char> > * incidences)
   // setting vtx_t: nothing to do
   // setting vtx_b:
-  
-  if ( ! vtx_b->replacesIncidCell(cell_A_id, cell_D_id, 2) )
-    vtx_b->replacesIncidCell(cell_B_id, cell_D_id, 2);  // !!!!!!!!!!!!!!!!!!!!!!!!!!!! aqui acho que era C no lugar de D
+  if ( ! vtx_b->replacesIncidCell(cidA, cidD, 2))
+    vtx_b->replacesIncidCell(cidB, cidD, 2);
   // setting vtx_r: nothing to do
-  // setting vtx_m: 
-  
-  // Calculo da posição onde deve ser inserido um novo ponto
+  // setting vtx_m:
   for (int i = 0; i < sdim; ++i)
     xyz_tmp[i] = t*(vt_xyz[i] - vb_xyz[i]) + vb_xyz[i];
-  
-  // Guarda a Tag associada à aresta dividida
   tag = edge_t->getTag();
-  
-  // Guarda se a aresta é de bordo em uma variavel de estado 
   stat = edge_in_boundary ? Point::mk_inboundary : 0;
-  
-  // Seta os valores referentes ao vertice criado
-  vtx_m->setAllMembers(xyz_tmp, sdim, &cell_A_id, &face_Abr_id, &tag, NULL/*flags*/, &stat, NULL/*singular list*/);
-  
-  // Pega as coordenadas deste vertice novo
+  vtx_m->setAllMembers(xyz_tmp, sdim, &cidA, &fidA_plus1, &tag, NULL/*flags*/, &stat, NULL/*singular list*/);
   vm_xyz = vtx_m->getCoord();
   // setting vtx_l: nothing to do
 
@@ -646,40 +984,40 @@ int MeshToolsTri::insertVertexOnEdge(int cell_A_id, int face_Am_id, Real t, Mesh
     tag = edge_t->getTag();
     pos = 4;
     stat = edge_in_boundary ? Point::mk_inboundary : 0;
-    nod_b->setAllMembers(xyz_tmp, sdim, &cell_D_id, &pos, &tag, NULL, &stat, NULL);
+    nod_b->setAllMembers(xyz_tmp, sdim, &cidD, &pos, &tag, NULL, &stat, NULL);
 
     //setting nod_r:
     for (int i = 0; i < sdim; ++i)
       xyz_tmp[i] = 0.5 * ( vr_xyz[i] + vm_xyz[i]);
-    tag = cell_A->getTag();
+    tag = cellA->getTag();
     pos = 3;
     stat = 0;
-    nod_r->setAllMembers(xyz_tmp, sdim, &cell_D_id, &pos, &tag, NULL, &stat, NULL);
+    nod_r->setAllMembers(xyz_tmp, sdim, &cidD, &pos, &tag, NULL, &stat, NULL);
 
     //setting nod_tr: nothing to do
 
     //setting nod_br:
-    nod_br->setIncidence(cell_D_id, 5);
+    nod_br->setIncidence(cidD, 5);
 
     if (!edge_in_boundary)
     {
       //setting nod_bl
-      nod_bl->setIncidence(cell_C_id, 3);
+      nod_bl->setIncidence(cidC, 3);
 
       //setting nod_tl : nothing to do
 
       //setting nod_l:
       for (int i = 0; i < sdim; ++i)
         xyz_tmp[i] = 0.5 * ( vl_xyz[i] + vm_xyz[i]);
-      tag = cell_B->getTag();
+      tag = cellB->getTag();
       pos = 5;
       stat = 0;
-      nod_l->setAllMembers(xyz_tmp, sdim, &cell_C_id, &pos, &tag, NULL, &stat, NULL);
+      nod_l->setAllMembers(xyz_tmp, sdim, &cidC, &pos, &tag, NULL, &stat, NULL);
 
     }
   }
 
-  //  ----- SetUp edges -------------------
+  // ----- SetUp edges -------------------
 
   // remeber: edge_t, edge_b, edge_l, edge_r, edge_tr, edge_tl, edge_br, edge_bl
   // void Facet::setAllMembers(int const* ic, int const* pos, int const* tag, int const* flags, int const* bound_comp_id))
@@ -689,130 +1027,128 @@ int MeshToolsTri::insertVertexOnEdge(int cell_A_id, int face_Am_id, Real t, Mesh
   //setting edge_tl: nothing to do
 
   //setting edge_b:
-  
-  tag = edge_t->getTag(); 
-  pos = 1; // in cidD 
-  bnd = edge_t->getBoundaryComponentId(); 
- 
-  edge_b->setAllMembers(&cell_D_id, &pos, &tag, NULL, &bnd);
+  tag = edge_t->getTag();
+  pos = 1; // in cidD
+  bnd = edge_t->getBoundaryComponentId();
+  edge_b->setAllMembers(&cidD, &pos, &tag, NULL, &bnd);
 
   //setting edge_r:
-  tag = cell_A->getTag();
+  tag = cellA->getTag();
   pos = 0; // in cidD
   bnd = -1;
-  
-  edge_r->setAllMembers(&cell_D_id, &pos, &tag, NULL, &bnd);
+  edge_r->setAllMembers(&cidD, &pos, &tag, NULL, &bnd);
 
   //setting edge_br:
-  edge_br->setIncidence(cell_D_id, 2);
+  edge_br->setIncidence(cidD, 2);
 
   if (!edge_in_boundary)
   {
     //setting edge_l:
-    tag = cell_B->getTag();
+    tag = cellB->getTag();
     pos = 2; // in cidC
     bnd = -1;
-    edge_l->setAllMembers(&cell_C_id, &pos, &tag, NULL, &bnd);
+    edge_l->setAllMembers(&cidC, &pos, &tag, NULL, &bnd);
 
     //setting edge_bl
-    edge_bl->setIncidence(cell_C_id, 0);
+    edge_bl->setIncidence(cidC, 0);
   }
 
 
-  //=======================================  ----- SetUp Neighbors --------------  =====================================
+  // ----- SetUp Neighbors -------------------
   // top-left: nothing to do
   // top-right: nothing to do
   // bot-right
-  
-  Cell *neighbor = mesh->getCellPtr(cell_A->getIncidCell(face_Abr_id));
+  Cell *neighbor = mesh->getCellPtr(cellA->getIncidCell(fidA_plus1));
   if (neighbor)
-    neighbor->setIncidence(cell_A->getIncidCellPos(face_Abr_id), cell_D_id, 2);
+    neighbor->setIncidence(cellA->getIncidCellPos(fidA_plus1), cidD, 2);
 
   if (!edge_in_boundary)
   {
     // bot-left
-    neighbor = mesh->getCellPtr(cell_B->getIncidCell(face_Bbl_id));
+    neighbor = mesh->getCellPtr(cellB->getIncidCell(fidB_plus2));
     if (neighbor)
-      neighbor->setIncidence(cell_B->getIncidCellPos(face_Bbl_id), cell_C_id, 0);
+      neighbor->setIncidence(cellB->getIncidCellPos(fidB_plus2), cidC, 0);
   }
 
-  // ===================================== ----- SetUp Cells ------------------- =======================================
+
+  // ----- SetUp Cells -------------------
   // remember: cellA, cellB, cellC, cellD
   //void setAllMembers(int const* nodes, int const* corners, int const* facets, int const* icells, int const* icells_pos,
-  //                    int const* icells_ancs, int const* conn_comp_id, int const* tag, int const* flags)
+  // int const* icells_ancs, int const* conn_comp_id, int const* tag, int const* flags)
 
   // set C and D first
 
-  // ============ setting cellD
+  //setting cellD
   nds[0] = vtx_r_id;
   nds[1] = vtx_m_id;
   nds[2] = vtx_b_id;
-  
   if (highm_order)
   {
     nds[3] = nod_r_id;
     nds[4] = nod_b_id;
     nds[5] = nod_br_id;
   }
-  
-  fts[0] =  edge_r_id;
-  fts[1] =  edge_b_id;
-  fts[2] =  edge_br_id;
-  
-  ics[0] =  cell_A_id;                             ics_pos[0] =  face_Abr_id;
-  ics[1] =  cell_C_id;                             ics_pos[1] =  1;
-  ics[2] =  cell_A->getIncidCell(face_Abr_id);     ics_pos[2] =  cell_A->getIncidCellPos(face_Abr_id);
-  
-  bnd = cell_A->getConnectedComponentId();
-  tag = cell_A->getTag();
-  
-  cell_D->setAllMembers(nds, NULL, fts, ics, ics_pos, NULL, &bnd, &tag, NULL);
+  fts[0] = edge_r_id;
+  fts[1] = edge_b_id;
+  fts[2] = edge_br_id;
+  ics[0] = cidA; ics_pos[0] = fidA_plus1;
+  ics[1] = cidC; ics_pos[1] = 1;
+  ics[2] = cellA->getIncidCell(fidA_plus1); ics_pos[2] = cellA->getIncidCellPos(fidA_plus1);
+  bnd = cellA->getConnectedComponentId();
+  tag = cellA->getTag();
+  cellD->setAllMembers(nds, NULL, fts, ics, ics_pos, NULL, &bnd, &tag, NULL);
+
 
   if (!edge_in_boundary)
   {
-    // ================================ setting cellC ==================================================================
+    //setting cellC
     nds[0] = vtx_l_id;
     nds[1] = vtx_b_id;
     nds[2] = vtx_m_id;
-    
     if (highm_order)
     {
       nds[3] = nod_bl_id;
       nds[4] = nod_b_id;
       nds[5] = nod_l_id;
     }
-    fts[0] =  edge_bl_id;
-    fts[1] =  edge_b_id;
-    fts[2] =  edge_l_id;
-    ics[0] =  cell_B->getIncidCell(face_Bbl_id);  ics_pos[0] =  cell_B->getIncidCellPos(face_Bbl_id);
-    ics[1] =  cell_D_id;                               ics_pos[1] =  1;
-    ics[2] =  cell_B_id;                               ics_pos[2] =  face_Bbl_id;
-    bnd = cell_B->getConnectedComponentId();
-    tag = cell_B->getTag();
-    cell_C->setAllMembers(nds, NULL, fts, ics, ics_pos, NULL, &bnd, &tag, NULL);
+    fts[0] = edge_bl_id;
+    fts[1] = edge_b_id;
+    fts[2] = edge_l_id;
+    ics[0] = cellB->getIncidCell(fidB_plus2); ics_pos[0] = cellB->getIncidCellPos(fidB_plus2);
+    ics[1] = cidD; ics_pos[1] = 1;
+    ics[2] = cidB; ics_pos[2] = fidB_plus2;
+    bnd = cellB->getConnectedComponentId();
+    tag = cellB->getTag();
+    cellC->setAllMembers(nds, NULL, fts, ics, ics_pos, NULL, &bnd, &tag, NULL);
   }
 
-  // ======================================== setting cellA ============================================================
-  cell_A->setNodeId(face_Abr_id, vtx_m_id);
+  //setting cellA
+  cellA->setNodeId(fidA_plus1, vtx_m_id);
   if (highm_order)
-    cell_A->setNodeId(face_Abr_id+3, nod_r_id);
-  cell_A->setFacetId(face_Abr_id, edge_r_id);
-  cell_A->setIncidence(face_Abr_id, cell_D_id, 0);
+    cellA->setNodeId(fidA_plus1+3, nod_r_id);
+  cellA->setFacetId(fidA_plus1, edge_r_id);
+  cellA->setIncidence(fidA_plus1, cidD, 0);
 
-  // ========================================= setting cellB ===========================================================
+  //setting cellB
   if (!edge_in_boundary)
   {
-    cell_B->setNodeId(face_Bm_id, vtx_m_id);
+    cellB->setNodeId(fidB, vtx_m_id);
     if (highm_order)
-      cell_B->setNodeId(face_Bbl_id+3, nod_l_id);
-    cell_B->setFacetId(face_Bbl_id, edge_l_id);
-    cell_B->setIncidence(face_Bbl_id, cell_C_id, 2);
+      cellB->setNodeId(fidB_plus2+3, nod_l_id);
+    cellB->setFacetId(fidB_plus2, edge_l_id);
+    cellB->setIncidence(fidB_plus2, cidC, 2);
   }
 
   return vtx_m_id;
 }
 
-// =====================================================================================================================
+
+
+
+
+
+
+
 
 
 ///** Safely removes a triangle (high orders to)

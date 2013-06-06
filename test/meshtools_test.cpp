@@ -432,7 +432,9 @@ TEST(MtoolInsertVertexOnEdgeTest, WithTri3)
 
   int tag;
 
+
   for (int i = 0; i < n_facets; ++i)
+  //for (int i = 3; i < 5; ++i)
   {
     Facet* edge = mesh->getFacetPtr(i);
     
@@ -443,6 +445,8 @@ TEST(MtoolInsertVertexOnEdgeTest, WithTri3)
     // old tag
     tag = edge->getTag();
 
+    EXPECT_TRUE(tag > 0);
+
     //cout << "cell: "<< mesh->getCellId(mesh->getCellPtr(edge->getIncidCell()))<<"; node_id:"<< mesh->getCellPtr(edge->getIncidCell())->getNodeId(edge->getPosition())
     //     << "; edge position:" << edge->getPosition() <<"; numm_nodes: " <<mesh->numNodes()<< endl;
     //mtools.insertVertexOnEdge(edge, 0.5, mesh);
@@ -451,12 +455,13 @@ TEST(MtoolInsertVertexOnEdgeTest, WithTri3)
     EXPECT_TRUE(nd_id > 0);
     if (mesh->inBoundary(edge))
       EXPECT_TRUE(mesh->inBoundary( mesh->getNodePtr(nd_id) ));
-
+    
     EXPECT_EQ(tag, mesh->getNodePtr(nd_id)->getTag());
-
+    
     checkConsistencyTri(mesh);
   }
   vtk_printer.writeVtk();
+  vtk_printer.printPointTagVtk("node_tags");
   
   
   delete mesh;

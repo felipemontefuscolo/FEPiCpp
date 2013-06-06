@@ -441,6 +441,26 @@ void MeshIoMsh::readFileMsh(const char* filename, Mesh * mesh)
     facetm_facets = NULL;
   }
 
+  if (mesh->cellDim()>1)
+  {
+    const int n_cells_total = mesh->numCellsTotal();
+    Cell * cell;
+    Facet * facet;
+    for (int i = 0; i < n_cells_total; ++i)
+    {
+      cell = mesh->getCellPtr(i);
+      if (cell->isDisabled())
+        continue;
+      for (int j = 0; j < mesh->numFacetsPerCell(); ++j)
+      {
+        facet = mesh->getFacetPtr(cell->getFacetId(j));
+        
+        if (facet->getTag() == 0)
+          facet->setTag(cell->getTag());
+      }
+    } // end loop
+  } // endif
+
   fclose(file_ptr);
   //File.close();
 
