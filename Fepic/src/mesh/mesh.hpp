@@ -183,6 +183,34 @@ public:
 
   static Mesh* create(ECellType type, int spacedim = -1);
 
+  // connected component vs initial cell id list
+  void setConnectedComponent(int cc, int cell_id_ref)
+  {
+    m_connected_comp_l[cc] = cell_id_ref;
+  }
+  void setBoundaryComponent(int bc, int facet_id_ref)
+  {
+    m_boundary_comp_l[bc] = facet_id_ref;
+  }
+  // connected component vs initial cell id list
+  int getConnectedComponent(int cc)
+  {
+    return m_connected_comp_l[cc] = cell_id_ref;
+  }
+  int getBoundaryComponent(int bc)
+  {
+    return m_boundary_comp_l[bc] = facet_id_ref;
+  }  
+  void removeConnectedComponent(int cc)
+  {
+    m_connected_comp_l.erase(cc);
+  }
+  void removeBoundaryComponent(int bc)
+  {
+    m_boundary_comp_l.erase( bc);
+  }
+  
+
   int cellDim() const
   {
     return this->m_cell_dim;
