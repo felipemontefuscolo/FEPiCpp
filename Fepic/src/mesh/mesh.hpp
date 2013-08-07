@@ -195,11 +195,11 @@ public:
   // connected component vs initial cell id list
   int getConnectedComponent(int cc)
   {
-    return m_connected_comp_l[cc] = cell_id_ref;
+    return m_connected_comp_l[cc];
   }
   int getBoundaryComponent(int bc)
   {
-    return m_boundary_comp_l[bc] = facet_id_ref;
+    return m_boundary_comp_l[bc];
   }  
   void removeConnectedComponent(int cc)
   {
