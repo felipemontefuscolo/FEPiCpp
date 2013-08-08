@@ -37,7 +37,8 @@ public:
   enum Masks {
     mk_disabled = (1<<0),
     mkm_marked   = (1<<1),
-    mk_visited  = (1<<2)
+    mk_visited  = (1<<2),
+    mk_blocked  = (1<<3),
   };
 
 protected:
@@ -83,6 +84,12 @@ public:
 
   void setVisitedTo(bool visit)
   { m_flags =  visit ? (m_flags | mk_visited) : (m_flags & (~mk_visited))  ; }
+
+  bool isBlocked() const
+  { return m_flags & mk_blocked; }
+
+  void setBlockedTo(bool visit)
+  { m_flags =  visit ? (m_flags | mk_blocked) : (m_flags & (~mk_blocked))  ; }
 
   bool getFlag(unsigned flag_no) const
   { return static_cast<bool>(m_flags & ( 1 << flag_no)); }
