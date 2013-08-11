@@ -297,12 +297,14 @@ void MeshIoVtk::addNodeScalarVtk(const char* nome_var, DefaultGetDataVtk const& 
   }
   m_add_node_scalar_vtk_n_calls++;
 
-  fprintf(file_ptr,"SCALARS %s float\nLOOKUP_TABLE default\n", nome_var);
+  //fprintf(file_ptr,"SCALARS %s float\nLOOKUP_TABLE default\n", nome_var);
+  fprintf(file_ptr,"SCALARS %s double\nLOOKUP_TABLE default\n", nome_var);
 
   
   for (int i=0; i<num_pts_total; ++i)
     if (!(m_mesh->getNodePtr(i)->isDisabled()))
-      fprintf(file_ptr,"%f\n", static_cast<float>(data.get_data_r(i)));
+      //fprintf(file_ptr,"%f\n", static_cast<float>(data.get_data_r(i)));
+      fprintf(file_ptr,"%.14e\n", data.get_data_r(i));
 
   fprintf(file_ptr,"\n");
 
