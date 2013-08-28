@@ -44,15 +44,15 @@ namespace fep_internal
   typedef SeqList<std::deque<Facet>     , SetVector<int> > Mesh_FacetContainer ;
   typedef SeqList<boost::ptr_deque<Cell>, SetVector<int> > Mesh_CellContainer  ;
   
-  typedef typename Mesh_PointContainer::iterator  Mesh_PointContainer_iterator;
-  typedef typename Mesh_CornerContainer::iterator Mesh_CornerContainer_iterator;
-  typedef typename Mesh_FacetContainer::iterator  Mesh_FacetContainer_iterator;
-  typedef typename Mesh_CellContainer::iterator   Mesh_CellContainer_iterator;
+  typedef Mesh_PointContainer::iterator  Mesh_PointContainer_iterator;
+  typedef Mesh_CornerContainer::iterator Mesh_CornerContainer_iterator;
+  typedef Mesh_FacetContainer::iterator  Mesh_FacetContainer_iterator;
+  typedef Mesh_CellContainer::iterator   Mesh_CellContainer_iterator;
 
-  typedef typename Mesh_PointContainer::const_iterator  Mesh_PointContainer_const_iterator;  
-  typedef typename Mesh_CornerContainer::const_iterator Mesh_CornerContainer_const_iterator;
-  typedef typename Mesh_FacetContainer::const_iterator  Mesh_FacetContainer_const_iterator;
-  typedef typename Mesh_CellContainer::const_iterator   Mesh_CellContainer_const_iterator;
+  typedef Mesh_PointContainer::const_iterator  Mesh_PointContainer_const_iterator;  
+  typedef Mesh_CornerContainer::const_iterator Mesh_CornerContainer_const_iterator;
+  typedef Mesh_FacetContainer::const_iterator  Mesh_FacetContainer_const_iterator;
+  typedef Mesh_CellContainer::const_iterator   Mesh_CellContainer_const_iterator;
 
   typedef MeshIterator<Mesh_PointContainer_iterator , Mesh_PointContainer , Mesh>  point_iterator ;
   typedef MeshIterator<Mesh_CornerContainer_iterator, Mesh_CornerContainer, Mesh>  corner_iterator;

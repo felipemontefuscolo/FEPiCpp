@@ -79,8 +79,8 @@ public:
   };
 
   typedef std::vector<std::set<int> >     TableT;
-  typedef typename TableT::iterator       TableIter;
-  typedef typename TableT::const_iterator TableConstIter;
+  typedef TableT::iterator       TableIter;
+  typedef TableT::const_iterator TableConstIter;
   typedef std::multiset<NodeT>           Set;
   typedef std::multiset<NodeT>::iterator SetIter;
 

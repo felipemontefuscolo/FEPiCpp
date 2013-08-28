@@ -38,7 +38,7 @@ public:
     mk_disabled = (1<<0),
     mkm_marked   = (1<<1),
     mk_visited  = (1<<2),
-    mk_blocked  = (1<<3),
+    mk_blocked  = (1<<3)
   };
 
 protected:

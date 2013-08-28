@@ -795,7 +795,7 @@ void Mesh::buildCellsAdjacency()
 
   typedef std::pair<VecxT, Vec2T> PairT; // < (facet vertices) , (cell, ith) >
   typedef std::vector<PairT>      MapT;
-  typedef typename MapT::const_iterator ConstIterT;
+  typedef MapT::const_iterator ConstIterT;
 
 
   int const n_cells = this->numCells();

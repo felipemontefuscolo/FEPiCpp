@@ -55,9 +55,9 @@ class Timer
 {
 public:
   typedef fi_FepTimer::Item Item;
-  typedef typename std::list<Item> List;
-  typedef typename List::iterator Iter;
-  typedef typename List::const_iterator CIter;
+  typedef std::list<Item> List;
+  typedef List::iterator Iter;
+  typedef List::const_iterator CIter;
 
   enum {LimitPushBacks = 64};
 

@@ -19,14 +19,6 @@
 #include "macros.hpp"
 
 
-#include "boost/static_assert.hpp"
-#include "boost/utility/enable_if.hpp"
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wundef"
-#include "boost/type_traits/remove_pointer.hpp"
-#include "boost/type_traits/is_same.hpp"
-#pragma GCC diagnostic pop
-
 //
 //                      _      _  _       _
 //                     | |    | |(_) _ | |_
@@ -80,7 +72,7 @@ public:
 private:
   
   // auxiliary typedefs
-  typedef typename boost::remove_pointer<value_type>::type RP_ValueType; // remove pointer value type
+  typedef typename std::tr1::remove_pointer<value_type>::type RP_ValueType; // remove pointer value type
   typedef          RP_ValueType &                          RP_Reference;
   typedef          RP_ValueType const&                     RP_ConstReference;
   typedef          RP_ValueType *                          RP_Pointer;
