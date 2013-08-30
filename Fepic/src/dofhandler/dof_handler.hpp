@@ -35,9 +35,9 @@ class DofHandler
   typedef std::vector<VarDofs>               DofsContainer;
   typedef Eigen::Array<bool,Eigen::Dynamic,Eigen::Dynamic> MatrixBool;
   
-  // if the compilers complains, just comment these lines
-  DofHandler(DofHandler const& ) = default;
-  DofHandler& operator=(DofHandler const& ) = default;
+  //// if the compilers complains, just comment these lines
+  //DofHandler(DofHandler const& ) = default;
+  //DofHandler& operator=(DofHandler const& ) = default;
   
 public:  
   
