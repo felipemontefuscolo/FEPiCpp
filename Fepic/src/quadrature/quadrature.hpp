@@ -59,7 +59,7 @@ public:
   static
   Quadrature* create(ECellClass cc);
 
-  ~Quadrature() {};
+  virtual ~Quadrature() {};
 protected:
   int m_nm_points;
   int m_order;
