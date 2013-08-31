@@ -30,6 +30,11 @@
 #include <string>
 
 #ifdef FEP_HAS_OPENMP
+//#if 0
+#  define TIMER_HAS_OPENMP FEP_HAS_OPENMP
+#endif
+
+#ifdef TIMER_HAS_OPENMP
 #  include <omp.h>
 #else
 #  include <ctime>
@@ -63,7 +68,7 @@ public:
 
   explicit Timer()
   {
-    #ifdef FEP_HAS_OPENMP
+    #ifdef TIMER_HAS_OPENMP
     m_method = "OpenMp";
     #else
     m_method = "ctime";
@@ -72,7 +77,7 @@ public:
 
   void restart()
   {
-    #ifdef FEP_HAS_OPENMP
+    #ifdef TIMER_HAS_OPENMP
     m_elapsed = omp_get_wtime();
     #else
     m_temp = clock();
@@ -83,7 +88,7 @@ public:
   {
     char  buff[256];
 
-    #ifdef FEP_HAS_OPENMP
+    #ifdef TIMER_HAS_OPENMP
     m_elapsed = omp_get_wtime() - m_elapsed;
     #else
     m_elapsed = static_cast<double>( clock()  - m_temp)/(1.*CLOCKS_PER_SEC);
@@ -124,7 +129,7 @@ protected:
   double      m_elapsed;
   std::string m_method;
   List	      m_list;
-  #ifndef FEP_HAS_OPENMP
+  #ifndef TIMER_HAS_OPENMP
   clock_t     m_temp;
   #endif
 

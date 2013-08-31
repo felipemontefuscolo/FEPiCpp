@@ -238,7 +238,25 @@ Cell* Cell::create(ECellType type)
     return NULL;
   }
   else
-    return (*(creators[idx]))();
+    //return (*(creators[idx]))();
+  {
+    switch (type)
+    {
+      case EDGE2        : return new Edge2;
+      case EDGE3        : return new Edge3;
+      case TRIANGLE3    : return new Triangle3;
+      case TRIANGLE6    : return new Triangle6;
+      case QUADRANGLE4  : return new Quadrangle4;
+      case QUADRANGLE8  : return new Quadrangle8;
+      case QUADRANGLE9  : return new Quadrangle9;
+      case TETRAHEDRON4 : return new Tetrahedron4;
+      case TETRAHEDRON10: return new Tetrahedron10;
+      case HEXAHEDRON8  : return new Hexahedron8;
+      case HEXAHEDRON20 : return new Hexahedron20;
+      case HEXAHEDRON27 : return new Hexahedron27;
+    }
+    
+  }
 
 }
 

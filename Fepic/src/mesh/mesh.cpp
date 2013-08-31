@@ -33,17 +33,19 @@
 #endif
 #include "boost/scoped_ptr.hpp"
 
-Mesh::Mesh(ECellType fept, int spacedim)
+Mesh::Mesh(ECellType const fept, int spacedim)
 {
   FEPIC_CHECK(spacedim>=1 && spacedim<4, "invalid space dimension", std::runtime_error);
   
-  boost::scoped_ptr<Cell> cell(Cell::create(fept));
+  Cell * cell = Cell::create(fept);
+
+  FEPIC_CHECK(cell != NULL, "invalid cell type", std::runtime_error);
 
   m_spacedim = spacedim; // BROKEN
   m_cellm_fep_tag = fept;
   m_cell_msh_tag = ctype2mshTag(fept);
   //m_cell_msh_tag = cell->getMshTag();
-  m_dont_build_adjacency = true;
+  m_build_adjacency = true;
   
   m_is_parametric_cell = cell->isParametric();
   m_cell_dim = cell->dim();
@@ -59,6 +61,8 @@ Mesh::Mesh(ECellType fept, int spacedim)
   m_cell_has_edge_nodes = cell->hasEdgeNodes();
   m_cell_has_face_nodes = cell->hasFaceNodes();
   m_cell_has_volume_nodes = cell->hasVolumeNodes();
+
+  delete cell;
 
   timer = Timer();
 }

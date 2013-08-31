@@ -7,9 +7,6 @@
 #include <utility>
 #include <iterator>
 #include <tr1/type_traits>
-#ifdef FEP_HAS_OPENMP
-#  include "omp.h"
-#endif
 #include "../mesh/enums.hpp"
 #include "../util/misc.hpp"
 #include "contrib/Loki/set_vector.hpp"

@@ -165,7 +165,7 @@ public:
 protected:
   ECellType m_cellm_fep_tag;
   EMshTag   m_cell_msh_tag;
-  bool      m_dont_build_adjacency;  
+  bool      m_build_adjacency;  
   
   //  
   //
@@ -964,11 +964,11 @@ public:
 
   void qBuildAdjacency(bool b)
   {
-    m_dont_build_adjacency = b;
+    m_build_adjacency = b;
   };
   bool qBuildAdjacency()
   {
-    return m_dont_build_adjacency;
+    return m_build_adjacency;
   };
 
 
@@ -1196,7 +1196,7 @@ public:
 
   int getCellId(Cell const* a) const
   {
-    FEPIC_CHECK(m_dont_build_adjacency, "this function can not be called without adjacency", std::runtime_error);
+    FEPIC_CHECK(m_build_adjacency, "this function can not be called without adjacency", std::runtime_error);
     
     int ic_id = a->getIncidCell(0);
     
@@ -1208,19 +1208,19 @@ public:
   
   int getPointId(Point const* a) const
   {
-    FEPIC_CHECK(m_dont_build_adjacency, "this function can not be called without adjacency", std::runtime_error);
+    FEPIC_CHECK(m_build_adjacency, "this function can not be called without adjacency", std::runtime_error);
     return this->getCellPtr(a->getIncidCell())->getNodeId(a->getPosition());
   }
   
   int getFacetId(Facet const* a) const
   {
-    FEPIC_CHECK(m_dont_build_adjacency, "this function can not be called without adjacency", std::runtime_error);
+    FEPIC_CHECK(m_build_adjacency, "this function can not be called without adjacency", std::runtime_error);
     return this->getCellPtr(a->getIncidCell())->getFacetId(a->getPosition());
   }
   
   int getCornerId(Corner const* a) const
   {
-    FEPIC_CHECK(m_dont_build_adjacency, "this function can not be called without adjacency", std::runtime_error);
+    FEPIC_CHECK(m_build_adjacency, "this function can not be called without adjacency", std::runtime_error);
     return this->getCellPtr(a->getIncidCell())->getCornerId(a->getPosition());
   }
 

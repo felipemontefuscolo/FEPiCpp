@@ -72,15 +72,17 @@ using namespace Eigen;
 TEST(DofHandlerTest, AssignsDofsTri3)
 {
   MeshIoMsh msh_reader;
-  MeshIoVtk vtk_printer;
+  //MeshIoVtk vtk_printer;
   Mesh *mesh = NULL;  
 
   ECellType cell_t     = TRIANGLE3;
   const char* mesh_in  = "meshes/simptri3.msh";  
   //const char* mesh_out = "meshes/outtest/dof_tri3.vtk";
 
+
   mesh = Mesh::create(cell_t);
   msh_reader.readFileMsh(mesh_in, mesh);
+
   
   DofHandler DofH(mesh);
   //                         ndpv,  ndpr,  ndpf,  ndpc
@@ -94,7 +96,7 @@ TEST(DofHandlerTest, AssignsDofsTri3)
   
   EXPECT_EQ(75, DofH.numDofs());
   
-
+  
   // checking variable 1
   int dofs[] = {-2,-2,-2,-2,-2,-2,-2,-2};
   int * dofs_end = dofs+sizeof(dofs)/sizeof(int);
@@ -129,13 +131,13 @@ TEST(DofHandlerTest, AssignsDofsTri3)
   EXPECT_EQ( 0, DofH.getVariable(2).numDofs());
   EXPECT_EQ(22, DofH.getVariable(3).numDofs());
   EXPECT_EQ(12, DofH.getVariable(4).numDofs());
-
+  
   EXPECT_EQ(67, DofH.numDofs());
   
   
   // .getVariable(0)
   int *dat = DofH.data();
-
+  
   int counter = 0;
   for (int i = 0; i < DofH.totalSize(); ++i)
   {
@@ -144,8 +146,6 @@ TEST(DofHandlerTest, AssignsDofsTri3)
       
     //std::cout << (*dat++) << std::endl;
   }
-  
-  
   
   delete mesh;
 }
