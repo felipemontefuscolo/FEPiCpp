@@ -207,6 +207,7 @@ public:
     if (ith == 0)
     {
       ic = getIncidCell();
+      pos = getPosition();
       return;
     }
     

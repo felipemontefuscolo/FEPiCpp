@@ -208,8 +208,9 @@ int* Mesh::vertexStar_2D(int C, int vC, int *iCs, int *viCs) const
 
   for (int cc = 0; cc < n_connected_comps; ++cc)
   {
-    C = pt->getIncidCell();
-    vC = pt->getPosition();
+    //C = pt->getIncidCell();
+    //vC = pt->getPosition();
+    pt->getIthIncidCell(cc,C,vC);
     
     Cell const* cell;
     int g, D=C, vD=vC, q=0;

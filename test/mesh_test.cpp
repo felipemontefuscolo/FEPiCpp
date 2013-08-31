@@ -1215,6 +1215,7 @@ TEST(AuxSetConnectedComponentIdTest, WithTri3)
   vtk_printer.attachMesh(mesh);
   //vtk_printer.writeVtk("meshes/outtest/simpedge2.vtk");
 
+
   mesh->fi_setConnectedComponentsId(mesh->getCell(0), 3);
   mesh->fi_setConnectedComponentsId(mesh->getCell(4), 6);
   mesh->fi_setConnectedComponentsId(mesh->getCell(8), 10);
