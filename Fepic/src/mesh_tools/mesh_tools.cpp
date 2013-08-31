@@ -1031,6 +1031,11 @@ int MeshToolsTri::insertVertexOnEdge(int cidA, int fidA, Real t, Mesh *mesh)
   pos = 1; // in cidD
   bnd = edge_t->getBoundaryComponentId();
   edge_b->setAllMembers(&cidD, &pos, &tag, NULL, &bnd);
+  if(edge_t->isBlocked())
+  {
+	  edge_b->setBlockedTo(true);
+	  vtx_m->setBlockedTo(true);
+  }
 
   //setting edge_r:
   tag = cellA->getTag();
@@ -1141,15 +1146,6 @@ int MeshToolsTri::insertVertexOnEdge(int cidA, int fidA, Real t, Mesh *mesh)
 
   return vtx_m_id;
 }
-
-
-
-
-
-
-
-
-
 
 ///** Safely removes a triangle (high orders to)
 // *  @param cell the cell that will be removed.
@@ -1342,6 +1338,7 @@ int MeshToolsTri::collapseEdge2d(int cell_A_id, int face_Am_id, Real t, Mesh *me
 		vtx_l_id = cell_B->getNodeId(face_Bbl_id);
 	}
 	
+	
 	// ================================ Id global das arestas ==========================================================
 	int const edge_m_id  = cell_A->getFacetId(face_Am_id); // = old edge
 	int       edge_br_id = cell_A->getFacetId(face_Abr_id); // Aresta que segue o vertice vtx_b
@@ -1390,21 +1387,55 @@ int MeshToolsTri::collapseEdge2d(int cell_A_id, int face_Am_id, Real t, Mesh *me
           
     if( !edge_in_boundary) vtx_l = mesh->getNodePtr(vtx_l_id);
     
-    Real const *coords_t = vtx_t->getCoord(), 
-			   *coords_b = vtx_b->getCoord();
-    Real coords_m[3];
+    // testes para identificar se algum dos vertices está bloqueado
+    Real coords_t[3], coords_b[3];
+    Real coords_m[3], t_aux=t;
     
+    vtx_t->getCoord(coords_t, sdim);
+    vtx_b->getCoord(coords_b, sdim);
+    
+    if( (vtx_t->isBlocked()) && (!vtx_b->isBlocked()) )
+    { 
+		t_aux=1;
+	}
+	if( (!vtx_t->isBlocked()) && (vtx_b->isBlocked()) )
+	{
+		t_aux=0;
+	}
+	if(  (vtx_t->isBlocked()) && (vtx_b->isBlocked()) && 
+	     ((vtx_b->getTag()!=vtx_t->getTag()) || ((vtx_b->getTag()==vtx_t->getTag())&&(vtx_b->getTag()!=mesh->getFacetPtr(edge_m_id)->getTag())) ) ) return -1;
+	
     for (int i = 0; i < sdim; ++i)
-		coords_m[i] = t*(coords_t[i] - coords_b[i]) + coords_b[i];
-    
+		coords_m[i] = t_aux*(coords_t[i] - coords_b[i]) + coords_b[i];
+		
 	vtx_t->setCoord(coords_m,sdim);
 	vtx_b->setCoord(coords_m,sdim);
 	
 	// ================================ Pegar a estrela do vertice que vai ser substituido =============================
-    int iCs_t[64],     // Ids das celulas da estrela 
-        viCs_t[64];  // Ids locais do vertice nas celulas da estrela
+    int iCs_t[64],   // Ids das celulas da estrela 
+        viCs_t[64], 
+        iCs_b[64],
+        viCs_b[64];  // Ids locais do vertice nas celulas da estrela
      
     mesh->vertexStar(cell_A_id, face_Am_id , iCs_t, viCs_t);
+    mesh->vertexStar(cell_A_id, (face_Am_id+1)%3 , iCs_b, viCs_b);
+    
+    // testa se o colapso gera elementos invertidos
+    bool test=false;
+    for( int i=0; iCs_t[i]!=-1; i++)
+    {
+		if((iCs_t[i]!=cell_A_id)&&(iCs_t[i]!=cell_B_id)&&(area(mesh->getCellPtr(iCs_t[i]), mesh) < 1e-8) ) test = true;
+	}
+	for( int i=0; iCs_b[i]!=-1; i++)
+    {
+		if((iCs_b[i]!=cell_A_id)&&(iCs_b[i]!=cell_B_id)&&(area(mesh->getCellPtr(iCs_b[i]), mesh) < 1e-8) ) test = true;
+	}
+	if(test == true)
+	{
+		vtx_t->setCoord(coords_t, sdim);
+		vtx_b->setCoord(coords_b, sdim);
+		return -1;
+	}
 	
 	// Indica a todas as celulas que continham vtx_t que vtx_b está na posição agora
     for( int i=0; iCs_t[i] > -1; i++)
@@ -1414,7 +1445,92 @@ int MeshToolsTri::collapseEdge2d(int cell_A_id, int face_Am_id, Real t, Mesh *me
     }
     
     // =========================== Atribuir as adjacencias aos vertices ================================================
-    // Vertice vtx_b e vtx_r
+    // vtx_t : será removido, logo não é necessário atualizar suas adjacencias
+    // Vertice vtx_r   
+    if( vtx_r->getIncidCell() == cell_A_id )
+    {
+		int cell_incid = -1, cell_pos = -1;
+		if( cell_AT_id > -1 )  
+		{
+			cell_incid  = cell_AT_id;
+			cell_pos	= (face_ATtr_id+1)%3;
+		}
+		else if( cell_AB_id > -1 )  
+		{
+			cell_incid  = cell_AB_id;
+			cell_pos	= face_ABbr_id;
+		}
+		vtx_r->setIncidence(cell_incid, cell_pos);
+	}
+    
+    // Vertice vtx_b
+    if( (vtx_b->getIncidCell() == cell_A_id) || (vtx_b->getIncidCell() == cell_B_id) )
+    {
+		int cell_incid = -1, cell_pos = -1;
+		if( cell_AT_id > -1 )  
+		{
+			cell_incid  = cell_AT_id;
+			cell_pos	= face_ATtr_id;
+		}
+		else if( cell_AB_id > -1 )  
+		{
+			cell_incid  = cell_AB_id;
+			cell_pos	= (face_ABbr_id+1)%3;
+		}
+		else if( cell_BB_id > -1 )
+		{
+			cell_incid  = cell_BB_id;
+			cell_pos	= face_BBbl_id;
+		}
+		else if( cell_BT_id > -1 )
+		{
+			cell_incid  = cell_BT_id;
+			cell_pos	= (face_BTtl_id+1)%3;
+		}
+		
+		vtx_b->setIncidence(cell_incid, cell_pos);	
+	}
+	
+	// Vertice vtx_l
+	if ( !edge_in_boundary ) 
+	{
+		if( vtx_l->getIncidCell() == cell_B_id )
+		{
+			int cell_incid = -1, cell_pos = -1;
+			if( cell_BT_id > -1 )
+			{
+				cell_incid  = cell_BT_id;
+				cell_pos	= face_BTtl_id;
+			}
+			else if( cell_BB_id > -1 )
+			{
+				cell_incid  = cell_BB_id;
+				cell_pos	= (face_BBbl_id+1)%3;
+			}
+			vtx_l->setIncidence(cell_incid, cell_pos);	
+		}		
+	}
+	
+	// =========================== Atualizar as tags dos vertices ================================================
+	if (mesh->inBoundary(vtx_t)||(vtx_t->isBlocked()))
+	{
+		int tag = vtx_t->getTag();
+		vtx_b->setTag(tag);
+	}	
+	else
+	{
+		int tag_t = vtx_t->getTag(),
+			tag_b = vtx_b->getTag();
+		if( tag_t < tag_b )
+			vtx_b->setTag(tag_t);
+	}
+	
+	if(vtx_t->isBlocked())
+	{
+		vtx_b->setBlockedTo(true);
+	}
+
+    /* old 
     if( cell_AT_id > -1 )
     {
 		if(! vtx_b->replacesIncidCell(cell_A_id, cell_AT_id, face_ATtr_id))
@@ -1440,24 +1556,57 @@ int MeshToolsTri::collapseEdge2d(int cell_A_id, int face_Am_id, Real t, Mesh *me
     
     if ( !edge_in_boundary ) 
 		vtx_l->replacesIncidCell(cell_B_id, cell_BT_id, face_BTtl_id);        
-    
+    */
     // =========================== Atribuir as adjacencias das arestas =================================================
 	
-	Facet *edge_br = mesh->getFacetPtr(edge_br_id);
-		  //*edge_tr = mesh->getFacetPtr(edge_tr_id) ;	
-	Facet *edge_bl = NULL;
-		  //*edge_tl = NULL;						
+	Facet *edge_br = mesh->getFacetPtr(edge_br_id),
+		  *edge_tr = mesh->getFacetPtr(edge_tr_id);	
+	Facet *edge_bl = NULL,
+		  *edge_tl = NULL;						
     
     // Aresta edge_br
     if(cell_AT_id > -1 ) edge_br->setIncidence(cell_AT_id, face_ATtr_id );
     else  				 edge_br->setIncidence(cell_AB_id, face_ABbr_id );
+	if(edge_tr->isBlocked()) edge_br->setBlockedTo(true);
     
     // Aresta edge_bl
     if ( !edge_in_boundary ) 
     {
 		edge_bl=mesh->getFacetPtr(edge_bl_id);
-		// edge_tl=mesh->getFacetPtr(edge_tl_id);
+		edge_tl=mesh->getFacetPtr(edge_tl_id);
 		edge_bl->setIncidence(cell_BT_id, face_BTtl_id);
+		if(edge_tl->isBlocked()) edge_bl->setBlockedTo(true);
+	}
+    // =========================== Atualizar as tags das arestas =======================================================
+    if (mesh->inBoundary(edge_tr) || edge_tr->isBlocked())
+    {
+		int tag = edge_tr->getTag();
+		edge_br->setTag(tag);
+	}
+	else
+	{
+		int tag_b = edge_br->getTag(),
+			tag_t = edge_tr->getTag();
+		if( tag_t < tag_b )
+			edge_br->setTag(tag_t);
+	}
+    
+    if ( !edge_in_boundary )
+    {
+		if( mesh->inBoundary(edge_tl) || edge_tl->isBlocked() )
+		{
+			int tag = edge_tl->getTag();
+			edge_bl->setTag(tag);
+		}
+		else
+		{
+			int tag_b = edge_bl->getTag(),
+				tag_t = edge_tl->getTag();
+			if( tag_t < tag_b )
+			{
+				edge_bl->setTag(tag_t);
+			}
+		}
 	}
     
     // ======= Fala para as celulas vizinhas o id das arestas que são suas faces, e quais são suas celulas vizinhas ====
@@ -1490,10 +1639,10 @@ int MeshToolsTri::collapseEdge2d(int cell_A_id, int face_Am_id, Real t, Mesh *me
 		}	
 	}
   
-  // ========================================== Caso de vtx_t estar no bordo ===========================================
-  // Se vtx_t esta no bordo, vtx_b tambem estara
-  if (mesh->inBoundary(vtx_t))
-    vtx_b->setAsBoundary(true);
+    // ========================================== Caso de vtx_t estar no bordo ===========================================
+    // Se vtx_t esta no bordo, vtx_b tambem estara
+	if (mesh->inBoundary(vtx_t))
+		vtx_b->setAsBoundary(true);
     
     // ================================ Deletar os elementos ===========================================================
 	mesh->disablePoint(vtx_t_id);
@@ -1507,14 +1656,14 @@ int MeshToolsTri::collapseEdge2d(int cell_A_id, int face_Am_id, Real t, Mesh *me
 	if(!edge_in_boundary) 
 		mesh->disableCell(cell_B_id);   
     
-  // Casos degenerados
-  if( ( cell_AT_id == -1 )&&( cell_AB_id ==-1 ) )
-  {
+	// Casos degenerados
+	if( ( cell_AT_id == -1 )&&( cell_AB_id ==-1 ) )
+	{
 		mesh->disableFacet(edge_br_id);
 		mesh->disablePoint(vtx_r_id);
 	}
 	if( ( cell_BT_id == -1 )&&( cell_BB_id ==-1 )&&(edge_bl_id!=-1))
-  {
+	{
 		mesh->disableFacet(edge_bl_id);
 		mesh->disablePoint(vtx_l_id);
 	}
@@ -1522,6 +1671,8 @@ int MeshToolsTri::collapseEdge2d(int cell_A_id, int face_Am_id, Real t, Mesh *me
     return vtx_b_id; 	
 }
 
+
+// =====================================================================================
 int MeshToolsTetr::calcAnchors(int cellA_id, int facetA_id, int cellB_id, int facetB_id, Mesh *mesh)
 {
 	int const nVtxPerFacet = mesh->numVerticesPerFacet();
@@ -1714,7 +1865,6 @@ int MeshToolsTetr::insertVertexOnEdge3d(int cell_A_id, int corner_Am_pos, Real t
 		Point *vtx_aux = vtx_t;
 		vtx_t_id = vtx_b_id;  	vtx_t = vtx_b;
 		vtx_b_id = aux;			vtx_b = vtx_aux;
-		std::cerr << "caso da estrela invertida " << mesh->getCellPtr(idsC[0])->getIncidCell(facet_l_pos) << std::endl;
 	}
 
 // ITERA SOBRE TODAS AS CÉLULAS DA ESTRELA DA ARESTA==================== ok
