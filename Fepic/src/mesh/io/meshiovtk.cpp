@@ -74,7 +74,10 @@ void MeshIoVtk::fi_printCellVtk_Triangle3(int const* ids, FILE *fp) const
 
 void MeshIoVtk::fi_printCellVtk_Triangle6(int const* ids, FILE *fp) const
 {
-  fprintf(fp,"6 %d %d %d %d %d %d\n", *ids, ids[1], ids[2], ids[3], ids[4], ids[5]);
+  fprintf(fp,"3 %d %d %d\n", ids[3], ids[4], ids[5]);
+  fprintf(fp,"3 %d %d %d\n", ids[3], ids[1], ids[4]);
+  fprintf(fp,"3 %d %d %d\n", ids[3], ids[5], ids[0]);
+  fprintf(fp,"3 %d %d %d\n", ids[4], ids[2], ids[5]);
 }
 
 void MeshIoVtk::fi_printCellVtk_Quadrangle4(int const* ids, FILE *fp) const
@@ -102,8 +105,14 @@ void MeshIoVtk::fi_printCellVtk_Tetrahedron4(int const* ids, FILE *fp) const
 
 void MeshIoVtk::fi_printCellVtk_Tetrahedron10(int const* ids, FILE *fp) const
 {
-  fprintf(fp,"10 %d %d %d %d %d %d %d %d %d %d\n",
-          ids[0], ids[1], ids[2], ids[3], ids[4], ids[5], ids[6], ids[7], ids[9], ids[8]);
+  fprintf(fp,"4 %d %d %d %d\n", ids[0], ids[4], ids[7], ids[6]);
+  fprintf(fp,"4 %d %d %d %d\n", ids[1], ids[4], ids[5], ids[9]);
+  fprintf(fp,"4 %d %d %d %d\n", ids[2], ids[5], ids[6], ids[8]);
+  fprintf(fp,"4 %d %d %d %d\n", ids[3], ids[7], ids[9], ids[8]);
+  fprintf(fp,"4 %d %d %d %d\n", ids[5], ids[8], ids[7], ids[9]);
+  fprintf(fp,"4 %d %d %d %d\n", ids[5], ids[7], ids[4], ids[9]);
+  fprintf(fp,"4 %d %d %d %d\n", ids[7], ids[8], ids[5], ids[6]);
+  fprintf(fp,"4 %d %d %d %d\n", ids[4], ids[7], ids[5], ids[6]);
 }
 
 void MeshIoVtk::fi_printCellVtk_Hexahedron8(int const* ids, FILE *fp) const
@@ -140,12 +149,12 @@ namespace fi_VtkTagsInitializers
     tab[log2_i32(EDGE2        ) ] = 3 ;
     tab[log2_i32(EDGE3        ) ] = 3 ;
     tab[log2_i32(TRIANGLE3    ) ] = 5 ;
-    tab[log2_i32(TRIANGLE6    ) ] = 22;
+    tab[log2_i32(TRIANGLE6    ) ] = 5 ;
     tab[log2_i32(QUADRANGLE4  ) ] = 9 ;
     tab[log2_i32(QUADRANGLE8  ) ] = 23;
     tab[log2_i32(QUADRANGLE9  ) ] = 9 ;
     tab[log2_i32(TETRAHEDRON4 ) ] = 10;
-    tab[log2_i32(TETRAHEDRON10) ] = 24;
+    tab[log2_i32(TETRAHEDRON10) ] = 10;
     tab[log2_i32(HEXAHEDRON8  ) ] = 12;
     tab[log2_i32(HEXAHEDRON20 ) ] = 25;
     tab[log2_i32(HEXAHEDRON27 ) ] = 12;
@@ -160,14 +169,14 @@ namespace fi_VtkTagsInitializers
     tab[log2_i32(EDGE2        ) ] = 1;
     tab[log2_i32(EDGE3        ) ] = 2;
     tab[log2_i32(TRIANGLE3    ) ] = 1;
-    tab[log2_i32(TRIANGLE6    ) ] = 1;
+    tab[log2_i32(TRIANGLE6    ) ] = 4;
     tab[log2_i32(QUADRANGLE4  ) ] = 1;
-    tab[log2_i32(QUADRANGLE8  ) ] = 1;
+    tab[log2_i32(QUADRANGLE8  ) ] = 1; // FIXME: can't split this element
     tab[log2_i32(QUADRANGLE9  ) ] = 4;
     tab[log2_i32(TETRAHEDRON4 ) ] = 1;
-    tab[log2_i32(TETRAHEDRON10) ] = 1;
+    tab[log2_i32(TETRAHEDRON10) ] = 8;
     tab[log2_i32(HEXAHEDRON8  ) ] = 1;
-    tab[log2_i32(HEXAHEDRON20 ) ] = 1;
+    tab[log2_i32(HEXAHEDRON20 ) ] = 1; // FIXME: can't split this element
     tab[log2_i32(HEXAHEDRON27 ) ] = 8;
     
     return tab;
@@ -272,10 +281,10 @@ void MeshIoVtk::writeVtk(std::string outname)
       continue;
     for (int i = 0; i < n_cd; ++i)
     {
-      fprintf(file_ptr, "%d\n", type);
+      fprintf(file_ptr, "%d ", type);
     }
   }
-  fprintf(file_ptr,"\n");
+  fprintf(file_ptr,"\n\n");
 
   fclose(file_ptr);
 }
