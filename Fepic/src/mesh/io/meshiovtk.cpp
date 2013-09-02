@@ -2,6 +2,22 @@
 #include <tr1/array>
 #include "../../util/misc2.hpp"
 
+template<typename T>
+T reverseEndian( T aa)
+{
+  T tt;
+  char *cc = ( char* ) & aa;
+  char *dd = ( char* ) & tt;
+
+  // swap the bytes into a temporary buffer
+  int const n = sizeof(T);
+
+  for (int i = 0; i < n; ++i)
+    dd[i] = cc[n-i-1];
+
+  return tt;
+}
+
 
 void MeshIoVtk::attachMesh(Mesh const* mesh)
 {
@@ -28,115 +44,310 @@ void MeshIoVtk::attachMesh(Mesh const* mesh)
     default:
       FEPIC_CHECK(false, "invalid mesh cell type", std::invalid_argument);
   }
-  
 
-  switch (m_spacedim)
+  
+}
+
+
+void MeshIoVtk::fi_printPointVtk(Point const* p, FILE *fp) const
+{
+  double x[3] = { p->getCoord(0),
+                  m_spacedim>1 ? p->getCoord(1): 0.0,
+                  m_spacedim>2 ? p->getCoord(2): 0.0};
+  if (m_is_binary)
   {
-    case 1:  m_p_printer = &MeshIoVtk::fi_printPointVtk_1d; break;
-    case 2:  m_p_printer = &MeshIoVtk::fi_printPointVtk_2d; break;
-    case 3:  m_p_printer = &MeshIoVtk::fi_printPointVtk_3d; break;
-    default:
-      FEPIC_CHECK(false, "invalid mesh dimension", std::invalid_argument);
+    x[0] = reverseEndian(x[0]);
+    x[1] = reverseEndian(x[1]);
+    x[2] = reverseEndian(x[2]);
+    fwrite(x, sizeof(double), 3, fp);
   }
-  
+  else
+    fprintf(fp, "%f %f %f\n", x[0], x[1], x[2]);
 }
 
-
-void MeshIoVtk::fi_printPointVtk_1d(Point const* p, FILE *fp) const
-{
-  fprintf(fp, "%f %d %d\n", static_cast<float>(p->getCoord(0)), 0, 0);
-}
-void MeshIoVtk::fi_printPointVtk_2d(Point const* p, FILE *fp) const
-{
-  fprintf(fp, "%f %f %d\n", static_cast<float>(p->getCoord()[0]), static_cast<float>(p->getCoord()[1]), 0);
-}
-void MeshIoVtk::fi_printPointVtk_3d(Point const* p, FILE *fp) const
-{
-  fprintf(fp, "%f %f %f\n", static_cast<float>(p->getCoord()[0]), static_cast<float>(p->getCoord()[1]), static_cast<float>(p->getCoord()[2]));
-}
 
 
 void MeshIoVtk::fi_printCellVtk_Edge2(int const* ids, FILE *fp) const
 {
+  if (m_is_binary)
+  {
+    int const n_nds   = 2;
+    int const n_parts = 1;
+    int ods[n_parts][n_nds + 1] = {{ n_nds, ids[0], ids[1] }};
+
+    for (int i = 0; i < n_parts; ++i)
+      for (int j = 0; j < n_nds + 1; ++j)
+        ods[i][j] = reverseEndian(ods[i][j]);
+    for (int i = 0; i < n_parts; ++i)
+      fwrite(ods[i], sizeof(int), n_nds+1, fp);
+  }
+  else
     fprintf(fp,"2 %d %d\n", ids[0], ids[1]);
 }
 
 void MeshIoVtk::fi_printCellVtk_Edge3(int const* ids, FILE *fp) const
 {
+  if (m_is_binary)
+  {
+    int const n_nds   = 2;
+    int const n_parts = 2;
+    int ods[n_parts][n_nds + 1] = {{ n_nds, ids[0], ids[2] },
+                                   { n_nds, ids[2], ids[1] }};
+    
+    for (int i = 0; i < n_parts; ++i)
+      for (int j = 0; j < n_nds + 1; ++j)
+        ods[i][j] = reverseEndian(ods[i][j]);
+    for (int i = 0; i < n_parts; ++i)
+      fwrite(ods[i], sizeof(int), n_nds+1, fp);
+  }
+  else
+  {
     fprintf(fp,"2 %d %d\n", ids[0], ids[2]);
     fprintf(fp,"2 %d %d\n", ids[2], ids[1]);
+  }
 }
 
 void MeshIoVtk::fi_printCellVtk_Triangle3(int const* ids, FILE *fp) const
 {
-  fprintf(fp,"3 %d %d %d\n", *ids, ids[1], ids[2]);
+  if (m_is_binary)
+  {
+    int const n_nds   = 3;
+    int const n_parts = 1;
+    int ods[n_parts][n_nds + 1] = {{ n_nds, ids[0], ids[1], ids[2] } };
+    
+    for (int i = 0; i < n_parts; ++i)
+      for (int j = 0; j < n_nds + 1; ++j)
+        ods[i][j] = reverseEndian(ods[i][j]);
+    for (int i = 0; i < n_parts; ++i)
+      fwrite(ods[i], sizeof(int), n_nds+1, fp);
+  }
+  else
+  {
+    fprintf(fp,"3 %d %d %d\n", *ids, ids[1], ids[2]);
+  }
 }
 
 void MeshIoVtk::fi_printCellVtk_Triangle6(int const* ids, FILE *fp) const
 {
-  fprintf(fp,"3 %d %d %d\n", ids[3], ids[4], ids[5]);
-  fprintf(fp,"3 %d %d %d\n", ids[3], ids[1], ids[4]);
-  fprintf(fp,"3 %d %d %d\n", ids[3], ids[5], ids[0]);
-  fprintf(fp,"3 %d %d %d\n", ids[4], ids[2], ids[5]);
+  if (m_is_binary)
+  {
+    int const n_nds   = 3;
+    int const n_parts = 4;
+    int ods[n_parts][n_nds + 1] = {{ n_nds, ids[3], ids[4], ids[5] },
+                                   { n_nds, ids[3], ids[1], ids[4] },
+                                   { n_nds, ids[3], ids[5], ids[0] },
+                                   { n_nds, ids[4], ids[2], ids[5] }};
+    
+    for (int i = 0; i < n_parts; ++i)
+      for (int j = 0; j < n_nds + 1; ++j)
+        ods[i][j] = reverseEndian(ods[i][j]);
+    for (int i = 0; i < n_parts; ++i)
+      fwrite(ods[i], sizeof(int), n_nds+1, fp);
+  }
+  else
+  {
+    fprintf(fp,"3 %d %d %d\n", ids[3], ids[4], ids[5]);
+    fprintf(fp,"3 %d %d %d\n", ids[3], ids[1], ids[4]);
+    fprintf(fp,"3 %d %d %d\n", ids[3], ids[5], ids[0]);
+    fprintf(fp,"3 %d %d %d\n", ids[4], ids[2], ids[5]);
+  }
 }
 
 void MeshIoVtk::fi_printCellVtk_Quadrangle4(int const* ids, FILE *fp) const
 {
-  fprintf(fp,"4 %d %d %d %d\n", *ids, ids[1], ids[2], ids[3]);
+  if (m_is_binary)
+  {
+    int const n_nds   = 4;
+    int const n_parts = 1;
+    int ods[n_parts][n_nds + 1] = {{ n_nds, ids[0], ids[1], ids[2], ids[3] } };
+    
+    for (int i = 0; i < n_parts; ++i)
+      for (int j = 0; j < n_nds + 1; ++j)
+        ods[i][j] = reverseEndian(ods[i][j]);
+    for (int i = 0; i < n_parts; ++i)
+      fwrite(ods[i], sizeof(int), n_nds+1, fp);
+  }
+  else
+  {
+    fprintf(fp,"4 %d %d %d %d\n", *ids, ids[1], ids[2], ids[3]);
+  }
 }
 
 void MeshIoVtk::fi_printCellVtk_Quadrangle8(int const* ids, FILE *fp) const
 {
-  fprintf(fp,"8 %d %d %d %d %d %d %d %d\n", *ids, ids[1], ids[2], ids[3], ids[4], ids[5], ids[6], ids[7]);
+  if (m_is_binary)
+  {
+    int const n_nds   = 8;
+    int const n_parts = 1;
+    int ods[n_parts][n_nds + 1] = {{ n_nds, ids[0], ids[1], ids[2], ids[3], ids[4], ids[5], ids[6], ids[7] } };
+    
+    for (int i = 0; i < n_parts; ++i)
+      for (int j = 0; j < n_nds + 1; ++j)
+        ods[i][j] = reverseEndian(ods[i][j]);
+    for (int i = 0; i < n_parts; ++i)
+      fwrite(ods[i], sizeof(int), n_nds+1, fp);
+  }
+  else
+  {
+    fprintf(fp,"8 %d %d %d %d %d %d %d %d\n", *ids, ids[1], ids[2], ids[3], ids[4], ids[5], ids[6], ids[7]);
+  }
 }
 
 void MeshIoVtk::fi_printCellVtk_Quadrangle9(int const* ids, FILE *fp) const
 {
-  fprintf(fp,"4 %d %d %d %d\n", ids[8], ids[7], ids[0], ids[4]);
-  fprintf(fp,"4 %d %d %d %d\n", ids[8], ids[4], ids[1], ids[5]);
-  fprintf(fp,"4 %d %d %d %d\n", ids[8], ids[5], ids[2], ids[6]);
-  fprintf(fp,"4 %d %d %d %d\n", ids[8], ids[6], ids[3], ids[7]);
+  if (m_is_binary)
+  {
+    int const n_nds   = 4;
+    int const n_parts = 4;
+    int ods[n_parts][n_nds + 1] = {{ n_nds, ids[8], ids[7], ids[0], ids[4] },
+                                   { n_nds, ids[8], ids[4], ids[1], ids[5] },
+                                   { n_nds, ids[8], ids[5], ids[2], ids[6] },
+                                   { n_nds, ids[8], ids[6], ids[3], ids[7] }};
+    
+    for (int i = 0; i < n_parts; ++i)
+      for (int j = 0; j < n_nds + 1; ++j)
+        ods[i][j] = reverseEndian(ods[i][j]);
+    for (int i = 0; i < n_parts; ++i)
+      fwrite(ods[i], sizeof(int), n_nds+1, fp);
+  }
+  else
+  {
+    fprintf(fp,"4 %d %d %d %d\n", ids[8], ids[7], ids[0], ids[4]);
+    fprintf(fp,"4 %d %d %d %d\n", ids[8], ids[4], ids[1], ids[5]);
+    fprintf(fp,"4 %d %d %d %d\n", ids[8], ids[5], ids[2], ids[6]);
+    fprintf(fp,"4 %d %d %d %d\n", ids[8], ids[6], ids[3], ids[7]);
+  }
 }
 
 void MeshIoVtk::fi_printCellVtk_Tetrahedron4(int const* ids, FILE *fp) const
 {
-  fprintf(fp,"4 %d %d %d %d\n", ids[0], ids[1], ids[2], ids[3]);
+  if (m_is_binary)
+  {
+    int const n_nds   = 4;
+    int const n_parts = 1;
+    int ods[n_parts][n_nds + 1] = {{ n_nds, ids[0], ids[1], ids[2], ids[3] } };
+    
+    for (int i = 0; i < n_parts; ++i)
+      for (int j = 0; j < n_nds + 1; ++j)
+        ods[i][j] = reverseEndian(ods[i][j]);
+    for (int i = 0; i < n_parts; ++i)
+      fwrite(ods[i], sizeof(int), n_nds+1, fp);
+  }
+  else
+  {
+    fprintf(fp,"4 %d %d %d %d\n", ids[0], ids[1], ids[2], ids[3]);
+  }
 }
 
 void MeshIoVtk::fi_printCellVtk_Tetrahedron10(int const* ids, FILE *fp) const
 {
-  fprintf(fp,"4 %d %d %d %d\n", ids[0], ids[4], ids[7], ids[6]);
-  fprintf(fp,"4 %d %d %d %d\n", ids[1], ids[4], ids[5], ids[9]);
-  fprintf(fp,"4 %d %d %d %d\n", ids[2], ids[5], ids[6], ids[8]);
-  fprintf(fp,"4 %d %d %d %d\n", ids[3], ids[7], ids[9], ids[8]);
-  fprintf(fp,"4 %d %d %d %d\n", ids[5], ids[8], ids[7], ids[9]);
-  fprintf(fp,"4 %d %d %d %d\n", ids[5], ids[7], ids[4], ids[9]);
-  fprintf(fp,"4 %d %d %d %d\n", ids[7], ids[8], ids[5], ids[6]);
-  fprintf(fp,"4 %d %d %d %d\n", ids[4], ids[7], ids[5], ids[6]);
+  if (m_is_binary)
+  {
+    int const n_nds   = 4;
+    int const n_parts = 8;
+    int ods[n_parts][n_nds + 1] = {{ n_nds, ids[0], ids[4], ids[7], ids[6] },
+                                   { n_nds, ids[1], ids[4], ids[5], ids[9] },
+                                   { n_nds, ids[2], ids[5], ids[6], ids[8] },
+                                   { n_nds, ids[3], ids[7], ids[9], ids[8] },
+                                   { n_nds, ids[5], ids[8], ids[7], ids[9] },
+                                   { n_nds, ids[5], ids[7], ids[4], ids[9] },
+                                   { n_nds, ids[7], ids[8], ids[5], ids[6] },
+                                   { n_nds, ids[4], ids[7], ids[5], ids[6] }};
+    
+    for (int i = 0; i < n_parts; ++i)
+      for (int j = 0; j < n_nds + 1; ++j)
+        ods[i][j] = reverseEndian(ods[i][j]);
+    for (int i = 0; i < n_parts; ++i)
+      fwrite(ods[i], sizeof(int), n_nds+1, fp);
+  }
+  else
+  {
+    fprintf(fp,"4 %d %d %d %d\n", ids[0], ids[4], ids[7], ids[6]);
+    fprintf(fp,"4 %d %d %d %d\n", ids[1], ids[4], ids[5], ids[9]);
+    fprintf(fp,"4 %d %d %d %d\n", ids[2], ids[5], ids[6], ids[8]);
+    fprintf(fp,"4 %d %d %d %d\n", ids[3], ids[7], ids[9], ids[8]);
+    fprintf(fp,"4 %d %d %d %d\n", ids[5], ids[8], ids[7], ids[9]);
+    fprintf(fp,"4 %d %d %d %d\n", ids[5], ids[7], ids[4], ids[9]);
+    fprintf(fp,"4 %d %d %d %d\n", ids[7], ids[8], ids[5], ids[6]);
+    fprintf(fp,"4 %d %d %d %d\n", ids[4], ids[7], ids[5], ids[6]);
+  }
 }
 
 void MeshIoVtk::fi_printCellVtk_Hexahedron8(int const* ids, FILE *fp) const
 {
-  fprintf(fp,"8 %d %d %d %d %d %d %d %d\n", ids[0],ids[1],ids[2],ids[3],ids[4],ids[5],ids[6],ids[7]);
+  if (m_is_binary)
+  {
+    int const n_nds   = 8;
+    int const n_parts = 1;
+    int ods[n_parts][n_nds + 1] = {{ n_nds, ids[0],ids[1],ids[2],ids[3],ids[4],ids[5],ids[6],ids[7] }};
+    
+    for (int i = 0; i < n_parts; ++i)
+      for (int j = 0; j < n_nds + 1; ++j)
+        ods[i][j] = reverseEndian(ods[i][j]);
+    for (int i = 0; i < n_parts; ++i)
+      fwrite(ods[i], sizeof(int), n_nds+1, fp);
+  }
+  else
+  {
+    fprintf(fp,"8 %d %d %d %d %d %d %d %d\n", ids[0],ids[1],ids[2],ids[3],ids[4],ids[5],ids[6],ids[7]);
+  }
 }
 
 void MeshIoVtk::fi_printCellVtk_Hexahedron20(int const* ids, FILE *fp) const
 {
-  fprintf(fp,"20 %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d\n",
-         ids[0], ids[1], ids[2], ids[3], ids[4], ids[5], ids[6], ids[7], ids[8], ids[11],
-         ids[13], ids[9], ids[16], ids[18], ids[19], ids[17], ids[10], ids[12], ids[14], ids[15]);
+  if (m_is_binary)
+  {
+    int const n_nds   = 20;
+    int const n_parts = 1;
+    int ods[n_parts][n_nds + 1] = {{ n_nds, ids[0], ids[1], ids[2], ids[3], ids[4], ids[5], ids[6], ids[7], ids[8], ids[11],
+                                      ids[13], ids[9], ids[16], ids[18], ids[19], ids[17], ids[10], ids[12], ids[14], ids[15] }};
+    
+    for (int i = 0; i < n_parts; ++i)
+      for (int j = 0; j < n_nds + 1; ++j)
+        ods[i][j] = reverseEndian(ods[i][j]);
+    for (int i = 0; i < n_parts; ++i)
+      fwrite(ods[i], sizeof(int), n_nds+1, fp);
+  }
+  else
+  {
+    fprintf(fp,"20 %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d\n",
+           ids[0], ids[1], ids[2], ids[3], ids[4], ids[5], ids[6], ids[7], ids[8], ids[11],
+           ids[13], ids[9], ids[16], ids[18], ids[19], ids[17], ids[10], ids[12], ids[14], ids[15]);
+  }
 }
 
 void MeshIoVtk::fi_printCellVtk_Hexahedron27(int const* ids, FILE *fp) const
 {
-  fprintf(fp,"8 %d %d %d %d %d %d %d %d\n", ids[ 0],ids[ 8],ids[20],ids[ 9],ids[10],ids[21],ids[26],ids[22]);
-  fprintf(fp,"8 %d %d %d %d %d %d %d %d\n", ids[10],ids[21],ids[26],ids[22],ids[ 4],ids[16],ids[25],ids[17]);
-  fprintf(fp,"8 %d %d %d %d %d %d %d %d\n", ids[ 8],ids[ 1],ids[11],ids[20],ids[21],ids[12],ids[23],ids[26]);
-  fprintf(fp,"8 %d %d %d %d %d %d %d %d\n", ids[21],ids[12],ids[23],ids[26],ids[16],ids[ 5],ids[18],ids[25]);
-  fprintf(fp,"8 %d %d %d %d %d %d %d %d\n", ids[ 9],ids[20],ids[13],ids[ 3],ids[22],ids[26],ids[24],ids[15]);
-  fprintf(fp,"8 %d %d %d %d %d %d %d %d\n", ids[22],ids[26],ids[24],ids[15],ids[17],ids[25],ids[19],ids[ 7]);
-  fprintf(fp,"8 %d %d %d %d %d %d %d %d\n", ids[20],ids[11],ids[ 2],ids[13],ids[26],ids[23],ids[14],ids[24]);
-  fprintf(fp,"8 %d %d %d %d %d %d %d %d\n", ids[26],ids[23],ids[14],ids[24],ids[25],ids[18],ids[ 6],ids[19]);
+  if (m_is_binary)
+  {
+    int const n_nds   = 8;
+    int const n_parts = 8;
+    int ods[n_parts][n_nds + 1] = {{ n_nds, ids[ 0],ids[ 8],ids[20],ids[ 9],ids[10],ids[21],ids[26],ids[22] },
+                                   { n_nds, ids[10],ids[21],ids[26],ids[22],ids[ 4],ids[16],ids[25],ids[17] },
+                                   { n_nds, ids[ 8],ids[ 1],ids[11],ids[20],ids[21],ids[12],ids[23],ids[26] },
+                                   { n_nds, ids[21],ids[12],ids[23],ids[26],ids[16],ids[ 5],ids[18],ids[25] },
+                                   { n_nds, ids[ 9],ids[20],ids[13],ids[ 3],ids[22],ids[26],ids[24],ids[15] },
+                                   { n_nds, ids[22],ids[26],ids[24],ids[15],ids[17],ids[25],ids[19],ids[ 7] },
+                                   { n_nds, ids[20],ids[11],ids[ 2],ids[13],ids[26],ids[23],ids[14],ids[24] },
+                                   { n_nds, ids[26],ids[23],ids[14],ids[24],ids[25],ids[18],ids[ 6],ids[19] }};
+    
+    for (int i = 0; i < n_parts; ++i)
+      for (int j = 0; j < n_nds + 1; ++j)
+        ods[i][j] = reverseEndian(ods[i][j]);
+    for (int i = 0; i < n_parts; ++i)
+      fwrite(ods[i], sizeof(int), n_nds+1, fp);
+  }
+  else
+  {
+    fprintf(fp,"8 %d %d %d %d %d %d %d %d\n", ids[ 0],ids[ 8],ids[20],ids[ 9],ids[10],ids[21],ids[26],ids[22]);
+    fprintf(fp,"8 %d %d %d %d %d %d %d %d\n", ids[10],ids[21],ids[26],ids[22],ids[ 4],ids[16],ids[25],ids[17]);
+    fprintf(fp,"8 %d %d %d %d %d %d %d %d\n", ids[ 8],ids[ 1],ids[11],ids[20],ids[21],ids[12],ids[23],ids[26]);
+    fprintf(fp,"8 %d %d %d %d %d %d %d %d\n", ids[21],ids[12],ids[23],ids[26],ids[16],ids[ 5],ids[18],ids[25]);
+    fprintf(fp,"8 %d %d %d %d %d %d %d %d\n", ids[ 9],ids[20],ids[13],ids[ 3],ids[22],ids[26],ids[24],ids[15]);
+    fprintf(fp,"8 %d %d %d %d %d %d %d %d\n", ids[22],ids[26],ids[24],ids[15],ids[17],ids[25],ids[19],ids[ 7]);
+    fprintf(fp,"8 %d %d %d %d %d %d %d %d\n", ids[20],ids[11],ids[ 2],ids[13],ids[26],ids[23],ids[14],ids[24]);
+    fprintf(fp,"8 %d %d %d %d %d %d %d %d\n", ids[26],ids[23],ids[14],ids[24],ids[25],ids[18],ids[ 6],ids[19]);
+  }
 }
 
 
@@ -230,13 +441,18 @@ void MeshIoVtk::writeVtk(std::string outname)
   
   ++m_filenumVtk;
   
-  FILE *file_ptr = fopen(outname.c_str(), "w");
+  FILE *file_ptr = fopen(outname.c_str(), m_is_binary ? "wb" : "w");
 
   fprintf(file_ptr, "# vtk DataFile Version 2.0\n"
-                    "unstructured grid\n"
-                    "ASCII\n"
-                    "DATASET UNSTRUCTURED_GRID\n"
-                    "POINTS %d float\n", m_mesh->numNodes());
+                    "Created by fepic++\n");
+  if (m_is_binary)
+    fprintf(file_ptr, "BINARY\n");
+  else
+    fprintf(file_ptr, "ASCII\n");
+  fprintf(file_ptr, "DATASET UNSTRUCTURED_GRID\n");
+  
+
+  fprintf(file_ptr, "POINTS %d double\n", m_mesh->numNodes());
 
   Point const* point;
   int nm_points_total = m_mesh->numNodesTotal();
@@ -247,7 +463,7 @@ void MeshIoVtk::writeVtk(std::string outname)
     point = m_mesh->getNodePtr(i);
     if (point->isDisabled())
       continue;
-    CALL_MEMBER_FN(*this, m_p_printer)(point, file_ptr);
+    fi_printPointVtk(point, file_ptr);
   }
   
   
@@ -281,10 +497,16 @@ void MeshIoVtk::writeVtk(std::string outname)
       continue;
     for (int i = 0; i < n_cd; ++i)
     {
-      fprintf(file_ptr, "%d ", type);
+      if (m_is_binary)
+      {
+        int tmp = reverseEndian(type);
+        fwrite(&tmp, sizeof(int), 1, file_ptr);
+      }
+      else
+        fprintf(file_ptr, "%d ", type);
     }
   }
-  fprintf(file_ptr,"\n\n");
+  fprintf(file_ptr,"\n");
 
   fclose(file_ptr);
 }
@@ -302,20 +524,24 @@ void MeshIoVtk::addNodeScalarVtk(const char* nome_var, DefaultGetDataVtk const& 
   const int num_pts       = m_mesh->numNodes();
   if (m_add_node_scalar_vtk_n_calls==0)
   {
-    fprintf(file_ptr,"POINT_DATA %d\n\n", num_pts);
+    fprintf(file_ptr,"POINT_DATA %d\n", num_pts);
   }
   m_add_node_scalar_vtk_n_calls++;
 
-  //fprintf(file_ptr,"SCALARS %s float\nLOOKUP_TABLE default\n", nome_var);
   fprintf(file_ptr,"SCALARS %s double\nLOOKUP_TABLE default\n", nome_var);
 
-  
   for (int i=0; i<num_pts_total; ++i)
     if (!(m_mesh->getNodePtr(i)->isDisabled()))
-      //fprintf(file_ptr,"%f\n", static_cast<float>(data.get_data_r(i)));
-      fprintf(file_ptr,"%.14e\n", data.get_data_r(i));
-
-  fprintf(file_ptr,"\n");
+    {
+      if (m_is_binary)
+      {
+        double tmp = reverseEndian(data.get_data_r(i));
+        fwrite(&tmp, sizeof(double), 1, file_ptr);
+      }
+      else
+        fprintf(file_ptr,"%.14e\n", data.get_data_r(i));
+    }
+  fprintf(file_ptr,"\n\n");
 
   fclose(file_ptr);
 }
@@ -335,21 +561,29 @@ void MeshIoVtk::addCellScalarVtk(const char* nome_var, DefaultGetDataVtk const& 
   const int num_cells = m_mesh->numCells();
   if (m_add_cell_scalar_vtk_n_calls==0)
   {
-    fprintf(file_ptr,"CELL_DATA %d\n\n", num_cells*n_cd);
+    fprintf(file_ptr,"CELL_DATA %d\n", num_cells*n_cd);
   }
   m_add_cell_scalar_vtk_n_calls++;
 
-  fprintf(file_ptr,"SCALARS %s float\nLOOKUP_TABLE default\n", nome_var);
+  fprintf(file_ptr,"SCALARS %s double\nLOOKUP_TABLE default\n", nome_var);
 
   for (int i=0; i<num_cells_total; ++i)
   {
     if (m_mesh->getCellPtr(i)->isDisabled())
       continue;
     for (int j = 0; j < n_cd; ++j)
-      fprintf(file_ptr,"%f\n", static_cast<float>(data.get_data_r(i)));
+    {
+      if (m_is_binary)
+      {
+        double tmp = data.get_data_r(i);
+        fwrite(&tmp, sizeof(double), 1, file_ptr);
+      }
+      else
+        fprintf(file_ptr,"%f\n", data.get_data_r(i));
+    }
   }
 
-  fprintf(file_ptr,"\n");
+  fprintf(file_ptr,"\n\n");
 
   fclose(file_ptr);
 }
@@ -382,7 +616,15 @@ void MeshIoVtk::addNodeIntVtk(const char* nome_var, DefaultGetDataVtk const& dat
   
   for (int i=0; i<num_pts_total; ++i)
     if (!(m_mesh->getNodePtr(i)->isDisabled()))
-      fprintf(file_ptr,"%d\n", data.get_data_i(i));
+    {
+      if (m_is_binary)
+      {
+        int tmp = reverseEndian(data.get_data_i(i));
+        fwrite(&tmp, sizeof(int), 1, file_ptr);
+      }
+      else       
+        fprintf(file_ptr,"%d\n", data.get_data_i(i));
+    }
 
   fprintf(file_ptr,"\n");
 
@@ -416,7 +658,15 @@ void MeshIoVtk::addCellIntVtk(const char* nome_var, DefaultGetDataVtk const& dat
     if (m_mesh->getCellPtr(i)->isDisabled())
       continue;
     for (int j = 0; j < n_cd; ++j)
-      fprintf(file_ptr,"%d\n", data.get_data_i(i));
+    {
+      if (m_is_binary)
+      {
+        int tmp = reverseEndian(data.get_data_i(i));
+        fwrite(&tmp, sizeof(int), 1, file_ptr);
+      }
+      else       
+        fprintf(file_ptr,"%d\n", data.get_data_i(i));
+    }
   }
 
   fprintf(file_ptr,"\n");
@@ -451,7 +701,13 @@ void MeshIoVtk::printPointTagVtk(const char* nome_var)
     point = m_mesh->getNodePtr(i);
     if (point->isDisabled())
       continue;
-    fprintf(file_ptr,"%d\n", point->getTag());
+    if (m_is_binary)
+    {
+      int tmp = reverseEndian(point->getTag());
+      fwrite(&tmp, sizeof(int), 1, file_ptr);
+    }
+    else
+      fprintf(file_ptr,"%d\n", point->getTag());
   }
 
   fprintf(file_ptr,"\n");
@@ -485,7 +741,13 @@ void MeshIoVtk::printPointIcellVtk(const char* nome_var)
     point = m_mesh->getNodePtr(i);
     if (point->isDisabled())
       continue;
-    fprintf(file_ptr,"%d\n", m_mesh->getCellContigId(point->getIncidCell()));
+    if (m_is_binary)
+    {
+      int tmp = reverseEndian(m_mesh->getCellContigId(point->getIncidCell()));
+      fwrite(&tmp, sizeof(int), 1, file_ptr);
+    }
+    else    
+      fprintf(file_ptr,"%d\n", m_mesh->getCellContigId(point->getIncidCell()));
   }
 
   fprintf(file_ptr,"\n");
@@ -519,7 +781,13 @@ void MeshIoVtk::printPointPositionVtk(const char* nome_var)
     point = m_mesh->getNodePtr(i);
     if (point->isDisabled())
       continue;
-    fprintf(file_ptr,"%d\n", point->getPosition());
+    if (m_is_binary)
+    {
+      int tmp = reverseEndian(point->getPosition());
+      fwrite(&tmp, sizeof(int), 1, file_ptr);
+    }
+    else      
+      fprintf(file_ptr,"%d\n", point->getPosition());
   }
 
   fprintf(file_ptr,"\n");
@@ -527,5 +795,47 @@ void MeshIoVtk::printPointPositionVtk(const char* nome_var)
   fclose(file_ptr);
 }
 
+void MeshIoVtk::printCellIdVtk(const char* nome_var)
+{
+
+  std::string ss = this->fi_popNextName(this->m_filenumVtk-1, ".vtk");
+
+  FILE * file_ptr = fopen(ss.c_str(), "a");
+  
+  FEPIC_ASSERT(file_ptr != NULL, "could not open the file", std::runtime_error);
+  
+  int  n_cd   = getNumDivisions(m_mesh->cellType()); // num divisions
+  const int num_cells_total = m_mesh->numCellsTotal();
+  const int num_cells = m_mesh->numCells();
+  
+  if (m_add_cell_scalar_vtk_n_calls==0)
+  {
+    fprintf(file_ptr,"CELL_DATA %d\n\n", num_cells*n_cd);
+  }
+  m_add_cell_scalar_vtk_n_calls++;
+
+  fprintf(file_ptr,"SCALARS %s int\nLOOKUP_TABLE default\n", nome_var);
+
+  for (int i=0; i<num_cells_total; ++i)
+  {
+    Cell const * cell = m_mesh->getCellPtr(i);
+    if (cell->isDisabled())
+      continue;
+    for (int j = 0; j < n_cd; ++j)
+    {
+      if (m_is_binary)
+      {
+        int tmp = reverseEndian(m_mesh->getCellId(cell) );
+        fwrite(&tmp, sizeof(int), 1, file_ptr);
+      }
+      else       
+        fprintf(file_ptr,"%d\n", m_mesh->getCellId(cell) );
+    }
+  }
+
+  fprintf(file_ptr,"\n");
+
+  fclose(file_ptr);
+}
 
 

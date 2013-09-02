@@ -32,9 +32,7 @@ class DefaultGetDataVtk
 {
 public:
 
-  /** @brief Returns data for contiguous id.
-   *  @warning I said for contiguous id.
-   *  @note warning: for contiguous id.
+  /**
    */  
 
   DefaultGetDataVtk(Real * r = NULL, int * i = NULL) : data_r(r), data_i(i) {}
@@ -59,20 +57,35 @@ protected:
 
 class MeshIoVtk : public iMeshNameHandler
 {
+  typedef void (MeshIoVtk::*CprinterMemFunPtr)(int const*, FILE*) const;
+  typedef void (MeshIoVtk::*PprinterMemFunPtr)(Point const*, FILE*) const;
+
+protected:
+  bool m_is_binary;
+  int  m_filenumVtk;
+  int  m_add_node_scalar_vtk_n_calls;
+  int  m_add_cell_scalar_vtk_n_calls;
+  int  m_spacedim;
+  ECellType m_fep_tag;
+  Mesh const* m_mesh;
+  CprinterMemFunPtr m_c_printer;
+  //PprinterMemFunPtr m_p_printer;
 
 public:
 
-  MeshIoVtk() :m_filenumVtk(0), m_add_node_scalar_vtk_n_calls(0), m_mesh(NULL) {};
+  MeshIoVtk() : m_is_binary(false), m_filenumVtk(0), m_add_node_scalar_vtk_n_calls(0), m_mesh(NULL) {};
 
   explicit MeshIoVtk(Mesh const* mesh, int filenum=0) : m_filenumVtk(filenum), m_add_node_scalar_vtk_n_calls(0)
   {
     attachMesh(mesh);
   }
 
-  MeshIoVtk(MeshIoVtk const&) {};
+  void setBinaryOutput(bool b)
+  {
+    m_is_binary = b;
+  }
 
-  typedef void (MeshIoVtk::*CprinterMemFunPtr)(int const*, FILE*) const;
-  typedef void (MeshIoVtk::*PprinterMemFunPtr)(Point const*, FILE*) const;
+  MeshIoVtk(MeshIoVtk const&) {};
 
   void attachMesh(Mesh const* mesh);
 
@@ -89,12 +102,9 @@ public:
   void printPointTagVtk(const char* nome_var="node_labels"); //  debug
   void printPointIcellVtk(const char* nome_var="pt_icell"); //  debug
   void printPointPositionVtk(const char* nome_var="pt_ic_pos"); //  debug
+  void printCellIdVtk(const char* nome_var="cell_id");
 
-
-  void fi_printPointVtk_1d(Point const* p, FILE *fp) const;
-  void fi_printPointVtk_2d(Point const* p, FILE *fp) const;
-  void fi_printPointVtk_3d(Point const* p, FILE *fp) const;
-
+  void fi_printPointVtk(Point const* p, FILE *fp) const;
 
   void fi_printCellVtk_Edge2(int const* ids, FILE *fp) const;
   
@@ -125,15 +135,6 @@ public:
 
   static int getNumDivisions(ECellType type);
 
-protected:
-  int  m_filenumVtk;
-  int  m_add_node_scalar_vtk_n_calls;
-  int  m_add_cell_scalar_vtk_n_calls;
-  int  m_spacedim;
-  ECellType m_fep_tag;
-  Mesh const* m_mesh;
-  CprinterMemFunPtr m_c_printer;
-  PprinterMemFunPtr m_p_printer;
 
 };
 
