@@ -808,14 +808,13 @@ void Mesh::buildCellsAdjacency()
 
   MapT table(n_facets*n_cells);
 
-  VecxT    facet_vtcs(n_vtx_per_facet);
-  Vec2T    cell_ith;
-
   m_facets_list.clear();
 
   // constroi uma tabela com as células e seus vizinhos
-  FEP_PRAGMA_OMP(parallel private(cell_ith,facet_vtcs) shared(table) default(none))
+  FEP_PRAGMA_OMP(parallel shared(table) default(none))
   {
+    VecxT    facet_vtcs(n_vtx_per_facet);
+    Vec2T    cell_ith;    
     Cell const* cell;
     int ii;
     unsigned t;
@@ -863,8 +862,9 @@ void Mesh::buildCellsAdjacency()
   }
 
   // build adjacency and create facets
-  FEP_PRAGMA_OMP(parallel private(facet_vtcs) shared(table) default(none))
+  FEP_PRAGMA_OMP(parallel shared(table) default(none))
   {
+    VecxT    facet_vtcs(n_vtx_per_facet);
     int otherC, otherith, thisC, thisith;
     int a;
     std::tr1::shared_ptr<Facet> facet(this->createFacet());
@@ -1596,6 +1596,187 @@ Mesh* Mesh::create(ECellType type, int spacedim)
                                                           |
                                                           |
 */ //=====================================================
+
+
+
+//   backup: 2013/09/03
+//   /// @note constroi as facets também
+//   void Mesh::buildCellsAdjacency()
+//   {
+//     const int cdim            = this->cellDim();
+//     const int n_vtx_per_facet = this->numVerticesPerFacet();
+//     const int n_facets        = this->numFacetsPerCell();
+//     const int n_anch          = cdim ? n_vtx_per_facet : 1;
+//   
+//     //typedef std::tr1::array<int, n_vtx_per_facet> VecxT;
+//     typedef std::vector<int>             VecxT;
+//     typedef std::tr1::array<int, 2>      Vec2T;
+//   
+//     typedef std::pair<VecxT, Vec2T> PairT; // < (facet vertices) , (cell, ith) >
+//     typedef std::vector<PairT>      MapT;
+//     typedef MapT::const_iterator ConstIterT;
+//   
+//   
+//     int const n_cells = this->numCells();
+//     int const n_cells_total = this->numCellsTotal();
+//   
+//     MapT table(n_facets*n_cells);
+//   
+//     VecxT    facet_vtcs(n_vtx_per_facet);
+//     Vec2T    cell_ith;
+//   
+//     m_facets_list.clear();
+//   
+//     // constroi uma tabela com as células e seus vizinhos
+//     FEP_PRAGMA_OMP(parallel private(cell_ith,facet_vtcs) shared(table) default(none))
+//     {
+//       Cell const* cell;
+//       int ii;
+//       unsigned t;
+//   
+//       FEP_PRAGMA_OMP(for schedule (static) nowait)
+//       for (int k = 0; k < n_cells_total; ++k)
+//       {
+//         cell = this->getCellPtr(k);
+//         if (cell->isDisabled())
+//           continue;
+//   
+//         ii = this->getCellContigId(k);
+//         //ii = k;
+//   
+//         for (int j = 0; j < n_facets; ++j)
+//         {
+//           cell->getFacetVerticesId(j, facet_vtcs.data());
+//           cell_ith[0] = k;
+//           cell_ith[1] = j;
+//           t = n_facets*ii + j;
+//           //table[n_facets*ii + j] = std::make_pair(facet_vtcs, cell_ith);
+//           table[t].first  = facet_vtcs;
+//           table[t].second = cell_ith;
+//   
+//         }
+//   
+//       }
+//   
+//     }
+//   
+//     omptl::sort(table.begin(), table.end(), pair_less<PairT>());
+//   
+//     //// the CellList iterator must be "random access" for the algorithms that follows
+//     //// otherwise, the algorithms must be reimplemented.
+//     //typedef typename CellIteratorT::iterator_category _category;
+//     //FEP_STATIC_ASSERT_ITERATOR((std::tr1::is_same<_category,std::random_access_iterator_tag>::value));
+//   
+//     // reseting cells neighbors
+//     FEP_PRAGMA_OMP(parallel for) // WARNING: VALID ONLY FOR std::vector<> ....
+//     for (int i=0; i<n_cells_total; ++i)
+//     {
+//       m_cells_list[i].resetIncidCells();
+//       if (cdim>1)
+//         m_cells_list[i].resetFacets();
+//     }
+//   
+//     // build adjacency and create facets
+//     FEP_PRAGMA_OMP(parallel private(facet_vtcs) shared(table) default(none))
+//     {
+//       int otherC, otherith, thisC, thisith;
+//       int a;
+//       std::tr1::shared_ptr<Facet> facet(this->createFacet());
+//       int facet_id;
+//   
+//       bool found;
+//       ConstIterT mid, table_end = table.end(), table_beg = table.begin();
+//   
+//       FEP_PRAGMA_OMP(for schedule (guided) nowait)
+//       for (ConstIterT kit = table.begin(); kit < table_end; ++kit) // table loop
+//       {
+//   
+//         std::reverse_copy(kit->first.begin(), kit->first.end(), facet_vtcs.begin());
+//   
+//         found = false;
+//   
+//         for (a = 0; a != n_anch; ++a) // ancora
+//         {
+//           mid = binary_find(table_beg, kit, facet_vtcs, pair_less<PairT>(), pair_eq<PairT>());
+//   
+//           if (mid != kit) // se econtrou uma face em comum
+//           {
+//   
+//             otherC = mid->second[0];
+//             otherith = mid->second[1];
+//             thisC = kit->second[0];
+//             thisith =  kit->second[1];
+//   
+//             (this->getCellPtr(thisC))->setIncidCell(thisith, otherC);
+//             (this->getCellPtr(thisC))->setIncidCellPos(thisith, otherith);
+//   
+//             (this->getCellPtr(otherC))->setIncidCell(otherith, thisC);
+//             (this->getCellPtr(otherC))->setIncidCellPos(otherith, thisith);
+//   
+//             if (cdim==3)
+//             {
+//               (this->getCellPtr(thisC))->setIncidCellAnch(thisith, a);
+//               (this->getCellPtr(otherC))->setIncidCellAnch(otherith, a);
+//             }
+//   
+//             found = true;
+//             break;
+//           }
+//           std::rotate(facet_vtcs.begin(), facet_vtcs.begin()+1, facet_vtcs.end());
+//         }
+//         if (!found)
+//         {
+//           thisC = kit->second[0];
+//           thisith =  kit->second[1];
+//           if( cdim > 1) // border facet
+//           {
+//             // create a facet
+//             facet->setIncidCell(thisC);
+//             facet->setPosition(thisith);
+//             //facet->FacetT::setAnchor(-1);
+//             FEP_PRAGMA_OMP(critical)
+//             facet_id = this->pushFacet(facet.get());
+//             this->getCellPtr(thisC)->setFacetId(thisith, facet_id);
+//           }
+//         }
+//   
+//       }
+//   
+//   
+//     } // end parallel
+//   
+//     // assigns facets to cells that remained
+//     if (cdim > 1)
+//     {
+//       FEP_PRAGMA_OMP(parallel)
+//       {
+//         Cell * cell;
+//         Cell const* icell;
+//         int oth;
+//         int facet_id;
+//         FEP_PRAGMA_OMP(for)
+//         for (int i=0; i<n_cells_total; ++i)
+//         {
+//           cell = getCellPtr(i);
+//           if (cell->isDisabled())
+//             continue;
+//           for (int j = 0; j < n_facets; ++j)
+//           {
+//             if (cell->getFacetId(j) < 0)
+//             {
+//               icell = getCellPtr(cell->getIncidCell(j));
+//               oth = cell->getIncidCellPos(j);
+//               facet_id = icell->getFacetId(oth);
+//               cell->setFacetId(j, facet_id);
+//             }
+//           }
+//         }
+//     
+//       }
+//     }
+//   
+//   
+//   }
 
 
 

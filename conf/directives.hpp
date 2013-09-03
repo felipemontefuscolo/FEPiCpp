@@ -47,12 +47,12 @@
 
 
 
-//#ifdef FEP_HAS_OPENMP
-//#   define FEP_PRAGMA_OMP(x) FEP_DO_PRAGMA(omp x)
-//#   define FEP_DO_PRAGMA(x) _Pragma ( #x ) // _Pragma eh soh pra linux?
-//#else
+#ifdef FEP_HAS_OPENMP
+#   define FEP_PRAGMA_OMP(x) FEP_DO_PRAGMA(omp x)
+#   define FEP_DO_PRAGMA(x) _Pragma ( #x ) // _Pragma eh soh pra linux?
+#else
 #   define FEP_PRAGMA_OMP(x)
-//#endif
+#endif
 
 
 // -----------------  TYPEDEFS -------------------------

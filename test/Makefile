@@ -78,14 +78,14 @@ alltests.exe: $(TOBJECTS) gtest.a gtest_main.a
 	@echo all tests successfully compiled
 	@echo 
 
-clean:
-	$(FEP_RM) *.o *.d *.exe *~ gtest.a gtest_main.a
-
 
 -include $(CPPSOURCES:.cpp=.d)
 
 %.d: %.cpp
 	$(FEP_CXX) $< -MM -MT '$*.o $*.d ' -MD $(CXXFLAGS) $(CPPFLAGS)
+
+clean:
+	$(FEP_RM) *.o *.d *.exe *~ gtest.a gtest_main.a
 
 #all: gtest.a gtest_main.a $(CPPSOURCES:.cpp=.cpp)
 #
