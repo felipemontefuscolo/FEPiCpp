@@ -39,7 +39,7 @@
 #include <tr1/memory>
 
 
-bool is_binary = true;
+bool is_binary = false;
 
 
 class GetDataVtk : public DefaultGetDataVtk
@@ -167,7 +167,6 @@ TEST(IOTest, WriteVtkEdge3Test)
 
   delete mesh;
 }
-
 
 TEST(IOTest, WriteVtkTri3Test)
 {
