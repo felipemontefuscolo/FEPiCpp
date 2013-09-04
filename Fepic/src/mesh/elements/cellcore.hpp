@@ -295,9 +295,11 @@ public:
    * @param[in] vtcs vector with the ids of the vertices.
    * @param[out] lfid local id of the facet that has those vertices. If the vertices form a facet
    *  in a anticyclically manner, then the negative of the facet's id is returned.
+   * @param[out] anchor in 3D, returns the anchor (how the facet is positioned, see doc.)
    * @return true if a facet were found, false otherwise.
+   * @warning lfid and anchor can be negative numbers!
    */
-  bool isFacet(int const* vtcs, int &lfid) const;
+  bool isFacet(int const* vtcs, int *lfid = NULL, int *anchor = NULL) const;
 
   bool isParametric() const
   {
@@ -508,7 +510,6 @@ public:
 #undef CONST_THIS
 
 };
-
 
 
 

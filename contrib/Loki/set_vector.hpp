@@ -123,6 +123,15 @@ public:
     Base::pop_back();
   }
 
+  pointer data()
+  {
+    return Base::data();
+  }
+  const_pointer data() const
+  {
+    return Base::data();
+  }
+
   // modifiers:
   std::pair<iterator, bool> insert(const value_type& val)
   {

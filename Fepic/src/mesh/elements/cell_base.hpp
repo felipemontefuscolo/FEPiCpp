@@ -76,7 +76,7 @@ public:
   virtual bool hasVolumeNodes() const = 0;
   virtual bool inBoundary() const = 0;
   virtual bool isCorner(int const* vtcs, int &lrid) const = 0;
-  virtual bool isFacet(int const* vtcs, int &lfid) const = 0;
+  virtual bool isFacet(int const* vtcs, int *lfid, int *anchor) const = 0;
   virtual bool isParametric() const = 0;
   virtual int  numCorners() const = 0;
   virtual int  numCornersPerFacet() const = 0;

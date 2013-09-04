@@ -786,179 +786,200 @@ void Mesh::pushIncidCell2Point(Point *pt, int iC, int pos)
 // --------------------------------------------------- ADJACENCY -------------------------------------------------------
 
 
+
+template <class Iter1, class Iter2, class T>
+bool common1 (Iter1 first1, Iter1 last1,
+              Iter2 first2, Iter2 last2,
+              T & result)
+{
+  while (first1!=last1 && first2!=last2)
+  {
+    if (*first1<*first2) ++first1;
+    else if (*first2<*first1) ++first2;
+    else {
+      result = *first1;
+      return true;
+    }
+  }
+  return false;
+}
+
+template <class Iter1, class Iter2, class Iter3, class T>
+bool common2 (Iter1 first1, Iter1 last1,
+              Iter2 first2, Iter2 last2,
+              Iter3 first3, Iter3 last3,
+              T & result)
+{
+
+  while (first1!=last1 && first2!=last2)
+  {
+    if (*first1<*first2) ++first1;
+    else if (*first2<*first1) ++first2;
+    else {
+       if ( last3 != std::find(first3,last3,*first1) )
+       {
+         result = *first1;
+         return true;
+       }
+       else
+         ++first1;
+    }
+  }
+  return false;
+
+}
+
 /// @note constroi as facets também
 void Mesh::buildCellsAdjacency()
 {
   const int cdim            = this->cellDim();
   const int n_vtx_per_facet = this->numVerticesPerFacet();
   const int n_facets        = this->numFacetsPerCell();
-  const int n_anch          = cdim ? n_vtx_per_facet : 1;
+  //const int n_anch          = cdim ? n_vtx_per_facet : 1;
 
-  //typedef std::tr1::array<int, n_vtx_per_facet> VecxT;
-  typedef std::vector<int>             VecxT;
-  typedef std::tr1::array<int, 2>      Vec2T;
-
-  typedef std::pair<VecxT, Vec2T> PairT; // < (facet vertices) , (cell, ith) >
-  typedef std::vector<PairT>      MapT;
-  typedef MapT::const_iterator ConstIterT;
-
-
-  int const n_cells = this->numCells();
+  //int const n_cells = this->numCells();
   int const n_cells_total = this->numCellsTotal();
 
-  MapT table(n_facets*n_cells);
+  // vertices star list
+  std::vector<SetVector<int> >  star( this->numNodesTotal() );
 
-  m_facets_list.clear();
+  // reserving memory
+  int n_neibs = cdim<3 ? 10 : 40;
+  for (unsigned i = 0; i < star.size(); ++i)
+    star[i].reserve(n_neibs);
 
-  // constroi uma tabela com as células e seus vizinhos
-  FEP_PRAGMA_OMP(parallel shared(table) default(none))
+  Cell * cell;
+  
+  // constructing the vertices star list
+  for (int i = 0; i < n_cells_total; ++i)
   {
-    VecxT    facet_vtcs(n_vtx_per_facet);
-    Vec2T    cell_ith;    
-    Cell const* cell;
-    int ii;
-    unsigned t;
-
-    FEP_PRAGMA_OMP(for schedule (static) nowait)
-    for (int k = 0; k < n_cells_total; ++k)
-    {
-      cell = this->getCellPtr(k);
-      if (cell->isDisabled())
-        continue;
-
-      ii = this->getCellContigId(k);
-      //ii = k;
-
-      for (int j = 0; j < n_facets; ++j)
-      {
-        cell->getFacetVerticesId(j, facet_vtcs.data());
-        cell_ith[0] = k;
-        cell_ith[1] = j;
-        t = n_facets*ii + j;
-        //table[n_facets*ii + j] = std::make_pair(facet_vtcs, cell_ith);
-        table[t].first  = facet_vtcs;
-        table[t].second = cell_ith;
-
-      }
-
-    }
-
+    cell = getCellPtr(i);
+    if (cell->isDisabled())
+      continue;
+    for (int j = 0; j < cell->numVertices(); ++j)
+      star.at( cell->getNodeId(j) ).insert(i);
+      
+    for (int f = 0; f < n_facets; ++f)
+      //cell->setFacetId(f, -1);
+      cell->setIncidCell(f, -1);
   }
 
-  omptl::sort(table.begin(), table.end(), pair_less<PairT>());
+  //for (int i = 0; i < (int)star.size(); ++i)
+  //{
+  //  for (int j = 0; j < (int)star[i].size(); ++j)
+  //  {
+  //    std::cout << (*(star[i].data() + j)) << " ";
+  //  }
+  //  if (star[i].empty())
+  //    std::cout << "--";
+  //  std::cout << std::endl;
+  //}
+  
 
-  //// the CellList iterator must be "random access" for the algorithms that follows
-  //// otherwise, the algorithms must be reimplemented.
-  //typedef typename CellIteratorT::iterator_category _category;
-  //FEP_STATIC_ASSERT_ITERATOR((std::tr1::is_same<_category,std::random_access_iterator_tag>::value));
-
-  // reseting cells neighbors
-  FEP_PRAGMA_OMP(parallel for) // WARNING: VALID ONLY FOR std::vector<> ....
-  for (int i=0; i<n_cells_total; ++i)
+  std::vector<int> f_vtcs(n_vtx_per_facet);  
+  std::tr1::shared_ptr<Facet> facet(this->createFacet());
+  int facet_id;
+  
+  // building adjacency
+  // also it creates the facets
+  // the strategy: we use the information that for each facet there are
+  //               at most two incident cells. The mate cell is given by
+  //               the intersection of the vertices star lists.
+  for (int i = 0; i < n_cells_total; ++i)
   {
-    m_cells_list[i].resetIncidCells();
-    if (cdim>1)
-      m_cells_list[i].resetFacets();
-  }
-
-  // build adjacency and create facets
-  FEP_PRAGMA_OMP(parallel shared(table) default(none))
-  {
-    VecxT    facet_vtcs(n_vtx_per_facet);
-    int otherC, otherith, thisC, thisith;
-    int a;
-    std::tr1::shared_ptr<Facet> facet(this->createFacet());
-    int facet_id;
-
+    cell = getCellPtr(i);
+    if (cell->isDisabled())
+      continue;
+    int neighbor_id;
     bool found;
-    ConstIterT mid, table_end = table.end(), table_beg = table.begin();
-
-    FEP_PRAGMA_OMP(for schedule (guided) nowait)
-    for (ConstIterT kit = table.begin(); kit < table_end; ++kit) // table loop
+    
+    // do not count itself
+    for (int k = 0; k < cell->numVertices(); ++k)
+      star[ cell->getNodeId(k) ].erase(i);
+    
+    for (int f = 0; f < n_facets; ++f)
     {
+      //if (cell->getFacetId(f) >= 0)
+      if (cell->getIncidCell(f) >= 0)
+        continue;
+      cell->getFacetVerticesId(f, f_vtcs.data());
 
-      std::reverse_copy(kit->first.begin(), kit->first.end(), facet_vtcs.begin());
-
-      found = false;
-
-      for (a = 0; a != n_anch; ++a) // ancora
+      if (cdim==1)
       {
-        mid = binary_find(table_beg, kit, facet_vtcs, pair_less<PairT>(), pair_eq<PairT>());
-
-        if (mid != kit) // se econtrou uma face em comum
+        found = ! star[f_vtcs[0]].empty();
+        if (found)
+          neighbor_id = star[f_vtcs[0]].back();
+      }
+      else
+      if (cdim == 2)
+      { 
+        int *beg1 = star[f_vtcs[0]].data();
+        int *end1 = beg1 + star[f_vtcs[0]].size();
+        int *beg2 = star[f_vtcs[1]].data();
+        int *end2 = beg2 + star[f_vtcs[1]].size();
+        
+        found = common1(beg1, end1, beg2, end2, neighbor_id);
+      }
+      else
+      if (cdim == 3)
+      { 
+        int *beg1 = star[f_vtcs[0]].data();
+        int *end1 = beg1 + star[f_vtcs[0]].size();
+        int *beg2 = star[f_vtcs[1]].data();
+        int *end2 = beg2 + star[f_vtcs[1]].size();
+        int *beg3 = star[f_vtcs[2]].data();
+        int *end3 = beg3 + star[f_vtcs[2]].size();
+        
+        found = common2(beg1, end1, beg2, end2, beg3, end3, neighbor_id);
+      }
+      
+      Cell * cellv;
+      int anchor;
+      int fv;
+      if (found)
+      {
+        cellv = this->getCellPtr(neighbor_id);
+        
+        if ( cellv->isFacet(f_vtcs.data(), &fv, &anchor) )
         {
+          fv = abs(fv);
+          anchor = abs(anchor);
+          
+          cell->setIncidCell(f, neighbor_id);
+          cell->setIncidCellPos(f, fv);
 
-          otherC = mid->second[0];
-          otherith = mid->second[1];
-          thisC = kit->second[0];
-          thisith =  kit->second[1];
-
-          (this->getCellPtr(thisC))->setIncidCell(thisith, otherC);
-          (this->getCellPtr(thisC))->setIncidCellPos(thisith, otherith);
-
-          (this->getCellPtr(otherC))->setIncidCell(otherith, thisC);
-          (this->getCellPtr(otherC))->setIncidCellPos(otherith, thisith);
+          cellv->setIncidCell(fv, i);
+          cellv->setIncidCellPos(fv, f);
 
           if (cdim==3)
           {
-            (this->getCellPtr(thisC))->setIncidCellAnch(thisith, a);
-            (this->getCellPtr(otherC))->setIncidCellAnch(otherith, a);
-          }
-
-          found = true;
-          break;
+            cell->setIncidCellAnch(f, anchor);
+            cellv->setIncidCellAnch(fv, anchor);
+          }          
         }
-        std::rotate(facet_vtcs.begin(), facet_vtcs.begin()+1, facet_vtcs.end());
-      }
-      if (!found)
-      {
-        thisC = kit->second[0];
-        thisith =  kit->second[1];
-        if( cdim > 1) // border facet
+        else
         {
-          // create a facet
-          facet->setIncidCell(thisC);
-          facet->setPosition(thisith);
-          //facet->FacetT::setAnchor(-1);
-          FEP_PRAGMA_OMP(critical)
-          facet_id = this->pushFacet(facet.get());
-          this->getCellPtr(thisC)->setFacetId(thisith, facet_id);
+          FEPIC_CHECK(false, "something is wrong ...", std::runtime_error);
         }
+        
       }
+      
+      // create the facet
+      facet->setIncidCell(i);
+      facet->setPosition(f);
+      facet_id = this->pushFacet(facet.get());
+      cell->setFacetId(f, facet_id);
+      if (found)
+        cellv->setFacetId(fv, facet_id);
+      
+      //std::cout << "Cell: " << i << "; nodes: "<<f_vtcs[0]<<" "<<f_vtcs[1]<<" "<<f_vtcs[2]<< "; found = " << found;
+      //if (found)
+      // std::cout << ", who: " << neighbor_id;
+      //std::cout << std::endl;
+      
+    } // end facets
 
-    }
 
-
-  } // end parallel
-
-  // assigns facets to cells that remained
-  if (cdim > 1)
-  {
-    FEP_PRAGMA_OMP(parallel)
-    {
-      Cell * cell;
-      Cell const* icell;
-      int oth;
-      int facet_id;
-      FEP_PRAGMA_OMP(for)
-      for (int i=0; i<n_cells_total; ++i)
-      {
-        cell = getCellPtr(i);
-        if (cell->isDisabled())
-          continue;
-        for (int j = 0; j < n_facets; ++j)
-        {
-          if (cell->getFacetId(j) < 0)
-          {
-            icell = getCellPtr(cell->getIncidCell(j));
-            oth = cell->getIncidCellPos(j);
-            facet_id = icell->getFacetId(oth);
-            cell->setFacetId(j, facet_id);
-          }
-        }
-      }
-  
-    }
   }
 
 
@@ -1087,7 +1108,7 @@ void Mesh::buildNodesAdjacency()
     for (int C = 0; C < num_cells; ++C)
     {
       cell = this->getCellPtr(C);
-      if (cell==NULL)
+      if (cell->isDisabled())
         continue;
 
       for (int j = 0; j < nfpc; ++j)
@@ -1282,6 +1303,7 @@ bool Mesh::getFacetIdFromVertices(int const* vtcs, int &fid)
   Cell const*      cell;
   int trash[FEPIC_MAX_ICELLS], iCs[FEPIC_MAX_ICELLS]; // MAX_ICELLS
   int fC;
+  int anc;
   bool found;
 
   // células incidentes ao primeiro vértice da facet
@@ -1290,7 +1312,7 @@ bool Mesh::getFacetIdFromVertices(int const* vtcs, int &fid)
   for(int* iC = iCs; iC!=iCs_end; ++iC)
   {
     cell = this->getCellPtr(*iC);
-    found = cell->isFacet(vtcs, fC);
+    found = cell->isFacet(vtcs, &fC, &anc);
 
     if (!found) continue;
 

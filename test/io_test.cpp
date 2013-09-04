@@ -168,6 +168,7 @@ TEST(IOTest, WriteVtkEdge3Test)
   delete mesh;
 }
 
+
 TEST(IOTest, WriteVtkTri3Test)
 {
   MeshIoMsh msh_reader;
@@ -227,6 +228,8 @@ TEST(IOTest, WriteVtkQuad4Test)
   vtk_printer.printPointPositionVtk();
   vtk_printer.addNodeScalarVtk("foo",GetDataVtk());
   vtk_printer.printCellIdVtk();
+  
+  //mesh->printInfo();
   
   delete mesh;
 }
@@ -290,8 +293,11 @@ TEST(IOTest, WriteVtkTet4Test)
   vtk_printer.printPointPositionVtk();
   vtk_printer.addNodeScalarVtk("foo",GetDataVtk());
   vtk_printer.printCellIdVtk();
-
+  
   delete mesh;
+
+
+
 }
 
 TEST(IOTest, WriteVtkTet10Test)
@@ -377,8 +383,6 @@ TEST(IOTest, WriteVtkHex27Test)
 
   delete mesh;
 }
-
-
 
 
 //TEST(IOTest, CheckMeshSizeTet4)

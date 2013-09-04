@@ -134,25 +134,56 @@ bool iCellCore<CellT>::isCorner(int const* vtcs, int &f) const
 
 
 template<typename CellT>
-bool iCellCore<CellT>::isFacet(int const* vtcs, int &f) const
+bool iCellCore<CellT>::isFacet(int const* vtcs, int *ff, int *anchor) const
 {
-  int facet_vtcs[CellT::n_vertices_per_facet];
+  int  facet_vtcs[CellT::n_vertices_per_facet];
+  int* facet_vtcs_end = facet_vtcs + CellT::n_vertices_per_facet;
+  int  f, a;
 
   for (f = 0; f < CellT::n_facets; ++f)
   {
     this->getFacetVerticesId(f, facet_vtcs);
-    if ( arrayIsCyclicallyEqual(vtcs, vtcs + CellT::n_vertices_per_facet,
-                                facet_vtcs, facet_vtcs + CellT::n_vertices_per_facet) )
-      return true;
-
-    std::reverse(facet_vtcs, facet_vtcs + CellT::n_vertices_per_facet);
-    if ( arrayIsCyclicallyEqual(vtcs, vtcs + CellT::n_vertices_per_facet,
-                                facet_vtcs, facet_vtcs + CellT::n_vertices_per_facet) )
+    a = 0;
+    
+    for (int i = 0; i < CellT::n_vertices_per_facet; ++i)
     {
-      f = -f;
-      return true;
+      if (std::equal(facet_vtcs, facet_vtcs_end, vtcs) )
+      {
+        if (anchor)
+          *anchor = a;
+        if (ff)
+          *ff = f;
+        return true;
+      }
+      else
+      {
+        std::rotate(facet_vtcs, facet_vtcs+1, facet_vtcs_end);
+        ++a;
+      }
     }
-  }
+
+    std::reverse(facet_vtcs, facet_vtcs_end);
+    a = 0;
+  
+    for (int i = 0; i < CellT::n_vertices_per_facet; ++i)
+    {
+      if (std::equal(facet_vtcs, facet_vtcs_end, vtcs) )
+      {
+        if (anchor)
+          *anchor = a;
+        if (ff)
+          *ff = -f;
+        return true;
+      }
+      else
+      {
+        std::rotate(facet_vtcs, facet_vtcs+1, facet_vtcs_end);
+        ++a;
+      }
+    }    
+
+  } // end facets
+  
   return false;
 }
 
@@ -238,25 +269,26 @@ Cell* Cell::create(ECellType type)
     return NULL;
   }
   else
-    //return (*(creators[idx]))();
-  {
-    switch (type)
-    {
-      case EDGE2        : return new Edge2;
-      case EDGE3        : return new Edge3;
-      case TRIANGLE3    : return new Triangle3;
-      case TRIANGLE6    : return new Triangle6;
-      case QUADRANGLE4  : return new Quadrangle4;
-      case QUADRANGLE8  : return new Quadrangle8;
-      case QUADRANGLE9  : return new Quadrangle9;
-      case TETRAHEDRON4 : return new Tetrahedron4;
-      case TETRAHEDRON10: return new Tetrahedron10;
-      case HEXAHEDRON8  : return new Hexahedron8;
-      case HEXAHEDRON20 : return new Hexahedron20;
-      case HEXAHEDRON27 : return new Hexahedron27;
-    }
-    
-  }
+    return (*(creators[idx]))();
+  //{
+  //  switch (type)
+  //  {
+  //    case EDGE2        : return new Edge2;
+  //    case EDGE3        : return new Edge3;
+  //    case TRIANGLE3    : return new Triangle3;
+  //    case TRIANGLE6    : return new Triangle6;
+  //    case QUADRANGLE4  : return new Quadrangle4;
+  //    case QUADRANGLE8  : return new Quadrangle8;
+  //    case QUADRANGLE9  : return new Quadrangle9;
+  //    case TETRAHEDRON4 : return new Tetrahedron4;
+  //    case TETRAHEDRON10: return new Tetrahedron10;
+  //    case HEXAHEDRON8  : return new Hexahedron8;
+  //    case HEXAHEDRON20 : return new Hexahedron20;
+  //    case HEXAHEDRON27 : return new Hexahedron27;
+  //    default : return NULL;
+  //  }
+  //  
+  //}
 
 }
 

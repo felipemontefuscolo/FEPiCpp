@@ -42,6 +42,8 @@ GTEST_INCLUDE = -I$(GTEST_DIR)/include
 # trailing _.
 GTEST_SRCS_ = $(GTEST_DIR)/src/*.cc $(GTEST_DIR)/src/*.h $(GTEST_HEADERS)
 
+.PHONY: all clean
+
 # For simplicity and to avoid depending on Google Test's
 # implementation details, the dependencies specified below are
 # conservative and not optimized.  This is fine as Google Test
@@ -81,7 +83,10 @@ alltests.exe: $(TOBJECTS) gtest.a gtest_main.a
 
 -include $(CPPSOURCES:.cpp=.d)
 
-%.d: %.cpp
+foo:
+	@false
+
+%.d: %.cpp foo
 	$(FEP_CXX) $< -MM -MT '$*.o $*.d ' -MD $(CXXFLAGS) $(CPPFLAGS)
 
 clean:

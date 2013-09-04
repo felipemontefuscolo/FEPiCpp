@@ -819,6 +819,7 @@ void MeshIoVtk::printCellIdVtk(const char* nome_var)
   for (int i=0; i<num_cells_total; ++i)
   {
     Cell const * cell = m_mesh->getCellPtr(i);
+    FEPIC_CHECK(cell != NULL, "a bug here ...", std::runtime_error);
     if (cell->isDisabled())
       continue;
     for (int j = 0; j < n_cd; ++j)
