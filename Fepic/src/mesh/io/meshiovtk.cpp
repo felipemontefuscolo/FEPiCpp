@@ -546,6 +546,62 @@ void MeshIoVtk::addNodeScalarVtk(const char* nome_var, DefaultGetDataVtk const& 
   fclose(file_ptr);
 }
 
+void MeshIoVtk::addNodeVectorVtk(const char* nome_var, DefaultGetDataVtk const& data)
+{
+
+  std::string ss = this->fi_popNextName(this->m_filenumVtk-1, ".vtk");
+
+  FILE * file_ptr = fopen(ss.c_str(), "a");
+  
+  FEPIC_ASSERT(file_ptr != NULL, "could not open the file", std::runtime_error);
+  
+  const int num_pts_total = m_mesh->numNodesTotal();
+  const int num_pts       = m_mesh->numNodes();
+  if (m_add_node_scalar_vtk_n_calls==0)
+  {
+    fprintf(file_ptr,"POINT_DATA %d\n", num_pts);
+  }
+  m_add_node_scalar_vtk_n_calls++;
+
+  fprintf(file_ptr,"VECTORS %s double\n", nome_var);
+
+  double vec[3]={0,0,0};
+  int vec_size = data.vec_ncomps();
+  for (int i=0; i<num_pts_total; ++i)
+  {
+    if (!(m_mesh->getNodePtr(i)->isDisabled()))
+    {
+      data.get_vec(i, vec);
+      FEPIC_CHECK(vec_size>=0 && vec_size<4, "invalid vtk vector", std::invalid_argument);
+      
+      if (m_is_binary)
+      {
+        for (int j = 0; j < vec_size; ++j)
+        {
+          vec[j] = reverseEndian(vec[j]);
+          fwrite(&vec[j], sizeof(double), 1, file_ptr);
+        }
+        for (int j = vec_size; j < 3; ++j)
+        {
+          double tmp = reverseEndian(0);
+          fwrite(&tmp, sizeof(double), 1, file_ptr);
+        }
+      }
+      else
+      {
+        for (int j = 0; j < vec_size; ++j)
+          fprintf(file_ptr,"%.14e ", vec[j]);
+        for (int j = vec_size; j < 3; ++j)
+          fprintf(file_ptr,"0.0 ");
+        fprintf(file_ptr,"\n");
+      }
+    }
+  }
+  fprintf(file_ptr,"\n\n");
+
+  fclose(file_ptr);
+}
+
 
 void MeshIoVtk::addCellScalarVtk(const char* nome_var, DefaultGetDataVtk const& data)
 {

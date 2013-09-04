@@ -874,6 +874,7 @@ void Mesh::buildCellsAdjacency()
   //    std::cout << "--";
   //  std::cout << std::endl;
   //}
+
   
 
   std::vector<int> f_vtcs(n_vtx_per_facet);  
@@ -951,7 +952,7 @@ void Mesh::buildCellsAdjacency()
           cellv->setIncidCell(fv, i);
           cellv->setIncidCellPos(fv, f);
 
-          if (cdim==3)
+          if (cdim>2)
           {
             cell->setIncidCellAnch(f, anchor);
             cellv->setIncidCellAnch(fv, anchor);
@@ -964,13 +965,16 @@ void Mesh::buildCellsAdjacency()
         
       }
       
-      // create the facet
-      facet->setIncidCell(i);
-      facet->setPosition(f);
-      facet_id = this->pushFacet(facet.get());
-      cell->setFacetId(f, facet_id);
-      if (found)
-        cellv->setFacetId(fv, facet_id);
+      if (cdim > 1)
+      {
+        // create the facet
+        facet->setIncidCell(i);
+        facet->setPosition(f);
+        facet_id = this->pushFacet(facet.get());
+        cell->setFacetId(f, facet_id);
+        if (found)
+          cellv->setFacetId(fv, facet_id);
+      }
       
       //std::cout << "Cell: " << i << "; nodes: "<<f_vtcs[0]<<" "<<f_vtcs[1]<<" "<<f_vtcs[2]<< "; found = " << found;
       //if (found)
@@ -981,6 +985,7 @@ void Mesh::buildCellsAdjacency()
 
 
   }
+
 
 
 }

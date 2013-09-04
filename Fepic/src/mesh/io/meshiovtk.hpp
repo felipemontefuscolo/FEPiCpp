@@ -35,7 +35,8 @@ public:
   /**
    */  
 
-  DefaultGetDataVtk(Real * r = NULL, int * i = NULL) : data_r(r), data_i(i) {}
+  DefaultGetDataVtk(Real * r = NULL, int * i = NULL, Real * vec = NULL, int vsize = 2)
+                                          : data_r(r), data_i(i), data_vec(vec), vec_size_(vsize) {}
   //DefaultGetDataVtk(int * i = NULL, Real * r = NULL) : data_r(r), data_i(i) {}
   
   virtual Real get_data_r(int id) const
@@ -46,13 +47,26 @@ public:
   {
     return data_i[id];
   }
+  // returns vec_out size
+  virtual void get_vec(int id, Real * vec_out) const
+  {
+    for (int i = 0; i < vec_size_; ++i)
+      vec_out[i] = data_vec[id*vec_size_ + i];
+  }
+  virtual int vec_ncomps() const
+  {
+    return vec_size_;
+  }
   
   virtual ~DefaultGetDataVtk() {}
   
 protected:
   Real * data_r;
   int  * data_i;
+  Real * data_vec;
+  int    vec_size_;
 };
+
 
 
 class MeshIoVtk : public iMeshNameHandler
@@ -96,6 +110,7 @@ public:
   
   void writeVtk(std::string outname = "");
   void addNodeScalarVtk(const char* nome_var, DefaultGetDataVtk const& data);
+  void addNodeVectorVtk(const char* nome_var, DefaultGetDataVtk const& data);
   void addCellScalarVtk(const char* nome_var, DefaultGetDataVtk const& data);
   void addNodeIntVtk(const char* nome_var, DefaultGetDataVtk const& data);
   void addCellIntVtk(const char* nome_var, DefaultGetDataVtk const& data);

@@ -45,11 +45,12 @@ bool is_binary = false;
 class GetDataVtk : public DefaultGetDataVtk
 {
 public:
+  int ncomps;  
 
   /**
    */  
 
-  GetDataVtk() : DefaultGetDataVtk() {}
+  GetDataVtk(int nc) : DefaultGetDataVtk(), ncomps(nc) {}
   //DefaultGetDataVtk(int * i = NULL, Real * r = NULL) : data_r(r), data_i(i) {}
   
   virtual Real get_data_r(int id) const
@@ -60,11 +61,19 @@ public:
   {
     return 1234567890;
   }
+  virtual void get_vec(int id, Real * vec_out) const
+  {
+    for (int i = 0; i < ncomps; ++i)
+      vec_out[i] = 3.0+i;
+  }
+  virtual int vec_ncomps() const
+  {
+    return ncomps;
+  } 
   
   virtual ~GetDataVtk() {}
   
 };
-
 
 TEST(IOTest, identifiesMshMeshTypeTest)
 {
@@ -141,7 +150,8 @@ TEST(IOTest, WriteVtkEdge2Test)
   vtk_printer.printPointTagVtk();
   vtk_printer.printPointIcellVtk();
   vtk_printer.printPointPositionVtk();  
-  vtk_printer.addNodeScalarVtk("foo",GetDataVtk());
+  vtk_printer.addNodeScalarVtk("foo",GetDataVtk(dim));
+  vtk_printer.addNodeVectorVtk("myvec",GetDataVtk(dim));
   vtk_printer.printCellIdVtk();
   
   delete mesh;
@@ -162,7 +172,8 @@ TEST(IOTest, WriteVtkEdge3Test)
   vtk_printer.printPointTagVtk();
   vtk_printer.printPointIcellVtk();
   vtk_printer.printPointPositionVtk();
-  vtk_printer.addNodeScalarVtk("foo",GetDataVtk());
+  vtk_printer.addNodeScalarVtk("foo",GetDataVtk(dim));
+  vtk_printer.addNodeVectorVtk("myvec",GetDataVtk(dim));
   vtk_printer.printCellIdVtk();
 
   delete mesh;
@@ -183,7 +194,8 @@ TEST(IOTest, WriteVtkTri3Test)
   vtk_printer.printPointTagVtk();
   vtk_printer.printPointIcellVtk();
   vtk_printer.printPointPositionVtk();
-  vtk_printer.addNodeScalarVtk("foo",GetDataVtk());
+  vtk_printer.addNodeScalarVtk("foo",GetDataVtk(dim));
+  vtk_printer.addNodeVectorVtk("myvec",GetDataVtk(dim));
   vtk_printer.printCellIdVtk();
 
   delete mesh;
@@ -204,7 +216,8 @@ TEST(IOTest, WriteVtkTri6Test)
   vtk_printer.printPointTagVtk();
   vtk_printer.printPointIcellVtk();
   vtk_printer.printPointPositionVtk();
-  vtk_printer.addNodeScalarVtk("foo",GetDataVtk());
+  vtk_printer.addNodeScalarVtk("foo",GetDataVtk(dim));
+  vtk_printer.addNodeVectorVtk("myvec",GetDataVtk(dim));
   vtk_printer.printCellIdVtk();
 
   delete mesh;
@@ -225,7 +238,8 @@ TEST(IOTest, WriteVtkQuad4Test)
   vtk_printer.printPointTagVtk();
   vtk_printer.printPointIcellVtk();
   vtk_printer.printPointPositionVtk();
-  vtk_printer.addNodeScalarVtk("foo",GetDataVtk());
+  vtk_printer.addNodeScalarVtk("foo",GetDataVtk(dim));
+  vtk_printer.addNodeVectorVtk("myvec",GetDataVtk(dim));
   vtk_printer.printCellIdVtk();
   
   //mesh->printInfo();
@@ -248,7 +262,8 @@ TEST(IOTest, WriteVtkQuad8Test)
   vtk_printer.printPointTagVtk();
   vtk_printer.printPointIcellVtk();
   vtk_printer.printPointPositionVtk();
-  vtk_printer.addNodeScalarVtk("foo",GetDataVtk());
+  vtk_printer.addNodeScalarVtk("foo",GetDataVtk(dim));
+  vtk_printer.addNodeVectorVtk("myvec",GetDataVtk(dim));
   vtk_printer.printCellIdVtk();
 
   delete mesh;
@@ -269,7 +284,8 @@ TEST(IOTest, WriteVtkQuad9Test)
   vtk_printer.printPointTagVtk();
   vtk_printer.printPointIcellVtk();
   vtk_printer.printPointPositionVtk();
-  vtk_printer.addNodeScalarVtk("foo",GetDataVtk());
+  vtk_printer.addNodeScalarVtk("foo",GetDataVtk(dim));
+  vtk_printer.addNodeVectorVtk("myvec",GetDataVtk(dim));
   vtk_printer.printCellIdVtk();
   
   delete mesh;
@@ -290,7 +306,8 @@ TEST(IOTest, WriteVtkTet4Test)
   vtk_printer.printPointTagVtk();
   vtk_printer.printPointIcellVtk();
   vtk_printer.printPointPositionVtk();
-  vtk_printer.addNodeScalarVtk("foo",GetDataVtk());
+  vtk_printer.addNodeScalarVtk("foo",GetDataVtk(dim));
+  vtk_printer.addNodeVectorVtk("myvec",GetDataVtk(dim));
   vtk_printer.printCellIdVtk();
   
   delete mesh;
@@ -314,7 +331,8 @@ TEST(IOTest, WriteVtkTet10Test)
   vtk_printer.printPointTagVtk();
   vtk_printer.printPointIcellVtk();
   vtk_printer.printPointPositionVtk();
-  vtk_printer.addNodeScalarVtk("foo",GetDataVtk());
+  vtk_printer.addNodeScalarVtk("foo",GetDataVtk(dim));
+  vtk_printer.addNodeVectorVtk("myvec",GetDataVtk(dim));
   vtk_printer.printCellIdVtk();
 
   delete mesh;
@@ -335,7 +353,8 @@ TEST(IOTest, WriteVtkHex8Test)
   vtk_printer.printPointTagVtk();
   vtk_printer.printPointIcellVtk();
   vtk_printer.printPointPositionVtk();
-  vtk_printer.addNodeScalarVtk("foo",GetDataVtk());
+  vtk_printer.addNodeScalarVtk("foo",GetDataVtk(dim));
+  vtk_printer.addNodeVectorVtk("myvec",GetDataVtk(dim));
   vtk_printer.printCellIdVtk();
   
   delete mesh;
@@ -356,11 +375,13 @@ TEST(IOTest, WriteVtkHex20Test)
   vtk_printer.printPointTagVtk();
   vtk_printer.printPointIcellVtk();
   vtk_printer.printPointPositionVtk();
-  vtk_printer.addNodeScalarVtk("foo",GetDataVtk());
+  vtk_printer.addNodeScalarVtk("foo",GetDataVtk(dim));
+  vtk_printer.addNodeVectorVtk("myvec",GetDataVtk(dim));
   vtk_printer.printCellIdVtk();
   
   delete mesh;
 }
+
 
 TEST(IOTest, WriteVtkHex27Test)
 {
@@ -377,7 +398,8 @@ TEST(IOTest, WriteVtkHex27Test)
   vtk_printer.printPointTagVtk();
   vtk_printer.printPointIcellVtk();
   vtk_printer.printPointPositionVtk();
-  vtk_printer.addNodeScalarVtk("foo",GetDataVtk());
+  vtk_printer.addNodeScalarVtk("foo",GetDataVtk(dim));
+  vtk_printer.addNodeVectorVtk("myvec",GetDataVtk(dim));
   vtk_printer.printCellIdVtk();
 
   delete mesh;
@@ -399,7 +421,7 @@ TEST(IOTest, WriteVtkHex27Test)
 //  vtk_printer.printPointTagVtk();
 //  vtk_printer.printPointIcellVtk();
 //  vtk_printer.printPointPositionVtk();
-//  vtk_printer.addNodeScalarVtk("foo",GetDataVtk());
+//  vtk_printer.addNodeScalarVtk("foo",GetDataVtk(dim));
 //  vtk_printer.printCellIdVtk();
 //
 //  delete mesh;
