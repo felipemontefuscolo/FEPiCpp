@@ -35,6 +35,7 @@
 #include <string>
 #include <fstream>
 #include <Fepic/Mesh>
+#include "Fepic/src/util/sparse_table.hpp"
 
 using ::testing::TestWithParam;
 using ::testing::Values;
@@ -287,6 +288,150 @@ TEST(sameElementsTest, OutputTest) {
   } while ( std::next_permutation (V,V+size) );  
   
 }
+
+
+TEST(SparseTableTest, InsertTest)
+{
+  SparseTable<int> v;
+  
+  EXPECT_EQ (0ul, v.size());
+  
+  v.resize(10);
+  
+  v(5,0) = 1;
+  v(3,1) = 2;
+  v(1,2) = 3;
+  v(0,3) = 4;
+  v(6,0) = 5;
+  v(7,2) = 6;
+  v(9,2) = 7;
+  
+  EXPECT_EQ (1 , v.at(5,0));
+  EXPECT_EQ (2 , v.at(3,1));
+  EXPECT_EQ (3 , v.at(1,2));
+  EXPECT_EQ (4 , v.at(0,3));
+  EXPECT_EQ (5 , v.at(6,0));
+  EXPECT_EQ (6 , v.at(7,2));
+  EXPECT_EQ (7 , v.at(9,2));
+
+  // check copy constructor
+  SparseTable<int> const u(v);
+
+  EXPECT_EQ (1 , u.at(5,0));
+  EXPECT_EQ (2 , u.at(3,1));
+  EXPECT_EQ (3 , u.at(1,2));
+  EXPECT_EQ (4 , u.at(0,3));
+  EXPECT_EQ (5 , u.at(6,0));
+  EXPECT_EQ (6 , u.at(7,2));
+  EXPECT_EQ (7 , u.at(9,2));  
+
+}
+
+TEST(SparseTableTest, BoundTest)
+{
+  SparseTable<int> v;
+  
+  EXPECT_EQ (0ul, v.size());
+  
+  v.resize(10);
+  
+  v(5,0) = 1;
+  v(3,1) = 2;
+  v(1,2) = 3;
+  v(0,3) = 4;
+  v(6,0) = 5;
+  v(7,2) = 6;
+  v(9,2) = 7;
+
+  EXPECT_ANY_THROW(v(10,0));
+  EXPECT_ANY_THROW(v.at(10,0));
+  EXPECT_ANY_THROW(v.at(5,1));
+  
+}
+
+TEST(SparseTableTest, ResizeTest)
+{
+  SparseTable<int> v;
+  
+  EXPECT_EQ (0u, v.size());
+  
+  v.resize(10,3,-1);
+
+  EXPECT_EQ(10ul, v.numRows());
+
+  for (int i = 0; i < (int)v.numRows(); ++i)
+  {
+    EXPECT_EQ(3ul, v.size(i));
+    for (int j = 0; j < 3; ++j)
+      EXPECT_EQ(-1, v.at(i,j));
+  }
+}
+
+TEST(SparseTableTest, EraseTest)
+{
+  SparseTable<int> v;
+  
+  EXPECT_EQ (0u, v.size());
+  
+  v.resize(6);
+
+  int k = 0;
+  for (int i = 0; i < 6; ++i)
+  {
+    for (int j = 0; j < i+1; ++j)
+    {
+      v(i,j) = k;
+      ++k;
+    }
+  }
+  
+  
+  v.erase(20);
+  v.erase(17);
+  v.erase(15);
+  v.erase(9);
+  v.erase(1);
+  
+  v.shrink();
+  
+  k = 0;
+  for (int i = 0; i < 6; ++i)
+  {
+    for (int j = 0, jj = 0; j < i+1; ++j)
+    {
+      if (k != 20 && k != 17 && k != 15  && k != 9 && k != 1)
+      //if (k != 1)
+      {
+        EXPECT_EQ(k, v(i,jj));
+        ++jj;
+      }
+      ++k;
+    }
+  }
+  
+  
+  //EXPECT_EQ(k, v(i,j));
+  
+  
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
