@@ -69,6 +69,89 @@ using namespace Eigen;
 //  delete mesh;
 //}
 //
+
+void getAllDofs(std::vector<int> & dat, DofHandler const& DofH, Mesh const* mesh)
+{
+  int dofs[20];
+  
+  dat.clear();
+  
+  // points
+  for (int k = 0; k < mesh->numNodesTotal(); ++k)
+  {
+    Point const* point = mesh->getNodePtr(k);
+    //if (!mesh->isVertex(point) || point->isDisabled())
+    if ( point->isDisabled())
+      continue;
+
+    for (int i = 0; i < DofH.numVars(); ++i)
+    {
+      DofH.getVariable(i).getVertexDofs(dofs, point);
+      for (int j = 0; j < DofH.getVariable(i).numDofsPerVertex(); ++j)
+        dat.push_back(dofs[j]);
+    }
+  }
+  // cells
+  for (int k = 0; k < mesh->numCellsTotal(); ++k)
+  {
+    Cell const* cell = mesh->getCellPtr(k);
+    if (cell->isDisabled())
+      continue;
+
+    for (int i = 0; i < DofH.numVars(); ++i)
+    {
+      DofH.getVariable(i).getCellDofs(dofs, cell);
+      for (int j = 0; j < DofH.getVariable(i).numDofsPerCell(); ++j)
+        dat.push_back(dofs[j]);
+    }
+  }
+  // facets
+  for (int k = 0; k < mesh->numFacetsTotal(); ++k)
+  {
+    Facet const* facet = mesh->getFacetPtr(k);
+    if (facet->isDisabled())
+      continue;
+
+    for (int i = 0; i < DofH.numVars(); ++i)
+    {
+      DofH.getVariable(i).getFacetDofs(dofs, facet);
+      for (int j = 0; j < DofH.getVariable(i).numDofsPerFacet(); ++j)
+        dat.push_back(dofs[j]);
+    }
+  }
+  // facets
+  for (int k = 0; k < mesh->numFacetsTotal(); ++k)
+  {
+    Facet const* facet = mesh->getFacetPtr(k);
+    if (facet->isDisabled())
+      continue;
+
+    for (int i = 0; i < DofH.numVars(); ++i)
+    {
+      DofH.getVariable(i).getFacetDofs(dofs, facet);
+      for (int j = 0; j < DofH.getVariable(i).numDofsPerFacet(); ++j)
+        dat.push_back(dofs[j]);
+    }
+  }
+  // corners
+  if (mesh->cellDim() == 3)
+    for (int k = 0; k < mesh->numCornersTotal(); ++k)
+    {
+      Corner const* corner = mesh->getCornerPtr(k);
+      if (corner->isDisabled())
+        continue;
+
+      for (int i = 0; i < DofH.numVars(); ++i)
+      {
+        DofH.getVariable(i).getCornerDofs(dofs, corner);
+        for (int j = 0; j < DofH.getVariable(i).numDofsPerCorner(); ++j)
+          dat.push_back(dofs[j]);
+      }
+    }  
+}
+
+
+
 TEST(DofHandlerTest, AssignsDofsTri3)
 {
   MeshIoMsh msh_reader;
@@ -135,17 +218,30 @@ TEST(DofHandlerTest, AssignsDofsTri3)
   EXPECT_EQ(67, DofH.numDofs());
   
   
-  // .getVariable(0)
-  int *dat = DofH.data();
+  // ckeck
+  std::vector<int> dat;
+  
+  EXPECT_EQ(5, DofH.numVars());
+  
+  getAllDofs(dat,DofH,mesh);
+
+  std::sort(dat.begin(), dat.end());
+
+  EXPECT_TRUE(dat[0] >= 0); // grau de liberdade definidos em todo lugar
+
+  dat.erase(std::remove(dat.begin(), dat.end(), -1), dat.end()); // remove -1
+  dat.erase(std::unique(dat.begin(), dat.end()), dat.end());     // remove duplicated
+  
+  EXPECT_EQ(DofH.numDofs(), (int)dat.size());
   
   int counter = 0;
-  for (int i = 0; i < DofH.totalSize(); ++i)
+  for (unsigned i = 0; i < dat.size(); ++i)
   {
-    if ((*dat) >= 0)
-      EXPECT_EQ(counter++, (*dat));
-      
-    //std::cout << (*dat++) << std::endl;
+    EXPECT_EQ(counter, dat[i]);
+    ++counter;
   }
+  
+  
   
   delete mesh;
 }
@@ -214,16 +310,16 @@ TEST(DofHandlerTest, AssignsDofsTri6)
   EXPECT_EQ(67, DofH.numDofs());
   
   
-  // .getVariable(0)
-  int *dat = DofH.data();
-
-  int counter = 0;
-  for (int i = 0; i < DofH.totalSize(); ++i)
-  {
-    if ((*dat) >= 0)
-      EXPECT_EQ(counter++, (*dat));
-      
-  }
+  //// .getVariable(0)
+  //int *dat = DofH.data();
+  //
+  //int counter = 0;
+  //for (int i = 0; i < DofH.totalSize(); ++i)
+  //{
+  //  if ((*dat) >= 0)
+  //    EXPECT_EQ(counter++, (*dat));
+  //    
+  //}
   
   vtk_printer.attachMesh(mesh);
   vtk_printer.writeVtk(mesh_out);
@@ -248,6 +344,30 @@ TEST(DofHandlerTest, AssignsDofsTri6)
   MyGetDataVtkTri6Test get_data(dados.data(), mesh, &DofH);
   
   vtk_printer.addNodeIntVtk(DofH.getVariable(0).getName(), get_data);
+  
+  // checking dofs
+  std::vector<int> dat;
+  
+  EXPECT_EQ(5, DofH.numVars());
+  
+  getAllDofs(dat,DofH,mesh);
+
+  std::sort(dat.begin(), dat.end());
+
+  EXPECT_TRUE(dat[0] == -1); // -1 nos nohs de controle
+
+  dat.erase(std::remove(dat.begin(), dat.end(), -1), dat.end()); // remove -1
+  dat.erase(std::unique(dat.begin(), dat.end()), dat.end());     // remove duplicated
+  
+  EXPECT_EQ(DofH.numDofs(), (int)dat.size());
+  
+  int counter = 0;
+  for (unsigned i = 0; i < dat.size(); ++i)
+  {
+    EXPECT_EQ(counter, dat[i]);
+    ++counter;
+  }
+  
   
   delete mesh;
 }
@@ -332,8 +452,33 @@ TEST(DofHandlerTest, AssignsDofsTet10)
   
   vtk_printer.addNodeIntVtk(DofH.getVariable(0).getName(), get_data);
   
+  // checking dofs
+  std::vector<int> dat;
+  
+  EXPECT_EQ(4, DofH.numVars());
+  
+  getAllDofs(dat,DofH,mesh);
+
+  std::sort(dat.begin(), dat.end());
+
+  EXPECT_TRUE(dat[0] == -1); // -1 nos nohs de controle
+
+  dat.erase(std::remove(dat.begin(), dat.end(), -1), dat.end()); // remove -1
+  dat.erase(std::unique(dat.begin(), dat.end()), dat.end());     // remove duplicated
+  
+  EXPECT_EQ(DofH.numDofs(), (int)dat.size());
+  
+  int counter = 0;
+  for (unsigned i = 0; i < dat.size(); ++i)
+  {
+    EXPECT_EQ(counter, dat[i]);
+    ++counter;
+  }  
+  
+  
   delete mesh;
 }
+
 
 TEST(DofHandlerTest, BubbleTri3)
 {
@@ -408,14 +553,28 @@ TEST(DofHandlerTest, BubbleTri3)
   vtk_printer.attachMesh(mesh);
   vtk_printer.writeVtk(mesh_out);
   
-  std::sort(DofH.data(), DofH.data()+DofH.totalSize());
+  // checking dofs
+  std::vector<int> dat;
+  
+  EXPECT_EQ(2, DofH.numVars());
+  
+  getAllDofs(dat,DofH,mesh);
+
+  std::sort(dat.begin(), dat.end());
+
+  EXPECT_TRUE(dat[0] >= 0); // grau de liberdade definidos em todo lugar
+
+  dat.erase(std::remove(dat.begin(), dat.end(), -1), dat.end()); // remove -1
+  dat.erase(std::unique(dat.begin(), dat.end()), dat.end());     // remove duplicated
+  
+  EXPECT_EQ(DofH.numDofs(), (int)dat.size());
+  
   int counter = 0;
-  for (int i = 0; i < DofH.totalSize(); ++i)
+  for (unsigned i = 0; i < dat.size(); ++i)
   {
-    if (*DofH.data() < 0) continue;
-    EXPECT_EQ(counter, DofH.data()[i]);
-    counter++;
-  }
+    EXPECT_EQ(counter, dat[i]);
+    ++counter;
+  }  
   
   delete phi;
   delete psi;
@@ -495,14 +654,28 @@ TEST(DofHandlerTest, BubbleTet4)
   vtk_printer.attachMesh(mesh);
   vtk_printer.writeVtk(mesh_out);
   
-  std::sort(DofH.data(), DofH.data()+DofH.totalSize());
+  // checking dofs
+  std::vector<int> dat;
+  
+  EXPECT_EQ(2, DofH.numVars());
+  
+  getAllDofs(dat,DofH,mesh);
+
+  std::sort(dat.begin(), dat.end());
+
+  EXPECT_TRUE(dat[0] >= 0); // grau de liberdade definidos em todo lugar
+
+  dat.erase(std::remove(dat.begin(), dat.end(), -1), dat.end()); // remove -1
+  dat.erase(std::unique(dat.begin(), dat.end()), dat.end());     // remove duplicated
+  
+  EXPECT_EQ(DofH.numDofs(), (int)dat.size());
+  
   int counter = 0;
-  for (int i = 0; i < DofH.totalSize(); ++i)
+  for (unsigned i = 0; i < dat.size(); ++i)
   {
-    if (*DofH.data() < 0) continue;
-    EXPECT_EQ(counter, DofH.data()[i]);
-    counter++;
-  }
+    EXPECT_EQ(counter, dat[i]);
+    ++counter;
+  }  
   
   delete phi;
   delete psi;
@@ -566,21 +739,33 @@ TEST(DofHandlerTest, TagsDofsTri3)
   EXPECT_EQ(12, DofH.numDofs());
   
   
-  // .getVariable(0)
-  int *dat = DofH.data();
+  // checking dofs
+  std::vector<int> dat;
+  
+  EXPECT_EQ(5, DofH.numVars());
+  
+  getAllDofs(dat,DofH,mesh);
 
+  std::sort(dat.begin(), dat.end());
+
+  EXPECT_EQ(-1,dat[0]); // tags
+
+  dat.erase(std::remove(dat.begin(), dat.end(), -1), dat.end()); // remove -1
+  dat.erase(std::unique(dat.begin(), dat.end()), dat.end());     // remove duplicated
+  
+  EXPECT_EQ(DofH.numDofs(), (int)dat.size());
+  
   int counter = 0;
-  for (int i = 0; i < DofH.totalSize(); ++i)
+  for (unsigned i = 0; i < dat.size(); ++i)
   {
-    if ((*dat) >= 0)
-      EXPECT_EQ(counter++, (*dat));
-      
-    //std::cout << (*dat++) << std::endl;
-  }
+    EXPECT_EQ(counter, dat[i]);
+    ++counter;
+  }  
   
   
   delete mesh;
 }
+
 
 TEST(DofHandlerTest, TagsDofsTet10)
 {
@@ -665,10 +850,34 @@ TEST(DofHandlerTest, TagsDofsTet10)
   MyGetDataVtkTri6Test get_data(dados.data(), mesh, &DofH);
   
   vtk_printer.addNodeIntVtk(DofH.getVariable(0).getName(), get_data);
+
+
+  // checking dofs
+  std::vector<int> dat;
+  
+  EXPECT_EQ(4, DofH.numVars());
+  
+  getAllDofs(dat,DofH,mesh);
+
+  std::sort(dat.begin(), dat.end());
+
+  EXPECT_TRUE(dat[0] == -1); // -1 nos nohs de controle
+
+  dat.erase(std::remove(dat.begin(), dat.end(), -1), dat.end()); // remove -1
+  dat.erase(std::unique(dat.begin(), dat.end()), dat.end());     // remove duplicated
+  
+  EXPECT_EQ(DofH.numDofs(), (int)dat.size());
+  
+  int counter = 0;
+  for (unsigned i = 0; i < dat.size(); ++i)
+  {
+    EXPECT_EQ(counter, dat[i]);
+    ++counter;
+  }  
+
   
   delete mesh;
 }
-
 
 
 
@@ -714,12 +923,42 @@ TEST(DofHandlerTest, TagsLinkTri3)
 
   //PRINT_DAT
   
-  DofH.getVariable(0).linkVertexDofs(mesh->getNodePtr(0), mesh->getNodePtr(4));
-  DofH.getVariable(1).linkVertexDofs(mesh->getNodePtr(0), mesh->getNodePtr(4));
-
-  //PRINT_DAT
+  int dofs1[3] = {-1,-1,-1};
+  int dofs2[3] = {-1,-1,-1};
   
-  DofH.removeDofsGaps();
+  DofH.getVariable(0).getVertexDofs(dofs1,   mesh->getNodePtr(7));
+  DofH.getVariable(1).getVertexDofs(dofs1+1, mesh->getNodePtr(7));
+
+  DofH.getVariable(0).getVertexDofs(dofs2,   mesh->getNodePtr(0));
+  DofH.getVariable(1).getVertexDofs(dofs2+1, mesh->getNodePtr(0));
+
+  DofH.linkDofs(3, dofs1, dofs2);
+
+  EXPECT_EQ(9, DofH.numDofs()) << dofs1[0] << " "<< dofs1[1] << " "<< dofs1[2] << "\n"<< dofs2[0] << " "<< dofs2[1] << " "<< dofs2[2] << " ";
+
+
+  // ckeck
+  std::vector<int> dat;
+  
+  EXPECT_EQ(2, DofH.numVars());
+  
+  getAllDofs(dat,DofH,mesh);
+
+  std::sort(dat.begin(), dat.end());
+
+  EXPECT_TRUE(dat[0] == -1); // grau de liberdade nao definidos em todo lugar
+
+  dat.erase(std::remove(dat.begin(), dat.end(), -1), dat.end()); // remove -1
+  dat.erase(std::unique(dat.begin(), dat.end()), dat.end());     // remove duplicated
+  
+  EXPECT_EQ(DofH.numDofs(), (int)dat.size());
+  
+  int counter = 0;
+  for (unsigned i = 0; i < dat.size(); ++i)
+  {
+    EXPECT_EQ(counter, dat[i]);
+    ++counter;
+  }
   
   //PRINT_DAT
   
@@ -753,28 +992,45 @@ TEST(DofHandlerTest, TagsLink2Tri3)
   
   EXPECT_EQ(12, DofH.numDofs());
 
-  // .getVariable(0)
-  int *dat = DofH.data();
-
-#define PRINT_DAT                            \
-  for (int i = 0; i < DofH.totalSize(); ++i) \
-  {                                          \
-    std::cout.width (3);                     \
-    std::cout << dat[i] << "\t";             \
-    if (i==11)                               \
-      std::cout <<"|\t";                     \
-  }                                          \
-  std::cout << std::endl;
 
 
   //PRINT_DAT
+  int dofs1[3] = {-1,-1,-1};
+  int dofs2[3] = {-1,-1,-1};
   
-  DofH.getVariable(0).linkVertexDofs(mesh->getNodePtr(0), mesh->getNodePtr(7));
-  DofH.getVariable(1).linkVertexDofs(mesh->getNodePtr(0), mesh->getNodePtr(7));
+  //DofH.getVariable(0).getVertexDofs(dofs1,   mesh->getNodePtr(7));
+  //DofH.getVariable(1).getVertexDofs(dofs1+1, mesh->getNodePtr(7));
+  //
+  //DofH.getVariable(0).getVertexDofs(dofs2,   mesh->getNodePtr(0));
+  //DofH.getVariable(1).getVertexDofs(dofs2+1, mesh->getNodePtr(0));
 
-  //PRINT_DAT
+  DofH.linkDofs(3, dofs1, dofs2); // do nothing
+
+  EXPECT_EQ(12, DofH.numDofs()) << dofs1[0] << " "<< dofs1[1] << " "<< dofs1[2] << "\n"<< dofs2[0] << " "<< dofs2[1] << " "<< dofs2[2] << " ";
+
+
+  // ckeck
+  std::vector<int> dat;
   
-  DofH.removeDofsGaps();
+  EXPECT_EQ(2, DofH.numVars());
+  
+  getAllDofs(dat,DofH,mesh);
+
+  std::sort(dat.begin(), dat.end());
+
+  EXPECT_TRUE(dat[0] == -1); // grau de liberdade nao definidos em todo lugar
+
+  dat.erase(std::remove(dat.begin(), dat.end(), -1), dat.end()); // remove -1
+  dat.erase(std::unique(dat.begin(), dat.end()), dat.end());     // remove duplicated
+  
+  EXPECT_EQ(DofH.numDofs(), (int)dat.size());
+  
+  int counter = 0;
+  for (unsigned i = 0; i < dat.size(); ++i)
+  {
+    EXPECT_EQ(counter, dat[i]);
+    ++counter;
+  }
   
   //PRINT_DAT
   
@@ -788,45 +1044,82 @@ TEST(DofHandlerTest, TagsLink3Tri3)
   MeshIoVtk vtk_printer;
   Mesh *mesh = NULL;  
 
-  ECellType cell_t     = TRIANGLE3;
-  const char* mesh_in  = "meshes/simptri3.msh";  
-  //const char* mesh_out = "meshes/outtest/dof_tri3.vtk";
+  ECellType cell_t     = TRIANGLE6;
+  const char* mesh_in  = "meshes/simptri6.msh";  
+  const char* mesh_out = "meshes/outtest/dof_tri6.vtk";
 
   mesh = Mesh::create(cell_t);
   msh_reader.readFileMsh(mesh_in, mesh);
   
   DofHandler DofH(mesh);
   //                         ndpv,  ndpr,  ndpf,  ndpc
-  DofH.addVariable("altura",    1,     0,     0,     0);
-  DofH.addVariable("vetor",     2,     0,     0,     0);
-  
+  DofH.addVariable("numero",    1,     0,     0,     0); // 12
+  DofH.addVariable("vetor",     2,     0,     0,     0); // 24
+  DofH.addVariable("foo",       0,     1,     0,     0); //  0
+  DofH.addVariable("bar",       0,     0,     1,     0); // 25
+  DofH.addVariable("moo",       0,     0,     0,     1); // 14
   
   DofH.SetUp();
   
-  EXPECT_EQ(36, DofH.numDofs());
+  EXPECT_EQ(75, DofH.numDofs());
+  
+  MeshTools::removeCell(mesh->getCellPtr(2), mesh);
+  MeshTools::removeCell(mesh->getCellPtr(3), mesh);
+  
+  DofH.SetUp();
+  
+  //11x3 + 22 + 12 + 12
+  EXPECT_EQ(11, DofH.getVariable(0).numDofs());
+  EXPECT_EQ(22, DofH.getVariable(1).numDofs());
+  EXPECT_EQ( 0, DofH.getVariable(2).numDofs());
+  EXPECT_EQ(22, DofH.getVariable(3).numDofs());
+  EXPECT_EQ(12, DofH.getVariable(4).numDofs());
+
+  EXPECT_EQ(67, DofH.numDofs());
+  
 
   // .getVariable(0)
   //int *dat = DofH.data();
 
-#define PRINT_DAT                            \
-  for (int i = 0; i < DofH.totalSize(); ++i) \
-  {                                          \
-    std::cout.width (3);                     \
-    std::cout << dat[i] << "\t";             \
-    if (i==11)                               \
-      std::cout <<"|\t";                     \
-  }                                          \
-  std::cout << std::endl;
-
-
-  //PRINT_DAT
+  int dofs1[] = {-1,-1,-1,-1};
+  int dofs2[] = {-1,-1,-1,-1};
   
-  DofH.getVariable(0).linkVertexDofs(mesh->getNodePtr(0), mesh->getNodePtr(11));
-  DofH.getVariable(1).linkVertexDofs(mesh->getNodePtr(0), mesh->getNodePtr(11));
+  DofH.getVariable(0).getVertexDofs(dofs1,   mesh->getNodePtr(4));
+  DofH.getVariable(1).getVertexDofs(dofs1+1, mesh->getNodePtr(4));
 
-  //PRINT_DAT
+  DofH.getVariable(0).getVertexDofs(dofs2,   mesh->getNodePtr(13));
+  DofH.getVariable(1).getVertexDofs(dofs2+1, mesh->getNodePtr(13));
+
+  DofH.getVariable(4).getCellAssociatedDofs(dofs1+3, mesh->getCellPtr(10));
+  DofH.getVariable(4).getCellAssociatedDofs(dofs2+3, mesh->getCellPtr(11));
+
+  DofH.linkDofs(4, dofs1, dofs2);
+
+  EXPECT_EQ(63, DofH.numDofs()) << dofs1[0] << " "<< dofs1[1] << " "<< dofs1[2] << " "<< dofs1[3] << "\n"<< dofs2[0] << " "<< dofs2[1] << " "<< dofs2[2] << " "<< dofs2[3] << " ";
+
+
+  // ckeck
+  std::vector<int> dat;
   
-  DofH.removeDofsGaps();
+  EXPECT_EQ(5, DofH.numVars());
+  
+  getAllDofs(dat,DofH,mesh);
+
+  std::sort(dat.begin(), dat.end());
+
+  EXPECT_TRUE(dat[0] == -1);
+
+  dat.erase(std::remove(dat.begin(), dat.end(), -1), dat.end()); // remove -1
+  dat.erase(std::unique(dat.begin(), dat.end()), dat.end());     // remove duplicated
+  
+  EXPECT_EQ(DofH.numDofs(), (int)dat.size());
+  
+  int counter = 0;
+  for (unsigned i = 0; i < dat.size(); ++i)
+  {
+    EXPECT_EQ(counter, dat[i]);
+    ++counter;
+  }
   
   //PRINT_DAT
   
@@ -838,7 +1131,7 @@ TEST(DofHandlerTest, TagsLink3Tri3)
 TEST(DofHandlerTest, CopyFunctionTri3)
 {
   
-  
+
   MeshIoMsh msh_reader;
   MeshIoVtk vtk_printer;
   Mesh *mesh = NULL;  
@@ -854,7 +1147,7 @@ TEST(DofHandlerTest, CopyFunctionTri3)
   
   {
     DofHandler DofH_temp(mesh);
-    //                         ndpv,  ndpr,  ndpf,  ndpc
+    //                               ndpv,  ndpr,  ndpf,  ndpc
     DofH_temp.addVariable("altura",    1,     0,     0,     0);
     DofH_temp.addVariable("vetor",     2,     0,     0,     0);
     
@@ -882,17 +1175,47 @@ TEST(DofHandlerTest, CopyFunctionTri3)
 
   //PRINT_DAT
   
-  DofH.getVariable(0).linkVertexDofs(mesh->getNodePtr(0), mesh->getNodePtr(11));
-  DofH.getVariable(1).linkVertexDofs(mesh->getNodePtr(0), mesh->getNodePtr(11));
+  int dofs1[3] = {-1,-1,-1};
+  int dofs2[3] = {-1,-1,-1};
+  
+  DofH.getVariable(0).getVertexDofs(dofs1,   mesh->getNodePtr(2));
+  DofH.getVariable(1).getVertexDofs(dofs1+1, mesh->getNodePtr(2));
 
-  //PRINT_DAT
+  DofH.getVariable(0).getVertexDofs(dofs2,   mesh->getNodePtr(6));
+  DofH.getVariable(1).getVertexDofs(dofs2+1, mesh->getNodePtr(6));
+
+  DofH.linkDofs(3, dofs1, dofs2);
+
+  EXPECT_EQ(33, DofH.numDofs()) << dofs1[0] << " "<< dofs1[1] << " "<< dofs1[2] << "\n"<< dofs2[0] << " "<< dofs2[1] << " "<< dofs2[2] << " ";
+
+
+  // ckeck
+  std::vector<int> dat;
   
-  DofH.removeDofsGaps();
+  EXPECT_EQ(2, DofH.numVars());
   
-  //PRINT_DAT
+  getAllDofs(dat,DofH,mesh);
+
+  std::sort(dat.begin(), dat.end());
+
+  EXPECT_TRUE(dat[0] >= 0); // grau de liberdade definidos em todo lugar
+
+  dat.erase(std::remove(dat.begin(), dat.end(), -1), dat.end()); // remove -1
+  dat.erase(std::unique(dat.begin(), dat.end()), dat.end());     // remove duplicated
+  
+  EXPECT_EQ(DofH.numDofs(), (int)dat.size());
+  
+  int counter = 0;
+  for (unsigned i = 0; i < dat.size(); ++i)
+  {
+    EXPECT_EQ(counter, dat[i]);
+    ++counter;
+  }
+
   
   
   delete mesh;  
 }
+
 
 

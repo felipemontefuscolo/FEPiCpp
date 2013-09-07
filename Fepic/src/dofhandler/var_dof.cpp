@@ -44,85 +44,37 @@ void VarDofs::setType(int ndpv, int ndpr, int ndpf, int ndpc, int ntags, int con
     m_considered_tags[i] = tags[i];  
 }
 
-int  VarDofs::totalSizeWithoutMeshInfo() const
-{
-  unsigned const n_nodes_total   = m_n_dof_within_vertice > 0 ? m_vertices_dofs.rows() : 0;
-  unsigned const n_corners_total = m_n_dof_within_corner > 0 ? m_corners_dofs.rows() : 0;
-  unsigned const n_facets_total  = m_n_dof_within_facet > 0 ? m_facets_dofs.rows() : 0;
-  unsigned const n_cells_total   = m_n_dof_within_cell > 0 ? m_cells_dofs.rows() : 0;  
-  
-  int 
-  total  = n_nodes_total*m_n_dof_within_vertice;
-  total += n_corners_total*m_n_dof_within_corner;
-  total += n_facets_total*m_n_dof_within_facet;
-  total += n_cells_total*m_n_dof_within_cell;
-  
-  return total;  
-}
 
 int VarDofs::totalSize() const
 {
-  unsigned const n_nodes_total = m_mesh_ptr->numNodesTotal();
-  unsigned const n_corners_total = m_mesh_ptr->numCornersTotal();
-  unsigned const n_facets_total = m_mesh_ptr->numFacetsTotal();
-  unsigned const n_cells_total = m_mesh_ptr->numCellsTotal();
-  
-  int 
-  total  = n_nodes_total*m_n_dof_within_vertice;
-  total += n_corners_total*m_n_dof_within_corner;
-  total += n_facets_total*m_n_dof_within_facet;
-  total += n_cells_total*m_n_dof_within_cell;
-  
-  return total;
+  return m_vertices_dofs.size() +
+         m_corners_dofs.size() +
+         m_facets_dofs.size() +
+         m_cells_dofs.size();
 }
 
-void VarDofs::getDivisions(int*& vertices_beg, int*& corners_beg, int*& facets_beg, int*& cells_beg) const
-{
-  unsigned const n_nodes_total = m_mesh_ptr->numNodesTotal();
-  unsigned const n_corners_total = m_mesh_ptr->numCornersTotal();
-  unsigned const n_facets_total = m_mesh_ptr->numFacetsTotal();
-  //unsigned const n_cells_total = m_mesh_ptr->numCellsTotal();
-  
-  vertices_beg = m_initial_dof_address;
-  corners_beg  = vertices_beg  +  n_nodes_total  *m_n_dof_within_vertice;
-  facets_beg   = corners_beg   +  n_corners_total*m_n_dof_within_corner;
-  cells_beg    = facets_beg    +  n_facets_total *m_n_dof_within_facet;
-  
-}
-
-void VarDofs::setUp()
+void VarDofs::setUp(int minimum_dof_id)
 {
   unsigned const n_nodes_total = m_mesh_ptr->numNodesTotal();
   unsigned const n_corners_total = m_mesh_ptr->numCornersTotal();
   unsigned const n_facets_total = m_mesh_ptr->numFacetsTotal();
   unsigned const n_cells_total = m_mesh_ptr->numCellsTotal();
 
-  //unsigned const n_vertices = m_mesh_ptr->numVertices();
-  //unsigned const n_corners = m_mesh_ptr->numCorners();
-  //unsigned const n_facets  = m_mesh_ptr->numFacets();
-  //unsigned const n_cells  = m_mesh_ptr->numCells();
-
-  int* vertices_beg;
-  int* corners_beg;
-  int* facets_beg;
-  int* cells_beg;
-  
   int tag;
   bool is_considered;
-
-  getDivisions(vertices_beg, corners_beg, facets_beg, cells_beg);
 
   Mesh * mesh = m_mesh_ptr;
 
   if (m_mesh_ptr->cellDim() < 3)
     m_n_dof_within_corner = 0;
 
-  unsigned dof_counter = m_initial_dof_id;
+  unsigned dof_counter = minimum_dof_id;
 
   // vertices dof
   if (m_n_dof_within_vertice > 0)
   {
-    new (&m_vertices_dofs) Container(vertices_beg, n_nodes_total, m_n_dof_within_vertice);
+    //new (&m_vertices_dofs) Container(vertices_beg, n_nodes_total, m_n_dof_within_vertice);
+    m_vertices_dofs.reshape(n_nodes_total, m_n_dof_within_vertice);
 
     Point const*p;
     for (unsigned i = 0; i < n_nodes_total; ++i)
@@ -134,17 +86,20 @@ void VarDofs::setUp()
       is_considered = m_considered_tags.empty() ? true : checkValue(m_considered_tags.begin(), m_considered_tags.end(), tag);
       
       if (!(mesh->isVertex(p)) || !is_considered || p->isDisabled() )
-        continue;
-      for (unsigned j = 0; j < m_vertices_dofs.cols(); ++j)
-        m_vertices_dofs(i,j) = dof_counter++;
+        for (int j = 0; j < m_vertices_dofs.dim(1); ++j)
+          m_vertices_dofs(i,j) = -1;
+      else
+        for (int j = 0; j < m_vertices_dofs.dim(1); ++j)
+          m_vertices_dofs(i,j) = dof_counter++;
     }
   }
 
   // corners dof
   if (m_n_dof_within_corner > 0)
   {
-    new (&m_corners_dofs) Container(corners_beg, n_corners_total, m_n_dof_within_corner);
-
+    //new (&m_corners_dofs) Container(corners_beg, n_corners_total, m_n_dof_within_corner);
+    m_corners_dofs.reshape(n_corners_total, m_n_dof_within_corner);
+    
     Corner const*p;
     for (unsigned i = 0; i < n_corners_total; ++i)
     {
@@ -155,16 +110,19 @@ void VarDofs::setUp()
       is_considered = m_considered_tags.empty() ? true : checkValue(m_considered_tags.begin(), m_considered_tags.end(), tag);
       
       if (!is_considered || p->isDisabled())
-        continue;
-      for (unsigned j = 0; j < m_corners_dofs.cols(); ++j)
-        m_corners_dofs(i,j) = dof_counter++;
+        for (int j = 0; j < m_corners_dofs.dim(1); ++j)
+          m_corners_dofs(i,j) = -1;
+      else
+        for (int j = 0; j < m_corners_dofs.dim(1); ++j)
+          m_corners_dofs(i,j) = dof_counter++;
     }
   }
 
   // facets dof
   if (m_n_dof_within_facet > 0)
   {
-    new (&m_facets_dofs) Container(facets_beg, n_facets_total, m_n_dof_within_facet);
+    //new (&m_facets_dofs) Container(facets_beg, n_facets_total, m_n_dof_within_facet);
+    m_facets_dofs.reshape(n_facets_total, m_n_dof_within_facet);
 
     Facet const*p;
     for (unsigned i = 0; i < n_facets_total; ++i)
@@ -176,9 +134,11 @@ void VarDofs::setUp()
       is_considered = m_considered_tags.empty() ? true : checkValue(m_considered_tags.begin(), m_considered_tags.end(), tag);
       
       if (!is_considered || p->isDisabled())
-        continue;
-      for (unsigned j = 0; j < m_facets_dofs.cols(); ++j)
-        m_facets_dofs(i,j) = dof_counter++;
+        for (int j = 0; j < m_facets_dofs.dim(1); ++j)
+          m_facets_dofs(i,j) = -1;
+      else
+        for (int j = 0; j < m_facets_dofs.dim(1); ++j)
+          m_facets_dofs(i,j) = dof_counter++;
     }
   }
 
@@ -186,7 +146,8 @@ void VarDofs::setUp()
   // cells dof
   if (m_n_dof_within_cell > 0)
   {
-    new (&m_cells_dofs) Container(cells_beg, n_cells_total, m_n_dof_within_cell);
+    //new (&m_cells_dofs) Container(cells_beg, n_cells_total, m_n_dof_within_cell);
+    m_cells_dofs.reshape(n_cells_total, m_n_dof_within_cell);
 
     Cell const*p;
     for (unsigned i = 0; i < n_cells_total; ++i)
@@ -198,59 +159,21 @@ void VarDofs::setUp()
       is_considered = m_considered_tags.empty() ? true : checkValue(m_considered_tags.begin(), m_considered_tags.end(), tag);
       
       if (!is_considered || p->isDisabled())
-        continue;
-      for (unsigned j = 0; j < m_cells_dofs.cols(); ++j)
-        m_cells_dofs(i,j) = dof_counter++;
+        for (int j = 0; j < m_cells_dofs.dim(1); ++j)
+          m_cells_dofs(i,j) = -1;
+      else
+        for (int j = 0; j < m_cells_dofs.dim(1); ++j)
+          m_cells_dofs(i,j) = dof_counter++;
     }
   }
 
-  m_n_dofs = dof_counter - m_initial_dof_id;
+  m_size = dof_counter - minimum_dof_id;
 
 }
-
-void VarDofs::updateFromInitialDofAddres()
-{
-  unsigned const n_nodes_total   = m_n_dof_within_vertice > 0 ? m_vertices_dofs.rows() : 0;
-  unsigned const n_corners_total = m_n_dof_within_corner > 0 ? m_corners_dofs.rows() : 0;
-  unsigned const n_facets_total  = m_n_dof_within_facet > 0 ? m_facets_dofs.rows() : 0;
-  unsigned const n_cells_total   = m_n_dof_within_cell > 0 ? m_cells_dofs.rows() : 0;
-
-  //unsigned const n_vertices = m_mesh_ptr->numVertices();
-  //unsigned const n_corners = m_mesh_ptr->numCorners();
-  //unsigned const n_facets  = m_mesh_ptr->numFacets();
-  //unsigned const n_cells  = m_mesh_ptr->numCells();
-
-  int* vertices_beg;
-  int* corners_beg;
-  int* facets_beg;
-  int* cells_beg;
-  
-  vertices_beg = m_initial_dof_address;
-  corners_beg  = vertices_beg  +  n_nodes_total  *m_n_dof_within_vertice;
-  facets_beg   = corners_beg   +  n_corners_total*m_n_dof_within_corner;
-  cells_beg    = facets_beg    +  n_facets_total *m_n_dof_within_facet;
-  
-  // vertices dof
-  if (m_n_dof_within_vertice > 0)
-    new (&m_vertices_dofs) Container(vertices_beg, n_nodes_total, m_n_dof_within_vertice);
-  
-  // corners dof
-  if (m_n_dof_within_corner > 0)
-    new (&m_corners_dofs) Container(corners_beg, n_corners_total, m_n_dof_within_corner);
-    
-  // facets dof
-  if (m_n_dof_within_facet > 0)
-    new (&m_facets_dofs) Container(facets_beg, n_facets_total, m_n_dof_within_facet);
-  
-  // cells dof
-  if (m_n_dof_within_cell > 0)
-    new (&m_cells_dofs) Container(cells_beg, n_cells_total, m_n_dof_within_cell);    
-}
-
 
 int VarDofs::numDofs() const
 {
-  return m_n_dofs - m_n_links;
+  return m_size;
 }
 
 int VarDofs::numDofsPerVertex() const
@@ -475,41 +398,6 @@ void VarDofs::getVertexAssociatedDofs(int* dofs, CellElement const* point) const
 {
   getVertexDofs(dofs, point);
 }
-
-
-
-
-void VarDofs::linkVertexDofs(Point const* point1, Point const* point2)
-{
-  const int pt_id1 = m_mesh_ptr->getCellPtr(point1->getIncidCell())->getNodeId(point1->getPosition());
-  const int pt_id2 = m_mesh_ptr->getCellPtr(point2->getIncidCell())->getNodeId(point2->getPosition());
-  
-  for (int j = 0; j < m_n_dof_within_vertice; ++j)
-  {
-    FEPIC_CHECK(m_vertices_dofs(pt_id2,j) >= 0, "Point has no associated dofs", std::invalid_argument);
-    
-    if (m_vertices_dofs(pt_id1,j) != m_vertices_dofs(pt_id2,j))
-    {
-      m_vertices_dofs(pt_id1,j) = m_vertices_dofs(pt_id2,j);
-      m_n_links++;
-    }
-  }
-  
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

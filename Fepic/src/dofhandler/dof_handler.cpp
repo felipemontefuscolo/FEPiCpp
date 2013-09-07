@@ -47,29 +47,7 @@ extern "C" {
 // NOTE: this function can not depends on the mesh
 void DofHandler::copy(DofHandler const& c)
 {
-  //*this = c;
-  
-  m_mesh_ptr    = c.m_mesh_ptr   ;
-  m_grow_factor = c.m_grow_factor;
-  m_relations   = c.m_relations  ;
-  m_vars        = c.m_vars       ;
-  m_data        = c.m_data       ;
-  
-  
-  
-  
-  int  initial_dof=0;
-  int* initial_address=m_data.data();
-  for (unsigned i = 0; i < m_vars.size(); ++i)
-  {
-    m_vars[i].setInitialDofId(initial_dof);
-    m_vars[i].setInitialDofAddress(initial_address);
-    m_vars[i].updateFromInitialDofAddres();
-    initial_dof += m_vars[i].numDofs();
-    initial_address += m_vars[i].totalSizeWithoutMeshInfo();
-  }
-  
-  
+  *this = c;
 }
 
 
@@ -88,41 +66,23 @@ void DofHandler::addVariable(const char* var_name, int ndpv, int ndpr, int ndpf,
   FEPIC_CHECK(m_mesh_ptr!=NULL, "mesh is NULL", std::invalid_argument);
   FEPIC_CHECK(m_mesh_ptr->numNodesTotal()>0, "did you forget to setup the mesh?", std::invalid_argument);
   
-  m_vars.push_back(VarDofs(var_name,m_mesh_ptr,ndpv,ndpr,ndpf,ndpc, 0,NULL, ntags,tags));
+  m_vars.push_back(VarDofs(var_name,m_mesh_ptr,ndpv,ndpr,ndpf,ndpc, ntags,tags));
 }
 
 void DofHandler::SetUp()
 {
   if (m_relations.size() < 1)
   {
-    m_relations.resize(numVars(), numVars());
-    m_relations.setOnes();
+    m_relations.reshape(numVars(), numVars());
+    for (int i = 0; i < numVars()*numVars(); ++i)
+      m_relations[i] = 1;
   }
-  
-  // computes total size and allocates memory
-  int total_size = 0;
-  for (unsigned i = 0; i < m_vars.size(); ++i)
-  {
-    total_size += m_vars[i].totalSize();
-  }
-  
-  if (m_data.capacity() < (unsigned)total_size)
-    m_data.reserve(total_size*(1.+m_grow_factor)+1);
-  m_data.resize(total_size);
-  FEP_PRAGMA_OMP(parallel for)
-  for (unsigned i = 0; i < m_data.size(); ++i)
-    m_data[i] = -1;
-  
   
   int  initial_dof=0;
-  int* initial_address=m_data.data();
   for (unsigned i = 0; i < m_vars.size(); ++i)
   {
-    m_vars[i].setInitialDofId(initial_dof);
-    m_vars[i].setInitialDofAddress(initial_address);
-    m_vars[i].setUp();
+    m_vars[i].setUp(initial_dof);
     initial_dof += m_vars[i].numDofs();
-    initial_address += m_vars[i].totalSize();
   }
   
 }
@@ -131,10 +91,10 @@ int DofHandler::numDofs() const
 {
   int total = 0;
   for (unsigned i = 0; i < m_vars.size(); ++i) 
-  {
     total += m_vars[i].numDofs();
-  }
-  return total;
+  
+  
+  return total  - m_n_links;
   
 }
 
@@ -565,28 +525,29 @@ void DofHandler::getCSR_adjacency(std::vector<int> &adjncy, std::vector<int> &xa
 
 void DofHandler::CuthillMcKeeRenumber()
 {
-  const int n_dofs = numDofs();
-  std::vector<int> perm(n_dofs);
-  
-  {
-    typedef std::vector<std::set<int> > TableT;
-    
-    TableT table; // dofs x neighbors
-    getSparsityTable(table);  
-    
-    CuthilMckee()(table, 0, perm.data());
-  }
-  
-  const int tsize = totalSize();
-  
-  FEP_PRAGMA_OMP(parallel for)
-  for (int k = 0; k < tsize; ++k)
-  {
-    if (m_data[k]==-1)
-      continue;
-    m_data[k] = perm[m_data[k]];
-  }   
-  
+//
+//  const int n_dofs = numDofs();
+//  std::vector<int> perm(n_dofs);
+//  
+//  {
+//    typedef std::vector<std::set<int> > TableT;
+//    
+//    TableT table; // dofs x neighbors
+//    getSparsityTable(table);  
+//    
+//    CuthilMckee()(table, 0, perm.data());
+//  }
+//  
+//  const int tsize = totalSize();
+//  
+//  FEP_PRAGMA_OMP(parallel for)
+//  for (int k = 0; k < tsize; ++k)
+//  {
+//    if (m_data[k]==-1)
+//      continue;
+//    m_data[k] = perm[m_data[k]];
+//  }   
+//  
 }
 
 
@@ -647,7 +608,7 @@ public:
     }
   } // end removeGaps
 
-private:
+
   static bool compare_ptr(int *a, int*b)
   {
     return *a < *b;
@@ -655,11 +616,76 @@ private:
 };
 
 
-void DofHandler::removeDofsGaps()
-{
-  AuxRemoveGaps::doit(m_data);
-}
+//void DofHandler::removeDofsGaps()
+//{
+////  AuxRemoveGaps::doit(m_data);
+//}
 
+void DofHandler::linkDofs(int size, int * dofs1, int * dofs2)
+{
+  std::vector<int*> data(numDofs(),NULL);
+
+  // is also check user's input
+  for (int j = 0; j < size; ++j)
+  {
+    bool err = (dofs2[j] != dofs1[j]) || dofs2[j] == -1;
+    
+    FEPIC_CHECK(err, "can not link same dofs", std::runtime_error);
+    
+    if (dofs2[j] < dofs1[j])
+      swap(dofs2[j], dofs1[j]);
+  }
+
+  int k = 0;
+  for (unsigned i = 0; i < m_vars.size(); ++i)
+  {
+    for (int j = 0; j < m_vars[i].m_vertices_dofs.size(); ++j)
+    {
+      if (m_vars[i].m_vertices_dofs[j] >= 0)
+        data.at(k++) = & m_vars[i].m_vertices_dofs[j];
+    }
+    
+    for (int j = 0; j < m_vars[i].m_corners_dofs.size(); ++j)
+    {
+      if (m_vars[i].m_corners_dofs[j] >= 0)
+        data.at(k++) = & m_vars[i].m_corners_dofs[j];
+    }
+
+    for (int j = 0; j < m_vars[i].m_facets_dofs.size(); ++j)
+    {
+      if (m_vars[i].m_facets_dofs[j] >= 0)
+        data.at(k++) = & m_vars[i].m_facets_dofs[j];
+    }
+    
+    for (int j = 0; j < m_vars[i].m_cells_dofs.size(); ++j)
+    {
+      if (m_vars[i].m_cells_dofs[j] >= 0)
+        data.at(k++) = & m_vars[i].m_cells_dofs[j];
+    }
+
+  }
+
+  std::sort(data.begin(), data.end(), AuxRemoveGaps::compare_ptr);
+
+
+  int sub = 0;
+  for (unsigned i = 0; i < data.size(); ++i)
+  {
+    for (int j = 0; j < size; ++j)
+    {
+      if (*data[i] == dofs2[j])
+      {
+        ++sub;
+        *data[i] = *data[ dofs1[j] ];
+        ++m_n_links;
+        break;
+      }
+      if (j==size-1)
+        *data[i] -= sub;
+    }
+  }
+
+}
 
 
 

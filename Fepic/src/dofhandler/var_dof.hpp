@@ -24,8 +24,8 @@
 
 #include "dof_traits.hpp"
 #include "../shapefunctions/shape_functions.hpp"
-#include "../custom_eigen/custom_eigen.hpp"
 #include "Fepic/src/mesh/elements/cell_element.hpp"
+#include "../util/array.hpp"
 #include <vector>
 #include <string>
 
@@ -40,36 +40,26 @@ class VarDofs
 {
   friend class DofHandler;
 
-  //typedef std::vector<int> MiniContainer;
-  //typedef std::vector<MiniContainer> Container;
-  typedef Eigen::Map<Eigen::ArrayXXi> Container;
+  typedef marray::Array<int, 2> Container;
 
   void setMesh(Mesh *m) {m_mesh_ptr = m;}
-  void setInitialDofId(int fid) {m_initial_dof_id = fid;}
-  void setInitialDofAddress(int* a) {m_initial_dof_address = a;}
   void setType(ShapeFunction * sf, int dim=1, int ntags=0, int const*tags=NULL);
   void setType(int ndpv, int ndpr, int ndpf, int ndpc, int ntags=0, int const*tags=NULL);
-  void getDivisions(int*& vertices_beg, int*& corners_beg, int*& facets_beg, int*& cells_beg) const;
 
-  void setUp();
-  // call this routine when only m_initial_dof_address was changed
-  void updateFromInitialDofAddres();
+  void setUp(int minimum_dof_id);
 
-  int  totalSizeWithoutMeshInfo() const;
+  void linkDofs(int size, int const* dofs1, int const* dofs2); // do dofs2 = dofs1
 
 public:
 
-  VarDofs(const char* name, Mesh * m=NULL, int ndpv=0, int ndpr=0, int ndpf=0, int ndpc=0, int fdi=0, int* a=NULL, int ntags=0, int const*tags=NULL)
-    : m_name(name), m_mesh_ptr(m), m_vertices_dofs(NULL,0,0), m_corners_dofs(NULL,0,0), m_facets_dofs(NULL,0,0), m_cells_dofs(NULL,0,0)
+  VarDofs(const char* name, Mesh * m=NULL, int ndpv=0, int ndpr=0, int ndpf=0, int ndpc=0, int ntags=0, int const*tags=NULL)
+                              : m_name(name), m_mesh_ptr(m)
   {
     m_n_dof_within_vertice = ndpv; // interior
     m_n_dof_within_corner = ndpr;  // interior
     m_n_dof_within_facet = ndpf;   // interior
     m_n_dof_within_cell = ndpc;    // interior
-    m_n_dofs = 0;
-    m_n_links = 0;
-    m_initial_dof_id = fdi;
-    m_initial_dof_address = a;
+    m_size = 0;
 
     if (ntags>0)
     {
@@ -105,30 +95,9 @@ public:
   
   char const* getName() const {return m_name.c_str();};
 
-  void linkVertexDofs(Point const* point1, Point const* point2);
+  //void linkVertexDofs(Point const* point1, Point const* point2);
 
-  int const* data() const
-  {
-    if (m_n_dof_within_vertice > 0)
-      {return m_vertices_dofs.data(); }
-    else if (m_n_dof_within_corner > 0)
-      {return m_corners_dofs.data();  }
-    else if (m_n_dof_within_facet > 0)
-      {return m_facets_dofs.data();  }
-    else
-      {return m_cells_dofs.data();  }
-  }
-  int* data()
-  {
-    if (m_n_dof_within_vertice > 0)
-      {return m_vertices_dofs.data(); }
-    else if (m_n_dof_within_corner > 0)
-      {return m_corners_dofs.data();  }
-    else if (m_n_dof_within_facet > 0)
-      {return m_facets_dofs.data();  }
-    else
-      {return m_cells_dofs.data();  }
-  }
+  // number of stored integers
   int  totalSize() const;
 
   float getGrowFactor() const {return m_grow_factor;}
@@ -140,10 +109,7 @@ protected:
   int         m_n_dof_within_corner;
   int         m_n_dof_within_facet;
   int         m_n_dof_within_cell;
-  int         m_n_dofs;
-  int         m_n_links;
-  int         m_initial_dof_id;
-  int*        m_initial_dof_address;
+  int         m_size;               // it can account for linked dofs
   float       m_grow_factor;
   
   std::vector<int> m_considered_tags; /* if m_considered_tags.size()==0, then all tags are considered. */

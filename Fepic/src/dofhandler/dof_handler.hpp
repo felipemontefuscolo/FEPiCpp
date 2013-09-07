@@ -27,13 +27,14 @@
 #include <vector>
 #include <set>
 #include <string>
+#include "../util/array.hpp"
 
 
 class DofHandler
 {
-  typedef std::vector<int>                   DataContainer;
-  typedef std::vector<VarDofs>               DofsContainer;
-  typedef Eigen::Array<bool,Eigen::Dynamic,Eigen::Dynamic> MatrixBool;
+  typedef std::vector<int>                  DataContainer;
+  typedef std::vector<VarDofs>              DofsContainer;
+  typedef marray::Array<int,2>              MatrixBool;
   
   //// if the compilers complains, just comment these lines
   //DofHandler(DofHandler const& ) = default;
@@ -41,7 +42,7 @@ class DofHandler
   
 public:  
   
-  DofHandler(Mesh* mesh=NULL, float gf=0.07) : m_mesh_ptr(mesh), m_grow_factor(gf) {}
+  DofHandler(Mesh* mesh=NULL, float gf=0.07) : m_mesh_ptr(mesh), m_grow_factor(gf), m_n_links(0) {}
   
   // a safe copy
   void copy(DofHandler const& c);
@@ -83,9 +84,8 @@ public:
   void boostCuthillMcKeeRenumber();
   void CuthillMcKeeRenumber();
   
-  /*  Remove gaps in the dofs numbering
-   */ 
-  void removeDofsGaps();
+  ///*  Remove gaps in the dofs numbering */
+  //void removeDofsGaps();
 
   /* @param deleted The deleted vertices
    * @param added The added vertices
@@ -94,20 +94,21 @@ public:
    */
   std::vector<int> updateVerticesDofs(std::vector<int> &deleted, std::vector<int> &added);
   
+  // it uses the vector dofs1 and dofs2
+  // for better performance, pass all dofs at once.
+  void linkDofs(int size, int * dofs1, int * dofs2); // do dofs2 = dofs1
+  
   
   int numVars() const {return m_vars.size();};
   int numDofs() const;
   void SetUp();
-  int const* data() const {return m_data.data();};
-  int* data() {return m_data.data();};
-  int totalSize() const {return m_data.size();};
   
 private:
   Mesh*         m_mesh_ptr;
   float         m_grow_factor;
   MatrixBool    m_relations;
   DofsContainer m_vars;
-  DataContainer m_data; // single block with dofs
+  int           m_n_links;
 };
 
 
