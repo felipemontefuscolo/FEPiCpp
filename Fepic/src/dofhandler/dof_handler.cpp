@@ -116,8 +116,8 @@ void DofHandler::setVariablesRelationship(bool const* v)
 void DofHandler::printSparsityMatlab(std::string matname, std::string filename)
 {
   
-  typedef std::vector<std::set<int> > TableT;
-  typedef std::set<int>::const_iterator SetIter;
+  typedef std::vector<SetVector<int> > TableT;
+  typedef SetVector<int>::const_iterator SetIter;
 
   //const int n_vars = numVars();
   const int n_dofs = numDofs();
@@ -168,20 +168,31 @@ void DofHandler::printSparsityMatlab(std::string matname, std::string filename)
 
 
 // automatic resize
-void DofHandler::getSparsityTable(std::vector<std::set<int> > & table)
+void DofHandler::getSparsityTable(std::vector<SetVector<int> > & table)
 {
-  typedef std::vector<std::set<int> > TableT;
-  typedef std::set<int>::const_iterator SetIter;
+  typedef std::vector<SetVector<int> > TableT;
+  //typedef std::set<int>::const_iterator SetIter;
   
   const int n_vars = numVars();
   const int n_dofs = numDofs();
   //const int tsize  = totalSize();
   std::vector<std::vector<int> > var_cell_dofs(n_vars); // var x cell dofs
   
-  table.resize(n_dofs);
-
+  int estimate = 0;
   for (int i = 0; i < n_vars; ++i)
-    var_cell_dofs[i].resize( getVariable(i).numDofsPerCell() );
+  {
+    int const n_dofs_cell = getVariable(i).numDofsPerCell();
+    var_cell_dofs[i].resize( n_dofs_cell );
+    estimate += n_dofs_cell;
+  }
+
+  table.resize(n_dofs);
+  if (m_mesh_ptr->cellDim() < 3)
+    estimate *= 3;
+  else
+    estimate *= 16;
+  for (unsigned i = 0; i < table.size(); ++i)
+    table[i].reserve(estimate);
   
   cell_iterator cell = m_mesh_ptr->cellBegin();
   cell_iterator cell_end = m_mesh_ptr->cellEnd();  
@@ -477,8 +488,8 @@ void DofHandler::getCSR_adjacency(std::vector<int> &adjncy, std::vector<int> &xa
   //(100*n_dofs)
   
   {
-    typedef std::vector<std::set<int> > TableT;
-    typedef std::set<int>::const_iterator SetIter;
+    typedef std::vector<SetVector<int> > TableT;
+    typedef SetVector<int>::const_iterator SetIter;
   
     TableT table; // dofs x neighbors
     getSparsityTable(table);

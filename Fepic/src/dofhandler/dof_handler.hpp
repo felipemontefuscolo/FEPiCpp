@@ -28,7 +28,7 @@
 #include <set>
 #include <string>
 #include "../util/array.hpp"
-
+#include "contrib/Loki/set_vector.hpp"
 
 class DofHandler
 {
@@ -75,7 +75,7 @@ public:
   void setVariablesRelationship(bool const* v);
   
   void printSparsityMatlab(std::string matname, std::string filename = "");
-  void getSparsityTable(std::vector<std::set<int> > & table);
+  void getSparsityTable(std::vector<SetVector<int> > & table);
   void getMetisCSRfromTable(int *, int *, std::vector<std::set<int> > const& table);
   void getCSR_adjacency(std::vector<int> &adjncy, std::vector<int> &xadj);
 
