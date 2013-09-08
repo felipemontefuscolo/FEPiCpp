@@ -24,7 +24,7 @@
 
 /* user config */
 #ifdef _OPENMP
-#  define FEP_HAS_OPENMP
+//#  define FEP_HAS_OPENMP
 #endif
 
 // #define FEP_HAS_OMPTL

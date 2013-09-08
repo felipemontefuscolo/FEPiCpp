@@ -209,11 +209,11 @@ TEST(DofHandlerTest, AssignsDofsTri3)
   DofH.SetUp();
   
   //11x3 + 22 + 12
-  EXPECT_EQ(11, DofH.getVariable(0).numDofs());
-  EXPECT_EQ(22, DofH.getVariable(1).numDofs());
-  EXPECT_EQ( 0, DofH.getVariable(2).numDofs());
-  EXPECT_EQ(22, DofH.getVariable(3).numDofs());
-  EXPECT_EQ(12, DofH.getVariable(4).numDofs());
+  EXPECT_EQ(11, DofH.getVariable(0).numPositiveDofs());
+  EXPECT_EQ(22, DofH.getVariable(1).numPositiveDofs());
+  EXPECT_EQ( 0, DofH.getVariable(2).numPositiveDofs());
+  EXPECT_EQ(22, DofH.getVariable(3).numPositiveDofs());
+  EXPECT_EQ(12, DofH.getVariable(4).numPositiveDofs());
   
   EXPECT_EQ(67, DofH.numDofs());
   
@@ -301,11 +301,11 @@ TEST(DofHandlerTest, AssignsDofsTri6)
   DofH.SetUp();
   
   //11x3 + 22 + 12 + 12
-  EXPECT_EQ(11, DofH.getVariable(0).numDofs());
-  EXPECT_EQ(22, DofH.getVariable(1).numDofs());
-  EXPECT_EQ( 0, DofH.getVariable(2).numDofs());
-  EXPECT_EQ(22, DofH.getVariable(3).numDofs());
-  EXPECT_EQ(12, DofH.getVariable(4).numDofs());
+  EXPECT_EQ(11, DofH.getVariable(0).numPositiveDofs());
+  EXPECT_EQ(22, DofH.getVariable(1).numPositiveDofs());
+  EXPECT_EQ( 0, DofH.getVariable(2).numPositiveDofs());
+  EXPECT_EQ(22, DofH.getVariable(3).numPositiveDofs());
+  EXPECT_EQ(12, DofH.getVariable(4).numPositiveDofs());
 
   EXPECT_EQ(67, DofH.numDofs());
   
@@ -394,10 +394,10 @@ TEST(DofHandlerTest, AssignsDofsTet10)
   
   DofH.SetUp();
   
-  EXPECT_EQ( 9, DofH.getVariable(0).numDofs());
-  EXPECT_EQ(26, DofH.getVariable(1).numDofs());
-  EXPECT_EQ(30, DofH.getVariable(2).numDofs());
-  EXPECT_EQ(24, DofH.getVariable(3).numDofs());
+  EXPECT_EQ( 9, DofH.getVariable(0).numPositiveDofs());
+  EXPECT_EQ(26, DofH.getVariable(1).numPositiveDofs());
+  EXPECT_EQ(30, DofH.getVariable(2).numPositiveDofs());
+  EXPECT_EQ(24, DofH.getVariable(3).numPositiveDofs());
   
   EXPECT_EQ(89, DofH.numDofs());
   
@@ -409,10 +409,10 @@ TEST(DofHandlerTest, AssignsDofsTet10)
   DofH.SetUp();
   //
   
-  EXPECT_EQ( 9, DofH.getVariable(0).numDofs());
-  EXPECT_EQ(26, DofH.getVariable(1).numDofs());
-  EXPECT_EQ(28, DofH.getVariable(2).numDofs());
-  EXPECT_EQ(20, DofH.getVariable(3).numDofs());
+  EXPECT_EQ( 9, DofH.getVariable(0).numPositiveDofs());
+  EXPECT_EQ(26, DofH.getVariable(1).numPositiveDofs());
+  EXPECT_EQ(28, DofH.getVariable(2).numPositiveDofs());
+  EXPECT_EQ(20, DofH.getVariable(3).numPositiveDofs());
   ////
   EXPECT_EQ(83, DofH.numDofs());
   //
@@ -730,11 +730,11 @@ TEST(DofHandlerTest, TagsDofsTri3)
   DofH.SetUp();
   
   // 15
-  EXPECT_EQ( 3, DofH.getVariable(0).numDofs());
-  EXPECT_EQ( 6, DofH.getVariable(1).numDofs());
-  EXPECT_EQ( 0, DofH.getVariable(2).numDofs());
-  EXPECT_EQ( 3, DofH.getVariable(3).numDofs());
-  EXPECT_EQ( 0, DofH.getVariable(4).numDofs());
+  EXPECT_EQ( 3, DofH.getVariable(0).numPositiveDofs());
+  EXPECT_EQ( 6, DofH.getVariable(1).numPositiveDofs());
+  EXPECT_EQ( 0, DofH.getVariable(2).numPositiveDofs());
+  EXPECT_EQ( 3, DofH.getVariable(3).numPositiveDofs());
+  EXPECT_EQ( 0, DofH.getVariable(4).numPositiveDofs());
 
   EXPECT_EQ(12, DofH.numDofs());
   
@@ -793,10 +793,10 @@ TEST(DofHandlerTest, TagsDofsTet10)
 
   DofH.SetUp();
   
-  EXPECT_EQ( 9, DofH.getVariable(0).numDofs());
-  EXPECT_EQ(26, DofH.getVariable(1).numDofs());
-  EXPECT_EQ(30, DofH.getVariable(2).numDofs());
-  EXPECT_EQ(24, DofH.getVariable(3).numDofs());
+  EXPECT_EQ( 9, DofH.getVariable(0).numPositiveDofs());
+  EXPECT_EQ(26, DofH.getVariable(1).numPositiveDofs());
+  EXPECT_EQ(30, DofH.getVariable(2).numPositiveDofs());
+  EXPECT_EQ(24, DofH.getVariable(3).numPositiveDofs());
   
   EXPECT_EQ(89, DofH.numDofs());
   
@@ -808,10 +808,10 @@ TEST(DofHandlerTest, TagsDofsTet10)
   DofH.SetUp();
   //
   
-  EXPECT_EQ( 9, DofH.getVariable(0).numDofs());
-  EXPECT_EQ(26, DofH.getVariable(1).numDofs());
-  EXPECT_EQ(28, DofH.getVariable(2).numDofs());
-  EXPECT_EQ(20, DofH.getVariable(3).numDofs());
+  EXPECT_EQ( 9, DofH.getVariable(0).numPositiveDofs());
+  EXPECT_EQ(26, DofH.getVariable(1).numPositiveDofs());
+  EXPECT_EQ(28, DofH.getVariable(2).numPositiveDofs());
+  EXPECT_EQ(20, DofH.getVariable(3).numPositiveDofs());
   ////
   EXPECT_EQ(83, DofH.numDofs());
   //
@@ -1069,11 +1069,11 @@ TEST(DofHandlerTest, TagsLink3Tri3)
   DofH.SetUp();
   
   //11x3 + 22 + 12 + 12
-  EXPECT_EQ(11, DofH.getVariable(0).numDofs());
-  EXPECT_EQ(22, DofH.getVariable(1).numDofs());
-  EXPECT_EQ( 0, DofH.getVariable(2).numDofs());
-  EXPECT_EQ(22, DofH.getVariable(3).numDofs());
-  EXPECT_EQ(12, DofH.getVariable(4).numDofs());
+  EXPECT_EQ(11, DofH.getVariable(0).numPositiveDofs());
+  EXPECT_EQ(22, DofH.getVariable(1).numPositiveDofs());
+  EXPECT_EQ( 0, DofH.getVariable(2).numPositiveDofs());
+  EXPECT_EQ(22, DofH.getVariable(3).numPositiveDofs());
+  EXPECT_EQ(12, DofH.getVariable(4).numPositiveDofs());
 
   EXPECT_EQ(67, DofH.numDofs());
   
@@ -1216,6 +1216,5 @@ TEST(DofHandlerTest, CopyFunctionTri3)
   
   delete mesh;  
 }
-
 
 

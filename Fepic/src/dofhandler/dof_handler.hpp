@@ -101,6 +101,7 @@ public:
   
   int numVars() const {return m_vars.size();};
   int numDofs() const;
+  int numPositiveDofs() const;
   void SetUp();
   
 private:

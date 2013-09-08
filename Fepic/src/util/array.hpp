@@ -263,8 +263,10 @@ class ArrayBase
 
   typedef ArrayBase Self;
   typedef typename internal::Traits<Derived>::UserT UserT;
+  typedef typename internal::Traits<Derived>::MemBlockT MemBlockT;
   static const int Rank = internal::Traits<Derived>::Rank;
   static const bool isRowMajor = internal::Traits<Derived>::isRowMajor;
+  
 
 public:
 
@@ -359,6 +361,81 @@ public:
   MA_DEF_CONST_CALL_OP(9)
   MA_DEF_CONST_CALL_OP(10)
 #undef MA_DEF_CONST_CALL_OP
+
+
+
+
+
+
+// check bound
+
+// define call operator
+#define MA_DEF_CALL_OP(n_args_)                                                       \
+  reference get(MA_EXPAND_ARGS(n_args_, int))                                          \
+  {                                                                                   \
+    MA_STATIC_CHECK(Rank==n_args_, INVALID_NUMBER_OF_ARGS_IN_CALL_OP);                \
+                                                                                      \
+    int const indices[] = {MA_EXPAND_SEQ(n_args_)};                                   \
+                                                                                      \
+    internal::BoundCheck<Rank>::check(THIS->rdims(), indices);                        \
+                                                                                      \
+    typedef typename internal::IdxComputationTraits<Rank, isRowMajor>::type ToGlobal; \
+                                                                                      \
+    return THIS->MemBlockT::at( ToGlobal::idx(THIS->rdims(), indices) );                         \
+  }
+
+  // define call operators
+  MA_DEF_CALL_OP(1)
+  MA_DEF_CALL_OP(2)
+  MA_DEF_CALL_OP(3)
+  MA_DEF_CALL_OP(4)
+  MA_DEF_CALL_OP(5)
+  MA_DEF_CALL_OP(6)
+  MA_DEF_CALL_OP(7)
+  MA_DEF_CALL_OP(8)
+  MA_DEF_CALL_OP(9)
+  MA_DEF_CALL_OP(10)
+#undef MA_DEF_CALL_OP
+
+
+// define const call operator
+#define MA_DEF_CONST_CALL_OP(n_args_)                                                 \
+  const_reference get(MA_EXPAND_ARGS(n_args_, int)) const                              \
+  {                                                                                   \
+    MA_STATIC_CHECK(Rank==n_args_, INVALID_NUMBER_OF_ARGS_IN_CALL_OP);                \
+                                                                                      \
+    int const indices[] = {MA_EXPAND_SEQ(n_args_)};                                   \
+                                                                                      \
+    internal::BoundCheck<Rank>::check(CONST_THIS->rdims(), indices);                  \
+                                                                                      \
+    typedef typename internal::IdxComputationTraits<Rank, isRowMajor>::type ToGlobal; \
+                                                                                      \
+    return CONST_THIS->MemBlockT::at( ToGlobal::idx(CONST_THIS->rdims(), indices) );    \
+  };
+
+  // define call operators
+  MA_DEF_CONST_CALL_OP(1)
+  MA_DEF_CONST_CALL_OP(2)
+  MA_DEF_CONST_CALL_OP(3)
+  MA_DEF_CONST_CALL_OP(4)
+  MA_DEF_CONST_CALL_OP(5)
+  MA_DEF_CONST_CALL_OP(6)
+  MA_DEF_CONST_CALL_OP(7)
+  MA_DEF_CONST_CALL_OP(8)
+  MA_DEF_CONST_CALL_OP(9)
+  MA_DEF_CONST_CALL_OP(10)
+#undef MA_DEF_CONST_CALL_OP
+
+
+
+
+
+
+
+
+
+
+
 
 
   int maxDim() const

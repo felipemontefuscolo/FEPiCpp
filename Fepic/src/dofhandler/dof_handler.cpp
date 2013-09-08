@@ -82,7 +82,7 @@ void DofHandler::SetUp()
   for (unsigned i = 0; i < m_vars.size(); ++i)
   {
     m_vars[i].setUp(initial_dof);
-    initial_dof += m_vars[i].numDofs();
+    initial_dof += m_vars[i].numPositiveDofs();
   }
   
 }
@@ -91,12 +91,23 @@ int DofHandler::numDofs() const
 {
   int total = 0;
   for (unsigned i = 0; i < m_vars.size(); ++i) 
-    total += m_vars[i].numDofs();
+    total += m_vars[i].numPositiveDofs();
   
   
   return total  - m_n_links;
   
 }
+
+int DofHandler::numPositiveDofs() const
+{
+  int total = 0;
+  for (unsigned i = 0; i < m_vars.size(); ++i) 
+    total += m_vars[i].numPositiveDofs();
+  
+  return total;
+  
+}
+
 
 /* a matrix of bools with size numVars() x numVars()
  */ 
@@ -634,7 +645,7 @@ public:
 
 void DofHandler::linkDofs(int size, int * dofs1, int * dofs2)
 {
-  std::vector<int*> data(numDofs(),NULL);
+  std::vector<int*> data(numPositiveDofs(),NULL);
 
   // is also check user's input
   for (int j = 0; j < size; ++j)
