@@ -263,7 +263,6 @@ class ArrayBase
 
   typedef ArrayBase Self;
   typedef typename internal::Traits<Derived>::UserT UserT;
-  typedef typename internal::Traits<Derived>::MemBlockT MemBlockT;
   static const int Rank = internal::Traits<Derived>::Rank;
   static const bool isRowMajor = internal::Traits<Derived>::isRowMajor;
   
@@ -381,7 +380,7 @@ public:
                                                                                       \
     typedef typename internal::IdxComputationTraits<Rank, isRowMajor>::type ToGlobal; \
                                                                                       \
-    return THIS->MemBlockT::at( ToGlobal::idx(THIS->rdims(), indices) );                         \
+    return THIS->at( ToGlobal::idx(THIS->rdims(), indices) );                         \
   }
 
   // define call operators
@@ -410,7 +409,7 @@ public:
                                                                                       \
     typedef typename internal::IdxComputationTraits<Rank, isRowMajor>::type ToGlobal; \
                                                                                       \
-    return CONST_THIS->MemBlockT::at( ToGlobal::idx(CONST_THIS->rdims(), indices) );    \
+    return CONST_THIS->at( ToGlobal::idx(CONST_THIS->rdims(), indices) );    \
   };
 
   // define call operators

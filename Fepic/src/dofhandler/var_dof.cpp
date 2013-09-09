@@ -394,9 +394,9 @@ void VarDofs::getFacetDofs(int *dofs, CellElement const* facet) const
     for (unsigned k = 0; k < m_regional_tags.size(); ++k)
     {
       SetVector<int>::const_iterator it = m_regional_tags[k].find(tag);
-      if (it != m_regions.end())
+      if (it != m_regional_tags[k].end())
       {
-        reg = (int)(it - m_regional_tags[k].begin());
+        reg = k;
         break;
       }
     }
@@ -460,9 +460,9 @@ void VarDofs::getCornerDofs(int *dofs, CellElement const* corner) const
     for (unsigned k = 0; k < m_regional_tags.size(); ++k)
     {
       SetVector<int>::const_iterator it = m_regional_tags[k].find(tag);
-      if (it != m_regions.end())
+      if (it != m_regional_tags[k].end())
       {
-        reg = (int)(it - m_regional_tags[k].begin());
+        reg = k;
         break;
       }
     }
@@ -504,9 +504,9 @@ void VarDofs::getVertexDofs(int *dofs, CellElement const* point) const
     for (unsigned k = 0; k < m_regional_tags.size(); ++k)
     {
       SetVector<int>::const_iterator it = m_regional_tags[k].find(tag);
-      if (it != m_regions.end())
+      if (it != m_regional_tags[k].end())
       {
-        reg = (int)(it - m_regional_tags[k].begin());
+        reg = k;
         break;
       }
     }
@@ -520,7 +520,7 @@ void VarDofs::getVertexDofs(int *dofs, CellElement const* point) const
 
     for (int j = 0; j < m_n_dof_within_vertice; ++j)
     {
-      *dofs++ = m_vertices_dofs(reg,pt_id,j);
+      *dofs++ = m_vertices_dofs.get(reg,pt_id,j);
     }
   }
 
@@ -536,9 +536,9 @@ void VarDofs::getVertexDofs(int *dofs, int pt_id) const
     for (unsigned k = 0; k < m_regional_tags.size(); ++k)
     {
       SetVector<int>::const_iterator it = m_regional_tags[k].find(tag);
-      if (it != m_regions.end())
+      if (it != m_regional_tags[k].end())
       {
-        reg = (int)(it - m_regional_tags[k].begin());
+        reg = k;
         break;
       }
     }
@@ -581,9 +581,9 @@ void VarDofs::getFacetAssociatedDofs(int* dofs, CellElement const* facet) const
     for (unsigned k = 0; k < m_regional_tags.size(); ++k)
     {
       SetVector<int>::const_iterator it = m_regional_tags[k].find(tag);
-      if (it != m_regions.end())
+      if (it != m_regional_tags[k].end())
       {
-        reg = (int)(it - m_regional_tags[k].begin());
+        reg = k;
         break;
       }
     }
@@ -605,9 +605,9 @@ void VarDofs::getCornerAssociatedDofs(int* dofs, CellElement const* corner) cons
     for (unsigned k = 0; k < m_regional_tags.size(); ++k)
     {
       SetVector<int>::const_iterator it = m_regional_tags[k].find(tag);
-      if (it != m_regions.end())
+      if (it != m_regional_tags[k].end())
       {
-        reg = (int)(it - m_regional_tags[k].begin());
+        reg = k;
         break;
       }
     }

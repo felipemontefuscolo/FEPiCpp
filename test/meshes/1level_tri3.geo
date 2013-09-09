@@ -124,7 +124,10 @@ Physical Surface(70) = {43, 35, 67, 37, 39, 45, 47, 41, 65};
 //left
 Physical Surface(71) = {61, 63, 59, 69, 57, 55, 53, 51, 49};
 // middle
-Physical Line(72) = {5};
+Physical Line(72) = {5,29,21};
+
+Physical Line(73) = {30,33,17,15,18,23};
+Physical Line(74) = {32,27,25,28,19,22};
 
 
 

@@ -1218,3 +1218,84 @@ TEST(DofHandlerTest, CopyFunctionTri3)
 }
 
 
+
+//
+//
+// SPLITTING AT INTERSECTION
+//
+
+TEST(DofHandlerTest, SplitAtIntersectionVolTri3)
+{
+  MeshIoMsh msh_reader;
+  MeshIoVtk vtk_printer;
+  Mesh *mesh = NULL;  
+
+  ECellType cell_t     = TRIANGLE3;
+  const char* mesh_in  = "meshes/1level_tri3.msh";  
+  const char* mesh_out = "meshes/outtest/1level_tri3.vtk";
+
+  mesh = Mesh::create(cell_t);
+  msh_reader.readFileMsh(mesh_in, mesh);
+  
+  vtk_printer.attachMesh(mesh);
+  vtk_printer.writeVtk(mesh_out);
+//  vtk_printer.printPointIcellVtk();
+//  vtk_printer.printPointPositionVtk();  
+  
+  DofHandler DofH(mesh);
+  //                         ndpv,  ndpr,  ndpf,  ndpc
+  DofH.addVariable("altura",    1,     0,     0,     0); // 16
+  DofH.addVariable("vetor",     0,     0,     1,     0); // 18
+  DofH.addVariable("coisa",     0,     0,     0,     1); // 33
+  
+  DofH.SetUp();
+  
+  EXPECT_EQ(67, DofH.numDofs());
+
+
+  // split
+  int regs[] = {71,70};
+  int nr = 2;
+  DofH.getVariable(0).setType(SPLITTED_BY_REGION_CELL, 0, 0);
+  DofH.getVariable(1).setType(SPLITTED_BY_REGION_CELL, nr, regs);
+  DofH.getVariable(2).setType(SPLITTED_BY_REGION_CELL, nr, regs);
+  
+  DofH.SetUp();
+
+  EXPECT_EQ(74, DofH.numDofs());
+
+  // .getVariable(0)
+  //int *dat = DofH.data();
+
+  //PRINT_DAT
+
+
+  // ckeck
+  std::vector<int> dat;
+  
+  EXPECT_EQ(3, DofH.numVars());
+  
+  getAllDofs(dat,DofH,mesh);
+  
+  std::sort(dat.begin(), dat.end());
+  
+  EXPECT_TRUE(dat[0] == 0);
+  
+  dat.erase(std::remove(dat.begin(), dat.end(), -1), dat.end()); // remove -1
+  dat.erase(std::unique(dat.begin(), dat.end()), dat.end());     // remove duplicated
+  
+  EXPECT_EQ(DofH.numDofs(), (int)dat.size());
+  
+  int counter = 0;
+  for (unsigned i = 0; i < dat.size(); ++i)
+  {
+    EXPECT_EQ(counter, dat[i]);
+    ++counter;
+  }
+  
+  //PRINT_DAT
+  
+  delete mesh;
+}
+
+

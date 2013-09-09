@@ -53,10 +53,6 @@ class VarDofs
   //void setType(ShapeFunction * sf, int dim=1, int ntags=0, int const*tags=NULL);
   //void setType(int ndpv, int ndpr, int ndpf, int ndpc, int ntags=0, int const*tags=NULL);
 
-  // If 'by_mesh_volume' = true, 'by_mesh_boundary' is ignored. If regions is empty, the regions are found
-  // automatically
-  void setType(EVarOptions options, unsigned n_regions, int const* regions);
-
   void setUp(int minimum_dof_id);
 
   void linkDofs(int size, int const* dofs1, int const* dofs2); // do dofs2 = dofs1
@@ -92,6 +88,10 @@ public:
   }
 
   /* --- users ---*/
+
+  // If 'by_mesh_volume' = true, 'by_mesh_boundary' is ignored. If regions is empty, the regions are found
+  // automatically
+  void setType(EVarOptions options, unsigned n_regions, int const* regions);
   
   // number of positive dofs
   int numPositiveDofs() const;
