@@ -16,14 +16,14 @@ FEP_LIBS_DIR = $(FEPIC_DIR)/Fepic/slibs
 
 #FEP_LDFLAGS = -fopenmp -L$(METIS_LD) -lmetis
 #FEP_LDFLAGS = -L$(METIS_LD) -lmetis
-#FEP_LDFLAGS = -fopenmp
+FEP_LDFLAGS = -fopenmp
 
 #-Wundef -Wshadow boost hates these 
 FEP_PEDANTIC_FLAGS = -pedantic -Wcast-align -Wlogical-op -Wredundant-decls -Winline -Wmissing-format-attribute -Wpacked -Wmissing-field-initializers
 FEP_PEDANTIC_FLAGS += 
 
-FEP_CXXFLAGS  = -g  -Wextra -Wall ${FEP_PEDANTIC_FLAGS} $(FEP_INCLUDE)
-#FEP_CXXFLAGS = -O3 -march=native -msse2  $(FEP_INCLUDE) -fopenmp
+#FEP_CXXFLAGS  = -g  -Wextra -Wall ${FEP_PEDANTIC_FLAGS} $(FEP_INCLUDE)
+FEP_CXXFLAGS = -O3 -march=native -msse2  $(FEP_INCLUDE) -fopenmp
 FEP_CXXFLAGS += $(FEP_LDFLAGS)
 
 FEP_RM = rm -f

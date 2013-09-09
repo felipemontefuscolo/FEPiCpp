@@ -425,40 +425,40 @@ bool MeshToolsTri::inCircle2d(Cell const* cell, int const fid, Mesh const* mesh)
 # if (0)
 //int MeshToolsTri::insertVertexOnEdge(int cell_A_id, int face_Am_id, Real t, Mesh *mesh)
 //{
-/* ---------------------------------------------------------------------------------------------------------------
- *                      vtx_t                                                              vtx_t
- *                  ,/|\,                                                              ,/|\
- *                ,/  |  \,                                                          ,/  | `\
- *   cellB      ,/    |    \,    cellA                                  cellB      ,/    |   `\    cellA    <-- edge_t
- *            ,/      |      \,                                                  ,/      |vtx_m`\             = edge_old
- *          ,/        |        \,                    to                        ,/      _-+-_     `\
- *        ,/          | edge_    \,                     \,                   ,/   _,--'  |  '--,_  `\,
- * vtx_l /            | old        \ vtx_r                \,                /_,--'edge_l | edge_r`--,_\
- *       \,           |           ,/            ------------\               \,           |          ,/
- *         \,         |         ,/              -----------,/                 \,         |        ,/
- *           \,       |       ,/                         ,/                     \,       |       ,/         <-- edge_b
- *             \,     |     ,/                          /                         \,     |     ,/
- *               \,   |   ,/                                            cellC       \,   |   ,/    cellD
- *                 \, | ,/                                                            \, | ,/
- *                   \|/                                                                \|/
- *                     vtx_b                                                               vtx_b
- *
- * cellA nodes order:   j                                                 cellC nodes order:     2
- *                      | \ i                                                                0 / |
- *                      | /                                                                    \ |
- *                      k                                                                        1
- *
- * cellB nodes order:    k                                                cellD nodes order:  1
- *                   i / |                                                                    | \ 0
- *                     \ |                                                                    | /
- *                       j                                                                    2
- *
- * nod_tl, nod_tr, nod_bl, nod_br, nod_t*, nod_b, nod_l, nod_r = high order nodes
- *
- * nod_top = node of the old edge
- *
- *
- *///-------------------------------------------------------------------------------------------------------------
+///* ---------------------------------------------------------------------------------------------------------------
+// *                      vtx_t                                                              vtx_t
+// *                  ,/|\,                                                              ,/|\
+// *                ,/  |  \,                                                          ,/  | `\
+// *   cellB      ,/    |    \,    cellA                                  cellB      ,/    |   `\    cellA    <-- edge_t
+// *            ,/      |      \,                                                  ,/      |vtx_m`\             = edge_old
+// *          ,/        |        \,                    to                        ,/      _-+-_     `\
+// *        ,/          | edge_    \,                     \,                   ,/   _,--'  |  '--,_  `\,
+// * vtx_l /            | old        \ vtx_r                \,                /_,--'edge_l | edge_r`--,_\
+// *       \,           |           ,/            ------------\               \,           |          ,/
+// *         \,         |         ,/              -----------,/                 \,         |        ,/
+// *           \,       |       ,/                         ,/                     \,       |       ,/         <-- edge_b
+// *             \,     |     ,/                          /                         \,     |     ,/
+// *               \,   |   ,/                                            cellC       \,   |   ,/    cellD
+// *                 \, | ,/                                                            \, | ,/
+// *                   \|/                                                                \|/
+// *                     vtx_b                                                               vtx_b
+// *
+// * cellA nodes order:   j                                                 cellC nodes order:     2
+// *                      | \ i                                                                0 / |
+// *                      | /                                                                    \ |
+// *                      k                                                                        1
+// *
+// * cellB nodes order:    k                                                cellD nodes order:  1
+// *                   i / |                                                                    | \ 0
+// *                     \ |                                                                    | /
+// *                       j                                                                    2
+// *
+// * nod_tl, nod_tr, nod_bl, nod_br, nod_t*, nod_b, nod_l, nod_r = high order nodes
+// *
+// * nod_top = node of the old edge
+// *
+// *
+// *///-------------------------------------------------------------------------------------------------------------
 //
 //  int const  sdim = mesh->spaceDim(); 		   // Pega a dimensão da malha
 //  
@@ -1574,9 +1574,11 @@ int MeshToolsTri::collapseEdge2d(int cell_A_id, int face_Am_id, Real t, Mesh *me
     {
 		edge_bl=mesh->getFacetPtr(edge_bl_id);
 		edge_tl=mesh->getFacetPtr(edge_tl_id);
-		edge_bl->setIncidence(cell_BT_id, face_BTtl_id);
+		if(cell_BT_id>-1) edge_bl->setIncidence(cell_BT_id, face_BTtl_id);
+		else 			  edge_bl->setIncidence(cell_BB_id, face_BBbl_id);
 		if(edge_tl->isBlocked()) edge_bl->setBlockedTo(true);
 	}
+	
     // =========================== Atualizar as tags das arestas =======================================================
     if (mesh->inBoundary(edge_tr) || edge_tr->isBlocked())
     {
