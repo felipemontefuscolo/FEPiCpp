@@ -7,8 +7,9 @@ EIGEN_DIR = $(FEPIC_DIR)/contrib/eigen
 LOKI_DIR  = $(FEPIC_DIR)/contrib/Loki
 OMPTL_DIR = $(FEPIC_DIR)/contrib/omptl
 BOOST_DIR = $(FEPIC_DIR)/contrib/boost
+ARRAY_DIR = $(FEPIC_DIR)/contrib/generic_array
 
-FEP_INCLUDE = -I$(FEPIC_DIR) -I$(EIGEN_DIR) -I$(METIS_DIR)/include -I$(LOKI_DIR) -I$(OMPTL_DIR) -I$(BOOST_DIR)
+FEP_INCLUDE = -I$(FEPIC_DIR) -I$(EIGEN_DIR) -I$(METIS_DIR)/include -I$(LOKI_DIR) -I$(OMPTL_DIR) -I$(BOOST_DIR) -I$(ARRAY_DIR)
 
 FEP_LIBS_DIR = $(FEPIC_DIR)/Fepic/slibs
 

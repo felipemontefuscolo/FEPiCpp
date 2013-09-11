@@ -27,7 +27,7 @@
 #include <vector>
 #include <set>
 #include <string>
-#include "../util/array.hpp"
+#include "Array/array.hpp"
 #include "contrib/Loki/set_vector.hpp"
 
 class DofHandler

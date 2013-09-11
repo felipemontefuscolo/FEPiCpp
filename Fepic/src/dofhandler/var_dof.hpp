@@ -25,7 +25,7 @@
 #include "dof_traits.hpp"
 #include "../shapefunctions/shape_functions.hpp"
 #include "Fepic/src/mesh/elements/cell_element.hpp"
-#include "../util/array.hpp"
+#include "Array/array.hpp"
 #include <vector>
 #include <string>
 #include "contrib/Loki/set_vector.hpp"

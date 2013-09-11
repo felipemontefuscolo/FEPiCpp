@@ -113,7 +113,7 @@ int DofHandler::numPositiveDofs() const
  */ 
 void DofHandler::setVariablesRelationship(bool const* v)
 {
-  m_relations.resize(numVars(), numVars());
+  m_relations.reshape(numVars(), numVars());
   for (int i = 0; i < numVars(); ++i)
   {
     for (int j = 0; j < numVars(); ++j)
