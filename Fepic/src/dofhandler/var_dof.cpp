@@ -98,7 +98,7 @@ void VarDofs::setUp(int minimum_dof_id)
 
   // find considered tags per region
 
-  if (m_regions.size() > 1u) // if not, the considered tags are those passed by the user
+  if (m_regions.size() >= 1u) // if not, the considered tags are those passed by the user
   {
     m_regional_tags.clear();
     m_regional_tags.resize(m_regions.size());

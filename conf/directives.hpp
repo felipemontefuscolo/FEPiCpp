@@ -31,7 +31,7 @@
 // #define FEP_HAS_METIS
 // #define FEP_HAS_BOOST
 
-#define FEPIC_DEBUG_ON
+//#define FEPIC_DEBUG_ON
 
 #define FEPIC_SCALAR_TYPE double
 
