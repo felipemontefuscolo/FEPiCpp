@@ -158,12 +158,13 @@ int Mesh::numVertices() const
 
 void Mesh::printInfo() const
 {
-  printf("elem type: %s\n",       ctypeName(this->cellType()));
-  printf("space dim: %d\n", this->spaceDim()                  );
-  printf("# nodes:   %d\n", this->numNodes()                  );
-  printf("# cells:   %d\n", this->numCells()                  );
-  printf("# facets:  %d\n", this->numFacets()                 );
-  printf("# corners: %d\n", this->numCorners()                );
+  printf("elem type:  %s\n",       ctypeName(this->cellType()));
+  printf("space dim:  %d\n", this->spaceDim()                  );
+  printf("# vertices: %d\n", this->numVertices()               );
+  printf("# nodes:    %d\n", this->numNodes()                  );
+  printf("# cells:    %d\n", this->numCells()                  );
+  printf("# facets:   %d\n", this->numFacets()                 );
+  printf("# corners:  %d\n", this->numCorners()                );
 }
 
 void Mesh::printStatistics() const
