@@ -1,0 +1,3 @@
+[submodule "contrib/generic_array"]
+	path = contrib/generic_array
+	url = git@github.com:felipemontefuscolo/generic_array.git
